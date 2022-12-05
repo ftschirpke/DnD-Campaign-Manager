@@ -9,3 +9,6 @@ target_sources(dndmanager_tests
 )
 
 configure_file(dndmanager_config.hpp.in dndmanager_config.hpp)
+
+add_subdirectory(models)
+add_subdirectory(parsing)
