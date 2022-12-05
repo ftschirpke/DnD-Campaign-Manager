@@ -6,6 +6,8 @@
 #include <cxxopts/cxxopts.hpp>
 
 #include "dndmanager_config.hpp"
+#include "models/content_controller.hpp"
+#include "parsing/content_parser.hpp"
 
 int dnd::launch(int argc, char** argv) {
     const std::filesystem::path cur_path = std::filesystem::current_path();
@@ -38,6 +40,20 @@ int dnd::launch(int argc, char** argv) {
             << DnDManager_VERSION_MINOR << "."
             << DnDManager_VERSION_PATCH << "\n";
         return 0;
+    }
+    if (args.count("directory") > 1) {
+        std::cerr << "Error: Please provide only one directory." << '\n';
+        return -1;
+    }
+    const std::filesystem::path content_path(args["directory"].as<std::string>());
+    ContentController controller;
+    ContentParser parser(content_path, controller);
+    parser.parseAll();
+
+    // just for the moment: (TODO: remove later)
+    std::cout << "=== Spells ===\n";
+    for (const auto& spell : controller.spells) {
+        std::cout << spell.first << '\n';
     }
 
     return 0;
