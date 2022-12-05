@@ -1,13 +1,6 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.20)
 
 project(DnDManager LANGUAGES CXX VERSION 0.1.1)
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-# set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 # CPM
     set(CPM_DOWNLOAD_VERSION 0.34.0)
@@ -31,16 +24,47 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
     include(${CPM_DOWNLOAD_LOCATION})
 # end CPM
 
-# nlohmann/json - https://json.nlohmann.me/integration/package_managers/#cpmcmake
-    CPMAddPackage(
-        NAME nlohmann_json
-        GITHUB_REPOSITORY nlohmann/json
-        VERSION 3.11.1)
-# end nlohmann/json
+CPMAddPackage(
+    NAME nlohmann_json
+    GITHUB_REPOSITORY nlohmann/json
+    VERSION 3.11.2)
 
-# Catch2 https://github.com/catchorg/Catch2/blob/devel/docs/cmake-integration.md
-    find_package(Catch2 3 REQUIRED)
-# end Catch2
+CPMAddPackage(
+    NAME catch
+    GITHUB_REPOSITORY catchorg/Catch2
+    VERSION 3.2.0)
+
+add_executable(dndmanager main.cpp)
+
+target_include_directories(dndmanager
+    PUBLIC
+    ${PROJECT_BINARY_DIR}/src
+    ${CMAKE_SOURCE_DIR}/src
+    PRIVATE
+    ${CMAKE_SOURCE_DIR}/src/lib
+)
+target_link_libraries(dndmanager PUBLIC nlohmann_json::nlohmann_json)
+
+add_executable(dndmanager_tests)
+
+target_include_directories(dndmanager_tests
+    PUBLIC
+    ${PROJECT_BINARY_DIR}/src
+    ${CMAKE_SOURCE_DIR}/src
+    PRIVATE
+    ${CMAKE_SOURCE_DIR}/src/lib
+)
+target_link_libraries(dndmanager_tests PRIVATE nlohmann_json::nlohmann_json Catch2::Catch2WithMain)
+
+include(CTest)
+include(Catch.cmake)
+catch_discover_tests(dndmanager_tests) # include catch2 tests
+
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_subdirectory(src)
 
