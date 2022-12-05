@@ -1,0 +1,6 @@
+#define DnDManager_NAME "DnD-Campaign-Manager"
+#define DnDManager_DESCRIPTION "A simple tool providing multiple features that are helpful for DMs managing their DnD5e-Campaigns."
+
+#define DnDManager_VERSION_MAJOR @DnDManager_VERSION_MAJOR@
+#define DnDManager_VERSION_MINOR @DnDManager_VERSION_MINOR@
+#define DnDManager_VERSION_PATCH @DnDManager_VERSION_PATCH@
