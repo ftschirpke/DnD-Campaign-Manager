@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <filesystem>
+#include <stdexcept>
 
 #include <cxxopts/cxxopts.hpp>
 
@@ -45,15 +46,21 @@ int dnd::launch(int argc, char** argv) {
         std::cerr << "Error: Please provide only one directory." << '\n';
         return -1;
     }
-    const std::filesystem::path content_path(args["directory"].as<std::string>());
-    ContentController controller;
-    ContentParser parser(content_path, controller);
-    parser.parseAll();
 
-    // just for the moment: (TODO: remove later)
-    std::cout << "=== Spells ===\n";
-    for (const auto& spell : controller.spells) {
-        std::cout << spell.first << '\n';
+    try {
+        const std::filesystem::path content_path(args["directory"].as<std::string>());
+        ContentController controller;
+        ContentParser parser(content_path, controller);
+        parser.parseAll();
+
+        // just for the moment: (TODO: remove later)
+        std::cout << "=== Spells ===\n";
+        for (const auto& spell : controller.spells) {
+            std::cout << spell.first << '\n';
+        }
+    } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << '\n';
+        return -1;
     }
 
     return 0;
