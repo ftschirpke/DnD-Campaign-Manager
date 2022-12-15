@@ -1,8 +1,10 @@
 #include "content_parser.hpp"
 
 #include <iostream>
+#include <filesystem>
 #include <fstream>
 #include <memory>
+#include <sstream>
 #include <string>
 
 #include "models/spell_parser.hpp"
@@ -61,6 +63,19 @@ void dnd::ContentParser::parseSpells(const std::filesystem::path& directory) {
 }
 
 void dnd::ContentParser::parseAll() {
+    const std::filesystem::path path(content_path);
+    try {
+        std::filesystem::directory_entry entry(path);
+        if (!entry.is_directory()) {
+            std::stringstream sstr;
+            sstr << path << " is not a directory.";
+            throw std::invalid_argument(sstr.str());
+        }
+    } catch (const std::filesystem::filesystem_error& e) {
+        std::stringstream sstr;
+        sstr << path << " does not exist.";
+        throw std::invalid_argument(sstr.str());
+    }
     for (const auto& dir : std::filesystem::directory_iterator(content_path)) {
         if (!dir.is_directory()) {
             continue;
