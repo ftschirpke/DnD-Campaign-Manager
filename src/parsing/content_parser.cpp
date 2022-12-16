@@ -7,7 +7,10 @@
 #include <sstream>
 #include <string>
 
+#include <nlohmann/json.hpp>
+
 #include "models/spell_parser.hpp"
+#include "../models/content_controller.hpp"
 #include "../models/spell.hpp"
 
 const std::unique_ptr<const nlohmann::json> dnd::ContentParser::openJSON(const std::filesystem::directory_entry& file) {
@@ -41,15 +44,14 @@ void dnd::ContentParser::parseSpells(const std::filesystem::path& directory) {
         if (spells_json == nullptr) {
             continue;
         }
-        if (!spells_json->is_array()) {
+        if (!spells_json->is_object()) {
             std::cerr << "Warning: Spell file " << entry.path()
-                << " is not formatted as an array.\n";
+                << " is not formatted as an object/map.\n";
             continue;
         }
         // TODO: this might throw exceptions
-        for (auto it = spells_json->cbegin();
-            it != spells_json->cend(); ++it) {
-            std::unique_ptr<Spell> spell = SpellParser::createSpell(*it);
+        for (const auto& [name, spell_info] : spells_json->items()) {
+            std::unique_ptr<Spell> spell = SpellParser::createSpell(name, spell_info);
             if (controller.spells.find(spell->name) != controller.spells.end()) {
                 std::cerr << "Warning: Duplicate of spell \""
                     << spell->name << "\" found in "

@@ -49,15 +49,13 @@ int dnd::launch(int argc, char** argv) {
 
     try {
         const std::filesystem::path content_path(args["directory"].as<std::string>());
-        ContentController controller;
-        ContentParser parser(content_path, controller);
+        ContentController content_controller;
+        ContentParser parser(content_path, content_controller);
         parser.parseAll();
 
         // just for the moment: (TODO: remove later)
         std::cout << "=== Spells ===\n";
-        for (const auto& spell : controller.spells) {
-            std::cout << spell.first << '\n';
-        }
+        std::cout << "spells parsed: " << content_controller.spells.size() << '\n';
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << '\n';
         return -1;

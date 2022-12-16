@@ -2,6 +2,7 @@
 #define SPELL_PARSER_HPP_
 
 #include <memory>
+#include <string>
 
 #include <nlohmann/json.hpp>
 
@@ -11,7 +12,8 @@ namespace dnd {
 
 class SpellParser {
 public:
-    static std::unique_ptr<Spell> createSpell(const nlohmann::json& spell_json);
+    static std::unique_ptr<Spell> createSpell(const std::string& spell_name,
+        const nlohmann::json& spell_json);
 };
 
 } // namespace dnd
