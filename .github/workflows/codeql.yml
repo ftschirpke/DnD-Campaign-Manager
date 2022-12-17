@@ -65,8 +65,8 @@ jobs:
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target dndmanager
 
     - name: Run
-      working-directory: ${{github.workspace}}/build
-      run: ./dndmanager
+      working-directory: ${{github.workspace}}
+      run: ./build/dndmanager
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
