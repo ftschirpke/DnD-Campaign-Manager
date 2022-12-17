@@ -36,8 +36,8 @@ std::unique_ptr<dnd::SpellComponents> dnd::SpellParser::createSpellComponents(
     std::string::const_iterator start = components_str.cbegin();
     int parentheses_idx = components_str.find(" (");
     std::string first_part = (parentheses_idx == std::string::npos)
-        ? first_part = components_str
-        : first_part = std::string(start, start+parentheses_idx);
+        ? components_str
+        : std::string(start, start+parentheses_idx);
     std::unique_ptr<SpellComponents> components_ptr(new SpellComponents);
     if (first_part.size() == 7) {
         components_ptr->verbal = true;
