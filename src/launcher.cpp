@@ -7,8 +7,6 @@
 #include <cxxopts/cxxopts.hpp>
 
 #include "dndmanager_config.hpp"
-#include "models/content_controller.hpp"
-#include "parsing/content_parser.hpp"
 
 int dnd::launch(int argc, char** argv) {
     const std::filesystem::path cur_path = std::filesystem::current_path();
