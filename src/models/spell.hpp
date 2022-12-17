@@ -2,6 +2,7 @@
 #define SPELL_HPP_
 
 #include <string>
+#include <unordered_map>
 
 namespace dnd {
 
@@ -22,6 +23,17 @@ enum MagicSchool {
     NECROMANCY,
     // transmutation - physically alter the form of an object
     TRANSMUTATION
+};
+
+const std::unordered_map<std::string, MagicSchool> magic_schools = {
+    {"abjuration", MagicSchool::ABJURATION},
+    {"conjuration", MagicSchool::CONJURATION},
+    {"divination", MagicSchool::DIVINATION},
+    {"enchantment", MagicSchool::ENCHANTMENT},
+    {"evocation", MagicSchool::EVOCATION},
+    {"illusion", MagicSchool::ILLUSION},
+    {"necromancy", MagicSchool::NECROMANCY},
+    {"transmutation", MagicSchool::TRANSMUTATION}
 };
 
 enum SpellLevel {

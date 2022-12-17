@@ -75,32 +75,21 @@ std::unique_ptr<dnd::SpellType> dnd::SpellParser::createSpellType(
     size_t ritual_idx = type_str.find(" (ritual)");
     type_ptr->is_ritual = ritual_idx != std::string::npos;
     std::string magic_school_str;
-    if (size_t c = type_str.find(" cantrip") != std::string::npos) {
+    size_t cantrip_idx = type_str.find(" cantrip");
+    if (cantrip_idx != std::string::npos) {
         type_ptr->level = SpellLevel::CANTRIP;
-        magic_school_str = std::string(type_str.cbegin(), type_str.cbegin() + c);
+        magic_school_str = std::string(
+            type_str.cbegin(), type_str.cbegin() + cantrip_idx
+        );
     } else {
         type_ptr->level = SpellLevel(std::atoi(&type_str[0]));
         size_t i = type_str.find("level ") + 6;
-        magic_school_str = std::string(type_str.cbegin() + i, type_str.cend() + ritual_idx);
+        std::string::const_iterator end_it = type_ptr->is_ritual
+            ? type_str.cbegin() + ritual_idx : type_str.cend();
+        magic_school_str = std::string(type_str.cbegin() + i, end_it);
     }
     std::transform(magic_school_str.begin(), magic_school_str.end(),
         magic_school_str.begin(), ::tolower);
-    if (magic_school_str == "abjuration") {
-        type_ptr->magic_school = MagicSchool::ABJURATION;
-    } else if (magic_school_str == "conjuration") {
-        type_ptr->magic_school = MagicSchool::CONJURATION;
-    } else if (magic_school_str == "divination") {
-        type_ptr->magic_school = MagicSchool::DIVINATION;
-    } else if (magic_school_str == "enchantment") {
-        type_ptr->magic_school = MagicSchool::ENCHANTMENT;
-    } else if (magic_school_str == "evocation") {
-        type_ptr->magic_school = MagicSchool::EVOCATION;
-    } else if (magic_school_str == "illusion") {
-        type_ptr->magic_school = MagicSchool::ILLUSION;
-    } else if (magic_school_str == "necromancy") {
-        type_ptr->magic_school = MagicSchool::NECROMANCY;
-    } else if (magic_school_str == "transmutation") {
-        type_ptr->magic_school = MagicSchool::TRANSMUTATION;
-    }
+    type_ptr->magic_school = magic_schools.at(magic_school_str);
     return type_ptr;
 }

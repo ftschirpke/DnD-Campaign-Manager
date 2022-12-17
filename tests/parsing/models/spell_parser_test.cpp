@@ -1,8 +1,11 @@
+#include <cctype>
 #include <memory>
 #include <random>
+#include <vector>
 
 #include <catch2/catch_test_macros.hpp>
 
+#include "models/spell.hpp"
 #include "parsing/models/spell_parser.hpp"
 
 TEST_CASE("SpellParser: parse invalid components") {
@@ -45,7 +48,7 @@ TEST_CASE("SpellParser: parse valid components") {
     std::string random_str;
     int l = len_distrib(gen);
     random_str.resize(l);
-    for (int i = 0; i < l; i++) {
+    for (int i = 0; i < l; ++i) {
         int ascii = distrib(gen);
         while (126 < ascii && ascii < 161) {
             ascii = distrib(gen);
@@ -107,5 +110,92 @@ TEST_CASE("SpellParser: parse valid components") {
         REQUIRE(components.somatic == true);
         REQUIRE(components.material == true);
         REQUIRE(components.materials_needed == random_str);
+    }
+}
+
+TEST_CASE("SpellParser: parse invalid types") {
+    SECTION("other formats than standard D&D format not allowed") {
+        REQUIRE_THROWS(dnd::SpellParser::createSpellComponents("Level 9 illusion"));
+        REQUIRE_THROWS(dnd::SpellParser::createSpellComponents("Cantrip - enchantment"));
+        REQUIRE_THROWS(dnd::SpellParser::createSpellComponents("0-level divination"));
+        REQUIRE_THROWS(dnd::SpellParser::createSpellComponents("9 level conjuration"));
+    }
+    SECTION("unknown magic school") {
+        REQUIRE_THROWS(dnd::SpellParser::createSpellType("Disappointment cantrip"));
+        REQUIRE_THROWS(dnd::SpellParser::createSpellType("1st-level aspiration"));
+        REQUIRE_THROWS(dnd::SpellParser::createSpellType("9th-level intention (ritual)"));
+    }
+    SECTION("cantrips cannot be rituals") {
+        REQUIRE_THROWS(dnd::SpellParser::createSpellType("Abjuration cantrip (ritual)"));
+        REQUIRE_THROWS(dnd::SpellParser::createSpellType("enchantment cantrip (ritual)"));
+    }
+    SECTION("when provided, parentheses must contain 'ritual'") {
+        REQUIRE_THROWS(dnd::SpellParser::createSpellType("1st-level Enchantment (something)"));
+        REQUIRE_THROWS(dnd::SpellParser::createSpellType("8th-level illusion (ritula)"));
+        REQUIRE_THROWS(dnd::SpellParser::createSpellType("5th-level evocation (Ritual)"));
+    }
+    SECTION("parentheses must be after a whitespace and need to open and close") {
+        REQUIRE_THROWS(dnd::SpellParser::createSpellType("2nd-level illusion(ritual)"));
+        REQUIRE_THROWS(dnd::SpellParser::createSpellType("3rd-level Divination (ritual"));
+        REQUIRE_THROWS(dnd::SpellParser::createSpellType("5th-level ritual)"));
+    }
+    SECTION("wrong capitalisation or uppercase in-word") {
+        REQUIRE_THROWS(dnd::SpellParser::createSpellType("Abjuration Cantrip"));
+        REQUIRE_THROWS(dnd::SpellParser::createSpellType("divination CanTrip"));
+        REQUIRE_THROWS(dnd::SpellParser::createSpellType("ILLusion cantrip"));
+        REQUIRE_THROWS(dnd::SpellParser::createSpellType("enchantment Cantrip"));
+        REQUIRE_THROWS(dnd::SpellParser::createSpellType("3rD-level Divination"));
+        REQUIRE_THROWS(dnd::SpellParser::createSpellType("5Th-level (ritual)"));
+        REQUIRE_THROWS(dnd::SpellParser::createSpellType("2nd-LEVEL illusion"));
+        REQUIRE_THROWS(dnd::SpellParser::createSpellType("4th-Level necromancy"));
+        REQUIRE_THROWS(dnd::SpellParser::createSpellType("1st-level TransMutation (ritual)"));
+    }
+}
+
+TEST_CASE("SpellParser: parse valid types") {
+    dnd::SpellType type;
+    std::string s;
+
+    const std::vector<std::string> allowed_magic_school_spellings = {
+        "abjuration", "Abjuration",
+        "conjuration", "Conjuration",
+        "divination", "Divination",
+        "enchantment", "Enchantment",
+        "evocation", "Evocation",
+        "illusion", "Illusion",
+        "necromancy", "Necromancy",
+        "transmutation", "Transmutation"
+    };
+    SECTION("cantrips") {
+        for (const auto& spelling : allowed_magic_school_spellings) {
+            s = spelling + " cantrip";
+            REQUIRE_NOTHROW(type = *dnd::SpellParser::createSpellType(s));
+            REQUIRE(type.level == 0);
+            std::string lowercase_spelling = spelling;
+            lowercase_spelling[0] = char(std::tolower(lowercase_spelling[0]));
+            REQUIRE(type.magic_school == dnd::magic_schools.at(lowercase_spelling));
+            REQUIRE(type.is_ritual == false);
+        }
+    }
+    const std::vector<std::string> spell_levels = {
+        "", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"
+    };
+    SECTION("non-cantrip spells") {
+        for (const auto& spelling : allowed_magic_school_spellings) {
+            for (int level = 1; level <= 9; ++level) {
+                s = spell_levels[level] + "-level " + spelling;
+                REQUIRE_NOTHROW(type = *dnd::SpellParser::createSpellType(s));
+                REQUIRE(type.level == level);
+                std::string lowercase_spelling = spelling;
+                lowercase_spelling[0] = char(std::tolower(lowercase_spelling[0]));
+                REQUIRE(type.magic_school == dnd::magic_schools.at(lowercase_spelling));
+                REQUIRE(type.is_ritual == false);
+                s += " (ritual)";
+                REQUIRE_NOTHROW(type = *dnd::SpellParser::createSpellType(s));
+                REQUIRE(type.level == level);
+                REQUIRE(type.magic_school == dnd::magic_schools.at(lowercase_spelling));
+                REQUIRE(type.is_ritual == true);
+            }
+        }
     }
 }
