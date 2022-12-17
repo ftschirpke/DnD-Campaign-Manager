@@ -56,6 +56,9 @@ int dnd::launch(int argc, char** argv) {
         // just for the moment: (TODO: remove later)
         std::cout << "=== Spells ===\n";
         std::cout << "spells parsed: " << content_controller.spells.size() << '\n';
+    } catch (const parsing_error& e) {
+        std::cerr << "Parsing Error: " << e.what() << '\n';
+        return -1;
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << '\n';
         return -1;

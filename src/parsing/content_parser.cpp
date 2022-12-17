@@ -49,17 +49,21 @@ void dnd::ContentParser::parseSpells(const std::filesystem::path& directory) {
                 << " is not formatted as an object/map.\n";
             continue;
         }
-        // TODO: this might throw exceptions
-        for (const auto& [name, spell_info] : spells_json->items()) {
-            std::unique_ptr<Spell> spell = SpellParser::createSpell(name, spell_info);
-            if (controller.spells.find(spell->name) != controller.spells.end()) {
-                std::cerr << "Warning: Duplicate of spell \""
-                    << spell->name << "\" found in "
-                    << entry.path() << ".\n";
-            } else {
-                controller.spells.emplace(spell->name, *spell);
+        for (const auto& [spell_name, spell_info] : spells_json->items()) {
+            try {
+                std::unique_ptr<Spell> spell = std::move(SpellParser::createSpell(spell_name, spell_info));
+                if (controller.spells.find(spell_name) != controller.spells.end()) {
+                    std::cerr << "Warning: Duplicate of spell \""
+                        << spell_name << "\" found in "
+                        << entry.path() << ".\n";
+                } else {
+                    controller.spells.emplace(spell_name, *spell);
+                }
+            } catch (const nlohmann::json::out_of_range& e) {
+                throw parsing_error("Spell \"" + spell_name + "\" is missing an attribute.");
+            } catch (const std::invalid_argument& e) {
+                throw parsing_error("Spell \"" + spell_name + "\": " + e.what());
             }
-
         }
     }
 }
