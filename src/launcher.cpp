@@ -8,6 +8,8 @@
 #include <cxxopts/cxxopts.hpp>
 
 #include "dndmanager_config.hpp"
+#include "models/content_controller.hpp"
+#include "parsing/content_parser.hpp"
 
 #include "controllers/content_controller.hpp"
 #include "parsing/content_parser.hpp"
