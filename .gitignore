@@ -1,3 +1,9 @@
 .vscode/*
 !.vscode/c_cpp_properties.json
 build/
+# only SRD content can be released on GitHub
+content/*
+!content/README.md
+!content/general
+content/general/*
+!content/general/srd

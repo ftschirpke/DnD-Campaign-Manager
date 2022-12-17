@@ -2,10 +2,13 @@
 
 #include <iostream>
 #include <filesystem>
+#include <stdexcept>
 
 #include <cxxopts/cxxopts.hpp>
 
 #include "dndmanager_config.hpp"
+#include "models/content_controller.hpp"
+#include "parsing/content_parser.hpp"
 
 int dnd::launch(int argc, char** argv) {
     const std::filesystem::path cur_path = std::filesystem::current_path();
@@ -14,9 +17,11 @@ int dnd::launch(int argc, char** argv) {
 
     options.add_options()
         ("d,directory", "Content directory", cxxopts::value<std::string>()
-            ->default_value((cur_path / "content").c_str()))
+            ->default_value((cur_path/"content").c_str())
+        )
         ("v,version", "Print version")
-        ("h,help", "Print usage");
+        ("h,help", "Print usage")
+    ;
 
     cxxopts::ParseResult args;
     try {
@@ -36,6 +41,27 @@ int dnd::launch(int argc, char** argv) {
             << DnDManager_VERSION_MINOR << "."
             << DnDManager_VERSION_PATCH << "\n";
         return 0;
+    }
+    if (args.count("directory") > 1) {
+        std::cerr << "Error: Please provide only one directory." << '\n';
+        return -1;
+    }
+
+    try {
+        const std::filesystem::path content_path(args["directory"].as<std::string>());
+        ContentController content_controller;
+        ContentParser parser(content_path, content_controller);
+        parser.parseAll();
+
+        // just for the moment: (TODO: remove later)
+        std::cout << "=== Spells ===\n";
+        std::cout << "spells parsed: " << content_controller.spells.size() << '\n';
+    } catch (const parsing_error& e) {
+        std::cerr << "Parsing Error: " << e.what() << '\n';
+        return -1;
+    } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << '\n';
+        return -1;
     }
 
     return 0;
