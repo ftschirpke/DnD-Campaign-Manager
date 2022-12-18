@@ -1,5 +1,6 @@
 #include "launcher.hpp"
 
+#include <chrono>
 #include <iostream>
 #include <filesystem>
 #include <stdexcept>
@@ -7,7 +8,7 @@
 #include <cxxopts/cxxopts.hpp>
 
 #include "dndmanager_config.hpp"
-#include "models/content_controller.hpp"
+#include "controllers/content_controller.hpp"
 #include "parsing/content_parser.hpp"
 
 int dnd::launch(int argc, char** argv) {
@@ -51,11 +52,13 @@ int dnd::launch(int argc, char** argv) {
         const std::filesystem::path content_path(args["directory"].as<std::string>());
         ContentController content_controller;
         ContentParser parser(content_path, content_controller);
+        // TODO: should the runtime measurement and status printing stay?
+        std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
         parser.parseAll();
-
-        // just for the moment: (TODO: remove later)
-        std::cout << "=== Spells ===\n";
-        std::cout << "spells parsed: " << content_controller.spells.size() << '\n';
+        std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> timespan = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
+        std::cout << "time taken for parsing: " << timespan.count() << " seconds\n";
+        content_controller.printStatus();
     } catch (const parsing_error& e) {
         std::cerr << "Parsing Error: " << e.what() << '\n';
         return -1;
