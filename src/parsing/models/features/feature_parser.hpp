@@ -10,9 +10,9 @@
 namespace dnd {
 
 class FeatureParser {
-    static void addEffects(const nlohmann::json& effects_json, Feature& feature);
-    static void parseEffect(const std::string& effect_str, Feature& feature);
 public:
+    static void addEffects(const nlohmann::json& effects_json, Feature& feature);
+    static void parseAndAddEffect(const std::string& effect_str, Feature& feature);
     static std::unique_ptr<Feature> createFeature(
         const std::string& feature_name, const nlohmann::json& feature_json);
 };

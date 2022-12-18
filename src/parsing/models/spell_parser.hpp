@@ -11,13 +11,12 @@
 namespace dnd {
 
 class SpellParser {
-private:
-    static std::unique_ptr<SpellComponents> createSpellComponents(
-        const std::string& components_str);
-    static std::unique_ptr<SpellType> createSpellType(const std::string& type_str);
 public:
     static std::unique_ptr<Spell> createSpell(const std::string& spell_name,
         const nlohmann::json& spell_json);
+    static std::unique_ptr<SpellComponents> createSpellComponents(
+        const std::string& components_str);
+    static std::unique_ptr<SpellType> createSpellType(const std::string& type_str);
 };
 
 } // namespace dnd

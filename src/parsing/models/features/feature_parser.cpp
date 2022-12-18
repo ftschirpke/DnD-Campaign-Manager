@@ -32,14 +32,14 @@ void dnd::FeatureParser::addEffects(const nlohmann::json& effects_json, Feature&
     }
     for (const std::string& effect_str : effects_json) {
         try {
-            parseEffect(effect_str, feature);
+            parseAndAddEffect(effect_str, feature);
         } catch (const std::invalid_argument& e) {
             throw std::invalid_argument("Feature \"" + feature.name + "\": " + e.what());
         }
     }
 }
 
-void dnd::FeatureParser::parseEffect(const std::string& effect_str, Feature& feature) {
+void dnd::FeatureParser::parseAndAddEffect(const std::string& effect_str, Feature& feature) {
     const std::regex effect_regex(
         "[A-Z]+ (earliest|early|normal|late|latest) (add|mult|div|set) -?(\\d+(\\.\\d+)?)"
     );
