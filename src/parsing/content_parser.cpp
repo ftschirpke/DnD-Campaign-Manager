@@ -9,8 +9,9 @@
 
 #include <nlohmann/json.hpp>
 
+#include "models/character_race_parser.hpp"
 #include "models/spell_parser.hpp"
-#include "../models/content_controller.hpp"
+#include "../controllers/content_controller.hpp"
 #include "../models/spell.hpp"
 
 const std::unique_ptr<const nlohmann::json> dnd::ContentParser::openJSON(const std::filesystem::directory_entry& file) {
@@ -45,25 +46,59 @@ void dnd::ContentParser::parseSpells(const std::filesystem::path& directory) {
             continue;
         }
         if (!spells_json->is_object()) {
-            std::cerr << "Warning: Spell file " << entry.path()
-                << " is not formatted as an object/map.\n";
-            continue;
+            const std::string filename = entry.path().c_str();
+            throw parsing_error(
+                "Spell file \"" + filename + "\" is not formatted as an object/map."
+            );
         }
         for (const auto& [spell_name, spell_info] : spells_json->items()) {
             try {
-                std::unique_ptr<Spell> spell = std::move(SpellParser::createSpell(spell_name, spell_info));
+                std::unique_ptr<Spell> spell = SpellParser::createSpell(spell_name, spell_info);
                 if (controller.spells.find(spell_name) != controller.spells.end()) {
                     std::cerr << "Warning: Duplicate of spell \""
                         << spell_name << "\" found in "
                         << entry.path() << ".\n";
                 } else {
-                    controller.spells.emplace(spell_name, *spell);
+                    controller.spells.emplace(spell_name, std::move(spell));
                 }
             } catch (const nlohmann::json::out_of_range& e) {
                 throw parsing_error("Spell \"" + spell_name + "\" is missing an attribute.");
             } catch (const std::invalid_argument& e) {
                 throw parsing_error("Spell \"" + spell_name + "\": " + e.what());
             }
+        }
+    }
+}
+
+void dnd::ContentParser::parseCharacterRaces(const std::filesystem::path& directory) {
+    for (const auto& entry : std::filesystem::directory_iterator(directory)) {
+        const auto character_race_json = openJSON(entry);
+        if (character_race_json == nullptr) {
+            continue;
+        }
+        const std::string filename = entry.path().c_str();
+        if (!character_race_json->is_object()) {
+            throw parsing_error(
+                "Race file \"" + filename + "\" is not formatted as an object/map."
+            );
+        }
+        try {
+            std::unique_ptr<CharacterRace> character_race = \
+                CharacterRaceParser::createCharacterRace(*character_race_json);
+            if (controller.character_races.find(character_race->name) 
+                != controller.character_races.end()) {
+                std::cerr << "Warning: Duplicate of character race \""
+                    << character_race->name << "\" found in "
+                    << entry.path() << ".\n";
+            } else {
+                controller.character_races.emplace(character_race->name, std::move(character_race));
+            }
+        } catch (const nlohmann::json::out_of_range& e) {
+            throw parsing_error(
+                "Character Race in file \"" + filename + "\" is missing an attribute."
+            );
+        } catch (const std::invalid_argument& e) {
+            throw parsing_error("Character Race in file \"" + filename + "\": " + e.what());
         }
     }
 }
@@ -92,6 +127,9 @@ void dnd::ContentParser::parseAll() {
             }
             if (std::filesystem::exists(sub_dir.path()/"spells")) {
                 parseSpells(sub_dir.path()/"spells");
+            }
+            if (std::filesystem::exists(sub_dir.path()/"races")) {
+                parseCharacterRaces(sub_dir.path()/"races");
             }
         }
     }

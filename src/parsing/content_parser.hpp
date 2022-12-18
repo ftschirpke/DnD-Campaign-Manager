@@ -6,7 +6,7 @@
 
 #include <nlohmann/json.hpp>
 
-#include "../models/content_controller.hpp"
+#include "../controllers/content_controller.hpp"
 
 namespace dnd {
 
@@ -21,6 +21,7 @@ private:
     ContentController& controller;
     const std::unique_ptr<const nlohmann::json> openJSON(const std::filesystem::directory_entry& file);
     void parseSpells(const std::filesystem::path& directory);
+    void parseCharacterRaces(const std::filesystem::path& directory);
 public:
     ContentParser(const std::filesystem::path& content_path, ContentController& controller) :
         content_path(content_path), controller(controller) {}
