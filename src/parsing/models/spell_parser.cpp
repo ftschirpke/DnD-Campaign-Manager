@@ -13,6 +13,11 @@
 
 std::unique_ptr<dnd::Spell> dnd::SpellParser::createSpell(
     const std::string& spell_name, const nlohmann::json& spell_json) {
+    if (!spell_json.is_object()) {
+        throw std::invalid_argument(
+            "Spell \"" + spell_name + "\" is not formatted as an object/map."
+        );
+    }
     const std::string name = spell_name;
     const SpellType type = *createSpellType(spell_json.at("level_type"));
     const std::string casting_time = spell_json.at("casting_time");

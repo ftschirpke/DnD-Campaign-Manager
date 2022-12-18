@@ -1,9 +1,9 @@
 target_sources(dndmanager
     PRIVATE
-        spell.cpp
+    content_controller.cpp
 )
 
 target_sources(dndmanager_tests
     PRIVATE
-        spell.cpp
+    content_controller.cpp
 )
