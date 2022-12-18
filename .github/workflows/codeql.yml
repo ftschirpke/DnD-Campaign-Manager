@@ -64,9 +64,13 @@ jobs:
     - name: Build
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target dndmanager
 
-    - name: Run
+    - name: Run Imperial
       working-directory: ${{github.workspace}}
-      run: ./build/dndmanager
+      run: ./build/dndmanager -d ${{github.workspace}}/content_imperial
+
+    - name: Run Metric
+      working-directory: ${{github.workspace}}
+      run: ./build/dndmanager -d ${{github.workspace}}/content_metric
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
