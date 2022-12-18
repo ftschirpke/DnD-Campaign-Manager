@@ -66,11 +66,11 @@ jobs:
 
     - name: Run Imperial
       working-directory: ${{github.workspace}}
-      run: ./build/dndmanager -d content_imperial
+      run: ./build/dndmanager -d ${{github.workspace}}/content_imperial
 
     - name: Run Metric
       working-directory: ${{github.workspace}}
-      run: ./build/dndmanager -d content_metric
+      run: ./build/dndmanager -d ${{github.workspace}}/content_metric
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
