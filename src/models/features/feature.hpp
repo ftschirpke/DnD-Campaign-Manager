@@ -3,7 +3,7 @@
 
 #include <memory>
 #include <string>
-#include <unordered_map>
+#include <vector>
 
 #include "effect.hpp"
 
@@ -12,7 +12,7 @@ namespace dnd {
 class Feature {
 public:
     const std::string name, description;
-    std::unordered_map<std::string, std::unique_ptr<Effect>> earliest, early, normal, late, latest;
+    std::vector<std::unique_ptr<Effect>> earliest, early, normal, late, latest;
     Feature(const std::string& name, const std::string& description) :
         name(name), description(description) {}
     // TODO: manage adding and removing languages/proficiencies/senses etc.

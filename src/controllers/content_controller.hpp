@@ -14,6 +14,7 @@ class ContentController {
 public:
     std::unordered_map<std::string, std::unique_ptr<Spell>> spells;
     std::unordered_map<std::string, std::unique_ptr<CharacterRace>> character_races;
+    std::unordered_map<std::string, std::unique_ptr<CharacterSubrace>> character_subraces;
     void printStatus() const;
 };
 

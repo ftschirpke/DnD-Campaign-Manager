@@ -91,7 +91,9 @@ void dnd::ContentParser::parseCharacterRaces(const std::filesystem::path& direct
                     << character_race->name << "\" found in "
                     << entry.path() << ".\n";
             } else {
-                controller.character_races.emplace(character_race->name, std::move(character_race));
+                controller.character_races.emplace(
+                    character_race->name, std::move(character_race)
+                );
             }
         } catch (const nlohmann::json::out_of_range& e) {
             throw parsing_error(
@@ -100,6 +102,64 @@ void dnd::ContentParser::parseCharacterRaces(const std::filesystem::path& direct
         } catch (const std::invalid_argument& e) {
             throw parsing_error("Character Race in file \"" + filename + "\": " + e.what());
         }
+    }
+}
+
+void dnd::ContentParser::parseCharacterSubraces(const std::filesystem::path& directory) {
+    for (const auto& entry : std::filesystem::directory_iterator(directory)) {
+        const auto character_subrace_json = openJSON(entry);
+        if (character_subrace_json == nullptr) {
+            continue;
+        }
+        const std::string filename = entry.path().c_str();
+        if (!character_subrace_json->is_object()) {
+            throw parsing_error(
+                "Subrace file \"" + filename + "\" is not formatted as an object/map."
+            );
+        }
+        try {
+            std::unique_ptr<CharacterSubrace> character_subrace = \
+                CharacterRaceParser::createCharacterSubrace(*character_subrace_json);
+            if (controller.character_subraces.find(character_subrace->name) 
+                != controller.character_subraces.end()) {
+                std::cerr << "Warning: Duplicate of character subrace \""
+                    << character_subrace->name << "\" found in "
+                    << entry.path() << ".\n";
+            } else {
+                controller.character_subraces.emplace(
+                    character_subrace->name, std::move(character_subrace)
+                );
+            }
+        } catch (const nlohmann::json::out_of_range& e) {
+            throw parsing_error(
+                "Character Subrace in file \"" + filename + "\" is missing an attribute."
+            );
+        } catch (const std::invalid_argument& e) {
+            throw parsing_error("Character Subrace in file \"" + filename + "\": " + e.what());
+        }
+    }
+}
+
+void dnd::ContentParser::validateCharacterSubraces() const {
+    bool all_valid = true;
+    for (const auto& [subrace_name, subrace_ptr] : controller.character_subraces) {
+        try {
+            auto& race_ptr = controller.character_races.at(subrace_ptr->race_name);
+            if (!race_ptr->has_subraces) {
+                std::cerr << "Error: Subrace \"" << subrace_name
+                    << "\" is invalid. \"" << race_ptr->name
+                    << "\" does not have subraces.\n";
+                all_valid = false;
+            }
+        } catch (const std::out_of_range& e) {
+            std::cerr << "Error: Subrace \"" << subrace_name
+                << "\" is invalid. The race \"" << subrace_ptr->race_name
+                << "\" does not exist.\n";
+            all_valid = false;
+        }
+    }
+    if (!all_valid) {
+        throw parsing_error("Invalid character subraces");
     }
 }
 
@@ -131,6 +191,10 @@ void dnd::ContentParser::parseAll() {
             if (std::filesystem::exists(sub_dir.path()/"races")) {
                 parseCharacterRaces(sub_dir.path()/"races");
             }
+            if (std::filesystem::exists(sub_dir.path()/"subraces")) {
+                parseCharacterSubraces(sub_dir.path()/"subraces");
+            }
         }
     }
+    validateCharacterSubraces();
 }

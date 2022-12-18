@@ -22,6 +22,8 @@ private:
     const std::unique_ptr<const nlohmann::json> openJSON(const std::filesystem::directory_entry& file);
     void parseSpells(const std::filesystem::path& directory);
     void parseCharacterRaces(const std::filesystem::path& directory);
+    void parseCharacterSubraces(const std::filesystem::path& directory);
+    void validateCharacterSubraces() const;
 public:
     ContentParser(const std::filesystem::path& content_path, ContentController& controller) :
         content_path(content_path), controller(controller) {}

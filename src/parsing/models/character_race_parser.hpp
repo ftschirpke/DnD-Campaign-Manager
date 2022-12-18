@@ -14,6 +14,8 @@ class CharacterRaceParser {
 public:
     static std::unique_ptr<CharacterRace> createCharacterRace(
         const nlohmann::json& character_race_json);
+    static std::unique_ptr<CharacterSubrace> createCharacterSubrace(
+        const nlohmann::json& character_subrace_json);
 };
 
 } // namespace dnd
