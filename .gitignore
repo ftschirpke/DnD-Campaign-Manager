@@ -3,6 +3,7 @@
 build/
 # only SRD content can be released on GitHub
 content_imperial/*
+!content_imperial/README.md
 !content_imperial/general
 content_imperial/general/*
 !content_imperial/general/srd
