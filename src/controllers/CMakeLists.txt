@@ -5,4 +5,5 @@ target_sources(dndmanager
 
 target_sources(dndmanager_tests
     PRIVATE
+    content_controller.cpp
 )
