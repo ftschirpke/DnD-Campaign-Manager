@@ -2,8 +2,12 @@
 !.vscode/c_cpp_properties.json
 build/
 # only SRD content can be released on GitHub
-content/*
-!content/README.md
-!content/general
-content/general/*
-!content/general/srd
+content_imperial/*
+!content_imperial/general
+content_imperial/general/*
+!content_imperial/general/srd
+content_metric/*
+!content_metric/README.md
+!content_metric/general
+content_metric/general/*
+!content_metric/general/srd
