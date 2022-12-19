@@ -6,8 +6,8 @@
 
 #include <nlohmann/json.hpp>
 
-#include "../../../models/features/effect.hpp"
-#include "../../../models/features/feature.hpp"
+#include "models/features/effect.hpp"
+#include "models/features/feature.hpp"
 
 std::unique_ptr<dnd::Feature> dnd::FeatureParser::createFeature(
     const std::string& feature_name, const nlohmann::json& feature_json) {

@@ -5,9 +5,9 @@
 #include <string>
 #include <unordered_map>
 
-#include "../models/spell.hpp"
-#include "../models/character_class.hpp"
-#include "../models/character_race.hpp"
+#include "models/spell.hpp"
+#include "models/character_class.hpp"
+#include "models/character_race.hpp"
 
 namespace dnd {
     

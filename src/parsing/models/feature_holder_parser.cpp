@@ -2,9 +2,9 @@
 
 #include <nlohmann/json.hpp>
 
-#include "features/feature_parser.hpp"
-#include "../../models/feature_holder.hpp"
-#include "../../models/features/feature.hpp"
+#include "models/feature_holder.hpp"
+#include "models/features/feature.hpp"
+#include "parsing/models/features/feature_parser.hpp"
 
 void dnd::FeatureHolderParser::parseAndAddFeatures(
     const nlohmann::json& features_json, FeatureHolder& feature_holder) {

@@ -6,7 +6,7 @@
 
 #include <nlohmann/json.hpp>
 
-#include "../controllers/content_controller.hpp"
+#include "controllers/content_controller.hpp"
 
 namespace dnd {
 

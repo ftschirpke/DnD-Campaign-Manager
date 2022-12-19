@@ -5,8 +5,8 @@
 
 #include <nlohmann/json.hpp>
 
-#include "features/feature_parser.hpp"
-#include "../../models/character_class.hpp"
+#include "models/character_class.hpp"
+#include "parsing/models/features/feature_parser.hpp"
 
 namespace dnd {
 

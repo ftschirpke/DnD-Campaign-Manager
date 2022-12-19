@@ -1,3 +1,5 @@
+#include "parsing/models/spell_parser.hpp"
+
 #include <cctype>
 #include <memory>
 #include <random>
@@ -6,7 +8,6 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include "models/spell.hpp"
-#include "parsing/models/spell_parser.hpp"
 
 TEST_CASE("SpellParser: parse invalid components") {
     SECTION("completely wrong letters not allowed") {

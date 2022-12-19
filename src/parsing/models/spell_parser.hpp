@@ -6,7 +6,7 @@
 
 #include <nlohmann/json.hpp>
 
-#include "../../models/spell.hpp"
+#include "models/spell.hpp"
 
 namespace dnd {
 

@@ -3,7 +3,7 @@
 
 #include <stdexcept>
 
-#include "../creature_state.hpp"
+#include "models/creature_state.hpp"
 
 namespace dnd {
 

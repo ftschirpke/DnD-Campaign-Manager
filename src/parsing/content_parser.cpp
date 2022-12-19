@@ -9,13 +9,13 @@
 
 #include <nlohmann/json.hpp>
 
-#include "models/character_class_parser.hpp"
-#include "models/character_race_parser.hpp"
-#include "models/spell_parser.hpp"
-#include "../controllers/content_controller.hpp"
-#include "../models/character_class.hpp"
-#include "../models/character_race.hpp"
-#include "../models/spell.hpp"
+#include "controllers/content_controller.hpp"
+#include "models/character_class.hpp"
+#include "models/character_race.hpp"
+#include "models/spell.hpp"
+#include "parsing/models/character_class_parser.hpp"
+#include "parsing/models/character_race_parser.hpp"
+#include "parsing/models/spell_parser.hpp"
 
 const std::unique_ptr<const nlohmann::json> dnd::ContentParser::openJSON(const std::filesystem::directory_entry& file) {
     if (!file.is_regular_file()) {

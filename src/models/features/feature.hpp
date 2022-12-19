@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "effect.hpp"
+#include "models/features/effect.hpp"
 
 namespace dnd {
 
@@ -18,6 +18,7 @@ public:
     // TODO: manage adding and removing languages/proficiencies/senses etc.
     // TODO: manage choices (choose one of ...)
     // TODO: manage granting actions, bonus actions, or reactions
+    // TODO: activation
 };
 
 } // namespace dnd

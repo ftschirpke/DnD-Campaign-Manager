@@ -1,9 +1,10 @@
+#include "launcher.hpp"
+
 #include <catch2/catch_test_macros.hpp>
 
 #include <cxxopts/cxxopts.hpp>
 
 #include "helper/argv.hpp"
-#include "launcher.hpp"
 
 TEST_CASE("Launcher: the program is run with the -h argument") {
     Argv argv_obj({"dndmanager", "-h"});

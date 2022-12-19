@@ -4,9 +4,9 @@
 
 #include <nlohmann/json.hpp>
 
-#include "feature_holder_parser.hpp"
-#include "features/feature_parser.hpp"
-#include "../../models/character_class.hpp"
+#include "models/character_class.hpp"
+#include "parsing/models/feature_holder_parser.hpp"
+#include "parsing/models/features/feature_parser.hpp"
 
 std::unique_ptr<dnd::CharacterClass> dnd::CharacterClassParser::createCharacterClass(
     const nlohmann::json& character_class_json) {
