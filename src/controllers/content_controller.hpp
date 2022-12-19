@@ -5,9 +5,15 @@
 #include <string>
 #include <unordered_map>
 
+<<<<<<< HEAD
 #include "models/character_class.hpp"
 #include "models/character_race.hpp"
 #include "models/spell.hpp"
+=======
+#include "models/spell.hpp"
+#include "models/character_class.hpp"
+#include "models/character_race.hpp"
+>>>>>>> d8f6e3f (adjustment: more readable include formatting)
 
 namespace dnd {
 
