@@ -27,7 +27,7 @@ std::unique_ptr<dnd::CharacterRace> dnd::CharacterRaceParser::createCharacterRac
 std::unique_ptr<dnd::CharacterSubrace> dnd::CharacterRaceParser::createCharacterSubrace(
     const nlohmann::json& character_subrace_json) {
     if (!character_subrace_json.is_object()) {
-        throw std::invalid_argument("Subace is not formatted as an object/map.");
+        throw std::invalid_argument("Subrace is not formatted as an object/map.");
     }
     CharacterSubrace character_subrace(
         character_subrace_json.at("name"), character_subrace_json.at("race")

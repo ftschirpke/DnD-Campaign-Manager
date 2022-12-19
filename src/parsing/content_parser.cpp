@@ -9,9 +9,12 @@
 
 #include <nlohmann/json.hpp>
 
+#include "models/character_class_parser.hpp"
 #include "models/character_race_parser.hpp"
 #include "models/spell_parser.hpp"
 #include "../controllers/content_controller.hpp"
+#include "../models/character_class.hpp"
+#include "../models/character_race.hpp"
 #include "../models/spell.hpp"
 
 const std::unique_ptr<const nlohmann::json> dnd::ContentParser::openJSON(const std::filesystem::directory_entry& file) {
@@ -66,6 +69,76 @@ void dnd::ContentParser::parseSpells(const std::filesystem::path& directory) {
             } catch (const std::invalid_argument& e) {
                 throw parsing_error("Spell \"" + spell_name + "\": " + e.what());
             }
+        }
+    }
+}
+
+void dnd::ContentParser::parseCharacterClasses(const std::filesystem::path& directory) {
+    for (const auto& entry : std::filesystem::directory_iterator(directory)) {
+        const auto character_class_json = openJSON(entry);
+        if (character_class_json == nullptr) {
+            continue;
+        }
+        const std::string filename = entry.path().c_str();
+        if (!character_class_json->is_object()) {
+            throw parsing_error(
+                "Class file \"" + filename + "\" is not formatted as an object/map."
+            );
+        }
+        try {
+            std::unique_ptr<CharacterClass> character_class = \
+                CharacterClassParser::createCharacterClass(*character_class_json);
+            if (controller.character_classes.find(character_class->name) 
+                != controller.character_classes.end()) {
+                std::cerr << "Warning: Duplicate of character class \""
+                    << character_class->name << "\" found in "
+                    << entry.path() << ".\n";
+            } else {
+                controller.character_classes.emplace(
+                    character_class->name, std::move(character_class)
+                );
+            }
+        } catch (const nlohmann::json::out_of_range& e) {
+            throw parsing_error(
+                "Character Class in file \"" + filename + "\" is missing an attribute."
+            );
+        } catch (const std::invalid_argument& e) {
+            throw parsing_error("Character Class in file \"" + filename + "\": " + e.what());
+        }
+    }
+}
+
+void dnd::ContentParser::parseCharacterSubclasses(const std::filesystem::path& directory) {
+    for (const auto& entry : std::filesystem::directory_iterator(directory)) {
+        const auto character_subclass_json = openJSON(entry);
+        if (character_subclass_json == nullptr) {
+            continue;
+        }
+        const std::string filename = entry.path().c_str();
+        if (!character_subclass_json->is_object()) {
+            throw parsing_error(
+                "Subclass file \"" + filename + "\" is not formatted as an object/map."
+            );
+        }
+        try {
+            std::unique_ptr<CharacterSubclass> character_subclass = \
+                CharacterClassParser::createCharacterSubclass(*character_subclass_json);
+            if (controller.character_subclasses.find(character_subclass->name) 
+                != controller.character_subclasses.end()) {
+                std::cerr << "Warning: Duplicate of character subclass \""
+                    << character_subclass->name << "\" found in "
+                    << entry.path() << ".\n";
+            } else {
+                controller.character_subclasses.emplace(
+                    character_subclass->name, std::move(character_subclass)
+                );
+            }
+        } catch (const nlohmann::json::out_of_range& e) {
+            throw parsing_error(
+                "Character Subclass in file \"" + filename + "\" is missing an attribute."
+            );
+        } catch (const std::invalid_argument& e) {
+            throw parsing_error("Character Subclass in file \"" + filename + "\": " + e.what());
         }
     }
 }
@@ -140,6 +213,21 @@ void dnd::ContentParser::parseCharacterSubraces(const std::filesystem::path& dir
     }
 }
 
+void dnd::ContentParser::validateCharacterSubclasses() const {
+    bool all_valid = true;
+    for (const auto& [subclass_name, subclass_ptr] : controller.character_subclasses) {
+        if (controller.character_classes.find(subclass_ptr->class_name) == controller.character_classes.cend()) {
+            std::cerr << "Error: Subclass \"" << subclass_name
+                << "\" is invalid. The class \"" << subclass_ptr->class_name
+                << "\" does not exist.\n";
+            all_valid = false;
+        }
+    }
+    if (!all_valid) {
+        throw parsing_error("Invalid character subclasses");
+    }
+}
+
 void dnd::ContentParser::validateCharacterSubraces() const {
     bool all_valid = true;
     for (const auto& [subrace_name, subrace_ptr] : controller.character_subraces) {
@@ -188,6 +276,12 @@ void dnd::ContentParser::parseAll() {
             if (std::filesystem::exists(sub_dir.path()/"spells")) {
                 parseSpells(sub_dir.path()/"spells");
             }
+            if (std::filesystem::exists(sub_dir.path()/"classes")) {
+                parseCharacterClasses(sub_dir.path()/"classes");
+            }
+            if (std::filesystem::exists(sub_dir.path()/"subclasses")) {
+                parseCharacterSubclasses(sub_dir.path()/"subclasses");
+            }
             if (std::filesystem::exists(sub_dir.path()/"races")) {
                 parseCharacterRaces(sub_dir.path()/"races");
             }
@@ -196,5 +290,6 @@ void dnd::ContentParser::parseAll() {
             }
         }
     }
+    validateCharacterSubclasses();
     validateCharacterSubraces();
 }
