@@ -9,8 +9,7 @@ namespace dnd {
 
 class FeatureHolderParser {
 public:
-    static void parseAndAddFeatures(const nlohmann::json& features_json,
-        FeatureHolder& feature_holder);
+    static void parseAndAddFeatures(const nlohmann::json& features_json, FeatureHolder& feature_holder);
 };
 
 } // namespace dnd

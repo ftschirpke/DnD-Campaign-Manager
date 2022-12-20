@@ -10,60 +10,48 @@ namespace dnd {
 class Effect {
 public:
     const std::string affected_attribute;
-    Effect(const std::string& affected_attribute) :
-        affected_attribute(affected_attribute) {}
+    Effect(const std::string& affected_attribute) : affected_attribute(affected_attribute) {}
     virtual void applyTo(CreatureState& state) const = 0;
 };
 
 class AddEffect : public Effect {
 public:
     const int add;
-    AddEffect(const std::string& affected_attribute, int add) :
-        Effect(affected_attribute), add(add) {}
-    void applyTo(CreatureState& state) const {
-        state.attributes[affected_attribute] += add;
-    }
+    AddEffect(const std::string& affected_attribute, int add) : Effect(affected_attribute), add(add) {}
+    void applyTo(CreatureState& state) const { state.attributes[affected_attribute] += add; }
 };
 
 class MultEffect : public Effect {
 public:
     const float factor;
-    MultEffect(const std::string& affected_attribute, float factor) :
-        Effect(affected_attribute), factor(factor) {}
-    void applyTo(CreatureState& state) const {
-        state.attributes[affected_attribute] *= factor;
-    }
+    MultEffect(const std::string& affected_attribute, float factor) : Effect(affected_attribute), factor(factor) {}
+    void applyTo(CreatureState& state) const { state.attributes[affected_attribute] *= factor; }
 };
 
 class DivEffect : public Effect {
 public:
     const float div;
-    DivEffect(const std::string& affected_attribute, float div) :
-        Effect(affected_attribute), div(div) {
+    DivEffect(const std::string& affected_attribute, float div) : Effect(affected_attribute), div(div) {
         if (div == 0) {
             throw std::invalid_argument("Cannot divide by zero.");
         }
     }
-    void applyTo(CreatureState& state) const {
-        state.attributes[affected_attribute] /= div;
-    }
+    void applyTo(CreatureState& state) const { state.attributes[affected_attribute] /= div; }
 };
 
 class SetEffect : public Effect {
 public:
     const int set_value;
-    SetEffect(const std::string& affected_attribute, int set_value) :
-        Effect(affected_attribute), set_value(set_value) {}
-    void applyTo(CreatureState& state) const {
-        state.attributes[affected_attribute] = set_value;
-    }
+    SetEffect(const std::string& affected_attribute, int set_value)
+        : Effect(affected_attribute), set_value(set_value) {}
+    void applyTo(CreatureState& state) const { state.attributes[affected_attribute] = set_value; }
 };
 
 class AddOtherEffect : public Effect {
 public:
     const std::string other_attribute;
-    AddOtherEffect(const std::string& affected_attribute, const std::string& other_attribute) :
-        Effect(affected_attribute), other_attribute(other_attribute) {}
+    AddOtherEffect(const std::string& affected_attribute, const std::string& other_attribute)
+        : Effect(affected_attribute), other_attribute(other_attribute) {}
     void applyTo(CreatureState& state) const {
         try {
             state.attributes[affected_attribute] += state.attributes.at(other_attribute);
@@ -76,8 +64,8 @@ public:
 class MultOtherEffect : public Effect {
 public:
     const std::string other_attribute;
-    MultOtherEffect(const std::string& affected_attribute, const std::string& other_attribute) :
-        Effect(affected_attribute), other_attribute(other_attribute) {}
+    MultOtherEffect(const std::string& affected_attribute, const std::string& other_attribute)
+        : Effect(affected_attribute), other_attribute(other_attribute) {}
     void applyTo(CreatureState& state) const {
         try {
             state.attributes[affected_attribute] *= state.attributes.at(other_attribute) / 100.0f;
@@ -90,8 +78,8 @@ public:
 class DivOtherEffect : public Effect {
 public:
     const std::string other_attribute;
-    DivOtherEffect(const std::string& affected_attribute, const std::string& other_attribute) :
-        Effect(affected_attribute), other_attribute(other_attribute) {}
+    DivOtherEffect(const std::string& affected_attribute, const std::string& other_attribute)
+        : Effect(affected_attribute), other_attribute(other_attribute) {}
     void applyTo(CreatureState& state) const {
         try {
             state.attributes[affected_attribute] /= state.attributes.at(other_attribute) / 100.0f;
@@ -104,8 +92,8 @@ public:
 class SetOtherEffect : public Effect {
 public:
     const std::string other_attribute;
-    SetOtherEffect(const std::string& affected_attribute, const std::string& other_attribute) :
-        Effect(affected_attribute), other_attribute(other_attribute) {}
+    SetOtherEffect(const std::string& affected_attribute, const std::string& other_attribute)
+        : Effect(affected_attribute), other_attribute(other_attribute) {}
     void applyTo(CreatureState& state) const {
         try {
             state.attributes[affected_attribute] = state.attributes.at(other_attribute);
@@ -118,8 +106,8 @@ public:
 class AddConstEffect : public Effect {
 public:
     const std::string constant;
-    AddConstEffect(const std::string& affected_attribute, const std::string& constant) :
-        Effect(affected_attribute), constant(constant) {}
+    AddConstEffect(const std::string& affected_attribute, const std::string& constant)
+        : Effect(affected_attribute), constant(constant) {}
     void applyTo(CreatureState& state) const {
         try {
             state.attributes[affected_attribute] += state.constants.at(constant);
@@ -132,8 +120,8 @@ public:
 class MultConstEffect : public Effect {
 public:
     const std::string constant;
-    MultConstEffect(const std::string& affected_attribute, const std::string& constant) :
-        Effect(affected_attribute), constant(constant) {}
+    MultConstEffect(const std::string& affected_attribute, const std::string& constant)
+        : Effect(affected_attribute), constant(constant) {}
     void applyTo(CreatureState& state) const {
         try {
             state.attributes[affected_attribute] *= state.constants.at(constant) / 100.0f;
@@ -146,8 +134,8 @@ public:
 class DivConstEffect : public Effect {
 public:
     const std::string constant;
-    DivConstEffect(const std::string& affected_attribute, const std::string& constant) :
-        Effect(affected_attribute), constant(constant) {}
+    DivConstEffect(const std::string& affected_attribute, const std::string& constant)
+        : Effect(affected_attribute), constant(constant) {}
     void applyTo(CreatureState& state) const {
         try {
             state.attributes[affected_attribute] /= state.constants.at(constant) / 100.0f;
@@ -160,8 +148,8 @@ public:
 class SetConstEffect : public Effect {
 public:
     const std::string constant;
-    SetConstEffect(const std::string& affected_attribute, const std::string& constant) :
-        Effect(affected_attribute), constant(constant) {}
+    SetConstEffect(const std::string& affected_attribute, const std::string& constant)
+        : Effect(affected_attribute), constant(constant) {}
     void applyTo(CreatureState& state) const {
         try {
             state.attributes[affected_attribute] = state.constants.at(constant);

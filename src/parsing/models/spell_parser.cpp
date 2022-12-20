@@ -12,11 +12,10 @@
 #include "models/spell.hpp"
 
 std::unique_ptr<dnd::Spell> dnd::SpellParser::createSpell(
-    const std::string& spell_name, const nlohmann::json& spell_json) {
+    const std::string& spell_name, const nlohmann::json& spell_json
+) {
     if (!spell_json.is_object()) {
-        throw std::invalid_argument(
-            "Spell \"" + spell_name + "\" is not formatted as an object/map."
-        );
+        throw std::invalid_argument("Spell \"" + spell_name + "\" is not formatted as an object/map.");
     }
     const std::string name = spell_name;
     const SpellType type = *createSpellType(spell_json.at("level_type"));
@@ -25,13 +24,10 @@ std::unique_ptr<dnd::Spell> dnd::SpellParser::createSpell(
     const SpellComponents components = *createSpellComponents(spell_json.at("components"));
     const std::string duration = spell_json.at("duration");
     const std::string description = spell_json.at("description");
-    return std::unique_ptr<Spell>(
-        new Spell(name, type, casting_time, range, components, duration, description)
-    );
+    return std::unique_ptr<Spell>(new Spell(name, type, casting_time, range, components, duration, description));
 }
 
-std::unique_ptr<dnd::SpellComponents> dnd::SpellParser::createSpellComponents(
-    const std::string& components_str) {
+std::unique_ptr<dnd::SpellComponents> dnd::SpellParser::createSpellComponents(const std::string& components_str) {
     const std::regex components_regex(
         "(V, S, M (\\((.*)\\))|V, S|V, M (\\((.*)\\))|S, M (\\((.*)\\))|V|S|M (\\((.*)\\)))"
     );
@@ -40,9 +36,8 @@ std::unique_ptr<dnd::SpellComponents> dnd::SpellParser::createSpellComponents(
     }
     std::string::const_iterator start = components_str.cbegin();
     int parentheses_idx = components_str.find(" (");
-    std::string first_part = (parentheses_idx == std::string::npos)
-        ? components_str
-        : std::string(start, start+parentheses_idx);
+    std::string first_part =
+        (parentheses_idx == std::string::npos) ? components_str : std::string(start, start + parentheses_idx);
     std::unique_ptr<SpellComponents> components_ptr(new SpellComponents);
     if (first_part.size() == 7) {
         components_ptr->verbal = true;
@@ -58,20 +53,17 @@ std::unique_ptr<dnd::SpellComponents> dnd::SpellParser::createSpellComponents(
         components_ptr->material = first_part == "M";
     }
     if (components_ptr->material) {
-        components_ptr->materials_needed = std::string(
-            start+parentheses_idx+2, components_str.cend()-1
-        );
+        components_ptr->materials_needed = std::string(start + parentheses_idx + 2, components_str.cend() - 1);
     }
     return components_ptr;
 }
 
-std::unique_ptr<dnd::SpellType> dnd::SpellParser::createSpellType(
-    const std::string& type_str) {
-    const std::string magic_school_regex_str = \
-    "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)";
+std::unique_ptr<dnd::SpellType> dnd::SpellParser::createSpellType(const std::string& type_str) {
+    const std::string magic_school_regex_str = "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|[eE]"
+                                               "vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)";
     const std::regex type_regex(
-        "((1st|2nd|3rd|[4-9]th)-level " + magic_school_regex_str + "( \\(ritual\\))?)|("
-        + magic_school_regex_str + " cantrip)"
+        "((1st|2nd|3rd|[4-9]th)-level " + magic_school_regex_str + "( \\(ritual\\))?)|(" + magic_school_regex_str
+        + " cantrip)"
     );
     if (!std::regex_match(type_str, type_regex)) {
         throw std::invalid_argument("Spell type is of wrong format.");
@@ -83,18 +75,14 @@ std::unique_ptr<dnd::SpellType> dnd::SpellParser::createSpellType(
     size_t cantrip_idx = type_str.find(" cantrip");
     if (cantrip_idx != std::string::npos) {
         type_ptr->level = SpellLevel::CANTRIP;
-        magic_school_str = std::string(
-            type_str.cbegin(), type_str.cbegin() + cantrip_idx
-        );
+        magic_school_str = std::string(type_str.cbegin(), type_str.cbegin() + cantrip_idx);
     } else {
         type_ptr->level = SpellLevel(std::atoi(&type_str[0]));
         size_t i = type_str.find("level ") + 6;
-        std::string::const_iterator end_it = type_ptr->is_ritual
-            ? type_str.cbegin() + ritual_idx : type_str.cend();
+        std::string::const_iterator end_it = type_ptr->is_ritual ? type_str.cbegin() + ritual_idx : type_str.cend();
         magic_school_str = std::string(type_str.cbegin() + i, end_it);
     }
-    std::transform(magic_school_str.begin(), magic_school_str.end(),
-        magic_school_str.begin(), ::tolower);
+    std::transform(magic_school_str.begin(), magic_school_str.end(), magic_school_str.begin(), ::tolower);
     type_ptr->magic_school = magic_schools.at(magic_school_str);
     return type_ptr;
 }

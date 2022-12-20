@@ -1,13 +1,14 @@
 #include "launcher.hpp"
 
 #include <chrono>
-#include <iostream>
 #include <filesystem>
+#include <iostream>
 #include <stdexcept>
 
 #include <cxxopts/cxxopts.hpp>
 
 #include "dndmanager_config.hpp"
+
 #include "controllers/content_controller.hpp"
 #include "parsing/content_parser.hpp"
 
@@ -16,13 +17,9 @@ int dnd::launch(int argc, char** argv) {
 
     cxxopts::Options options(DnDManager_NAME, DnDManager_DESCRIPTION);
 
-    options.add_options()
-        ("d,directory", "Content directory", cxxopts::value<std::string>()
-            ->default_value((cur_path/"content").c_str())
-        )
-        ("v,version", "Print version")
-        ("h,help", "Print usage")
-    ;
+    options.add_options()(
+        "d,directory", "Content directory", cxxopts::value<std::string>()->default_value((cur_path / "content").c_str())
+    )("v,version", "Print version")("h,help", "Print usage");
 
     cxxopts::ParseResult args;
     try {
@@ -33,14 +30,12 @@ int dnd::launch(int argc, char** argv) {
     }
 
     if (args.count("help")) {
-        std::cout << options.help() << "\n";
+        std::cout << options.help() << '\n';
         return 0;
     }
     if (args.count("version")) {
-        std::cout << DnDManager_NAME << " Version "
-            << DnDManager_VERSION_MAJOR << "."
-            << DnDManager_VERSION_MINOR << "."
-            << DnDManager_VERSION_PATCH << "\n";
+        std::cout << DnDManager_NAME << " Version " << DnDManager_VERSION_MAJOR << '.' << DnDManager_VERSION_MINOR
+                  << '.' << DnDManager_VERSION_PATCH << '\n';
         return 0;
     }
     if (args.count("directory") > 1) {

@@ -10,11 +10,10 @@
 #include "models/features/feature.hpp"
 
 std::unique_ptr<dnd::Feature> dnd::FeatureParser::createFeature(
-    const std::string& feature_name, const nlohmann::json& feature_json) {
+    const std::string& feature_name, const nlohmann::json& feature_json
+) {
     if (!feature_json.is_object()) {
-        throw std::invalid_argument(
-            "Feature \"" + feature_name + "\" is not formatted as an object/map."
-        );
+        throw std::invalid_argument("Feature \"" + feature_name + "\" is not formatted as an object/map.");
     }
     Feature feature(feature_name, feature_json.at("description"));
     if (feature_json.contains("effects")) {
@@ -26,9 +25,7 @@ std::unique_ptr<dnd::Feature> dnd::FeatureParser::createFeature(
 
 void dnd::FeatureParser::addEffects(const nlohmann::json& effects_json, Feature& feature) {
     if (!effects_json.is_array()) {
-        throw std::invalid_argument(
-            "Effects of feature \"" + feature.name + "\" are not formatted as an array."
-        );
+        throw std::invalid_argument("Effects of feature \"" + feature.name + "\" are not formatted as an array.");
     }
     for (const std::string& effect_str : effects_json) {
         try {
@@ -43,8 +40,9 @@ void dnd::FeatureParser::parseAndAddEffect(const std::string& effect_str, Featur
     const std::string times = "(earliest|early|normal|late|latest)";
     const std::string numeric_effects = "(add|mult|div|set)";
     const std::string numeric_effects_regex = "(" + numeric_effects + " -?\\d+(\\.\\d\\d?)?)";
-    const std::string identifier_effects = "(addOther|multOther|divOther|setOther|addConst|multConst|divConst|setConst)";
-    const std::string identifier_effects_regex = "("+identifier_effects+" [A-Z][_A-Z0-9]+)";
+    const std::string identifier_effects =
+        "(addOther|multOther|divOther|setOther|addConst|multConst|divConst|setConst)";
+    const std::string identifier_effects_regex = "(" + identifier_effects + " [A-Z][_A-Z0-9]+)";
     const std::regex effect_regex(
         "[A-Z][_A-Z0-9]+ " + times + " (" + numeric_effects_regex + "|" + identifier_effects_regex + ")"
     );
