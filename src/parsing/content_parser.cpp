@@ -139,9 +139,7 @@ void dnd::ContentParser::parseCharacterRaces(const std::filesystem::path& direct
                 std::cerr << "Warning: Duplicate of character race \"" << character_race->name << "\" found in "
                           << entry.path() << ".\n";
             } else {
-                controller.character_races.emplace(
-                    character_race->name, std::move(character_race)
-                );
+                controller.character_races.emplace(character_race->name, std::move(character_race));
             }
         } catch (const nlohmann::json::out_of_range& e) {
             throw parsing_error("Character Race in file \"" + filename + "\" is missing an attribute.");
@@ -249,9 +247,6 @@ void dnd::ContentParser::parseAll() {
             }
             if (std::filesystem::exists(sub_dir.path() / "subraces")) {
                 parseCharacterSubraces(sub_dir.path() / "subraces");
-            }
-            if (std::filesystem::exists(sub_dir.path()/"subraces")) {
-                parseCharacterSubraces(sub_dir.path()/"subraces");
             }
         }
     }

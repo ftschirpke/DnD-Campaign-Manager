@@ -20,13 +20,6 @@ public:
         : FeatureHolder(name), race_name(race_name) {}
 };
 
-class CharacterSubrace : public FeatureHolder {
-public:
-    const std::string race_name;
-    CharacterSubrace(const std::string& name, const std::string& race_name) :
-        FeatureHolder(name), race_name(race_name) {}
-};
-
 } // namespace dnd
 
 #endif // RACE_HPP_

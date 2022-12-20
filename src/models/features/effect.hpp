@@ -80,47 +80,6 @@ public:
     const std::string other_attribute;
     DivOtherEffect(const std::string& affected_attribute, const std::string& other_attribute)
         : Effect(affected_attribute), other_attribute(other_attribute) {}
-=======
-    SetEffect(const std::string& affected_attribute, int set_value) :
-        Effect(affected_attribute), set_value(set_value) {}
-    void applyTo(CreatureState& state) const {
-        state.attributes[affected_attribute] = set_value;
-    }
-};
-
-class AddOtherEffect : public Effect {
-public:
-    const std::string other_attribute;
-    AddOtherEffect(const std::string& affected_attribute, const std::string& other_attribute) :
-        Effect(affected_attribute), other_attribute(other_attribute) {}
-    void applyTo(CreatureState& state) const {
-        try {
-            state.attributes[affected_attribute] += state.attributes.at(other_attribute);
-        } catch (const std::out_of_range& e) {
-            throw std::out_of_range("Other attribute \"" + other_attribute + "\" does not exist.");
-        }
-    }
-};
-
-class MultOtherEffect : public Effect {
-public:
-    const std::string other_attribute;
-    MultOtherEffect(const std::string& affected_attribute, const std::string& other_attribute) :
-        Effect(affected_attribute), other_attribute(other_attribute) {}
-    void applyTo(CreatureState& state) const {
-        try {
-            state.attributes[affected_attribute] *= state.attributes.at(other_attribute) / 100.0f;
-        } catch (const std::out_of_range& e) {
-            throw std::out_of_range("Other attribute \"" + other_attribute + "\" does not exist.");
-        }
-    }
-};
-
-class DivOtherEffect : public Effect {
-public:
-    const std::string other_attribute;
-    DivOtherEffect(const std::string& affected_attribute, const std::string& other_attribute) :
-        Effect(affected_attribute), other_attribute(other_attribute) {}
     void applyTo(CreatureState& state) const {
         try {
             state.attributes[affected_attribute] /= state.attributes.at(other_attribute) / 100.0f;
