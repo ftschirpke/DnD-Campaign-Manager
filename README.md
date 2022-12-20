@@ -20,3 +20,22 @@ Ideas for future improvements include:
 
 - [CMake](https://cmake.org/)
 - [Catch2](https://github.com/catchorg/Catch2)
+
+## You want to use the software?
+
+At the moment, the only possibility to use the tool is by [building it from source code](#building-from-source-code) first.
+
+## You want to contribute?
+
+Please have a look at [this](CONTRIBUTING.md).
+
+## Building from source code
+
+1. Make sure you have all [required dependencies](#requirements) installed
+2. Clone the repository
+3. Testing (optional)
+   1. Build the CMake target "dndmanager_tests"
+   2. Execute the tests using ctest
+4. Running
+   1. Build the Cmake target "dndmanager"
+   2. Run the executable

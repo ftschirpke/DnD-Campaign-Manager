@@ -7,8 +7,9 @@
 
 #include <cxxopts/cxxopts.hpp>
 
-#include "controllers/content_controller.hpp"
 #include "dndmanager_config.hpp"
+
+#include "controllers/content_controller.hpp"
 #include "parsing/content_parser.hpp"
 
 int dnd::launch(int argc, char** argv) {
@@ -29,12 +30,12 @@ int dnd::launch(int argc, char** argv) {
     }
 
     if (args.count("help")) {
-        std::cout << options.help() << "\n";
+        std::cout << options.help() << '\n';
         return 0;
     }
     if (args.count("version")) {
-        std::cout << DnDManager_NAME << " Version " << DnDManager_VERSION_MAJOR << "." << DnDManager_VERSION_MINOR
-                  << "." << DnDManager_VERSION_PATCH << "\n";
+        std::cout << DnDManager_NAME << " Version " << DnDManager_VERSION_MAJOR << '.' << DnDManager_VERSION_MINOR
+                  << '.' << DnDManager_VERSION_PATCH << '\n';
         return 0;
     }
     if (args.count("directory") > 1) {
