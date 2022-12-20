@@ -42,11 +42,11 @@ void dnd::FeatureParser::addEffects(const nlohmann::json& effects_json, Feature&
 void dnd::FeatureParser::parseAndAddEffect(const std::string& effect_str, Feature& feature) {
     const std::string times = "(earliest|early|normal|late|latest)";
     const std::string numeric_effects = "(add|mult|div|set)";
-    const std::string numeric_effects_regex = "(" + numeric_effects + " -?\\d+(\\.\\d+)?)";
+    const std::string numeric_effects_regex = "(" + numeric_effects + " -?\\d+(\\.\\d\\d?)?)";
     const std::string identifier_effects = "(addOther|multOther|divOther|setOther|addConst|multConst|divConst|setConst)";
-    const std::string identifier_effects_regex = "("+identifier_effects+" [A-Z0-9]+)";
+    const std::string identifier_effects_regex = "("+identifier_effects+" [A-Z][_A-Z0-9]+)";
     const std::regex effect_regex(
-        "[A-Z0-9]+ " + times + " (" + numeric_effects_regex + "|" + identifier_effects_regex + ")"
+        "[A-Z][_A-Z0-9]+ " + times + " (" + numeric_effects_regex + "|" + identifier_effects_regex + ")"
     );
     if (!std::regex_match(effect_str, effect_regex)) {
         throw std::invalid_argument("Effect is of wrong format.");

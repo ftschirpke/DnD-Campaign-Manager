@@ -9,7 +9,7 @@
 
 #include "models/spell.hpp"
 
-TEST_CASE("SpellParser: parse invalid components") {
+TEST_CASE("dnd::SpellParser::createSpellComponents: parse invalid components") {
     SECTION("completely wrong letters not allowed") {
         REQUIRE_THROWS(dnd::SpellParser::createSpellComponents("A, B"));
         REQUIRE_THROWS(dnd::SpellParser::createSpellComponents("öikje"));
@@ -37,7 +37,7 @@ TEST_CASE("SpellParser: parse invalid components") {
     }
 }
 
-TEST_CASE("SpellParser: parse valid components") {
+TEST_CASE("dnd::SpellParser::createSpellComponents: parse valid components") {
     dnd::SpellComponents components;
     std::string s;
 
@@ -114,12 +114,12 @@ TEST_CASE("SpellParser: parse valid components") {
     }
 }
 
-TEST_CASE("SpellParser: parse invalid types") {
+TEST_CASE("dnd::SpellParser::createSpellType: parse invalid types") {
     SECTION("other formats than standard D&D format not allowed") {
-        REQUIRE_THROWS(dnd::SpellParser::createSpellComponents("Level 9 illusion"));
-        REQUIRE_THROWS(dnd::SpellParser::createSpellComponents("Cantrip - enchantment"));
-        REQUIRE_THROWS(dnd::SpellParser::createSpellComponents("0-level divination"));
-        REQUIRE_THROWS(dnd::SpellParser::createSpellComponents("9 level conjuration"));
+        REQUIRE_THROWS(dnd::SpellParser::createSpellType("Level 9 illusion"));
+        REQUIRE_THROWS(dnd::SpellParser::createSpellType("Cantrip - enchantment"));
+        REQUIRE_THROWS(dnd::SpellParser::createSpellType("0-level divination"));
+        REQUIRE_THROWS(dnd::SpellParser::createSpellType("9 level conjuration"));
     }
     SECTION("unknown magic school") {
         REQUIRE_THROWS(dnd::SpellParser::createSpellType("Disappointment cantrip"));
@@ -153,7 +153,7 @@ TEST_CASE("SpellParser: parse invalid types") {
     }
 }
 
-TEST_CASE("SpellParser: parse valid types") {
+TEST_CASE("dnd::SpellParser::createSpellType: parse valid types") {
     dnd::SpellType type;
     std::string s;
 

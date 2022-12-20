@@ -10,6 +10,9 @@ class CreatureState {
 public:
     const std::unordered_map<std::string, int> constants;
     std::unordered_map<std::string, int> attributes;
+    CreatureState() = default;
+    CreatureState(const std::unordered_map<std::string, int>& constants) : // for testing
+        constants(constants) {}
 };
 
 } // namespace dnd

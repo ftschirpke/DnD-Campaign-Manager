@@ -16,9 +16,8 @@ public:
 };
 
 class AddEffect : public Effect {
-private:
-    const int add;
 public:
+    const int add;
     AddEffect(const std::string& affected_attribute, int add) :
         Effect(affected_attribute), add(add) {}
     void applyTo(CreatureState& state) const {
@@ -27,9 +26,8 @@ public:
 };
 
 class MultEffect : public Effect {
-private:
-    const float factor;
 public:
+    const float factor;
     MultEffect(const std::string& affected_attribute, float factor) :
         Effect(affected_attribute), factor(factor) {}
     void applyTo(CreatureState& state) const {
@@ -38,9 +36,8 @@ public:
 };
 
 class DivEffect : public Effect {
-private:
-    const float div;
 public:
+    const float div;
     DivEffect(const std::string& affected_attribute, float div) :
         Effect(affected_attribute), div(div) {
         if (div == 0) {
@@ -53,9 +50,8 @@ public:
 };
 
 class SetEffect : public Effect {
-private:
-    const int set_value;
 public:
+    const int set_value;
     SetEffect(const std::string& affected_attribute, int set_value) :
         Effect(affected_attribute), set_value(set_value) {}
     void applyTo(CreatureState& state) const {
@@ -64,9 +60,8 @@ public:
 };
 
 class AddOtherEffect : public Effect {
-private:
-    const std::string other_attribute;
 public:
+    const std::string other_attribute;
     AddOtherEffect(const std::string& affected_attribute, const std::string& other_attribute) :
         Effect(affected_attribute), other_attribute(other_attribute) {}
     void applyTo(CreatureState& state) const {
@@ -79,9 +74,8 @@ public:
 };
 
 class MultOtherEffect : public Effect {
-private:
-    const std::string other_attribute;
 public:
+    const std::string other_attribute;
     MultOtherEffect(const std::string& affected_attribute, const std::string& other_attribute) :
         Effect(affected_attribute), other_attribute(other_attribute) {}
     void applyTo(CreatureState& state) const {
@@ -94,9 +88,8 @@ public:
 };
 
 class DivOtherEffect : public Effect {
-private:
-    const std::string other_attribute;
 public:
+    const std::string other_attribute;
     DivOtherEffect(const std::string& affected_attribute, const std::string& other_attribute) :
         Effect(affected_attribute), other_attribute(other_attribute) {}
     void applyTo(CreatureState& state) const {
@@ -109,9 +102,8 @@ public:
 };
 
 class SetOtherEffect : public Effect {
-private:
-    const std::string other_attribute;
 public:
+    const std::string other_attribute;
     SetOtherEffect(const std::string& affected_attribute, const std::string& other_attribute) :
         Effect(affected_attribute), other_attribute(other_attribute) {}
     void applyTo(CreatureState& state) const {
@@ -124,9 +116,8 @@ public:
 };
 
 class AddConstEffect : public Effect {
-private:
-    const std::string constant;
 public:
+    const std::string constant;
     AddConstEffect(const std::string& affected_attribute, const std::string& constant) :
         Effect(affected_attribute), constant(constant) {}
     void applyTo(CreatureState& state) const {
@@ -139,9 +130,8 @@ public:
 };
 
 class MultConstEffect : public Effect {
-private:
-    const std::string constant;
 public:
+    const std::string constant;
     MultConstEffect(const std::string& affected_attribute, const std::string& constant) :
         Effect(affected_attribute), constant(constant) {}
     void applyTo(CreatureState& state) const {
@@ -154,9 +144,8 @@ public:
 };
 
 class DivConstEffect : public Effect {
-private:
-    const std::string constant;
 public:
+    const std::string constant;
     DivConstEffect(const std::string& affected_attribute, const std::string& constant) :
         Effect(affected_attribute), constant(constant) {}
     void applyTo(CreatureState& state) const {
@@ -169,9 +158,8 @@ public:
 };
 
 class SetConstEffect : public Effect {
-private:
-    const std::string constant;
 public:
+    const std::string constant;
     SetConstEffect(const std::string& affected_attribute, const std::string& constant) :
         Effect(affected_attribute), constant(constant) {}
     void applyTo(CreatureState& state) const {
