@@ -4,9 +4,9 @@
 
 #include <nlohmann/json.hpp>
 
-#include "feature_holder_parser.hpp"
-#include "features/feature_parser.hpp"
-#include "../../models/character_race.hpp"
+#include "models/character_race.hpp"
+#include "parsing/models/feature_holder_parser.hpp"
+#include "parsing/models/features/feature_parser.hpp"
 
 std::unique_ptr<dnd::CharacterRace> dnd::CharacterRaceParser::createCharacterRace(
     const nlohmann::json& character_race_json) {
@@ -22,4 +22,18 @@ std::unique_ptr<dnd::CharacterRace> dnd::CharacterRaceParser::createCharacterRac
         character_race_json.at("features"), character_race
     );
     return std::make_unique<CharacterRace>(std::move(character_race));
+}
+
+std::unique_ptr<dnd::CharacterSubrace> dnd::CharacterRaceParser::createCharacterSubrace(
+    const nlohmann::json& character_subrace_json) {
+    if (!character_subrace_json.is_object()) {
+        throw std::invalid_argument("Subrace is not formatted as an object/map.");
+    }
+    CharacterSubrace character_subrace(
+        character_subrace_json.at("name"), character_subrace_json.at("race")
+    );
+    FeatureHolderParser::parseAndAddFeatures(
+        character_subrace_json.at("features"), character_subrace
+    );
+    return std::make_unique<CharacterSubrace>(std::move(character_subrace));
 }

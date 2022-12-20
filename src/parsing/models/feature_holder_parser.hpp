@@ -3,7 +3,7 @@
 
 #include <nlohmann/json.hpp>
 
-#include "../../models/feature_holder.hpp"
+#include "models/feature_holder.hpp"
 
 namespace dnd {
 

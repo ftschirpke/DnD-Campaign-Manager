@@ -1,7 +1,9 @@
+# TODO: better way of adding test files
 set(TEST_FILES
     launcher_test.cpp
     parsing/content_parser_test.cpp
     parsing/models/spell_parser_test.cpp
+    parsing/models/features/feature_parser_test.cpp
 )
 
 set(TEST_SOURCE_FILES
@@ -9,6 +11,7 @@ set(TEST_SOURCE_FILES
         ${TEST_FILES}
 )
 
+# TODO: better way of adding the needed source files
 foreach (TEST_SRC_FILE IN LISTS TEST_FILES)
     string(REPLACE "_test" "" SRC_FILE ${TEST_SRC_FILE})
     LIST(APPEND SOURCE_FILES_FOR_TEST "${SRC_FILE}")

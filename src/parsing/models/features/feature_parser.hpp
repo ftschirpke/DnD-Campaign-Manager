@@ -5,7 +5,7 @@
 
 #include <nlohmann/json.hpp>
 
-#include "../../../models/features/feature.hpp"
+#include "models/features/feature.hpp"
 
 namespace dnd {
 

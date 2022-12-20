@@ -9,7 +9,7 @@
 
 #include <nlohmann/json.hpp>
 
-#include "../../models/spell.hpp"
+#include "models/spell.hpp"
 
 std::unique_ptr<dnd::Spell> dnd::SpellParser::createSpell(
     const std::string& spell_name, const nlohmann::json& spell_json) {
