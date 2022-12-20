@@ -158,15 +158,9 @@ TEST_CASE("dnd::SpellParser::createSpellType: parse valid types") {
     std::string s;
 
     const std::vector<std::string> allowed_magic_school_spellings = {
-        "abjuration", "Abjuration",
-        "conjuration", "Conjuration",
-        "divination", "Divination",
-        "enchantment", "Enchantment",
-        "evocation", "Evocation",
-        "illusion", "Illusion",
-        "necromancy", "Necromancy",
-        "transmutation", "Transmutation"
-    };
+        "abjuration",  "Abjuration",  "conjuration",   "Conjuration",  "divination", "Divination",
+        "enchantment", "Enchantment", "evocation",     "Evocation",    "illusion",   "Illusion",
+        "necromancy",  "Necromancy",  "transmutation", "Transmutation"};
     SECTION("cantrips") {
         for (const auto& spelling : allowed_magic_school_spellings) {
             s = spelling + " cantrip";
@@ -178,9 +172,7 @@ TEST_CASE("dnd::SpellParser::createSpellType: parse valid types") {
             REQUIRE(type.is_ritual == false);
         }
     }
-    const std::vector<std::string> spell_levels = {
-        "", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"
-    };
+    const std::vector<std::string> spell_levels = {"", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"};
     SECTION("non-cantrip spells") {
         for (const auto& spelling : allowed_magic_school_spellings) {
             for (int level = 1; level <= 9; ++level) {

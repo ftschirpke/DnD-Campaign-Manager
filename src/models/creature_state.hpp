@@ -11,8 +11,7 @@ public:
     const std::unordered_map<std::string, int> constants;
     std::unordered_map<std::string, int> attributes;
     CreatureState() = default;
-    CreatureState(const std::unordered_map<std::string, int>& constants) : // for testing
-        constants(constants) {}
+    CreatureState(const std::unordered_map<std::string, int>& constants) : constants(constants) {} // for testing
 };
 
 } // namespace dnd

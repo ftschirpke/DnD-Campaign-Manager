@@ -28,8 +28,8 @@ private:
     void validateCharacterSubclasses() const;
     void validateCharacterSubraces() const;
 public:
-    ContentParser(const std::filesystem::path& content_path, ContentController& controller) :
-        content_path(content_path), controller(controller) {}
+    ContentParser(const std::filesystem::path& content_path, ContentController& controller)
+        : content_path(content_path), controller(controller) {}
     void parseAll();
 };
 

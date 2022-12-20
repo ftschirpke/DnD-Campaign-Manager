@@ -26,15 +26,10 @@ enum MagicSchool {
 };
 
 const std::unordered_map<std::string, MagicSchool> magic_schools = {
-    {"abjuration", MagicSchool::ABJURATION},
-    {"conjuration", MagicSchool::CONJURATION},
-    {"divination", MagicSchool::DIVINATION},
-    {"enchantment", MagicSchool::ENCHANTMENT},
-    {"evocation", MagicSchool::EVOCATION},
-    {"illusion", MagicSchool::ILLUSION},
-    {"necromancy", MagicSchool::NECROMANCY},
-    {"transmutation", MagicSchool::TRANSMUTATION}
-};
+    {"abjuration", MagicSchool::ABJURATION}, {"conjuration", MagicSchool::CONJURATION},
+    {"divination", MagicSchool::DIVINATION}, {"enchantment", MagicSchool::ENCHANTMENT},
+    {"evocation", MagicSchool::EVOCATION},   {"illusion", MagicSchool::ILLUSION},
+    {"necromancy", MagicSchool::NECROMANCY}, {"transmutation", MagicSchool::TRANSMUTATION}};
 
 enum SpellLevel {
     CANTRIP = 0,
@@ -67,12 +62,12 @@ public:
     const std::string name, casting_time, range, duration, description;
     const SpellType type;
     const SpellComponents components;
-    Spell(const std::string& name, const SpellType& type,
-        const std::string& casting_time, const std::string& range,
-        const SpellComponents& components, const std::string& duration,
-        const std::string& description)
-        : name(name), type(type), casting_time(casting_time), range(range),
-        components(components), duration(duration), description(description) {}
+    Spell(
+        const std::string& name, const SpellType& type, const std::string& casting_time, const std::string& range,
+        const SpellComponents& components, const std::string& duration, const std::string& description
+    )
+        : name(name), type(type), casting_time(casting_time), range(range), components(components), duration(duration),
+          description(description) {}
 };
 
 } // namespace dnd

@@ -9,13 +9,11 @@
 class Argv {
 private:
     std::vector<std::unique_ptr<char[]>> m_args{};
-    std::unique_ptr<char* []> m_argv;
+    std::unique_ptr<char*[]> m_argv;
     int m_argc;
 public:
     Argv(std::initializer_list<const char*> args)
-        : m_argv(new char* [args.size()]),
-        m_argc(static_cast<int>(args.size()))
-    {
+        : m_argv(new char*[args.size()]), m_argc(static_cast<int>(args.size())) {
         int i = 0;
         auto iter = args.begin();
         while (iter != args.end()) {
@@ -31,13 +29,9 @@ public:
         }
     }
 
-    char** argv() const {
-        return m_argv.get();
-    }
+    char** argv() const { return m_argv.get(); }
 
-    int argc() const {
-        return m_argc;
-    }
+    int argc() const { return m_argc; }
 };
 
 #endif // ARGV_HPP_
