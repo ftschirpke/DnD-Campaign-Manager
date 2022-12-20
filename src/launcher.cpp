@@ -7,8 +7,9 @@
 
 #include <cxxopts/cxxopts.hpp>
 
-#include "controllers/content_controller.hpp"
 #include "dndmanager_config.hpp"
+
+#include "controllers/content_controller.hpp"
 #include "parsing/content_parser.hpp"
 
 int dnd::launch(int argc, char** argv) {
