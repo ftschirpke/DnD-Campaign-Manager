@@ -1,0 +1,16 @@
+{
+    "name": "Bob the Great",
+    "class": "Barbarian",
+    "subclass": "Path of the Berserker",
+    "race": "Dwarf",
+    "subrace": "Hill Dwarf",
+    "initial_ability_scores": [15, 12, 14, 10, 8, 13],
+    "level": 15,
+    "xp": 170000,
+    "hit_dice_rolls": [8, 11, 7, 6, 12, 4, 5, 3, 3, 7, 9, 7, 4, 2, 10],
+    "choices": {
+        "Barbarian Base": {
+            "skill_proficiency": ["athletics", "intimidation"]
+        }
+    }
+}
