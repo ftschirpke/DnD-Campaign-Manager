@@ -40,6 +40,11 @@ const std::unique_ptr<const nlohmann::json> dnd::ContentParser::openJSON(const s
 }
 
 void dnd::ContentParser::parseSpells(const std::filesystem::path& directory) {
+    if (!std::filesystem::directory_entry(directory).is_directory()) {
+        std::cerr << "Warning: Rename " << directory
+                  << " so that it cannot be confused with a directory containing spells.\n";
+        return;
+    }
     for (const auto& entry : std::filesystem::directory_iterator(directory)) {
         const auto spells_json = openJSON(entry);
         if (spells_json == nullptr) {
@@ -68,6 +73,11 @@ void dnd::ContentParser::parseSpells(const std::filesystem::path& directory) {
 }
 
 void dnd::ContentParser::parseCharacterClasses(const std::filesystem::path& directory) {
+    if (!std::filesystem::directory_entry(directory).is_directory()) {
+        std::cerr << "Warning: Rename " << directory
+                  << " so that it cannot be confused with a directory containing classes.\n";
+        return;
+    }
     for (const auto& entry : std::filesystem::directory_iterator(directory)) {
         const auto character_class_json = openJSON(entry);
         if (character_class_json == nullptr) {
@@ -95,6 +105,11 @@ void dnd::ContentParser::parseCharacterClasses(const std::filesystem::path& dire
 }
 
 void dnd::ContentParser::parseCharacterSubclasses(const std::filesystem::path& directory) {
+    if (!std::filesystem::directory_entry(directory).is_directory()) {
+        std::cerr << "Warning: Rename " << directory
+                  << " so that it cannot be confused with a directory containing subclasses.\n";
+        return;
+    }
     for (const auto& entry : std::filesystem::directory_iterator(directory)) {
         const auto character_subclass_json = openJSON(entry);
         if (character_subclass_json == nullptr) {
@@ -123,6 +138,11 @@ void dnd::ContentParser::parseCharacterSubclasses(const std::filesystem::path& d
 }
 
 void dnd::ContentParser::parseCharacterRaces(const std::filesystem::path& directory) {
+    if (!std::filesystem::directory_entry(directory).is_directory()) {
+        std::cerr << "Warning: Rename " << directory
+                  << " so that it cannot be confused with a directory containing races.\n";
+        return;
+    }
     for (const auto& entry : std::filesystem::directory_iterator(directory)) {
         const auto character_race_json = openJSON(entry);
         if (character_race_json == nullptr) {
@@ -150,6 +170,11 @@ void dnd::ContentParser::parseCharacterRaces(const std::filesystem::path& direct
 }
 
 void dnd::ContentParser::parseCharacterSubraces(const std::filesystem::path& directory) {
+    if (!std::filesystem::directory_entry(directory).is_directory()) {
+        std::cerr << "Warning: Rename " << directory
+                  << " so that it cannot be confused with a directory containing subraces.\n";
+        return;
+    }
     for (const auto& entry : std::filesystem::directory_iterator(directory)) {
         const auto character_subrace_json = openJSON(entry);
         if (character_subrace_json == nullptr) {
@@ -230,34 +255,32 @@ void dnd::ContentParser::parseAll() {
         sstr << "No subdirectory '" << campaign_dir_name << "' exists within the content directory.";
         throw std::invalid_argument(sstr.str());
     }
-    for (const auto& dir : std::filesystem::directory_iterator(content_path)) {
-        if (!dir.is_directory()) {
+    std::vector<std::filesystem::directory_entry> dirs_to_parse;
+    for (const auto& source_dir : std::filesystem::directory_iterator(content_path / "general")) {
+        if (!source_dir.is_directory()) {
             continue;
         }
-        const std::string dir_name = dir.path().filename().c_str();
-        if (dir_name != "general" && dir_name != campaign_dir_name) {
-            continue;
+        dirs_to_parse.push_back(source_dir);
+    }
+    dirs_to_parse.push_back(std::filesystem::directory_entry(content_path / campaign_dir_name));
+
+    for (const auto& dir : dirs_to_parse) {
+        std::cout << "Parsing " << dir.path().lexically_relative(content_path) << " directory...\n";
+
+        if (std::filesystem::exists(dir.path() / "spells")) {
+            parseSpells(dir.path() / "spells");
         }
-        std::cout << "Parsing \"" << dir_name << "\" directory...\n";
-        for (const auto& sub_dir : std::filesystem::directory_iterator(dir)) {
-            if (!sub_dir.is_directory()) {
-                continue;
-            }
-            if (std::filesystem::exists(sub_dir.path() / "spells")) {
-                parseSpells(sub_dir.path() / "spells");
-            }
-            if (std::filesystem::exists(sub_dir.path() / "classes")) {
-                parseCharacterClasses(sub_dir.path() / "classes");
-            }
-            if (std::filesystem::exists(sub_dir.path() / "subclasses")) {
-                parseCharacterSubclasses(sub_dir.path() / "subclasses");
-            }
-            if (std::filesystem::exists(sub_dir.path() / "races")) {
-                parseCharacterRaces(sub_dir.path() / "races");
-            }
-            if (std::filesystem::exists(sub_dir.path() / "subraces")) {
-                parseCharacterSubraces(sub_dir.path() / "subraces");
-            }
+        if (std::filesystem::exists(dir.path() / "classes")) {
+            parseCharacterClasses(dir.path() / "classes");
+        }
+        if (std::filesystem::exists(dir.path() / "subclasses")) {
+            parseCharacterSubclasses(dir.path() / "subclasses");
+        }
+        if (std::filesystem::exists(dir.path() / "races")) {
+            parseCharacterRaces(dir.path() / "races");
+        }
+        if (std::filesystem::exists(dir.path() / "subraces")) {
+            parseCharacterSubraces(dir.path() / "subraces");
         }
     }
     validateCharacterSubclasses();
