@@ -51,7 +51,7 @@ void dnd::ContentParser::parseSpells(const std::filesystem::path& directory) {
         }
         for (const auto& [spell_name, spell_info] : spells_json->items()) {
             try {
-                std::unique_ptr<Spell> spell = SpellParser::createSpell(spell_name, spell_info);
+                std::shared_ptr<const Spell> spell = SpellParser::createSpell(spell_name, spell_info);
                 if (controller.spells.find(spell_name) != controller.spells.end()) {
                     std::cerr << "Warning: Duplicate of spell \"" << spell_name << "\" found in " << entry.path()
                               << ".\n";
@@ -78,7 +78,7 @@ void dnd::ContentParser::parseCharacterClasses(const std::filesystem::path& dire
             throw parsing_error("Class file \"" + filename + "\" is not formatted as an object/map.");
         }
         try {
-            std::unique_ptr<CharacterClass> character_class =
+            std::shared_ptr<const CharacterClass> character_class =
                 CharacterClassParser::createCharacterClass(*character_class_json);
             if (controller.character_classes.find(character_class->name) != controller.character_classes.end()) {
                 std::cerr << "Warning: Duplicate of character class \"" << character_class->name << "\" found in "
@@ -105,7 +105,7 @@ void dnd::ContentParser::parseCharacterSubclasses(const std::filesystem::path& d
             throw parsing_error("Subclass file \"" + filename + "\" is not formatted as an object/map.");
         }
         try {
-            std::unique_ptr<CharacterSubclass> character_subclass =
+            std::shared_ptr<const CharacterSubclass> character_subclass =
                 CharacterClassParser::createCharacterSubclass(*character_subclass_json);
             if (controller.character_subclasses.find(character_subclass->name)
                 != controller.character_subclasses.end()) {
@@ -133,7 +133,7 @@ void dnd::ContentParser::parseCharacterRaces(const std::filesystem::path& direct
             throw parsing_error("Race file \"" + filename + "\" is not formatted as an object/map.");
         }
         try {
-            std::unique_ptr<CharacterRace> character_race =
+            std::shared_ptr<const CharacterRace> character_race =
                 CharacterRaceParser::createCharacterRace(*character_race_json);
             if (controller.character_races.find(character_race->name) != controller.character_races.end()) {
                 std::cerr << "Warning: Duplicate of character race \"" << character_race->name << "\" found in "
@@ -160,7 +160,7 @@ void dnd::ContentParser::parseCharacterSubraces(const std::filesystem::path& dir
             throw parsing_error("Subrace file \"" + filename + "\" is not formatted as an object/map.");
         }
         try {
-            std::unique_ptr<CharacterSubrace> character_subrace =
+            std::shared_ptr<const CharacterSubrace> character_subrace =
                 CharacterRaceParser::createCharacterSubrace(*character_subrace_json);
             if (controller.character_subraces.find(character_subrace->name) != controller.character_subraces.end()) {
                 std::cerr << "Warning: Duplicate of character subrace \"" << character_subrace->name << "\" found in "

@@ -12,6 +12,7 @@ namespace dnd {
 class Feature {
 public:
     const std::string name, description;
+    // TODO: should this really be public AND non-const?
     std::vector<std::unique_ptr<Effect>> earliest, early, normal, late, latest;
     Feature(const std::string& name, const std::string& description) : name(name), description(description) {}
     // TODO: manage adding and removing languages/proficiencies/senses etc.

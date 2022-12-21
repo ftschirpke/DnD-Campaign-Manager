@@ -8,7 +8,7 @@
 #include "parsing/models/feature_holder_parser.hpp"
 #include "parsing/models/features/feature_parser.hpp"
 
-std::unique_ptr<dnd::CharacterRace> dnd::CharacterRaceParser::createCharacterRace(
+std::shared_ptr<const dnd::CharacterRace> dnd::CharacterRaceParser::createCharacterRace(
     const nlohmann::json& character_race_json
 ) {
     if (!character_race_json.is_object()) {
@@ -20,10 +20,10 @@ std::unique_ptr<dnd::CharacterRace> dnd::CharacterRaceParser::createCharacterRac
     }
     CharacterRace character_race(character_race_json.at("name"), has_subraces);
     FeatureHolderParser::parseAndAddFeatures(character_race_json.at("features"), character_race);
-    return std::make_unique<CharacterRace>(std::move(character_race));
+    return std::make_shared<const CharacterRace>(std::move(character_race));
 }
 
-std::unique_ptr<dnd::CharacterSubrace> dnd::CharacterRaceParser::createCharacterSubrace(
+std::shared_ptr<const dnd::CharacterSubrace> dnd::CharacterRaceParser::createCharacterSubrace(
     const nlohmann::json& character_subrace_json
 ) {
     if (!character_subrace_json.is_object()) {
@@ -31,5 +31,5 @@ std::unique_ptr<dnd::CharacterSubrace> dnd::CharacterRaceParser::createCharacter
     }
     CharacterSubrace character_subrace(character_subrace_json.at("name"), character_subrace_json.at("race"));
     FeatureHolderParser::parseAndAddFeatures(character_subrace_json.at("features"), character_subrace);
-    return std::make_unique<CharacterSubrace>(std::move(character_subrace));
+    return std::make_shared<const CharacterSubrace>(std::move(character_subrace));
 }
