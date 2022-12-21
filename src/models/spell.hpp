@@ -29,7 +29,8 @@ const std::unordered_map<std::string, MagicSchool> magic_schools = {
     {"abjuration", MagicSchool::ABJURATION}, {"conjuration", MagicSchool::CONJURATION},
     {"divination", MagicSchool::DIVINATION}, {"enchantment", MagicSchool::ENCHANTMENT},
     {"evocation", MagicSchool::EVOCATION},   {"illusion", MagicSchool::ILLUSION},
-    {"necromancy", MagicSchool::NECROMANCY}, {"transmutation", MagicSchool::TRANSMUTATION}};
+    {"necromancy", MagicSchool::NECROMANCY}, {"transmutation", MagicSchool::TRANSMUTATION},
+};
 
 enum SpellLevel {
     CANTRIP = 0,

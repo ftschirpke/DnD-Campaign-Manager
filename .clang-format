@@ -10,6 +10,7 @@ BreakConstructorInitializers: BeforeColon
 BreakBeforeTernaryOperators: true
 ColumnLimit: 120
 EmptyLineBeforeAccessModifier: Never
+InsertTrailingCommas: Wrapped
 KeepEmptyLinesAtTheStartOfBlocks: false
 MaxEmptyLinesToKeep: 2
 PenaltyReturnTypeOnItsOwnLine: 10000

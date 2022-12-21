@@ -158,9 +158,10 @@ TEST_CASE("dnd::SpellParser::createSpellType: parse valid types") {
     std::string s;
 
     const std::vector<std::string> allowed_magic_school_spellings = {
-        "abjuration",  "Abjuration",  "conjuration",   "Conjuration",  "divination", "Divination",
-        "enchantment", "Enchantment", "evocation",     "Evocation",    "illusion",   "Illusion",
-        "necromancy",  "Necromancy",  "transmutation", "Transmutation"};
+        "abjuration",  "Abjuration",  "conjuration",   "Conjuration",   "divination", "Divination",
+        "enchantment", "Enchantment", "evocation",     "Evocation",     "illusion",   "Illusion",
+        "necromancy",  "Necromancy",  "transmutation", "Transmutation",
+    };
     SECTION("cantrips") {
         for (const auto& spelling : allowed_magic_school_spellings) {
             s = spelling + " cantrip";

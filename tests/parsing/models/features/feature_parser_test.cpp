@@ -55,7 +55,12 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid numeric effects") 
     dnd::Feature feature("test", "feature for testing of effect parsing");
     // TODO: change, when CreatureState is properly implemented
     dnd::CreatureState teststate;
-    teststate.attributes = {{"MAXHP", 1000}, {"STR", 1000}, {"CON", 1000}, {"INT", 1000}};
+    teststate.attributes = {
+        {"MAXHP", 1000},
+        {"STR", 1000},
+        {"CON", 1000},
+        {"INT", 1000},
+    };
     SECTION("add") {
         REQUIRE_NOTHROW(dnd::FeatureParser::parseAndAddEffect("MAXHP normal add 2", feature));
         REQUIRE_NOTHROW(dnd::FeatureParser::parseAndAddEffect("STR earliest add 1.25", feature));
@@ -72,7 +77,11 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid numeric effects") 
         REQUIRE_NOTHROW(feature.normal[0]->applyTo(teststate));
         REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
         const std::unordered_map<std::string, int> result = {
-            {"MAXHP", 1200}, {"STR", 1125}, {"CON", 930}, {"INT", 700}};
+            {"MAXHP", 1200},
+            {"STR", 1125},
+            {"CON", 930},
+            {"INT", 700},
+        };
         REQUIRE(teststate.attributes == result);
     }
     SECTION("mult") {
@@ -91,7 +100,11 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid numeric effects") 
         REQUIRE_NOTHROW(feature.normal[0]->applyTo(teststate));
         REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
         const std::unordered_map<std::string, int> result = {
-            {"MAXHP", 2000}, {"STR", 1250}, {"CON", -700}, {"INT", -3000}};
+            {"MAXHP", 2000},
+            {"STR", 1250},
+            {"CON", -700},
+            {"INT", -3000},
+        };
         REQUIRE(teststate.attributes == result);
     }
     SECTION("div") {
@@ -110,7 +123,11 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid numeric effects") 
         REQUIRE_NOTHROW(feature.normal[0]->applyTo(teststate));
         REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
         const std::unordered_map<std::string, int> result = {
-            {"MAXHP", 500}, {"STR", 800}, {"CON", -1428}, {"INT", -333}};
+            {"MAXHP", 500},
+            {"STR", 800},
+            {"CON", -1428},
+            {"INT", -333},
+        };
         REQUIRE(teststate.attributes == result);
     }
     SECTION("div") {
@@ -128,7 +145,12 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid numeric effects") 
         REQUIRE_NOTHROW(feature.early[0]->applyTo(teststate));
         REQUIRE_NOTHROW(feature.normal[0]->applyTo(teststate));
         REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
-        const std::unordered_map<std::string, int> result = {{"MAXHP", 200}, {"STR", 125}, {"CON", -70}, {"INT", -300}};
+        const std::unordered_map<std::string, int> result = {
+            {"MAXHP", 200},
+            {"STR", 125},
+            {"CON", -70},
+            {"INT", -300},
+        };
         REQUIRE(teststate.attributes == result);
     }
 }
@@ -137,8 +159,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Other' identifier
     dnd::Feature feature("test", "feature for testing of effect parsing");
     // TODO: change, when CreatureState is properly implemented
     dnd::CreatureState teststate;
-    teststate.attributes = {{"AC", 200},     {"DEX", 125},  {"WIS", -70},  {"CHA", -300},
-                            {"MAXHP", 1000}, {"STR", 1000}, {"CON", 1000}, {"INT", 1000}};
+    teststate.attributes = {
+        {"AC", 200},     {"DEX", 125},  {"WIS", -70},  {"CHA", -300},
+        {"MAXHP", 1000}, {"STR", 1000}, {"CON", 1000}, {"INT", 1000},
+    };
     SECTION("addOther") {
         REQUIRE_NOTHROW(dnd::FeatureParser::parseAndAddEffect("MAXHP normal addOther AC", feature));
         REQUIRE_NOTHROW(dnd::FeatureParser::parseAndAddEffect("STR earliest addOther DEX", feature));
@@ -154,9 +178,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Other' identifier
         REQUIRE_NOTHROW(feature.early[0]->applyTo(teststate));
         REQUIRE_NOTHROW(feature.normal[0]->applyTo(teststate));
         REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
-        const std::unordered_map<std::string, int> result = {{"AC", 200},   {"DEX", 125},    {"WIS", -70},
-                                                             {"CHA", -300}, {"MAXHP", 1200}, {"STR", 1125},
-                                                             {"CON", 930},  {"INT", 700}};
+        const std::unordered_map<std::string, int> result = {
+            {"AC", 200},     {"DEX", 125},  {"WIS", -70}, {"CHA", -300},
+            {"MAXHP", 1200}, {"STR", 1125}, {"CON", 930}, {"INT", 700},
+        };
         REQUIRE(teststate.attributes == result);
     }
     SECTION("multOther") {
@@ -174,9 +199,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Other' identifier
         REQUIRE_NOTHROW(feature.early[0]->applyTo(teststate));
         REQUIRE_NOTHROW(feature.normal[0]->applyTo(teststate));
         REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
-        const std::unordered_map<std::string, int> result = {{"AC", 200},   {"DEX", 125},    {"WIS", -70},
-                                                             {"CHA", -300}, {"MAXHP", 2000}, {"STR", 1250},
-                                                             {"CON", -700}, {"INT", -3000}};
+        const std::unordered_map<std::string, int> result = {
+            {"AC", 200},     {"DEX", 125},  {"WIS", -70},  {"CHA", -300},
+            {"MAXHP", 2000}, {"STR", 1250}, {"CON", -700}, {"INT", -3000},
+        };
         REQUIRE(teststate.attributes == result);
     }
     SECTION("divOther") {
@@ -194,9 +220,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Other' identifier
         REQUIRE_NOTHROW(feature.early[0]->applyTo(teststate));
         REQUIRE_NOTHROW(feature.normal[0]->applyTo(teststate));
         REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
-        const std::unordered_map<std::string, int> result = {{"AC", 200},    {"DEX", 125},   {"WIS", -70},
-                                                             {"CHA", -300},  {"MAXHP", 500}, {"STR", 800},
-                                                             {"CON", -1428}, {"INT", -333}};
+        const std::unordered_map<std::string, int> result = {
+            {"AC", 200},    {"DEX", 125}, {"WIS", -70},   {"CHA", -300},
+            {"MAXHP", 500}, {"STR", 800}, {"CON", -1428}, {"INT", -333},
+        };
         REQUIRE(teststate.attributes == result);
     }
     SECTION("setOther") {
@@ -214,8 +241,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Other' identifier
         REQUIRE_NOTHROW(feature.early[0]->applyTo(teststate));
         REQUIRE_NOTHROW(feature.normal[0]->applyTo(teststate));
         REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
-        const std::unordered_map<std::string, int> result = {{"AC", 200},    {"DEX", 125}, {"WIS", -70}, {"CHA", -300},
-                                                             {"MAXHP", 200}, {"STR", 125}, {"CON", -70}, {"INT", -300}};
+        const std::unordered_map<std::string, int> result = {
+            {"AC", 200},    {"DEX", 125}, {"WIS", -70}, {"CHA", -300},
+            {"MAXHP", 200}, {"STR", 125}, {"CON", -70}, {"INT", -300},
+        };
         REQUIRE(teststate.attributes == result);
     }
 }
@@ -223,11 +252,20 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Other' identifier
 TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Const' identifier effects") {
     dnd::Feature feature("test", "feature for testing of effect parsing");
     const std::unordered_map<std::string, int> constants = {
-        {"LEVEL", 200}, {"ARMOR_ON", 125}, {"CONST1", -70}, {"CONST2", -300}};
+        {"LEVEL", 200},
+        {"ARMOR_ON", 125},
+        {"CONST1", -70},
+        {"CONST2", -300},
+    };
     // TODO: change, when CreatureState is properly implemented
     dnd::CreatureState teststate(constants);
     REQUIRE(teststate.constants == constants);
-    teststate.attributes = {{"MAXHP", 1000}, {"STR", 1000}, {"CON", 1000}, {"INT", 1000}};
+    teststate.attributes = {
+        {"MAXHP", 1000},
+        {"STR", 1000},
+        {"CON", 1000},
+        {"INT", 1000},
+    };
     SECTION("addConst") {
         REQUIRE_NOTHROW(dnd::FeatureParser::parseAndAddEffect("MAXHP normal addConst LEVEL", feature));
         REQUIRE_NOTHROW(dnd::FeatureParser::parseAndAddEffect("STR earliest addConst ARMOR_ON", feature));
@@ -245,7 +283,11 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Const' identifier
         REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
         REQUIRE(teststate.constants == constants);
         const std::unordered_map<std::string, int> result = {
-            {"MAXHP", 1200}, {"STR", 1125}, {"CON", 930}, {"INT", 700}};
+            {"MAXHP", 1200},
+            {"STR", 1125},
+            {"CON", 930},
+            {"INT", 700},
+        };
         REQUIRE(teststate.attributes == result);
     }
     SECTION("multConst") {
@@ -265,7 +307,11 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Const' identifier
         REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
         REQUIRE(teststate.constants == constants);
         const std::unordered_map<std::string, int> result = {
-            {"MAXHP", 2000}, {"STR", 1250}, {"CON", -700}, {"INT", -3000}};
+            {"MAXHP", 2000},
+            {"STR", 1250},
+            {"CON", -700},
+            {"INT", -3000},
+        };
         REQUIRE(teststate.attributes == result);
     }
     SECTION("divConst") {
@@ -285,7 +331,11 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Const' identifier
         REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
         REQUIRE(teststate.constants == constants);
         const std::unordered_map<std::string, int> result = {
-            {"MAXHP", 500}, {"STR", 800}, {"CON", -1428}, {"INT", -333}};
+            {"MAXHP", 500},
+            {"STR", 800},
+            {"CON", -1428},
+            {"INT", -333},
+        };
         REQUIRE(teststate.attributes == result);
     }
     SECTION("setConst") {
@@ -304,7 +354,12 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Const' identifier
         REQUIRE_NOTHROW(feature.normal[0]->applyTo(teststate));
         REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
         REQUIRE(teststate.constants == constants);
-        const std::unordered_map<std::string, int> result = {{"MAXHP", 200}, {"STR", 125}, {"CON", -70}, {"INT", -300}};
+        const std::unordered_map<std::string, int> result = {
+            {"MAXHP", 200},
+            {"STR", 125},
+            {"CON", -70},
+            {"INT", -300},
+        };
         REQUIRE(teststate.attributes == result);
     }
 }
@@ -312,11 +367,20 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Const' identifier
 TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse effect combinations") {
     dnd::Feature feature("test", "feature for testing of effect parsing");
     const std::unordered_map<std::string, int> constants = {
-        {"LEVEL", 200}, {"ARMOR_ON", 125}, {"CONST1", -70}, {"CONST2", -300}};
+        {"LEVEL", 200},
+        {"ARMOR_ON", 125},
+        {"CONST1", -70},
+        {"CONST2", -300},
+    };
     // TODO: change, when CreatureState is properly implemented
     dnd::CreatureState teststate(constants);
     REQUIRE(teststate.constants == constants);
-    teststate.attributes = {{"MAXHP", 1000}, {"STR", 1000}, {"CON", 1000}, {"INT", 1000}};
+    teststate.attributes = {
+        {"MAXHP", 1000},
+        {"STR", 1000},
+        {"CON", 1000},
+        {"INT", 1000},
+    };
     SECTION("combination 1 (order of calculation)") {
         REQUIRE_NOTHROW(dnd::FeatureParser::parseAndAddEffect("MAXHP earliest setConst CONST2", feature));
         REQUIRE_NOTHROW(dnd::FeatureParser::parseAndAddEffect("MAXHP early div -4", feature));
@@ -338,7 +402,11 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse effect combinations") {
         REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
         REQUIRE(teststate.constants == constants);
         const std::unordered_map<std::string, int> result = {
-            {"MAXHP", -2550}, {"STR", 1000}, {"CON", 1000}, {"INT", 1000}};
+            {"MAXHP", -2550},
+            {"STR", 1000},
+            {"CON", 1000},
+            {"INT", 1000},
+        };
         REQUIRE(teststate.attributes == result);
     }
     SECTION("combination 2") {
@@ -362,7 +430,11 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse effect combinations") {
         REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
         REQUIRE(teststate.constants == constants);
         const std::unordered_map<std::string, int> result = {
-            {"MAXHP", 550}, {"STR", -250}, {"CON", 1000}, {"INT", 1000}};
+            {"MAXHP", 550},
+            {"STR", -250},
+            {"CON", 1000},
+            {"INT", 1000},
+        };
         REQUIRE(teststate.attributes == result);
     }
 }
@@ -370,7 +442,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse effect combinations") {
 TEST_CASE("dnd::FeatureParser::addEffects: invalid JSON format") {
     dnd::Feature feature("test", "feature for testing of effect parsing");
     SECTION("JSON is object/map") {
-        const nlohmann::json effects_json = {{"1st effect", "CON normal add 2"}, {"2nd effect", "INT normal mult 3"}};
+        const nlohmann::json effects_json = {
+            {"1st effect", "CON normal add 2"},
+            {"2nd effect", "INT normal mult 3"},
+        };
         REQUIRE_THROWS(dnd::FeatureParser::addEffects(effects_json, feature));
     }
     SECTION("JSON is literal") {
@@ -384,19 +459,24 @@ TEST_CASE("dnd::FeatureParser::addEffects: invalid JSON format") {
 TEST_CASE("dnd::FeatureParser::addEffects: parse valid effect combinations") {
     dnd::Feature feature("test", "feature for testing of effect parsing");
     const std::unordered_map<std::string, int> constants = {
-        {"LEVEL", 200}, {"ARMOR_ON", 125}, {"CONST1", -70}, {"CONST2", -300}};
+        {"LEVEL", 200},
+        {"ARMOR_ON", 125},
+        {"CONST1", -70},
+        {"CONST2", -300},
+    };
     // TODO: change, when CreatureState is properly implemented
     dnd::CreatureState teststate(constants);
     REQUIRE(teststate.constants == constants);
-    teststate.attributes = {{"MAXHP", 1000}, {"STR", 1000}, {"CON", 1000}, {"INT", 1000}};
+    teststate.attributes = {
+        {"MAXHP", 1000},
+        {"STR", 1000},
+        {"CON", 1000},
+        {"INT", 1000},
+    };
     SECTION("combination 1 (order of calculation)") {
         const nlohmann::json effects_json = {
-            "MAXHP earliest setConst CONST2",
-            "MAXHP early div -4",
-            "MAXHP normal add 2",
-            "MAXHP late multOther STR",
-            "MAXHP late mult -1",
-            "MAXHP latest addConst LEVEL"
+            "MAXHP earliest setConst CONST2", "MAXHP early div -4", "MAXHP normal add 2",
+            "MAXHP late multOther STR",       "MAXHP late mult -1", "MAXHP latest addConst LEVEL",
         };
         REQUIRE_NOTHROW(dnd::FeatureParser::addEffects(effects_json, feature));
         REQUIRE(feature.earliest.size() == 1);
@@ -413,7 +493,11 @@ TEST_CASE("dnd::FeatureParser::addEffects: parse valid effect combinations") {
         REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
         REQUIRE(teststate.constants == constants);
         const std::unordered_map<std::string, int> result = {
-            {"MAXHP", -2550}, {"STR", 1000}, {"CON", 1000}, {"INT", 1000}};
+            {"MAXHP", -2550},
+            {"STR", 1000},
+            {"CON", 1000},
+            {"INT", 1000},
+        };
         REQUIRE(teststate.attributes == result);
     }
     SECTION("combination 2") {
@@ -423,7 +507,7 @@ TEST_CASE("dnd::FeatureParser::addEffects: parse valid effect combinations") {
             "MAXHP early div 2",
             "MAXHP normal add 2",
             "MAXHP normal add 1",
-            "MAXHP latest addOther STR"
+            "MAXHP latest addOther STR",
         };
         REQUIRE_NOTHROW(dnd::FeatureParser::addEffects(effects_json, feature));
         REQUIRE(feature.earliest.size() == 1);
@@ -440,7 +524,11 @@ TEST_CASE("dnd::FeatureParser::addEffects: parse valid effect combinations") {
         REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
         REQUIRE(teststate.constants == constants);
         const std::unordered_map<std::string, int> result = {
-            {"MAXHP", 550}, {"STR", -250}, {"CON", 1000}, {"INT", 1000}};
+            {"MAXHP", 550},
+            {"STR", -250},
+            {"CON", 1000},
+            {"INT", 1000},
+        };
         REQUIRE(teststate.attributes == result);
     }
 }
@@ -449,7 +537,9 @@ TEST_CASE("dnd::FeatureParser::createFeature: invalid JSON format") {
     dnd::Feature feature("test", "feature for testing of effect parsing");
     SECTION("JSON is array") {
         const nlohmann::json feature_json = {
-            "feature for testing of effect parsing", {"CON normal add 2", "INT normal mult 3"}};
+            "feature for testing of effect parsing",
+            {"CON normal add 2", "INT normal mult 3"},
+        };
         REQUIRE_THROWS(dnd::FeatureParser::createFeature("test", feature_json));
     }
     SECTION("JSON is literal") {
@@ -462,16 +552,27 @@ TEST_CASE("dnd::FeatureParser::createFeature: invalid JSON format") {
 
 TEST_CASE("dnd::FeatureParser::createFeature: parse valid features") {
     const std::unordered_map<std::string, int> constants = {
-        {"LEVEL", 200}, {"ARMOR_ON", 125}, {"CONST1", -70}, {"CONST2", -300}};
+        {"LEVEL", 200},
+        {"ARMOR_ON", 125},
+        {"CONST1", -70},
+        {"CONST2", -300},
+    };
     // TODO: change, when CreatureState is properly implemented
     dnd::CreatureState teststate(constants);
     REQUIRE(teststate.constants == constants);
-    teststate.attributes = {{"MAXHP", 1000}, {"STR", 1000}, {"CON", 1000}, {"INT", 1000}};
+    teststate.attributes = {
+        {"MAXHP", 1000},
+        {"STR", 1000},
+        {"CON", 1000},
+        {"INT", 1000},
+    };
     const std::string name = "test";
     const std::string description = "feature for testing of effect parsing";
     SECTION("feature without effects") {
         // TODO: add more testcases when activation etc. is implemented
-        const nlohmann::json feature_json = {{"description", description}};
+        const nlohmann::json feature_json = {
+            {"description", description},
+        };
         std::unique_ptr<dnd::Feature> feature;
         REQUIRE_NOTHROW(feature = std::move(dnd::FeatureParser::createFeature(name, feature_json)));
         REQUIRE(feature->name == name);
@@ -484,15 +585,14 @@ TEST_CASE("dnd::FeatureParser::createFeature: parse valid features") {
     }
     SECTION("effect combination 1 (order of calculation)") {
         const nlohmann::json effects_json = {
-            "MAXHP earliest setConst CONST2",
-            "MAXHP early div -4",
-            "MAXHP normal add 2",
-            "MAXHP late multOther STR",
-            "MAXHP late mult -1",
-            "MAXHP latest addConst LEVEL"
+            "MAXHP earliest setConst CONST2", "MAXHP early div -4", "MAXHP normal add 2",
+            "MAXHP late multOther STR",       "MAXHP late mult -1", "MAXHP latest addConst LEVEL",
         };
         // TODO: add more testcases when activation etc. is implemented
-        const nlohmann::json feature_json = {{"description", description}, {"effects", effects_json}};
+        const nlohmann::json feature_json = {
+            {"description", description},
+            {"effects", effects_json},
+        };
         std::unique_ptr<dnd::Feature> feature;
         REQUIRE_NOTHROW(feature = std::move(dnd::FeatureParser::createFeature(name, feature_json)));
         REQUIRE(feature->name == name);
@@ -511,7 +611,11 @@ TEST_CASE("dnd::FeatureParser::createFeature: parse valid features") {
         REQUIRE_NOTHROW(feature->latest[0]->applyTo(teststate));
         REQUIRE(teststate.constants == constants);
         const std::unordered_map<std::string, int> result = {
-            {"MAXHP", -2550}, {"STR", 1000}, {"CON", 1000}, {"INT", 1000}};
+            {"MAXHP", -2550},
+            {"STR", 1000},
+            {"CON", 1000},
+            {"INT", 1000},
+        };
         REQUIRE(teststate.attributes == result);
     }
     SECTION("effect combination 2") {
@@ -521,10 +625,13 @@ TEST_CASE("dnd::FeatureParser::createFeature: parse valid features") {
             "MAXHP early div 2",
             "MAXHP normal add 2",
             "MAXHP normal add 1",
-            "MAXHP latest addOther STR"
+            "MAXHP latest addOther STR",
         };
         // TODO: add more testcases when activation etc. is implemented
-        const nlohmann::json feature_json = {{"description", description}, {"effects", effects_json}};
+        const nlohmann::json feature_json = {
+            {"description", description},
+            {"effects", effects_json},
+        };
         std::unique_ptr<dnd::Feature> feature;
         REQUIRE_NOTHROW(feature = std::move(dnd::FeatureParser::createFeature(name, feature_json)));
         REQUIRE(feature->name == name);
@@ -543,7 +650,11 @@ TEST_CASE("dnd::FeatureParser::createFeature: parse valid features") {
         REQUIRE_NOTHROW(feature->latest[0]->applyTo(teststate));
         REQUIRE(teststate.constants == constants);
         const std::unordered_map<std::string, int> result = {
-            {"MAXHP", 550}, {"STR", -250}, {"CON", 1000}, {"INT", 1000}};
+            {"MAXHP", 550},
+            {"STR", -250},
+            {"CON", 1000},
+            {"INT", 1000},
+        };
         REQUIRE(teststate.attributes == result);
     }
 }

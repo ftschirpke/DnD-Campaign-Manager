@@ -5,7 +5,8 @@ Because the project is still in its beginnings and only managed by myself right 
 ## Format
 
 Please use the format defined by the [clang-format file](.clang-format) as much as possible.
-But feel free to deviate from this format, whenever doing so greatly improves the readability of the code.
+You may deviate from this format, whenever doing so greatly improves the readability of the code. But this should be the exception.
+In most cases changing the [clang-format file](.clang-format) itself might be the better solution.
 
 ## Commit types
 
