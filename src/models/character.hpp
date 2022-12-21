@@ -2,8 +2,9 @@
 #define CHARACTER_HPP_
 
 #include <iostream>
+#include <map>
 #include <memory>
-#include <unordered_map>
+#include <vector>
 
 #include "character_class.hpp"
 #include "character_race.hpp"
@@ -11,7 +12,7 @@
 
 namespace dnd {
 
-const std::unordered_map<int, int> xp_for_level = {
+const std::map<int, int> xp_for_level = {
     {1, 0},       {2, 300},     {3, 900},     {4, 2700},    {5, 6500},    {6, 14000},   {7, 23000},
     {8, 34000},   {9, 48000},   {10, 64000},  {11, 85000},  {12, 100000}, {13, 120000}, {14, 140000},
     {15, 165000}, {16, 195000}, {17, 225000}, {18, 265000}, {19, 305000}, {20, 355000},
@@ -19,14 +20,17 @@ const std::unordered_map<int, int> xp_for_level = {
 
 class Character : public Creature {
 private:
-    int xp, level;
+    int level, xp;
+    std::vector<int> hit_dice_rolls;
+    void updateLevel();
 public:
     // TODO: should these pointers be non-const?
     std::shared_ptr<const CharacterClass> class_ptr;
     std::shared_ptr<const CharacterSubclass> subclass_ptr;
     std::shared_ptr<const CharacterRace> race_ptr;
     std::shared_ptr<const CharacterSubrace> subrace_ptr;
-    Character(const std::string& name) : Creature(name) {}
+    Character(const std::string& name, const std::vector<int>& base_ability_scores)
+        : Creature(name, base_ability_scores) {}
     inline int getLevel() const { return level; }
     inline int getXp() const { return level; }
     inline void levelUp() {
@@ -42,6 +46,7 @@ public:
             return;
         }
         xp = new_xp;
+        updateLevel();
     }
     inline void increaseXP(int xp_increase) {
         if (-xp_increase > xp) {
@@ -49,6 +54,7 @@ public:
             return;
         }
         xp += xp_increase;
+        updateLevel();
     }
     inline void decreaseXP(int xp_decrease) { increaseXP(-xp_decrease); }
 };
