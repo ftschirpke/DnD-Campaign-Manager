@@ -18,6 +18,7 @@ public:
 class ContentParser {
 private:
     const std::filesystem::path content_path;
+    const std::string campaign_dir_name;
     ContentController& controller;
     const std::unique_ptr<const nlohmann::json> openJSON(const std::filesystem::directory_entry& file);
     void parseSpells(const std::filesystem::path& directory);
@@ -28,8 +29,8 @@ private:
     void validateCharacterSubclasses() const;
     void validateCharacterSubraces() const;
 public:
-    ContentParser(const std::filesystem::path& content_path, ContentController& controller)
-        : content_path(content_path), controller(controller) {}
+    ContentParser(const std::filesystem::path& content_path, const std::string& campaign_dir_name, ContentController& controller)
+        : content_path(content_path), campaign_dir_name(campaign_dir_name), controller(controller) {}
     void parseAll();
 };
 

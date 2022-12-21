@@ -212,23 +212,33 @@ void dnd::ContentParser::validateCharacterSubraces() const {
 }
 
 void dnd::ContentParser::parseAll() {
-    const std::filesystem::path path(content_path);
-    try {
-        std::filesystem::directory_entry entry(path);
-        if (!entry.is_directory()) {
-            std::stringstream sstr;
-            sstr << path << " is not a directory.";
-            throw std::invalid_argument(sstr.str());
-        }
-    } catch (const std::filesystem::filesystem_error& e) {
+    if (!std::filesystem::exists(content_path)) {
         std::stringstream sstr;
-        sstr << path << " does not exist.";
+        sstr << content_path << " does not exist.";
+        throw std::invalid_argument(sstr.str());
+    }
+    if (!std::filesystem::directory_entry(content_path).is_directory()) {
+        std::stringstream sstr;
+        sstr << content_path << " is not a directory.";
+        throw std::invalid_argument(sstr.str());
+    }
+    if (!std::filesystem::exists(content_path / "general")) {
+        throw std::invalid_argument("No subdirectory 'general' exists within the content directory.");
+    }
+    if (!std::filesystem::exists(content_path / campaign_dir_name)) {
+        std::stringstream sstr;
+        sstr << "No subdirectory '" << campaign_dir_name << "' exists within the content directory.";
         throw std::invalid_argument(sstr.str());
     }
     for (const auto& dir : std::filesystem::directory_iterator(content_path)) {
         if (!dir.is_directory()) {
             continue;
         }
+        const std::string dir_name = dir.path().filename().c_str();
+        if (dir_name != "general" && dir_name != campaign_dir_name) {
+            continue;
+        }
+        std::cout << "Parsing \"" << dir_name << "\" directory...\n";
         for (const auto& sub_dir : std::filesystem::directory_iterator(dir)) {
             if (!sub_dir.is_directory()) {
                 continue;
