@@ -12,8 +12,10 @@ namespace dnd {
 
 class CharacterClassParser {
 public:
-    static std::unique_ptr<CharacterClass> createCharacterClass(const nlohmann::json& character_class_json);
-    static std::unique_ptr<CharacterSubclass> createCharacterSubclass(const nlohmann::json& character_subclass_json);
+    static std::shared_ptr<const CharacterClass> createCharacterClass(const nlohmann::json& character_class_json);
+    static std::shared_ptr<const CharacterSubclass> createCharacterSubclass(
+        const nlohmann::json& character_subclass_json
+    );
 };
 
 } // namespace dnd

@@ -13,11 +13,11 @@ namespace dnd {
 
 class ContentController {
 public:
-    std::unordered_map<std::string, std::unique_ptr<Spell>> spells;
-    std::unordered_map<std::string, std::unique_ptr<CharacterClass>> character_classes;
-    std::unordered_map<std::string, std::unique_ptr<CharacterSubclass>> character_subclasses;
-    std::unordered_map<std::string, std::unique_ptr<CharacterRace>> character_races;
-    std::unordered_map<std::string, std::unique_ptr<CharacterSubrace>> character_subraces;
+    std::unordered_map<std::string, std::shared_ptr<const Spell>> spells;
+    std::unordered_map<std::string, std::shared_ptr<const CharacterClass>> character_classes;
+    std::unordered_map<std::string, std::shared_ptr<const CharacterSubclass>> character_subclasses;
+    std::unordered_map<std::string, std::shared_ptr<const CharacterRace>> character_races;
+    std::unordered_map<std::string, std::shared_ptr<const CharacterSubrace>> character_subraces;
     void printStatus() const;
 };
 

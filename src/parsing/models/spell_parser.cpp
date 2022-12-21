@@ -11,7 +11,7 @@
 
 #include "models/spell.hpp"
 
-std::unique_ptr<dnd::Spell> dnd::SpellParser::createSpell(
+std::shared_ptr<const dnd::Spell> dnd::SpellParser::createSpell(
     const std::string& spell_name, const nlohmann::json& spell_json
 ) {
     if (!spell_json.is_object()) {
@@ -24,7 +24,7 @@ std::unique_ptr<dnd::Spell> dnd::SpellParser::createSpell(
     const SpellComponents components = *createSpellComponents(spell_json.at("components"));
     const std::string duration = spell_json.at("duration");
     const std::string description = spell_json.at("description");
-    return std::unique_ptr<Spell>(new Spell(name, type, casting_time, range, components, duration, description));
+    return std::make_shared<const Spell>(name, type, casting_time, range, components, duration, description);
 }
 
 std::unique_ptr<dnd::SpellComponents> dnd::SpellParser::createSpellComponents(const std::string& components_str) {

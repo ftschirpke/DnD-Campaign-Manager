@@ -8,7 +8,7 @@
 #include "parsing/models/feature_holder_parser.hpp"
 #include "parsing/models/features/feature_parser.hpp"
 
-std::unique_ptr<dnd::CharacterClass> dnd::CharacterClassParser::createCharacterClass(
+std::shared_ptr<const dnd::CharacterClass> dnd::CharacterClassParser::createCharacterClass(
     const nlohmann::json& character_class_json
 ) {
     if (!character_class_json.is_object()) {
@@ -16,10 +16,10 @@ std::unique_ptr<dnd::CharacterClass> dnd::CharacterClassParser::createCharacterC
     }
     CharacterClass character_class(character_class_json.at("name"), character_class_json.at("hit_dice"));
     FeatureHolderParser::parseAndAddFeatures(character_class_json.at("features"), character_class);
-    return std::make_unique<CharacterClass>(std::move(character_class));
+    return std::make_shared<const CharacterClass>(std::move(character_class));
 }
 
-std::unique_ptr<dnd::CharacterSubclass> dnd::CharacterClassParser::createCharacterSubclass(
+std::shared_ptr<const dnd::CharacterSubclass> dnd::CharacterClassParser::createCharacterSubclass(
     const nlohmann::json& character_subclass_json
 ) {
     if (!character_subclass_json.is_object()) {
@@ -27,5 +27,5 @@ std::unique_ptr<dnd::CharacterSubclass> dnd::CharacterClassParser::createCharact
     }
     CharacterSubclass character_subclass(character_subclass_json.at("name"), character_subclass_json.at("class"));
     FeatureHolderParser::parseAndAddFeatures(character_subclass_json.at("features"), character_subclass);
-    return std::make_unique<CharacterSubclass>(std::move(character_subclass));
+    return std::make_shared<const CharacterSubclass>(std::move(character_subclass));
 }

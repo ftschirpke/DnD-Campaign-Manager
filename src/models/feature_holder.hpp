@@ -11,6 +11,7 @@ namespace dnd {
 class FeatureHolder {
 public:
     const std::string name;
+    // TODO: should this really be public AND non-const?
     std::vector<std::unique_ptr<Feature>> features;
     FeatureHolder(const std::string& name) : name(name) {}
 };
