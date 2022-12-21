@@ -5,12 +5,14 @@ build/
 content_imperial/*
 !content_imperial/README.md
 !content_imperial/LICENSE
+!content_imperial/example_campaign
 !content_imperial/general
 content_imperial/general/*
 !content_imperial/general/srd
 content_metric/*
 !content_metric/README.md
 !content_metric/LICENSE
+!content_metric/example_campaign
 !content_metric/general
 content_metric/general/*
 !content_metric/general/srd
