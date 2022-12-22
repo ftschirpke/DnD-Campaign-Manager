@@ -32,10 +32,13 @@ private:
 public:
     ContentParser(
         const std::filesystem::path& content_path, const std::string& campaign_dir_name, ContentController& controller
-    )
-        : content_path(content_path), campaign_dir_name(campaign_dir_name), controller(controller) {}
-    void parseAll();
+    );
 };
+
+inline ContentParser::ContentParser(
+    const std::filesystem::path& content_path, const std::string& campaign_dir_name, ContentController& controller
+)
+    : content_path(content_path), campaign_dir_name(campaign_dir_name), controller(controller) {}
 
 } // namespace dnd
 

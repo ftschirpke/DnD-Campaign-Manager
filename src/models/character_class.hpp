@@ -10,15 +10,20 @@ namespace dnd {
 class CharacterClass : public FeatureHolder {
 public:
     const std::string hit_dice;
-    CharacterClass(const std::string& name, const std::string& hit_dice) : FeatureHolder(name), hit_dice(hit_dice) {}
+    CharacterClass(const std::string& name, const std::string& hit_dice);
 };
 
 class CharacterSubclass : public FeatureHolder {
 public:
     const std::string class_name;
-    CharacterSubclass(const std::string& name, const std::string& class_name)
-        : FeatureHolder(name), class_name(class_name) {}
+    CharacterSubclass(const std::string& name, const std::string& class_name);
 };
+
+inline CharacterClass::CharacterClass(const std::string& name, const std::string& hit_dice)
+    : FeatureHolder(name), hit_dice(hit_dice) {}
+
+inline CharacterSubclass::CharacterSubclass(const std::string& name, const std::string& class_name)
+    : FeatureHolder(name), class_name(class_name) {}
 
 } // namespace dnd
 
