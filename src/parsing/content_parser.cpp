@@ -251,7 +251,7 @@ void dnd::ContentParser::validateCharacterSubraces() const {
     bool all_valid = true;
     for (const auto& [subrace_name, subrace_ptr] : controller.character_subraces) {
         try {
-            auto& race_ptr = controller.character_races.at(subrace_ptr->race_name);
+            std::shared_ptr<const CharacterRace> race_ptr = controller.character_races.at(subrace_ptr->race_name);
             if (!race_ptr->has_subraces) {
                 std::cerr << "Error: Subrace \"" << subrace_name << "\" is invalid. \"" << race_ptr->name
                           << "\" does not have subraces.\n";

@@ -3,6 +3,7 @@
 #include <memory>
 #include <regex>
 #include <stdexcept>
+#include <string>
 
 #include <nlohmann/json.hpp>
 
@@ -15,9 +16,11 @@ std::unique_ptr<dnd::Feature> dnd::FeatureParser::createFeature(
     if (!feature_json.is_object()) {
         throw std::invalid_argument("Feature \"" + feature_name + "\" is not formatted as an object/map.");
     }
-    Feature feature(feature_name, feature_json.at("description"));
+    const std::string feature_description = feature_json.at("description").get<std::string>();
+    Feature feature(feature_name, feature_description);
     if (feature_json.contains("effects")) {
-        addEffects(feature_json.at("effects"), feature);
+        const std::string feature_effects = feature_json.at("effects").get<std::string>();
+        addEffects(feature_effects, feature);
     }
     return std::make_unique<Feature>(std::move(feature));
 }
@@ -27,8 +30,9 @@ void dnd::FeatureParser::addEffects(const nlohmann::json& effects_json, Feature&
     if (!effects_json.is_array()) {
         throw std::invalid_argument("Effects of feature \"" + feature.name + "\" are not formatted as an array.");
     }
-    for (const std::string& effect_str : effects_json) {
+    for (const auto& effect_val : effects_json) {
         try {
+            const std::string effect_str = effect_val.get<std::string>();
             parseAndAddEffect(effect_str, feature);
         } catch (const std::invalid_argument& e) {
             throw std::invalid_argument("Feature \"" + feature.name + "\": " + e.what());
