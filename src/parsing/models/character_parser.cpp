@@ -16,6 +16,11 @@ std::shared_ptr<dnd::Character> dnd::CharacterParser::createCharacter(
 ) {
     const std::string character_name = character_json.at("name").get<std::string>();
     const std::vector<int> base_ability_scores = character_json.at("base_ability_scores").get<std::vector<int>>();
+    if (base_ability_scores.size() != 6) {
+        std::stringstream sstr;
+        sstr << "Character \"" << character_name << "\" is invalid. Characters must have exactly 6 ability scores\n";
+        throw std::invalid_argument(sstr.str());
+    }
     Character character(character_name, base_ability_scores);
 
     parseFeatureHolders(character, character_json, content_controller);

@@ -22,26 +22,38 @@ class Character : public Creature {
 private:
     int level, xp;
     std::vector<int> hit_dice_rolls;
-    inline void updateLevel() { level = levelForXP(xp); }
+    void updateLevel();
+protected:
+    virtual const std::unordered_map<std::string, int> getConstants() const;
+    virtual const std::unordered_map<std::string, int> getInitialAttributeValues() const;
 public:
     // TODO: should these pointers be non-const?
     std::shared_ptr<const CharacterClass> class_ptr;
     std::shared_ptr<const CharacterSubclass> subclass_ptr;
     std::shared_ptr<const CharacterRace> race_ptr;
     std::shared_ptr<const CharacterSubrace> subrace_ptr;
-    Character(const std::string& name, const std::vector<int>& base_ability_scores)
-        : Creature(name, base_ability_scores) {}
-    inline int getLevel() const { return level; }
-    inline int getXP() const { return xp; }
+    Character(const std::string& name, const std::vector<int>& base_ability_scores);
+    int getLevel() const;
+    int getXP() const;
     void levelUp();
     void setLevel(int new_level);
     void setXP(int new_xp);
     void increaseXP(int xp_increase);
-    inline void decreaseXP(int xp_decrease) { increaseXP(-xp_decrease); }
-    inline std::vector<int> getHitDiceRolls() const { return hit_dice_rolls; }
+    void decreaseXP(int xp_decrease);
+    std::vector<int> getHitDiceRolls() const;
     static int levelForXP(int xp);
     void addHitDiceRoll(int hit_dice_roll);
+    virtual void determineState();
 };
+
+inline Character::Character(const std::string& name, const std::vector<int>& base_ability_scores)
+    : Creature(name, base_ability_scores), subclass_ptr(nullptr), subrace_ptr(nullptr) {}
+
+inline int Character::getLevel() const { return level; }
+
+inline int Character::getXP() const { return xp; }
+
+inline void Character::updateLevel() { level = levelForXP(xp); }
 
 inline void Character::levelUp() {
     if (level == 20) {
@@ -78,13 +90,16 @@ inline void Character::increaseXP(int xp_increase) {
     updateLevel();
 }
 
+inline void Character::decreaseXP(int xp_decrease) { increaseXP(-xp_decrease); }
+
+inline std::vector<int> Character::getHitDiceRolls() const { return hit_dice_rolls; }
+
 inline void Character::addHitDiceRoll(int hit_dice_roll) {
     hit_dice_rolls.push_back(hit_dice_roll);
     if (hit_dice_rolls.size() > level) {
         std::cerr << "Warning: More hit dice rolls than level.\n";
     }
 }
-
 
 } // namespace dnd
 
