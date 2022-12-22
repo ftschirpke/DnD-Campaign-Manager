@@ -17,15 +17,9 @@ int dnd::launch(int argc, char** argv) {
 
     cxxopts::Options options(DnDManager_NAME, DnDManager_DESCRIPTION);
 
-    options.add_options()(
-        "c,campaign", "Name of campaign directory", cxxopts::value<std::string>()
-    )(
+    options.add_options()("c,campaign", "Name of campaign directory", cxxopts::value<std::string>())(
         "d,directory", "Content directory", cxxopts::value<std::string>()->default_value((cur_path / "content").c_str())
-    )(
-        "v,version", "Print version"
-    )(
-        "h,help", "Print usage"
-    );
+    )("v,version", "Print version")("h,help", "Print usage");
 
     cxxopts::ParseResult args;
     try {

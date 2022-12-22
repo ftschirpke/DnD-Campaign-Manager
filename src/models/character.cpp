@@ -1,13 +1,15 @@
 #include "character.hpp"
 
-void dnd::Character::updateLevel() {
-    if (xp_for_level.at(level) <= xp && (level == 20 || xp_for_level.at(level+1) > xp)) {
-        return;
+#include <stdexcept>
+
+int dnd::Character::levelForXP(int xp) {
+    if (xp < 0) {
+        throw std::invalid_argument("XP cannot be negative.");
     }
-    for (const auto& [lv, min_xp] : xp_for_level) {
+    for (const auto& [level, min_xp] : xp_for_level) {
         if (min_xp <= xp) {
-            level = lv;
-            return;
+            return level;
         }
     }
+    return 0; // should never happen
 }

@@ -22,7 +22,12 @@ class Character : public Creature {
 private:
     int level, xp;
     std::vector<int> hit_dice_rolls;
-    void updateLevel();
+    inline void updateLevel() {
+        if (xp_for_level.at(level) <= xp && (level == 20 || xp_for_level.at(level + 1) > xp)) {
+            return;
+        }
+        level = levelForXP(xp);
+    }
 public:
     // TODO: should these pointers be non-const?
     std::shared_ptr<const CharacterClass> class_ptr;
@@ -32,7 +37,7 @@ public:
     Character(const std::string& name, const std::vector<int>& base_ability_scores)
         : Creature(name, base_ability_scores) {}
     inline int getLevel() const { return level; }
-    inline int getXp() const { return level; }
+    inline int getXP() const { return level; }
     inline void levelUp() {
         if (level == 20) {
             std::cerr << "Warning: Cannot level up beyond level 20.\n"; // TODO: consider throwing exception instead
@@ -57,6 +62,8 @@ public:
         updateLevel();
     }
     inline void decreaseXP(int xp_decrease) { increaseXP(-xp_decrease); }
+    inline std::vector<int> getHitDiceRolls() const { return hit_dice_rolls; }
+    static int levelForXP(int xp);
 };
 
 } // namespace dnd

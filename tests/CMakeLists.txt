@@ -2,6 +2,7 @@
 set(TEST_FILES
     launcher_test.cpp
     parsing/content_parser_test.cpp
+    parsing/models/character_parser_test.cpp
     parsing/models/spell_parser_test.cpp
     parsing/models/features/feature_parser_test.cpp
 )
