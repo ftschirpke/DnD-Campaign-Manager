@@ -11,9 +11,6 @@
 std::shared_ptr<const dnd::CharacterClass> dnd::CharacterClassParser::createCharacterClass(
     const nlohmann::json& character_class_json
 ) {
-    if (!character_class_json.is_object()) {
-        throw std::invalid_argument("Class is not formatted as an object/map.");
-    }
     CharacterClass character_class(character_class_json.at("name"), character_class_json.at("hit_dice"));
     FeatureHolderParser::parseAndAddFeatures(character_class_json.at("features"), character_class);
     return std::make_shared<const CharacterClass>(std::move(character_class));
@@ -22,9 +19,6 @@ std::shared_ptr<const dnd::CharacterClass> dnd::CharacterClassParser::createChar
 std::shared_ptr<const dnd::CharacterSubclass> dnd::CharacterClassParser::createCharacterSubclass(
     const nlohmann::json& character_subclass_json
 ) {
-    if (!character_subclass_json.is_object()) {
-        throw std::invalid_argument("Subclass is not formatted as an object/map.");
-    }
     CharacterSubclass character_subclass(character_subclass_json.at("name"), character_subclass_json.at("class"));
     FeatureHolderParser::parseAndAddFeatures(character_subclass_json.at("features"), character_subclass);
     return std::make_shared<const CharacterSubclass>(std::move(character_subclass));
