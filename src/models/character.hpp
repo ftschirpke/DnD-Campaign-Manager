@@ -22,7 +22,7 @@ class Character : public Creature {
 private:
     int level, xp;
     std::vector<int> hit_dice_rolls;
-    inline void updateLevel();
+    inline void updateLevel() { level = levelForXP(xp); }
 public:
     // TODO: should these pointers be non-const?
     std::shared_ptr<const CharacterClass> class_ptr;
@@ -32,7 +32,7 @@ public:
     Character(const std::string& name, const std::vector<int>& base_ability_scores)
         : Creature(name, base_ability_scores) {}
     inline int getLevel() const { return level; }
-    inline int getXP() const { return level; }
+    inline int getXP() const { return xp; }
     void levelUp();
     void setLevel(int new_level);
     void setXP(int new_xp);
@@ -43,13 +43,6 @@ public:
     void addHitDiceRoll(int hit_dice_roll);
 };
 
-inline void Character::updateLevel() {
-    if (xp_for_level.at(level) <= xp && (level == 20 || xp_for_level.at(level + 1) > xp)) {
-        return;
-    }
-    level = levelForXP(xp);
-}
-
 inline void Character::levelUp() {
     if (level == 20) {
         std::cerr << "Warning: Cannot level up beyond level 20.\n"; // TODO: consider throwing exception instead
@@ -59,7 +52,7 @@ inline void Character::levelUp() {
 }
 
 inline void Character::setLevel(int new_level) {
-    if (level < 1 || level > 20) {
+    if (new_level < 1 || new_level > 20) {
         std::cerr << "Warning: Level must be between 1 and 20.\n"; // TODO: consider throwing exception instead
         return;
     }

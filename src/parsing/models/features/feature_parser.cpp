@@ -19,8 +19,7 @@ std::unique_ptr<dnd::Feature> dnd::FeatureParser::createFeature(
     const std::string feature_description = feature_json.at("description").get<std::string>();
     Feature feature(feature_name, feature_description);
     if (feature_json.contains("effects")) {
-        const std::string feature_effects = feature_json.at("effects").get<std::string>();
-        addEffects(feature_effects, feature);
+        addEffects(feature_json.at("effects"), feature);
     }
     return std::make_unique<Feature>(std::move(feature));
 }

@@ -140,7 +140,7 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse logically wrong characte
     }
 }
 
-std::shared_ptr<const dnd::Character> testBasicValuesFromJSON(
+void testBasicValuesFromJSON(
     const nlohmann::json& character_json, std::shared_ptr<const dnd::Character> character_ptr
 ) {
     REQUIRE(character_ptr->name == character_json.at("name").get<std::string>());
@@ -160,7 +160,6 @@ std::shared_ptr<const dnd::Character> testBasicValuesFromJSON(
         REQUIRE(character_ptr->getXP() == character_json.at("xp").get<int>());
     }
     REQUIRE(character_ptr->getHitDiceRolls() == character_json.at("hit_dice_rolls").get<std::vector<int>>());
-    return character_ptr;
 }
 
 TEST_CASE("dnd::CharacterParser::createCharacter: parse minimum characters") {
@@ -192,28 +191,28 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse minimum characters") {
     SECTION("characters with level only") {
         valid_low_level_bob.erase("xp");
         REQUIRE_NOTHROW(character_ptr = dnd::CharacterParser::createCharacter(valid_low_level_bob, test_controller));
-        REQUIRE_NOTHROW(character_ptr = testBasicValuesFromJSON(valid_low_level_bob, std::move(character_ptr)));
+        testBasicValuesFromJSON(valid_low_level_bob, character_ptr);
         REQUIRE(character_ptr->getXP() == dnd::xp_for_level.at(valid_low_level_bob.at("level").get<int>()));
         valid_high_level_bob.erase("xp");
         REQUIRE_NOTHROW(character_ptr = dnd::CharacterParser::createCharacter(valid_high_level_bob, test_controller));
-        REQUIRE_NOTHROW(character_ptr = testBasicValuesFromJSON(valid_high_level_bob, std::move(character_ptr)));
+        testBasicValuesFromJSON(valid_high_level_bob, character_ptr);
         REQUIRE(character_ptr->getXP() == dnd::xp_for_level.at(valid_high_level_bob.at("level").get<int>()));
     }
     SECTION("characters with xp only") {
         valid_low_level_bob.erase("level");
         REQUIRE_NOTHROW(character_ptr = dnd::CharacterParser::createCharacter(valid_low_level_bob, test_controller));
-        REQUIRE_NOTHROW(character_ptr = testBasicValuesFromJSON(valid_low_level_bob, std::move(character_ptr)));
+        testBasicValuesFromJSON(valid_low_level_bob, character_ptr);
         REQUIRE(character_ptr->getLevel() == dnd::Character::levelForXP(valid_low_level_bob.at("xp").get<int>()));
         valid_high_level_bob.erase("level");
         REQUIRE_NOTHROW(character_ptr = dnd::CharacterParser::createCharacter(valid_high_level_bob, test_controller));
-        REQUIRE_NOTHROW(character_ptr = testBasicValuesFromJSON(valid_high_level_bob, std::move(character_ptr)));
+        testBasicValuesFromJSON(valid_high_level_bob, character_ptr);
         REQUIRE(character_ptr->getLevel() == dnd::Character::levelForXP(valid_high_level_bob.at("xp").get<int>()));
     }
     SECTION("characters with level and xp") {
         REQUIRE_NOTHROW(character_ptr = dnd::CharacterParser::createCharacter(valid_low_level_bob, test_controller));
-        REQUIRE_NOTHROW(character_ptr = testBasicValuesFromJSON(valid_low_level_bob, std::move(character_ptr)));
+        testBasicValuesFromJSON(valid_low_level_bob, character_ptr);
         REQUIRE_NOTHROW(character_ptr = dnd::CharacterParser::createCharacter(valid_high_level_bob, test_controller));
-        REQUIRE_NOTHROW(character_ptr = testBasicValuesFromJSON(valid_high_level_bob, std::move(character_ptr)));
+        testBasicValuesFromJSON(valid_high_level_bob, character_ptr);
     }
 }
 

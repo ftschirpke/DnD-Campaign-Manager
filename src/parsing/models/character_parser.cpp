@@ -1,5 +1,6 @@
 #include "character_parser.hpp"
 
+#include <iostream>
 #include <memory>
 #include <sstream>
 #include <stdexcept>
@@ -99,7 +100,6 @@ void dnd::CharacterParser::parseFeatureHolders(
     }
 }
 
-
 void dnd::CharacterParser::checkLevel(const std::string& character_name, int level) {
     if (level < 1 || level > 20) {
         std::stringstream sstr;
@@ -107,6 +107,7 @@ void dnd::CharacterParser::checkLevel(const std::string& character_name, int lev
         throw std::invalid_argument(sstr.str());
     }
 }
+
 void dnd::CharacterParser::checkXP(const std::string& character_name, int xp) {
     if (xp < 0) {
         std::stringstream sstr;
@@ -128,7 +129,7 @@ void dnd::CharacterParser::parseLevelAndXP(dnd::Character& character, const nloh
             sstr << "Character \"" << character.name << "\" is invalid. Level and XP values are contradictory.\n";
             throw std::invalid_argument(sstr.str());
         }
-        character.setLevel(level);
+        character.setXP(xp);
     } else if (has_level) {
         const int level = character_json.at("level").get<int>();
         checkLevel(character.name, level);
