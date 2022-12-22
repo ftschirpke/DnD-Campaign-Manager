@@ -89,7 +89,7 @@ void dnd::ContentParser::parseCharacters(const std::filesystem::path& directory)
             throw parsing_error("Character file \"" + filename + "\" is not formatted as an object/map.");
         }
         try {
-            std::unique_ptr<const Character> character = CharacterParser::createCharacter(*character_json);
+            std::shared_ptr<const Character> character = CharacterParser::createCharacter(*character_json, controller);
             if (controller.characters.find(character->name) != controller.characters.end()) {
                 std::cerr << "Warning: Duplicate of character \"" << character->name << "\" found in " << entry.path()
                           << ".\n";
@@ -99,7 +99,7 @@ void dnd::ContentParser::parseCharacters(const std::filesystem::path& directory)
         } catch (const nlohmann::json::out_of_range& e) {
             throw parsing_error("Character in file \"" + filename + "\" is missing an attribute.");
         } catch (const std::invalid_argument& e) {
-            throw parsing_error("Character in file \"" + filename + "\": " + e.what());
+            throw parsing_error(e.what());
         }
     }
 }

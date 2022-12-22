@@ -22,12 +22,7 @@ class Character : public Creature {
 private:
     int level, xp;
     std::vector<int> hit_dice_rolls;
-    inline void updateLevel() {
-        if (xp_for_level.at(level) <= xp && (level == 20 || xp_for_level.at(level + 1) > xp)) {
-            return;
-        }
-        level = levelForXP(xp);
-    }
+    inline void updateLevel();
 public:
     // TODO: should these pointers be non-const?
     std::shared_ptr<const CharacterClass> class_ptr;
@@ -38,33 +33,65 @@ public:
         : Creature(name, base_ability_scores) {}
     inline int getLevel() const { return level; }
     inline int getXP() const { return level; }
-    inline void levelUp() {
-        if (level == 20) {
-            std::cerr << "Warning: Cannot level up beyond level 20.\n"; // TODO: consider throwing exception instead
-            return;
-        }
-        xp = xp_for_level.at(++level);
-    }
-    inline void setXP(int new_xp) {
-        if (new_xp < 0) {
-            std::cerr << "Warning: Cannot set XP to less than 0.\n"; // TODO: consider throwing exception instead
-            return;
-        }
-        xp = new_xp;
-        updateLevel();
-    }
-    inline void increaseXP(int xp_increase) {
-        if (-xp_increase > xp) {
-            std::cerr << "Warning: Cannot decrease XP to less than 0.\n"; // TODO: consider throwing exception instead
-            return;
-        }
-        xp += xp_increase;
-        updateLevel();
-    }
+    void levelUp();
+    void setLevel(int new_level);
+    void setXP(int new_xp);
+    void increaseXP(int xp_increase);
     inline void decreaseXP(int xp_decrease) { increaseXP(-xp_decrease); }
     inline std::vector<int> getHitDiceRolls() const { return hit_dice_rolls; }
     static int levelForXP(int xp);
+    void addHitDiceRoll(int hit_dice_roll);
 };
+
+inline void Character::updateLevel() {
+    if (xp_for_level.at(level) <= xp && (level == 20 || xp_for_level.at(level + 1) > xp)) {
+        return;
+    }
+    level = levelForXP(xp);
+}
+
+inline void Character::levelUp() {
+    if (level == 20) {
+        std::cerr << "Warning: Cannot level up beyond level 20.\n"; // TODO: consider throwing exception instead
+        return;
+    }
+    xp = xp_for_level.at(++level);
+}
+
+inline void Character::setLevel(int new_level) {
+    if (level < 1 || level > 20) {
+        std::cerr << "Warning: Level must be between 1 and 20.\n"; // TODO: consider throwing exception instead
+        return;
+    }
+    level = new_level;
+    xp = xp_for_level.at(level);
+}
+
+inline void Character::setXP(int new_xp) {
+    if (new_xp < 0) {
+        std::cerr << "Warning: Cannot set XP to less than 0.\n"; // TODO: consider throwing exception instead
+        return;
+    }
+    xp = new_xp;
+    updateLevel();
+}
+
+inline void Character::increaseXP(int xp_increase) {
+    if (-xp_increase > xp) {
+        std::cerr << "Warning: Cannot decrease XP to less than 0.\n"; // TODO: consider throwing exception instead
+        return;
+    }
+    xp += xp_increase;
+    updateLevel();
+}
+
+inline void Character::addHitDiceRoll(int hit_dice_roll) {
+    hit_dice_rolls.push_back(hit_dice_roll);
+    if (hit_dice_rolls.size() > level) {
+        std::cerr << "Warning: More hit dice rolls than level.\n";
+    }
+}
+
 
 } // namespace dnd
 

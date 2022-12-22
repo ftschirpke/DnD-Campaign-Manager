@@ -15,8 +15,7 @@ namespace dnd {
 class ContentController {
 public:
     std::unordered_map<std::string, std::shared_ptr<const Spell>> spells;
-    // TODO: not sure whether these can stay unique pointers forever...
-    std::unordered_map<std::string, std::unique_ptr<const Character>> characters;
+    std::unordered_map<std::string, std::shared_ptr<const Character>> characters;
     std::unordered_map<std::string, std::shared_ptr<const CharacterClass>> character_classes;
     std::unordered_map<std::string, std::shared_ptr<const CharacterSubclass>> character_subclasses;
     std::unordered_map<std::string, std::shared_ptr<const CharacterRace>> character_races;
