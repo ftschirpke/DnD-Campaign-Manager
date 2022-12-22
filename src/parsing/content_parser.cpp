@@ -14,6 +14,7 @@
 #include "models/character_race.hpp"
 #include "models/spell.hpp"
 #include "parsing/models/character_class_parser.hpp"
+#include "parsing/models/character_parser.hpp"
 #include "parsing/models/character_race_parser.hpp"
 #include "parsing/models/spell_parser.hpp"
 
@@ -68,6 +69,37 @@ void dnd::ContentParser::parseSpells(const std::filesystem::path& directory) {
             } catch (const std::invalid_argument& e) {
                 throw parsing_error("Spell \"" + spell_name + "\": " + e.what());
             }
+        }
+    }
+}
+
+void dnd::ContentParser::parseCharacters(const std::filesystem::path& directory) {
+    if (!std::filesystem::directory_entry(directory).is_directory()) {
+        std::cerr << "Warning: Rename " << directory
+                  << " so that it cannot be confused with a directory containing characters.\n";
+        return;
+    }
+    for (const auto& entry : std::filesystem::directory_iterator(directory)) {
+        const auto character_json = openJSON(entry);
+        if (character_json == nullptr) {
+            continue;
+        }
+        const std::string filename = entry.path().c_str();
+        if (!character_json->is_object()) {
+            throw parsing_error("Character file \"" + filename + "\" is not formatted as an object/map.");
+        }
+        try {
+            std::unique_ptr<const Character> character = CharacterParser::createCharacter(*character_json);
+            if (controller.characters.find(character->name) != controller.characters.end()) {
+                std::cerr << "Warning: Duplicate of character \"" << character->name << "\" found in " << entry.path()
+                          << ".\n";
+            } else {
+                controller.characters.emplace(character->name, std::move(character));
+            }
+        } catch (const nlohmann::json::out_of_range& e) {
+            throw parsing_error("Character in file \"" + filename + "\" is missing an attribute.");
+        } catch (const std::invalid_argument& e) {
+            throw parsing_error("Character in file \"" + filename + "\": " + e.what());
         }
     }
 }
@@ -265,8 +297,8 @@ void dnd::ContentParser::parseAll() {
     dirs_to_parse.push_back(std::filesystem::directory_entry(content_path / campaign_dir_name));
 
     for (const auto& dir : dirs_to_parse) {
-        std::cout << "Parsing " << dir.path().lexically_relative(content_path) << " directory...\n";
-
+        // TODO: keep or delete these messages giving feeling of progress?
+        // std::cout << "Parsing " << dir.path().lexically_relative(content_path) << " directory...\n";
         if (std::filesystem::exists(dir.path() / "spells")) {
             parseSpells(dir.path() / "spells");
         }
@@ -285,4 +317,12 @@ void dnd::ContentParser::parseAll() {
     }
     validateCharacterSubclasses();
     validateCharacterSubraces();
+
+    // TODO: keep or delete these messages giving feeling of progress?
+    // std::cout << "Parsing characters...\n";
+    for (const auto& dir : dirs_to_parse) {
+        if (std::filesystem::exists(dir.path() / "characters")) {
+            parseCharacters(dir.path() / "characters");
+        }
+    }
 }
