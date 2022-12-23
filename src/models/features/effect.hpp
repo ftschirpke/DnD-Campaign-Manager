@@ -8,7 +8,7 @@
 namespace dnd {
 
 enum EffectTime {
-    // earliest - executed first, e.g. setting new default value
+    // earliest - executed first, e.g. setting a new default value
     EARLIEST,
     // early - executed early, e.g. multiplication that shouldn't affect added boni
     EARLY,

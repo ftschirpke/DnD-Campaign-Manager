@@ -37,10 +37,10 @@ Each character should be stored in a JSON file as a map (or "object") containing
 - "subclass" (required at a certain level) - the name of the subclass
 - "race" (required) - the name of the race
 - "subrace" (required if race has subraces) - the name of the subrace
-- "base_ability_scores" (required) - array of initial ability scores **without any modifiers applied** (must be of length 6)
+- "base_ability_scores" (required) - an array of initial ability scores **without any modifiers applied** (must be of length 6)
 - "level" and "xp" (only one of them is required) - level or XP value of character
   - you can only provide one of these values e.g. only the levels of characters when you are using milestone levelling
-- "hit_dice_rolls" (required) - array of hit dice rolls on level-ups for hit points **without any modifiers applied** (should have one value for each level)
+- "hit_dice_rolls" (required) - an array of hit dice rolls on level-ups for hit points **without any modifiers applied** (should have one value for each level)
   - **be aware:** if you are using the rule that on level 1 everyone gets the maximum value of the hit dice as HP you still have to provide that value in this array
 - "features" (optional) - map of character-specific [features](#features)
 
@@ -183,6 +183,8 @@ Each feature is represented as a key-value pair where the key is the name of the
 - "description" (required) - a human-readable description of the feature
 - "effects" (optional) - an array of [effects](#effects) that are applied to the creature (these are parsed by the DnD-Campaign Manager tool and then used in calculations)
 - "activation" (optional) - a machine-readable description of when this feature activates, the most common version of class features activating at a certain level: `"activation": "LEVEL >= 3"`
+- "languages" (optional) - an array of languages this feature allows you to understand
+- "senses" (optional) - an array of senses this feature provides you with
 - "armor_proficiency" (optional) - an array of armor proficiencies this feature provides
 - "weapon_proficiency" (optional) - an array of weapon proficiencies this feature provides
 - "tool_proficiency" (optional) - an array of tool proficiencies this feature provides
@@ -211,7 +213,7 @@ PERFORMANCE,   PERSUASION,      RELIGION, SLEIGHT_OF_HAND,
 STEALTH,       SURVIVAL
 ```
 The `time` describes how early in the calculation this effect should be applied. The possible values are:
-- `earliest` - executed first, e.g. setting new default value
+- `earliest` - executed first, e.g. setting a new default value
 - `early` - executed early, e.g. multiplication that shouldn't affect any added bonus
 - `normal` - intended for a normal bonus e.g. -1, +1, +2 etc.
 - `late` - executed late, e.g. multiplication that should affect every added bonus
