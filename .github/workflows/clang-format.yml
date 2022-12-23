@@ -1,4 +1,4 @@
-name: CMake
+name: Clang-Format
 
 on:
   push:
@@ -14,8 +14,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Check clang-format
+    - name: Check clang-format existence
       run: which clang-format
+
+    - name: Check clang-format version
       run: clang-format --version
 
     - working-directory: ${{github.workspace}}
