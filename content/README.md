@@ -1,5 +1,17 @@
 # Content
 
+- [Content](#content)
+- [Formatting Content](#formatting-content)
+  - [Characters](#characters)
+  - [Races](#races)
+  - [Subraces](#subraces)
+  - [Classes](#classes)
+  - [Subclasses](#subclasses)
+  - [Spells](#spells)
+  - [Features](#features)
+  - [Effects](#effects)
+  - [Anything unclear?](#anything-unclear)
+
 This directory is where you store all your content i.e. definitions of classes, races, spells, items, and monsters.
 
 Everything that applies to all of your campaigns, such as the SRD classes and races is placed in the `general` directory. Whereas everything related to the campaign itself is placed within its own folder for the campaign.
@@ -12,9 +24,11 @@ Within the `content_imperial` directory, you can find the original content with 
 
 When you choose that your content directory has another name, remember to provide the directory name to the executable using `-d directory_name`.
 
-# Formatting content
+# Formatting Content
 
 All of your content is specified through JSON files.
+
+The following chapters explain how to format certain types of content.
 
 ## Characters
 Each character should be stored in a JSON file as a map (or "object") containing the following values:
@@ -148,12 +162,11 @@ An example of a minimal spell JSON file would be:
 ```
 [Are you still having questions?](#anything-unclear)
 
-## Items
-TODO
+<!-- ## Items -->
+<!-- TODO -->
 
-## Monsters
-TODO
-
+<!-- ## Monsters -->
+<!-- TODO -->
 
 ## Features
 Races, subraces, classes, subclasses and characters can all have features. In the JSON files, the features are formatted as a map inside a larger map.
