@@ -20,8 +20,7 @@ jobs:
     - name: Check clang-format version
       run: clang-format --version
 
-    - working-directory: ${{github.workspace}}
-      run: bash .github/workflows/format_file.sh ${{github.workspace}}/src/models/character.hpp
+    - name: Check format of C++ files
+      working-directory: ${{github.workspace}}
+      run: bash ${{github.workspace}/.github/workflows/check_file_formats.sh
 
-    - working-directory: ${{github.workspace}}
-      run: bash .github/workflows/format_file.sh ${{github.workspace}}/src/parsing/models/character_class_parser.cpp
