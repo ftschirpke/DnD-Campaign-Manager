@@ -1,0 +1,16 @@
+{
+    "name": "Mountain Dwarf",
+    "race": "Dwarf",
+    "features": {
+        "Ability Score Increase (Mountain Dwarf)": {
+            "description": "Your Strength score increases by 2.",
+            "effects": [
+                "STR normal add 2"
+            ]
+        },
+        "Dwarven Armor Training": {
+            "description": "You have proficiency with light and medium armor.",
+            "armor_proficiency": ["light armor", "medium armor"]
+        }
+    }
+}

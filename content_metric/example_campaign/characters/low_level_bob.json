@@ -3,7 +3,7 @@
     "class": "Barbarian",
     "race": "Dwarf",
     "subrace": "Hill Dwarf",
-    "initial_ability_scores": [15, 12, 14, 10, 8, 13],
+    "base_ability_scores": [15, 12, 14, 10, 8, 13],
     "level": 2,
     "xp": 600,
     "hit_dice_rolls": [8, 11],
