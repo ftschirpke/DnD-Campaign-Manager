@@ -1,0 +1,26 @@
+name: Clang-Format
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+
+jobs:
+  Clang-Format-Checking:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Check clang-format existence
+      run: which clang-format
+
+    - name: Check clang-format version
+      run: clang-format --version
+
+    - name: Check format of C++ files
+      working-directory: ${{github.workspace}}
+      run: bash ${{github.workspace}}/.github/workflows/check_file_formats.sh
+

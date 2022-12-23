@@ -1,0 +1,25 @@
+#!/bin/bash
+
+all_correct=true
+
+cd $(dirname $0)/../..
+
+files=$(find src tests -type f \( -name "*.cpp" -o -name "*.hpp" \) -not -path "src/lib/*")
+
+for file in $files
+do
+    # echo $file
+    clang-format -style=file -output-replacements-xml $file | grep -c "<replacement " >/dev/null
+
+    if [ $? -eq 0 ]; then
+        echo "formatted incorrectly: $file"
+        all_correct=false
+    fi
+done
+
+if $all_correct
+then
+    echo "All files formatted correctly."
+else
+    exit 1
+fi
