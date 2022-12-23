@@ -2,7 +2,7 @@ name: Clang-Format
 
 on:
   push:
-    branches: [ "main", "clang_format_github_action" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
