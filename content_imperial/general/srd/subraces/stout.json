@@ -1,5 +1,6 @@
 {
     "name": "Stout",
+    "race": "Halfling",
     "features": {
         "Ability Score Increase (Stout)": {
             "description": "Your Intelligence score increases by 2.",

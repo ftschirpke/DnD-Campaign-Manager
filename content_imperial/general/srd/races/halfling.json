@@ -1,5 +1,6 @@
 {
     "name": "Halfling",
+    "has_subraces": true,
     "features": {
         "Ability Score Increase (Halfling)": {
             "description": "Your Dexterity score increases by 2.",

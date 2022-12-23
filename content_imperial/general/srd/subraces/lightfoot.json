@@ -1,5 +1,6 @@
 {
     "name": "Lightfoot",
+    "race": "Halfling",
     "features": {
         "Ability Score Increase (Lightfoot)": {
             "description": "Your Charisma score increases by 1.",
