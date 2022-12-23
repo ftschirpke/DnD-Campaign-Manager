@@ -14,7 +14,9 @@ std::shared_ptr<const dnd::CharacterClass> dnd::CharacterClassParser::createChar
     const std::string character_class_name = character_class_json.at("name").get<std::string>();
     const std::string character_class_hit_dice = character_class_json.at("hit_dice").get<std::string>();
     CharacterClass character_class(character_class_name, character_class_hit_dice);
-    FeatureHolderParser::parseAndAddFeatures(character_class_json.at("features"), character_class);
+    FeatureHolderParser::parseAndAddFeatures(
+        character_class_json.at("features"), character_class
+    );
     return std::make_shared<const CharacterClass>(std::move(character_class));
 }
 

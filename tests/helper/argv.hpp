@@ -18,7 +18,9 @@ public:
         auto iter = args.begin();
         while (iter != args.end()) {
             int len = strlen(*iter) + 1;
-            auto ptr = std::unique_ptr<char[]>(new char[len]);
+            auto ptr = std::unique_ptr<char[]>(
+                new char[len]
+            );
 
             strcpy(ptr.get(), *iter);
             m_args.push_back(std::move(ptr));

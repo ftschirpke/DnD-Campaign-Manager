@@ -16,19 +16,14 @@ int dnd::Character::levelForXP(int xp) {
         throw std::invalid_argument("XP cannot be negative.");
     }
     for (const auto [lv, min_xp] : xp_for_level) {
-        if (min_xp > xp) {
-            return lv - 1;
-        }
+        if (min_xp > xp) { return lv - 1; }
     }
     return 20;
 }
 
 const std::unordered_map<std::string, int> dnd::Character::getConstants() const {
     const std::unordered_map<std::string, int> creature_constants = Creature::getConstants();
-    std::unordered_map<std::string, int> character_constants = {
-        {"LEVEL", 1},
-        {"XP", 230},
-    };
+    std::unordered_map<std::string, int> character_constants = { {"LEVEL", 1}, {"XP", 230}, };
     character_constants.insert(creature_constants.cbegin(), creature_constants.cend());
     return character_constants;
 }

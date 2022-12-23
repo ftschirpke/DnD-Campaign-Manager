@@ -1,0 +1,25 @@
+name: CMake
+
+on:
+  push:
+    branches: [ "main", "clang_format_github_action" ]
+  pull_request:
+    branches: [ "main" ]
+
+
+jobs:
+  Clang-Format-Checking:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Check clang-format
+      run: which clang-format
+      run: clang-format --version
+
+    - working-directory: ${{github.workspace}}
+      run: bash .github/workflows/format_file.sh ${{github.workspace}}/src/models/character.hpp
+
+    - working-directory: ${{github.workspace}}
+      run: bash .github/workflows/format_file.sh ${{github.workspace}}/src/parsing/models/character_class_parser.cpp
