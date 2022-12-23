@@ -3,9 +3,9 @@
     "race": "Halfling",
     "features": {
         "Ability Score Increase (Stout)": {
-            "description": "Your Intelligence score increases by 2.",
+            "description": "Your Constitution score increases by 1.",
             "effects": [
-                "INT normal add 2"
+                "CON normal add 1"
             ]
         },
         "Stout Resilience": {

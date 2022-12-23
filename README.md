@@ -9,6 +9,7 @@ The first version of this tool is supposed to be a command line tool that allows
 - access to information about characters and spells at any time (e.g. while dm-ing a session)
 
 Ideas for future improvements include:
+- multiclassing
 - adding items
 - adding monsters and NPCs
 - management of XP and level-ups of your characters
