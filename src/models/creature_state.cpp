@@ -14,27 +14,27 @@ void dnd::CreatureState::applyAbilityScoreFeatures(std::shared_ptr<const dnd::Fe
     for (const auto& feature_ptr : feature_holder_ptr->features) {
         for (const auto& effect_ptr : feature_ptr->earliest) {
             if (isAbility(effect_ptr->affected_attribute)) {
-                effect_ptr->applyTo(*this);
+                effect_ptr->apply(attributes, constants);
             }
         }
         for (const auto& effect_ptr : feature_ptr->early) {
             if (isAbility(effect_ptr->affected_attribute)) {
-                effect_ptr->applyTo(*this);
+                effect_ptr->apply(attributes, constants);
             }
         }
         for (const auto& effect_ptr : feature_ptr->normal) {
             if (isAbility(effect_ptr->affected_attribute)) {
-                effect_ptr->applyTo(*this);
+                effect_ptr->apply(attributes, constants);
             }
         }
         for (const auto& effect_ptr : feature_ptr->late) {
             if (isAbility(effect_ptr->affected_attribute)) {
-                effect_ptr->applyTo(*this);
+                effect_ptr->apply(attributes, constants);
             }
         }
         for (const auto& effect_ptr : feature_ptr->latest) {
             if (isAbility(effect_ptr->affected_attribute)) {
-                effect_ptr->applyTo(*this);
+                effect_ptr->apply(attributes, constants);
             }
         }
     }
@@ -46,27 +46,27 @@ void dnd::CreatureState::applyNormalFeatures(std::shared_ptr<const dnd::FeatureH
     for (const auto& feature_ptr : feature_holder_ptr->features) {
         for (const auto& effect_ptr : feature_ptr->earliest) {
             if (isAbility(effect_ptr->affected_attribute)) {
-                effect_ptr->applyTo(*this);
+                effect_ptr->apply(attributes, constants);
             }
         }
         for (const auto& effect_ptr : feature_ptr->early) {
             if (isAbility(effect_ptr->affected_attribute)) {
-                effect_ptr->applyTo(*this);
+                effect_ptr->apply(attributes, constants);
             }
         }
         for (const auto& effect_ptr : feature_ptr->normal) {
             if (isAbility(effect_ptr->affected_attribute)) {
-                effect_ptr->applyTo(*this);
+                effect_ptr->apply(attributes, constants);
             }
         }
         for (const auto& effect_ptr : feature_ptr->late) {
             if (isAbility(effect_ptr->affected_attribute)) {
-                effect_ptr->applyTo(*this);
+                effect_ptr->apply(attributes, constants);
             }
         }
         for (const auto& effect_ptr : feature_ptr->latest) {
             if (isAbility(effect_ptr->affected_attribute)) {
-                effect_ptr->applyTo(*this);
+                effect_ptr->apply(attributes, constants);
             }
         }
     }

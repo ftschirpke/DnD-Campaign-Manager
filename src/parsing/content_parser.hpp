@@ -33,6 +33,7 @@ public:
     ContentParser(
         const std::filesystem::path& content_path, const std::string& campaign_dir_name, ContentController& controller
     );
+    void parseAll();
 };
 
 inline ContentParser::ContentParser(

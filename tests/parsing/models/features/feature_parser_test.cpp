@@ -72,10 +72,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid numeric effects") 
         REQUIRE(feature.late.size() == 0);
         REQUIRE(feature.latest.size() == 1);
         // TODO: replace, when Feature class has apply functionality
-        REQUIRE_NOTHROW(feature.earliest[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.early[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.normal[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
+        REQUIRE_NOTHROW(feature.earliest[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.early[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.normal[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.latest[0]->apply(teststate));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 1200},
             {"STR", 1125},
@@ -95,10 +95,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid numeric effects") 
         REQUIRE(feature.late.size() == 0);
         REQUIRE(feature.latest.size() == 1);
         // TODO: replace, when Feature class has apply functionality
-        REQUIRE_NOTHROW(feature.earliest[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.early[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.normal[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
+        REQUIRE_NOTHROW(feature.earliest[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.early[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.normal[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.latest[0]->apply(teststate));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 2000},
             {"STR", 1250},
@@ -118,10 +118,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid numeric effects") 
         REQUIRE(feature.late.size() == 0);
         REQUIRE(feature.latest.size() == 1);
         // TODO: replace, when Feature class has apply functionality
-        REQUIRE_NOTHROW(feature.earliest[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.early[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.normal[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
+        REQUIRE_NOTHROW(feature.earliest[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.early[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.normal[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.latest[0]->apply(teststate));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 500},
             {"STR", 800},
@@ -141,10 +141,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid numeric effects") 
         REQUIRE(feature.late.size() == 0);
         REQUIRE(feature.latest.size() == 1);
         // TODO: replace, when Feature class has apply functionality
-        REQUIRE_NOTHROW(feature.earliest[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.early[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.normal[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
+        REQUIRE_NOTHROW(feature.earliest[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.early[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.normal[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.latest[0]->apply(teststate));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 200},
             {"STR", 125},
@@ -174,10 +174,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Other' identifier
         REQUIRE(feature.late.size() == 0);
         REQUIRE(feature.latest.size() == 1);
         // TODO: replace, when Feature class has apply functionality
-        REQUIRE_NOTHROW(feature.earliest[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.early[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.normal[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
+        REQUIRE_NOTHROW(feature.earliest[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.early[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.normal[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.latest[0]->apply(teststate));
         const std::unordered_map<std::string, int> result = {
             {"AC", 200},     {"DEX", 125},  {"WIS", -70}, {"CHA", -300},
             {"MAXHP", 1200}, {"STR", 1125}, {"CON", 930}, {"INT", 700},
@@ -195,10 +195,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Other' identifier
         REQUIRE(feature.late.size() == 0);
         REQUIRE(feature.latest.size() == 1);
         // TODO: replace, when Feature class has apply functionality
-        REQUIRE_NOTHROW(feature.earliest[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.early[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.normal[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
+        REQUIRE_NOTHROW(feature.earliest[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.early[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.normal[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.latest[0]->apply(teststate));
         const std::unordered_map<std::string, int> result = {
             {"AC", 200},     {"DEX", 125},  {"WIS", -70},  {"CHA", -300},
             {"MAXHP", 2000}, {"STR", 1250}, {"CON", -700}, {"INT", -3000},
@@ -216,10 +216,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Other' identifier
         REQUIRE(feature.late.size() == 0);
         REQUIRE(feature.latest.size() == 1);
         // TODO: replace, when Feature class has apply functionality
-        REQUIRE_NOTHROW(feature.earliest[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.early[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.normal[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
+        REQUIRE_NOTHROW(feature.earliest[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.early[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.normal[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.latest[0]->apply(teststate));
         const std::unordered_map<std::string, int> result = {
             {"AC", 200},    {"DEX", 125}, {"WIS", -70},   {"CHA", -300},
             {"MAXHP", 500}, {"STR", 800}, {"CON", -1428}, {"INT", -333},
@@ -237,10 +237,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Other' identifier
         REQUIRE(feature.late.size() == 0);
         REQUIRE(feature.latest.size() == 1);
         // TODO: replace, when Feature class has apply functionality
-        REQUIRE_NOTHROW(feature.earliest[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.early[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.normal[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
+        REQUIRE_NOTHROW(feature.earliest[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.early[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.normal[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.latest[0]->apply(teststate));
         const std::unordered_map<std::string, int> result = {
             {"AC", 200},    {"DEX", 125}, {"WIS", -70}, {"CHA", -300},
             {"MAXHP", 200}, {"STR", 125}, {"CON", -70}, {"INT", -300},
@@ -277,10 +277,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Const' identifier
         REQUIRE(feature.late.size() == 0);
         REQUIRE(feature.latest.size() == 1);
         // TODO: replace, when Feature class has apply functionality
-        REQUIRE_NOTHROW(feature.earliest[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.early[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.normal[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
+        REQUIRE_NOTHROW(feature.earliest[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.early[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.normal[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.latest[0]->apply(teststate));
         REQUIRE(teststate.constants == constants);
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 1200},
@@ -301,10 +301,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Const' identifier
         REQUIRE(feature.late.size() == 0);
         REQUIRE(feature.latest.size() == 1);
         // TODO: replace, when Feature class has apply functionality
-        REQUIRE_NOTHROW(feature.earliest[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.early[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.normal[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
+        REQUIRE_NOTHROW(feature.earliest[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.early[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.normal[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.latest[0]->apply(teststate));
         REQUIRE(teststate.constants == constants);
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 2000},
@@ -325,10 +325,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Const' identifier
         REQUIRE(feature.late.size() == 0);
         REQUIRE(feature.latest.size() == 1);
         // TODO: replace, when Feature class has apply functionality
-        REQUIRE_NOTHROW(feature.earliest[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.early[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.normal[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
+        REQUIRE_NOTHROW(feature.earliest[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.early[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.normal[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.latest[0]->apply(teststate));
         REQUIRE(teststate.constants == constants);
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 500},
@@ -349,10 +349,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Const' identifier
         REQUIRE(feature.late.size() == 0);
         REQUIRE(feature.latest.size() == 1);
         // TODO: replace, when Feature class has apply functionality
-        REQUIRE_NOTHROW(feature.earliest[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.early[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.normal[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
+        REQUIRE_NOTHROW(feature.earliest[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.early[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.normal[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.latest[0]->apply(teststate));
         REQUIRE(teststate.constants == constants);
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 200},
@@ -394,12 +394,12 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse effect combinations") {
         REQUIRE(feature.late.size() == 2);
         REQUIRE(feature.latest.size() == 1);
         // TODO: replace, when Feature class has apply functionality
-        REQUIRE_NOTHROW(feature.earliest[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.early[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.normal[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.late[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.late[1]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
+        REQUIRE_NOTHROW(feature.earliest[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.early[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.normal[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.late[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.late[1]->apply(teststate));
+        REQUIRE_NOTHROW(feature.latest[0]->apply(teststate));
         REQUIRE(teststate.constants == constants);
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", -2550},
@@ -422,12 +422,12 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse effect combinations") {
         REQUIRE(feature.late.size() == 0);
         REQUIRE(feature.latest.size() == 1);
         // TODO: replace, when Feature class has apply functionality
-        REQUIRE_NOTHROW(feature.earliest[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.early[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.early[1]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.normal[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.normal[1]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
+        REQUIRE_NOTHROW(feature.earliest[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.early[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.early[1]->apply(teststate));
+        REQUIRE_NOTHROW(feature.normal[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.normal[1]->apply(teststate));
+        REQUIRE_NOTHROW(feature.latest[0]->apply(teststate));
         REQUIRE(teststate.constants == constants);
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 550},
@@ -485,12 +485,12 @@ TEST_CASE("dnd::FeatureParser::addEffects: parse valid effect combinations") {
         REQUIRE(feature.late.size() == 2);
         REQUIRE(feature.latest.size() == 1);
         // TODO: replace, when Feature class has apply functionality
-        REQUIRE_NOTHROW(feature.earliest[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.early[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.normal[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.late[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.late[1]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
+        REQUIRE_NOTHROW(feature.earliest[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.early[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.normal[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.late[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.late[1]->apply(teststate));
+        REQUIRE_NOTHROW(feature.latest[0]->apply(teststate));
         REQUIRE(teststate.constants == constants);
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", -2550},
@@ -516,12 +516,12 @@ TEST_CASE("dnd::FeatureParser::addEffects: parse valid effect combinations") {
         REQUIRE(feature.late.size() == 0);
         REQUIRE(feature.latest.size() == 1);
         // TODO: replace, when Feature class has apply functionality
-        REQUIRE_NOTHROW(feature.earliest[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.early[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.early[1]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.normal[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.normal[1]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature.latest[0]->applyTo(teststate));
+        REQUIRE_NOTHROW(feature.earliest[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.early[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.early[1]->apply(teststate));
+        REQUIRE_NOTHROW(feature.normal[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature.normal[1]->apply(teststate));
+        REQUIRE_NOTHROW(feature.latest[0]->apply(teststate));
         REQUIRE(teststate.constants == constants);
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 550},
@@ -603,12 +603,12 @@ TEST_CASE("dnd::FeatureParser::createFeature: parse valid features") {
         REQUIRE(feature->late.size() == 2);
         REQUIRE(feature->latest.size() == 1);
         // TODO: replace, when Feature class has apply functionality
-        REQUIRE_NOTHROW(feature->earliest[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature->early[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature->normal[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature->late[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature->late[1]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature->latest[0]->applyTo(teststate));
+        REQUIRE_NOTHROW(feature->earliest[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature->early[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature->normal[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature->late[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature->late[1]->apply(teststate));
+        REQUIRE_NOTHROW(feature->latest[0]->apply(teststate));
         REQUIRE(teststate.constants == constants);
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", -2550},
@@ -642,12 +642,12 @@ TEST_CASE("dnd::FeatureParser::createFeature: parse valid features") {
         REQUIRE(feature->late.size() == 0);
         REQUIRE(feature->latest.size() == 1);
         // TODO: replace, when Feature class has apply functionality
-        REQUIRE_NOTHROW(feature->earliest[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature->early[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature->early[1]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature->normal[0]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature->normal[1]->applyTo(teststate));
-        REQUIRE_NOTHROW(feature->latest[0]->applyTo(teststate));
+        REQUIRE_NOTHROW(feature->earliest[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature->early[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature->early[1]->apply(teststate));
+        REQUIRE_NOTHROW(feature->normal[0]->apply(teststate));
+        REQUIRE_NOTHROW(feature->normal[1]->apply(teststate));
+        REQUIRE_NOTHROW(feature->latest[0]->apply(teststate));
         REQUIRE(teststate.constants == constants);
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 550},

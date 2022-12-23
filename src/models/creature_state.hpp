@@ -8,10 +8,9 @@
 #include <unordered_map>
 #include <vector>
 
-namespace dnd {
+#include "models/feature_holder.hpp"
 
-// forward declaration
-class FeatureHolder;
+namespace dnd {
 
 const std::vector<std::string> abilities = {
     "STR", "DEX", "CON", "INT", "WIS", "CHA",
