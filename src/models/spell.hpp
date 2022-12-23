@@ -66,10 +66,15 @@ public:
     Spell(
         const std::string& name, const SpellType& type, const std::string& casting_time, const std::string& range,
         const SpellComponents& components, const std::string& duration, const std::string& description
-    )
-        : name(name), type(type), casting_time(casting_time), range(range), components(components), duration(duration),
-          description(description) {}
+    );
 };
+
+inline Spell::Spell(
+    const std::string& name, const SpellType& type, const std::string& casting_time, const std::string& range,
+    const SpellComponents& components, const std::string& duration, const std::string& description
+)
+    : name(name), type(type), casting_time(casting_time), range(range), components(components), duration(duration),
+      description(description) {}
 
 } // namespace dnd
 

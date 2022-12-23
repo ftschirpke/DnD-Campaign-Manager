@@ -17,7 +17,7 @@ int dnd::launch(int argc, char** argv) {
 
     cxxopts::Options options(DnDManager_NAME, DnDManager_DESCRIPTION);
 
-    options.add_options()(
+    options.add_options()("c,campaign", "Name of campaign directory", cxxopts::value<std::string>())(
         "d,directory", "Content directory", cxxopts::value<std::string>()->default_value((cur_path / "content").c_str())
     )("v,version", "Print version")("h,help", "Print usage");
 
@@ -38,21 +38,31 @@ int dnd::launch(int argc, char** argv) {
                   << '.' << DnDManager_VERSION_PATCH << '\n';
         return 0;
     }
+    if (args.count("campaign") != 1) {
+        std::cerr << "Error: Please provide exactly one campaign directory.\n";
+        return -1;
+    }
     if (args.count("directory") > 1) {
-        std::cerr << "Error: Please provide only one directory." << '\n';
+        std::cerr << "Error: Please provide only one directory.\n";
         return -1;
     }
 
     try {
         const std::filesystem::path content_path(args["directory"].as<std::string>());
+        const std::string campaign_dir_name = args["campaign"].as<std::string>();
+        std::cout << "Content directory:       " << content_path << '\n';
+        std::cout << "Campaign directory name: \"" << campaign_dir_name << "\"\n\n";
+        if (campaign_dir_name.size() == 0) {
+            throw std::invalid_argument("Campaign directory name cannot be \"\".");
+        }
         ContentController content_controller;
-        ContentParser parser(content_path, content_controller);
+        ContentParser parser(content_path, campaign_dir_name, content_controller);
         // TODO: should the runtime measurement and status printing stay?
         std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
         parser.parseAll();
         std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> timespan = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
-        std::cout << "time taken for parsing: " << timespan.count() << " seconds\n";
+        std::cout << "\nTime taken for parsing: " << timespan.count() << " seconds\n";
         content_controller.printStatus();
     } catch (const parsing_error& e) {
         std::cerr << "Parsing Error: " << e.what() << '\n';

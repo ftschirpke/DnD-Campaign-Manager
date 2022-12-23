@@ -11,14 +11,12 @@
 std::shared_ptr<const dnd::CharacterRace> dnd::CharacterRaceParser::createCharacterRace(
     const nlohmann::json& character_race_json
 ) {
-    if (!character_race_json.is_object()) {
-        throw std::invalid_argument("Race is not formatted as an object/map.");
-    }
     bool has_subraces = false;
     if (character_race_json.contains("has_subraces")) {
-        has_subraces = character_race_json.at("has_subraces");
+        has_subraces = character_race_json.at("has_subraces").get<bool>();
     }
-    CharacterRace character_race(character_race_json.at("name"), has_subraces);
+    const std::string character_race_name = character_race_json.at("name").get<std::string>();
+    CharacterRace character_race(character_race_name, has_subraces);
     FeatureHolderParser::parseAndAddFeatures(character_race_json.at("features"), character_race);
     return std::make_shared<const CharacterRace>(std::move(character_race));
 }
@@ -26,10 +24,9 @@ std::shared_ptr<const dnd::CharacterRace> dnd::CharacterRaceParser::createCharac
 std::shared_ptr<const dnd::CharacterSubrace> dnd::CharacterRaceParser::createCharacterSubrace(
     const nlohmann::json& character_subrace_json
 ) {
-    if (!character_subrace_json.is_object()) {
-        throw std::invalid_argument("Subrace is not formatted as an object/map.");
-    }
-    CharacterSubrace character_subrace(character_subrace_json.at("name"), character_subrace_json.at("race"));
+    const std::string character_subrace_name = character_subrace_json.at("name").get<std::string>();
+    const std::string character_subrace_race_name = character_subrace_json.at("race").get<std::string>();
+    CharacterSubrace character_subrace(character_subrace_name, character_subrace_race_name);
     FeatureHolderParser::parseAndAddFeatures(character_subrace_json.at("features"), character_subrace);
     return std::make_shared<const CharacterSubrace>(std::move(character_subrace));
 }

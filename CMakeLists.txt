@@ -35,6 +35,7 @@ CPMAddPackage(
     VERSION 3.2.0)
 
 add_executable(dndmanager main.cpp)
+set_target_properties(dndmanager PROPERTIES EXPORT_COMPILE_COMMANDS ON)
 
 target_include_directories(dndmanager
     PUBLIC
@@ -46,6 +47,7 @@ target_include_directories(dndmanager
 target_link_libraries(dndmanager PUBLIC nlohmann_json::nlohmann_json)
 
 add_executable(dndmanager_tests)
+set_target_properties(dndmanager_tests PROPERTIES EXPORT_COMPILE_COMMANDS ON)
 
 target_include_directories(dndmanager_tests
     PUBLIC

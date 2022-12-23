@@ -3,9 +3,11 @@
 #include <memory>
 #include <regex>
 #include <stdexcept>
+#include <string>
 
 #include <nlohmann/json.hpp>
 
+#include "models/creature_state.hpp"
 #include "models/features/effect.hpp"
 #include "models/features/feature.hpp"
 
@@ -15,7 +17,8 @@ std::unique_ptr<dnd::Feature> dnd::FeatureParser::createFeature(
     if (!feature_json.is_object()) {
         throw std::invalid_argument("Feature \"" + feature_name + "\" is not formatted as an object/map.");
     }
-    Feature feature(feature_name, feature_json.at("description"));
+    const std::string feature_description = feature_json.at("description").get<std::string>();
+    Feature feature(feature_name, feature_description);
     if (feature_json.contains("effects")) {
         addEffects(feature_json.at("effects"), feature);
     }
@@ -27,8 +30,9 @@ void dnd::FeatureParser::addEffects(const nlohmann::json& effects_json, Feature&
     if (!effects_json.is_array()) {
         throw std::invalid_argument("Effects of feature \"" + feature.name + "\" are not formatted as an array.");
     }
-    for (const std::string& effect_str : effects_json) {
+    for (const auto& effect_val : effects_json) {
         try {
+            const std::string effect_str = effect_val.get<std::string>();
             parseAndAddEffect(effect_str, feature);
         } catch (const std::invalid_argument& e) {
             throw std::invalid_argument("Feature \"" + feature.name + "\": " + e.what());
@@ -59,7 +63,7 @@ void dnd::FeatureParser::parseAndAddEffect(const std::string& effect_str, Featur
     while (*it != ' ') {
         it++;
     }
-    const std::string effect_time(start_it, it);
+    const std::string effect_time_str(start_it, it);
     start_it = ++it;
     while (*it != ' ') {
         it++;
@@ -101,15 +105,10 @@ void dnd::FeatureParser::parseAndAddEffect(const std::string& effect_str, Featur
         }
     }
 
-    if (effect_time == "earliest") {
-        feature.earliest.push_back(std::move(effect_ptr));
-    } else if (effect_time == "early") {
-        feature.early.push_back(std::move(effect_ptr));
-    } else if (effect_time == "normal") {
-        feature.normal.push_back(std::move(effect_ptr));
-    } else if (effect_time == "late") {
-        feature.late.push_back(std::move(effect_ptr));
-    } else if (effect_time == "latest") {
-        feature.latest.push_back(std::move(effect_ptr));
+    const EffectTime effect_time = effect_time_for_string.at(effect_time_str);
+    if (CreatureState::isAbility(affected_attribute)) {
+        feature.ability_score_effects[effect_time].push_back(std::move(effect_ptr));
+    } else {
+        feature.normal_effects[effect_time].push_back(std::move(effect_ptr));
     }
 }

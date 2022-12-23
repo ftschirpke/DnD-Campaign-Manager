@@ -18,12 +18,12 @@ std::shared_ptr<const dnd::Spell> dnd::SpellParser::createSpell(
         throw std::invalid_argument("Spell \"" + spell_name + "\" is not formatted as an object/map.");
     }
     const std::string name = spell_name;
-    const SpellType type = *createSpellType(spell_json.at("level_type"));
-    const std::string casting_time = spell_json.at("casting_time");
-    const std::string range = spell_json.at("range");
-    const SpellComponents components = *createSpellComponents(spell_json.at("components"));
-    const std::string duration = spell_json.at("duration");
-    const std::string description = spell_json.at("description");
+    const SpellType type = *createSpellType(spell_json.at("level_type").get<std::string>());
+    const std::string casting_time = spell_json.at("casting_time").get<std::string>();
+    const std::string range = spell_json.at("range").get<std::string>();
+    const SpellComponents components = *createSpellComponents(spell_json.at("components").get<std::string>());
+    const std::string duration = spell_json.at("duration").get<std::string>();
+    const std::string description = spell_json.at("description").get<std::string>();
     return std::make_shared<const Spell>(name, type, casting_time, range, components, duration, description);
 }
 

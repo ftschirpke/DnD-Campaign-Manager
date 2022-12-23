@@ -5,6 +5,7 @@
 #include <string>
 #include <unordered_map>
 
+#include "models/character.hpp"
 #include "models/character_class.hpp"
 #include "models/character_race.hpp"
 #include "models/spell.hpp"
@@ -14,6 +15,7 @@ namespace dnd {
 class ContentController {
 public:
     std::unordered_map<std::string, std::shared_ptr<const Spell>> spells;
+    std::unordered_map<std::string, std::shared_ptr<const Character>> characters;
     std::unordered_map<std::string, std::shared_ptr<const CharacterClass>> character_classes;
     std::unordered_map<std::string, std::shared_ptr<const CharacterSubclass>> character_subclasses;
     std::unordered_map<std::string, std::shared_ptr<const CharacterRace>> character_races;

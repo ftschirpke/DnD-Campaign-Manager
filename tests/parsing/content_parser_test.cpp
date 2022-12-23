@@ -6,6 +6,6 @@
 
 TEST_CASE("dnd::ContentParser::parseAll: providing invalid directory to parser") {
     dnd::ContentController controller;
-    dnd::ContentParser parser("/this/directory/doesnt/exist", controller);
+    dnd::ContentParser parser("/this/directory/doesnt/exist", "example_campaign", controller);
     REQUIRE_THROWS(parser.parseAll());
 }

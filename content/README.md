@@ -6,6 +6,8 @@ Everything that applies to all of your campaigns, such as the SRD classes and ra
 
 As an example, the content from SRD is formatted in this way inside of the `content_imperial` and `content_metric` directories. **Be aware:** They are just an example, all rights belong to WotC, and as an example they are not guaranteed to be correct, complete, or up-to-date.
 
+Furthermore, a few further examples using the SRD content are provided in the `example_campaign` directory. This directory should also show you, how you can create content for your own campaign and how to place it in a directory so that the DnD-Campaign-Manager can use it.
+
 Within the `content_imperial` directory, you can find the original content with imperial units. I did my best to convert all imperial units into metric units. You can find this adapted content in the `content_metric` directory.
 
 When you choose that your content directory has another name, remember to provide the directory name to the executable using `-d directory_name`.
