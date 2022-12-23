@@ -16,10 +16,7 @@ public:
     FeatureHolder(const std::string& name);
 };
 
-inline FeatureHolder::FeatureHolder(
-    const std::string& name
-) 
-    : name(name) {}
+inline FeatureHolder::FeatureHolder(const std::string& name) : name(name) {}
 
 } // namespace dnd
 

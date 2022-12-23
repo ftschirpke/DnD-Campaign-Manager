@@ -29,9 +29,7 @@ TEST_CASE("dnd::launch: the program is run without a -c argument") {
     int argc = argv_obj.argc();
     char** argv = argv_obj.argv();
 
-    REQUIRE_NOTHROW(
-        dnd::launch(argc, argv)
-    );
+    REQUIRE_NOTHROW(dnd::launch(argc, argv));
     REQUIRE(dnd::launch(argc, argv) != 0);
 }
 
