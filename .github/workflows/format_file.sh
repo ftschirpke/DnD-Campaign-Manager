@@ -4,6 +4,5 @@ clang-format -style=file -output-replacements-xml $1 | grep -c "<replacement " >
 
 if [ $? -eq 0 ]; then
     echo "formatted incorrectly: $1"
-    exit
+    exit 1
 fi
-echo "formatted correctly: $1"
