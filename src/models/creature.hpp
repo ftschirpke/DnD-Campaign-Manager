@@ -14,7 +14,6 @@ protected:
     virtual const std::unordered_map<std::string, int> getConstants() const;
     virtual const std::unordered_map<std::string, int> getInitialAttributeValues() const;
 public:
-    const std::string name;
     const std::vector<int> base_ability_scores;
     CreatureState state;
     // TODO: probably needs a revamp, when monsters are introduced
