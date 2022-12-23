@@ -11,7 +11,9 @@
         },
         "Fleet of Foot": {
             "description": "Your base walking speed increases to 35 feet.",
-            "SPEED earliest max 35"
+            "effects": [
+                "SPEED earliest max 35"
+            ]
         },
         "Mask of the Wild": {
             "description": "You can attempt to hide even when you are only lightly obscured by foliage, heavy rain, falling snow, mist, and other natural phenomena."

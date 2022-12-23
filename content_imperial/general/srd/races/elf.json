@@ -17,7 +17,7 @@
         "Speed of an Elf": {
             "description": "Your base walking speed is 30 feet.",
             "effects": [
-                "SPEED earliest set 30"
+                "SPEED earliest max 30"
             ]
         },
         "Darkvision of an Elf": {
