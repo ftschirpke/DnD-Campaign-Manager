@@ -1,0 +1,20 @@
+{
+    "name": "Wood Elf",
+    "features": {
+        "Ability Score Increase": {
+            "description": "Your Wisdom score increases by 1.",
+            "effects": ["WIS normal add 1"]
+        },
+        "Elf Weapon Training": {
+            "description": "You have proficiency with the longsword, shortsword, shortbow, and longbow.",
+            "weapon_proficiency": ["longsword", "shortsword", "shortbow", "longbow"]
+        },
+        "Fleet of Foot": {
+            "description": "Your base walking speed increases to 35 feet.",
+            "SPEED earliest max 35"
+        },
+        "Mask of the Wild": {
+            "description": "You can attempt to hide even when you are only lightly obscured by foliage, heavy rain, falling snow, mist, and other natural phenomena."
+        }
+    }
+}
