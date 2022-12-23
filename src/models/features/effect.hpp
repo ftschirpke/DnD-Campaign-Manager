@@ -3,8 +3,31 @@
 
 #include <stdexcept>
 #include <unordered_map>
+#include <vector>
 
 namespace dnd {
+
+enum EffectTime {
+    // earliest - executed first, e.g. setting new default value
+    EARLIEST,
+    // early - executed early, e.g. multiplication that shouldn't affect added boni
+    EARLY,
+    // normal - intended for normal boni e.g. -1, +1, +2 etc.
+    NORMAL,
+    // late - executed late, e.g. multiplication that should effect added boni
+    LATE,
+    // latest - executed latest, e.g. setting fixed value
+    LATEST
+};
+
+const std::vector<EffectTime> effect_times_in_order = {
+    EffectTime::EARLIEST, EffectTime::EARLY, EffectTime::NORMAL, EffectTime::LATE, EffectTime::LATEST,
+};
+
+const std::unordered_map<std::string, EffectTime> effect_time_for_string = {
+    {"earliest", EffectTime::EARLIEST}, {"early", EffectTime::EARLY},   {"normal", EffectTime::NORMAL},
+    {"late", EffectTime::LATE},         {"latest", EffectTime::LATEST},
+};
 
 class Effect {
 public:

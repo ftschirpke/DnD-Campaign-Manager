@@ -13,7 +13,7 @@ class Feature {
 public:
     const std::string name, description;
     // TODO: should this really be public AND non-const?
-    std::vector<std::unique_ptr<Effect>> earliest, early, normal, late, latest;
+    std::unordered_map<EffectTime, std::vector<std::unique_ptr<const Effect>>> ability_score_effects, normal_effects;
     Feature(const std::string& name, const std::string& description) : name(name), description(description) {}
     // TODO: manage adding and removing languages/proficiencies/senses etc.
     // TODO: manage choices (choose one of ...)

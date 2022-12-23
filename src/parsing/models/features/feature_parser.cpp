@@ -7,6 +7,7 @@
 
 #include <nlohmann/json.hpp>
 
+#include "models/creature_state.hpp"
 #include "models/features/effect.hpp"
 #include "models/features/feature.hpp"
 
@@ -62,7 +63,7 @@ void dnd::FeatureParser::parseAndAddEffect(const std::string& effect_str, Featur
     while (*it != ' ') {
         it++;
     }
-    const std::string effect_time(start_it, it);
+    const std::string effect_time_str(start_it, it);
     start_it = ++it;
     while (*it != ' ') {
         it++;
@@ -104,15 +105,10 @@ void dnd::FeatureParser::parseAndAddEffect(const std::string& effect_str, Featur
         }
     }
 
-    if (effect_time == "earliest") {
-        feature.earliest.push_back(std::move(effect_ptr));
-    } else if (effect_time == "early") {
-        feature.early.push_back(std::move(effect_ptr));
-    } else if (effect_time == "normal") {
-        feature.normal.push_back(std::move(effect_ptr));
-    } else if (effect_time == "late") {
-        feature.late.push_back(std::move(effect_ptr));
-    } else if (effect_time == "latest") {
-        feature.latest.push_back(std::move(effect_ptr));
+    const EffectTime effect_time = effect_time_for_string.at(effect_time_str);
+    if (CreatureState::isAbility(affected_attribute)) {
+        feature.ability_score_effects[effect_time].push_back(std::move(effect_ptr));
+    } else {
+        feature.normal_effects[effect_time].push_back(std::move(effect_ptr));
     }
 }
