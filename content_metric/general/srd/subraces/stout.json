@@ -1,0 +1,15 @@
+{
+    "name": "Stout",
+    "race": "Halfling",
+    "features": {
+        "Ability Score Increase (Stout)": {
+            "description": "Your Constitution score increases by 1.",
+            "effects": [
+                "CON normal add 1"
+            ]
+        },
+        "Stout Resilience": {
+            "description": "You have advantage on saving throws against poison, and you have resistance against poison damage."
+        }
+    }
+}

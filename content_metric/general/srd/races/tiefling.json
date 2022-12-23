@@ -15,15 +15,15 @@
             "description": "Tieflings are about the same size and build as humans. Your size is Medium."
         },
         "Speed of a Tiefling": {
-            "description": "Your base walking speed is 30 feet.",
+            "description": "Your base walking speed is 9m.",
             "effects": [
-                "SPEED earliest max 30"
+                "SPEED earliest max 9"
             ]
         },
         "Darkvision of a Tiefling": {
-            "description": "Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+            "description": "Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 18m of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
             "senses": [
-                "Darkvision (60 feet)"
+                "Darkvision (18m)"
             ]
         },
         "Hellish Resistance": {

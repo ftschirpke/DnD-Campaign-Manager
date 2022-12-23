@@ -1,0 +1,27 @@
+{
+    "name": "High Elf",
+    "race": "Elf",
+    "features": {
+        "Ability Score Increase (High Elf)": {
+            "description": "Your Intelligence score increases by 1.",
+            "effects": [
+                "INT normal add 1"
+            ]
+        },
+        "Elf Weapon Training": {
+            "description": "You have proficiency with the longsword, shortsword, shortbow, and longbow.",
+            "weapon_proficiency": ["longsword", "shortsword", "shortbow", "longbow"]
+        },
+        "Cantrip (High Elf)": {
+            "description": "You know one cantrip of your choice from the wizard spell list. Intelligence is your spellcasting ability for it."
+        },
+        "Extra Language (High Elf)": {
+            "description": "You can speak, read, and write one extra language of your choice.",
+            "choose": {
+                "languages": {
+                    "amount": 1
+                }
+            }
+        }
+    }
+}
