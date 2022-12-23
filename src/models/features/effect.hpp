@@ -14,7 +14,7 @@ enum EffectTime {
     EARLY,
     // normal - intended for normal boni e.g. -1, +1, +2 etc.
     NORMAL,
-    // late - executed late, e.g. multiplication that should effect added boni
+    // late - executed late, e.g. multiplication that should affect added boni
     LATE,
     // latest - executed latest, e.g. setting fixed value
     LATEST
