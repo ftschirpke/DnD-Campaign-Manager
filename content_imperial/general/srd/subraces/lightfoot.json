@@ -1,0 +1,14 @@
+{
+    "name": "Lightfoot",
+    "features": {
+        "Ability Score Increase (Lightfoot)": {
+            "description": "Your Charisma score increases by 1.",
+            "effects": [
+                "CHA normal add 1"
+            ]
+        },
+        "Naturally Stealthy": {
+            "description": "You can attempt to hide even when you are obscured only by a creature that is at least one size larger than you."
+        }
+    }
+}

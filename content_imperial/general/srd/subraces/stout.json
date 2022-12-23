@@ -1,0 +1,14 @@
+{
+    "name": "Stout",
+    "features": {
+        "Ability Score Increase (Stout)": {
+            "description": "Your Intelligence score increases by 2.",
+            "effects": [
+                "INT normal add 2"
+            ]
+        },
+        "Stout Resilience": {
+            "description": "You have advantage on saving throws against poison, and you have resistance against poison damage."
+        }
+    }
+}

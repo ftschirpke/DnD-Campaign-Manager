@@ -1,7 +1,7 @@
 {
     "name": "Wood Elf",
     "features": {
-        "Ability Score Increase": {
+        "Ability Score Increase (Wood Elf)": {
             "description": "Your Wisdom score increases by 1.",
             "effects": ["WIS normal add 1"]
         },
