@@ -37,6 +37,7 @@ void dnd::CreatureState::applyNormalFeatures(std::shared_ptr<const dnd::FeatureH
 void dnd::CreatureState::determineModifiers() {
     for (const std::string& ability_name : abilities) {
         attributes[ability_name + "MOD"] = modifier(attributes.at(ability_name));
+        attributes[ability_name + "SAVE"] = modifier(attributes.at(ability_name));
     }
     for (const auto& [skill_name, ability_name] : skills) {
         attributes[skill_name] = attributes.at(ability_name + "MOD");
