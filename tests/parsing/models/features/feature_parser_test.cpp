@@ -71,10 +71,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid numeric effects") 
         REQUIRE(feature.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(feature.normal_effects.size() == 1);
         REQUIRE(feature.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 1200},
             {"STR", 1125},
@@ -94,10 +94,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid numeric effects") 
         REQUIRE(feature.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(feature.normal_effects.size() == 1);
         REQUIRE(feature.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 2000},
             {"STR", 1250},
@@ -117,10 +117,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid numeric effects") 
         REQUIRE(feature.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(feature.normal_effects.size() == 1);
         REQUIRE(feature.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 500},
             {"STR", 800},
@@ -140,10 +140,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid numeric effects") 
         REQUIRE(feature.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(feature.normal_effects.size() == 1);
         REQUIRE(feature.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 200},
             {"STR", 125},
@@ -172,10 +172,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Other' identifier
         REQUIRE(feature.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(feature.normal_effects.size() == 1);
         REQUIRE(feature.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"AC", 200},     {"DEX", 125},  {"WIS", -70}, {"CHA", -300},
             {"MAXHP", 1200}, {"STR", 1125}, {"CON", 930}, {"INT", 700},
@@ -193,10 +193,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Other' identifier
         REQUIRE(feature.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(feature.normal_effects.size() == 1);
         REQUIRE(feature.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"AC", 200},     {"DEX", 125},  {"WIS", -70},  {"CHA", -300},
             {"MAXHP", 2000}, {"STR", 1250}, {"CON", -700}, {"INT", -3000},
@@ -214,10 +214,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Other' identifier
         REQUIRE(feature.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(feature.normal_effects.size() == 1);
         REQUIRE(feature.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"AC", 200},    {"DEX", 125}, {"WIS", -70},   {"CHA", -300},
             {"MAXHP", 500}, {"STR", 800}, {"CON", -1428}, {"INT", -333},
@@ -235,10 +235,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Other' identifier
         REQUIRE(feature.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(feature.normal_effects.size() == 1);
         REQUIRE(feature.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"AC", 200},    {"DEX", 125}, {"WIS", -70}, {"CHA", -300},
             {"MAXHP", 200}, {"STR", 125}, {"CON", -70}, {"INT", -300},
@@ -272,10 +272,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Const' identifier
         REQUIRE(feature.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(feature.normal_effects.size() == 1);
         REQUIRE(feature.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 1200},
             {"STR", 1125},
@@ -295,10 +295,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Const' identifier
         REQUIRE(feature.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(feature.normal_effects.size() == 1);
         REQUIRE(feature.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 2000},
             {"STR", 1250},
@@ -318,10 +318,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Const' identifier
         REQUIRE(feature.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(feature.normal_effects.size() == 1);
         REQUIRE(feature.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 500},
             {"STR", 800},
@@ -341,10 +341,10 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Const' identifier
         REQUIRE(feature.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(feature.normal_effects.size() == 1);
         REQUIRE(feature.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 200},
             {"STR", 125},
@@ -383,12 +383,12 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse effect combinations") {
         REQUIRE(feature.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
         REQUIRE(feature.normal_effects.at(dnd::EffectTime::LATE).size() == 2);
         REQUIRE(feature.normal_effects.at(dnd::EffectTime::LATEST).size() == 1);
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::EARLIEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::EARLY)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::LATE)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::LATE)[1]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::LATEST)[0]->apply(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::LATE)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::LATE)[1]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", -2550},
             {"STR", 1000},
@@ -411,12 +411,12 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse effect combinations") {
         REQUIRE(feature.normal_effects.at(dnd::EffectTime::EARLY).size() == 1);
         REQUIRE(feature.normal_effects.at(dnd::EffectTime::NORMAL).size() == 2);
         REQUIRE(feature.normal_effects.at(dnd::EffectTime::LATEST).size() == 1);
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::EARLY)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[1]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::LATEST)[0]->apply(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[1]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 550},
             {"STR", -250},
@@ -471,12 +471,12 @@ TEST_CASE("dnd::FeatureParser::addEffects: parse valid effect combinations") {
         REQUIRE(feature.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
         REQUIRE(feature.normal_effects.at(dnd::EffectTime::LATE).size() == 2);
         REQUIRE(feature.normal_effects.at(dnd::EffectTime::LATEST).size() == 1);
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::EARLIEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::EARLY)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::LATE)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::LATE)[1]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::LATEST)[0]->apply(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::LATE)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::LATE)[1]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", -2550},
             {"STR", 1000},
@@ -502,12 +502,12 @@ TEST_CASE("dnd::FeatureParser::addEffects: parse valid effect combinations") {
         REQUIRE(feature.normal_effects.at(dnd::EffectTime::EARLY).size() == 1);
         REQUIRE(feature.normal_effects.at(dnd::EffectTime::NORMAL).size() == 2);
         REQUIRE(feature.normal_effects.at(dnd::EffectTime::LATEST).size() == 1);
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::EARLY)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[1]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::LATEST)[0]->apply(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::NORMAL)[1]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature.normal_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 550},
             {"STR", -250},
@@ -583,12 +583,12 @@ TEST_CASE("dnd::FeatureParser::createFeature: parse valid features") {
         REQUIRE(feature->normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
         REQUIRE(feature->normal_effects.at(dnd::EffectTime::LATE).size() == 2);
         REQUIRE(feature->normal_effects.at(dnd::EffectTime::LATEST).size() == 1);
-        REQUIRE_NOTHROW(feature->normal_effects.at(dnd::EffectTime::EARLIEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature->normal_effects.at(dnd::EffectTime::EARLY)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature->normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature->normal_effects.at(dnd::EffectTime::LATE)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature->normal_effects.at(dnd::EffectTime::LATE)[1]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature->normal_effects.at(dnd::EffectTime::LATEST)[0]->apply(attributes, constants));
+        REQUIRE_NOTHROW(feature->normal_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature->normal_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature->normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature->normal_effects.at(dnd::EffectTime::LATE)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature->normal_effects.at(dnd::EffectTime::LATE)[1]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature->normal_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", -2550},
             {"STR", 1000},
@@ -622,12 +622,12 @@ TEST_CASE("dnd::FeatureParser::createFeature: parse valid features") {
         REQUIRE(feature->normal_effects.at(dnd::EffectTime::EARLY).size() == 1);
         REQUIRE(feature->normal_effects.at(dnd::EffectTime::NORMAL).size() == 2);
         REQUIRE(feature->normal_effects.at(dnd::EffectTime::LATEST).size() == 1);
-        REQUIRE_NOTHROW(feature->ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature->ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature->normal_effects.at(dnd::EffectTime::EARLY)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature->normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature->normal_effects.at(dnd::EffectTime::NORMAL)[1]->apply(attributes, constants));
-        REQUIRE_NOTHROW(feature->normal_effects.at(dnd::EffectTime::LATEST)[0]->apply(attributes, constants));
+        REQUIRE_NOTHROW(feature->ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature->ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature->normal_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature->normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature->normal_effects.at(dnd::EffectTime::NORMAL)[1]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(feature->normal_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 550},
             {"STR", -250},

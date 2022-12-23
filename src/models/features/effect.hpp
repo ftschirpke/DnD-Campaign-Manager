@@ -33,7 +33,7 @@ class Effect {
 public:
     const std::string affected_attribute;
     Effect(const std::string& affected_attribute);
-    virtual void apply(
+    virtual void applyTo(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const = 0;
 };
@@ -42,96 +42,108 @@ class AddEffect : public Effect {
 public:
     const int add;
     AddEffect(const std::string& affected_attribute, int add);
-    void apply(std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants)
-        const;
+    void applyTo(
+        std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
+    ) const;
 };
 
 class MultEffect : public Effect {
 public:
     const float factor;
     MultEffect(const std::string& affected_attribute, float factor);
-    void apply(std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants)
-        const;
+    void applyTo(
+        std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
+    ) const;
 };
 
 class DivEffect : public Effect {
 public:
     const float div;
     DivEffect(const std::string& affected_attribute, float div);
-    void apply(std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants)
-        const;
+    void applyTo(
+        std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
+    ) const;
 };
 
 class SetEffect : public Effect {
 public:
     const int set_value;
     SetEffect(const std::string& affected_attribute, int set_value);
-    void apply(std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants)
-        const;
+    void applyTo(
+        std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
+    ) const;
 };
 
 class AddOtherEffect : public Effect {
 public:
     const std::string other_attribute;
     AddOtherEffect(const std::string& affected_attribute, const std::string& other_attribute);
-    void apply(std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants)
-        const;
+    void applyTo(
+        std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
+    ) const;
 };
 
 class MultOtherEffect : public Effect {
 public:
     const std::string other_attribute;
     MultOtherEffect(const std::string& affected_attribute, const std::string& other_attribute);
-    void apply(std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants)
-        const;
+    void applyTo(
+        std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
+    ) const;
 };
 
 class DivOtherEffect : public Effect {
 public:
     const std::string other_attribute;
     DivOtherEffect(const std::string& affected_attribute, const std::string& other_attribute);
-    void apply(std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants)
-        const;
+    void applyTo(
+        std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
+    ) const;
 };
 
 class SetOtherEffect : public Effect {
 public:
     const std::string other_attribute;
     SetOtherEffect(const std::string& affected_attribute, const std::string& other_attribute);
-    void apply(std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants)
-        const;
+    void applyTo(
+        std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
+    ) const;
 };
 
 class AddConstEffect : public Effect {
 public:
     const std::string constant;
     AddConstEffect(const std::string& affected_attribute, const std::string& constant);
-    void apply(std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants)
-        const;
+    void applyTo(
+        std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
+    ) const;
 };
 
 class MultConstEffect : public Effect {
 public:
     const std::string constant;
     MultConstEffect(const std::string& affected_attribute, const std::string& constant);
-    void apply(std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants)
-        const;
+    void applyTo(
+        std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
+    ) const;
 };
 
 class DivConstEffect : public Effect {
 public:
     const std::string constant;
     DivConstEffect(const std::string& affected_attribute, const std::string& constant);
-    void apply(std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants)
-        const;
+    void applyTo(
+        std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
+    ) const;
 };
 
 class SetConstEffect : public Effect {
 public:
     const std::string constant;
     SetConstEffect(const std::string& affected_attribute, const std::string& constant);
-    void apply(std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants)
-        const;
+    void applyTo(
+        std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
+    ) const;
 };
 
 
@@ -139,7 +151,7 @@ inline Effect::Effect(const std::string& affected_attribute) : affected_attribut
 
 inline AddEffect::AddEffect(const std::string& affected_attribute, int add) : Effect(affected_attribute), add(add) {}
 
-inline void AddEffect::apply(
+inline void AddEffect::applyTo(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
     attributes[affected_attribute] += add;
@@ -148,7 +160,7 @@ inline void AddEffect::apply(
 inline MultEffect::MultEffect(const std::string& affected_attribute, float factor)
     : Effect(affected_attribute), factor(factor) {}
 
-inline void MultEffect::apply(
+inline void MultEffect::applyTo(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
     attributes[affected_attribute] *= factor;
@@ -160,7 +172,7 @@ inline DivEffect::DivEffect(const std::string& affected_attribute, float div) : 
     }
 }
 
-inline void DivEffect::apply(
+inline void DivEffect::applyTo(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
     attributes[affected_attribute] /= div;
@@ -169,7 +181,7 @@ inline void DivEffect::apply(
 inline SetEffect::SetEffect(const std::string& affected_attribute, int set_value)
     : Effect(affected_attribute), set_value(set_value) {}
 
-inline void SetEffect::apply(
+inline void SetEffect::applyTo(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
     attributes[affected_attribute] = set_value;
@@ -178,7 +190,7 @@ inline void SetEffect::apply(
 inline AddOtherEffect::AddOtherEffect(const std::string& affected_attribute, const std::string& other_attribute)
     : Effect(affected_attribute), other_attribute(other_attribute) {}
 
-inline void AddOtherEffect::apply(
+inline void AddOtherEffect::applyTo(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
     try {
@@ -191,7 +203,7 @@ inline void AddOtherEffect::apply(
 inline MultOtherEffect::MultOtherEffect(const std::string& affected_attribute, const std::string& other_attribute)
     : Effect(affected_attribute), other_attribute(other_attribute) {}
 
-inline void MultOtherEffect::apply(
+inline void MultOtherEffect::applyTo(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
     try {
@@ -204,7 +216,7 @@ inline void MultOtherEffect::apply(
 inline DivOtherEffect::DivOtherEffect(const std::string& affected_attribute, const std::string& other_attribute)
     : Effect(affected_attribute), other_attribute(other_attribute) {}
 
-inline void DivOtherEffect::apply(
+inline void DivOtherEffect::applyTo(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
     try {
@@ -217,7 +229,7 @@ inline void DivOtherEffect::apply(
 inline SetOtherEffect::SetOtherEffect(const std::string& affected_attribute, const std::string& other_attribute)
     : Effect(affected_attribute), other_attribute(other_attribute) {}
 
-inline void SetOtherEffect::apply(
+inline void SetOtherEffect::applyTo(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
     try {
@@ -230,7 +242,7 @@ inline void SetOtherEffect::apply(
 inline AddConstEffect::AddConstEffect(const std::string& affected_attribute, const std::string& constant)
     : Effect(affected_attribute), constant(constant) {}
 
-inline void AddConstEffect::apply(
+inline void AddConstEffect::applyTo(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
     try {
@@ -243,7 +255,7 @@ inline void AddConstEffect::apply(
 inline MultConstEffect::MultConstEffect(const std::string& affected_attribute, const std::string& constant)
     : Effect(affected_attribute), constant(constant) {}
 
-inline void MultConstEffect::apply(
+inline void MultConstEffect::applyTo(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
     try {
@@ -255,7 +267,7 @@ inline void MultConstEffect::apply(
 
 inline DivConstEffect::DivConstEffect(const std::string& affected_attribute, const std::string& constant)
     : Effect(affected_attribute), constant(constant) {}
-inline void DivConstEffect::apply(
+inline void DivConstEffect::applyTo(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
     try {
@@ -268,7 +280,7 @@ inline void DivConstEffect::apply(
 inline SetConstEffect::SetConstEffect(const std::string& affected_attribute, const std::string& constant)
     : Effect(affected_attribute), constant(constant) {}
 
-inline void SetConstEffect::apply(
+inline void SetConstEffect::applyTo(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
     try {

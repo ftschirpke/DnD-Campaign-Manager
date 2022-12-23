@@ -15,7 +15,7 @@ void dnd::CreatureState::applyAbilityScoreFeatures(std::shared_ptr<const dnd::Fe
                 continue;
             }
             for (const auto& effect_ptr : feature_ptr->ability_score_effects.at(effect_time)) {
-                effect_ptr->apply(attributes, constants);
+                effect_ptr->applyTo(attributes, constants);
             }
         }
     }
@@ -28,7 +28,7 @@ void dnd::CreatureState::applyNormalFeatures(std::shared_ptr<const dnd::FeatureH
                 continue;
             }
             for (const auto& effect_ptr : feature_ptr->normal_effects.at(effect_time)) {
-                effect_ptr->apply(attributes, constants);
+                effect_ptr->applyTo(attributes, constants);
             }
         }
     }
