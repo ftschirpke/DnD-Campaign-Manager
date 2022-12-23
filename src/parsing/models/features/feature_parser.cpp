@@ -42,10 +42,11 @@ void dnd::FeatureParser::addEffects(const nlohmann::json& effects_json, Feature&
 
 void dnd::FeatureParser::parseAndAddEffect(const std::string& effect_str, Feature& feature) {
     const std::string times = "(earliest|early|normal|late|latest)";
-    const std::string numeric_effects = "(add|mult|div|set)";
+    const std::string numeric_effects = "(add|mult|div|set|max|min)";
     const std::string numeric_effects_regex = "(" + numeric_effects + " -?\\d+(\\.\\d\\d?)?)";
-    const std::string identifier_effects =
-        "(addOther|multOther|divOther|setOther|addConst|multConst|divConst|setConst)";
+    const std::string other_effects = "addOther|multOther|divOther|setOther|maxOther|minOther";
+    const std::string const_effects = "addConst|multConst|divConst|setConst|maxConst|minConst";
+    const std::string identifier_effects = "(" + other_effects + "|" + const_effects + ")";
     const std::string identifier_effects_regex = "(" + identifier_effects + " [A-Z][_A-Z0-9]+)";
     const std::regex effect_regex(
         "[A-Z][_A-Z0-9]+ " + times + " (" + numeric_effects_regex + "|" + identifier_effects_regex + ")"
@@ -84,6 +85,12 @@ void dnd::FeatureParser::parseAndAddEffect(const std::string& effect_str, Featur
         } else if (effect_type == "set") {
             effect_ptr = std::make_unique<SetEffect>(affected_attribute, effect_value * 100);
             // attributes are stored as integers * 100, see CreatureState
+        } else if (effect_type == "max") {
+            effect_ptr = std::make_unique<MaxEffect>(affected_attribute, effect_value * 100);
+            // attributes are stored as integers * 100, see CreatureState
+        } else if (effect_type == "min") {
+            effect_ptr = std::make_unique<MinEffect>(affected_attribute, effect_value * 100);
+            // attributes are stored as integers * 100, see CreatureState
         }
     } else {
         if (effect_type == "addOther") {
@@ -94,6 +101,10 @@ void dnd::FeatureParser::parseAndAddEffect(const std::string& effect_str, Featur
             effect_ptr = std::make_unique<DivOtherEffect>(affected_attribute, last_part);
         } else if (effect_type == "setOther") {
             effect_ptr = std::make_unique<SetOtherEffect>(affected_attribute, last_part);
+        } else if (effect_type == "maxOther") {
+            effect_ptr = std::make_unique<MaxOtherEffect>(affected_attribute, last_part);
+        } else if (effect_type == "minOther") {
+            effect_ptr = std::make_unique<MinOtherEffect>(affected_attribute, last_part);
         } else if (effect_type == "addConst") {
             effect_ptr = std::make_unique<AddConstEffect>(affected_attribute, last_part);
         } else if (effect_type == "multConst") {
@@ -102,6 +113,10 @@ void dnd::FeatureParser::parseAndAddEffect(const std::string& effect_str, Featur
             effect_ptr = std::make_unique<DivConstEffect>(affected_attribute, last_part);
         } else if (effect_type == "setConst") {
             effect_ptr = std::make_unique<SetConstEffect>(affected_attribute, last_part);
+        } else if (effect_type == "maxConst") {
+            effect_ptr = std::make_unique<MaxConstEffect>(affected_attribute, last_part);
+        } else if (effect_type == "minConst") {
+            effect_ptr = std::make_unique<MinConstEffect>(affected_attribute, last_part);
         }
     }
 

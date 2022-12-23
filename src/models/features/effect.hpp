@@ -1,6 +1,7 @@
 #ifndef EFFECT_HPP_
 #define EFFECT_HPP_
 
+#include <algorithm>
 #include <stdexcept>
 #include <unordered_map>
 #include <vector>
@@ -74,6 +75,24 @@ public:
     ) const;
 };
 
+class MaxEffect : public Effect {
+public:
+    const int set_value;
+    MaxEffect(const std::string& affected_attribute, int set_value);
+    void applyTo(
+        std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
+    ) const;
+};
+
+class MinEffect : public Effect {
+public:
+    const int set_value;
+    MinEffect(const std::string& affected_attribute, int set_value);
+    void applyTo(
+        std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
+    ) const;
+};
+
 class AddOtherEffect : public Effect {
 public:
     const std::string other_attribute;
@@ -110,6 +129,24 @@ public:
     ) const;
 };
 
+class MaxOtherEffect : public Effect {
+public:
+    const std::string other_attribute;
+    MaxOtherEffect(const std::string& affected_attribute, const std::string& other_attribute);
+    void applyTo(
+        std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
+    ) const;
+};
+
+class MinOtherEffect : public Effect {
+public:
+    const std::string other_attribute;
+    MinOtherEffect(const std::string& affected_attribute, const std::string& other_attribute);
+    void applyTo(
+        std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
+    ) const;
+};
+
 class AddConstEffect : public Effect {
 public:
     const std::string constant;
@@ -141,6 +178,24 @@ class SetConstEffect : public Effect {
 public:
     const std::string constant;
     SetConstEffect(const std::string& affected_attribute, const std::string& constant);
+    void applyTo(
+        std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
+    ) const;
+};
+
+class MaxConstEffect : public Effect {
+public:
+    const std::string constant;
+    MaxConstEffect(const std::string& affected_attribute, const std::string& constant);
+    void applyTo(
+        std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
+    ) const;
+};
+
+class MinConstEffect : public Effect {
+public:
+    const std::string constant;
+    MinConstEffect(const std::string& affected_attribute, const std::string& constant);
     void applyTo(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const;
@@ -185,6 +240,24 @@ inline void SetEffect::applyTo(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
     attributes[affected_attribute] = set_value;
+}
+
+inline MaxEffect::MaxEffect(const std::string& affected_attribute, int set_value)
+    : Effect(affected_attribute), set_value(set_value) {}
+
+inline void MaxEffect::applyTo(
+    std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
+) const {
+    attributes[affected_attribute] = std::max(attributes[affected_attribute], set_value);
+}
+
+inline MinEffect::MinEffect(const std::string& affected_attribute, int set_value)
+    : Effect(affected_attribute), set_value(set_value) {}
+
+inline void MinEffect::applyTo(
+    std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
+) const {
+    attributes[affected_attribute] = std::min(attributes[affected_attribute], set_value);
 }
 
 inline AddOtherEffect::AddOtherEffect(const std::string& affected_attribute, const std::string& other_attribute)
@@ -239,6 +312,32 @@ inline void SetOtherEffect::applyTo(
     }
 }
 
+inline MaxOtherEffect::MaxOtherEffect(const std::string& affected_attribute, const std::string& other_attribute)
+    : Effect(affected_attribute), other_attribute(other_attribute) {}
+
+inline void MaxOtherEffect::applyTo(
+    std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
+) const {
+    try {
+        attributes[affected_attribute] = std::max(attributes[affected_attribute], attributes.at(other_attribute));
+    } catch (const std::out_of_range& e) {
+        throw std::out_of_range("Other attribute \"" + other_attribute + "\" does not exist.");
+    }
+}
+
+inline MinOtherEffect::MinOtherEffect(const std::string& affected_attribute, const std::string& other_attribute)
+    : Effect(affected_attribute), other_attribute(other_attribute) {}
+
+inline void MinOtherEffect::applyTo(
+    std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
+) const {
+    try {
+        attributes[affected_attribute] = std::min(attributes[affected_attribute], attributes.at(other_attribute));
+    } catch (const std::out_of_range& e) {
+        throw std::out_of_range("Other attribute \"" + other_attribute + "\" does not exist.");
+    }
+}
+
 inline AddConstEffect::AddConstEffect(const std::string& affected_attribute, const std::string& constant)
     : Effect(affected_attribute), constant(constant) {}
 
@@ -285,6 +384,32 @@ inline void SetConstEffect::applyTo(
 ) const {
     try {
         attributes[affected_attribute] = constants.at(constant);
+    } catch (const std::out_of_range& e) {
+        throw std::out_of_range("Constant \"" + constant + "\" does not exist.");
+    }
+}
+
+inline MaxConstEffect::MaxConstEffect(const std::string& affected_attribute, const std::string& constant)
+    : Effect(affected_attribute), constant(constant) {}
+
+inline void MaxConstEffect::applyTo(
+    std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
+) const {
+    try {
+        attributes[affected_attribute] = std::max(attributes[affected_attribute], constants.at(constant));
+    } catch (const std::out_of_range& e) {
+        throw std::out_of_range("Constant \"" + constant + "\" does not exist.");
+    }
+}
+
+inline MinConstEffect::MinConstEffect(const std::string& affected_attribute, const std::string& constant)
+    : Effect(affected_attribute), constant(constant) {}
+
+inline void MinConstEffect::applyTo(
+    std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
+) const {
+    try {
+        attributes[affected_attribute] = std::min(attributes[affected_attribute], constants.at(constant));
     } catch (const std::out_of_range& e) {
         throw std::out_of_range("Constant \"" + constant + "\" does not exist.");
     }
