@@ -28,7 +28,8 @@
         },
         "Martial Archetype": {
             "description": "At 3rd level, you choose an archetype that you strive to emulate in your combat styles and techniques. The archetype you choose grants you features at 3rd level and again at 7th, 10th, 15th, and 18th level.",
-            "activation": "LEVEL >= 3"
+            "activation": "LEVEL >= 3",
+            "subclass": true
         },
         "Extra Attack (Fighter)": {
             "description": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn.\n\nThe number of attacks increases to three when you reach 11th level in this class and to four when you reach 20th level in this class.",
