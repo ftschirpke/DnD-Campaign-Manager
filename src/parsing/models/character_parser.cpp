@@ -1,9 +1,11 @@
 #include "character_parser.hpp"
 
+#include <array>
 #include <iostream>
 #include <memory>
 #include <sstream>
 #include <stdexcept>
+#include <vector>
 
 #include <nlohmann/json.hpp>
 
@@ -15,10 +17,10 @@ std::shared_ptr<dnd::Character> dnd::CharacterParser::createCharacter(
     const nlohmann::json& character_json, const ContentController& content_controller
 ) {
     const std::string character_name = character_json.at("name").get<std::string>();
-    const std::vector<int> base_ability_scores = character_json.at("base_ability_scores").get<std::vector<int>>();
-    if (base_ability_scores.size() != 6) {
+    const std::array<int, 6> base_ability_scores = character_json.at("base_ability_scores").get<std::array<int, 6>>();
+    if (character_json.at("base_ability_scores").size() != 6) {
         std::stringstream sstr;
-        sstr << "Character \"" << character_name << "\" is invalid. Characters must have exactly 6 ability scores\n";
+        sstr << "Character \"" << character_name << "\" is invalid. Base ability score array must have length 6.\n";
         throw std::invalid_argument(sstr.str());
     }
     Character character(character_name, base_ability_scores);

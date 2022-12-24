@@ -1,5 +1,6 @@
 #include "parsing/models/character_parser.hpp"
 
+#include <array>
 #include <memory>
 #include <string>
 #include <vector>
@@ -15,7 +16,7 @@
 std::shared_ptr<dnd::ContentController> setupContentControllerForTesting() {
     dnd::ContentController test_controller;
     test_controller.character_classes = {
-        {"Barbarian", std::make_shared<dnd::CharacterClass>("Barbarian", "1d12")},
+        {"Barbarian", std::make_shared<dnd::CharacterClass>("Barbarian", "d12", std::vector<int>({4, 8, 12, 16, 19}))},
     };
     test_controller.character_subclasses = {
         {"Path of the Berserker", std::make_shared<dnd::CharacterSubclass>("Path of the Berserker", "Barbarian")},
@@ -152,7 +153,7 @@ void testBasicValuesFromJSON(
     if (character_json.contains("subrace")) {
         REQUIRE(character_ptr->subrace_ptr->name == character_json.at("subrace").get<std::string>());
     }
-    REQUIRE(character_ptr->base_ability_scores == character_json.at("base_ability_scores").get<std::vector<int>>());
+    REQUIRE(character_ptr->base_ability_scores == character_json.at("base_ability_scores").get<std::array<int, 6>>());
     if (character_json.contains("level")) {
         REQUIRE(character_ptr->getLevel() == character_json.at("level").get<int>());
     }
