@@ -20,7 +20,7 @@ std::shared_ptr<dnd::Character> dnd::CharacterParser::createCharacter(
     const std::array<int, 6> base_ability_scores = character_json.at("base_ability_scores").get<std::array<int, 6>>();
     if (character_json.at("base_ability_scores").size() != 6) {
         std::stringstream sstr;
-        sstr << "Character \"" << character_name << "\" is invalid. Base ability score array must have length 6.\n";
+        sstr << "Character \"" << character_name << "\" is invalid. Characters must have exactly 6 ability scores\n";
         throw std::invalid_argument(sstr.str());
     }
     Character character(character_name, base_ability_scores);

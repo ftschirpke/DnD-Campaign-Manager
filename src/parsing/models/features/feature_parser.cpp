@@ -52,7 +52,7 @@ void dnd::FeatureParser::parseAndAddEffect(const std::string& effect_str, Featur
         "[A-Z][_A-Z0-9]+ " + times + " (" + numeric_effects_regex + "|" + identifier_effects_regex + ")"
     );
     if (!std::regex_match(effect_str, effect_regex)) {
-        throw std::invalid_argument("Effect is of wrong format.");
+        throw std::invalid_argument("Effect \"" + effect_str + "\" is of wrong format.");
     }
     std::string::const_iterator it = effect_str.cbegin();
     while (*it != ' ') {
