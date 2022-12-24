@@ -1,6 +1,7 @@
 {
     "name": "Barbarian",
     "hit_dice": "d12",
+    "asi_levels": [4, 8, 12, 16, 19],
     "features": {
         "Barbarian Base": {
             "description": "Hit Dice: 1d12 per barbarian level\n\nProficiencies\n\nArmor: Light armor, medium armor, shields\nWeapons: Simple weapons, martial weapons\nTools: None\nSaving Throws: Strength, Constitution\nSkills: Choose two from Animal Handling, Athletics, Intimidation, Nature, Perception, and Survival",
@@ -36,7 +37,7 @@
             "activation": "LEVEL >= 3",
             "subclass": true
         },
-        "Extra Attack": {
+        "Extra Attack (Barbarian)": {
             "description": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn.",
             "activation": "LEVEL >= 5"
         },

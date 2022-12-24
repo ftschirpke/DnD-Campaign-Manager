@@ -93,6 +93,7 @@ Example of a subrace of our Example Race with one feature:
 Each class should be stored in a JSON file as a map (or "object"). The required values are:
 - "name" - the name of the class
 - "hit_dice" - string for hit dice i.e. "d6", "d8", "d10" or "d12"
+- "asi_levels" (required) - an array of the levels at which characters of this class get Ability Score Increases
 - "features" - map of [features](#features) e.g. innate spellcasting abilities
   - there needs to be at least one feature that has the key-value pair `"subclass": true` (this feature should just be a feature describing that from a certain level on, usually level 2 or 3, a subclass can be chosen)
   - usually, there is also a feature describing hit dice and proficiencies for armor, weapons, saving throws and skills
