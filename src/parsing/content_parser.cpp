@@ -18,6 +18,14 @@
 #include "parsing/models/character_race_parser.hpp"
 #include "parsing/models/spell_parser.hpp"
 
+std::string stripJsonExceptionWhat(const std::string& original_what) {
+    std::string what = original_what;
+    if (int i = what.find("]"); i != std::string::npos) {
+        what.erase(0, i + 2);
+    }
+    return '(' + what + ')';
+}
+
 const std::unique_ptr<const nlohmann::json> dnd::ContentParser::openJSON(const std::filesystem::directory_entry& file) {
     if (!file.is_regular_file()) {
         std::cerr << "Warning: " << file.path() << " is not a regular file.\n";
@@ -65,7 +73,11 @@ void dnd::ContentParser::parseSpells(const std::filesystem::path& directory) {
                     controller.spells.emplace(spell_name, std::move(spell));
                 }
             } catch (const nlohmann::json::out_of_range& e) {
-                throw parsing_error("Spell \"" + spell_name + "\" is missing an attribute.");
+                const std::string json_what = stripJsonExceptionWhat(e.what());
+                throw parsing_error("Spell \"" + spell_name + "\" is missing a required value. " + json_what);
+            } catch (const nlohmann::json::type_error& e) {
+                const std::string json_what = stripJsonExceptionWhat(e.what());
+                throw parsing_error("Spell \"" + spell_name + "\" has attribute of wrong type. " + json_what);
             } catch (const std::invalid_argument& e) {
                 throw parsing_error("Spell \"" + spell_name + "\": " + e.what());
             }
@@ -84,7 +96,7 @@ void dnd::ContentParser::parseCharacters(const std::filesystem::path& directory)
         if (character_json == nullptr) {
             continue;
         }
-        const std::string filename = entry.path().c_str();
+        const std::string filename = entry.path().lexically_relative(content_path).c_str();
         if (!character_json->is_object()) {
             throw parsing_error("Character file \"" + filename + "\" is not formatted as an object/map.");
         }
@@ -97,7 +109,11 @@ void dnd::ContentParser::parseCharacters(const std::filesystem::path& directory)
                 controller.characters.emplace(character->name, std::move(character));
             }
         } catch (const nlohmann::json::out_of_range& e) {
-            throw parsing_error("Character in file \"" + filename + "\" is missing an attribute.");
+            const std::string json_what = stripJsonExceptionWhat(e.what());
+            throw parsing_error("Character in file \"" + filename + "\" is missing a required value. " + json_what);
+        } catch (const nlohmann::json::type_error& e) {
+            const std::string json_what = stripJsonExceptionWhat(e.what());
+            throw parsing_error("Character in file \"" + filename + "\" has attribute of wrong type. " + json_what);
         } catch (const std::invalid_argument& e) {
             throw parsing_error(e.what());
         }
@@ -115,7 +131,7 @@ void dnd::ContentParser::parseCharacterClasses(const std::filesystem::path& dire
         if (character_class_json == nullptr) {
             continue;
         }
-        const std::string filename = entry.path().c_str();
+        const std::string filename = entry.path().lexically_relative(content_path).c_str();
         if (!character_class_json->is_object()) {
             throw parsing_error("Class file \"" + filename + "\" is not formatted as an object/map.");
         }
@@ -129,7 +145,15 @@ void dnd::ContentParser::parseCharacterClasses(const std::filesystem::path& dire
                 controller.character_classes.emplace(character_class->name, std::move(character_class));
             }
         } catch (const nlohmann::json::out_of_range& e) {
-            throw parsing_error("Character Class in file \"" + filename + "\" is missing an attribute.");
+            const std::string json_what = stripJsonExceptionWhat(e.what());
+            throw parsing_error(
+                "Character Class in file \"" + filename + "\" is missing a required value. " + json_what
+            );
+        } catch (const nlohmann::json::type_error& e) {
+            const std::string json_what = stripJsonExceptionWhat(e.what());
+            throw parsing_error(
+                "Character Class in file \"" + filename + "\" has attribute of wrong type. " + json_what
+            );
         } catch (const std::invalid_argument& e) {
             throw parsing_error("Character Class in file \"" + filename + "\": " + e.what());
         }
@@ -147,7 +171,7 @@ void dnd::ContentParser::parseCharacterSubclasses(const std::filesystem::path& d
         if (character_subclass_json == nullptr) {
             continue;
         }
-        const std::string filename = entry.path().c_str();
+        const std::string filename = entry.path().lexically_relative(content_path).c_str();
         if (!character_subclass_json->is_object()) {
             throw parsing_error("Subclass file \"" + filename + "\" is not formatted as an object/map.");
         }
@@ -162,7 +186,15 @@ void dnd::ContentParser::parseCharacterSubclasses(const std::filesystem::path& d
                 controller.character_subclasses.emplace(character_subclass->name, std::move(character_subclass));
             }
         } catch (const nlohmann::json::out_of_range& e) {
-            throw parsing_error("Character Subclass in file \"" + filename + "\" is missing an attribute.");
+            const std::string json_what = stripJsonExceptionWhat(e.what());
+            throw parsing_error(
+                "Character Subclass in file \"" + filename + "\" is missing a required value. " + json_what
+            );
+        } catch (const nlohmann::json::type_error& e) {
+            const std::string json_what = stripJsonExceptionWhat(e.what());
+            throw parsing_error(
+                "Character Subclass in file \"" + filename + "\" has attribute of wrong type. " + json_what
+            );
         } catch (const std::invalid_argument& e) {
             throw parsing_error("Character Subclass in file \"" + filename + "\": " + e.what());
         }
@@ -180,7 +212,7 @@ void dnd::ContentParser::parseCharacterRaces(const std::filesystem::path& direct
         if (character_race_json == nullptr) {
             continue;
         }
-        const std::string filename = entry.path().c_str();
+        const std::string filename = entry.path().lexically_relative(content_path).c_str();
         if (!character_race_json->is_object()) {
             throw parsing_error("Race file \"" + filename + "\" is not formatted as an object/map.");
         }
@@ -194,7 +226,15 @@ void dnd::ContentParser::parseCharacterRaces(const std::filesystem::path& direct
                 controller.character_races.emplace(character_race->name, std::move(character_race));
             }
         } catch (const nlohmann::json::out_of_range& e) {
-            throw parsing_error("Character Race in file \"" + filename + "\" is missing an attribute.");
+            const std::string json_what = stripJsonExceptionWhat(e.what());
+            throw parsing_error(
+                "Character Race in file \"" + filename + "\" is missing a required value. " + json_what
+            );
+        } catch (const nlohmann::json::type_error& e) {
+            const std::string json_what = stripJsonExceptionWhat(e.what());
+            throw parsing_error(
+                "Character Race in file \"" + filename + "\" has attribute of wrong type. " + json_what
+            );
         } catch (const std::invalid_argument& e) {
             throw parsing_error("Character Race in file \"" + filename + "\": " + e.what());
         }
@@ -212,7 +252,7 @@ void dnd::ContentParser::parseCharacterSubraces(const std::filesystem::path& dir
         if (character_subrace_json == nullptr) {
             continue;
         }
-        const std::string filename = entry.path().c_str();
+        const std::string filename = entry.path().lexically_relative(content_path).c_str();
         if (!character_subrace_json->is_object()) {
             throw parsing_error("Subrace file \"" + filename + "\" is not formatted as an object/map.");
         }
@@ -226,7 +266,15 @@ void dnd::ContentParser::parseCharacterSubraces(const std::filesystem::path& dir
                 controller.character_subraces.emplace(character_subrace->name, std::move(character_subrace));
             }
         } catch (const nlohmann::json::out_of_range& e) {
-            throw parsing_error("Character Subrace in file \"" + filename + "\" is missing an attribute.");
+            const std::string json_what = stripJsonExceptionWhat(e.what());
+            throw parsing_error(
+                "Character Subrace in file \"" + filename + "\" is missing a required value. " + json_what
+            );
+        } catch (const nlohmann::json::type_error& e) {
+            const std::string json_what = stripJsonExceptionWhat(e.what());
+            throw parsing_error(
+                "Character Subrace in file \"" + filename + "\" has attribute of wrong type. " + json_what
+            );
         } catch (const std::invalid_argument& e) {
             throw parsing_error("Character Subrace in file \"" + filename + "\": " + e.what());
         }

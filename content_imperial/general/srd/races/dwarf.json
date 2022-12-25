@@ -17,7 +17,7 @@
         "Speed of a Dwarf": {
             "description": "Your base walking speed is 25 feet. Your speed is not reduced by wearing heavy armor.",
             "effects": [
-                "SPEED earliest set 25"
+                "SPEED earliest max 25"
             ]
         },
         "Darkvision of a Dwarf": {

@@ -1,0 +1,43 @@
+{
+    "name": "Fighter",
+    "hit_dice": "d10",
+    "asi_levels": [4, 6, 8, 12, 14, 16, 19],
+    "features": {
+        "Fighter Base": {
+            "description": "Hit Dice: 1d10 per fighter level\n\nProficiencies\n\nArmor: All armor, shields\nWeapons: Simple weapons, martial weapons\nSaving Throws: Strength, Constitution\nSkills: Choose two skills from Acrobatics, Animal Handling, Athletics, History, Insight, Intimidation, Perception, and Survival",
+            "armor_proficiency": ["light armor", "medium armor", "heavy armor"],
+            "weapon_proficiency": ["simple weapons", "martial weapons"],
+            "savingthrow_proficiency": ["STR", "CON"],
+            "choose": {
+                "skill_proficiency": {
+                    "amount": 2,
+                    "choices": ["acrobatics", "animal handling", "athletics", "history", "insight", "intimidation", "perception", "survival"]
+                }
+            }
+        },
+        "Fighting Style": {
+            "description": "You adopt a particular style of fighting as your specialty. Choose one of the following options. You can't take a Fighting Style option more than once, even if you later get to choose again.\n\nArchery\nYou gain a +2 bonus to attack rolls you make with ranged weapons.\n\nDefense\nWhile you are wearing armor, you gain a +1 bonus to AC.\n\nDueling\nWhen you are wielding a melee weapon in one hand and no other weapons, you gain a +2 bonus to damage rolls with that weapon.\n\nGreat Weapon Fighting\nWhen you roll a 1 or 2 on a damage die for an attack you make with a melee weapon that you are wielding with two hands, you can reroll the die and must use the new roll, even if the new roll is a 1 or a 2. The weapon must have the two-handed or versatile property for you to gain this benefit.\n\nProtection\nWhen a creature you can see attacks a target other than you that is within 5 feet of you, you can use your reaction to impose disadvantage on the attack roll. You must be wielding a shield.\n\nTwo-Weapon Fighting\nWhen you engage in two-weapon fighting, you can add your ability modifier to the damage of the second attack."
+        },
+        "Second Wind": {
+            "description": "You have a limited well of stamina that you can draw on to protect yourself from harm. On your turn, you can use a bonus action to regain hit points equal to 1d10 + your fighter level. Once you use this feature, you must finish a short or long rest before you can use it again.",
+            "bonus_actions": {"Second wind": "Regain hit points equal to 1d10 + your fighter level."}
+        },
+        "Action Surge": {
+            "description": "Starting at 2nd level, you can push yourself beyond your normal limits for a moment. On your turn, you can take one additional action on top of your regular action and a possible bonus action.\n\nOnce you use this feature, you must finish a short or long rest before you can use it again. Starting at 17th level, you can use it twice before a rest, but only once on the same turn.",
+            "activation": "LEVEL >= 2"
+        },
+        "Martial Archetype": {
+            "description": "At 3rd level, you choose an archetype that you strive to emulate in your combat styles and techniques. The archetype you choose grants you features at 3rd level and again at 7th, 10th, 15th, and 18th level.",
+            "activation": "LEVEL >= 3",
+            "subclass": true
+        },
+        "Extra Attack (Fighter)": {
+            "description": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn.\n\nThe number of attacks increases to three when you reach 11th level in this class and to four when you reach 20th level in this class.",
+            "activation": "LEVEL >= 5"
+        },
+        "Indomitable": {
+            "description": "Beginning at 9th level, you can reroll a saving throw that you fail. If you do so, you must use the new roll, and you can't use this feature again until you finish a long rest.\n\nYou can use this feature twice between long rests starting at 13th level and three times between long rests starting at 17th level.",
+            "activation": "LEVEL >= 9"
+        }
+    }
+}

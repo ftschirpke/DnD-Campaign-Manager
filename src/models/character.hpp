@@ -1,6 +1,7 @@
 #ifndef CHARACTER_HPP_
 #define CHARACTER_HPP_
 
+#include <array>
 #include <iostream>
 #include <map>
 #include <memory>
@@ -32,7 +33,7 @@ public:
     std::shared_ptr<const CharacterSubclass> subclass_ptr;
     std::shared_ptr<const CharacterRace> race_ptr;
     std::shared_ptr<const CharacterSubrace> subrace_ptr;
-    Character(const std::string& name, const std::vector<int>& base_ability_scores);
+    Character(const std::string& name, const std::array<int, 6>& base_ability_scores);
     int getLevel() const;
     int getXP() const;
     void levelUp();
@@ -46,7 +47,7 @@ public:
     virtual void determineState();
 };
 
-inline Character::Character(const std::string& name, const std::vector<int>& base_ability_scores)
+inline Character::Character(const std::string& name, const std::array<int, 6>& base_ability_scores)
     : Creature(name, base_ability_scores), subclass_ptr(nullptr), subrace_ptr(nullptr) {}
 
 inline int Character::getLevel() const { return level; }

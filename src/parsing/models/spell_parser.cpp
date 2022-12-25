@@ -66,7 +66,7 @@ std::unique_ptr<dnd::SpellType> dnd::SpellParser::createSpellType(const std::str
         + " cantrip)"
     );
     if (!std::regex_match(type_str, type_regex)) {
-        throw std::invalid_argument("Spell type is of wrong format.");
+        throw std::invalid_argument("Spell type \"" + type_str + "\" is of wrong format.");
     }
     std::unique_ptr<SpellType> type_ptr(new SpellType());
     size_t ritual_idx = type_str.find(" (ritual)");

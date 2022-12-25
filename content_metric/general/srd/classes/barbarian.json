@@ -1,6 +1,7 @@
 {
     "name": "Barbarian",
     "hit_dice": "d12",
+    "asi_levels": [4, 8, 12, 16, 19],
     "features": {
         "Barbarian Base": {
             "description": "Hit Dice: 1d12 per barbarian level\n\nProficiencies\n\nArmor: Light armor, medium armor, shields\nWeapons: Simple weapons, martial weapons\nTools: None\nSaving Throws: Strength, Constitution\nSkills: Choose two from Animal Handling, Athletics, Intimidation, Nature, Perception, and Survival",
@@ -15,7 +16,7 @@
             }
         },
         "Rage": {
-            "description": "In battle, you fight with primal ferocity. On your turn, you can enter a rage as a bonus action.\n\nWhile raging, you gain the following benefits if you aren't wearing heavy armor:\n\n- You have advantage on Strength checks and Strength saving throws.\n- When you make a melee weapon attack using Strength, you gain a bonus to the damage roll that increases as you gain levels as a barbarian, as shown in the Rage Damage column of the Barbarian table.\n- You have resistance to bludgeoning, piercing, and slashing damage.\n\nIf you are able to cast spells, you can't cast them or concentrate on them while raging.\nYour rage lasts for 1 minute. It ends early if you are knocked unconscious or if your turn ends and you haven't attacked a hostile creature since your last turn or taken damage since then. You can also end your rage on your turn as a bonus action.\n\nOnce you have raged the number of times shown for your barbarian level in the Rages column of the Barbarian table, you must finish a long rest before you can rage again.",
+            "description": "In battle, you fight with primal ferocity. On your turn, you can enter a rage as a bonus action.\n\nWhile raging, you gain the following benefits if you aren't wearing heavy armor:\n\n- You have advantage on Strength checks and Strength saving throws.\n- When you make a melee weapon attack using Strength, you gain a bonus to the damage roll that increases as you gain levels as a barbarian, as shown in the Rage Damage column of the table below.\n- You have resistance to bludgeoning, piercing, and slashing damage.\n\nIf you are able to cast spells, you can't cast them or concentrate on them while raging.\nYour rage lasts for 1 minute. It ends early if you are knocked unconscious or if your turn ends and you haven't attacked a hostile creature since your last turn or taken damage since then. You can also end your rage on your turn as a bonus action.\n\nOnce you have raged the number of times shown for your barbarian level in the Rages column of the table below, you must finish a long rest before you can rage again.\n\nLevel|Rages|Rage Damage\n1|2|+2\n2|2|+2\n3|3|+2\n4|3|+2\n5|3|+2\n6|4|+2\n7|4|+2\n8|4|+2\n9|4|+3\n10|4|+3\n11|4|+3\n12|5|+3\n13|5|+3\n14|5|+3\n15|5|+3\n16|5|+4\n17|6|+4\n18|6|+4\n19|6|+4\n20|Unlimited|+4",
             "bonus_actions": {
                 "Raging": "Start or end raging."
             }
@@ -36,7 +37,7 @@
             "activation": "LEVEL >= 3",
             "subclass": true
         },
-        "Extra Attack": {
+        "Extra Attack (Barbarian)": {
             "description": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn.",
             "activation": "LEVEL >= 5"
         },
@@ -71,7 +72,7 @@
             "description": "At 20th level, you embody the power of the wilds. Your Strength and Constitution scores increase by 4. Your maximum for those scores is now 24.",
             "activation": "LEVEL >= 20",
             "effects": [
-                "STRMAX earliest set 24", "CONMAX earliest set 24",
+                "STRMAX earliest max 24", "CONMAX earliest max 24",
                 "STR normal add 4", "CON normal add 4"
             ]
         }

@@ -1,0 +1,56 @@
+{
+    "name": "Half-Elf",
+    "has_subraces": false,
+    "features": {
+        "Ability Score Increase (Half-Elf)": {
+            "description": "Your Charisma score increases by 2, and two other ability scores of your choice increase by 1.",
+            "effects": [
+                "CHA normal add 2"
+            ],
+            "choose": {
+                "effects": {
+                    "amount": 2,
+                    "choices": ["STR normal add 1", "DEX normal add 1", "CON normal add 1", "INT normal add 1", "WIS normal add 1"]
+                }
+            }
+        },
+        "Age of a Half-Elf": {
+            "description": "Half-elves mature at the same rate humans do and reach adulthood around the age of 20. They live much longer than humans, however, often exceeding 180 years."
+        },
+        "Size of a Half-Elf": {
+            "description": "Half-elves are about the same size as humans, ranging from 150cm to 180cm tall. Your size is Medium."
+        },
+        "Speed of a Half-Elf": {
+            "description": "Your base walking speed is 9m.",
+            "effects": [
+                "SPEED earliest max 9"
+            ]
+        },
+        "Darkvision of a Half-Elf": {
+            "description": "Thanks to your elf blood, you have superior vision in dark and dim conditions. You can see in dim light within 18m of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+            "senses": [
+                "Darkvision (18m)"
+            ]
+        },
+        "Fey Ancestry": {
+            "description": "You have advantage on saving throws against being charmed, and magic can't put you to sleep."
+        },
+        "Skill Versatility": {
+            "description": "You gain proficiency in two skills of your choice.",
+            "choose": {
+                "skill_proficiency": {
+                    "amount": 2
+                }
+            }
+        },
+        "Languages of a Half-Elf": {
+            "description": "You can speak, read, and write Common, Elvish, and one extra language of your choice.",
+            "languages": ["Common", "Elvish"],
+            "choose": {
+                "languages": {
+                    "amount": 1
+                }
+            }
+        }
+    }
+}
