@@ -23,7 +23,7 @@ Content that may not be formatted perfectly or a part of it is not implemented a
 - [Martial Arts (Monk)](classes/monk.json) needs implementing
 
 - how to format features that have choices and effects for these choices e.g. expertise
-  - [Expertise (Bard)](classes/bard.json)
+  - [Expertise (Bard)](classes/bard.json), [Expertise (Rogue)](classes/rogue.json)
   - [Circle Spells (Circle of the Land)](subclasses/circle_of_the_land.json)
   - Everything from [Hunter](subclasses/hunter.json)
 
@@ -43,6 +43,9 @@ Content that may not be formatted perfectly or a part of it is not implemented a
   - [Paladin's](classes/paladin.json) Divine Smite
   - [Ranger's](classes/ranger.json) Feral Senses
   - [Ranger's](classes/ranger.json) Foe Slayer
+  - [Rogue's](classes/rogue.json) Sneak Attack
+  - [Rogue's](classes/rogue.json) Stroke of Luck
+  - [Thief's](subclasses/thief.json) "Thief's Reflexes"
 
 - [Paladin's](classes/paladin.json) Natural Explorer
 
