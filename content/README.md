@@ -16,13 +16,14 @@ This directory is where you store all your content i.e. definitions of classes, 
 
 Everything that applies to all of your campaigns, such as the SRD classes and races is placed in the `general` directory. Whereas everything related to the campaign itself is placed within its own folder for the campaign.
 
-As an example, the content from SRD is formatted in this way inside of the [`content_imperial`](../content_imperial/) and [`content_metric`](../content_metric/) directories. **Be aware:** They are just an example, all rights belong to WotC, and as an example, they are not guaranteed to be correct, complete, or up-to-date.
+As an example, the content from SRD is formatted in this way. These examples are located in the [`content_imperial/general/srd`](../content_imperial/general/srd/) and [`content_metric/general/srd`](../content_metric/general/srd/) directories. **Be aware:** They are just an example, all rights belong to WotC, and as an example, they are not guaranteed to be correct, complete, or up-to-date.
 
-Furthermore, a few further examples using the SRD content are provided in the `example_campaign` directory. This directory should also show you, how you can create content for your own campaign and how to place it in a directory so that the DnD-Campaign-Manager can use it.
+Furthermore, a few further examples using the SRD content are provided in the `example_campaign` directories ([imperial](../content_imperial/example_campaign/) or [metric](../content_metric/example_campaign/)). These directories should also show you, how you can create content for your own campaign and how to place it in a directory so that the DnD-Campaign-Manager can use it.
 
-Within the [`content_imperial`](../content_imperial/) directory, you can find the original content with imperial units. I did my best to convert all imperial units into metric units. You can find this adapted content in the [`content_metric`](../content_metric/) directory.
+Within the [`content_imperial`](../content_imperial/) directory, you can find the original content using imperial units. I did my best to convert all imperial units into metric units. You can find this adapted content in the [`content_metric`](../content_metric/) directory.
 
-When you choose that your content directory has another name, remember to provide the directory name to the executable using `-d directory_name`.
+By default, the DnD-Campaign-Manager parses all content from a directory called `content` in the location where you are starting the tool.
+Therefore, when your content is located somewhere else, remember to provide the directory name to the executable using `-d path/to/dir`.
 
 # Formatting Content
 
@@ -259,7 +260,7 @@ Examples:
 
 ## Anything unclear?
 
-If something about the formatting of the content is not clear, please have a look at the SRD content([content_imperial](../content_imperial/) or [content_metric](../content_metric/)), hopefully, that helps.
+If something about the formatting of the content is not clear, please have a look at the SRD content (in [imperial units](../content_imperial/) or [metric units](../content_metric/)), hopefully, that helps.
 
 If you are comfortable reading C++ code, another possibility would be to have a look at the test cases for the particular content type you are having problems with e.g. the `spell_parser_test.cpp`.
 
