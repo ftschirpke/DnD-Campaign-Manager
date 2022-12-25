@@ -194,9 +194,11 @@ Each feature is represented as a key-value pair where the key is the name of the
 - "tool_proficiency" (optional) - an array of tool proficiencies this feature provides
 - "savingthrow_proficiency" (optional) - an array of saving throw proficiencies this feature provides
 - "skill_proficiency" (optional) - an array of skill proficiencies this feature provides
-- "actions" (optional) - a map of actions (and their descriptions) which this feature allows
-- "bonus_actions" (optional) - a map of bonus actions (and their descriptions) which this feature allows
-- "reactions" (optional) - a map of reactions (and their descriptions) which this feature allows
+- "actions" (optional) - a map of actions (key: expressive name, value: short description) which this feature allows
+- "bonus_actions" (optional) - a map of bonus actions (key: expressive name, value: short description) which this feature allows
+- "reactions" (optional) - a map of reactions (key: expressive name, value: short description) which this feature allows
+
+Try to keep the descriptions for your actions, bonus action, and reactions as short as possible. They should just be short and descriptive, reminding the reader of what the action/bonus action/reaction does. For the full explanation, you can always read the feature's description which should be complete and impossible to misunderstand.
 
 ## Effects
 Effects are defined as a string of the following format:
