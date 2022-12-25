@@ -16,11 +16,10 @@ Content that may not be formatted perfectly or a part of it is not implemented a
   - [Song of Rest (Bard)](classes/bard.json)
   - [Life Domain Spells (Life Domain - Cleric)](subclasses/life_domain.json)
 
+- [Magical Secrets (Bard)](classes/bard.json) - I think, at the moment this is not doing what it should
+
 - how to format features that have choices and effects for these choices e.g. expertise
   - [Expertise (Bard)](classes/bard.json)
-
-- [Cantrip (High Elf)](subraces/high_elf.json) - how to format the choice of a cantrip from the wizard spell list
-- [Infernal Legacy (Tiefling)](races/tiefling.json) - how to format cantrips and spellcasting
 
 - [Jack of All Trades (Bard)](classes/bard.json) - no idea how to implement this yet...
 

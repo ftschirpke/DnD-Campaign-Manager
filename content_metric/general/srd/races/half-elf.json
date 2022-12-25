@@ -38,8 +38,9 @@
         "Skill Versatility": {
             "description": "You gain proficiency in two skills of your choice.",
             "choose": {
-                "skill_proficiency": {
-                    "amount": 2
+                "skill_proficiencies": {
+                    "amount": 2,
+                    "group": "skills"
                 }
             }
         },

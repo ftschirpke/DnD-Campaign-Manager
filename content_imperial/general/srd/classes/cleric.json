@@ -20,33 +20,34 @@
     "features": {
         "Cleric Base": {
             "description": "Hit Dice: 1d8 per cleric level\n\nProficiencies\nArmor: Light armor, medium armor, shields\nWeapons: Simple weapons\nTools: None\nSaving Throws: Wisdom, Charisma\nSkills: Choose two from History, Insight, Medicine, Persuasion, and Religion",
-            "armor_proficiency": ["light armor", "medium armor", "shields"],
-            "weapon_proficiency": ["simple weapons"],
-            "savingthrow_proficiency": ["WIS", "CHA"],
-            "choose" :{
-                "skill_proficiency": {
+            "armor_proficiencies": ["light armor", "medium armor", "shields"],
+            "weapon_proficiencies": ["simple weapons"],
+            "savingthrow_proficiencies": ["WIS", "CHA"],
+            "choose": {
+                "skill_proficiencies": {
                     "amount": 2,
                     "choices": ["history", "insight", "medicine", "persuasion", "religion"]
                 }
             }
         },
         "Divine Domain": {
-            "description": "Choose one domain related to your deity. Each domain provides examples of gods associated with it. Your choice grants you domain spells and other features when you choose it at 1st level. It also grants you additional ways to use Channel Divinity when you gain that feature at 2nd level, and additional benefits at 6th, 8th, and 17th levels.\n\nDomain Spells\n\nEach domain has a list of spells — its domain spells — that you gain at the cleric levels noted in the domain description. Once you gain a domain spell, you always have it prepared, and it doesn't count against the number of spells you can prepare each day.\n\nIf you have a domain spell that doesn't appear on the cleric spell list, the spell is nonetheless a cleric spell for you."
+            "description": "Choose one domain related to your deity. Each domain provides examples of gods associated with it. Your choice grants you domain spells and other features when you choose it at 1st level. It also grants you additional ways to use Channel Divinity when you gain that feature at 2nd level, and additional benefits at 6th, 8th, and 17th levels.\n\nDomain Spells\n\nEach domain has a list of spells — its domain spells — that you gain at the cleric levels noted in the domain description. Once you gain a domain spell, you always have it prepared, and it doesn't count against the number of spells you can prepare each day.\n\nIf you have a domain spell that doesn't appear on the cleric spell list, the spell is nonetheless a cleric spell for you.",
+            "subclass": true
         },
         "Channel Divinity": {
             "description": "At 2nd level, you gain the ability to channel divine energy directly from your deity, using that energy to fuel magical effects. You start with two such effects: Turn Undead and an effect determined by your domain. Some domains grant you additional effects as you advance in levels, as noted in the domain description.\n\nWhen you use your Channel Divinity, you choose which effect to create. You must then finish a short or long rest to use your Channel Divinity again.\n\nSome Channel Divinity effects require saving throws. When you use such an effect from this class, the DC equals your cleric spell save DC.\n\nBeginning at 6th level, you can use your Channel Divinity twice between rests, and beginning at 18th level, you can use it three times between rests. When you finish a short or long rest, you regain your expended uses.",
-            "activation": "LEVEL >= 2"
+            "activation": "CLASS_LEVEL >= 2"
         },
         "Channel Divinity: Turn Undead": {
             "description": "As an action, you present your holy symbol and speak a prayer censuring the undead. Each undead that can see or hear you within 30 feet of you must make a Wisdom saving throw. If the creature fails its saving throw, it is turned for 1 minute or until it takes any damage.\n\nA turned creature must spend its turns trying to move as far away from you as it can, and it can't willingly move to a space within 30 feet of you. It also can't take reactions. For its action, it can use only the Dash action or try to escape from an effect that prevents it from moving. If there's nowhere to move, the creature can use the Dodge action.",
-            "activation": "LEVEL >= 2",
+            "activation": "CLASS_LEVEL >= 2",
             "actions": {
                 "Channel Divinity: Turn Undead": "Each undead that can see or hear you within 30 feet of you must make a Wisdom saving throw. If the creature fails its saving throw, it is turned for 1 minute or until it takes any damage. A turned creature must spend its turns trying to move as far away from you as it can."
             }
         },
         "Destroy Undead": {
             "description": "Starting at 5th level, when an undead fails its saving throw against your Turn Undead feature, the creature is instantly destroyed if its challenge rating is at or below a certain threshold, as shown in the Destroy Undead table.\n\nCleric Level|Destroys Undead of CR...\n5th|1/2 or lower\n8th|1 or lower\n11th|2 or lower\n14|3 or lower\n17th|4 or lower",
-            "activation": "LEVEL >= 4"
+            "activation": "CLASS_LEVEL >= 4"
         },
         "Divine Intervention": {
             "description": "Beginning at 10th level, you can call on your deity to intervene on your behalf when your need is great.\n\nImploring your deity's aid requires you to use your action. Describe the assistance you seek, and roll percentile dice. If you roll a number equal to or lower than your cleric level, your deity intervenes. The DM chooses the nature of the intervention; the effect of any cleric spell or cleric domain spell would be appropriate.\n\nIf your deity intervenes, you can't use this feature again for 7 days. Otherwise, you can use it again after you finish a long rest.\n\nAt 20th level, your call for intervention succeeds automatically, no roll required."

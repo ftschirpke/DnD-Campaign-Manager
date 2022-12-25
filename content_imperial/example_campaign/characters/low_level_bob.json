@@ -9,7 +9,7 @@
     "hit_dice_rolls": [8, 11],
     "choices": {
         "Barbarian Base": {
-            "skill_proficiency": ["athletics", "intimidation"]
+            "skill_proficiencies": ["athletics", "intimidation"]
         }
     }
 }
