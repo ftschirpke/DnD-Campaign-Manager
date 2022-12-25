@@ -118,10 +118,11 @@ Example of a class without a proficiency feature (for more information on profic
 Some classes allow spellcasting. In that case, you have to provide the key "spellcasting" to the map. And the value mapped to "spellcasting" is another map with (some of) the following values:
 - "ability" (required) - one of "STR", "DEX", "CON", "INT", "WIS", "CHA"
 - "ritual_casting" (required) - boolean whether the class allows spells with the ritual tag to be cast as a ritual
-- "cantrips_known" (required) - a length-20-array containing the amounts of cantrips known for each level from 1 to 20
 - "spells_known" or "preparation_caster" (required) - **exactly one** must be provided to describe how many spells a character of this class knows
   - "spells_known" - a length-20-array containing the amounts of spells known for each level
   - "preparation_caster" - one of "half" or "full" to describe how many spells can be prepared: `spellcasting ability + (half of) level`
+- "cantrips_known" (optional) - a length-20-array containing the amounts of cantrips known for each level from 1 to 20
+  - if not provided, the tool assumes that the class provides no cantrips (e.g. Paladins and Rangers)
 - "levelX_slots" (optional) - a length-20-array containing the amounts of spells slots of level X, where X is between 1 and 9, for each level
   - if for example only "level2_slots" and "level3_slots" are provided, the tool assumes that the class provides no spell slots of any other level
 
