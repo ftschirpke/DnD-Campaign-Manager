@@ -14,6 +14,7 @@ Content that may not be formatted perfectly or a part of it is not implemented a
 - how to format features that have multiple steps e.g. something at level 3, something at level 5, and another thing at level 7
   - [Infernal Legacy (Tiefling)](races/tiefling.json)
   - [Song of Rest (Bard)](classes/bard.json)
+  - [Life Domain Spells (Life Domain - Cleric)](subclasses/life_domain.json)
 
 - how to format features that have choices and effects for these choices e.g. expertise
   - [Expertise (Bard)](classes/bard.json)
@@ -25,11 +26,15 @@ Content that may not be formatted perfectly or a part of it is not implemented a
 
 - should "Resources" (name could be changed) exist outside of the description? (examples would be ki points or bardic inspiration)
 
-- Free decisions such as [Fighter's](classes/fighter.json) action surge - but should they even get an implementation?
+- Free decisions should they even get an implementation?
+  - [Fighter's](classes/fighter.json) action surge
+  - [Life Domain's](subclasses/life_domain.json) Divine Strike
 
 - [Rage (Barbarian)](classes/barbarian.json) - could Rage be a parameter?
 - [Path of the Berserker](subclasses/path_of_the_berserker.json): "Frenzy" - the bonus action attack (and the exhaustion)
 - [Path of the Berserker](subclasses/path_of_the_berserker.json): "Mindless Rage" - Rage as a parameter would be needed though - probably not going to happen
+
+- class starting equipment?
 
 ## Changes that could bring more clarity
 
