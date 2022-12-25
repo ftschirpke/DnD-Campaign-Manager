@@ -6,7 +6,7 @@ The goal of this tool is to provide similar functionality for managing character
 
 The first version of this tool is supposed to be a command line tool that allows:
 - creation of your own characters, classes, races and spells through JSON files
-- access to information about characters and spells at any time (e.g. while dm-ing a session)
+- access to information about characters and spells at any time (e.g. while DM-ing a session)
 
 Ideas for future improvements include:
 - multiclassing

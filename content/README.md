@@ -260,7 +260,7 @@ Examples:
 
 ## Anything unclear?
 
-If something about the formatting of the content is not clear, please have a look at the SRD content (in [imperial units](../content_imperial/) or [metric units](../content_metric/)), hopefully, that helps.
+If something about the formatting of the content is not clear, please have a look at the Open Game Content examples (in [imperial units](../content_imperial/) or [metric units](../content_metric/)), hopefully, that helps.
 
 If you are comfortable reading C++ code, another possibility would be to have a look at the test cases for the particular content type you are having problems with e.g. the `spell_parser_test.cpp`.
 
