@@ -16,11 +16,11 @@ This directory is where you store all your content i.e. definitions of classes, 
 
 Everything that applies to all of your campaigns, such as the SRD classes and races is placed in the `general` directory. Whereas everything related to the campaign itself is placed within its own folder for the campaign.
 
-As an example, the content from SRD is formatted in this way inside of the `content_imperial` and `content_metric` directories. **Be aware:** They are just an example, all rights belong to WotC, and as an example, they are not guaranteed to be correct, complete, or up-to-date.
+As an example, the content from SRD is formatted in this way inside of the [`content_imperial`](../content_imperial/) and [`content_metric`](../content_metric/) directories. **Be aware:** They are just an example, all rights belong to WotC, and as an example, they are not guaranteed to be correct, complete, or up-to-date.
 
 Furthermore, a few further examples using the SRD content are provided in the `example_campaign` directory. This directory should also show you, how you can create content for your own campaign and how to place it in a directory so that the DnD-Campaign-Manager can use it.
 
-Within the `content_imperial` directory, you can find the original content with imperial units. I did my best to convert all imperial units into metric units. You can find this adapted content in the `content_metric` directory.
+Within the [`content_imperial`](../content_imperial/) directory, you can find the original content with imperial units. I did my best to convert all imperial units into metric units. You can find this adapted content in the [`content_metric`](../content_metric/) directory.
 
 When you choose that your content directory has another name, remember to provide the directory name to the executable using `-d directory_name`.
 
@@ -98,7 +98,7 @@ Each class should be stored in a JSON file as a map (or "object"). The required 
   - there needs to be at least one feature that has the key-value pair `"subclass": true` (this feature should just be a feature describing that from a certain level on, usually level 2 or 3, a subclass can be chosen)
   - usually, there is also a feature describing hit dice and proficiencies for armor, weapons, saving throws and skills
 
-Example of a class without a proficiency feature (for more information on that, have a look at the examples provided in the `content_imperial` and `content_metric` directories):
+Example of a class without a proficiency feature (for more information on proficiency features, have a look at the examples provided in the [`content_imperial`](../content_imperial/general/srd/classes/) and [`content_metric`](../content_metric/general/srd/classes/) directories):
 ```json
 {
     "name": "Example Class",
@@ -171,13 +171,13 @@ An example of a minimal spell JSON file would be:
 
 ## Features
 Races, subraces, classes, subclasses and characters can all have features. In the JSON files, the features are formatted as a map inside a larger map.
-```json
+```jsonc
 {
-    ...
+    // ...
     "features": {
         // the features go in here
     }
-    ...
+    // ...
 }
 ```
 Each feature is represented as a key-value pair where the key is the name of the feature and the value is another JSON map containing the following values:
@@ -247,7 +247,7 @@ LEVEL, XP
 ```
 
 Examples:
-```json
+```jsonc
 "effects": [
     "AC earliest set 12",     // set new default value for armor class to 12
     "SPEED normal add 1.5",   // increase speed by 1.5
@@ -259,7 +259,7 @@ Examples:
 
 ## Anything unclear?
 
-If something about the formatting of the content is not clear, please have a look at the SRD content, hopefully, that helps.
+If something about the formatting of the content is not clear, please have a look at the SRD content([content_imperial](../content_imperial/) or [content_metric](../content_metric/)), hopefully, that helps.
 
 If you are comfortable reading C++ code, another possibility would be to have a look at the test cases for the particular content type you are having problems with e.g. the `spell_parser_test.cpp`.
 
