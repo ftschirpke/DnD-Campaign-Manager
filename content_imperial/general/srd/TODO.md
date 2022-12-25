@@ -20,6 +20,7 @@ Content that may not be formatted perfectly or a part of it is not implemented a
 
 - how to format features that have choices and effects for these choices e.g. expertise
   - [Expertise (Bard)](classes/bard.json)
+  - [Circle Spells (Circle of the Land)](subclasses/circle_of_the_land.json)
 
 - [Jack of All Trades (Bard)](classes/bard.json) - no idea how to implement this yet...
 
@@ -32,6 +33,8 @@ Content that may not be formatted perfectly or a part of it is not implemented a
 - [Rage (Barbarian)](classes/barbarian.json) - could Rage be a parameter?
 - [Path of the Berserker](subclasses/path_of_the_berserker.json): "Frenzy" - the bonus action attack (and the exhaustion)
 - [Path of the Berserker](subclasses/path_of_the_berserker.json): "Mindless Rage" - Rage as a parameter would be needed though - probably not going to happen
+
+- Should immunity against diseases be somehow integrated? ([Nature's Ward (Circle of the Land)](subclasses/circle_of_the_land.json))
 
 - class starting equipment?
 
