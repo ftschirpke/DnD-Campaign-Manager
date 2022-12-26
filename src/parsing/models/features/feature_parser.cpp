@@ -75,48 +75,21 @@ void dnd::FeatureParser::parseAndAddEffect(const std::string& effect_str, Featur
     std::unique_ptr<Effect> effect_ptr;
     if (effect_type.size() < 5) {
         const float effect_value = std::stof(last_part);
-        if (effect_type == "add") {
-            effect_ptr = std::make_unique<AddEffect>(affected_attribute, effect_value * 100);
-            // attributes are stored as integers * 100, see CreatureState
-        } else if (effect_type == "mult") {
-            effect_ptr = std::make_unique<MultEffect>(affected_attribute, effect_value);
-        } else if (effect_type == "div") {
-            effect_ptr = std::make_unique<DivEffect>(affected_attribute, effect_value);
-        } else if (effect_type == "set") {
-            effect_ptr = std::make_unique<SetEffect>(affected_attribute, effect_value * 100);
-            // attributes are stored as integers * 100, see CreatureState
-        } else if (effect_type == "max") {
-            effect_ptr = std::make_unique<MaxEffect>(affected_attribute, effect_value * 100);
-            // attributes are stored as integers * 100, see CreatureState
-        } else if (effect_type == "min") {
-            effect_ptr = std::make_unique<MinEffect>(affected_attribute, effect_value * 100);
+        if (effect_type == "mult" || effect_type == "div") {
+            effect_ptr = std::make_unique<FloatNumEffect>(affected_attribute, effect_type, effect_value);
+        } else {
+            effect_ptr = std::make_unique<IntNumEffect>(affected_attribute, effect_type, effect_value * 100);
             // attributes are stored as integers * 100, see CreatureState
         }
     } else {
-        if (effect_type == "addOther") {
-            effect_ptr = std::make_unique<AddOtherEffect>(affected_attribute, last_part);
-        } else if (effect_type == "multOther") {
-            effect_ptr = std::make_unique<MultOtherEffect>(affected_attribute, last_part);
-        } else if (effect_type == "divOther") {
-            effect_ptr = std::make_unique<DivOtherEffect>(affected_attribute, last_part);
-        } else if (effect_type == "setOther") {
-            effect_ptr = std::make_unique<SetOtherEffect>(affected_attribute, last_part);
-        } else if (effect_type == "maxOther") {
-            effect_ptr = std::make_unique<MaxOtherEffect>(affected_attribute, last_part);
-        } else if (effect_type == "minOther") {
-            effect_ptr = std::make_unique<MinOtherEffect>(affected_attribute, last_part);
-        } else if (effect_type == "addConst") {
-            effect_ptr = std::make_unique<AddConstEffect>(affected_attribute, last_part);
-        } else if (effect_type == "multConst") {
-            effect_ptr = std::make_unique<MultConstEffect>(affected_attribute, last_part);
-        } else if (effect_type == "divConst") {
-            effect_ptr = std::make_unique<DivConstEffect>(affected_attribute, last_part);
-        } else if (effect_type == "setConst") {
-            effect_ptr = std::make_unique<SetConstEffect>(affected_attribute, last_part);
-        } else if (effect_type == "maxConst") {
-            effect_ptr = std::make_unique<MaxConstEffect>(affected_attribute, last_part);
-        } else if (effect_type == "minConst") {
-            effect_ptr = std::make_unique<MinConstEffect>(affected_attribute, last_part);
+        int other_idx = effect_type.find("Other");
+        int const_idx = effect_type.find("Const");
+        if (other_idx != std::string::npos) {
+            const std::string op_name(effect_type.cbegin(), effect_type.cbegin() + other_idx);
+            effect_ptr = std::make_unique<OtherAttributeEffect>(affected_attribute, op_name, last_part);
+        } else if (const_idx != std::string::npos) {
+            const std::string op_name(effect_type.cbegin(), effect_type.cbegin() + const_idx);
+            effect_ptr = std::make_unique<ConstEffect>(affected_attribute, op_name, last_part);
         }
     }
 
