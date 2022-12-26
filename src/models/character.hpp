@@ -46,8 +46,8 @@ public:
     static int levelForXP(int xp);
     void addHitDiceRoll(int hit_dice_roll);
     virtual void determineState();
-    const std::vector<std::shared_ptr<const Feature>>& active_features() const;
-    std::vector<std::shared_ptr<const Feature>> all_features() const;
+    const std::vector<std::shared_ptr<const Feature>>& activeFeatures() const;
+    std::vector<std::shared_ptr<const Feature>> allFeatures() const;
 };
 
 inline Character::Character(const std::string& name, const std::array<int, 6>& base_ability_scores)
@@ -105,7 +105,7 @@ inline void Character::addHitDiceRoll(int hit_dice_roll) {
     }
 }
 
-inline const std::vector<std::shared_ptr<const Feature>>& Character::active_features() const {
+inline const std::vector<std::shared_ptr<const Feature>>& Character::activeFeatures() const {
     return state.active_features;
 }
 

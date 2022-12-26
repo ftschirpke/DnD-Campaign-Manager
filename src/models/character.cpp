@@ -53,3 +53,15 @@ void dnd::Character::determineState() {
 
     state.calculate();
 }
+
+std::vector<std::shared_ptr<const dnd::Feature>> dnd::Character::allFeatures() const {
+    std::vector<std::shared_ptr<const dnd::Feature>> all_features = class_ptr->features;
+    if (subclass_ptr != nullptr) {
+        all_features.insert(all_features.end(), subclass_ptr->features.cbegin(), subclass_ptr->features.cend());
+    }
+    all_features.insert(all_features.end(), race_ptr->features.cbegin(), race_ptr->features.cend());
+    if (subrace_ptr != nullptr) {
+        all_features.insert(all_features.end(), subrace_ptr->features.cbegin(), subrace_ptr->features.cend());
+    }
+    return all_features;
+}
