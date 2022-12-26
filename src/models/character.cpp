@@ -45,25 +45,10 @@ const std::unordered_map<std::string, int> dnd::Character::getInitialAttributeVa
 void dnd::Character::determineState() {
     state.reset(getConstants(), getInitialAttributeValues());
 
-    state.applyAbilityScoreFeatures(class_ptr);
-    if (subclass_ptr != nullptr) {
-        state.applyAbilityScoreFeatures(subclass_ptr);
-    }
-    state.applyAbilityScoreFeatures(race_ptr);
-    if (subrace_ptr != nullptr) {
-        state.applyAbilityScoreFeatures(subrace_ptr);
-    }
+    state.addFeatureHolder(class_ptr);
+    state.addFeatureHolder(subclass_ptr);
+    state.addFeatureHolder(race_ptr);
+    state.addFeatureHolder(subrace_ptr);
 
-    state.determineModifiers();
-
-    // TODO: are proficiencies normal features or should they have their own function?
-
-    state.applyNormalFeatures(class_ptr);
-    if (subclass_ptr != nullptr) {
-        state.applyNormalFeatures(subclass_ptr);
-    }
-    state.applyNormalFeatures(race_ptr);
-    if (subrace_ptr != nullptr) {
-        state.applyNormalFeatures(subrace_ptr);
-    }
+    state.calculate();
 }

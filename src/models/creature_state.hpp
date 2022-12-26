@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "models/feature_holder.hpp"
+#include "models/features/feature.hpp"
 
 namespace dnd {
 
@@ -25,9 +26,13 @@ const std::map<std::string, std::string> skills = {
 };
 
 class CreatureState {
+    void applyAbilityScoreEffects();
+    void applyNormalEffects();
+    void determineModifiers();
 public:
     std::unordered_map<std::string, int> constants;
     std::unordered_map<std::string, int> attributes;
+    std::vector<std::shared_ptr<const Feature>> active_features;
     CreatureState() = default;
     CreatureState(
         const std::unordered_map<std::string, int>& constants,
@@ -37,9 +42,8 @@ public:
         const std::unordered_map<std::string, int>& new_constants,
         const std::unordered_map<std::string, int>& new_initial_attributes
     );
-    void applyAbilityScoreFeatures(std::shared_ptr<const FeatureHolder> feature_holder_ptr);
-    void applyNormalFeatures(std::shared_ptr<const FeatureHolder> feature_holder_ptr);
-    void determineModifiers();
+    void addFeatureHolder(std::shared_ptr<const FeatureHolder> feature_holder_ptr);
+    void calculate();
     static int modifier(int ability_score);
     static bool isAbility(const std::string& attribute_name);
 };
