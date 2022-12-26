@@ -9,7 +9,7 @@ Content that may not be formatted perfectly or a part of it is not implemented a
   - Characters need to define their ASI choices and/or chosen feats
   - feats need to be defined (probably just like features)
 
-- Special choices such as Eldritch Invocations (Warlock) and Fighting Styles ([Fighter](classes/fighter.json), [Paladin](classes/paladin.json), and [Ranger](classes/ranger.json))
+- Special choices such as Eldritch Invocations (Warlock) and Fighting Styles ([Fighter](classes/fighter.json), [Paladin](classes/paladin.json), and [Ranger](classes/ranger.json)), [Sorcerer's](classes/sorcerer.json) Metamagic
 
 - how to format features that have multiple steps e.g. something at level 3, something at level 5, and another thing at level 7
   - [Infernal Legacy (Tiefling)](races/tiefling.json)
@@ -17,6 +17,8 @@ Content that may not be formatted perfectly or a part of it is not implemented a
   - [Life Domain Spells (Life Domain - Cleric)](subclasses/life_domain.json)
   - [Oath of Devotion Spells (Oath of Devotion - Paladin)](subclasses/oath_of_devotion.json)
   - [Unarmored Movement (Monk)](classes/monk.json)
+- similarly, there are features that need a similar division of effects into multiple parts
+  - [Draconic Bloodline's](subclasses/draconic_bloodline.json) Draconic Resilience (always: MAXP increase, only when no armor: 13 + DEXMOD)
 
 - [Magical Secrets (Bard)](classes/bard.json) - I think, at the moment this is not doing what it should
 
@@ -31,7 +33,7 @@ Content that may not be formatted perfectly or a part of it is not implemented a
   - [Jack of All Trades (Bard)](classes/bard.json) - no idea how to implement this yet...
   - [Ranger's](classes/ranger.json) Favored Enemy
 
-- should "Resources" (name could be changed) exist outside of the description? (examples would be ki points or bardic inspiration)
+- should "Resources" (name could be changed) exist outside of the description? (examples would be ki points, bardic inspiration, or sorcery points)
 
 - free decisions should they even get an implementation?
   - [Fighter's](classes/fighter.json) action surge
@@ -58,6 +60,8 @@ Content that may not be formatted perfectly or a part of it is not implemented a
 
 - [Monk's](classes/monk.json) Tongue of the Sun and Moon?
 - class starting equipment?
+
+- flying speed? (e.g. [Draconic Bloodline's](subclasses/draconic_bloodline.json) Dragon Wings)
 
 ## Changes that could bring more clarity
 
