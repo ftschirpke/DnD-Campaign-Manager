@@ -6,6 +6,7 @@
   - [Races](#races)
   - [Subraces](#subraces)
   - [Classes](#classes)
+    - [Spellcasting](#spellcasting)
   - [Subclasses](#subclasses)
   - [Spells](#spells)
   - [Features](#features)
@@ -94,9 +95,9 @@ Example of a subrace of our Example Race with one feature:
 Each class should be stored in a JSON file as a map (or "object"). The required values are:
 - "name" - the name of the class
 - "hit_dice" - string for hit dice i.e. "d6", "d8", "d10" or "d12"
-- "asi_levels" (required) - an array of the levels at which characters of this class get Ability Score Increases
+- "asi_levels" - an array of the levels at which characters of this class get Ability Score Increases
 - "features" - map of [features](#features) e.g. innate spellcasting abilities
-  - there needs to be at least one feature that has the key-value pair `"subclass": true` (this feature should just be a feature describing that from a certain level on, usually level 2 or 3, a subclass can be chosen)
+  - there needs to be at least one feature that has the key-value pair `"subclass": true` (this feature should just be a feature describing that from a certain level on, usually level 1, 2 or 3, a subclass can be chosen)
   - usually, there is also a feature describing hit dice and proficiencies for armor, weapons, saving throws and skills
 
 Example of a class without a proficiency feature (for more information on proficiency features, have a look at the examples provided in the [`content_imperial`](../content_imperial/general/srd/classes/) and [`content_metric`](../content_metric/general/srd/classes/) directories):
@@ -107,11 +108,26 @@ Example of a class without a proficiency feature (for more information on profic
     "features": {
         "Special": {
             "description": "At 4th level, you chooose a subclass.",
-            "activation": "LEVEL >= 4"
+            "activation": "CLASS_LEVEL >= 4",
+            "subclass": true
         }
     }
 }
 ```
+### Spellcasting
+Some classes allow spellcasting. In that case, you have to provide the key "spellcasting" to the map. And the value mapped to "spellcasting" is another map with (some of) the following values:
+- "ability" (required) - one of "STR", "DEX", "CON", "INT", "WIS", "CHA"
+- "ritual_casting" (required) - boolean whether the class allows spells with the ritual tag to be cast as a ritual
+- "spells_known" or "preparation_caster" (required) - **exactly one** must be provided to describe how many spells a character of this class knows
+  - "spells_known" - a length-20-array containing the amounts of spells known for each level
+  - "preparation_caster" - one of "half" or "full" to describe how many spells can be prepared: `spellcasting ability + (half of) level`
+- "cantrips_known" (optional) - a length-20-array containing the amounts of cantrips known for each level from 1 to 20
+  - if not provided, the tool assumes that the class provides no cantrips (e.g. Paladins and Rangers)
+- "levelX_slots" (optional) - a length-20-array containing the amounts of spells slots of level X, where X is between 1 and 9, for each level
+  - if for example only "level2_slots" and "level3_slots" are provided, the tool assumes that the class provides no spell slots of any other level
+
+The last few values are supposed to replace the spell table for the class:
+
 [Are you still having questions?](#anything-unclear)
 
 ## Subclasses
@@ -128,7 +144,7 @@ Example of a subclass with one feature:
     "features": {
         "Do Stuff": {
             "description": "Starting when you choose this subclass at 4th level, you can do stuff as an action.",
-            "activation": "LEVEL >= 4",
+            "activation": "CLASS_LEVEL >= 4",
             "actions": {"Do Stuff": "You can do stuff"}
         }
     }
@@ -184,17 +200,17 @@ Races, subraces, classes, subclasses and characters can all have features. In th
 Each feature is represented as a key-value pair where the key is the name of the feature and the value is another JSON map containing the following values:
 - "description" (required) - a human-readable description of the feature
 - "effects" (optional) - an array of [effects](#effects) that are applied to the creature (these are parsed by the DnD-Campaign Manager tool and then used in calculations)
-- "activation" (optional) - a machine-readable description of when this feature activates, the most common version of class features activating at a certain level: `"activation": "LEVEL >= 3"`
-- "damage_resistance" (optional) - an array of damage resistances this feature gives you
-- "damage_immunity" (optional) - an array of damage immunities this feature gives you
-- "condition_immunity" (optional) - an array of condition immunities this feature gives you
+- "activation" (optional) - a machine-readable description of when this feature activates, the most common version of class features activating at a certain class level: `"activation": "CLASS_LEVEL >= 3"`
+- "damage_resistances" (optional) - an array of damage resistances this feature gives you
+- "damage_immunities" (optional) - an array of damage immunities this feature gives you
+- "condition_immunities" (optional) - an array of condition immunities this feature gives you
 - "languages" (optional) - an array of languages this feature allows you to understand
 - "senses" (optional) - an array of senses this feature provides you with
-- "armor_proficiency" (optional) - an array of armor proficiencies this feature provides
-- "weapon_proficiency" (optional) - an array of weapon proficiencies this feature provides
-- "tool_proficiency" (optional) - an array of tool proficiencies this feature provides
-- "savingthrow_proficiency" (optional) - an array of saving throw proficiencies this feature provides
-- "skill_proficiency" (optional) - an array of skill proficiencies this feature provides
+- "armor_proficiencies" (optional) - an array of armor proficiencies this feature provides
+- "weapon_proficiencies" (optional) - an array of weapon proficiencies this feature provides
+- "tool_proficiencies" (optional) - an array of tool proficiencies this feature provides
+- "savingthrow_proficiencies" (optional) - an array of saving throw proficiencies this feature provides
+- "skill_proficiencies" (optional) - an array of skill proficiencies this feature provides
 - "actions" (optional) - a map of actions (key: expressive name, value: short description) which this feature allows
 - "bonus_actions" (optional) - a map of bonus actions (key: expressive name, value: short description) which this feature allows
 - "reactions" (optional) - a map of reactions (key: expressive name, value: short description) which this feature allows

@@ -29,7 +29,7 @@
         "Tool Proficiency of a Dwarf": {
             "description": "You gain proficiency with the artisan's tools of your choice: smith's tools, brewer's supplies, or mason's tools.",
             "choose:": {
-                "tool_proficiency": {
+                "tool_proficiencies": {
                     "amount": 1,
                     "choices": ["smith's tools", "brewer's supplies", "mason's tools"]
                 }

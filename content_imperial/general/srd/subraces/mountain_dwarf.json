@@ -10,7 +10,7 @@
         },
         "Dwarven Armor Training": {
             "description": "You have proficiency with light and medium armor.",
-            "armor_proficiency": ["light armor", "medium armor"]
+            "armor_proficiencies": ["light armor", "medium armor"]
         }
     }
 }

@@ -28,7 +28,7 @@
         },
         "Keen Senses": {
             "description": "You have proficiency in the Perception skill.",
-            "skill_proficiency": ["perception"]
+            "skill_proficiencies": ["perception"]
         },
         "Fey Ancestry": {
             "description": "You have advantage on saving throws against being charmed, and magic can't put you to sleep."

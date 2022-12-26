@@ -10,10 +10,16 @@
         },
         "Elf Weapon Training": {
             "description": "You have proficiency with the longsword, shortsword, shortbow, and longbow.",
-            "weapon_proficiency": ["longsword", "shortsword", "shortbow", "longbow"]
+            "weapon_proficiencies": ["longsword", "shortsword", "shortbow", "longbow"]
         },
         "Cantrip (High Elf)": {
-            "description": "You know one cantrip of your choice from the wizard spell list. Intelligence is your spellcasting ability for it."
+            "description": "You know one cantrip of your choice from the wizard spell list. Intelligence is your spellcasting ability for it.",
+            "choose": {
+                "cantrips_free": {
+                    "amount": 1,
+                    "group": "wizard cantrips"
+                }
+            }
         },
         "Extra Language (High Elf)": {
             "description": "You can speak, read, and write one extra language of your choice.",

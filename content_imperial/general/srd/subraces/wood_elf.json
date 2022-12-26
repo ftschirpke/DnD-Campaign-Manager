@@ -8,7 +8,7 @@
         },
         "Elf Weapon Training": {
             "description": "You have proficiency with the longsword, shortsword, shortbow, and longbow.",
-            "weapon_proficiency": ["longsword", "shortsword", "shortbow", "longbow"]
+            "weapon_proficiencies": ["longsword", "shortsword", "shortbow", "longbow"]
         },
         "Fleet of Foot": {
             "description": "Your base walking speed increases to 35 feet.",
