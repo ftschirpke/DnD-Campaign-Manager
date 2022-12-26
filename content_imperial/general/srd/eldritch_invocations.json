@@ -21,12 +21,12 @@
         "skill_proficiencies": ["deception", "persuasion"]
     },
     "Bewitching Whispers": {
-        "description": "You can cast compulsion once using a warlock spell slot. You can’t do so again until you finish a long rest.",
+        "description": "You can cast compulsion once using a warlock spell slot. You can't do so again until you finish a long rest.",
         "prerequisites": ["LEVEL >= 7"],
         "spells_always_prepared": ["Compulsion"]
     },
     "Book of Ancient Secrets": {
-        "description": "You can now inscribe magical rituals in your Book of Shadows. Choose two 1st-level spells that have the ritual tag from any class’s spell list (the two needn’t be from the same list). The spells appear in the book and don’t count against the number of spells you know. With your Book of Shadows in hand, you can cast the chosen spells as rituals. You can’t cast the spells except as rituals, unless you’ve learned them by some other means. You can also cast a warlock spell you know as a ritual if it has the ritual tag.\n\nOn your adventures, you can add other ritual spells to your Book of Shadows. When you find such a spell, you can add it to the book if the spell’s level is equal to or less than half your warlock level (rounded up) and if you can spare the time to transcribe the spell. For each level of the spell, the transcription process takes 2 hours and costs 50 gp for the rare inks needed to inscribe it.",
+        "description": "You can now inscribe magical rituals in your Book of Shadows. Choose two 1st-level spells that have the ritual tag from any class's spell list (the two needn't be from the same list). The spells appear in the book and don't count against the number of spells you know. With your Book of Shadows in hand, you can cast the chosen spells as rituals. You can't cast the spells except as rituals, unless you've learned them by some other means. You can also cast a warlock spell you know as a ritual if it has the ritual tag.\n\nOn your adventures, you can add other ritual spells to your Book of Shadows. When you find such a spell, you can add it to the book if the spell's level is equal to or less than half your warlock level (rounded up) and if you can spare the time to transcribe the spell. For each level of the spell, the transcription process takes 2 hours and costs 50 gp for the rare inks needed to inscribe it.",
         "prerequisites": ["HAS_PACT Pact of the Tome"]
     },
     "Chains of Carceri": {
@@ -37,7 +37,7 @@
         "description": "You can see normally in darkness, both magical and nonmagical, to a distance of 120 feet."
     },
     "Dreadful Word": {
-        "description": "You can cast confusion once using a warlock spell slot. You can’t do so again until you finish a long rest.",
+        "description": "You can cast confusion once using a warlock spell slot. You can't do so again until you finish a long rest.",
         "prerequisites": ["LEVEL >= 7"]
     },
     "Eldritch Sight": {
@@ -56,9 +56,9 @@
         "spells_at_will": ["False Life"]
     },
     "Gaze of Two Minds": {
-        "description": "You can use your action to touch a willing humanoid and perceive through its senses until the end of your next turn. As long as the creature is on the same plane of existence as you, you can use your action on subsequent turns to maintain this connection, extending the duration until the end of your next turn. While perceiving through the other creature’s senses, you benefit from any special senses possessed by that creature, and you are blinded and deafened to your own surroundings.",
+        "description": "You can use your action to touch a willing humanoid and perceive through its senses until the end of your next turn. As long as the creature is on the same plane of existence as you, you can use your action on subsequent turns to maintain this connection, extending the duration until the end of your next turn. While perceiving through the other creature's senses, you benefit from any special senses possessed by that creature, and you are blinded and deafened to your own surroundings.",
         "actions": {
-            "Gaze of Two Minds": "You can use your action to touch a willing humanoid and perceive through its senses until the end of your next turn. You can use your action on subsequent turns to maintain this connection, extending the duration until the end of your next turn. While perceiving through the other creature’s senses, you are blinded and deafened to your own surroundings."
+            "Gaze of Two Minds": "You can use your action to touch a willing humanoid and perceive through its senses until the end of your next turn. You can use your action on subsequent turns to maintain this connection, extending the duration until the end of your next turn. While perceiving through the other creature's senses, you are blinded and deafened to your own surroundings."
         }
     },
     "Lifedrinker": {
@@ -75,12 +75,12 @@
         "spells_at_will": ["Alter Self"]
     },
     "Minions of Chaos": {
-        "description": "You can cast conjure elemental once using a warlock spell slot. You can’t do so again until you finish a long rest.",
+        "description": "You can cast conjure elemental once using a warlock spell slot. You can't do so again until you finish a long rest.",
         "prerequisites": ["LEVEL >= 9"],
         "spells_always_prepared": ["Conjure Elemental"]
     },
     "Mire of Mind": {
-        "description": "You can cast slow once using a warlock spell slot. You can’t do so again until you finish a long rest.",
+        "description": "You can cast slow once using a warlock spell slot. You can't do so again until you finish a long rest.",
         "prerequisites": ["LEVEL >= 5"],
         "spells_always_prepared": ["Slow"]
     },
@@ -105,17 +105,17 @@
         "prerequisites": ["HAS_CANTRIP Eldritch Blast"]
     },
     "Sculptor of Flesh": {
-        "description": "You can cast polymorph once using a warlock spell slot. You can’t do so again until you finish a long rest.",
+        "description": "You can cast polymorph once using a warlock spell slot. You can't do so again until you finish a long rest.",
         "prerequisites": ["LEVEL >= 7"],
         "spells_always_prepared": ["Polymorph"]
     },
     "Sign of Ill Omen": {
-        "description": "You can cast bestow curse once using a warlock spell slot. You can’t do so again until you finish a long rest.",
+        "description": "You can cast bestow curse once using a warlock spell slot. You can't do so again until you finish a long rest.",
         "prerequisites": ["LEVEL >= 5"],
         "spells_always_prepared": ["Bestow Curse"]
     },
     "Thief of Five Fates": {
-        "description": "You can cast bane once using a warlock spell slot. You can’t do so again until you finish a long rest.",
+        "description": "You can cast bane once using a warlock spell slot. You can't do so again until you finish a long rest.",
         "spells_always_prepared": ["Bane"]
     },
     "Thirsting Blade": {
@@ -128,7 +128,7 @@
         "spells_at_will": ["Arcane Eye"]
     },
     "Voice of Chain Master": {
-        "description": "You can communicate telepathically with your familiar and perceive through your familiar’s senses as long as you are on the same plane of existence. Additionally, while perceiving through your familiar’s senses, you can also speak through your familiar in your own voice, even if your familiar is normally incapable of speech.",
+        "description": "You can communicate telepathically with your familiar and perceive through your familiar's senses as long as you are on the same plane of existence. Additionally, while perceiving through your familiar's senses, you can also speak through your familiar in your own voice, even if your familiar is normally incapable of speech.",
         "prerequisites": ["HAS_PACT Pact of the Chain"]
     },
     "Whispers of the Grave": {

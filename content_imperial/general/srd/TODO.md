@@ -51,10 +51,12 @@ Content that may not be formatted perfectly or a part of it is not implemented a
   - [Rogue's](classes/rogue.json) Stroke of Luck
   - [Thief's](subclasses/thief.json) "Thief's Reflexes"
   - [The Fiend's](subclasses/the_fiend.json) Fiendish Resillience and Hurl Through Hell
+  - [Wizard's](classes/wizard.json) Arcane Recovery
 
 - [Paladin's](classes/paladin.json) Natural Explorer
 
 - [Ki-Empowered Strikes (Monk)](classes/monk.json) ?
+- [Wizard's](classes/wizard.json) Spell Mastery and Signature Spells
 - [Rage (Barbarian)](classes/barbarian.json) - could Rage be a parameter?
 - [Path of the Berserker](subclasses/path_of_the_berserker.json): "Frenzy" - the bonus action attack (and the exhaustion)
 - [Path of the Berserker](subclasses/path_of_the_berserker.json): "Mindless Rage" - Rage as a parameter would be needed though - probably not going to happen
