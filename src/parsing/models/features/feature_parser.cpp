@@ -2,12 +2,14 @@
 
 #include <memory>
 #include <regex>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 
 #include <nlohmann/json.hpp>
 
 #include "models/creature_state.hpp"
+#include "models/features/activation.hpp"
 #include "models/features/effect.hpp"
 #include "models/features/feature.hpp"
 
@@ -19,10 +21,52 @@ std::shared_ptr<dnd::Feature> dnd::FeatureParser::createFeature(
     }
     const std::string feature_description = feature_json.at("description").get<std::string>();
     Feature feature(feature_name, feature_description);
+    if (feature_json.contains("activation")) {
+        const std::string activation_str = feature_json.at("activation").get<std::string>();
+        feature.activation_ptr = createActivation(activation_str);
+    }
     if (feature_json.contains("effects")) {
         addEffects(feature_json.at("effects"), feature);
     }
     return std::make_shared<Feature>(std::move(feature));
+}
+
+std::unique_ptr<dnd::Activation> dnd::FeatureParser::createActivation(const std::string& activation_str) {
+    const std::string operators_allowed = "(==|!=|>=|<=|>|<)";
+    const std::regex activation_regex(
+        "[A-Z][_A-Z0-9]+ " + operators_allowed + " ([A-Z][_A-Z0-9]+|-?\\d+(\\.\\d\\d?)?)|true|false)"
+    );
+    if (!std::regex_match(activation_str, activation_regex)) {
+        throw std::invalid_argument("Activation \"" + activation_str + "\" is of wrong format.");
+    }
+    std::string::const_iterator it = activation_str.cbegin();
+    while (*it != ' ') {
+        ++it;
+    }
+    const std::string left_identifier(activation_str.cbegin(), it);
+    ++it;
+    const auto& last_it = it;
+    while (*it != ' ') {
+        ++it;
+    }
+    const std::string op_name(last_it, it);
+    ++it;
+    const std::string last_part(it, activation_str.cend());
+
+    if (last_part[0] >= 'A' && last_part[0] <= 'Z') {
+        return std::make_unique<IdentifierActivation>(left_identifier, op_name, last_part);
+    }
+
+    int right_value;
+    if (last_part == "true") {
+        right_value = true;
+    } else if (last_part == "false") {
+        right_value = false;
+    } else {
+        right_value = std::stof(last_part) * 100;
+        // attributes are stored as integers * 100, see CreatureState
+    }
+    return std::make_unique<NumericActivation>(left_identifier, op_name, right_value);
 }
 
 
@@ -56,18 +100,18 @@ void dnd::FeatureParser::parseAndAddEffect(const std::string& effect_str, Featur
     }
     std::string::const_iterator it = effect_str.cbegin();
     while (*it != ' ') {
-        it++;
+        ++it;
     }
     const std::string affected_attribute(effect_str.cbegin(), it);
-    it++;
+    ++it;
     std::string::const_iterator start_it = it;
     while (*it != ' ') {
-        it++;
+        ++it;
     }
     const std::string effect_time_str(start_it, it);
     start_it = ++it;
     while (*it != ' ') {
-        it++;
+        ++it;
     }
     const std::string effect_type(start_it, it);
 
