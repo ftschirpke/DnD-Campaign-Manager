@@ -9,7 +9,7 @@ Content that may not be formatted perfectly or a part of it is not implemented a
   - Characters need to define their ASI choices and/or chosen feats
   - feats need to be defined (probably just like features)
 
-- Special choices such as Eldritch Invocations (Warlock) and Fighting Styles ([Fighter](classes/fighter.json), [Paladin](classes/paladin.json), and [Ranger](classes/ranger.json)), [Sorcerer's](classes/sorcerer.json) Metamagic
+- Special choices such as Eldritch Invocations (Warlock) and Fighting Styles ([Fighter](classes/fighter.json), [Paladin](classes/paladin.json), and [Ranger](classes/ranger.json)), [Sorcerer's](classes/sorcerer.json) Metamagic, [Warlock's](classes/warlock.json) Pact Boon
 
 - how to format features that have multiple steps e.g. something at level 3, something at level 5, and another thing at level 7
   - [Infernal Legacy (Tiefling)](races/tiefling.json)
@@ -23,6 +23,8 @@ Content that may not be formatted perfectly or a part of it is not implemented a
 - [Magical Secrets (Bard)](classes/bard.json) - I think, at the moment this is not doing what it should
 
 - [Martial Arts (Monk)](classes/monk.json) needs implementing
+
+- [Warlock's](classes/warlock.json) Mystic Arcanum
 
 - how to format features that have choices and effects for these choices e.g. expertise
   - [Expertise (Bard)](classes/bard.json), [Expertise (Rogue)](classes/rogue.json)
@@ -48,6 +50,7 @@ Content that may not be formatted perfectly or a part of it is not implemented a
   - [Rogue's](classes/rogue.json) Sneak Attack
   - [Rogue's](classes/rogue.json) Stroke of Luck
   - [Thief's](subclasses/thief.json) "Thief's Reflexes"
+  - [The Fiend's](subclasses/the_fiend.json) Fiendish Resillience and Hurl Through Hell
 
 - [Paladin's](classes/paladin.json) Natural Explorer
 
@@ -55,6 +58,9 @@ Content that may not be formatted perfectly or a part of it is not implemented a
 - [Rage (Barbarian)](classes/barbarian.json) - could Rage be a parameter?
 - [Path of the Berserker](subclasses/path_of_the_berserker.json): "Frenzy" - the bonus action attack (and the exhaustion)
 - [Path of the Berserker](subclasses/path_of_the_berserker.json): "Mindless Rage" - Rage as a parameter would be needed though - probably not going to happen
+
+- [Eldritch Invocation](eldritch_invocations.json) Book of Ancient Secrets
+- [Eldritch Invocation](eldritch_invocations.json) Devil's Sight
 
 - Should immunity against diseases be somehow integrated? ([Nature's Ward (Circle of the Land)](subclasses/circle_of_the_land.json), ([Purity of Body (Monk)](classes/monk.json), [Divine Health (Paladin)](classes/paladin.json))
 
@@ -64,6 +70,11 @@ Content that may not be formatted perfectly or a part of it is not implemented a
 - flying speed? (e.g. [Draconic Bloodline's](subclasses/draconic_bloodline.json) Dragon Wings)
 
 ## Changes that could bring more clarity
+
+- "spells_added_to_spelllist" - maybe should be renamed
+
+- a lot of similar spell effects are combined under "spells_innate", "spells_at_will", "spells_always_prepared" and "spells_added_to_spelllist". Consider splitting these up into more categories if it improves clarity
+  - maybe "spells_once_per_day" - e.g. for eldritch invocations
 
 - [Path of the Berserker](subclasses/path_of_the_berserker.json): "Intimidation Presence" - splitting the action into 2 e.g. "Start Intimidation Presence" and "Extend Intimidation Presence"?
 

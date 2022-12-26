@@ -4,7 +4,7 @@
     "asi_levels": [4, 8, 12, 16, 19],
     "features": {
         "Monk Base": {
-            "description": "Hit Dice: 1d8 per monk level\n\nProficiencies\nArmor: None\nWeapons: Simple weapons, shortswords\nTools: Choose one type of artisan’s tools or one musical instrument\nSaving Throws: Strength, Dexterity\nSkills: Choose two from Acrobatics, Athletics, History, Insight, Religion, and Stealth",
+            "description": "Hit Dice: 1d8 per monk level\n\nProficiencies\nArmor: None\nWeapons: Simple weapons, shortswords\nTools: Choose one type of artisan's tools or one musical instrument\nSaving Throws: Strength, Dexterity\nSkills: Choose two from Acrobatics, Athletics, History, Insight, Religion, and Stealth",
             "weapon_proficiencies": ["simple weapons", "shortsword"],
             "savingthrow_proficiencies": ["STR", "DEX"],
             "choose": {
@@ -26,10 +26,10 @@
             ]
         },
         "Martial Arts": {
-            "description": "At 1st level, your practice of martial arts gives you mastery of combat styles that use unarmed strikes and monk weapons, which are shortswords and any simple melee weapons that don’t have the two-handed or heavy property.\n\nYou gain the following benefits while you are unarmed or wielding only monk weapons and you aren’t wearing armor or wielding a shield:\n\n- You can use Dexterity instead of Strength for the attack and damage rolls of your unarmed strikes and monk weapons.\n- You can roll a d4 in place of the normal damage of your unarmed strike or monk weapon. This die changes as you gain monk levels. It changes to a d6 at level 5, a d8 at level 11, and a d10 at level 17.\n- When you use the Attack action with an unarmed strike or a monk weapon on your turn, you can make one unarmed strike as a bonus action. For example, if you take the Attack action and attack with a quarterstaff, you can also make an unarmed strike as a bonus action, assuming you haven’t already taken a bonus action this turn.\n\nCertain monasteries use specialized forms of the monk weapons. For example, you might use a club that is two lengths of wood connected by a short chain (called a nunchaku) or a sickle with a shorter, straighter blade (called a kama). Whatever name you use for a monk weapon, you can use the game statistics provided for the weapon in “Equipment.”"
+            "description": "At 1st level, your practice of martial arts gives you mastery of combat styles that use unarmed strikes and monk weapons, which are shortswords and any simple melee weapons that don't have the two-handed or heavy property.\n\nYou gain the following benefits while you are unarmed or wielding only monk weapons and you aren't wearing armor or wielding a shield:\n\n- You can use Dexterity instead of Strength for the attack and damage rolls of your unarmed strikes and monk weapons.\n- You can roll a d4 in place of the normal damage of your unarmed strike or monk weapon. This die changes as you gain monk levels. It changes to a d6 at level 5, a d8 at level 11, and a d10 at level 17.\n- When you use the Attack action with an unarmed strike or a monk weapon on your turn, you can make one unarmed strike as a bonus action. For example, if you take the Attack action and attack with a quarterstaff, you can also make an unarmed strike as a bonus action, assuming you haven't already taken a bonus action this turn.\n\nCertain monasteries use specialized forms of the monk weapons. For example, you might use a club that is two lengths of wood connected by a short chain (called a nunchaku) or a sickle with a shorter, straighter blade (called a kama). Whatever name you use for a monk weapon, you can use the game statistics provided for the weapon in “Equipment.”"
         },
         "Ki": {
-            "description": "Starting at 2nd level, your training allows you to harness the mystic energy of ki. Your access to this energy is represented by a number of ki points. Your monk level determines the number of points you have.\n\nYou can spend these points to fuel various ki features. You start knowing three such features: Flurry of Blows, Patient Defense, and Step of the Wind. You learn more ki features as you gain levels in this class.\n\nWhen you spend a ki point, it is unavailable until you finish a short or long rest, at the end of which you draw all of your expended ki back into yourself. You must spend at least 30 minutes of the rest meditating to regain your ki points.\n\nSome of your ki features require your target to make a saving throw to resist the feature’s effects. The saving throw DC is calculated as follows:\n\nKi save DC = 8 + your proficiency bonus + your Wisdom modifier\n\nFlurry of Blows\nImmediately after you take the Attack action on your turn, you can spend 1 ki point to make two unarmed strikes as a bonus action.\n\nPatient Defense\nYou can spend 1 ki point to take the Dodge action as a bonus action on your turn.\n\nStep of the Wind\nYou can spend 1 ki point to take the Disengage or Dash action as a bonus action on your turn, and your jump distance is doubled for the turn.",
+            "description": "Starting at 2nd level, your training allows you to harness the mystic energy of ki. Your access to this energy is represented by a number of ki points. Your monk level determines the number of points you have.\n\nYou can spend these points to fuel various ki features. You start knowing three such features: Flurry of Blows, Patient Defense, and Step of the Wind. You learn more ki features as you gain levels in this class.\n\nWhen you spend a ki point, it is unavailable until you finish a short or long rest, at the end of which you draw all of your expended ki back into yourself. You must spend at least 30 minutes of the rest meditating to regain your ki points.\n\nSome of your ki features require your target to make a saving throw to resist the feature's effects. The saving throw DC is calculated as follows:\n\nKi save DC = 8 + your proficiency bonus + your Wisdom modifier\n\nFlurry of Blows\nImmediately after you take the Attack action on your turn, you can spend 1 ki point to make two unarmed strikes as a bonus action.\n\nPatient Defense\nYou can spend 1 ki point to take the Dodge action as a bonus action on your turn.\n\nStep of the Wind\nYou can spend 1 ki point to take the Disengage or Dash action as a bonus action on your turn, and your jump distance is doubled for the turn.",
             "activation": "CLASS_LEVEL >= 2",
             "bonus_actions": {
                 "Flurry of Blows": "Spend 1 ki point to make two unarmed strikes.",
@@ -68,7 +68,7 @@
             "activation": "CLASS_LEVEL >= 5"
         },
         "Stunning Strike": {
-            "description": "Starting at 5th level, you can interfere with the flow of ki in an opponent’s body. When you hit another creature with a melee weapon attack, you can spend 1 ki point to attempt a stunning strike. The target must succeed on a Constitution saving throw or be stunned until the end of your next turn.",
+            "description": "Starting at 5th level, you can interfere with the flow of ki in an opponent's body. When you hit another creature with a melee weapon attack, you can spend 1 ki point to attempt a stunning strike. The target must succeed on a Constitution saving throw or be stunned until the end of your next turn.",
             "activation": "CLASS_LEVEL >= 5"
         },
         "Ki-Empowered Strikes": {
@@ -76,7 +76,7 @@
             "activation": "CLASS_LEVEL >= 6"
         },
         "Evasion (Monk)": {
-            "description": "At 7th level, your instinctive agility lets you dodge out of the way of certain area effects, such as a blue dragon’s lightning breath or a fireball spell. When you are subjected to an effect that allows you to make a Dexterity saving throw to take only half damage, you instead take no damage if you succeed on the saving throw, and only half damage if you fail.",
+            "description": "At 7th level, your instinctive agility lets you dodge out of the way of certain area effects, such as a blue dragon's lightning breath or a fireball spell. When you are subjected to an effect that allows you to make a Dexterity saving throw to take only half damage, you instead take no damage if you succeed on the saving throw, and only half damage if you fail.",
             "activation": "CLASS_LEVEL >= 7"
         },
         "Stillness of Mind": {
@@ -102,11 +102,11 @@
             "savingthrow_proficiencies": ["STR", "DEX", "CON", "INT", "WIS", "CHA"]
         },
         "Timeless Body": {
-            "description": "At 15th level, your ki sustains you so that you suffer none of the frailty of old age, and you can’t be aged magically. You can still die of old age, however. In addition, you no longer need food or water.",
+            "description": "At 15th level, your ki sustains you so that you suffer none of the frailty of old age, and you can't be aged magically. You can still die of old age, however. In addition, you no longer need food or water.",
             "activation": "CLASS_LEVEL >= 15"
         },
         "Empty Body": {
-            "description": "Beginning at 18th level, you can use your action to spend 4 ki points to become invisible for 1 minute. During that time, you also have resistance to all damage but force damage.\n\nAdditionally, you can spend 8 ki points to cast the astral projection spell, without needing material components. When you do so, you can’t take any other creatures with you.",
+            "description": "Beginning at 18th level, you can use your action to spend 4 ki points to become invisible for 1 minute. During that time, you also have resistance to all damage but force damage.\n\nAdditionally, you can spend 8 ki points to cast the astral projection spell, without needing material components. When you do so, you can't take any other creatures with you.",
             "activation": "CLASS_LEVEL >= 18",
             "actions": {
                 "Empty Body": "You spend 4 ki points to become invisible for 1 minute. During that time, you also have resistance to all damage but force damage."

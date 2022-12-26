@@ -46,7 +46,7 @@
             }
         },
         "Destroy Undead": {
-            "description": "Starting at 5th level, when an undead fails its saving throw against your Turn Undead feature, the creature is instantly destroyed if its challenge rating is at or below a certain threshold, as shown in the Destroy Undead table.\n\nCleric Level|Destroys Undead of CR...\n5th|1/2 or lower\n8th|1 or lower\n11th|2 or lower\n14|3 or lower\n17th|4 or lower",
+            "description": "Starting at 5th level, when an undead fails its saving throw against your Turn Undead feature, the creature is instantly destroyed if its challenge rating is at or below a certain threshold, as shown in the Destroy Undead table below.\n\nCleric Level|Destroys Undead of CR...\n5th|1/2 or lower\n8th|1 or lower\n11th|2 or lower\n14|3 or lower\n17th|4 or lower",
             "activation": "CLASS_LEVEL >= 4"
         },
         "Divine Intervention": {

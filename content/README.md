@@ -97,7 +97,7 @@ Each class should be stored in a JSON file as a map (or "object"). The required 
 - "hit_dice" - string for hit dice i.e. "d6", "d8", "d10" or "d12"
 - "asi_levels" - an array of the levels at which characters of this class get Ability Score Increases
 - "features" - map of [features](#features) e.g. innate spellcasting abilities
-  - there needs to be at least one feature that has the key-value pair `"subclass": true` (this feature should just be a feature describing that from a certain level on, usually level 2 or 3, a subclass can be chosen)
+  - there needs to be at least one feature that has the key-value pair `"subclass": true` (this feature should just be a feature describing that from a certain level on, usually level 1, 2 or 3, a subclass can be chosen)
   - usually, there is also a feature describing hit dice and proficiencies for armor, weapons, saving throws and skills
 
 Example of a class without a proficiency feature (for more information on proficiency features, have a look at the examples provided in the [`content_imperial`](../content_imperial/general/srd/classes/) and [`content_metric`](../content_metric/general/srd/classes/) directories):
