@@ -1,7 +1,7 @@
 #include "creature.hpp"
 
 #include <string>
-#include <vector>
+#include <unordered_map>
 
 #include "models/creature_state.hpp"
 #include "models/feature_holder.hpp"

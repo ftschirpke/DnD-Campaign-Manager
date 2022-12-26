@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 #include "models/feature_holder.hpp"
 #include "models/features/effect.hpp"

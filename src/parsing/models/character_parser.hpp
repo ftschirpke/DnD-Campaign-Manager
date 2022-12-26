@@ -2,6 +2,7 @@
 #define CHARACTER_PARSER_HPP_
 
 #include <memory>
+#include <string>
 
 #include <nlohmann/json.hpp>
 

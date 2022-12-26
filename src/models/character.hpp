@@ -7,9 +7,10 @@
 #include <memory>
 #include <vector>
 
-#include "character_class.hpp"
-#include "character_race.hpp"
-#include "creature.hpp"
+#include "models/character_class.hpp"
+#include "models/character_race.hpp"
+#include "models/creature.hpp"
+#include "models/features/feature.hpp"
 
 namespace dnd {
 
@@ -46,6 +47,7 @@ public:
     void addHitDiceRoll(int hit_dice_roll);
     virtual void determineState();
     const std::vector<std::shared_ptr<const Feature>>& active_features() const;
+    std::vector<std::shared_ptr<const Feature>> all_features() const;
 };
 
 inline Character::Character(const std::string& name, const std::array<int, 6>& base_ability_scores)

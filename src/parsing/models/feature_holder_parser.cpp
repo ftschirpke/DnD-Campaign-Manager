@@ -1,5 +1,7 @@
 #include "feature_holder_parser.hpp"
 
+#include <memory>
+
 #include <nlohmann/json.hpp>
 
 #include "models/feature_holder.hpp"

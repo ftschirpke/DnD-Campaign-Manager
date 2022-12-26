@@ -2,7 +2,9 @@
 #define CONTENT_PARSER_HPP_
 
 #include <filesystem>
+#include <memory>
 #include <stdexcept>
+#include <string>
 
 #include <nlohmann/json.hpp>
 
@@ -12,8 +14,10 @@ namespace dnd {
 
 class parsing_error : public std::invalid_argument {
 public:
-    parsing_error(const std::string& what) : std::invalid_argument(what) {}
+    parsing_error(const std::string& what);
 };
+
+inline parsing_error::parsing_error(const std::string& what) : std::invalid_argument(what) {}
 
 class ContentParser {
 private:
