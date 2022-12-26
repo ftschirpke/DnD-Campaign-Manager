@@ -707,7 +707,7 @@ TEST_CASE("dnd::FeatureParser::createFeature: parse valid features") {
         const nlohmann::json feature_json = {
             {"description", description},
         };
-        std::unique_ptr<dnd::Feature> feature;
+        std::shared_ptr<dnd::Feature> feature;
         REQUIRE_NOTHROW(feature = std::move(dnd::FeatureParser::createFeature(name, feature_json)));
         REQUIRE(feature->name == name);
         REQUIRE(feature->description == description);
@@ -724,7 +724,7 @@ TEST_CASE("dnd::FeatureParser::createFeature: parse valid features") {
             {"description", description},
             {"effects", effects_json},
         };
-        std::unique_ptr<dnd::Feature> feature;
+        std::shared_ptr<dnd::Feature> feature;
         REQUIRE_NOTHROW(feature = std::move(dnd::FeatureParser::createFeature(name, feature_json)));
         REQUIRE(feature->name == name);
         REQUIRE(feature->description == description);
@@ -759,7 +759,7 @@ TEST_CASE("dnd::FeatureParser::createFeature: parse valid features") {
             {"description", description},
             {"effects", effects_json},
         };
-        std::unique_ptr<dnd::Feature> feature;
+        std::shared_ptr<dnd::Feature> feature;
         REQUIRE_NOTHROW(feature = std::move(dnd::FeatureParser::createFeature(name, feature_json)));
         REQUIRE(feature->name == name);
         REQUIRE(feature->description == description);

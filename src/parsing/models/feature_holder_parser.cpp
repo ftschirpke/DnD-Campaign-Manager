@@ -11,7 +11,7 @@ void dnd::FeatureHolderParser::parseAndAddFeatures(const nlohmann::json& feature
         throw std::invalid_argument("Features for \"" + feature_holder.name + "\" are not formatted as an object/map.");
     }
     for (const auto& [feature_name, feature_info] : features_json.items()) {
-        std::unique_ptr<Feature> feature = FeatureParser::createFeature(feature_name, feature_info);
+        std::shared_ptr<Feature> feature = FeatureParser::createFeature(feature_name, feature_info);
         feature_holder.features.push_back(std::move(feature));
     }
 }

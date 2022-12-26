@@ -11,7 +11,7 @@
 #include "models/features/effect.hpp"
 #include "models/features/feature.hpp"
 
-std::unique_ptr<dnd::Feature> dnd::FeatureParser::createFeature(
+std::shared_ptr<dnd::Feature> dnd::FeatureParser::createFeature(
     const std::string& feature_name, const nlohmann::json& feature_json
 ) {
     if (!feature_json.is_object()) {
@@ -22,7 +22,7 @@ std::unique_ptr<dnd::Feature> dnd::FeatureParser::createFeature(
     if (feature_json.contains("effects")) {
         addEffects(feature_json.at("effects"), feature);
     }
-    return std::make_unique<Feature>(std::move(feature));
+    return std::make_shared<Feature>(std::move(feature));
 }
 
 
