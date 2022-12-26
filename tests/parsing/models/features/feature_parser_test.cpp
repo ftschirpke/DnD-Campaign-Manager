@@ -81,7 +81,9 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid numeric effects") 
             {"CON", 930},
             {"INT", 700},
         };
-        REQUIRE(attributes == result);
+        for (const auto& [attr_name, attr_val] : attributes) {
+            REQUIRE(attr_val == result.at(attr_name));
+        }
     }
     SECTION("mult") {
         REQUIRE_NOTHROW(dnd::FeatureParser::parseAndAddEffect("MAXHP normal mult 2", feature));
@@ -104,7 +106,9 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid numeric effects") 
             {"CON", -700},
             {"INT", -3000},
         };
-        REQUIRE(attributes == result);
+        for (const auto& [attr_name, attr_val] : attributes) {
+            REQUIRE(attr_val == result.at(attr_name));
+        }
     }
     SECTION("div") {
         REQUIRE_NOTHROW(dnd::FeatureParser::parseAndAddEffect("MAXHP normal div 2", feature));
@@ -127,7 +131,9 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid numeric effects") 
             {"CON", -1428},
             {"INT", -333},
         };
-        REQUIRE(attributes == result);
+        for (const auto& [attr_name, attr_val] : attributes) {
+            REQUIRE(attr_val == result.at(attr_name));
+        }
     }
     SECTION("set") {
         REQUIRE_NOTHROW(dnd::FeatureParser::parseAndAddEffect("MAXHP normal set 2", feature));
@@ -150,7 +156,9 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid numeric effects") 
             {"CON", -70},
             {"INT", -300},
         };
-        REQUIRE(attributes == result);
+        for (const auto& [attr_name, attr_val] : attributes) {
+            REQUIRE(attr_val == result.at(attr_name));
+        }
     }
     SECTION("max") {
         REQUIRE_NOTHROW(dnd::FeatureParser::parseAndAddEffect("MAXHP normal max 20", feature));
@@ -173,7 +181,9 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid numeric effects") 
             {"CON", 1000},
             {"INT", 1000},
         };
-        REQUIRE(attributes == result);
+        for (const auto& [attr_name, attr_val] : attributes) {
+            REQUIRE(attr_val == result.at(attr_name));
+        }
     }
     SECTION("min") {
         REQUIRE_NOTHROW(dnd::FeatureParser::parseAndAddEffect("MAXHP normal min 20", feature));
@@ -196,7 +206,9 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid numeric effects") 
             {"CON", -70},
             {"INT", -300},
         };
-        REQUIRE(attributes == result);
+        for (const auto& [attr_name, attr_val] : attributes) {
+            REQUIRE(attr_val == result.at(attr_name));
+        }
     }
 }
 
@@ -226,7 +238,9 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Other' identifier
             {"AC", 200},     {"DEX", 125},  {"WIS", -70}, {"CHA", -300},
             {"MAXHP", 1200}, {"STR", 1125}, {"CON", 930}, {"INT", 700},
         };
-        REQUIRE(attributes == result);
+        for (const auto& [attr_name, attr_val] : attributes) {
+            REQUIRE(attr_val == result.at(attr_name));
+        }
     }
     SECTION("multOther") {
         REQUIRE_NOTHROW(dnd::FeatureParser::parseAndAddEffect("MAXHP normal multOther AC", feature));
@@ -247,7 +261,9 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Other' identifier
             {"AC", 200},     {"DEX", 125},  {"WIS", -70},  {"CHA", -300},
             {"MAXHP", 2000}, {"STR", 1250}, {"CON", -700}, {"INT", -3000},
         };
-        REQUIRE(attributes == result);
+        for (const auto& [attr_name, attr_val] : attributes) {
+            REQUIRE(attr_val == result.at(attr_name));
+        }
     }
     SECTION("divOther") {
         REQUIRE_NOTHROW(dnd::FeatureParser::parseAndAddEffect("MAXHP normal divOther AC", feature));
@@ -268,7 +284,9 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Other' identifier
             {"AC", 200},    {"DEX", 125}, {"WIS", -70},   {"CHA", -300},
             {"MAXHP", 500}, {"STR", 800}, {"CON", -1428}, {"INT", -333},
         };
-        REQUIRE(attributes == result);
+        for (const auto& [attr_name, attr_val] : attributes) {
+            REQUIRE(attr_val == result.at(attr_name));
+        }
     }
     SECTION("setOther") {
         REQUIRE_NOTHROW(dnd::FeatureParser::parseAndAddEffect("MAXHP normal setOther AC", feature));
@@ -289,7 +307,9 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Other' identifier
             {"AC", 200},    {"DEX", 125}, {"WIS", -70}, {"CHA", -300},
             {"MAXHP", 200}, {"STR", 125}, {"CON", -70}, {"INT", -300},
         };
-        REQUIRE(attributes == result);
+        for (const auto& [attr_name, attr_val] : attributes) {
+            REQUIRE(attr_val == result.at(attr_name));
+        }
     }
     SECTION("maxOther") {
         attributes["AC"] = 2000;
@@ -311,7 +331,9 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Other' identifier
             {"AC", 2000},    {"DEX", 125},  {"WIS", -70},  {"CHA", -300},
             {"MAXHP", 2000}, {"STR", 1000}, {"CON", 1000}, {"INT", 1000},
         };
-        REQUIRE(attributes == result);
+        for (const auto& [attr_name, attr_val] : attributes) {
+            REQUIRE(attr_val == result.at(attr_name));
+        }
     }
     SECTION("minOther") {
         attributes["AC"] = 2000;
@@ -333,7 +355,9 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Other' identifier
             {"AC", 2000},    {"DEX", 125}, {"WIS", -70}, {"CHA", -300},
             {"MAXHP", 1000}, {"STR", 125}, {"CON", -70}, {"INT", -300},
         };
-        REQUIRE(attributes == result);
+        for (const auto& [attr_name, attr_val] : attributes) {
+            REQUIRE(attr_val == result.at(attr_name));
+        }
     }
 }
 
@@ -372,7 +396,9 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Const' identifier
             {"CON", 930},
             {"INT", 700},
         };
-        REQUIRE(attributes == result);
+        for (const auto& [attr_name, attr_val] : attributes) {
+            REQUIRE(attr_val == result.at(attr_name));
+        }
     }
     SECTION("multConst") {
         REQUIRE_NOTHROW(dnd::FeatureParser::parseAndAddEffect("MAXHP normal multConst LEVEL", feature));
@@ -395,7 +421,9 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Const' identifier
             {"CON", -700},
             {"INT", -3000},
         };
-        REQUIRE(attributes == result);
+        for (const auto& [attr_name, attr_val] : attributes) {
+            REQUIRE(attr_val == result.at(attr_name));
+        }
     }
     SECTION("divConst") {
         REQUIRE_NOTHROW(dnd::FeatureParser::parseAndAddEffect("MAXHP normal divConst LEVEL", feature));
@@ -418,7 +446,9 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Const' identifier
             {"CON", -1428},
             {"INT", -333},
         };
-        REQUIRE(attributes == result);
+        for (const auto& [attr_name, attr_val] : attributes) {
+            REQUIRE(attr_val == result.at(attr_name));
+        }
     }
     SECTION("setConst") {
         REQUIRE_NOTHROW(dnd::FeatureParser::parseAndAddEffect("MAXHP normal setConst LEVEL", feature));
@@ -441,7 +471,9 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Const' identifier
             {"CON", -70},
             {"INT", -300},
         };
-        REQUIRE(attributes == result);
+        for (const auto& [attr_name, attr_val] : attributes) {
+            REQUIRE(attr_val == result.at(attr_name));
+        }
     }
 
     const std::unordered_map<std::string, int> max_min_constants = {
@@ -478,7 +510,9 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Const' identifier
             {"CON", 1000},
             {"INT", 1000},
         };
-        REQUIRE(attributes == result);
+        for (const auto& [attr_name, attr_val] : attributes) {
+            REQUIRE(attr_val == result.at(attr_name));
+        }
     }
     SECTION("minConst") {
         REQUIRE_NOTHROW(dnd::FeatureParser::parseAndAddEffect("MAXHP normal minConst LEVEL", feature));
@@ -507,7 +541,9 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse valid 'Const' identifier
             {"CON", -70},
             {"INT", -300},
         };
-        REQUIRE(attributes == result);
+        for (const auto& [attr_name, attr_val] : attributes) {
+            REQUIRE(attr_val == result.at(attr_name));
+        }
     }
 }
 
@@ -551,7 +587,9 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse effect combinations") {
             {"CON", 1000},
             {"INT", 1000},
         };
-        REQUIRE(attributes == result);
+        for (const auto& [attr_name, attr_val] : attributes) {
+            REQUIRE(attr_val == result.at(attr_name));
+        }
     }
     SECTION("combination 2") {
         REQUIRE_NOTHROW(dnd::FeatureParser::parseAndAddEffect("STR earliest setConst XP", feature));
@@ -579,7 +617,9 @@ TEST_CASE("dnd::FeatureParser::parseAndAddEffect: parse effect combinations") {
             {"CON", 1000},
             {"INT", 1000},
         };
-        REQUIRE(attributes == result);
+        for (const auto& [attr_name, attr_val] : attributes) {
+            REQUIRE(attr_val == result.at(attr_name));
+        }
     }
 }
 
@@ -639,7 +679,9 @@ TEST_CASE("dnd::FeatureParser::addEffects: parse valid effect combinations") {
             {"CON", 1000},
             {"INT", 1000},
         };
-        REQUIRE(attributes == result);
+        for (const auto& [attr_name, attr_val] : attributes) {
+            REQUIRE(attr_val == result.at(attr_name));
+        }
     }
     SECTION("combination 2") {
         const nlohmann::json effects_json = {
@@ -666,7 +708,9 @@ TEST_CASE("dnd::FeatureParser::addEffects: parse valid effect combinations") {
             {"CON", 1000},
             {"INT", 1000},
         };
-        REQUIRE(attributes == result);
+        for (const auto& [attr_name, attr_val] : attributes) {
+            REQUIRE(attr_val == result.at(attr_name));
+        }
     }
 }
 
@@ -747,7 +791,9 @@ TEST_CASE("dnd::FeatureParser::createFeature: parse valid features") {
             {"CON", 1000},
             {"INT", 1000},
         };
-        REQUIRE(attributes == result);
+        for (const auto& [attr_name, attr_val] : attributes) {
+            REQUIRE(attr_val == result.at(attr_name));
+        }
     }
     SECTION("effect combination 2") {
         const nlohmann::json effects_json = {
@@ -783,6 +829,8 @@ TEST_CASE("dnd::FeatureParser::createFeature: parse valid features") {
             {"CON", 1000},
             {"INT", 1000},
         };
-        REQUIRE(attributes == result);
+        for (const auto& [attr_name, attr_val] : attributes) {
+            REQUIRE(attr_val == result.at(attr_name));
+        }
     }
 }
