@@ -5,8 +5,11 @@
 #include <string>
 #include <vector>
 
+#include "models/features/action_holder.hpp"
 #include "models/features/activation.hpp"
 #include "models/features/effect.hpp"
+#include "models/features/proficiency_holder.hpp"
+#include "models/features/riv_holder.hpp"
 
 namespace dnd {
 
@@ -15,6 +18,9 @@ public:
     const std::string name, description;
     // TODO: should these really be public AND non-const?
     std::vector<std::unique_ptr<Activation>> activations;
+    ActionHolder actions;
+    ProficiencyHolder proficiencies;
+    RIVHolder rivs;
     std::unordered_map<EffectTime, std::vector<std::unique_ptr<const Effect>>> ability_score_effects, normal_effects;
     Feature(const std::string& name, const std::string& description);
     bool isActive(
