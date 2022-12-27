@@ -7,9 +7,10 @@
 #include <memory>
 #include <vector>
 
-#include "character_class.hpp"
-#include "character_race.hpp"
-#include "creature.hpp"
+#include "models/character_class.hpp"
+#include "models/character_race.hpp"
+#include "models/creature.hpp"
+#include "models/features/feature.hpp"
 
 namespace dnd {
 
@@ -41,10 +42,12 @@ public:
     void setXP(int new_xp);
     void increaseXP(int xp_increase);
     void decreaseXP(int xp_decrease);
-    std::vector<int> getHitDiceRolls() const;
+    const std::vector<int>& getHitDiceRolls() const;
     static int levelForXP(int xp);
     void addHitDiceRoll(int hit_dice_roll);
     virtual void determineState();
+    const std::vector<std::shared_ptr<const Feature>>& activeFeatures() const;
+    std::vector<std::shared_ptr<const Feature>> allFeatures() const;
 };
 
 inline Character::Character(const std::string& name, const std::array<int, 6>& base_ability_scores)
@@ -93,13 +96,17 @@ inline void Character::increaseXP(int xp_increase) {
 
 inline void Character::decreaseXP(int xp_decrease) { increaseXP(-xp_decrease); }
 
-inline std::vector<int> Character::getHitDiceRolls() const { return hit_dice_rolls; }
+inline const std::vector<int>& Character::getHitDiceRolls() const { return hit_dice_rolls; }
 
 inline void Character::addHitDiceRoll(int hit_dice_roll) {
     hit_dice_rolls.push_back(hit_dice_roll);
     if (hit_dice_rolls.size() > level) {
         std::cerr << "Warning: More hit dice rolls than level.\n";
     }
+}
+
+inline const std::vector<std::shared_ptr<const Feature>>& Character::activeFeatures() const {
+    return state.active_features;
 }
 
 } // namespace dnd

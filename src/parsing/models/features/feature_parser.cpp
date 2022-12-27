@@ -2,16 +2,18 @@
 
 #include <memory>
 #include <regex>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 
 #include <nlohmann/json.hpp>
 
 #include "models/creature_state.hpp"
+#include "models/features/activation.hpp"
 #include "models/features/effect.hpp"
 #include "models/features/feature.hpp"
 
-std::unique_ptr<dnd::Feature> dnd::FeatureParser::createFeature(
+std::shared_ptr<dnd::Feature> dnd::FeatureParser::createFeature(
     const std::string& feature_name, const nlohmann::json& feature_json
 ) {
     if (!feature_json.is_object()) {
@@ -19,10 +21,66 @@ std::unique_ptr<dnd::Feature> dnd::FeatureParser::createFeature(
     }
     const std::string feature_description = feature_json.at("description").get<std::string>();
     Feature feature(feature_name, feature_description);
+
+    if (feature_json.contains("activation") && feature_json.contains("activations")) {
+        throw std::invalid_argument(
+            "Feature \"" + feature_name + "\": Please only provide one of \"activation\" or \"activations\"."
+        );
+    } else if (feature_json.contains("activation")) {
+        const std::string activation_str = feature_json.at("activation").get<std::string>();
+        feature.activations.push_back(createActivation(activation_str));
+    } else if (feature_json.contains("activations")) {
+        if (!feature_json.at("activations").is_array()) {
+            throw std::invalid_argument("Feature \"" + feature_name + "\": activations are not formatted as an array.");
+        }
+        const std::vector<std::string> activation_strs = feature_json.at("activations").get<std::vector<std::string>>();
+        for (const std::string& activation_str : activation_strs) {
+            feature.activations.push_back(createActivation(activation_str));
+        }
+    }
+
     if (feature_json.contains("effects")) {
         addEffects(feature_json.at("effects"), feature);
     }
-    return std::make_unique<Feature>(std::move(feature));
+    return std::make_shared<Feature>(std::move(feature));
+}
+
+std::unique_ptr<dnd::Activation> dnd::FeatureParser::createActivation(const std::string& activation_str) {
+    const std::string operators_allowed = "(==|!=|>=|<=|>|<)";
+    const std::regex activation_regex(
+        "[A-Z][_A-Z0-9]+ " + operators_allowed + " ([A-Z][_A-Z0-9]+|-?\\d+(\\.\\d\\d?)?|true|false)"
+    );
+    if (!std::regex_match(activation_str, activation_regex)) {
+        throw std::invalid_argument("Activation \"" + activation_str + "\" is of wrong format.");
+    }
+    std::string::const_iterator it = activation_str.cbegin();
+    while (*it != ' ') {
+        ++it;
+    }
+    const std::string left_identifier(activation_str.cbegin(), it);
+    ++it;
+    const std::string::const_iterator last_it = it;
+    while (*it != ' ') {
+        ++it;
+    }
+    const std::string op_name(last_it, it);
+    ++it;
+    const std::string last_part(it, activation_str.cend());
+
+    if (last_part[0] >= 'A' && last_part[0] <= 'Z') {
+        return std::make_unique<IdentifierActivation>(left_identifier, op_name, last_part);
+    }
+
+    int right_value;
+    if (last_part == "true") {
+        right_value = true;
+    } else if (last_part == "false") {
+        right_value = false;
+    } else {
+        right_value = std::stof(last_part) * 100;
+        // attributes are stored as integers * 100, see CreatureState
+    }
+    return std::make_unique<NumericActivation>(left_identifier, op_name, right_value);
 }
 
 
@@ -56,18 +114,18 @@ void dnd::FeatureParser::parseAndAddEffect(const std::string& effect_str, Featur
     }
     std::string::const_iterator it = effect_str.cbegin();
     while (*it != ' ') {
-        it++;
+        ++it;
     }
     const std::string affected_attribute(effect_str.cbegin(), it);
-    it++;
+    ++it;
     std::string::const_iterator start_it = it;
     while (*it != ' ') {
-        it++;
+        ++it;
     }
     const std::string effect_time_str(start_it, it);
     start_it = ++it;
     while (*it != ' ') {
-        it++;
+        ++it;
     }
     const std::string effect_type(start_it, it);
 
@@ -75,48 +133,21 @@ void dnd::FeatureParser::parseAndAddEffect(const std::string& effect_str, Featur
     std::unique_ptr<Effect> effect_ptr;
     if (effect_type.size() < 5) {
         const float effect_value = std::stof(last_part);
-        if (effect_type == "add") {
-            effect_ptr = std::make_unique<AddEffect>(affected_attribute, effect_value * 100);
-            // attributes are stored as integers * 100, see CreatureState
-        } else if (effect_type == "mult") {
-            effect_ptr = std::make_unique<MultEffect>(affected_attribute, effect_value);
-        } else if (effect_type == "div") {
-            effect_ptr = std::make_unique<DivEffect>(affected_attribute, effect_value);
-        } else if (effect_type == "set") {
-            effect_ptr = std::make_unique<SetEffect>(affected_attribute, effect_value * 100);
-            // attributes are stored as integers * 100, see CreatureState
-        } else if (effect_type == "max") {
-            effect_ptr = std::make_unique<MaxEffect>(affected_attribute, effect_value * 100);
-            // attributes are stored as integers * 100, see CreatureState
-        } else if (effect_type == "min") {
-            effect_ptr = std::make_unique<MinEffect>(affected_attribute, effect_value * 100);
+        if (effect_type == "mult" || effect_type == "div") {
+            effect_ptr = std::make_unique<FloatNumEffect>(affected_attribute, effect_type, effect_value);
+        } else {
+            effect_ptr = std::make_unique<IntNumEffect>(affected_attribute, effect_type, effect_value * 100);
             // attributes are stored as integers * 100, see CreatureState
         }
     } else {
-        if (effect_type == "addOther") {
-            effect_ptr = std::make_unique<AddOtherEffect>(affected_attribute, last_part);
-        } else if (effect_type == "multOther") {
-            effect_ptr = std::make_unique<MultOtherEffect>(affected_attribute, last_part);
-        } else if (effect_type == "divOther") {
-            effect_ptr = std::make_unique<DivOtherEffect>(affected_attribute, last_part);
-        } else if (effect_type == "setOther") {
-            effect_ptr = std::make_unique<SetOtherEffect>(affected_attribute, last_part);
-        } else if (effect_type == "maxOther") {
-            effect_ptr = std::make_unique<MaxOtherEffect>(affected_attribute, last_part);
-        } else if (effect_type == "minOther") {
-            effect_ptr = std::make_unique<MinOtherEffect>(affected_attribute, last_part);
-        } else if (effect_type == "addConst") {
-            effect_ptr = std::make_unique<AddConstEffect>(affected_attribute, last_part);
-        } else if (effect_type == "multConst") {
-            effect_ptr = std::make_unique<MultConstEffect>(affected_attribute, last_part);
-        } else if (effect_type == "divConst") {
-            effect_ptr = std::make_unique<DivConstEffect>(affected_attribute, last_part);
-        } else if (effect_type == "setConst") {
-            effect_ptr = std::make_unique<SetConstEffect>(affected_attribute, last_part);
-        } else if (effect_type == "maxConst") {
-            effect_ptr = std::make_unique<MaxConstEffect>(affected_attribute, last_part);
-        } else if (effect_type == "minConst") {
-            effect_ptr = std::make_unique<MinConstEffect>(affected_attribute, last_part);
+        int other_idx = effect_type.find("Other");
+        int const_idx = effect_type.find("Const");
+        if (other_idx != std::string::npos) {
+            const std::string op_name(effect_type.cbegin(), effect_type.cbegin() + other_idx);
+            effect_ptr = std::make_unique<OtherAttributeEffect>(affected_attribute, op_name, last_part);
+        } else if (const_idx != std::string::npos) {
+            const std::string op_name(effect_type.cbegin(), effect_type.cbegin() + const_idx);
+            effect_ptr = std::make_unique<ConstEffect>(affected_attribute, op_name, last_part);
         }
     }
 

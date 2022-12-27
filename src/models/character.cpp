@@ -10,6 +10,7 @@
 #include "models/character_race.hpp"
 #include "models/creature.hpp"
 #include "models/creature_state.hpp"
+#include "models/features/feature.hpp"
 
 int dnd::Character::levelForXP(int xp) {
     if (xp < 0) {
@@ -29,6 +30,7 @@ const std::unordered_map<std::string, int> dnd::Character::getConstants() const 
         {"LEVEL", 1},
         {"XP", 230},
     };
+    // TODO: removed fixed values and multiply by 100 (except booleans)
     character_constants.insert(creature_constants.cbegin(), creature_constants.cend());
     return character_constants;
 }
@@ -38,6 +40,7 @@ const std::unordered_map<std::string, int> dnd::Character::getInitialAttributeVa
     std::unordered_map<std::string, int> character_initial_values = {
         {"ARMOR_ON", false},
     };
+    // TODO: removed fixed values and multiply by 100 (except booleans)
     character_initial_values.insert(creature_initial_values.cbegin(), creature_initial_values.cend());
     return character_initial_values;
 }
@@ -45,25 +48,22 @@ const std::unordered_map<std::string, int> dnd::Character::getInitialAttributeVa
 void dnd::Character::determineState() {
     state.reset(getConstants(), getInitialAttributeValues());
 
-    state.applyAbilityScoreFeatures(class_ptr);
+    state.addFeatureHolder(class_ptr);
+    state.addFeatureHolder(subclass_ptr);
+    state.addFeatureHolder(race_ptr);
+    state.addFeatureHolder(subrace_ptr);
+
+    state.calculate();
+}
+
+std::vector<std::shared_ptr<const dnd::Feature>> dnd::Character::allFeatures() const {
+    std::vector<std::shared_ptr<const dnd::Feature>> all_features = class_ptr->features;
     if (subclass_ptr != nullptr) {
-        state.applyAbilityScoreFeatures(subclass_ptr);
+        all_features.insert(all_features.end(), subclass_ptr->features.cbegin(), subclass_ptr->features.cend());
     }
-    state.applyAbilityScoreFeatures(race_ptr);
+    all_features.insert(all_features.end(), race_ptr->features.cbegin(), race_ptr->features.cend());
     if (subrace_ptr != nullptr) {
-        state.applyAbilityScoreFeatures(subrace_ptr);
+        all_features.insert(all_features.end(), subrace_ptr->features.cbegin(), subrace_ptr->features.cend());
     }
-
-    state.determineModifiers();
-
-    // TODO: are proficiencies normal features or should they have their own function?
-
-    state.applyNormalFeatures(class_ptr);
-    if (subclass_ptr != nullptr) {
-        state.applyNormalFeatures(subclass_ptr);
-    }
-    state.applyNormalFeatures(race_ptr);
-    if (subrace_ptr != nullptr) {
-        state.applyNormalFeatures(subrace_ptr);
-    }
+    return all_features;
 }

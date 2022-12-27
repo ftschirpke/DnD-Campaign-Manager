@@ -1,6 +1,7 @@
 #include "character_race_parser.hpp"
 
 #include <memory>
+#include <string>
 
 #include <nlohmann/json.hpp>
 

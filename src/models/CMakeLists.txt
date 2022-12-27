@@ -11,3 +11,5 @@ target_sources(dndmanager_tests
     creature.cpp
     creature_state.cpp
 )
+
+add_subdirectory(features)

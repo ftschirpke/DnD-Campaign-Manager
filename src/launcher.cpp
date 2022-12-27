@@ -62,7 +62,7 @@ int dnd::launch(int argc, char** argv) {
         parser.parseAll();
         std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> timespan = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
-        std::cout << "\nTime taken for parsing: " << timespan.count() << " seconds\n";
+        std::cout << "Time taken for parsing: " << timespan.count() << " seconds\n";
         content_controller.printStatus();
     } catch (const parsing_error& e) {
         std::cerr << "Parsing Error: " << e.what() << '\n';

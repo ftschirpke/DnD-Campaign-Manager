@@ -43,7 +43,7 @@
         },
         "Fast Movement": {
             "description": "Starting at 5th level, your speed increases by 3m while you aren't wearing heavy armor.",
-            "activation": "CLASS_LEVEL >= 5 & ARMOR_ON == false",
+            "activations": ["CLASS_LEVEL >= 5", "ARMOR_ON == false"],
             "effects": [
                 "SPEED normal add 3"
             ]
