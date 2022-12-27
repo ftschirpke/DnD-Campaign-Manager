@@ -201,6 +201,8 @@ Each feature is represented as a key-value pair where the key is the name of the
 - "description" (required) - a human-readable description of the feature
 - "effects" (optional) - an array of [effects](#effects) that are applied to the creature (these are parsed by the DnD-Campaign Manager tool and then used in calculations)
 - "activation" (optional) - a machine-readable description of when this feature activates, the most common version of class features activating at a certain class level: `"activation": "CLASS_LEVEL >= 3"`
+  - "activations" (optional) - if you want to provide multiple activations per feature, which all have to be true, you can also put multiple of them into an array
+  - please provide either "activation", "activations", or neither of them **but not both**
 - "damage_resistances" (optional) - an array of damage resistances this feature gives you
 - "damage_immunities" (optional) - an array of damage immunities this feature gives you
 - "condition_immunities" (optional) - an array of condition immunities this feature gives you

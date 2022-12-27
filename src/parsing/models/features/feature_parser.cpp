@@ -21,10 +21,24 @@ std::shared_ptr<dnd::Feature> dnd::FeatureParser::createFeature(
     }
     const std::string feature_description = feature_json.at("description").get<std::string>();
     Feature feature(feature_name, feature_description);
-    if (feature_json.contains("activation")) {
+
+    if (feature_json.contains("activation") && feature_json.contains("activations")) {
+        throw std::invalid_argument(
+            "Feature \"" + feature_name + "\": Please only provide one of \"activation\" or \"activations\"."
+        );
+    } else if (feature_json.contains("activation")) {
         const std::string activation_str = feature_json.at("activation").get<std::string>();
-        feature.activation_ptr = createActivation(activation_str);
+        feature.activations.push_back(createActivation(activation_str));
+    } else if (feature_json.contains("activations")) {
+        if (!feature_json.at("activations").is_array()) {
+            throw std::invalid_argument("Feature \"" + feature_name + "\": activations are not formatted as an array.");
+        }
+        const std::vector<std::string> activation_strs = feature_json.at("activations").get<std::vector<std::string>>();
+        for (const std::string& activation_str : activation_strs) {
+            feature.activations.push_back(createActivation(activation_str));
+        }
     }
+
     if (feature_json.contains("effects")) {
         addEffects(feature_json.at("effects"), feature);
     }

@@ -18,7 +18,7 @@ public:
     const std::string left_identifier, op_name;
     std::unordered_map<std::string, bool (*)(int, int)>::mapped_type op;
     Activation(const std::string& left_identifier, const std::string& op_name);
-    virtual bool isActive(
+    virtual bool check(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const = 0;
 };
@@ -27,7 +27,7 @@ class NumericActivation : public Activation {
 public:
     const int right_value;
     NumericActivation(const std::string& left_identifier, const std::string& op_name, int right_value);
-    virtual bool isActive(
+    virtual bool check(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const;
 };
@@ -38,7 +38,7 @@ public:
     IdentifierActivation(
         const std::string& left_identifier, const std::string& op_name, const std::string& right_identifier
     );
-    virtual bool isActive(
+    virtual bool check(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const;
 };
@@ -58,7 +58,7 @@ inline NumericActivation::NumericActivation(
 )
     : Activation(left_identifier, op_name), right_value(right_value) {}
 
-inline bool NumericActivation::isActive(
+inline bool NumericActivation::check(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
     int left_value;
@@ -79,7 +79,7 @@ inline IdentifierActivation::IdentifierActivation(
 )
     : Activation(left_identifier, op_name), right_identifier(right_identifier) {}
 
-inline bool IdentifierActivation::isActive(
+inline bool IdentifierActivation::check(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
     int left_value, right_value;

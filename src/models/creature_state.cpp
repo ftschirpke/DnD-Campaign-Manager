@@ -48,7 +48,7 @@ void dnd::CreatureState::addFeatureHolder(std::shared_ptr<const dnd::FeatureHold
         return;
     }
     for (const auto& feature_ptr : feature_holder_ptr->features) {
-        if (feature_ptr->activation_ptr->isActive(attributes, constants)) {
+        if (feature_ptr->isActive(attributes, constants)) {
             active_features.push_back(feature_ptr);
         }
     }
