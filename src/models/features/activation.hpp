@@ -24,6 +24,7 @@ public:
 };
 
 class NumericActivation : public Activation {
+public:
     const int right_value;
     NumericActivation(const std::string& left_identifier, const std::string& op_name, int right_value);
     virtual bool isActive(
@@ -32,6 +33,7 @@ class NumericActivation : public Activation {
 };
 
 class IdentifierActivation : public Activation {
+public:
     const std::string right_identifier;
     IdentifierActivation(
         const std::string& left_identifier, const std::string& op_name, const std::string& right_identifier

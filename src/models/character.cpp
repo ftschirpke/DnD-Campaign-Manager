@@ -30,6 +30,7 @@ const std::unordered_map<std::string, int> dnd::Character::getConstants() const 
         {"LEVEL", 1},
         {"XP", 230},
     };
+    // TODO: removed fixed values and multiply by 100 (except booleans)
     character_constants.insert(creature_constants.cbegin(), creature_constants.cend());
     return character_constants;
 }
@@ -39,6 +40,7 @@ const std::unordered_map<std::string, int> dnd::Character::getInitialAttributeVa
     std::unordered_map<std::string, int> character_initial_values = {
         {"ARMOR_ON", false},
     };
+    // TODO: removed fixed values and multiply by 100 (except booleans)
     character_initial_values.insert(creature_initial_values.cbegin(), creature_initial_values.cend());
     return character_initial_values;
 }

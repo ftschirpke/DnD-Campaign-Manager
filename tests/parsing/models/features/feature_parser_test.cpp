@@ -6,6 +6,7 @@
 #include <nlohmann/json.hpp>
 
 #include "models/creature_state.hpp"
+#include "models/features/activation.hpp"
 #include "models/features/effect.hpp"
 #include "models/features/feature.hpp"
 
@@ -711,6 +712,245 @@ TEST_CASE("dnd::FeatureParser::addEffects: parse valid effect combinations") {
         for (const auto& [attr_name, attr_val] : attributes) {
             REQUIRE(attr_val == result.at(attr_name));
         }
+    }
+}
+
+TEST_CASE("dnd::FeatureParser::createActivation: parse invalid activations") {
+    SECTION("wrong format or order") {
+        REQUIRE_THROWS(dnd::FeatureParser::createActivation("hello"));
+        REQUIRE_THROWS(dnd::FeatureParser::createActivation(""));
+        REQUIRE_THROWS(dnd::FeatureParser::createActivation("CLASS_LEVEL>=2"));
+        REQUIRE_THROWS(dnd::FeatureParser::createActivation("LEVEL== 1"));
+        REQUIRE_THROWS(dnd::FeatureParser::createActivation("ARMOR_ON <0"));
+        REQUIRE_THROWS(dnd::FeatureParser::createActivation("== CLASS_LEVEL LEVEL"));
+        REQUIRE_THROWS(dnd::FeatureParser::createActivation("LEVEL 1 =="));
+        REQUIRE_THROWS(dnd::FeatureParser::createActivation("CLASS_LEVEL 5"));
+        REQUIRE_THROWS(dnd::FeatureParser::createActivation("LEVEL is CLASS_LEVEL"));
+        REQUIRE_THROWS(dnd::FeatureParser::createActivation("INT 12 greater"));
+        REQUIRE_THROWS(dnd::FeatureParser::createActivation("ARMOR_ON 1 =="));
+        REQUIRE_THROWS(dnd::FeatureParser::createActivation("ARMOR_ON"));
+        REQUIRE_THROWS(dnd::FeatureParser::createActivation("true == ARMOR_ON"));
+        REQUIRE_THROWS(dnd::FeatureParser::createActivation("13 <= INT"));
+    }
+}
+
+TEST_CASE("dnd::FeatureParser::createActivation: parse valid numeric activations") {
+    std::unordered_map<std::string, int> attributes = {{"MAXHP", 4000}, {"STR", 1600}, {"CON", 1300}, {"INT", 800}};
+    const std::unordered_map<std::string, int> constants = {{"LEVEL", 500}, {"CLASS_LEVEL", 500}, {"ARMOR_ON", 1}};
+    std::unique_ptr<dnd::Activation> activation_ptr;
+    SECTION("==") {
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("LEVEL == 5"));
+        REQUIRE(activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("CLASS_LEVEL == 3"));
+        REQUIRE(!activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("ARMOR_ON == true"));
+        REQUIRE(activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("ARMOR_ON == false"));
+        REQUIRE(!activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("CON == 13"));
+        REQUIRE(activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("STR == 18"));
+        REQUIRE(!activation_ptr->isActive(attributes, constants));
+    }
+    SECTION("!=") {
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("CLASS_LEVEL != 3"));
+        REQUIRE(activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("LEVEL != 5"));
+        REQUIRE(!activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("ARMOR_ON != false"));
+        REQUIRE(activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("ARMOR_ON != true"));
+        REQUIRE(!activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("STR != 18"));
+        REQUIRE(activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("CON != 13"));
+        REQUIRE(!activation_ptr->isActive(attributes, constants));
+    }
+    SECTION(">=") {
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("CLASS_LEVEL >= 3"));
+        REQUIRE(activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("LEVEL >= 5"));
+        REQUIRE(activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("CLASS_LEVEL >= 10"));
+        REQUIRE(!activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("MAXHP >= 10"));
+        REQUIRE(activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("STR >= 16"));
+        REQUIRE(activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("INT >= 10"));
+        REQUIRE(!activation_ptr->isActive(attributes, constants));
+    }
+    SECTION("<=") {
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("CLASS_LEVEL <= 10"));
+        REQUIRE(activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("LEVEL <= 5"));
+        REQUIRE(activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("CLASS_LEVEL <= 3"));
+        REQUIRE(!activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("STR <= 16"));
+        REQUIRE(activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("INT <= 10"));
+        REQUIRE(activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("MAXHP <= 10"));
+        REQUIRE(!activation_ptr->isActive(attributes, constants));
+    }
+    SECTION(">") {
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("CLASS_LEVEL > 3"));
+        REQUIRE(activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("LEVEL > 5"));
+        REQUIRE(!activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("CLASS_LEVEL > 10"));
+        REQUIRE(!activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("MAXHP > 10"));
+        REQUIRE(activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("STR > 16"));
+        REQUIRE(!activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("INT > 10"));
+        REQUIRE(!activation_ptr->isActive(attributes, constants));
+    }
+    SECTION("<") {
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("CLASS_LEVEL < 10"));
+        REQUIRE(activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("LEVEL < 5"));
+        REQUIRE(!activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("CLASS_LEVEL < 3"));
+        REQUIRE(!activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("INT < 10"));
+        REQUIRE(activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("STR < 16"));
+        REQUIRE(!activation_ptr->isActive(attributes, constants));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("MAXHP < 10"));
+        REQUIRE(!activation_ptr->isActive(attributes, constants));
+    }
+}
+
+TEST_CASE("dnd::FeatureParser::createActivation: parse valid identifier activations") {
+    std::unordered_map<std::string, int> attributes1 = {{"MAXHP", 4000}, {"STR", 1600}, {"CON", 1300}, {"INT", 800}};
+    const std::unordered_map<std::string, int> constants1 = {{"LEVEL", 500}, {"CLASS_LEVEL", 500}, {"ARMOR_ON", 1}};
+    std::unordered_map<std::string, int> attributes2 = {{"MAXHP", 2300}, {"STR", 800}, {"CON", 1000}, {"INT", 1800}};
+    const std::unordered_map<std::string, int> constants2 = {{"LEVEL", 1300}, {"CLASS_LEVEL", 1300}, {"ARMOR_ON", 0}};
+    std::unique_ptr<dnd::Activation> activation_ptr;
+    SECTION("==") {
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("LEVEL == CLASS_LEVEL"));
+        REQUIRE(activation_ptr->isActive(attributes1, constants1));
+        REQUIRE(activation_ptr->isActive(attributes1, constants2));
+        REQUIRE(activation_ptr->isActive(attributes2, constants1));
+        REQUIRE(activation_ptr->isActive(attributes2, constants2));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("INT == LEVEL"));
+        REQUIRE(!activation_ptr->isActive(attributes1, constants1));
+        REQUIRE(!activation_ptr->isActive(attributes1, constants2));
+        REQUIRE(!activation_ptr->isActive(attributes2, constants1));
+        REQUIRE(!activation_ptr->isActive(attributes2, constants2));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("CON == STR"));
+        REQUIRE(!activation_ptr->isActive(attributes1, constants1));
+        REQUIRE(!activation_ptr->isActive(attributes1, constants2));
+        REQUIRE(!activation_ptr->isActive(attributes2, constants1));
+        REQUIRE(!activation_ptr->isActive(attributes2, constants2));
+    }
+    SECTION("!=") {
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("LEVEL != CLASS_LEVEL"));
+        REQUIRE(!activation_ptr->isActive(attributes1, constants1));
+        REQUIRE(!activation_ptr->isActive(attributes1, constants2));
+        REQUIRE(!activation_ptr->isActive(attributes2, constants1));
+        REQUIRE(!activation_ptr->isActive(attributes2, constants2));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("INT != LEVEL"));
+        REQUIRE(activation_ptr->isActive(attributes1, constants1));
+        REQUIRE(activation_ptr->isActive(attributes1, constants2));
+        REQUIRE(activation_ptr->isActive(attributes2, constants1));
+        REQUIRE(activation_ptr->isActive(attributes2, constants2));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("CON != STR"));
+        REQUIRE(activation_ptr->isActive(attributes1, constants1));
+        REQUIRE(activation_ptr->isActive(attributes1, constants2));
+        REQUIRE(activation_ptr->isActive(attributes2, constants1));
+        REQUIRE(activation_ptr->isActive(attributes2, constants2));
+    }
+    SECTION(">=") {
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("LEVEL >= CLASS_LEVEL"));
+        REQUIRE(activation_ptr->isActive(attributes1, constants1));
+        REQUIRE(activation_ptr->isActive(attributes1, constants2));
+        REQUIRE(activation_ptr->isActive(attributes2, constants1));
+        REQUIRE(activation_ptr->isActive(attributes2, constants2));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("MAXHP >= INT"));
+        REQUIRE(activation_ptr->isActive(attributes1, constants1));
+        REQUIRE(activation_ptr->isActive(attributes1, constants2));
+        REQUIRE(activation_ptr->isActive(attributes2, constants1));
+        REQUIRE(activation_ptr->isActive(attributes2, constants2));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("LEVEL >= CON"));
+        REQUIRE(!activation_ptr->isActive(attributes1, constants1));
+        REQUIRE(activation_ptr->isActive(attributes1, constants2));
+        REQUIRE(!activation_ptr->isActive(attributes2, constants1));
+        REQUIRE(activation_ptr->isActive(attributes2, constants2));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("ARMOR_ON >= LEVEL"));
+        REQUIRE(!activation_ptr->isActive(attributes1, constants1));
+        REQUIRE(!activation_ptr->isActive(attributes1, constants2));
+        REQUIRE(!activation_ptr->isActive(attributes2, constants1));
+        REQUIRE(!activation_ptr->isActive(attributes2, constants2));
+    }
+    SECTION("<=") {
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("LEVEL <= CLASS_LEVEL"));
+        REQUIRE(activation_ptr->isActive(attributes1, constants1));
+        REQUIRE(activation_ptr->isActive(attributes1, constants2));
+        REQUIRE(activation_ptr->isActive(attributes2, constants1));
+        REQUIRE(activation_ptr->isActive(attributes2, constants2));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("MAXHP <= INT"));
+        REQUIRE(!activation_ptr->isActive(attributes1, constants1));
+        REQUIRE(!activation_ptr->isActive(attributes1, constants2));
+        REQUIRE(!activation_ptr->isActive(attributes2, constants1));
+        REQUIRE(!activation_ptr->isActive(attributes2, constants2));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("LEVEL <= CON"));
+        REQUIRE(activation_ptr->isActive(attributes1, constants1));
+        REQUIRE(activation_ptr->isActive(attributes1, constants2));
+        REQUIRE(activation_ptr->isActive(attributes2, constants1));
+        REQUIRE(!activation_ptr->isActive(attributes2, constants2));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("ARMOR_ON <= LEVEL"));
+        REQUIRE(activation_ptr->isActive(attributes1, constants1));
+        REQUIRE(activation_ptr->isActive(attributes1, constants2));
+        REQUIRE(activation_ptr->isActive(attributes2, constants1));
+        REQUIRE(activation_ptr->isActive(attributes2, constants2));
+    }
+    SECTION(">") {
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("LEVEL > CLASS_LEVEL"));
+        REQUIRE(!activation_ptr->isActive(attributes1, constants1));
+        REQUIRE(!activation_ptr->isActive(attributes1, constants2));
+        REQUIRE(!activation_ptr->isActive(attributes2, constants1));
+        REQUIRE(!activation_ptr->isActive(attributes2, constants2));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("MAXHP > INT"));
+        REQUIRE(activation_ptr->isActive(attributes1, constants1));
+        REQUIRE(activation_ptr->isActive(attributes1, constants2));
+        REQUIRE(activation_ptr->isActive(attributes2, constants1));
+        REQUIRE(activation_ptr->isActive(attributes2, constants2));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("LEVEL > CON"));
+        REQUIRE(!activation_ptr->isActive(attributes1, constants1));
+        REQUIRE(!activation_ptr->isActive(attributes1, constants2));
+        REQUIRE(!activation_ptr->isActive(attributes2, constants1));
+        REQUIRE(activation_ptr->isActive(attributes2, constants2));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("ARMOR_ON > LEVEL"));
+        REQUIRE(!activation_ptr->isActive(attributes1, constants1));
+        REQUIRE(!activation_ptr->isActive(attributes1, constants2));
+        REQUIRE(!activation_ptr->isActive(attributes2, constants1));
+        REQUIRE(!activation_ptr->isActive(attributes2, constants2));
+    }
+    SECTION("<") {
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("LEVEL < CLASS_LEVEL"));
+        REQUIRE(!activation_ptr->isActive(attributes1, constants1));
+        REQUIRE(!activation_ptr->isActive(attributes1, constants2));
+        REQUIRE(!activation_ptr->isActive(attributes2, constants1));
+        REQUIRE(!activation_ptr->isActive(attributes2, constants2));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("MAXHP < INT"));
+        REQUIRE(!activation_ptr->isActive(attributes1, constants1));
+        REQUIRE(!activation_ptr->isActive(attributes1, constants2));
+        REQUIRE(!activation_ptr->isActive(attributes2, constants1));
+        REQUIRE(!activation_ptr->isActive(attributes2, constants2));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("LEVEL < CON"));
+        REQUIRE(activation_ptr->isActive(attributes1, constants1));
+        REQUIRE(!activation_ptr->isActive(attributes1, constants2));
+        REQUIRE(activation_ptr->isActive(attributes2, constants1));
+        REQUIRE(!activation_ptr->isActive(attributes2, constants2));
+        REQUIRE_NOTHROW(activation_ptr = dnd::FeatureParser::createActivation("ARMOR_ON < LEVEL"));
+        REQUIRE(activation_ptr->isActive(attributes1, constants1));
+        REQUIRE(activation_ptr->isActive(attributes1, constants2));
+        REQUIRE(activation_ptr->isActive(attributes2, constants1));
+        REQUIRE(activation_ptr->isActive(attributes2, constants2));
     }
 }
 

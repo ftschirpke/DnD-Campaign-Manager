@@ -34,7 +34,7 @@ std::shared_ptr<dnd::Feature> dnd::FeatureParser::createFeature(
 std::unique_ptr<dnd::Activation> dnd::FeatureParser::createActivation(const std::string& activation_str) {
     const std::string operators_allowed = "(==|!=|>=|<=|>|<)";
     const std::regex activation_regex(
-        "[A-Z][_A-Z0-9]+ " + operators_allowed + " ([A-Z][_A-Z0-9]+|-?\\d+(\\.\\d\\d?)?)|true|false)"
+        "[A-Z][_A-Z0-9]+ " + operators_allowed + " ([A-Z][_A-Z0-9]+|-?\\d+(\\.\\d\\d?)?|true|false)"
     );
     if (!std::regex_match(activation_str, activation_regex)) {
         throw std::invalid_argument("Activation \"" + activation_str + "\" is of wrong format.");
@@ -45,7 +45,7 @@ std::unique_ptr<dnd::Activation> dnd::FeatureParser::createActivation(const std:
     }
     const std::string left_identifier(activation_str.cbegin(), it);
     ++it;
-    const auto& last_it = it;
+    const std::string::const_iterator last_it = it;
     while (*it != ' ') {
         ++it;
     }
