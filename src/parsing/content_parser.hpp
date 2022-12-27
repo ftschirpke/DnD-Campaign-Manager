@@ -8,7 +8,7 @@
 
 #include <nlohmann/json.hpp>
 
-#include "controllers/content_controller.hpp"
+#include "controllers/content.hpp"
 
 namespace dnd {
 
@@ -23,7 +23,7 @@ class ContentParser {
 private:
     const std::filesystem::path content_path;
     const std::string campaign_dir_name;
-    ContentController& controller;
+    Content& content;
     const std::unique_ptr<const nlohmann::json> openJSON(const std::filesystem::directory_entry& file);
     void parseSpells(const std::filesystem::path& directory);
     void parseCharacters(const std::filesystem::path& directory);
@@ -34,16 +34,14 @@ private:
     void validateCharacterSubclasses() const;
     void validateCharacterSubraces() const;
 public:
-    ContentParser(
-        const std::filesystem::path& content_path, const std::string& campaign_dir_name, ContentController& controller
-    );
+    ContentParser(const std::filesystem::path& content_path, const std::string& campaign_dir_name, Content& content);
     void parseAll();
 };
 
 inline ContentParser::ContentParser(
-    const std::filesystem::path& content_path, const std::string& campaign_dir_name, ContentController& controller
+    const std::filesystem::path& content_path, const std::string& campaign_dir_name, Content& content
 )
-    : content_path(content_path), campaign_dir_name(campaign_dir_name), controller(controller) {}
+    : content_path(content_path), campaign_dir_name(campaign_dir_name), content(content) {}
 
 } // namespace dnd
 

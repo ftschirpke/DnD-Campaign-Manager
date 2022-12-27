@@ -9,7 +9,7 @@
 
 #include <nlohmann/json.hpp>
 
-#include "controllers/content_controller.hpp"
+#include "controllers/content.hpp"
 #include "models/character.hpp"
 #include "models/character_class.hpp"
 #include "models/character_race.hpp"
@@ -67,11 +67,11 @@ void dnd::ContentParser::parseSpells(const std::filesystem::path& directory) {
         for (const auto& [spell_name, spell_info] : spells_json->items()) {
             try {
                 std::shared_ptr<const Spell> spell = SpellParser::createSpell(spell_name, spell_info);
-                if (controller.spells.find(spell_name) != controller.spells.end()) {
+                if (content.spells.find(spell_name) != content.spells.end()) {
                     std::cerr << "Warning: Duplicate of spell \"" << spell_name << "\" found in " << entry.path()
                               << ".\n";
                 } else {
-                    controller.spells.emplace(spell_name, std::move(spell));
+                    content.spells.emplace(spell_name, std::move(spell));
                 }
             } catch (const nlohmann::json::out_of_range& e) {
                 const std::string json_what = stripJsonExceptionWhat(e.what());
@@ -102,12 +102,12 @@ void dnd::ContentParser::parseCharacters(const std::filesystem::path& directory)
             throw parsing_error("Character file \"" + filename + "\" is not formatted as an object/map.");
         }
         try {
-            std::shared_ptr<const Character> character = CharacterParser::createCharacter(*character_json, controller);
-            if (controller.characters.find(character->name) != controller.characters.end()) {
+            std::shared_ptr<const Character> character = CharacterParser::createCharacter(*character_json, content);
+            if (content.characters.find(character->name) != content.characters.end()) {
                 std::cerr << "Warning: Duplicate of character \"" << character->name << "\" found in " << entry.path()
                           << ".\n";
             } else {
-                controller.characters.emplace(character->name, std::move(character));
+                content.characters.emplace(character->name, std::move(character));
             }
         } catch (const nlohmann::json::out_of_range& e) {
             const std::string json_what = stripJsonExceptionWhat(e.what());
@@ -139,11 +139,11 @@ void dnd::ContentParser::parseCharacterClasses(const std::filesystem::path& dire
         try {
             std::shared_ptr<const CharacterClass> character_class =
                 CharacterClassParser::createCharacterClass(*character_class_json);
-            if (controller.character_classes.find(character_class->name) != controller.character_classes.end()) {
+            if (content.character_classes.find(character_class->name) != content.character_classes.end()) {
                 std::cerr << "Warning: Duplicate of character class \"" << character_class->name << "\" found in "
                           << entry.path() << ".\n";
             } else {
-                controller.character_classes.emplace(character_class->name, std::move(character_class));
+                content.character_classes.emplace(character_class->name, std::move(character_class));
             }
         } catch (const nlohmann::json::out_of_range& e) {
             const std::string json_what = stripJsonExceptionWhat(e.what());
@@ -179,12 +179,12 @@ void dnd::ContentParser::parseCharacterSubclasses(const std::filesystem::path& d
         try {
             std::shared_ptr<const CharacterSubclass> character_subclass =
                 CharacterClassParser::createCharacterSubclass(*character_subclass_json);
-            if (controller.character_subclasses.find(character_subclass->name)
-                != controller.character_subclasses.end()) {
+            if (content.character_subclasses.find(character_subclass->name)
+                != content.character_subclasses.end()) {
                 std::cerr << "Warning: Duplicate of character subclass \"" << character_subclass->name << "\" found in "
                           << entry.path() << ".\n";
             } else {
-                controller.character_subclasses.emplace(character_subclass->name, std::move(character_subclass));
+                content.character_subclasses.emplace(character_subclass->name, std::move(character_subclass));
             }
         } catch (const nlohmann::json::out_of_range& e) {
             const std::string json_what = stripJsonExceptionWhat(e.what());
@@ -220,11 +220,11 @@ void dnd::ContentParser::parseCharacterRaces(const std::filesystem::path& direct
         try {
             std::shared_ptr<const CharacterRace> character_race =
                 CharacterRaceParser::createCharacterRace(*character_race_json);
-            if (controller.character_races.find(character_race->name) != controller.character_races.end()) {
+            if (content.character_races.find(character_race->name) != content.character_races.end()) {
                 std::cerr << "Warning: Duplicate of character race \"" << character_race->name << "\" found in "
                           << entry.path() << ".\n";
             } else {
-                controller.character_races.emplace(character_race->name, std::move(character_race));
+                content.character_races.emplace(character_race->name, std::move(character_race));
             }
         } catch (const nlohmann::json::out_of_range& e) {
             const std::string json_what = stripJsonExceptionWhat(e.what());
@@ -260,11 +260,11 @@ void dnd::ContentParser::parseCharacterSubraces(const std::filesystem::path& dir
         try {
             std::shared_ptr<const CharacterSubrace> character_subrace =
                 CharacterRaceParser::createCharacterSubrace(*character_subrace_json);
-            if (controller.character_subraces.find(character_subrace->name) != controller.character_subraces.end()) {
+            if (content.character_subraces.find(character_subrace->name) != content.character_subraces.end()) {
                 std::cerr << "Warning: Duplicate of character subrace \"" << character_subrace->name << "\" found in "
                           << entry.path() << ".\n";
             } else {
-                controller.character_subraces.emplace(character_subrace->name, std::move(character_subrace));
+                content.character_subraces.emplace(character_subrace->name, std::move(character_subrace));
             }
         } catch (const nlohmann::json::out_of_range& e) {
             const std::string json_what = stripJsonExceptionWhat(e.what());
@@ -284,8 +284,8 @@ void dnd::ContentParser::parseCharacterSubraces(const std::filesystem::path& dir
 
 void dnd::ContentParser::validateCharacterSubclasses() const {
     bool all_valid = true;
-    for (const auto& [subclass_name, subclass_ptr] : controller.character_subclasses) {
-        if (controller.character_classes.find(subclass_ptr->class_name) == controller.character_classes.cend()) {
+    for (const auto& [subclass_name, subclass_ptr] : content.character_subclasses) {
+        if (content.character_classes.find(subclass_ptr->class_name) == content.character_classes.cend()) {
             std::cerr << "Error: Subclass \"" << subclass_name << "\" is invalid. The class \""
                       << subclass_ptr->class_name << "\" does not exist.\n";
             all_valid = false;
@@ -298,9 +298,9 @@ void dnd::ContentParser::validateCharacterSubclasses() const {
 
 void dnd::ContentParser::validateCharacterSubraces() const {
     bool all_valid = true;
-    for (const auto& [subrace_name, subrace_ptr] : controller.character_subraces) {
+    for (const auto& [subrace_name, subrace_ptr] : content.character_subraces) {
         try {
-            std::shared_ptr<const CharacterRace> race_ptr = controller.character_races.at(subrace_ptr->race_name);
+            std::shared_ptr<const CharacterRace> race_ptr = content.character_races.at(subrace_ptr->race_name);
             if (!race_ptr->has_subraces) {
                 std::cerr << "Error: Subrace \"" << subrace_name << "\" is invalid. \"" << race_ptr->name
                           << "\" does not have subraces.\n";

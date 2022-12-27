@@ -1,4 +1,4 @@
-#include "content_controller.hpp"
+#include "content.hpp"
 
 #include <iostream>
 #include <memory>
@@ -10,7 +10,7 @@
 #include "models/character_race.hpp"
 #include "models/spell.hpp"
 
-void dnd::ContentController::printStatus() const {
+void dnd::Content::printStatus() const {
     std::cout << "=== Spells ===\n";
     std::cout << "spells parsed: " << spells.size() << '\n';
     std::cout << "=== Character Races ===\n";

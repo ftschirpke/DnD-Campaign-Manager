@@ -8,30 +8,30 @@
 #include <catch2/catch_test_macros.hpp>
 #include <nlohmann/json.hpp>
 
-#include "controllers/content_controller.hpp"
+#include "controllers/content.hpp"
 #include "models/character.hpp"
 #include "models/character_class.hpp"
 #include "models/character_race.hpp"
 
-std::shared_ptr<dnd::ContentController> setupContentControllerForTesting() {
-    dnd::ContentController test_controller;
-    test_controller.character_classes = {
+std::shared_ptr<dnd::Content> setupContentForTesting() {
+    dnd::Content test_content;
+    test_content.character_classes = {
         {"Barbarian", std::make_shared<dnd::CharacterClass>("Barbarian", "d12", std::vector<int>({4, 8, 12, 16, 19}))},
     };
-    test_controller.character_subclasses = {
+    test_content.character_subclasses = {
         {"Path of the Berserker", std::make_shared<dnd::CharacterSubclass>("Path of the Berserker", "Barbarian")},
     };
-    test_controller.character_races = {
+    test_content.character_races = {
         {"Dwarf", std::make_shared<dnd::CharacterRace>("Dwarf", true)},
     };
-    test_controller.character_subraces = {
+    test_content.character_subraces = {
         {"Hill Dwarf", std::make_shared<dnd::CharacterSubrace>("Hill Dwarf", "Dwarf")},
     };
-    return std::make_shared<dnd::ContentController>(std::move(test_controller));
+    return std::make_shared<dnd::Content>(std::move(test_content));
 }
 
 TEST_CASE("dnd::CharacterParser::createCharacter: parse characters of invalid format") {
-    dnd::ContentController test_controller = *setupContentControllerForTesting();
+    dnd::Content test_content = *setupContentForTesting();
     // TODO: update once more features available
     // TODO: add more test characters?
     nlohmann::json valid_low_level_bob = {
@@ -57,52 +57,52 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse characters of invalid fo
     };
     SECTION("JSON is no object/map") {
         // JSON is literal
-        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(true, test_controller));
-        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(1, test_controller));
-        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(-3.4, test_controller));
-        REQUIRE_THROWS(dnd::CharacterParser::createCharacter("string", test_controller));
+        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(true, test_content));
+        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(1, test_content));
+        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(-3.4, test_content));
+        REQUIRE_THROWS(dnd::CharacterParser::createCharacter("string", test_content));
         // JSON is array
         nlohmann::json valid_low_level_bob_array = nlohmann::json::array();
         for (const auto& [key, value] : valid_low_level_bob.items()) {
             valid_low_level_bob_array.push_back(value);
         }
-        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_low_level_bob_array, test_controller));
+        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_low_level_bob_array, test_content));
         nlohmann::json valid_high_level_bob_array = nlohmann::json::array();
         for (const auto& [key, value] : valid_high_level_bob.items()) {
             valid_high_level_bob_array.push_back(value);
         }
-        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_high_level_bob_array, test_controller));
+        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_high_level_bob_array, test_content));
     }
     SECTION("character has no name") {
         valid_low_level_bob.erase("name");
-        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_low_level_bob, test_controller));
+        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_low_level_bob, test_content));
         valid_high_level_bob.erase("name");
-        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_high_level_bob, test_controller));
+        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_high_level_bob, test_content));
     }
     SECTION("character has no class") {
         valid_low_level_bob.erase("class");
-        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_low_level_bob, test_controller));
+        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_low_level_bob, test_content));
         valid_high_level_bob.erase("class");
-        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_high_level_bob, test_controller));
+        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_high_level_bob, test_content));
     }
     SECTION("character has no race") {
         valid_low_level_bob.erase("race");
-        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_low_level_bob, test_controller));
+        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_low_level_bob, test_content));
         valid_high_level_bob.erase("race");
-        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_high_level_bob, test_controller));
+        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_high_level_bob, test_content));
     }
     SECTION("character has neither level nor xp") {
         valid_low_level_bob.erase("level");
         valid_low_level_bob.erase("xp");
-        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_low_level_bob, test_controller));
+        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_low_level_bob, test_content));
         valid_high_level_bob.erase("level");
         valid_high_level_bob.erase("xp");
-        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_high_level_bob, test_controller));
+        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_high_level_bob, test_content));
     }
 }
 
 TEST_CASE("dnd::CharacterParser::createCharacter: parse logically wrong character") {
-    dnd::ContentController test_controller = *setupContentControllerForTesting();
+    dnd::Content test_content = *setupContentForTesting();
     // TODO: update once more features available
     // TODO: add more test characters?
     nlohmann::json valid_low_level_bob = {
@@ -129,15 +129,15 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse logically wrong characte
     SECTION("character has no subrace although race requires subrace") {
         // TODO: add tests where subrace is not required
         valid_low_level_bob.erase("subrace");
-        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_low_level_bob, test_controller));
+        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_low_level_bob, test_content));
         valid_high_level_bob.erase("subrace");
-        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_high_level_bob, test_controller));
+        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_high_level_bob, test_content));
     }
     SECTION("character's xp value corresponds to another level than the level provided") {
         valid_low_level_bob.at("level") = 1;
-        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_low_level_bob, test_controller));
+        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_low_level_bob, test_content));
         valid_high_level_bob.at("xp") = 200000; // corresponds to level 16
-        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_high_level_bob, test_controller));
+        REQUIRE_THROWS(dnd::CharacterParser::createCharacter(valid_high_level_bob, test_content));
     }
 }
 
@@ -164,7 +164,7 @@ void testBasicValuesFromJSON(
 }
 
 TEST_CASE("dnd::CharacterParser::createCharacter: parse minimum characters") {
-    dnd::ContentController test_controller = *setupContentControllerForTesting();
+    dnd::Content test_content = *setupContentForTesting();
     // TODO: update once more features available
     // TODO: add more test characters?
     nlohmann::json valid_low_level_bob = {
@@ -191,28 +191,28 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse minimum characters") {
     std::shared_ptr<const dnd::Character> character_ptr;
     SECTION("characters with level only") {
         valid_low_level_bob.erase("xp");
-        REQUIRE_NOTHROW(character_ptr = dnd::CharacterParser::createCharacter(valid_low_level_bob, test_controller));
+        REQUIRE_NOTHROW(character_ptr = dnd::CharacterParser::createCharacter(valid_low_level_bob, test_content));
         testBasicValuesFromJSON(valid_low_level_bob, character_ptr);
         REQUIRE(character_ptr->getXP() == dnd::xp_for_level.at(valid_low_level_bob.at("level").get<int>()));
         valid_high_level_bob.erase("xp");
-        REQUIRE_NOTHROW(character_ptr = dnd::CharacterParser::createCharacter(valid_high_level_bob, test_controller));
+        REQUIRE_NOTHROW(character_ptr = dnd::CharacterParser::createCharacter(valid_high_level_bob, test_content));
         testBasicValuesFromJSON(valid_high_level_bob, character_ptr);
         REQUIRE(character_ptr->getXP() == dnd::xp_for_level.at(valid_high_level_bob.at("level").get<int>()));
     }
     SECTION("characters with xp only") {
         valid_low_level_bob.erase("level");
-        REQUIRE_NOTHROW(character_ptr = dnd::CharacterParser::createCharacter(valid_low_level_bob, test_controller));
+        REQUIRE_NOTHROW(character_ptr = dnd::CharacterParser::createCharacter(valid_low_level_bob, test_content));
         testBasicValuesFromJSON(valid_low_level_bob, character_ptr);
         REQUIRE(character_ptr->getLevel() == dnd::Character::levelForXP(valid_low_level_bob.at("xp").get<int>()));
         valid_high_level_bob.erase("level");
-        REQUIRE_NOTHROW(character_ptr = dnd::CharacterParser::createCharacter(valid_high_level_bob, test_controller));
+        REQUIRE_NOTHROW(character_ptr = dnd::CharacterParser::createCharacter(valid_high_level_bob, test_content));
         testBasicValuesFromJSON(valid_high_level_bob, character_ptr);
         REQUIRE(character_ptr->getLevel() == dnd::Character::levelForXP(valid_high_level_bob.at("xp").get<int>()));
     }
     SECTION("characters with level and xp") {
-        REQUIRE_NOTHROW(character_ptr = dnd::CharacterParser::createCharacter(valid_low_level_bob, test_controller));
+        REQUIRE_NOTHROW(character_ptr = dnd::CharacterParser::createCharacter(valid_low_level_bob, test_content));
         testBasicValuesFromJSON(valid_low_level_bob, character_ptr);
-        REQUIRE_NOTHROW(character_ptr = dnd::CharacterParser::createCharacter(valid_high_level_bob, test_controller));
+        REQUIRE_NOTHROW(character_ptr = dnd::CharacterParser::createCharacter(valid_high_level_bob, test_content));
         testBasicValuesFromJSON(valid_high_level_bob, character_ptr);
     }
 }

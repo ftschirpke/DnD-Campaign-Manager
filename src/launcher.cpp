@@ -9,7 +9,7 @@
 
 #include "dndmanager_config.hpp"
 
-#include "controllers/content_controller.hpp"
+#include "controllers/content.hpp"
 #include "parsing/content_parser.hpp"
 
 int dnd::launch(int argc, char** argv) {
@@ -55,15 +55,15 @@ int dnd::launch(int argc, char** argv) {
         if (campaign_dir_name.size() == 0) {
             throw std::invalid_argument("Campaign directory name cannot be \"\".");
         }
-        ContentController content_controller;
-        ContentParser parser(content_path, campaign_dir_name, content_controller);
+        Content content;
+        ContentParser parser(content_path, campaign_dir_name, content);
         // TODO: should the runtime measurement and status printing stay?
         std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
         parser.parseAll();
         std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> timespan = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
         std::cout << "Time taken for parsing: " << timespan.count() << " seconds\n";
-        content_controller.printStatus();
+        content.printStatus();
     } catch (const parsing_error& e) {
         std::cerr << "Parsing Error: " << e.what() << '\n';
         return -1;

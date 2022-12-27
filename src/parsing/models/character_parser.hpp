@@ -6,7 +6,7 @@
 
 #include <nlohmann/json.hpp>
 
-#include "controllers/content_controller.hpp"
+#include "controllers/content.hpp"
 #include "models/character.hpp"
 
 namespace dnd {
@@ -15,14 +15,10 @@ class CharacterParser {
 private:
     static void checkLevel(const std::string& character_name, int level);
     static void checkXP(const std::string& character_name, int xp);
-    static void parseFeatureHolders(
-        Character& character, const nlohmann::json& character_json, const ContentController& content_controller
-    );
+    static void parseFeatureHolders(Character& character, const nlohmann::json& character_json, const Content& content);
     static void parseLevelAndXP(Character& character, const nlohmann::json& character_json);
 public:
-    static std::shared_ptr<Character> createCharacter(
-        const nlohmann::json& character_json, const ContentController& content_controller
-    );
+    static std::shared_ptr<Character> createCharacter(const nlohmann::json& character_json, const Content& content);
 };
 
 } // namespace dnd

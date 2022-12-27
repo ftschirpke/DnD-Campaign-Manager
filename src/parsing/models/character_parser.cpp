@@ -10,12 +10,12 @@
 
 #include <nlohmann/json.hpp>
 
-#include "controllers/content_controller.hpp"
+#include "controllers/content.hpp"
 #include "models/character.hpp"
 
 
 std::shared_ptr<dnd::Character> dnd::CharacterParser::createCharacter(
-    const nlohmann::json& character_json, const ContentController& content_controller
+    const nlohmann::json& character_json, const Content& content
 ) {
     const std::string character_name = character_json.at("name").get<std::string>();
     const std::array<int, 6> base_ability_scores = character_json.at("base_ability_scores").get<std::array<int, 6>>();
@@ -26,7 +26,7 @@ std::shared_ptr<dnd::Character> dnd::CharacterParser::createCharacter(
     }
     Character character(character_name, base_ability_scores);
 
-    parseFeatureHolders(character, character_json, content_controller);
+    parseFeatureHolders(character, character_json, content);
     parseLevelAndXP(character, character_json);
 
     const std::vector<int> hit_dice_rolls = character_json.at("hit_dice_rolls").get<std::vector<int>>();
@@ -52,11 +52,11 @@ std::shared_ptr<dnd::Character> dnd::CharacterParser::createCharacter(
 }
 
 void dnd::CharacterParser::parseFeatureHolders(
-    dnd::Character& character, const nlohmann::json& character_json, const dnd::ContentController& content_controller
+    dnd::Character& character, const nlohmann::json& character_json, const dnd::Content& content
 ) {
     const std::string character_class_name = character_json.at("class").get<std::string>();
     try {
-        character.class_ptr = content_controller.character_classes.at(character_class_name);
+        character.class_ptr = content.character_classes.at(character_class_name);
     } catch (const std::out_of_range& e) {
         std::stringstream sstr;
         sstr << "Character \"" << character.name << "\" is invalid. The class \"" << character_class_name
@@ -67,7 +67,7 @@ void dnd::CharacterParser::parseFeatureHolders(
     if (character_json.contains("subclass")) {
         const std::string character_subclass_name = character_json.at("subclass").get<std::string>();
         try {
-            character.subclass_ptr = content_controller.character_subclasses.at(character_subclass_name);
+            character.subclass_ptr = content.character_subclasses.at(character_subclass_name);
         } catch (const std::out_of_range& e) {
             std::stringstream sstr;
             sstr << "Character \"" << character.name << "\" is invalid. The subclass \"" << character_subclass_name
@@ -82,7 +82,7 @@ void dnd::CharacterParser::parseFeatureHolders(
 
     const std::string character_race_name = character_json.at("race").get<std::string>();
     try {
-        character.race_ptr = content_controller.character_races.at(character_race_name);
+        character.race_ptr = content.character_races.at(character_race_name);
     } catch (const std::out_of_range& e) {
         std::stringstream sstr;
         sstr << "Character \"" << character.name << "\" is invalid. The race \"" << character_race_name
@@ -93,7 +93,7 @@ void dnd::CharacterParser::parseFeatureHolders(
     if (character_json.contains("subrace")) {
         const std::string character_subrace_name = character_json.at("subrace").get<std::string>();
         try {
-            character.subrace_ptr = content_controller.character_subraces.at(character_subrace_name);
+            character.subrace_ptr = content.character_subraces.at(character_subrace_name);
         } catch (const std::out_of_range& e) {
             std::stringstream sstr;
             sstr << "Character \"" << character.name << "\" is invalid. The subrace \"" << character_subrace_name
