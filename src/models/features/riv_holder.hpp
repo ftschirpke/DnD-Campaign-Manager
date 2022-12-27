@@ -9,8 +9,8 @@ namespace dnd {
 // This class holds a creature's resistances, immunities, and vulnerabilities.
 class RIVHolder {
 public:
-    std::unordered_set<std::string> damage_resistances, damage_immunities, condition_immunities, condition_immunities;
-}
+    std::unordered_set<std::string> damage_resistances, damage_immunities, damage_vulnerabilities, condition_immunities;
+};
 
 } // namespace dnd
 
