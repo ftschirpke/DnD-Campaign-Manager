@@ -1,5 +1,6 @@
 # Contributing
 - [Contributing](#contributing)
+  - [Requirements](#requirements)
   - [Format](#format)
   - [Style](#style)
     - [File Names](#file-names)
@@ -17,6 +18,12 @@ This is especially important because the project is still in its beginnings and 
 So, **do not hesitate to ask questions.**
 
 I would be happy to clarify and explain my ideas. I am also open to any ideas to improve the project if you have any.
+
+## Requirements
+
+- a good knowledge of the C++ programming language
+- [CMake](https://cmake.org/) to build the project
+
 ## Format
 
 Please use the format defined by the [clang-format file](.clang-format) as much as possible.

@@ -27,12 +27,23 @@ project(DnDManager LANGUAGES CXX VERSION 0.1.2)
 CPMAddPackage(
     NAME nlohmann_json
     GITHUB_REPOSITORY nlohmann/json
-    VERSION 3.11.2)
+    VERSION 3.11.2
+    OPTIONS
+        "JSON_BuildTests OFF"
+)
 
 CPMAddPackage(
-    NAME catch
+    NAME catch2
+    VERSION 3.2.0
     GITHUB_REPOSITORY catchorg/Catch2
-    VERSION 3.2.0)
+)
+
+CPMAddPackage(
+    NAME cxxopts
+    GITHUB_REPOSITORY jarro2783/cxxopts
+    VERSION 3.0.0
+    OPTIONS "CXXOPTS_BUILD_EXAMPLES NO" "CXXOPTS_BUILD_TESTS NO" "CXXOPTS_ENABLE_INSTALL YES"
+)
 
 add_executable(dndmanager main.cpp)
 set_target_properties(dndmanager PROPERTIES EXPORT_COMPILE_COMMANDS ON)
@@ -44,7 +55,7 @@ target_include_directories(dndmanager
     PRIVATE
     ${CMAKE_SOURCE_DIR}/src/lib
 )
-target_link_libraries(dndmanager PUBLIC nlohmann_json::nlohmann_json)
+target_link_libraries(dndmanager PUBLIC nlohmann_json::nlohmann_json cxxopts::cxxopts)
 
 add_executable(dndmanager_tests)
 set_target_properties(dndmanager_tests PROPERTIES EXPORT_COMPILE_COMMANDS ON)
@@ -56,7 +67,7 @@ target_include_directories(dndmanager_tests
     PRIVATE
     ${CMAKE_SOURCE_DIR}/src/lib
 )
-target_link_libraries(dndmanager_tests PRIVATE nlohmann_json::nlohmann_json Catch2::Catch2WithMain)
+target_link_libraries(dndmanager_tests PRIVATE nlohmann_json::nlohmann_json cxxopts::cxxopts Catch2::Catch2WithMain)
 
 include(CTest)
 include(Catch.cmake)
