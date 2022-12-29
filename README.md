@@ -17,11 +17,6 @@ Ideas for future improvements include:
 - automatic creation of character sheets and other helpful character documents
 - keeping track of a character's resources (such as spell slots, HP, Ki, or exhaustion) while playing
 
-## Requirements
-
-- [CMake](https://cmake.org/)
-- [Catch2](https://github.com/catchorg/Catch2)
-
 ## You want to use the software?
 
 At the moment, the only possibility to use the tool is by [building it from source code](#building-from-source-code) first.

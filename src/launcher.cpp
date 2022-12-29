@@ -5,7 +5,7 @@
 #include <iostream>
 #include <stdexcept>
 
-#include <cxxopts/cxxopts.hpp>
+#include <cxxopts.hpp>
 
 #include "dndmanager_config.hpp"
 

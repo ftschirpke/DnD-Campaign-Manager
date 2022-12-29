@@ -4,11 +4,10 @@ all_correct=true
 
 cd $(dirname $0)/../..
 
-files=$(find src tests -type f \( -name "*.cpp" -o -name "*.hpp" \) -not -path "src/lib/*")
+files=$(find src tests -type f \( -name "*.cpp" -o -name "*.hpp" \))
 
 for file in $files
 do
-    # echo $file
     clang-format -style=file -output-replacements-xml $file | grep -c "<replacement " >/dev/null
 
     if [ $? -eq 0 ]; then
