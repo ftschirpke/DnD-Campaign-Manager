@@ -4,8 +4,7 @@
 
 #include "controllers/content.hpp"
 
-TEST_CASE("dnd::ContentParser::parseAll: providing invalid directory to parser") {
-    dnd::Content content;
-    dnd::ContentParser parser("/this/directory/doesnt/exist", "example_campaign", content);
-    REQUIRE_THROWS(parser.parseAll());
+TEST_CASE("dnd::ContentParser::parse: providing invalid directory to parser") {
+    dnd::ContentParser parser;
+    REQUIRE_THROWS(parser.parse("/this/directory/doesnt/exist", "example_campaign"));
 }
