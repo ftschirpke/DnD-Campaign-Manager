@@ -9,7 +9,7 @@ namespace dnd {
 
 class FeatureHolderParser {
 public:
-    static void parseAndAddFeatures(const nlohmann::json& features_json, FeatureHolder& feature_holder);
+    static std::vector<std::shared_ptr<const Feature>> parseAndAddFeatures(const nlohmann::json& features_json);
 };
 
 } // namespace dnd
