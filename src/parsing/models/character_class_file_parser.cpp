@@ -7,7 +7,6 @@
 #include <vector>
 
 #include "models/character_class.hpp"
-#include "parsing/models/features/feature_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
 
@@ -22,13 +21,8 @@ void dnd::CharacterClassFileParser::parse() {
     character_class_hit_dice = json_to_parse.at("hit_dice").get<std::string>();
     // TODO: change int to short
     asi_levels = json_to_parse.at("asi_levels").get<std::vector<int>>();
-    if (!json_to_parse.at("features").is_object()) {
-        throw attribute_format_error(ParsingType::CLASSES, filename, "features", "map/object");
-    }
-    features.reserve(json_to_parse.size());
-    for (const auto& [feature_name, feature_json] : json_to_parse.at("features").items()) {
-        features.push_back(std::move(FeatureParser::createFeature(feature_name, feature_json)));
-    }
+
+    features = parseFeatures();
 }
 
 bool dnd::CharacterClassFileParser::validate() const {

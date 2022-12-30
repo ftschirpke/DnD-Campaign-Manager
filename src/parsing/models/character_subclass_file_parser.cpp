@@ -7,7 +7,6 @@
 #include <vector>
 
 #include "models/character_class.hpp"
-#include "parsing/models/features/feature_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
 
@@ -21,13 +20,7 @@ void dnd::CharacterSubclassFileParser::parse() {
     }
     class_name = json_to_parse.at("class").get<std::string>();
 
-    if (!json_to_parse.at("features").is_object()) {
-        throw attribute_format_error(ParsingType::SUBCLASSES, filename, "features", "map/object");
-    }
-    features.reserve(json_to_parse.size());
-    for (const auto& [feature_name, feature_json] : json_to_parse.at("features").items()) {
-        features.push_back(std::move(FeatureParser::createFeature(feature_name, feature_json)));
-    }
+    features = parseFeatures();
 }
 
 bool dnd::CharacterSubclassFileParser::validate() const {

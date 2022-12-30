@@ -16,11 +16,13 @@ std::string stripJsonExceptionWhat(const std::string& original_what);
 class parsing_error : public std::invalid_argument {
 private:
     std::filesystem::path path;
-    const std::string msg_start, error_msg;
+    std::string msg_start;
+    const std::string error_msg;
     mutable std::string w;
 public:
     parsing_error(const std::filesystem::path& path, const std::string& error_msg);
     parsing_error(ParsingType parsing_type, const std::filesystem::path& path, const std::string& error_msg);
+    void setParsingType(ParsingType parsing_type);
     void relativiseFileName(const std::filesystem::path& root_path);
     const char* what() const noexcept override;
 };
@@ -32,6 +34,7 @@ public:
     json_format_error(ParsingType parsing_type, const std::filesystem::path& path, const std::string& desired_format);
 };
 
+// thrown when an attribute is not formatted the way it's supposed to
 class attribute_format_error : public parsing_error {
 public:
     attribute_format_error(
@@ -87,6 +90,12 @@ inline parsing_error::parsing_error(
 )
     : std::invalid_argument(""), msg_start(parsing_type_names.at(parsing_type) + " in file"), path(path),
       error_msg(error_msg) {}
+
+
+inline void parsing_error::setParsingType(ParsingType parsing_type) {
+    msg_start = parsing_type_names.at(parsing_type) + " in file";
+}
+
 
 inline void parsing_error::relativiseFileName(const std::filesystem::path& root_path) {
     path = path.lexically_relative(root_path);

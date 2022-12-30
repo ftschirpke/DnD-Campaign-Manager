@@ -7,7 +7,6 @@
 #include <vector>
 
 #include "models/character_race.hpp"
-#include "parsing/models/features/feature_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
 
@@ -21,13 +20,7 @@ void dnd::CharacterRaceFileParser::parse() {
     }
     has_subraces = json_to_parse.at("has_subraces").get<bool>();
 
-    if (!json_to_parse.at("features").is_object()) {
-        throw attribute_format_error(ParsingType::RACES, filename, "features", "map/object");
-    }
-    features.reserve(json_to_parse.size());
-    for (const auto& [feature_name, feature_json] : json_to_parse.at("features").items()) {
-        features.push_back(std::move(FeatureParser::createFeature(feature_name, feature_json)));
-    }
+    features = parseFeatures();
 }
 
 bool dnd::CharacterRaceFileParser::validate() const {

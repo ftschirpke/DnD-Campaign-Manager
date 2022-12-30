@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "models/spell.hpp"
-#include "parsing/models/content_file_parser.hpp"
+#include "parsing/content_file_parser.hpp"
 
 namespace dnd {
 

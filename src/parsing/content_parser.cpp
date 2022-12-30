@@ -10,12 +10,12 @@
 #include <nlohmann/json.hpp>
 
 #include "controllers/content.hpp"
+#include "parsing/content_file_parser.hpp"
 #include "parsing/models/character_class_file_parser.hpp"
 #include "parsing/models/character_file_parser.hpp"
 #include "parsing/models/character_race_file_parser.hpp"
 #include "parsing/models/character_subclass_file_parser.hpp"
 #include "parsing/models/character_subrace_file_parser.hpp"
-#include "parsing/models/content_file_parser.hpp"
 #include "parsing/models/spells_file_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"

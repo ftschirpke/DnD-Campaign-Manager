@@ -8,11 +8,11 @@
 
 #include "models/character_race.hpp"
 #include "models/features/feature.hpp"
-#include "parsing/models/content_file_parser.hpp"
+#include "parsing/models/feature_holder_file_parser.hpp"
 
 namespace dnd {
 
-class CharacterSubraceFileParser : public ContentFileParser {
+class CharacterSubraceFileParser : public FeatureHolderFileParser {
 private:
     std::unordered_map<std::string, std::shared_ptr<const CharacterSubrace>>& results;
     const std::unordered_map<std::string, std::shared_ptr<const CharacterRace>>& races;
