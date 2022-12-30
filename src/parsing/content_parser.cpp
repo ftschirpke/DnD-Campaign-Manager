@@ -89,7 +89,8 @@ void dnd::ContentParser::parseType(
             parser = std::make_unique<CharacterClassFileParser>(parsed_character_classes);
             break;
         case ParsingType::SUBCLASSES:
-            parser = std::make_unique<CharacterSubclassFileParser>(parsed_character_subclasses);
+            parser =
+                std::make_unique<CharacterSubclassFileParser>(parsed_character_subclasses, parsed_character_classes);
             break;
         case ParsingType::SPELLS:
             parser = std::make_unique<SpellsFileParser>(parsed_spells);

@@ -1,9 +1,57 @@
 #include "character_subclass_file_parser.hpp"
 
-void dnd::CharacterSubclassFileParser::parse() { return; }
+#include <iostream>
+#include <memory>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
-bool dnd::CharacterSubclassFileParser::validate() const { return true; }
+#include "models/character_class.hpp"
+#include "parsing/models/features/feature_parser.hpp"
+#include "parsing/parsing_exceptions.hpp"
+#include "parsing/parsing_types.hpp"
 
-void dnd::CharacterSubclassFileParser::saveResult() { return; }
+void dnd::CharacterSubclassFileParser::parse() {
+    if (!json_to_parse.is_object()) {
+        throw json_format_error(ParsingType::SUBCLASSES, filename, "map/object");
+    };
+    character_subclass_name = json_to_parse.at("name").get<std::string>();
+    if (character_subclass_name.size() == 0) {
+        throw invalid_attribute(ParsingType::SUBCLASSES, filename, "name", "cannot be \"\".");
+    }
+    class_name = json_to_parse.at("class").get<std::string>();
 
-void dnd::CharacterSubclassFileParser::reset() { return; }
+    if (!json_to_parse.at("features").is_object()) {
+        throw attribute_format_error(ParsingType::SUBCLASSES, filename, "features", "map/object");
+    }
+    features.reserve(json_to_parse.size());
+    for (const auto& [feature_name, feature_json] : json_to_parse.at("features").items()) {
+        features.push_back(std::move(FeatureParser::createFeature(feature_name, feature_json)));
+    }
+}
+
+bool dnd::CharacterSubclassFileParser::validate() const {
+    if (results.find(character_subclass_name) != results.end()) {
+        std::cerr << "Warning: Duplicate of subclass \"" << character_subclass_name << "\" found.\n";
+        return false;
+    }
+    if (classes.find(class_name) == classes.cend()) {
+        throw invalid_attribute(
+            ParsingType::SUBCLASSES, filename, "class", "must exist. \"" + class_name + "\" does not exist."
+        );
+    }
+    return true;
+}
+
+void dnd::CharacterSubclassFileParser::saveResult() {
+    // TODO: change CharacterSubclass constructor
+    auto character_subclass = std::make_shared<CharacterSubclass>(character_subclass_name, class_name);
+    character_subclass->features = std::move(features);
+    results.emplace(character_subclass_name, std::move(character_subclass));
+}
+
+void dnd::CharacterSubclassFileParser::reset() {
+    character_subclass_name = "";
+    class_name = "";
+    features = {};
+}
