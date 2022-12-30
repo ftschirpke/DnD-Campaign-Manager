@@ -145,14 +145,14 @@ inline attribute_type_error::attribute_type_error(
 inline invalid_attribute::invalid_attribute(
     const std::filesystem::path& path, const std::string& attribute, const std::string& error_msg
 )
-    : parsing_error(path, "the attribute \"" + attribute + "\" " + error_msg) {}
+    : parsing_error(path, "the \"" + attribute + "\" " + error_msg) {}
 
 
 inline invalid_attribute::invalid_attribute(
     ParsingType parsing_type, const std::filesystem::path& path, const std::string& attribute,
     const std::string& error_msg
 )
-    : parsing_error(parsing_type, path, "the attribute \"" + attribute + "\" " + error_msg) {}
+    : parsing_error(parsing_type, path, "the \"" + attribute + "\" " + error_msg) {}
 
 
 } // namespace dnd

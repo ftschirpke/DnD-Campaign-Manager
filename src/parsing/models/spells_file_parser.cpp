@@ -102,7 +102,7 @@ dnd::SpellComponents dnd::SpellsFileParser::createSpellComponents(const std::str
 bool dnd::SpellsFileParser::validate() const {
     valid.reserve(spells_in_file);
     for (const std::string& name : names) {
-        if (results_map.find(name) != results_map.end()) {
+        if (results.find(name) != results.end()) {
             std::cerr << "Warning: Duplicate of spell \"" << name << "\" found.\n";
             valid.emplace_back(false);
             continue;
@@ -118,7 +118,7 @@ void dnd::SpellsFileParser::saveResult() {
             auto spell = std::make_unique<Spell>(
                 names[i], types[i], casting_times[i], ranges[i], components[i], durations[i], descriptions[i]
             );
-            results_map.emplace(names[i], std::move(spell));
+            results.emplace(names[i], std::move(spell));
         }
     }
 }

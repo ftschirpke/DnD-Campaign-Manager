@@ -13,7 +13,7 @@ namespace dnd {
 
 class SpellsFileParser : public ContentFileParser {
 private:
-    std::unordered_map<std::string, std::shared_ptr<const Spell>>& results_map;
+    std::unordered_map<std::string, std::shared_ptr<const Spell>>& results;
     int spells_in_file;
     std::vector<std::string> names, casting_times, ranges, durations, descriptions;
     std::vector<SpellType> types;
@@ -22,15 +22,15 @@ private:
     SpellType createSpellType(const std::string& spell_type_str);
     SpellComponents createSpellComponents(const std::string& spell_components_str);
 public:
-    SpellsFileParser(std::unordered_map<std::string, std::shared_ptr<const Spell>>& results_map);
+    SpellsFileParser(std::unordered_map<std::string, std::shared_ptr<const Spell>>& results);
     void parse() override;
     bool validate() const override;
     void saveResult() override;
     void reset() override;
 };
 
-inline SpellsFileParser::SpellsFileParser(std::unordered_map<std::string, std::shared_ptr<const Spell>>& results_map)
-    : results_map(results_map) {}
+inline SpellsFileParser::SpellsFileParser(std::unordered_map<std::string, std::shared_ptr<const Spell>>& results)
+    : results(results) {}
 
 } // namespace dnd
 

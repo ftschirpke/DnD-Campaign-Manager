@@ -12,9 +12,9 @@ namespace dnd {
 
 class CharacterFileParser : public ContentFileParser {
 private:
-    std::unordered_map<std::string, std::shared_ptr<const Character>>& results_map;
+    std::unordered_map<std::string, std::shared_ptr<const Character>>& results;
 public:
-    CharacterFileParser(std::unordered_map<std::string, std::shared_ptr<const Character>>& results_map);
+    CharacterFileParser(std::unordered_map<std::string, std::shared_ptr<const Character>>& results);
     void parse() override;
     bool validate() const override;
     void saveResult() override;
@@ -22,9 +22,9 @@ public:
 };
 
 inline CharacterFileParser::CharacterFileParser(
-    std::unordered_map<std::string, std::shared_ptr<const Character>>& results_map
+    std::unordered_map<std::string, std::shared_ptr<const Character>>& results
 )
-    : results_map(results_map) {}
+    : results(results) {}
 
 } // namespace dnd
 

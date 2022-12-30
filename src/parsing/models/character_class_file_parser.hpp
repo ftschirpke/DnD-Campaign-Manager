@@ -14,12 +14,12 @@ namespace dnd {
 
 class CharacterClassFileParser : public ContentFileParser {
 private:
-    std::unordered_map<std::string, std::shared_ptr<const CharacterClass>>& results_map;
+    std::unordered_map<std::string, std::shared_ptr<const CharacterClass>>& results;
     std::string character_class_name, character_class_hit_dice;
     std::vector<int> asi_levels;
     std::vector<std::shared_ptr<const Feature>> features;
 public:
-    CharacterClassFileParser(std::unordered_map<std::string, std::shared_ptr<const CharacterClass>>& results_map);
+    CharacterClassFileParser(std::unordered_map<std::string, std::shared_ptr<const CharacterClass>>& results);
     void parse() override;
     bool validate() const override;
     void saveResult() override;
@@ -27,9 +27,9 @@ public:
 };
 
 inline CharacterClassFileParser::CharacterClassFileParser(
-    std::unordered_map<std::string, std::shared_ptr<const CharacterClass>>& results_map
+    std::unordered_map<std::string, std::shared_ptr<const CharacterClass>>& results
 )
-    : results_map(results_map) {}
+    : results(results) {}
 
 } // namespace dnd
 

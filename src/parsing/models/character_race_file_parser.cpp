@@ -31,7 +31,7 @@ void dnd::CharacterRaceFileParser::parse() {
 }
 
 bool dnd::CharacterRaceFileParser::validate() const {
-    if (results_map.find(character_race_name) != results_map.end()) {
+    if (results.find(character_race_name) != results.end()) {
         std::cerr << "Warning: Duplicate of race \"" << character_race_name << "\" found.\n";
         return false;
     }
@@ -42,7 +42,7 @@ void dnd::CharacterRaceFileParser::saveResult() {
     // TODO: change CharacterRace constructor
     auto character_race = std::make_shared<CharacterRace>(character_race_name, has_subraces);
     character_race->features = std::move(features);
-    results_map.emplace(character_race_name, std::move(character_race));
+    results.emplace(character_race_name, std::move(character_race));
 }
 
 void dnd::CharacterRaceFileParser::reset() {

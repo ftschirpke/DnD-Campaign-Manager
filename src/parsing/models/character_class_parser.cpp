@@ -29,7 +29,7 @@ void dnd::CharacterClassParser::parse() {
 }
 
 bool dnd::CharacterClassParser::validate() const {
-    if (results_map.find(character_class_name) != results_map.end()) {
+    if (results.find(character_class_name) != results.end()) {
         std::cerr << "Warning: Duplicate of class \"" << character_class_name << "\" found.\n";
         return false;
     }
@@ -40,7 +40,7 @@ void dnd::CharacterClassParser::saveResult() {
     // TODO: change CharacterClass constructor
     auto character_class = std::make_shared<CharacterClass>(character_class_name, character_class_hit_dice, asi_levels);
     character_class->features = std::move(features);
-    results_map.emplace(character_class_name, std::move(character_class));
+    results.emplace(character_class_name, std::move(character_class));
 }
 
 void dnd::CharacterClassParser::reset() {

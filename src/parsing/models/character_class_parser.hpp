@@ -15,12 +15,12 @@ namespace dnd {
 
 class CharacterClassParser : public ContentTypeParser {
 private:
-    std::unordered_map<std::string, std::shared_ptr<const CharacterClass>>& results_map;
+    std::unordered_map<std::string, std::shared_ptr<const CharacterClass>>& results;
     std::string character_class_name, character_class_hit_dice;
     std::vector<int> asi_levels;
     std::vector<std::shared_ptr<const Feature>> features;
 public:
-    CharacterClassParser(std::unordered_map<std::string, std::shared_ptr<const CharacterClass>>& results_map);
+    CharacterClassParser(std::unordered_map<std::string, std::shared_ptr<const CharacterClass>>& results);
     void parse() override;
     bool validate() const override;
     void saveResult() override;
@@ -32,9 +32,9 @@ public:
 };
 
 CharacterClassParser::CharacterClassParser(
-    std::unordered_map<std::string, std::shared_ptr<const CharacterClass>>& results_map
+    std::unordered_map<std::string, std::shared_ptr<const CharacterClass>>& results
 )
-    : results_map(results_map) {}
+    : results(results) {}
 
 } // namespace dnd
 
