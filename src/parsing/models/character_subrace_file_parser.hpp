@@ -4,20 +4,25 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 #include "models/character_race.hpp"
+#include "models/features/feature.hpp"
 #include "parsing/models/content_file_parser.hpp"
 
 namespace dnd {
 
 class CharacterSubraceFileParser : public ContentFileParser {
 private:
-    std::unordered_map<std::string, std::shared_ptr<const CharacterSubrace>>& results_map;
-    std::string name;
-    bool has_subraces;
+    std::unordered_map<std::string, std::shared_ptr<const CharacterSubrace>>& results;
+    const std::unordered_map<std::string, std::shared_ptr<const CharacterRace>>& races;
+    std::string character_subrace_name, race_name;
     std::vector<std::shared_ptr<const Feature>> features;
 public:
-    CharacterSubraceFileParser(std::unordered_map<std::string, std::shared_ptr<const CharacterSubrace>>& results_map);
+    CharacterSubraceFileParser(
+        std::unordered_map<std::string, std::shared_ptr<const CharacterSubrace>>& results,
+        const std::unordered_map<std::string, std::shared_ptr<const CharacterRace>>& races
+    );
     void parse() override;
     bool validate() const override;
     void saveResult() override;
@@ -25,9 +30,10 @@ public:
 };
 
 inline CharacterSubraceFileParser::CharacterSubraceFileParser(
-    std::unordered_map<std::string, std::shared_ptr<const CharacterSubrace>>& results_map
+    std::unordered_map<std::string, std::shared_ptr<const CharacterSubrace>>& results,
+    const std::unordered_map<std::string, std::shared_ptr<const CharacterRace>>& races
 )
-    : results_map(results_map) {}
+    : results(results), races(races) {}
 
 } // namespace dnd
 

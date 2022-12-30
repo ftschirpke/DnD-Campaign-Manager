@@ -83,7 +83,7 @@ void dnd::ContentParser::parseType(
             parser = std::make_unique<CharacterRaceFileParser>(parsed_character_races);
             break;
         case ParsingType::SUBRACES:
-            parser = std::make_unique<CharacterSubraceFileParser>(parsed_character_subraces);
+            parser = std::make_unique<CharacterSubraceFileParser>(parsed_character_subraces, parsed_character_races);
             break;
         case ParsingType::CLASSES:
             parser = std::make_unique<CharacterClassFileParser>(parsed_character_classes);
