@@ -30,18 +30,14 @@ private:
     void parseType(
         const dnd::ParsingType parsing_type, const std::vector<std::filesystem::directory_entry>& dirs_to_parse
     );
-    // Content& content;
-    // const std::unique_ptr<const nlohmann::json> openJSON(const std::filesystem::directory_entry& file);
-    // void parseSpells(const std::filesystem::path& directory);
-    // void parseCharacters(const std::filesystem::path& directory);
-    // void parseCharacterClasses(const std::filesystem::path& directory);
-    // void parseCharacterSubclasses(const std::filesystem::path& directory);
-    // void parseCharacterRaces(const std::filesystem::path& directory);
-    // void parseCharacterSubraces(const std::filesystem::path& directory);
-    // void validateCharacterSubclasses() const;
-    // void validateCharacterSubraces() const;
 public:
     Content parse(const std::filesystem::path& content_path, const std::string& campaign_dir_name);
+};
+
+inline const std::unordered_map<ParsingType, std::string> ContentParser::subdir_names = {
+    {ParsingType::CHARACTERS, "characters"}, {ParsingType::CLASSES, "classes"},
+    {ParsingType::SUBCLASSES, "subclasses"}, {ParsingType::RACES, "races"},
+    {ParsingType::SUBRACES, "subraces"},     {ParsingType::SPELLS, "spells"},
 };
 
 } // namespace dnd
