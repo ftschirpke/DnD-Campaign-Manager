@@ -35,6 +35,7 @@ public:
     std::shared_ptr<const CharacterRace> race_ptr;
     std::shared_ptr<const CharacterSubrace> subrace_ptr;
     Character(const std::string& name, const std::array<int, 6>& base_ability_scores);
+    Character(const std::string& name, const std::array<int, 6>& base_ability_scores, int level, int xp);
     int getLevel() const;
     int getXP() const;
     void levelUp();
@@ -52,6 +53,10 @@ public:
 
 inline Character::Character(const std::string& name, const std::array<int, 6>& base_ability_scores)
     : Creature(name, base_ability_scores), subclass_ptr(nullptr), subrace_ptr(nullptr) {}
+
+
+inline Character::Character(const std::string& name, const std::array<int, 6>& base_ability_scores, int level, int xp)
+    : Creature(name, base_ability_scores), level(level), xp(xp), subclass_ptr(nullptr), subrace_ptr(nullptr) {}
 
 inline int Character::getLevel() const { return level; }
 

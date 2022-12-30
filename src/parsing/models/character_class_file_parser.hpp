@@ -17,7 +17,7 @@ private:
     std::unordered_map<std::string, std::shared_ptr<const CharacterClass>>& results;
     std::string character_class_name, character_class_hit_dice;
     std::vector<int> asi_levels;
-    std::vector<std::shared_ptr<const Feature>> features;
+    int subclass_level;
 public:
     CharacterClassFileParser(std::unordered_map<std::string, std::shared_ptr<const CharacterClass>>& results);
     void parse() override;

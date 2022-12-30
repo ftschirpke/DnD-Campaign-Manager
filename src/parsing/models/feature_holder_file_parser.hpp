@@ -14,6 +14,8 @@
 namespace dnd {
 
 class FeatureHolderFileParser : public ContentFileParser {
+protected:
+    std::vector<std::shared_ptr<const Feature>> features;
     // TODO: this is only public for testing purposes, is there a better solution?
 public:
     // private:
@@ -21,7 +23,8 @@ public:
     void parseAndAddActivation(const std::string& activation_str, Feature& feature) const;
     std::shared_ptr<Feature> createFeature(const std::string& feature_name, const nlohmann::json& feature_json) const;
     // protected:
-    virtual std::vector<std::shared_ptr<const Feature>> parseFeatures() const;
+    virtual void parseFeatures();
+    virtual void reset() override;
 };
 
 } // namespace dnd

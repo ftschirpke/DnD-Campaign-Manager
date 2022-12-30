@@ -13,19 +13,17 @@
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
 
-std::vector<std::shared_ptr<const dnd::Feature>> dnd::FeatureHolderFileParser::parseFeatures() const {
+void dnd::FeatureHolderFileParser::parseFeatures() {
     const nlohmann::json& features_json = json_to_parse.at("features");
     if (!features_json.is_object()) {
         throw attribute_format_error(filename, "features", "map/object");
     }
 
-    std::vector<std::shared_ptr<const Feature>> parsed_features;
-    parsed_features.reserve(features_json.size());
+    features.reserve(features_json.size());
 
     for (const auto& [feature_name, feature_json] : features_json.items()) {
-        parsed_features.emplace_back(createFeature(feature_name, feature_json));
+        features.emplace_back(createFeature(feature_name, feature_json));
     }
-    return parsed_features;
 }
 
 std::shared_ptr<dnd::Feature> dnd::FeatureHolderFileParser::createFeature(
@@ -38,6 +36,11 @@ std::shared_ptr<dnd::Feature> dnd::FeatureHolderFileParser::createFeature(
 
     // TODO: change feature constructor?
     Feature feature(feature_name, feature_description);
+
+    feature.subclass = false;
+    if (feature_json.contains("subclass")) {
+        feature.subclass = feature_json.at("subclass").get<bool>();
+    }
 
     if (feature_json.contains("activation") && feature_json.contains("activations")) {
         throw invalid_attribute(
@@ -185,3 +188,5 @@ void dnd::FeatureHolderFileParser::parseAndAddActivation(const std::string& acti
     }
     feature.activations.emplace_back(std::make_unique<NumericActivation>(left_identifier, op_name, right_value));
 }
+
+void dnd::FeatureHolderFileParser::reset() { features = {}; }

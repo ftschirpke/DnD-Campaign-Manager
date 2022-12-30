@@ -15,7 +15,7 @@ namespace dnd {
 class Content {
 public:
     std::unordered_map<std::string, std::shared_ptr<const Spell>> spells;
-    std::unordered_map<std::string, std::shared_ptr<const Character>> characters;
+    std::unordered_map<std::string, std::shared_ptr<Character>> characters;
     std::unordered_map<std::string, std::shared_ptr<const CharacterClass>> character_classes;
     std::unordered_map<std::string, std::shared_ptr<const CharacterSubclass>> character_subclasses;
     std::unordered_map<std::string, std::shared_ptr<const CharacterRace>> character_races;

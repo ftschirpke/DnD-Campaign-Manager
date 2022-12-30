@@ -77,7 +77,10 @@ void dnd::ContentParser::parseType(
     std::unique_ptr<ContentFileParser> parser;
     switch (parsing_type) {
         case ParsingType::CHARACTERS:
-            parser = std::make_unique<CharacterFileParser>(parsed_characters);
+            parser = std::make_unique<CharacterFileParser>(
+                parsed_characters, parsed_character_classes, parsed_character_subclasses, parsed_character_races,
+                parsed_character_subraces, parsed_spells
+            );
             break;
         case ParsingType::RACES:
             parser = std::make_unique<CharacterRaceFileParser>(parsed_character_races);

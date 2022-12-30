@@ -7,20 +7,21 @@
 #include <vector>
 
 #include "models/character_race.hpp"
+#include "parsing/models/feature_holder_file_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
 
 void dnd::CharacterSubraceFileParser::parse() {
     if (!json_to_parse.is_object()) {
         throw json_format_error(ParsingType::SUBRACES, filename, "map/object");
-    };
+    }
     character_subrace_name = json_to_parse.at("name").get<std::string>();
     if (character_subrace_name.size() == 0) {
         throw invalid_attribute(ParsingType::SUBRACES, filename, "name", "cannot be \"\".");
     }
     race_name = json_to_parse.at("race").get<std::string>();
 
-    features = parseFeatures();
+    parseFeatures();
 }
 
 bool dnd::CharacterSubraceFileParser::validate() const {
@@ -49,7 +50,7 @@ void dnd::CharacterSubraceFileParser::saveResult() {
 }
 
 void dnd::CharacterSubraceFileParser::reset() {
+    FeatureHolderFileParser::reset();
     character_subrace_name = "";
     race_name = "";
-    features = {};
 }
