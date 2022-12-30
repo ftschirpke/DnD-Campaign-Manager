@@ -16,7 +16,7 @@ void dnd::CharacterClassFileParser::parse() {
     }
     character_class_name = json_to_parse.at("name").get<std::string>();
     if (character_class_name.size() == 0) {
-        throw invalid_attribute(filename, "name", "cannot be \"\".");
+        throw invalid_attribute(ParsingType::CLASSES, filename, "name", "cannot be \"\".");
     }
     character_class_hit_dice = json_to_parse.at("hit_dice").get<std::string>();
     // TODO: change int to short
