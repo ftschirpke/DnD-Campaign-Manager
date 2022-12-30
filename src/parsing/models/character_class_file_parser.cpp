@@ -1,6 +1,7 @@
 #include "character_class_file_parser.hpp"
 
 #include <iostream>
+#include <memory>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -21,7 +22,6 @@ void dnd::CharacterClassFileParser::parse() {
     character_class_hit_dice = json_to_parse.at("hit_dice").get<std::string>();
     // TODO: change int to short
     asi_levels = json_to_parse.at("asi_levels").get<std::vector<int>>();
-    // features = FeatureHolderParser::parseAndAddFeatures(json_to_parse.at("features"));
     if (!json_to_parse.at("features").is_object()) {
         throw attribute_format_error(ParsingType::CLASSES, filename, "features", "map/object");
     }

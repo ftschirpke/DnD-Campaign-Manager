@@ -1,11 +1,13 @@
 #ifndef CHARACTER_CLASS_FILE_PARSER_HPP_
 #define CHARACTER_CLASS_FILE_PARSER_HPP_
 
+#include <memory>
 #include <string>
 #include <unordered_map>
 #include <vector>
 
 #include "models/character_class.hpp"
+#include "models/features/feature.hpp"
 #include "parsing/models/content_file_parser.hpp"
 
 namespace dnd {

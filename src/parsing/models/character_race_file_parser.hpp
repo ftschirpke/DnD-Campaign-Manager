@@ -4,8 +4,10 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 #include "models/character_race.hpp"
+#include "models/features/feature.hpp"
 #include "parsing/models/content_file_parser.hpp"
 
 namespace dnd {
@@ -13,7 +15,7 @@ namespace dnd {
 class CharacterRaceFileParser : public ContentFileParser {
 private:
     std::unordered_map<std::string, std::shared_ptr<const CharacterRace>>& results_map;
-    std::string name;
+    std::string character_race_name;
     bool has_subraces;
     std::vector<std::shared_ptr<const Feature>> features;
 public:
