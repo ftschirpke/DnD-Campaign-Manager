@@ -72,13 +72,6 @@ std::shared_ptr<dnd::Feature> dnd::FeatureHolderFileParser::createFeature(
 }
 
 void dnd::FeatureHolderFileParser::parseAndAddEffect(const std::string& effect_str, dnd::Feature& feature) const {
-    // const std::string times = "(earliest|early|normal|late|latest)";
-    // const std::string numeric_effects = "(add|mult|div|set|max|min)";
-    // const std::string numeric_effects_regex = "(" + numeric_effects + " -?\\d+(\\.\\d\\d?)?)";
-    // const std::string other_effects = "addOther|multOther|divOther|setOther|maxOther|minOther";
-    // const std::string const_effects = "addConst|multConst|divConst|setConst|maxConst|minConst";
-    // const std::string identifier_effects = "(" + other_effects + "|" + const_effects + ")";
-    // const std::string identifier_effects_regex = "(" + identifier_effects + " [A-Z][_A-Z0-9]+)";
     const std::regex effect_regex("[A-Z][_A-Z0-9]+"
                                   " "
                                   "(earliest|early|normal|late|latest)"

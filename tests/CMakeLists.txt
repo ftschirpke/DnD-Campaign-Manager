@@ -4,6 +4,7 @@ set(TEST_FILES
     parsing/content_parser_test.cpp
     parsing/models/character_file_parser_test.cpp
     parsing/models/feature_holder_file_parser_test.cpp
+    parsing/models/spells_file_parser_test.cpp
 )
 
 set(TEST_SOURCE_FILES

@@ -18,7 +18,8 @@ private:
     std::filesystem::path path;
     std::string msg_start;
     const std::string error_msg;
-    mutable std::string w;
+    std::string w;
+    void updateWhat();
 public:
     parsing_error(const std::filesystem::path& path, const std::string& error_msg);
     parsing_error(ParsingType parsing_type, const std::filesystem::path& path, const std::string& error_msg);
@@ -83,28 +84,32 @@ inline std::string stripJsonExceptionWhat(const std::string& original_what) {
 }
 
 inline parsing_error::parsing_error(const std::filesystem::path& path, const std::string& error_msg)
-    : std::invalid_argument(""), msg_start("File"), path(path), error_msg(error_msg) {}
+    : std::invalid_argument(""), msg_start("File"), path(path), error_msg(error_msg) {
+    updateWhat();
+}
 
 inline parsing_error::parsing_error(
     ParsingType parsing_type, const std::filesystem::path& path, const std::string& error_msg
 )
     : std::invalid_argument(""), msg_start(parsing_type_names.at(parsing_type) + " in file"), path(path),
-      error_msg(error_msg) {}
+      error_msg(error_msg) {
+    updateWhat();
+}
 
+inline void parsing_error::updateWhat() { w = msg_start + " \"" + path.c_str() + "\" " + error_msg; }
 
 inline void parsing_error::setParsingType(ParsingType parsing_type) {
     msg_start = parsing_type_names.at(parsing_type) + " in file";
+    updateWhat();
 }
 
 
 inline void parsing_error::relativiseFileName(const std::filesystem::path& root_path) {
     path = path.lexically_relative(root_path);
+    updateWhat();
 }
 
-inline const char* parsing_error::what() const noexcept {
-    w = msg_start + " \"" + path.c_str() + "\" " + error_msg;
-    return w.c_str();
-}
+inline const char* parsing_error::what() const noexcept { return w.c_str(); }
 
 inline json_format_error::json_format_error(const std::filesystem::path& path, const std::string& desired_format)
     : parsing_error(path, "has wrong format: should be " + desired_format) {}
