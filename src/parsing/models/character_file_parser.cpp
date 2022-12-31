@@ -120,12 +120,9 @@ void dnd::CharacterFileParser::parseClassAndRace() {
             throw invalid_attribute(ParsingType::CHARACTERS, filename, "subrace", "does not exist");
         }
     } else if (race_ptr->has_subraces) {
+        std::cout << "JSON:\n" << json_to_parse << std::endl;
         throw attribute_missing(
-            ParsingType::CHARACTERS, filename,
-            "The race \"" + race_ptr->name
-                + "\" requires a subrace selection."
-                  "beginning at level "
-                + std::to_string(class_ptr->subclass_level) + " a subclass is required for " + class_ptr->name + "s."
+            ParsingType::CHARACTERS, filename, "The race \"" + race_ptr->name + "\" requires a subrace selection."
         );
     }
 }
@@ -140,8 +137,12 @@ bool dnd::CharacterFileParser::validate() const {
 
 void dnd::CharacterFileParser::saveResult() {
     // TODO: change Character constructor
-    auto character = std::make_shared<Character>(character_name, base_ability_scores, level, xp);
+    auto character = std::make_shared<Character>(character_name, base_ability_scores, level, xp, hit_dice_rolls);
     character->features = features;
+    character->race_ptr = race_ptr;
+    character->subrace_ptr = subrace_ptr;
+    character->class_ptr = class_ptr;
+    character->subclass_ptr = subclass_ptr;
     results.emplace(character_name, std::move(character));
 }
 

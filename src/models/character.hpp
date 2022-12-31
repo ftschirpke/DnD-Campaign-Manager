@@ -35,7 +35,10 @@ public:
     std::shared_ptr<const CharacterRace> race_ptr;
     std::shared_ptr<const CharacterSubrace> subrace_ptr;
     Character(const std::string& name, const std::array<int, 6>& base_ability_scores);
-    Character(const std::string& name, const std::array<int, 6>& base_ability_scores, int level, int xp);
+    Character(
+        const std::string& name, const std::array<int, 6>& base_ability_scores, int level, int xp,
+        const std::vector<int>& hit_dice_rolls
+    );
     int getLevel() const;
     int getXP() const;
     void levelUp();
@@ -55,8 +58,12 @@ inline Character::Character(const std::string& name, const std::array<int, 6>& b
     : Creature(name, base_ability_scores), subclass_ptr(nullptr), subrace_ptr(nullptr) {}
 
 
-inline Character::Character(const std::string& name, const std::array<int, 6>& base_ability_scores, int level, int xp)
-    : Creature(name, base_ability_scores), level(level), xp(xp), subclass_ptr(nullptr), subrace_ptr(nullptr) {}
+inline Character::Character(
+    const std::string& name, const std::array<int, 6>& base_ability_scores, int level, int xp,
+    const std::vector<int>& hit_dice_rolls
+)
+    : Creature(name, base_ability_scores), level(level), xp(xp), hit_dice_rolls(hit_dice_rolls), subclass_ptr(nullptr),
+      subrace_ptr(nullptr) {}
 
 inline int Character::getLevel() const { return level; }
 
