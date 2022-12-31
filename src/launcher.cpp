@@ -9,8 +9,9 @@
 
 #include "dndmanager_config.hpp"
 
-#include "controllers/content_controller.hpp"
+#include "controllers/content.hpp"
 #include "parsing/content_parser.hpp"
+#include "parsing/parsing_exceptions.hpp"
 
 int dnd::launch(int argc, char** argv) {
     const std::filesystem::path cur_path = std::filesystem::current_path();
@@ -55,17 +56,19 @@ int dnd::launch(int argc, char** argv) {
         if (campaign_dir_name.size() == 0) {
             throw std::invalid_argument("Campaign directory name cannot be \"\".");
         }
-        ContentController content_controller;
-        ContentParser parser(content_path, campaign_dir_name, content_controller);
+        ContentParser parser;
         // TODO: should the runtime measurement and status printing stay?
         std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
-        parser.parseAll();
+        Content content = parser.parse(content_path, campaign_dir_name);
         std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> timespan = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
         std::cout << "Time taken for parsing: " << timespan.count() << " seconds\n";
-        content_controller.printStatus();
+        content.printStatus();
     } catch (const parsing_error& e) {
         std::cerr << "Parsing Error: " << e.what() << '\n';
+        return -1;
+    } catch (const std::invalid_argument& e) {
+        std::cerr << "Invalid Argument: " << e.what() << '\n';
         return -1;
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << '\n';

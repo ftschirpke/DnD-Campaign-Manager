@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "models/feature_holder.hpp"
+#include "models/features/feature.hpp"
 
 namespace dnd {
 
@@ -12,7 +13,10 @@ class CharacterClass : public FeatureHolder {
 public:
     const std::string hit_dice;
     const std::vector<int> asi_levels;
-    CharacterClass(const std::string& name, const std::string& hit_dice, const std::vector<int>& asi_levels);
+    int subclass_level;
+    CharacterClass(
+        const std::string& name, const std::string& hit_dice, const std::vector<int>& asi_levels, int subclass_level
+    );
 };
 
 class CharacterSubclass : public FeatureHolder {
@@ -22,9 +26,9 @@ public:
 };
 
 inline CharacterClass::CharacterClass(
-    const std::string& name, const std::string& hit_dice, const std::vector<int>& asi_levels
+    const std::string& name, const std::string& hit_dice, const std::vector<int>& asi_levels, int subclass_level
 )
-    : FeatureHolder(name), hit_dice(hit_dice), asi_levels(asi_levels) {}
+    : FeatureHolder(name), hit_dice(hit_dice), asi_levels(asi_levels), subclass_level(subclass_level) {}
 
 inline CharacterSubclass::CharacterSubclass(const std::string& name, const std::string& class_name)
     : FeatureHolder(name), class_name(class_name) {}

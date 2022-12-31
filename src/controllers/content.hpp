@@ -1,5 +1,5 @@
-#ifndef CONTENT_CONTROLLER_HPP_
-#define CONTENT_CONTROLLER_HPP_
+#ifndef CONTENT_HPP_
+#define CONTENT_HPP_
 
 #include <memory>
 #include <string>
@@ -12,10 +12,10 @@
 
 namespace dnd {
 
-class ContentController {
+class Content {
 public:
     std::unordered_map<std::string, std::shared_ptr<const Spell>> spells;
-    std::unordered_map<std::string, std::shared_ptr<const Character>> characters;
+    std::unordered_map<std::string, std::shared_ptr<Character>> characters;
     std::unordered_map<std::string, std::shared_ptr<const CharacterClass>> character_classes;
     std::unordered_map<std::string, std::shared_ptr<const CharacterSubclass>> character_subclasses;
     std::unordered_map<std::string, std::shared_ptr<const CharacterRace>> character_races;
@@ -25,4 +25,4 @@ public:
 
 } // namespace dnd
 
-#endif // CONTENT_CONTROLLER_HPP_
+#endif // CONTENT_HPP_

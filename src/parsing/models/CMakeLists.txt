@@ -1,19 +1,21 @@
 target_sources(dndmanager
     PRIVATE
-        spell_parser.cpp
-        character_class_parser.cpp
-        character_parser.cpp
-        character_race_parser.cpp
-        feature_holder_parser.cpp
+    character_file_parser.cpp
+    feature_holder_file_parser.cpp
+    character_class_file_parser.cpp
+    character_race_file_parser.cpp
+    character_subclass_file_parser.cpp
+    character_subrace_file_parser.cpp
+    spells_file_parser.cpp
 )
 
 target_sources(dndmanager_tests
     PRIVATE
-        spell_parser.cpp
-        character_class_parser.cpp
-        character_parser.cpp
-        character_race_parser.cpp
-        feature_holder_parser.cpp
+    character_file_parser.cpp
+    feature_holder_file_parser.cpp
+    character_class_file_parser.cpp
+    character_race_file_parser.cpp
+    character_subclass_file_parser.cpp
+    character_subrace_file_parser.cpp
+    spells_file_parser.cpp
 )
-
-add_subdirectory(features)
