@@ -19,8 +19,9 @@ private:
     std::vector<SpellType> types;
     std::vector<SpellComponents> components;
     mutable std::vector<bool> valid;
-    SpellType createSpellType(const std::string& spell_type_str);
-    SpellComponents createSpellComponents(const std::string& spell_components_str);
+protected:
+    SpellType createSpellType(const std::string& spell_type_str) const;
+    SpellComponents createSpellComponents(const std::string& spell_components_str) const;
 public:
     SpellsFileParser(std::unordered_map<std::string, std::shared_ptr<const Spell>>& results);
     void parse() override;

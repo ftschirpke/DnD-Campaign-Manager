@@ -16,14 +16,11 @@ namespace dnd {
 class FeatureHolderFileParser : public ContentFileParser {
 protected:
     std::vector<std::shared_ptr<const Feature>> features;
-    // TODO: this is only public for testing purposes, is there a better solution?
-public:
-    // private:
     void parseAndAddEffect(const std::string& effect_str, Feature& feature) const;
     void parseAndAddActivation(const std::string& activation_str, Feature& feature) const;
     std::shared_ptr<Feature> createFeature(const std::string& feature_name, const nlohmann::json& feature_json) const;
-    // protected:
     virtual void parseFeatures();
+public:
     virtual void reset() override;
 };
 

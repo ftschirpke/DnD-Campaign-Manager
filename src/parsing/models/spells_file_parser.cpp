@@ -37,7 +37,7 @@ void dnd::SpellsFileParser::parse() {
     }
 }
 
-dnd::SpellType dnd::SpellsFileParser::createSpellType(const std::string& spell_type_str) {
+dnd::SpellType dnd::SpellsFileParser::createSpellType(const std::string& spell_type_str) const {
     const std::string magic_school_regex_str = "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|[eE]"
                                                "vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)";
     const std::regex spell_type_regex(
@@ -45,7 +45,8 @@ dnd::SpellType dnd::SpellsFileParser::createSpellType(const std::string& spell_t
         + " cantrip)"
     );
     if (!std::regex_match(spell_type_str, spell_type_regex)) {
-        throw std::invalid_argument("Spell type \"" + spell_type_str + "\" is of wrong format.");
+        // TODO: think about how to reintroduce spell name into error message
+        throw attribute_type_error(filename, "invalid spell type format: \"" + spell_type_str + "\"");
     }
     SpellType spell_type;
     size_t ritual_idx = spell_type_str.find(" (ritual)");
@@ -67,12 +68,13 @@ dnd::SpellType dnd::SpellsFileParser::createSpellType(const std::string& spell_t
     return spell_type;
 }
 
-dnd::SpellComponents dnd::SpellsFileParser::createSpellComponents(const std::string& spell_components_str) {
+dnd::SpellComponents dnd::SpellsFileParser::createSpellComponents(const std::string& spell_components_str) const {
     const std::regex spell_components_regex(
         "(V, S, M (\\((.*)\\))|V, S|V, M (\\((.*)\\))|S, M (\\((.*)\\))|V|S|M (\\((.*)\\)))"
     );
     if (!std::regex_match(spell_components_str, spell_components_regex)) {
-        throw std::invalid_argument("Spell components are of wrong format.");
+        // TODO: think about how to reintroduce spell name into error message
+        throw attribute_type_error(filename, "invalid spell components format: \"" + spell_components_str + "\"");
     }
     std::string::const_iterator start = spell_components_str.cbegin();
     int parentheses_idx = spell_components_str.find(" (");
