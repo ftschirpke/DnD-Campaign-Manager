@@ -11,13 +11,17 @@
 
 namespace dnd {
 
+struct SpellParsingInfo {
+    std::string name, casting_time, range, duration, description;
+    SpellType type;
+    SpellComponents components;
+};
+
 class SpellsFileParser : public ContentFileParser {
 private:
     std::unordered_map<std::string, std::shared_ptr<const Spell>>& results;
     int spells_in_file;
-    std::vector<std::string> names, casting_times, ranges, durations, descriptions;
-    std::vector<SpellType> types;
-    std::vector<SpellComponents> components;
+    std::vector<SpellParsingInfo> spell_parsing_info;
     mutable std::vector<bool> valid;
 protected:
     SpellType createSpellType(const std::string& spell_type_str) const;

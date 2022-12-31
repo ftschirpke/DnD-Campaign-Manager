@@ -18,25 +18,21 @@ void dnd::SpellsFileParser::parse() {
         throw json_format_error(ParsingType::SPELLS, filename, "map/object");
     }
     spells_in_file = json_to_parse.size();
-    names.reserve(spells_in_file);
-    casting_times.reserve(spells_in_file);
-    ranges.reserve(spells_in_file);
-    durations.reserve(spells_in_file);
-    descriptions.reserve(spells_in_file);
-    types.reserve(spells_in_file);
-    components.reserve(spells_in_file);
+    spell_parsing_info.reserve(spells_in_file);
 
     for (const auto& [spell_name, spell_json] : json_to_parse.items()) {
-        names.emplace_back(spell_name);
+        SpellParsingInfo info;
+        info.name = spell_name;
         if (spell_name.size() == 0) {
             throw invalid_attribute(ParsingType::SPELLS, filename, "spell name", "cannot be \"\".");
         }
-        casting_times.emplace_back(spell_json.at("casting_time").get<std::string>());
-        ranges.emplace_back(spell_json.at("range").get<std::string>());
-        durations.emplace_back(spell_json.at("duration").get<std::string>());
-        descriptions.emplace_back(spell_json.at("description").get<std::string>());
-        types.emplace_back(createSpellType(spell_json.at("level_type").get<std::string>()));
-        components.emplace_back(createSpellComponents(spell_json.at("components").get<std::string>()));
+        info.casting_time = spell_json.at("casting_time").get<std::string>();
+        info.range = spell_json.at("range").get<std::string>();
+        info.duration = spell_json.at("duration").get<std::string>();
+        info.description = spell_json.at("description").get<std::string>();
+        info.type = createSpellType(spell_json.at("level_type").get<std::string>());
+        info.components = createSpellComponents(spell_json.at("components").get<std::string>());
+        spell_parsing_info.emplace_back(std::move(info));
     }
 }
 
@@ -106,9 +102,9 @@ dnd::SpellComponents dnd::SpellsFileParser::createSpellComponents(const std::str
 
 bool dnd::SpellsFileParser::validate() const {
     valid.reserve(spells_in_file);
-    for (const std::string& name : names) {
-        if (results.find(name) != results.end()) {
-            std::cerr << "Warning: Duplicate of spell \"" << name << "\" found.\n";
+    for (const SpellParsingInfo& info : spell_parsing_info) {
+        if (results.find(info.name) != results.end()) {
+            std::cerr << "Warning: Duplicate of spell \"" << info.name << "\" found.\n";
             valid.emplace_back(false);
             continue;
         }
@@ -120,22 +116,17 @@ bool dnd::SpellsFileParser::validate() const {
 void dnd::SpellsFileParser::saveResult() {
     for (int i = 0; i < spells_in_file; ++i) {
         if (valid[i]) {
+            SpellParsingInfo& info = spell_parsing_info[i];
             auto spell = std::make_unique<Spell>(
-                names[i], types[i], casting_times[i], ranges[i], components[i], durations[i], descriptions[i]
+                info.name, info.type, info.casting_time, info.range, info.components, info.duration, info.description
             );
-            results.emplace(names[i], std::move(spell));
+            results.emplace(info.name, std::move(spell));
         }
     }
 }
 
 void dnd::SpellsFileParser::reset() {
     spells_in_file = 0;
-    names = {};
-    casting_times = {};
-    ranges = {};
-    durations = {};
-    descriptions = {};
-    types = {};
-    components = {};
+    spell_parsing_info = {};
     valid = {};
 }
