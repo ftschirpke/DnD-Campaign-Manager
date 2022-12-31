@@ -9,11 +9,15 @@
 
 #include "dndmanager_config.hpp"
 
+#include "runtime_measurement/measuring.hpp"
+
 #include "controllers/content.hpp"
 #include "parsing/content_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 
 int dnd::launch(int argc, char** argv) {
+    Instrumentor::get().beginSession("My Benchmarking Session");
+
     const std::filesystem::path cur_path = std::filesystem::current_path();
 
     cxxopts::Options options(DnDManager_NAME, DnDManager_DESCRIPTION);
@@ -66,14 +70,18 @@ int dnd::launch(int argc, char** argv) {
         content.printStatus();
     } catch (const parsing_error& e) {
         std::cerr << "Parsing Error: " << e.what() << '\n';
+        Instrumentor::get().endSession();
         return -1;
     } catch (const std::invalid_argument& e) {
         std::cerr << "Invalid Argument: " << e.what() << '\n';
+        Instrumentor::get().endSession();
         return -1;
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << '\n';
+        Instrumentor::get().endSession();
         return -1;
     }
 
+    Instrumentor::get().endSession();
     return 0;
 }

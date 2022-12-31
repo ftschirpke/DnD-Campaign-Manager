@@ -9,6 +9,8 @@
 
 #include <nlohmann/json.hpp>
 
+#include "runtime_measurement/measuring.hpp"
+
 #include "controllers/content.hpp"
 #include "parsing/content_file_parser.hpp"
 #include "parsing/models/character_class_file_parser.hpp"
@@ -23,6 +25,7 @@
 dnd::Content dnd::ContentParser::parse(
     const std::filesystem::path& content_path, const std::string& campaign_dir_name
 ) {
+    MEASURE_FUNCTION();
     if (!std::filesystem::exists(content_path)) {
         throw parsing_error(content_path, "does not exist");
     }
@@ -74,6 +77,7 @@ dnd::Content dnd::ContentParser::parse(
 void dnd::ContentParser::parseType(
     const dnd::ParsingType parsing_type, const std::vector<std::filesystem::directory_entry>& dirs_to_parse
 ) {
+    MEASURE_FUNCTION();
     std::unique_ptr<ContentFileParser> parser;
     switch (parsing_type) {
         case ParsingType::CHARACTERS:

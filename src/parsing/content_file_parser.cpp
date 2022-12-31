@@ -6,7 +6,10 @@
 
 #include <nlohmann/json.hpp>
 
+#include "runtime_measurement/measuring.hpp"
+
 bool dnd::ContentFileParser::openJSON(const std::filesystem::directory_entry& file) {
+    MEASURE_FUNCTION();
     if (!file.is_regular_file()) {
         std::cerr << "Warning: " << file.path() << " is not a regular file.\n";
         return false;

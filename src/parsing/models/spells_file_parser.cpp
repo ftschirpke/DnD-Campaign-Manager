@@ -6,11 +6,14 @@
 #include <string>
 #include <unordered_map>
 
+#include "runtime_measurement/measuring.hpp"
+
 #include "models/spell.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
 
 void dnd::SpellsFileParser::parse() {
+    MEASURE_FUNCTION();
     if (!json_to_parse.is_object()) {
         throw json_format_error(ParsingType::SPELLS, filename, "map/object");
     }
@@ -38,8 +41,8 @@ void dnd::SpellsFileParser::parse() {
 }
 
 dnd::SpellType dnd::SpellsFileParser::createSpellType(const std::string& spell_type_str) const {
-    const std::string magic_school_regex_str = "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|[eE]"
-                                               "vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)";
+    const std::string magic_school_regex_str = "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|"
+                                               "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)";
     const std::regex spell_type_regex(
         "((1st|2nd|3rd|[4-9]th)-level " + magic_school_regex_str + "( \\(ritual\\))?)|(" + magic_school_regex_str
         + " cantrip)"
