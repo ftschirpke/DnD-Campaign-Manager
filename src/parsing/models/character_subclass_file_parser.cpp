@@ -21,7 +21,12 @@ void dnd::CharacterSubclassFileParser::parse() {
     }
     class_name = json_to_parse.at("class").get<std::string>();
 
-    parseFeatures();
+    try {
+        parseFeatures();
+    } catch (parsing_error& e) {
+        e.setParsingType(ParsingType::SUBCLASSES);
+        throw e;
+    }
 }
 
 bool dnd::CharacterSubclassFileParser::validate() const {

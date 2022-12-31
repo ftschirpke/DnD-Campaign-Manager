@@ -23,7 +23,12 @@ void dnd::CharacterClassFileParser::parse() {
     // TODO: change int to short
     asi_levels = json_to_parse.at("asi_levels").get<std::vector<int>>();
 
-    parseFeatures();
+    try {
+        parseFeatures();
+    } catch (parsing_error& e) {
+        e.setParsingType(ParsingType::CLASSES);
+        throw e;
+    }
 
     const Feature* subclass_feature = nullptr;
     for (auto it = features.cbegin(); it != features.cend(); ++it) {

@@ -32,7 +32,12 @@ void dnd::CharacterFileParser::parse() {
     parseClassAndRace();
 
     if (json_to_parse.contains("features")) {
-        parseFeatures();
+        try {
+            parseFeatures();
+        } catch (parsing_error& e) {
+            e.setParsingType(ParsingType::CHARACTERS);
+            throw e;
+        }
     }
 }
 

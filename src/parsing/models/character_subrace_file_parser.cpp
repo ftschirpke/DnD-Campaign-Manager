@@ -21,7 +21,12 @@ void dnd::CharacterSubraceFileParser::parse() {
     }
     race_name = json_to_parse.at("race").get<std::string>();
 
-    parseFeatures();
+    try {
+        parseFeatures();
+    } catch (parsing_error& e) {
+        e.setParsingType(ParsingType::SUBRACES);
+        throw e;
+    }
 }
 
 bool dnd::CharacterSubraceFileParser::validate() const {
