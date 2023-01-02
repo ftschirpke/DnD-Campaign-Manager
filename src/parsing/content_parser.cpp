@@ -4,10 +4,12 @@
 
 #include <filesystem>
 #include <fstream>
+#include <future>
 #include <iostream>
 #include <memory>
 #include <sstream>
 #include <string>
+#include <vector>
 
 #include <nlohmann/json.hpp>
 
@@ -96,11 +98,36 @@ std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createParser(const d
     }
 }
 
+void dnd::ContentParser::parseSingle(
+    const dnd::ParsingType parsing_type, const std::filesystem::directory_entry* file
+) {
+    std::unique_ptr<ContentFileParser> parser = createParser(parsing_type);
+    if (!parser->openJSON(*file)) {
+        return;
+    }
+
+    try {
+        parser->parse();
+    } catch (const nlohmann::json::out_of_range& e) {
+        const std::string stripped_what = stripJsonExceptionWhat(e.what());
+        throw attribute_missing(parsing_type, file->path(), stripped_what);
+    } catch (const nlohmann::json::type_error& e) {
+        const std::string stripped_what = stripJsonExceptionWhat(e.what());
+        throw attribute_type_error(parsing_type, file->path(), stripped_what);
+    }
+
+    if (parser->validate()) {
+        parser->saveResult();
+    }
+    parser->reset();
+}
+
 void dnd::ContentParser::parseAllOfType(
     const dnd::ParsingType parsing_type, const std::vector<std::filesystem::directory_entry>& dirs_to_parse
 ) {
     DND_MEASURE_SCOPE(("dnd::ContentParser::parseAllOfType ( " + subdir_names.at(parsing_type) + " )").c_str());
-    std::unique_ptr<ContentFileParser> parser = createParser(parsing_type);
+    std::vector<std::filesystem::directory_entry> files;
+    std::vector<std::future<void>> futures;
     for (const auto& dir : dirs_to_parse) {
         std::filesystem::directory_entry type_subdir(dir.path() / subdir_names.at(parsing_type));
         if (!type_subdir.exists()) {
@@ -113,24 +140,8 @@ void dnd::ContentParser::parseAllOfType(
             continue;
         }
         for (const auto& file : std::filesystem::directory_iterator(type_subdir)) {
-            if (!parser->openJSON(file)) {
-                continue;
-            }
-
-            try {
-                parser->parse();
-            } catch (const nlohmann::json::out_of_range& e) {
-                const std::string stripped_what = stripJsonExceptionWhat(e.what());
-                throw attribute_missing(parsing_type, file.path(), stripped_what);
-            } catch (const nlohmann::json::type_error& e) {
-                const std::string stripped_what = stripJsonExceptionWhat(e.what());
-                throw attribute_type_error(parsing_type, file.path(), stripped_what);
-            }
-
-            if (parser->validate()) {
-                parser->saveResult();
-            }
-            parser->reset();
+            files.emplace_back(file);
+            futures.emplace_back(std::async(std::launch::async, &parseSingle, this, parsing_type, &files.back()));
         }
     }
 }
