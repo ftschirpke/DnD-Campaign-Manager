@@ -8,7 +8,7 @@ target_sources(dndmanager_tests
         launcher.cpp
 )
 
-configure_file(dndmanager_config.hpp.in dndmanager_config.hpp)
+configure_file(dnd_config.hpp.in dnd_config.hpp)
 
 add_subdirectory(controllers)
 add_subdirectory(models)

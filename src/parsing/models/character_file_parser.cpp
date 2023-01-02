@@ -1,3 +1,5 @@
+#include "dnd_config.hpp"
+
 #include "character_file_parser.hpp"
 
 #include <array>

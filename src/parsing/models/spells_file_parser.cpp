@@ -1,3 +1,5 @@
+#include "dnd_config.hpp"
+
 #include "spells_file_parser.hpp"
 
 #include <algorithm>
@@ -6,14 +8,11 @@
 #include <string>
 #include <unordered_map>
 
-#include "runtime_measurement/measuring.hpp"
-
 #include "models/spell.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
 
 void dnd::SpellsFileParser::parse() {
-    MEASURE_FUNCTION();
     if (!json_to_parse.is_object()) {
         throw json_format_error(ParsingType::SPELL, filename, "map/object");
     }

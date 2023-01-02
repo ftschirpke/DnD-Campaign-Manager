@@ -1,3 +1,5 @@
+#include "dnd_config.hpp"
+
 #include "creature.hpp"
 
 #include <string>

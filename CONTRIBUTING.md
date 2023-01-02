@@ -45,13 +45,16 @@ Each file should include everything that it explicitly uses, even in implementat
 
 Includes should be separated into multiple include-blocks which are each sorted and separated with newlines.
 
-- first line: include header file in implementation files or the implementation files in test files
+- first line: include config file that contains preprocessor macros (only in implementation files)
+- second line: include header file in implementation files or the implementation files in test files
 - first block: include standard library headers (format `<header_name>`)
 - second block: include other library headers (format `<header_name.hpp>`)
 - third block: include header files from this code base with their path relative to the `src/` directory and *not with relative paths* (format `"header_name.hpp"`)
 
 An example:
 ```c++
+#include "dnd_config.hpp"
+
 #include "my_class_parser.hpp"
 
 #include <iostream>

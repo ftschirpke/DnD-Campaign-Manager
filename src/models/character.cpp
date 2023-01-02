@@ -1,3 +1,5 @@
+#include "dnd_config.hpp"
+
 #include "character.hpp"
 
 #include <iostream>

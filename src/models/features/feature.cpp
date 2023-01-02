@@ -1,3 +1,5 @@
+#include "dnd_config.hpp"
+
 #include "feature.hpp"
 
 #include <memory>

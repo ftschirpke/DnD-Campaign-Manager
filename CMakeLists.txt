@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.20)
 
-project(DnDManager LANGUAGES CXX VERSION 0.1.2)
+project(DnD-Campaign-Manager
+    DESCRIPTION "A simple tool providing multiple features that are helpful for DMs managing their DnD5e-Campaigns."
+    LANGUAGES CXX
+    VERSION 0.1.2
+)
 
 # CPM
     set(CPM_DOWNLOAD_VERSION 0.34.0)
@@ -45,7 +49,7 @@ CPMAddPackage(
     OPTIONS "CXXOPTS_BUILD_EXAMPLES NO" "CXXOPTS_BUILD_TESTS NO" "CXXOPTS_ENABLE_INSTALL YES"
 )
 
-add_executable(dndmanager main.cpp)
+add_executable(dndmanager src/main.cpp)
 set_target_properties(dndmanager PROPERTIES EXPORT_COMPILE_COMMANDS ON)
 
 target_include_directories(dndmanager

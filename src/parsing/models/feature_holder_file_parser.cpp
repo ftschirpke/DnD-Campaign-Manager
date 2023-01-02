@@ -1,3 +1,5 @@
+#include "dnd_config.hpp"
+
 #include "feature_holder_file_parser.hpp"
 
 #include <memory>
