@@ -25,6 +25,7 @@
 dnd::Content dnd::ContentParser::parse(
     const std::filesystem::path& content_path, const std::string& campaign_dir_name
 ) {
+    DND_MEASURE_FUNCTION();
     if (!std::filesystem::exists(content_path)) {
         throw parsing_error(content_path, "does not exist");
     }
@@ -76,6 +77,7 @@ dnd::Content dnd::ContentParser::parse(
 void dnd::ContentParser::parseAllOfType(
     const dnd::ParsingType parsing_type, const std::vector<std::filesystem::directory_entry>& dirs_to_parse
 ) {
+    DND_MEASURE_SCOPE(("dnd::ContentParser::parseAllOfType ( " + subdir_names.at(parsing_type) + " )").c_str());
     std::unique_ptr<ContentFileParser> parser;
     switch (parsing_type) {
         case ParsingType::CHARACTER:
