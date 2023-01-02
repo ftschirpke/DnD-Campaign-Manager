@@ -13,6 +13,7 @@
 #include "parsing/parsing_types.hpp"
 
 void dnd::SpellsFileParser::parse() {
+    DND_MEASURE_FUNCTION();
     if (!json_to_parse.is_object()) {
         throw json_format_error(ParsingType::SPELL, filename, "map/object");
     }
@@ -122,10 +123,4 @@ void dnd::SpellsFileParser::saveResult() {
             results.emplace(info.name, std::move(spell));
         }
     }
-}
-
-void dnd::SpellsFileParser::reset() {
-    spells_in_file = 0;
-    spell_parsing_info = {};
-    valid = {};
 }

@@ -7,6 +7,7 @@
 #include <future>
 #include <iostream>
 #include <memory>
+#include <mutex>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -23,6 +24,15 @@
 #include "parsing/models/spells_file_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
+
+void dnd::ContentParser::reset() {
+    parsed_spells = {};
+    parsed_characters = {};
+    parsed_character_classes = {};
+    parsed_character_subclasses = {};
+    parsed_character_races = {};
+    parsed_character_subraces = {};
+}
 
 dnd::Content dnd::ContentParser::parse(
     const std::filesystem::path& content_path, const std::string& campaign_dir_name
@@ -52,7 +62,6 @@ dnd::Content dnd::ContentParser::parse(
         dirs_to_parse.push_back(source_dir);
     }
     dirs_to_parse.push_back(std::filesystem::directory_entry(content_path / campaign_dir_name));
-
     try {
         parseAllOfType(ParsingType::SPELL, dirs_to_parse);
         parseAllOfType(ParsingType::RACE, dirs_to_parse);
@@ -98,10 +107,12 @@ std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createParser(const d
     }
 }
 
-void dnd::ContentParser::parseSingle(
+void dnd::ContentParser::parseSingleOfType(
     const dnd::ParsingType parsing_type, const std::filesystem::directory_entry* file
 ) {
+    DND_MEASURE_SCOPE(("dnd::ContentParser::parseSingleOfType ( " + subdir_names.at(parsing_type) + " )").c_str());
     std::unique_ptr<ContentFileParser> parser = createParser(parsing_type);
+
     if (!parser->openJSON(*file)) {
         return;
     }
@@ -117,9 +128,9 @@ void dnd::ContentParser::parseSingle(
     }
 
     if (parser->validate()) {
+        std::lock_guard<std::mutex> lock(parsing_mutexes[parsing_type]);
         parser->saveResult();
     }
-    parser->reset();
 }
 
 void dnd::ContentParser::parseAllOfType(
@@ -141,7 +152,18 @@ void dnd::ContentParser::parseAllOfType(
         }
         for (const auto& file : std::filesystem::directory_iterator(type_subdir)) {
             files.emplace_back(file);
-            futures.emplace_back(std::async(std::launch::async, &parseSingle, this, parsing_type, &files.back()));
+        }
+    }
+    for (const auto& file : files) {
+        futures.emplace_back(
+            std::async(std::launch::async, &ContentParser::parseSingleOfType, this, parsing_type, &file)
+        );
+    }
+    for (auto& future : futures) {
+        try {
+            future.get();
+        } catch (const parsing_error& e) {
+            throw e;
         }
     }
 }

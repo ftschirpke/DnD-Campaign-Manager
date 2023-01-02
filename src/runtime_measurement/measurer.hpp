@@ -48,7 +48,6 @@ public:
     Timer(const char* name);
     virtual ~Timer();
     void stop();
-    virtual void output(const std::string& name, long long start, long long end, size_t thread_id) const;
 };
 
 inline std::mutex Measurer::write_profile_mutex;
@@ -121,13 +120,9 @@ inline void Timer::stop() {
 
     size_t thread_id = std::hash<std::thread::id>{}(std::this_thread::get_id());
 
-    output(name, start, end, thread_id);
+    Measurer::get().writeProfile({name, start, end, thread_id});
 
     stopped = true;
-}
-
-inline void Timer::output(const std::string& name, long long start, long long end, size_t thread_id) const {
-    Measurer::get().writeProfile({name, start, end, thread_id});
 }
 
 } // namespace dnd

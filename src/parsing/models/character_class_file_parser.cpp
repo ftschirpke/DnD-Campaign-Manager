@@ -14,6 +14,7 @@
 #include "parsing/parsing_types.hpp"
 
 void dnd::CharacterClassFileParser::parse() {
+    DND_MEASURE_FUNCTION();
     if (!json_to_parse.is_object()) {
         throw json_format_error(ParsingType::CLASS, filename, "map/object");
     }
@@ -72,12 +73,4 @@ void dnd::CharacterClassFileParser::saveResult() {
         std::make_shared<CharacterClass>(character_class_name, character_class_hit_dice, asi_levels, subclass_level);
     character_class->features = std::move(features);
     results.emplace(character_class_name, std::move(character_class));
-}
-
-void dnd::CharacterClassFileParser::reset() {
-    FeatureHolderFileParser::reset();
-    character_class_name = "";
-    character_class_hit_dice = "";
-    subclass_level = 0;
-    asi_levels = {};
 }

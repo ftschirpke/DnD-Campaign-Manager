@@ -14,6 +14,7 @@
 #include "parsing/parsing_types.hpp"
 
 void dnd::CharacterRaceFileParser::parse() {
+    DND_MEASURE_FUNCTION();
     if (!json_to_parse.is_object()) {
         throw json_format_error(ParsingType::RACE, filename, "map/object");
     }
@@ -44,10 +45,4 @@ void dnd::CharacterRaceFileParser::saveResult() {
     auto character_race = std::make_shared<CharacterRace>(character_race_name, has_subraces);
     character_race->features = std::move(features);
     results.emplace(character_race_name, std::move(character_race));
-}
-
-void dnd::CharacterRaceFileParser::reset() {
-    FeatureHolderFileParser::reset();
-    character_race_name = "";
-    has_subraces = false;
 }

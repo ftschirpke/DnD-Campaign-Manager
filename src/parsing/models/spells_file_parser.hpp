@@ -31,7 +31,6 @@ public:
     void parse() override;
     bool validate() const override;
     void saveResult() override;
-    void reset() override;
 };
 
 inline SpellsFileParser::SpellsFileParser(std::unordered_map<std::string, std::shared_ptr<const Spell>>& results)

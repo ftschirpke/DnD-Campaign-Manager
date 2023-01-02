@@ -14,6 +14,7 @@
 #include "parsing/parsing_types.hpp"
 
 void dnd::CharacterSubclassFileParser::parse() {
+    DND_MEASURE_FUNCTION();
     if (!json_to_parse.is_object()) {
         throw json_format_error(ParsingType::SUBCLASS, filename, "map/object");
     }
@@ -49,10 +50,4 @@ void dnd::CharacterSubclassFileParser::saveResult() {
     auto character_subclass = std::make_shared<CharacterSubclass>(character_subclass_name, class_name);
     character_subclass->features = std::move(features);
     results.emplace(character_subclass_name, std::move(character_subclass));
-}
-
-void dnd::CharacterSubclassFileParser::reset() {
-    FeatureHolderFileParser::reset();
-    character_subclass_name = "";
-    class_name = "";
 }

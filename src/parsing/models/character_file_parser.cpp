@@ -18,6 +18,7 @@
 #include "parsing/parsing_types.hpp"
 
 void dnd::CharacterFileParser::parse() {
+    DND_MEASURE_FUNCTION();
     if (!json_to_parse.is_object()) {
         throw json_format_error(ParsingType::CHARACTER, filename, "map/object");
     }
@@ -151,17 +152,4 @@ void dnd::CharacterFileParser::saveResult() {
     character->class_ptr = class_ptr;
     character->subclass_ptr = subclass_ptr;
     results.emplace(character_name, std::move(character));
-}
-
-void dnd::CharacterFileParser::reset() {
-    FeatureHolderFileParser::reset();
-    character_name = "";
-    base_ability_scores = {0, 0, 0, 0, 0, 0};
-    hit_dice_rolls = {};
-    class_ptr = nullptr;
-    subclass_ptr = nullptr;
-    race_ptr = nullptr;
-    subrace_ptr = nullptr;
-    level = 0;
-    xp = 0;
 }

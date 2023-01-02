@@ -17,7 +17,6 @@ public:
     virtual void parse() = 0;
     virtual bool validate() const = 0;
     virtual void saveResult() = 0;
-    virtual void reset() = 0;
 };
 
 } // namespace dnd

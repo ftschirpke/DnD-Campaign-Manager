@@ -23,7 +23,6 @@ public:
     void parse() override;
     bool validate() const override;
     void saveResult() override;
-    void reset() override;
 };
 
 inline CharacterClassFileParser::CharacterClassFileParser(
