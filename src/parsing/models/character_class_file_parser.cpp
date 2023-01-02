@@ -1,3 +1,5 @@
+#include "dnd_config.hpp"
+
 #include "character_class_file_parser.hpp"
 
 #include <iostream>
@@ -12,12 +14,13 @@
 #include "parsing/parsing_types.hpp"
 
 void dnd::CharacterClassFileParser::parse() {
+    DND_MEASURE_FUNCTION();
     if (!json_to_parse.is_object()) {
-        throw json_format_error(ParsingType::CLASSES, filename, "map/object");
+        throw json_format_error(ParsingType::CLASS, filename, "map/object");
     }
     character_class_name = json_to_parse.at("name").get<std::string>();
     if (character_class_name.size() == 0) {
-        throw invalid_attribute(ParsingType::CLASSES, filename, "name", "cannot be \"\".");
+        throw invalid_attribute(ParsingType::CLASS, filename, "name", "cannot be \"\".");
     }
     character_class_hit_dice = json_to_parse.at("hit_dice").get<std::string>();
     // TODO: change int to short
@@ -26,7 +29,7 @@ void dnd::CharacterClassFileParser::parse() {
     try {
         parseFeatures();
     } catch (parsing_error& e) {
-        e.setParsingType(ParsingType::CLASSES);
+        e.setParsingType(ParsingType::CLASS);
         throw e;
     }
 
@@ -35,14 +38,14 @@ void dnd::CharacterClassFileParser::parse() {
         if ((*it)->subclass) {
             if (subclass_feature != nullptr) {
                 throw invalid_attribute(
-                    ParsingType::CLASSES, filename, "features", "there must be only one subclass feature."
+                    ParsingType::CLASS, filename, "features", "there must be only one subclass feature."
                 );
             }
             subclass_feature = it->get();
         }
     }
     if (subclass_feature == nullptr) {
-        throw invalid_attribute(ParsingType::CLASSES, filename, "features", "there must be one subclass feature.");
+        throw invalid_attribute(ParsingType::CLASS, filename, "features", "there must be one subclass feature.");
     }
 
     subclass_level = 1;
@@ -51,7 +54,7 @@ void dnd::CharacterClassFileParser::parse() {
     }
     if (subclass_level < 1 || subclass_level > 20) {
         throw invalid_attribute(
-            ParsingType::CLASSES, filename, "features", "subclass feature must be active for a level between 1 and 20."
+            ParsingType::CLASS, filename, "features", "subclass feature must be active for a level between 1 and 20."
         );
     }
 }
@@ -70,12 +73,4 @@ void dnd::CharacterClassFileParser::saveResult() {
         std::make_shared<CharacterClass>(character_class_name, character_class_hit_dice, asi_levels, subclass_level);
     character_class->features = std::move(features);
     results.emplace(character_class_name, std::move(character_class));
-}
-
-void dnd::CharacterClassFileParser::reset() {
-    FeatureHolderFileParser::reset();
-    character_class_name = "";
-    character_class_hit_dice = "";
-    subclass_level = 0;
-    asi_levels = {};
 }

@@ -1,11 +1,16 @@
+#include "dnd_config.hpp"
+
 #include "content_parser.hpp"
 
 #include <filesystem>
 #include <fstream>
+#include <future>
 #include <iostream>
 #include <memory>
+#include <mutex>
 #include <sstream>
 #include <string>
+#include <vector>
 
 #include <nlohmann/json.hpp>
 
@@ -20,9 +25,19 @@
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
 
+void dnd::ContentParser::reset() {
+    parsed_spells = {};
+    parsed_characters = {};
+    parsed_character_classes = {};
+    parsed_character_subclasses = {};
+    parsed_character_races = {};
+    parsed_character_subraces = {};
+}
+
 dnd::Content dnd::ContentParser::parse(
     const std::filesystem::path& content_path, const std::string& campaign_dir_name
 ) {
+    DND_MEASURE_FUNCTION();
     if (!std::filesystem::exists(content_path)) {
         throw parsing_error(content_path, "does not exist");
     }
@@ -47,14 +62,13 @@ dnd::Content dnd::ContentParser::parse(
         dirs_to_parse.push_back(source_dir);
     }
     dirs_to_parse.push_back(std::filesystem::directory_entry(content_path / campaign_dir_name));
-
     try {
-        parseType(ParsingType::SPELLS, dirs_to_parse);
-        parseType(ParsingType::RACES, dirs_to_parse);
-        parseType(ParsingType::CLASSES, dirs_to_parse);
-        parseType(ParsingType::SUBRACES, dirs_to_parse);
-        parseType(ParsingType::SUBCLASSES, dirs_to_parse);
-        parseType(ParsingType::CHARACTERS, dirs_to_parse);
+        parseAllOfType(ParsingType::SPELL, dirs_to_parse);
+        parseAllOfType(ParsingType::RACE, dirs_to_parse);
+        parseAllOfType(ParsingType::CLASS, dirs_to_parse);
+        parseAllOfType(ParsingType::SUBRACE, dirs_to_parse);
+        parseAllOfType(ParsingType::SUBCLASS, dirs_to_parse);
+        parseAllOfType(ParsingType::CHARACTER, dirs_to_parse);
     } catch (parsing_error& e) {
         e.relativiseFileName(content_path);
         throw e;
@@ -71,36 +85,60 @@ dnd::Content dnd::ContentParser::parse(
     return content;
 }
 
-void dnd::ContentParser::parseType(
-    const dnd::ParsingType parsing_type, const std::vector<std::filesystem::directory_entry>& dirs_to_parse
-) {
-    std::unique_ptr<ContentFileParser> parser;
+std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createParser(const dnd::ParsingType parsing_type) {
     switch (parsing_type) {
-        case ParsingType::CHARACTERS:
-            parser = std::make_unique<CharacterFileParser>(
+        case ParsingType::CHARACTER:
+            return std::make_unique<CharacterFileParser>(
                 parsed_characters, parsed_character_classes, parsed_character_subclasses, parsed_character_races,
                 parsed_character_subraces, parsed_spells
             );
-            break;
-        case ParsingType::RACES:
-            parser = std::make_unique<CharacterRaceFileParser>(parsed_character_races);
-            break;
-        case ParsingType::SUBRACES:
-            parser = std::make_unique<CharacterSubraceFileParser>(parsed_character_subraces, parsed_character_races);
-            break;
-        case ParsingType::CLASSES:
-            parser = std::make_unique<CharacterClassFileParser>(parsed_character_classes);
-            break;
-        case ParsingType::SUBCLASSES:
-            parser =
-                std::make_unique<CharacterSubclassFileParser>(parsed_character_subclasses, parsed_character_classes);
-            break;
-        case ParsingType::SPELLS:
-            parser = std::make_unique<SpellsFileParser>(parsed_spells);
-            break;
+        case ParsingType::RACE:
+            return std::make_unique<CharacterRaceFileParser>(parsed_character_races);
+        case ParsingType::SUBRACE:
+            return std::make_unique<CharacterSubraceFileParser>(parsed_character_subraces, parsed_character_races);
+        case ParsingType::CLASS:
+            return std::make_unique<CharacterClassFileParser>(parsed_character_classes);
+        case ParsingType::SUBCLASS:
+            return std::make_unique<CharacterSubclassFileParser>(parsed_character_subclasses, parsed_character_classes);
+        case ParsingType::SPELL:
+            return std::make_unique<SpellsFileParser>(parsed_spells);
         default:
-            return;
+            return nullptr;
     }
+}
+
+void dnd::ContentParser::parseSingleOfType(
+    const dnd::ParsingType parsing_type, const std::filesystem::directory_entry* file
+) {
+    DND_MEASURE_SCOPE(("dnd::ContentParser::parseSingleOfType ( " + subdir_names.at(parsing_type) + " )").c_str());
+    std::unique_ptr<ContentFileParser> parser = createParser(parsing_type);
+
+    if (!parser->openJSON(*file)) {
+        return;
+    }
+
+    try {
+        parser->parse();
+    } catch (const nlohmann::json::out_of_range& e) {
+        const std::string stripped_what = stripJsonExceptionWhat(e.what());
+        throw attribute_missing(parsing_type, file->path(), stripped_what);
+    } catch (const nlohmann::json::type_error& e) {
+        const std::string stripped_what = stripJsonExceptionWhat(e.what());
+        throw attribute_type_error(parsing_type, file->path(), stripped_what);
+    }
+
+    if (parser->validate()) {
+        std::lock_guard<std::mutex> lock(parsing_mutexes[parsing_type]);
+        parser->saveResult();
+    }
+}
+
+void dnd::ContentParser::parseAllOfType(
+    const dnd::ParsingType parsing_type, const std::vector<std::filesystem::directory_entry>& dirs_to_parse
+) {
+    DND_MEASURE_SCOPE(("dnd::ContentParser::parseAllOfType ( " + subdir_names.at(parsing_type) + " )").c_str());
+    std::vector<std::filesystem::directory_entry> files;
+    std::vector<std::future<void>> futures;
     for (const auto& dir : dirs_to_parse) {
         std::filesystem::directory_entry type_subdir(dir.path() / subdir_names.at(parsing_type));
         if (!type_subdir.exists()) {
@@ -113,24 +151,19 @@ void dnd::ContentParser::parseType(
             continue;
         }
         for (const auto& file : std::filesystem::directory_iterator(type_subdir)) {
-            if (!parser->openJSON(file)) {
-                continue;
-            }
-
-            try {
-                parser->parse();
-            } catch (const nlohmann::json::out_of_range& e) {
-                const std::string stripped_what = stripJsonExceptionWhat(e.what());
-                throw attribute_missing(parsing_type, file.path(), stripped_what);
-            } catch (const nlohmann::json::type_error& e) {
-                const std::string stripped_what = stripJsonExceptionWhat(e.what());
-                throw attribute_type_error(parsing_type, file.path(), stripped_what);
-            }
-
-            if (parser->validate()) {
-                parser->saveResult();
-            }
-            parser->reset();
+            files.emplace_back(file);
+        }
+    }
+    for (const auto& file : files) {
+        futures.emplace_back(
+            std::async(std::launch::async, &ContentParser::parseSingleOfType, this, parsing_type, &file)
+        );
+    }
+    for (auto& future : futures) {
+        try {
+            future.get();
+        } catch (const parsing_error& e) {
+            throw e;
         }
     }
 }

@@ -1,0 +1,30 @@
+#ifndef DND_CONFIG_HPP_
+#define DND_CONFIG_HPP_
+
+#define DND_CAMPAIGN_MANAGER_NAME "@CMAKE_PROJECT_NAME@"
+#define DND_CAMPAIGN_MANAGER_DESCRIPTION "@CMAKE_PROJECT_DESCRIPTION@"
+
+#define DND_CAMPAIGN_MANAGER_VERSION_MAJOR @CMAKE_PROJECT_VERSION_MAJOR@
+#define DND_CAMPAIGN_MANAGER_VERSION_MINOR @CMAKE_PROJECT_VERSION_MINOR@
+#define DND_CAMPAIGN_MANAGER_VERSION_PATCH @CMAKE_PROJECT_VERSION_PATCH@
+
+#define DND_Debug 1
+#define DND_Release 0
+
+#define DND_DEBUG_MODE DND_@CMAKE_BUILD_TYPE@
+
+// runtime measurement if in debug mode
+#if DND_DEBUG_MODE
+#include "runtime_measurement/measurer.hpp"
+#define DND_START_MEASURING_SESSION(name, filepath) dnd::Measurer::get().beginSession(name, filepath)
+#define DND_END_MEASURING_SESSION() dnd::Measurer::get().endSession()
+#define DND_MEASURE_FUNCTION() DND_MEASURE_SCOPE(__PRETTY_FUNCTION__)
+#define DND_MEASURE_SCOPE(name) dnd::Timer timer##__LINE__(name);
+#else
+#define DND_START_MEASURING_SESSION(name, filepath)
+#define DND_END_MEASURING_SESSION()
+#define DND_MEASURE_FUNCTION()
+#define DND_MEASURE_SCOPE(name)
+#endif
+
+#endif // DND_CONFIG_HPP_

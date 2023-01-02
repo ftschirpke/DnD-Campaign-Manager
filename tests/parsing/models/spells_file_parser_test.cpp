@@ -23,7 +23,6 @@ public:
     void parse() override {}
     bool validate() const override { return true; }
     void saveResult() override {}
-    void reset() override {}
 };
 
 class SetupSpellsParserTest {

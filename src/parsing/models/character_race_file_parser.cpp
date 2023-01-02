@@ -1,3 +1,5 @@
+#include "dnd_config.hpp"
+
 #include "character_race_file_parser.hpp"
 
 #include <iostream>
@@ -12,19 +14,20 @@
 #include "parsing/parsing_types.hpp"
 
 void dnd::CharacterRaceFileParser::parse() {
+    DND_MEASURE_FUNCTION();
     if (!json_to_parse.is_object()) {
-        throw json_format_error(ParsingType::RACES, filename, "map/object");
+        throw json_format_error(ParsingType::RACE, filename, "map/object");
     }
     character_race_name = json_to_parse.at("name").get<std::string>();
     if (character_race_name.size() == 0) {
-        throw invalid_attribute(ParsingType::RACES, filename, "name", "cannot be \"\".");
+        throw invalid_attribute(ParsingType::RACE, filename, "name", "cannot be \"\".");
     }
     has_subraces = json_to_parse.at("has_subraces").get<bool>();
 
     try {
         parseFeatures();
     } catch (parsing_error& e) {
-        e.setParsingType(ParsingType::RACES);
+        e.setParsingType(ParsingType::RACE);
         throw e;
     }
 }
@@ -42,10 +45,4 @@ void dnd::CharacterRaceFileParser::saveResult() {
     auto character_race = std::make_shared<CharacterRace>(character_race_name, has_subraces);
     character_race->features = std::move(features);
     results.emplace(character_race_name, std::move(character_race));
-}
-
-void dnd::CharacterRaceFileParser::reset() {
-    FeatureHolderFileParser::reset();
-    character_race_name = "";
-    has_subraces = false;
 }

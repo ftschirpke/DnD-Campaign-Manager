@@ -1,45 +1,66 @@
+#include "dnd_config.hpp"
+
 #include "spells_file_parser.hpp"
 
 #include <algorithm>
+#include <future>
 #include <memory>
+#include <mutex>
 #include <regex>
 #include <string>
 #include <unordered_map>
+
+#include <nlohmann/json.hpp>
 
 #include "models/spell.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
 
+
+void dnd::SpellsFileParser::createSpell(std::string_view spell_name, nlohmann::json* spell_json_ptr) {
+    DND_MEASURE_FUNCTION();
+    SpellParsingInfo info;
+    info.name = spell_name;
+    info.casting_time = spell_json_ptr->at("casting_time").get<std::string>();
+    info.range = spell_json_ptr->at("range").get<std::string>();
+    info.duration = spell_json_ptr->at("duration").get<std::string>();
+    info.description = spell_json_ptr->at("description").get<std::string>();
+    info.type = createSpellType(spell_json_ptr->at("level_type").get<std::string>());
+    info.components = createSpellComponents(spell_json_ptr->at("components").get<std::string>());
+    std::lock_guard<std::mutex> lock(spell_parsing_mutex);
+    spell_parsing_info.emplace_back(std::move(info));
+}
+
 void dnd::SpellsFileParser::parse() {
+    DND_MEASURE_FUNCTION();
     if (!json_to_parse.is_object()) {
-        throw json_format_error(ParsingType::SPELLS, filename, "map/object");
+        throw json_format_error(ParsingType::SPELL, filename, "map/object");
     }
     spells_in_file = json_to_parse.size();
-    names.reserve(spells_in_file);
-    casting_times.reserve(spells_in_file);
-    ranges.reserve(spells_in_file);
-    durations.reserve(spells_in_file);
-    descriptions.reserve(spells_in_file);
-    types.reserve(spells_in_file);
-    components.reserve(spells_in_file);
+    spell_parsing_info.reserve(spells_in_file);
 
+    std::vector<std::future<void>> futures;
     for (const auto& [spell_name, spell_json] : json_to_parse.items()) {
-        names.emplace_back(spell_name);
         if (spell_name.size() == 0) {
-            throw invalid_attribute(ParsingType::SPELLS, filename, "spell name", "cannot be \"\".");
+            throw invalid_attribute(ParsingType::SPELL, filename, "spell name", "cannot be \"\".");
         }
-        casting_times.emplace_back(spell_json.at("casting_time").get<std::string>());
-        ranges.emplace_back(spell_json.at("range").get<std::string>());
-        durations.emplace_back(spell_json.at("duration").get<std::string>());
-        descriptions.emplace_back(spell_json.at("description").get<std::string>());
-        types.emplace_back(createSpellType(spell_json.at("level_type").get<std::string>()));
-        components.emplace_back(createSpellComponents(spell_json.at("components").get<std::string>()));
+        futures.emplace_back(
+            std::async(std::launch::async, &SpellsFileParser::createSpell, this, spell_name, &spell_json)
+        );
+    }
+    for (auto& future : futures) {
+        try {
+            future.get();
+        } catch (const parsing_error& e) {
+            throw e;
+        }
     }
 }
 
 dnd::SpellType dnd::SpellsFileParser::createSpellType(const std::string& spell_type_str) const {
-    const std::string magic_school_regex_str = "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|[eE]"
-                                               "vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)";
+    DND_MEASURE_FUNCTION();
+    const std::string magic_school_regex_str = "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|"
+                                               "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)";
     const std::regex spell_type_regex(
         "((1st|2nd|3rd|[4-9]th)-level " + magic_school_regex_str + "( \\(ritual\\))?)|(" + magic_school_regex_str
         + " cantrip)"
@@ -69,6 +90,7 @@ dnd::SpellType dnd::SpellsFileParser::createSpellType(const std::string& spell_t
 }
 
 dnd::SpellComponents dnd::SpellsFileParser::createSpellComponents(const std::string& spell_components_str) const {
+    DND_MEASURE_FUNCTION();
     const std::regex spell_components_regex(
         "(V, S, M (\\((.*)\\))|V, S|V, M (\\((.*)\\))|S, M (\\((.*)\\))|V|S|M (\\((.*)\\)))"
     );
@@ -103,9 +125,9 @@ dnd::SpellComponents dnd::SpellsFileParser::createSpellComponents(const std::str
 
 bool dnd::SpellsFileParser::validate() const {
     valid.reserve(spells_in_file);
-    for (const std::string& name : names) {
-        if (results.find(name) != results.end()) {
-            std::cerr << "Warning: Duplicate of spell \"" << name << "\" found.\n";
+    for (const SpellParsingInfo& info : spell_parsing_info) {
+        if (results.find(info.name) != results.end()) {
+            std::cerr << "Warning: Duplicate of spell \"" << info.name << "\" found.\n";
             valid.emplace_back(false);
             continue;
         }
@@ -117,22 +139,11 @@ bool dnd::SpellsFileParser::validate() const {
 void dnd::SpellsFileParser::saveResult() {
     for (int i = 0; i < spells_in_file; ++i) {
         if (valid[i]) {
+            SpellParsingInfo& info = spell_parsing_info[i];
             auto spell = std::make_unique<Spell>(
-                names[i], types[i], casting_times[i], ranges[i], components[i], durations[i], descriptions[i]
+                info.name, info.type, info.casting_time, info.range, info.components, info.duration, info.description
             );
-            results.emplace(names[i], std::move(spell));
+            results.emplace(info.name, std::move(spell));
         }
     }
-}
-
-void dnd::SpellsFileParser::reset() {
-    spells_in_file = 0;
-    names = {};
-    casting_times = {};
-    ranges = {};
-    durations = {};
-    descriptions = {};
-    types = {};
-    components = {};
-    valid = {};
 }

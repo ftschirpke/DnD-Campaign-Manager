@@ -1,3 +1,5 @@
+#include "dnd_config.hpp"
+
 #include "feature_holder_file_parser.hpp"
 
 #include <memory>
@@ -181,5 +183,3 @@ void dnd::FeatureHolderFileParser::parseAndAddActivation(const std::string& acti
     }
     feature.activations.emplace_back(std::make_unique<NumericActivation>(left_identifier, op_name, right_value));
 }
-
-void dnd::FeatureHolderFileParser::reset() { features = {}; }

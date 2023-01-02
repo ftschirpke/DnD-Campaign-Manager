@@ -102,19 +102,15 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse characters of invalid fo
         // JSON is literal
         parser.setJSON(true);
         REQUIRE_THROWS(parser.parse());
-        parser.reset();
 
         parser.setJSON(1);
         REQUIRE_THROWS(parser.parse());
-        parser.reset();
 
         parser.setJSON(-3.4);
         REQUIRE_THROWS(parser.parse());
-        parser.reset();
 
         parser.setJSON("string");
         REQUIRE_THROWS(parser.parse());
-        parser.reset();
         // JSON is array
         nlohmann::json low_level_bob_array = nlohmann::json::array();
         for (const auto& [key, value] : low_level_bob.items()) {
@@ -122,7 +118,6 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse characters of invalid fo
         }
         parser.setJSON(low_level_bob_array);
         REQUIRE_THROWS(parser.parse());
-        parser.reset();
 
         nlohmann::json high_level_bob_array = nlohmann::json::array();
         for (const auto& [key, value] : high_level_bob.items()) {
@@ -130,53 +125,44 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse characters of invalid fo
         }
         parser.setJSON(high_level_bob_array);
         REQUIRE_THROWS(parser.parse());
-        parser.reset();
     }
     SECTION("character has no name") {
         low_level_bob.erase("name");
         parser.setJSON(low_level_bob);
         REQUIRE_THROWS(parser.parse());
-        parser.reset();
 
         high_level_bob.erase("name");
         parser.setJSON(high_level_bob);
         REQUIRE_THROWS(parser.parse());
-        parser.reset();
     }
     SECTION("character has no class") {
         low_level_bob.erase("class");
         parser.setJSON(low_level_bob);
         REQUIRE_THROWS(parser.parse());
-        parser.reset();
 
         high_level_bob.erase("class");
         parser.setJSON(high_level_bob);
         REQUIRE_THROWS(parser.parse());
-        parser.reset();
     }
     SECTION("character has no race") {
         low_level_bob.erase("race");
         parser.setJSON(low_level_bob);
         REQUIRE_THROWS(parser.parse());
-        parser.reset();
 
         high_level_bob.erase("race");
         parser.setJSON(high_level_bob);
         REQUIRE_THROWS(parser.parse());
-        parser.reset();
     }
     SECTION("character has neither level nor xp") {
         low_level_bob.erase("level");
         low_level_bob.erase("xp");
         parser.setJSON(low_level_bob);
         REQUIRE_THROWS(parser.parse());
-        parser.reset();
 
         high_level_bob.erase("level");
         high_level_bob.erase("xp");
         parser.setJSON(high_level_bob);
         REQUIRE_THROWS(parser.parse());
-        parser.reset();
     }
 }
 
@@ -211,24 +197,20 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse logically wrong characte
         valid_low_level_bob.erase("subrace");
         parser.setJSON(valid_low_level_bob);
         REQUIRE_THROWS(parser.parse());
-        parser.reset();
 
         valid_high_level_bob.erase("subrace");
         parser.setJSON(valid_high_level_bob);
         REQUIRE_THROWS(parser.parse());
-        parser.reset();
     }
     SECTION("character's xp value corresponds to another level than the level provided") {
         valid_low_level_bob.at("level") = 1;
         parser.setJSON(valid_low_level_bob);
         REQUIRE_THROWS(parser.parse());
-        parser.reset();
 
         valid_high_level_bob.at("xp") = 200000; // corresponds to level 16
         valid_high_level_bob.erase("subrace");
         parser.setJSON(valid_high_level_bob);
         REQUIRE_THROWS(parser.parse());
-        parser.reset();
     }
 }
 
@@ -291,7 +273,6 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse minimum characters") {
         character_ptr = setup.characters.at(valid_low_level_bob.at("name"));
         testBasicValuesFromJSON(valid_low_level_bob, character_ptr);
         REQUIRE(character_ptr->getXP() == dnd::xp_for_level.at(valid_low_level_bob.at("level").get<int>()));
-        parser.reset();
 
         valid_high_level_bob.erase("xp");
         parser.setJSON(valid_high_level_bob);
@@ -302,7 +283,6 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse minimum characters") {
         character_ptr = setup.characters.at(valid_high_level_bob.at("name"));
         testBasicValuesFromJSON(valid_high_level_bob, character_ptr);
         REQUIRE(character_ptr->getXP() == dnd::xp_for_level.at(valid_high_level_bob.at("level").get<int>()));
-        parser.reset();
     }
     SECTION("characters with xp only") {
         valid_low_level_bob.erase("level");
@@ -314,7 +294,6 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse minimum characters") {
         character_ptr = setup.characters.at(valid_low_level_bob.at("name"));
         testBasicValuesFromJSON(valid_low_level_bob, character_ptr);
         REQUIRE(character_ptr->getLevel() == dnd::Character::levelForXP(valid_low_level_bob.at("xp").get<int>()));
-        parser.reset();
 
         valid_high_level_bob.erase("level");
         parser.setJSON(valid_high_level_bob);
@@ -325,7 +304,6 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse minimum characters") {
         character_ptr = setup.characters.at(valid_high_level_bob.at("name"));
         testBasicValuesFromJSON(valid_high_level_bob, character_ptr);
         REQUIRE(character_ptr->getLevel() == dnd::Character::levelForXP(valid_high_level_bob.at("xp").get<int>()));
-        parser.reset();
     }
     SECTION("characters with level and xp") {
         parser.setJSON(valid_low_level_bob);
@@ -335,7 +313,6 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse minimum characters") {
         REQUIRE(setup.characters.size() == 1);
         character_ptr = setup.characters.at(valid_low_level_bob.at("name"));
         testBasicValuesFromJSON(valid_low_level_bob, character_ptr);
-        parser.reset();
 
         parser.setJSON(valid_high_level_bob);
         REQUIRE_NOTHROW(parser.parse());
@@ -344,7 +321,6 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse minimum characters") {
         REQUIRE(setup.characters.size() == 2);
         character_ptr = setup.characters.at(valid_high_level_bob.at("name"));
         testBasicValuesFromJSON(valid_high_level_bob, character_ptr);
-        parser.reset();
     }
 }
 

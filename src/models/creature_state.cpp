@@ -1,3 +1,5 @@
+#include "dnd_config.hpp"
+
 #include "creature_state.hpp"
 
 #include <memory>
