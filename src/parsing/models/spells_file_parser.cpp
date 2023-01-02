@@ -15,7 +15,7 @@
 void dnd::SpellsFileParser::parse() {
     MEASURE_FUNCTION();
     if (!json_to_parse.is_object()) {
-        throw json_format_error(ParsingType::SPELLS, filename, "map/object");
+        throw json_format_error(ParsingType::SPELL, filename, "map/object");
     }
     spells_in_file = json_to_parse.size();
     spell_parsing_info.reserve(spells_in_file);
@@ -24,7 +24,7 @@ void dnd::SpellsFileParser::parse() {
         SpellParsingInfo info;
         info.name = spell_name;
         if (spell_name.size() == 0) {
-            throw invalid_attribute(ParsingType::SPELLS, filename, "spell name", "cannot be \"\".");
+            throw invalid_attribute(ParsingType::SPELL, filename, "spell name", "cannot be \"\".");
         }
         info.casting_time = spell_json.at("casting_time").get<std::string>();
         info.range = spell_json.at("range").get<std::string>();

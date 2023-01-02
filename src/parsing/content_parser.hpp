@@ -27,7 +27,7 @@ private:
     std::unordered_map<std::string, std::shared_ptr<const CharacterSubclass>> parsed_character_subclasses;
     std::unordered_map<std::string, std::shared_ptr<const CharacterRace>> parsed_character_races;
     std::unordered_map<std::string, std::shared_ptr<const CharacterSubrace>> parsed_character_subraces;
-    void parseType(
+    void parseAllOfType(
         const dnd::ParsingType parsing_type, const std::vector<std::filesystem::directory_entry>& dirs_to_parse
     );
 public:
@@ -35,9 +35,8 @@ public:
 };
 
 inline const std::unordered_map<ParsingType, std::string> ContentParser::subdir_names = {
-    {ParsingType::CHARACTERS, "characters"}, {ParsingType::CLASSES, "classes"},
-    {ParsingType::SUBCLASSES, "subclasses"}, {ParsingType::RACES, "races"},
-    {ParsingType::SUBRACES, "subraces"},     {ParsingType::SPELLS, "spells"},
+    {ParsingType::CHARACTER, "characters"}, {ParsingType::CLASS, "classes"},    {ParsingType::SUBCLASS, "subclasses"},
+    {ParsingType::RACE, "races"},           {ParsingType::SUBRACE, "subraces"}, {ParsingType::SPELL, "spells"},
 };
 
 } // namespace dnd

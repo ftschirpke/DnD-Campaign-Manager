@@ -52,12 +52,12 @@ dnd::Content dnd::ContentParser::parse(
     dirs_to_parse.push_back(std::filesystem::directory_entry(content_path / campaign_dir_name));
 
     try {
-        parseType(ParsingType::SPELLS, dirs_to_parse);
-        parseType(ParsingType::RACES, dirs_to_parse);
-        parseType(ParsingType::CLASSES, dirs_to_parse);
-        parseType(ParsingType::SUBRACES, dirs_to_parse);
-        parseType(ParsingType::SUBCLASSES, dirs_to_parse);
-        parseType(ParsingType::CHARACTERS, dirs_to_parse);
+        parseAllOfType(ParsingType::SPELL, dirs_to_parse);
+        parseAllOfType(ParsingType::RACE, dirs_to_parse);
+        parseAllOfType(ParsingType::CLASS, dirs_to_parse);
+        parseAllOfType(ParsingType::SUBRACE, dirs_to_parse);
+        parseAllOfType(ParsingType::SUBCLASS, dirs_to_parse);
+        parseAllOfType(ParsingType::CHARACTER, dirs_to_parse);
     } catch (parsing_error& e) {
         e.relativiseFileName(content_path);
         throw e;
@@ -74,32 +74,32 @@ dnd::Content dnd::ContentParser::parse(
     return content;
 }
 
-void dnd::ContentParser::parseType(
+void dnd::ContentParser::parseAllOfType(
     const dnd::ParsingType parsing_type, const std::vector<std::filesystem::directory_entry>& dirs_to_parse
 ) {
     MEASURE_FUNCTION();
     std::unique_ptr<ContentFileParser> parser;
     switch (parsing_type) {
-        case ParsingType::CHARACTERS:
+        case ParsingType::CHARACTER:
             parser = std::make_unique<CharacterFileParser>(
                 parsed_characters, parsed_character_classes, parsed_character_subclasses, parsed_character_races,
                 parsed_character_subraces, parsed_spells
             );
             break;
-        case ParsingType::RACES:
+        case ParsingType::RACE:
             parser = std::make_unique<CharacterRaceFileParser>(parsed_character_races);
             break;
-        case ParsingType::SUBRACES:
+        case ParsingType::SUBRACE:
             parser = std::make_unique<CharacterSubraceFileParser>(parsed_character_subraces, parsed_character_races);
             break;
-        case ParsingType::CLASSES:
+        case ParsingType::CLASS:
             parser = std::make_unique<CharacterClassFileParser>(parsed_character_classes);
             break;
-        case ParsingType::SUBCLASSES:
+        case ParsingType::SUBCLASS:
             parser =
                 std::make_unique<CharacterSubclassFileParser>(parsed_character_subclasses, parsed_character_classes);
             break;
-        case ParsingType::SPELLS:
+        case ParsingType::SPELL:
             parser = std::make_unique<SpellsFileParser>(parsed_spells);
             break;
         default:

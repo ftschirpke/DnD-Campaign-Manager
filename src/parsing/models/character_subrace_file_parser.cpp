@@ -13,18 +13,18 @@
 
 void dnd::CharacterSubraceFileParser::parse() {
     if (!json_to_parse.is_object()) {
-        throw json_format_error(ParsingType::SUBRACES, filename, "map/object");
+        throw json_format_error(ParsingType::SUBRACE, filename, "map/object");
     }
     character_subrace_name = json_to_parse.at("name").get<std::string>();
     if (character_subrace_name.size() == 0) {
-        throw invalid_attribute(ParsingType::SUBRACES, filename, "name", "cannot be \"\".");
+        throw invalid_attribute(ParsingType::SUBRACE, filename, "name", "cannot be \"\".");
     }
     race_name = json_to_parse.at("race").get<std::string>();
 
     try {
         parseFeatures();
     } catch (parsing_error& e) {
-        e.setParsingType(ParsingType::SUBRACES);
+        e.setParsingType(ParsingType::SUBRACE);
         throw e;
     }
 }
@@ -36,12 +36,12 @@ bool dnd::CharacterSubraceFileParser::validate() const {
     }
     if (races.find(race_name) == races.cend()) {
         throw invalid_attribute(
-            ParsingType::SUBRACES, filename, "race", "must exist. \"" + race_name + "\" does not exist."
+            ParsingType::SUBRACE, filename, "race", "must exist. \"" + race_name + "\" does not exist."
         );
     }
     if (!races.at(race_name)->has_subraces) {
         throw invalid_attribute(
-            ParsingType::SUBRACES, filename, "race", "must have subraces. \"" + race_name + "\" does not have subraces."
+            ParsingType::SUBRACE, filename, "race", "must have subraces. \"" + race_name + "\" does not have subraces."
         );
     }
     return true;

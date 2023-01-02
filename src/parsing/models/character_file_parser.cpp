@@ -17,12 +17,12 @@
 
 void dnd::CharacterFileParser::parse() {
     if (!json_to_parse.is_object()) {
-        throw json_format_error(ParsingType::CHARACTERS, filename, "map/object");
+        throw json_format_error(ParsingType::CHARACTER, filename, "map/object");
     }
     character_name = json_to_parse.at("name").get<std::string>();
     if (json_to_parse.at("base_ability_scores").size() != 6) {
         throw invalid_attribute(
-            ParsingType::CHARACTERS, filename, "base_ability_scores", "must have exactly 6 entries."
+            ParsingType::CHARACTER, filename, "base_ability_scores", "must have exactly 6 entries."
         );
     }
     base_ability_scores = json_to_parse.at("base_ability_scores").get<std::array<int, 6>>();
@@ -35,7 +35,7 @@ void dnd::CharacterFileParser::parse() {
         try {
             parseFeatures();
         } catch (parsing_error& e) {
-            e.setParsingType(ParsingType::CHARACTERS);
+            e.setParsingType(ParsingType::CHARACTER);
             throw e;
         }
     }
@@ -47,32 +47,32 @@ void dnd::CharacterFileParser::parseLevelAndXP() {
     if (has_level && has_xp) {
         level = json_to_parse.at("level").get<int>();
         if (level < 1 || level > 20) {
-            throw invalid_attribute(ParsingType::CHARACTERS, filename, "level", "must be between 1 and 20.");
+            throw invalid_attribute(ParsingType::CHARACTER, filename, "level", "must be between 1 and 20.");
         }
         xp = json_to_parse.at("xp").get<int>();
         if (xp < 0) {
-            throw invalid_attribute(ParsingType::CHARACTERS, filename, "xp", "must be positive.");
+            throw invalid_attribute(ParsingType::CHARACTER, filename, "xp", "must be positive.");
         }
         if (xp_for_level.at(level) > xp || (level < 20 && xp_for_level.at(level + 1) <= xp)) {
             throw invalid_attribute(
-                ParsingType::CHARACTERS, filename, "xp",
+                ParsingType::CHARACTER, filename, "xp",
                 "corresponsds to a different level than the level value provided."
             );
         }
     } else if (has_level) {
         level = json_to_parse.at("level").get<int>();
         if (level < 1 || level > 20) {
-            throw invalid_attribute(ParsingType::CHARACTERS, filename, "level", "must be between 1 and 20.");
+            throw invalid_attribute(ParsingType::CHARACTER, filename, "level", "must be between 1 and 20.");
         }
         xp = xp_for_level.at(level);
     } else if (has_xp) {
         xp = json_to_parse.at("xp").get<int>();
         if (xp < 0) {
-            throw invalid_attribute(ParsingType::CHARACTERS, filename, "xp", "must be positive.");
+            throw invalid_attribute(ParsingType::CHARACTER, filename, "xp", "must be positive.");
         }
         level = Character::levelForXP(xp);
     } else {
-        throw invalid_attribute(ParsingType::CHARACTERS, filename, "level/xp", "at least one must be provided.");
+        throw invalid_attribute(ParsingType::CHARACTER, filename, "level/xp", "at least one must be provided.");
     }
 }
 
@@ -81,7 +81,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
     try {
         class_ptr = character_classes.at(character_class_name);
     } catch (const std::out_of_range& e) {
-        throw invalid_attribute(ParsingType::CHARACTERS, filename, "class", "does not exist");
+        throw invalid_attribute(ParsingType::CHARACTER, filename, "class", "does not exist");
     }
 
     if (json_to_parse.contains("subclass")) {
@@ -89,7 +89,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
         try {
             subclass_ptr = character_subclasses.at(character_subclass_name);
         } catch (const std::out_of_range& e) {
-            throw invalid_attribute(ParsingType::CHARACTERS, filename, "subclass", "does not exist");
+            throw invalid_attribute(ParsingType::CHARACTER, filename, "subclass", "does not exist");
         }
         if (class_ptr->subclass_level > level) {
             std::cerr << "Warning: Character " << character_name << " has subclass although the class \""
@@ -98,7 +98,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
         }
     } else if (class_ptr->subclass_level <= level) {
         throw attribute_missing(
-            ParsingType::CHARACTERS, filename,
+            ParsingType::CHARACTER, filename,
             "beginning at level " + std::to_string(class_ptr->subclass_level) + " a subclass is required for "
                 + class_ptr->name + "s."
         );
@@ -108,13 +108,13 @@ void dnd::CharacterFileParser::parseClassAndRace() {
     try {
         race_ptr = character_races.at(character_race_name);
     } catch (const std::out_of_range& e) {
-        throw invalid_attribute(ParsingType::CHARACTERS, filename, "race", "does not exist");
+        throw invalid_attribute(ParsingType::CHARACTER, filename, "race", "does not exist");
     }
 
     if (json_to_parse.contains("subrace")) {
         if (!race_ptr->has_subraces) {
             throw invalid_attribute(
-                ParsingType::CHARACTERS, filename, "subrace",
+                ParsingType::CHARACTER, filename, "subrace",
                 "is invalid because the race \"" + race_ptr->name + "\" has no subraces."
             );
         }
@@ -122,12 +122,12 @@ void dnd::CharacterFileParser::parseClassAndRace() {
         try {
             subrace_ptr = character_subraces.at(character_subrace_name);
         } catch (const std::out_of_range& e) {
-            throw invalid_attribute(ParsingType::CHARACTERS, filename, "subrace", "does not exist");
+            throw invalid_attribute(ParsingType::CHARACTER, filename, "subrace", "does not exist");
         }
     } else if (race_ptr->has_subraces) {
         std::cout << "JSON:\n" << json_to_parse << std::endl;
         throw attribute_missing(
-            ParsingType::CHARACTERS, filename, "The race \"" + race_ptr->name + "\" requires a subrace selection."
+            ParsingType::CHARACTER, filename, "The race \"" + race_ptr->name + "\" requires a subrace selection."
         );
     }
 }
