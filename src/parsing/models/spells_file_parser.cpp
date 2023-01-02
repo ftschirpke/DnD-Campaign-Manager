@@ -3,14 +3,33 @@
 #include "spells_file_parser.hpp"
 
 #include <algorithm>
+#include <future>
 #include <memory>
+#include <mutex>
 #include <regex>
 #include <string>
 #include <unordered_map>
 
+#include <nlohmann/json.hpp>
+
 #include "models/spell.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
+
+
+void dnd::SpellsFileParser::createSpell(std::string_view spell_name, nlohmann::json* spell_json_ptr) {
+    DND_MEASURE_FUNCTION();
+    SpellParsingInfo info;
+    info.name = spell_name;
+    info.casting_time = spell_json_ptr->at("casting_time").get<std::string>();
+    info.range = spell_json_ptr->at("range").get<std::string>();
+    info.duration = spell_json_ptr->at("duration").get<std::string>();
+    info.description = spell_json_ptr->at("description").get<std::string>();
+    info.type = createSpellType(spell_json_ptr->at("level_type").get<std::string>());
+    info.components = createSpellComponents(spell_json_ptr->at("components").get<std::string>());
+    std::lock_guard<std::mutex> lock(spell_parsing_mutex);
+    spell_parsing_info.emplace_back(std::move(info));
+}
 
 void dnd::SpellsFileParser::parse() {
     DND_MEASURE_FUNCTION();
@@ -20,23 +39,26 @@ void dnd::SpellsFileParser::parse() {
     spells_in_file = json_to_parse.size();
     spell_parsing_info.reserve(spells_in_file);
 
+    std::vector<std::future<void>> futures;
     for (const auto& [spell_name, spell_json] : json_to_parse.items()) {
-        SpellParsingInfo info;
-        info.name = spell_name;
         if (spell_name.size() == 0) {
             throw invalid_attribute(ParsingType::SPELL, filename, "spell name", "cannot be \"\".");
         }
-        info.casting_time = spell_json.at("casting_time").get<std::string>();
-        info.range = spell_json.at("range").get<std::string>();
-        info.duration = spell_json.at("duration").get<std::string>();
-        info.description = spell_json.at("description").get<std::string>();
-        info.type = createSpellType(spell_json.at("level_type").get<std::string>());
-        info.components = createSpellComponents(spell_json.at("components").get<std::string>());
-        spell_parsing_info.emplace_back(std::move(info));
+        futures.emplace_back(
+            std::async(std::launch::async, &SpellsFileParser::createSpell, this, spell_name, &spell_json)
+        );
+    }
+    for (auto& future : futures) {
+        try {
+            future.get();
+        } catch (const parsing_error& e) {
+            throw e;
+        }
     }
 }
 
 dnd::SpellType dnd::SpellsFileParser::createSpellType(const std::string& spell_type_str) const {
+    DND_MEASURE_FUNCTION();
     const std::string magic_school_regex_str = "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|"
                                                "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)";
     const std::regex spell_type_regex(
@@ -68,6 +90,7 @@ dnd::SpellType dnd::SpellsFileParser::createSpellType(const std::string& spell_t
 }
 
 dnd::SpellComponents dnd::SpellsFileParser::createSpellComponents(const std::string& spell_components_str) const {
+    DND_MEASURE_FUNCTION();
     const std::regex spell_components_regex(
         "(V, S, M (\\((.*)\\))|V, S|V, M (\\((.*)\\))|S, M (\\((.*)\\))|V|S|M (\\((.*)\\)))"
     );
