@@ -74,37 +74,33 @@ dnd::Content dnd::ContentParser::parse(
     return content;
 }
 
+std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createParser(const dnd::ParsingType parsing_type) {
+    switch (parsing_type) {
+        case ParsingType::CHARACTER:
+            return std::make_unique<CharacterFileParser>(
+                parsed_characters, parsed_character_classes, parsed_character_subclasses, parsed_character_races,
+                parsed_character_subraces, parsed_spells
+            );
+        case ParsingType::RACE:
+            return std::make_unique<CharacterRaceFileParser>(parsed_character_races);
+        case ParsingType::SUBRACE:
+            return std::make_unique<CharacterSubraceFileParser>(parsed_character_subraces, parsed_character_races);
+        case ParsingType::CLASS:
+            return std::make_unique<CharacterClassFileParser>(parsed_character_classes);
+        case ParsingType::SUBCLASS:
+            return std::make_unique<CharacterSubclassFileParser>(parsed_character_subclasses, parsed_character_classes);
+        case ParsingType::SPELL:
+            return std::make_unique<SpellsFileParser>(parsed_spells);
+        default:
+            return nullptr;
+    }
+}
+
 void dnd::ContentParser::parseAllOfType(
     const dnd::ParsingType parsing_type, const std::vector<std::filesystem::directory_entry>& dirs_to_parse
 ) {
     DND_MEASURE_SCOPE(("dnd::ContentParser::parseAllOfType ( " + subdir_names.at(parsing_type) + " )").c_str());
-    std::unique_ptr<ContentFileParser> parser;
-    switch (parsing_type) {
-        case ParsingType::CHARACTER:
-            parser = std::make_unique<CharacterFileParser>(
-                parsed_characters, parsed_character_classes, parsed_character_subclasses, parsed_character_races,
-                parsed_character_subraces, parsed_spells
-            );
-            break;
-        case ParsingType::RACE:
-            parser = std::make_unique<CharacterRaceFileParser>(parsed_character_races);
-            break;
-        case ParsingType::SUBRACE:
-            parser = std::make_unique<CharacterSubraceFileParser>(parsed_character_subraces, parsed_character_races);
-            break;
-        case ParsingType::CLASS:
-            parser = std::make_unique<CharacterClassFileParser>(parsed_character_classes);
-            break;
-        case ParsingType::SUBCLASS:
-            parser =
-                std::make_unique<CharacterSubclassFileParser>(parsed_character_subclasses, parsed_character_classes);
-            break;
-        case ParsingType::SPELL:
-            parser = std::make_unique<SpellsFileParser>(parsed_spells);
-            break;
-        default:
-            return;
-    }
+    std::unique_ptr<ContentFileParser> parser = createParser(parsing_type);
     for (const auto& dir : dirs_to_parse) {
         std::filesystem::directory_entry type_subdir(dir.path() / subdir_names.at(parsing_type));
         if (!type_subdir.exists()) {

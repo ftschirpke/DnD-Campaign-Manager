@@ -14,6 +14,7 @@
 #include "models/character_class.hpp"
 #include "models/character_race.hpp"
 #include "models/spell.hpp"
+#include "parsing/models/character_file_parser.hpp"
 #include "parsing/parsing_types.hpp"
 
 namespace dnd {
@@ -28,8 +29,9 @@ private:
     std::unordered_map<std::string, std::shared_ptr<const CharacterRace>> parsed_character_races;
     std::unordered_map<std::string, std::shared_ptr<const CharacterSubrace>> parsed_character_subraces;
     void parseAllOfType(
-        const dnd::ParsingType parsing_type, const std::vector<std::filesystem::directory_entry>& dirs_to_parse
+        const ParsingType parsing_type, const std::vector<std::filesystem::directory_entry>& dirs_to_parse
     );
+    std::unique_ptr<ContentFileParser> createParser(const ParsingType parsing_type);
 public:
     Content parse(const std::filesystem::path& content_path, const std::string& campaign_dir_name);
 };
