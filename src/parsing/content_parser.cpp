@@ -107,13 +107,13 @@ std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createParser(const d
     }
 }
 
-void dnd::ContentParser::parseSingleOfType(
-    const dnd::ParsingType parsing_type, const std::filesystem::directory_entry* file
+void dnd::ContentParser::parseFileOfType(
+    const dnd::ParsingType parsing_type, const std::filesystem::directory_entry& file
 ) {
-    DND_MEASURE_SCOPE(("dnd::ContentParser::parseSingleOfType ( " + subdir_names.at(parsing_type) + " )").c_str());
+    DND_MEASURE_SCOPE(("dnd::ContentParser::parseFileOfType ( " + subdir_names.at(parsing_type) + " )").c_str());
     std::unique_ptr<ContentFileParser> parser = createParser(parsing_type);
 
-    if (!parser->openJSON(*file)) {
+    if (!parser->openJSON(file)) {
         return;
     }
 
@@ -121,10 +121,10 @@ void dnd::ContentParser::parseSingleOfType(
         parser->parse();
     } catch (const nlohmann::json::out_of_range& e) {
         const std::string stripped_what = stripJsonExceptionWhat(e.what());
-        throw attribute_missing(parsing_type, file->path(), stripped_what);
+        throw attribute_missing(parsing_type, file.path(), stripped_what);
     } catch (const nlohmann::json::type_error& e) {
         const std::string stripped_what = stripJsonExceptionWhat(e.what());
-        throw attribute_type_error(parsing_type, file->path(), stripped_what);
+        throw attribute_type_error(parsing_type, file.path(), stripped_what);
     }
 
     if (parser->validate()) {
@@ -155,9 +155,7 @@ void dnd::ContentParser::parseAllOfType(
         }
     }
     for (const auto& file : files) {
-        futures.emplace_back(
-            std::async(std::launch::async, &ContentParser::parseSingleOfType, this, parsing_type, &file)
-        );
+        futures.emplace_back(std::async(std::launch::async, &ContentParser::parseFileOfType, this, parsing_type, file));
     }
     for (auto& future : futures) {
         try {

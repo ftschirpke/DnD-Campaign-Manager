@@ -31,7 +31,7 @@ private:
     std::unordered_map<std::string, std::shared_ptr<const CharacterSubrace>> parsed_character_subraces;
     // mutexes used to control the access to each of the content type maps
     std::unordered_map<ParsingType, std::mutex> parsing_mutexes;
-    void parseSingleOfType(const ParsingType parsing_type, const std::filesystem::directory_entry* file);
+    void parseFileOfType(const ParsingType parsing_type, const std::filesystem::directory_entry& file);
     // parse all files containing a certain content type in the provided directories
     void parseAllOfType(
         const ParsingType parsing_type, const std::vector<std::filesystem::directory_entry>& dirs_to_parse
