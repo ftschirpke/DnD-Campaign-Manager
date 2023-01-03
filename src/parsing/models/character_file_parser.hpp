@@ -19,7 +19,7 @@ namespace dnd {
 
 class CharacterFileParser : public FeatureHolderFileParser {
 private:
-    std::unordered_map<std::string, std::shared_ptr<Character>>& results;
+    std::unordered_map<std::string, std::unique_ptr<Character>>& results;
     const std::unordered_map<std::string, std::shared_ptr<const Spell>>& spells;
     const std::unordered_map<std::string, std::shared_ptr<const CharacterClass>> character_classes;
     const std::unordered_map<std::string, std::shared_ptr<const CharacterSubclass>> character_subclasses;
@@ -37,7 +37,7 @@ private:
     void parseLevelAndXP();
 public:
     CharacterFileParser(
-        std::unordered_map<std::string, std::shared_ptr<Character>>& results,
+        std::unordered_map<std::string, std::unique_ptr<Character>>& results,
         const std::unordered_map<std::string, std::shared_ptr<const CharacterClass>>& character_classes,
         const std::unordered_map<std::string, std::shared_ptr<const CharacterSubclass>>& character_subclasses,
         const std::unordered_map<std::string, std::shared_ptr<const CharacterRace>>& character_races,
@@ -50,7 +50,7 @@ public:
 };
 
 inline CharacterFileParser::CharacterFileParser(
-    std::unordered_map<std::string, std::shared_ptr<Character>>& results,
+    std::unordered_map<std::string, std::unique_ptr<Character>>& results,
     const std::unordered_map<std::string, std::shared_ptr<const CharacterClass>>& character_classes,
     const std::unordered_map<std::string, std::shared_ptr<const CharacterSubclass>>& character_subclasses,
     const std::unordered_map<std::string, std::shared_ptr<const CharacterRace>>& character_races,

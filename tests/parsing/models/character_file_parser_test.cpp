@@ -18,7 +18,7 @@
 class TestCharacterFileParser : public dnd::CharacterFileParser {
 public:
     TestCharacterFileParser(
-        std::unordered_map<std::string, std::shared_ptr<dnd::Character>>& results,
+        std::unordered_map<std::string, std::unique_ptr<dnd::Character>>& results,
         const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterClass>>& character_classes,
         const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterSubclass>>& character_subclasses,
         const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterRace>>& character_races,
@@ -42,7 +42,7 @@ private:
     static const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterSubrace>> character_subraces;
     static const std::unordered_map<std::string, std::shared_ptr<const dnd::Spell>> spells;
 public:
-    std::unordered_map<std::string, std::shared_ptr<dnd::Character>> characters;
+    std::unordered_map<std::string, std::unique_ptr<dnd::Character>> characters;
     TestCharacterFileParser createParser();
 };
 
@@ -214,9 +214,7 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse logically wrong characte
     }
 }
 
-void testBasicValuesFromJSON(
-    const nlohmann::json& character_json, std::shared_ptr<const dnd::Character> character_ptr
-) {
+void testBasicValuesFromJSON(const nlohmann::json& character_json, const dnd::Character* const character_ptr) {
     REQUIRE(character_ptr->name == character_json.at("name").get<std::string>());
     REQUIRE(character_ptr->class_ptr->name == character_json.at("class"));
     if (character_json.contains("subclass")) {
@@ -262,7 +260,7 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse minimum characters") {
         {"xp", 170000},
         {"hit_dice_rolls", {8, 11, 7, 6, 12, 4, 5, 3, 3, 7, 9, 7, 4, 2, 10}},
     };
-    std::shared_ptr<const dnd::Character> character_ptr;
+    const dnd::Character* character_ptr;
     SECTION("characters with level only") {
         valid_low_level_bob.erase("xp");
         parser.setJSON(valid_low_level_bob);
@@ -270,7 +268,7 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse minimum characters") {
         REQUIRE(parser.validate());
         REQUIRE_NOTHROW(parser.saveResult());
         REQUIRE(setup.characters.size() == 1);
-        character_ptr = setup.characters.at(valid_low_level_bob.at("name"));
+        character_ptr = setup.characters.at(valid_low_level_bob.at("name")).get();
         testBasicValuesFromJSON(valid_low_level_bob, character_ptr);
         REQUIRE(character_ptr->getXP() == dnd::xp_for_level.at(valid_low_level_bob.at("level").get<int>()));
 
@@ -280,7 +278,7 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse minimum characters") {
         REQUIRE(parser.validate());
         REQUIRE_NOTHROW(parser.saveResult());
         REQUIRE(setup.characters.size() == 2);
-        character_ptr = setup.characters.at(valid_high_level_bob.at("name"));
+        character_ptr = setup.characters.at(valid_high_level_bob.at("name")).get();
         testBasicValuesFromJSON(valid_high_level_bob, character_ptr);
         REQUIRE(character_ptr->getXP() == dnd::xp_for_level.at(valid_high_level_bob.at("level").get<int>()));
     }
@@ -291,7 +289,7 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse minimum characters") {
         REQUIRE(parser.validate());
         REQUIRE_NOTHROW(parser.saveResult());
         REQUIRE(setup.characters.size() == 1);
-        character_ptr = setup.characters.at(valid_low_level_bob.at("name"));
+        character_ptr = setup.characters.at(valid_low_level_bob.at("name")).get();
         testBasicValuesFromJSON(valid_low_level_bob, character_ptr);
         REQUIRE(character_ptr->getLevel() == dnd::Character::levelForXP(valid_low_level_bob.at("xp").get<int>()));
 
@@ -301,7 +299,7 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse minimum characters") {
         REQUIRE(parser.validate());
         REQUIRE_NOTHROW(parser.saveResult());
         REQUIRE(setup.characters.size() == 2);
-        character_ptr = setup.characters.at(valid_high_level_bob.at("name"));
+        character_ptr = setup.characters.at(valid_high_level_bob.at("name")).get();
         testBasicValuesFromJSON(valid_high_level_bob, character_ptr);
         REQUIRE(character_ptr->getLevel() == dnd::Character::levelForXP(valid_high_level_bob.at("xp").get<int>()));
     }
@@ -311,7 +309,7 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse minimum characters") {
         REQUIRE(parser.validate());
         REQUIRE_NOTHROW(parser.saveResult());
         REQUIRE(setup.characters.size() == 1);
-        character_ptr = setup.characters.at(valid_low_level_bob.at("name"));
+        character_ptr = setup.characters.at(valid_low_level_bob.at("name")).get();
         testBasicValuesFromJSON(valid_low_level_bob, character_ptr);
 
         parser.setJSON(valid_high_level_bob);
@@ -319,7 +317,7 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse minimum characters") {
         REQUIRE(parser.validate());
         REQUIRE_NOTHROW(parser.saveResult());
         REQUIRE(setup.characters.size() == 2);
-        character_ptr = setup.characters.at(valid_high_level_bob.at("name"));
+        character_ptr = setup.characters.at(valid_high_level_bob.at("name")).get();
         testBasicValuesFromJSON(valid_high_level_bob, character_ptr);
     }
 }

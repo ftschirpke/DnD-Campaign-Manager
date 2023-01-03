@@ -24,23 +24,21 @@ class ContentParser {
 private:
     static const std::unordered_map<ParsingType, std::string> subdir_names;
     std::unordered_map<std::string, std::shared_ptr<const Spell>> parsed_spells;
-    std::unordered_map<std::string, std::shared_ptr<Character>> parsed_characters;
+    std::unordered_map<std::string, std::unique_ptr<Character>> parsed_characters;
     std::unordered_map<std::string, std::shared_ptr<const CharacterClass>> parsed_character_classes;
     std::unordered_map<std::string, std::shared_ptr<const CharacterSubclass>> parsed_character_subclasses;
     std::unordered_map<std::string, std::shared_ptr<const CharacterRace>> parsed_character_races;
     std::unordered_map<std::string, std::shared_ptr<const CharacterSubrace>> parsed_character_subraces;
     // mutexes used to control the access to each of the content type maps
     std::unordered_map<ParsingType, std::mutex> parsing_mutexes;
+    void resetParsed();
     void parseFileOfType(const ParsingType parsing_type, const std::filesystem::directory_entry& file);
-    // parse all files containing a certain content type in the provided directories
     void parseAllOfType(
         const ParsingType parsing_type, const std::vector<std::filesystem::directory_entry>& dirs_to_parse
     );
     std::unique_ptr<ContentFileParser> createParser(const ParsingType parsing_type);
 public:
-    // delete all the parsed content
-    void reset();
-    // parsing content from content_path for campaign cumulatively (use the reset function if you don't want that)
+    // parsing content from content_path for a certain campaign
     Content parse(const std::filesystem::path& content_path, const std::string& campaign_dir_name);
 };
 

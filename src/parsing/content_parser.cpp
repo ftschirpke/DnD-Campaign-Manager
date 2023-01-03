@@ -25,13 +25,19 @@
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
 
-void dnd::ContentParser::reset() {
-    parsed_spells = {};
-    parsed_characters = {};
-    parsed_character_classes = {};
-    parsed_character_subclasses = {};
-    parsed_character_races = {};
-    parsed_character_subraces = {};
+void dnd::ContentParser::resetParsed() {
+    std::unordered_map<std::string, std::shared_ptr<const Spell>> empty_spells_map;
+    std::unordered_map<std::string, std::unique_ptr<Character>> empty_characters_map;
+    std::unordered_map<std::string, std::shared_ptr<const CharacterClass>> empty_character_classes_map;
+    std::unordered_map<std::string, std::shared_ptr<const CharacterSubclass>> empty_character_subclasses_map;
+    std::unordered_map<std::string, std::shared_ptr<const CharacterRace>> empty_character_races_map;
+    std::unordered_map<std::string, std::shared_ptr<const CharacterSubrace>> empty_character_subraces_map;
+    parsed_spells.swap(empty_spells_map);
+    parsed_characters.swap(empty_characters_map);
+    parsed_character_classes.swap(empty_character_classes_map);
+    parsed_character_subclasses.swap(empty_character_subclasses_map);
+    parsed_character_races.swap(empty_character_races_map);
+    parsed_character_subraces.swap(empty_character_subraces_map);
 }
 
 dnd::Content dnd::ContentParser::parse(
@@ -76,12 +82,13 @@ dnd::Content dnd::ContentParser::parse(
 
     // TODO: change Content constructor
     Content content;
-    content.spells = parsed_spells;
-    content.characters = parsed_characters;
-    content.character_classes = parsed_character_classes;
-    content.character_subclasses = parsed_character_subclasses;
-    content.character_races = parsed_character_races;
-    content.character_subraces = parsed_character_subraces;
+    content.spells = std::move(parsed_spells);
+    content.characters = std::move(parsed_characters);
+    content.character_classes = std::move(parsed_character_classes);
+    content.character_subclasses = std::move(parsed_character_subclasses);
+    content.character_races = std::move(parsed_character_races);
+    content.character_subraces = std::move(parsed_character_subraces);
+    resetParsed();
     return content;
 }
 
