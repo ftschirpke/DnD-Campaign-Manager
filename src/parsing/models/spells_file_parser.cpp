@@ -59,12 +59,13 @@ void dnd::SpellsFileParser::parse() {
 
 dnd::SpellType dnd::SpellsFileParser::createSpellType(const std::string& spell_type_str) const {
     DND_MEASURE_FUNCTION();
-    const std::string magic_school_regex_str = "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|"
-                                               "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)";
-    const std::regex spell_type_regex(
-        "((1st|2nd|3rd|[4-9]th)-level " + magic_school_regex_str + "( \\(ritual\\))?)|(" + magic_school_regex_str
-        + " cantrip)"
-    );
+    const std::regex spell_type_regex("((1st|2nd|3rd|[4-9]th)-level "
+                                      "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|"
+                                      "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)"
+                                      "( \\(ritual\\))?)|("
+                                      "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|"
+                                      "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)"
+                                      " cantrip)");
     if (!std::regex_match(spell_type_str, spell_type_regex)) {
         // TODO: think about how to reintroduce spell name into error message
         throw attribute_type_error(filename, "invalid spell type format: \"" + spell_type_str + "\"");
