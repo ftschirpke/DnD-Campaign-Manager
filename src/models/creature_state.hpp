@@ -45,7 +45,7 @@ public:
         const std::unordered_map<std::string, int>& new_constants,
         const std::unordered_map<std::string, int>& new_initial_attributes
     );
-    void addFeatureHolder(std::shared_ptr<const FeatureHolder> feature_holder_ptr);
+    void addFeatureHolder(const FeatureHolder* const feature_holder_ptr);
     void calculate();
     static int modifier(int ability_score);
     static bool isAbility(const std::string& attribute_name);

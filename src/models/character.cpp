@@ -50,6 +50,7 @@ const std::unordered_map<std::string, int> dnd::Character::getInitialAttributeVa
 void dnd::Character::determineState() {
     state.reset(getConstants(), getInitialAttributeValues());
 
+    state.addFeatureHolder(this);
     state.addFeatureHolder(class_ptr);
     state.addFeatureHolder(subclass_ptr);
     state.addFeatureHolder(race_ptr);

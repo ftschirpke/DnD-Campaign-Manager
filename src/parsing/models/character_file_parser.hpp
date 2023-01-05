@@ -28,10 +28,10 @@ private:
     std::string character_name;
     std::array<int, 6> base_ability_scores;
     std::vector<int> hit_dice_rolls;
-    std::shared_ptr<const CharacterClass> class_ptr;
-    std::shared_ptr<const CharacterSubclass> subclass_ptr;
-    std::shared_ptr<const CharacterRace> race_ptr;
-    std::shared_ptr<const CharacterSubrace> subrace_ptr;
+    const CharacterClass* class_ptr;
+    const CharacterSubclass* subclass_ptr;
+    const CharacterRace* race_ptr;
+    const CharacterSubrace* subrace_ptr;
     int level, xp;
     void parseClassAndRace();
     void parseLevelAndXP();

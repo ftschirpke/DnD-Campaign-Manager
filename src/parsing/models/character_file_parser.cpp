@@ -82,7 +82,7 @@ void dnd::CharacterFileParser::parseLevelAndXP() {
 void dnd::CharacterFileParser::parseClassAndRace() {
     const std::string character_class_name = json_to_parse.at("class").get<std::string>();
     try {
-        class_ptr = character_classes.at(character_class_name);
+        class_ptr = character_classes.at(character_class_name).get();
     } catch (const std::out_of_range& e) {
         throw invalid_attribute(ParsingType::CHARACTER, filename, "class", "does not exist");
     }
@@ -90,7 +90,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
     if (json_to_parse.contains("subclass")) {
         const std::string character_subclass_name = json_to_parse.at("subclass").get<std::string>();
         try {
-            subclass_ptr = character_subclasses.at(character_subclass_name);
+            subclass_ptr = character_subclasses.at(character_subclass_name).get();
         } catch (const std::out_of_range& e) {
             throw invalid_attribute(ParsingType::CHARACTER, filename, "subclass", "does not exist");
         }
@@ -109,7 +109,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
 
     const std::string character_race_name = json_to_parse.at("race").get<std::string>();
     try {
-        race_ptr = character_races.at(character_race_name);
+        race_ptr = character_races.at(character_race_name).get();
     } catch (const std::out_of_range& e) {
         throw invalid_attribute(ParsingType::CHARACTER, filename, "race", "does not exist");
     }
@@ -123,7 +123,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
         }
         const std::string character_subrace_name = json_to_parse.at("subrace").get<std::string>();
         try {
-            subrace_ptr = character_subraces.at(character_subrace_name);
+            subrace_ptr = character_subraces.at(character_subrace_name).get();
         } catch (const std::out_of_range& e) {
             throw invalid_attribute(ParsingType::CHARACTER, filename, "subrace", "does not exist");
         }
