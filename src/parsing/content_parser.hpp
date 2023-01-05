@@ -23,7 +23,7 @@ namespace dnd {
 class ContentParser {
 private:
     static const std::unordered_map<ParsingType, std::string> subdir_names;
-    std::unordered_map<std::string, std::shared_ptr<const Spell>> parsed_spells;
+    std::unordered_map<std::string, const Spell> parsed_spells;
     std::unordered_map<std::string, std::unique_ptr<Character>> parsed_characters;
     std::unordered_map<std::string, std::shared_ptr<const CharacterClass>> parsed_character_classes;
     std::unordered_map<std::string, std::shared_ptr<const CharacterSubclass>> parsed_character_subclasses;

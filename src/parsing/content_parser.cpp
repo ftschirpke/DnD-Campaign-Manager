@@ -26,18 +26,12 @@
 #include "parsing/parsing_types.hpp"
 
 void dnd::ContentParser::resetParsed() {
-    std::unordered_map<std::string, std::shared_ptr<const Spell>> empty_spells_map;
-    std::unordered_map<std::string, std::unique_ptr<Character>> empty_characters_map;
-    std::unordered_map<std::string, std::shared_ptr<const CharacterClass>> empty_character_classes_map;
-    std::unordered_map<std::string, std::shared_ptr<const CharacterSubclass>> empty_character_subclasses_map;
-    std::unordered_map<std::string, std::shared_ptr<const CharacterRace>> empty_character_races_map;
-    std::unordered_map<std::string, std::shared_ptr<const CharacterSubrace>> empty_character_subraces_map;
-    parsed_spells.swap(empty_spells_map);
-    parsed_characters.swap(empty_characters_map);
-    parsed_character_classes.swap(empty_character_classes_map);
-    parsed_character_subclasses.swap(empty_character_subclasses_map);
-    parsed_character_races.swap(empty_character_races_map);
-    parsed_character_subraces.swap(empty_character_subraces_map);
+    parsed_characters.clear();
+    parsed_character_classes.clear();
+    parsed_character_subclasses.clear();
+    parsed_character_races.clear();
+    parsed_character_subraces.clear();
+    parsed_spells.clear();
 }
 
 dnd::Content dnd::ContentParser::parse(

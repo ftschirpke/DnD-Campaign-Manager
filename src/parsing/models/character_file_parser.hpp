@@ -20,11 +20,11 @@ namespace dnd {
 class CharacterFileParser : public FeatureHolderFileParser {
 private:
     std::unordered_map<std::string, std::unique_ptr<Character>>& results;
-    const std::unordered_map<std::string, std::shared_ptr<const Spell>>& spells;
     const std::unordered_map<std::string, std::shared_ptr<const CharacterClass>> character_classes;
     const std::unordered_map<std::string, std::shared_ptr<const CharacterSubclass>> character_subclasses;
     const std::unordered_map<std::string, std::shared_ptr<const CharacterRace>> character_races;
     const std::unordered_map<std::string, std::shared_ptr<const CharacterSubrace>> character_subraces;
+    const std::unordered_map<std::string, const Spell>& spells;
     std::string character_name;
     std::array<int, 6> base_ability_scores;
     std::vector<int> hit_dice_rolls;
@@ -42,7 +42,7 @@ public:
         const std::unordered_map<std::string, std::shared_ptr<const CharacterSubclass>>& character_subclasses,
         const std::unordered_map<std::string, std::shared_ptr<const CharacterRace>>& character_races,
         const std::unordered_map<std::string, std::shared_ptr<const CharacterSubrace>>& character_subraces,
-        const std::unordered_map<std::string, std::shared_ptr<const Spell>>& spells
+        const std::unordered_map<std::string, const Spell>& spells
     );
     void parse() override;
     bool validate() const override;
@@ -55,7 +55,7 @@ inline CharacterFileParser::CharacterFileParser(
     const std::unordered_map<std::string, std::shared_ptr<const CharacterSubclass>>& character_subclasses,
     const std::unordered_map<std::string, std::shared_ptr<const CharacterRace>>& character_races,
     const std::unordered_map<std::string, std::shared_ptr<const CharacterSubrace>>& character_subraces,
-    const std::unordered_map<std::string, std::shared_ptr<const Spell>>& spells
+    const std::unordered_map<std::string, const Spell>& spells
 )
     : results(results), character_classes(character_classes), character_subclasses(character_subclasses),
       character_races(character_races), character_subraces(character_subraces), spells(spells) {}

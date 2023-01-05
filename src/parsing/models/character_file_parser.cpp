@@ -34,6 +34,8 @@ void dnd::CharacterFileParser::parse() {
     parseLevelAndXP();
     parseClassAndRace();
 
+    // TODO: parse spells
+
     if (json_to_parse.contains("features")) {
         try {
             parseFeatures();

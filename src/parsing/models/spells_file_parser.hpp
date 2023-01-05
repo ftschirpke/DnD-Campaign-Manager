@@ -23,7 +23,7 @@ struct SpellParsingInfo {
 
 class SpellsFileParser : public ContentFileParser {
 private:
-    std::unordered_map<std::string, std::shared_ptr<const Spell>>& results;
+    std::unordered_map<std::string, const Spell>& results;
     int spells_in_file;
     std::vector<SpellParsingInfo> spell_parsing_info;
     mutable std::vector<bool> valid;
@@ -33,14 +33,13 @@ protected:
     SpellType createSpellType(const std::string& spell_type_str) const;
     SpellComponents createSpellComponents(const std::string& spell_components_str) const;
 public:
-    SpellsFileParser(std::unordered_map<std::string, std::shared_ptr<const Spell>>& results);
+    SpellsFileParser(std::unordered_map<std::string, const Spell>& results);
     void parse() override;
     bool validate() const override;
     void saveResult() override;
 };
 
-inline SpellsFileParser::SpellsFileParser(std::unordered_map<std::string, std::shared_ptr<const Spell>>& results)
-    : results(results) {}
+inline SpellsFileParser::SpellsFileParser(std::unordered_map<std::string, const Spell>& results) : results(results) {}
 
 } // namespace dnd
 

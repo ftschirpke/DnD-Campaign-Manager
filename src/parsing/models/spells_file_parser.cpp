@@ -141,10 +141,13 @@ void dnd::SpellsFileParser::saveResult() {
     for (int i = 0; i < spells_in_file; ++i) {
         if (valid[i]) {
             SpellParsingInfo& info = spell_parsing_info[i];
-            auto spell = std::make_unique<Spell>(
-                info.name, info.type, info.casting_time, info.range, info.components, info.duration, info.description
+            results.emplace(
+                std::piecewise_construct, std::forward_as_tuple(info.name),
+                std::forward_as_tuple(
+                    info.name, info.type, info.casting_time, info.range, info.components, info.duration,
+                    info.description
+                )
             );
-            results.emplace(info.name, std::move(spell));
         }
     }
 }
