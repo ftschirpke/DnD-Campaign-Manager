@@ -8,6 +8,10 @@
 
 namespace dnd {
 
+// parse a simple, conditional attribute from a json into the output variable
+template <typename T>
+void parseConditional(const nlohmann::json& json, const char* attribute_name, T& output);
+
 class ContentFileParser {
 protected:
     nlohmann::json json_to_parse;
@@ -18,6 +22,13 @@ public:
     virtual bool validate() const = 0;
     virtual void saveResult() = 0;
 };
+
+template <typename T>
+inline void parseConditional(const nlohmann::json& json_to_parse, const char* attribute_name, T& output) {
+    if (json_to_parse.contains(attribute_name)) {
+        output = json_to_parse.at(attribute_name).get<T>();
+    }
+}
 
 } // namespace dnd
 

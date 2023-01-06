@@ -4,6 +4,7 @@ IndentWidth: 4
 Language: Cpp
 AccessModifierOffset: -4
 AlignAfterOpenBracket: BlockIndent
+AlwaysBreakTemplateDeclarations: Yes
 BreakBeforeBinaryOperators: NonAssignment
 BreakBeforeBraces: Attach
 BreakConstructorInitializers: BeforeColon

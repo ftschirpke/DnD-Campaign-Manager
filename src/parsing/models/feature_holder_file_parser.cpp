@@ -39,10 +39,24 @@ dnd::Feature dnd::FeatureHolderFileParser::createFeature(
     // TODO: change feature constructor?
     Feature feature(feature_name, feature_description);
 
-    feature.subclass = false;
-    if (feature_json.contains("subclass")) {
-        feature.subclass = feature_json.at("subclass").get<bool>();
-    }
+    parseConditional(feature_json, "subclass", feature.subclass);
+
+    parseConditional(feature_json, "actions", feature.actions.actions);
+    parseConditional(feature_json, "bonus_actions", feature.actions.bonus_actions);
+    parseConditional(feature_json, "reactions", feature.actions.reactions);
+
+    parseConditional(feature_json, "damage_resistances", feature.rivs.damage_resistances);
+    parseConditional(feature_json, "damage_immunities", feature.rivs.damage_immunities);
+    parseConditional(feature_json, "damage_vulnerabilities", feature.rivs.damage_vulnerabilities);
+    parseConditional(feature_json, "condition_immunities", feature.rivs.condition_immunities);
+
+    parseConditional(feature_json, "armor_proficiencies", feature.proficiencies.armor);
+    parseConditional(feature_json, "weapon_proficiencies", feature.proficiencies.weapons);
+    parseConditional(feature_json, "tool_proficiencies", feature.proficiencies.tools);
+    parseConditional(feature_json, "skill_proficiencies", feature.proficiencies.skills);
+    parseConditional(feature_json, "savingthrow_proficiencies", feature.proficiencies.saving_throws);
+    parseConditional(feature_json, "languages", feature.proficiencies.languages);
+    parseConditional(feature_json, "senses", feature.proficiencies.senses);
 
     if (feature_json.contains("activation") && feature_json.contains("activations")) {
         throw invalid_attribute(
