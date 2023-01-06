@@ -32,7 +32,7 @@ class CreatureState {
 public:
     std::unordered_map<std::string, int> constants;
     std::unordered_map<std::string, int> attributes;
-    std::vector<std::shared_ptr<const Feature>> active_features;
+    std::vector<const Feature*> active_features;
     ActionHolder actions;
     ProficiencyHolder proficiencies;
     RIVHolder rivs;

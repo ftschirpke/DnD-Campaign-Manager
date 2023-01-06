@@ -51,7 +51,7 @@ void dnd::CreatureState::addFeatureHolder(const FeatureHolder* const feature_hol
     }
     for (const auto& feature_ptr : feature_holder_ptr->features) {
         if (feature_ptr->isActive(attributes, constants)) {
-            active_features.push_back(feature_ptr);
+            active_features.push_back(feature_ptr.get());
         }
     }
 }

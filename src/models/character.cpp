@@ -59,14 +59,27 @@ void dnd::Character::determineState() {
     state.calculate();
 }
 
-std::vector<std::shared_ptr<const dnd::Feature>> dnd::Character::allFeatures() const {
-    std::vector<std::shared_ptr<const dnd::Feature>> all_features = class_ptr->features;
-    if (subclass_ptr != nullptr) {
-        all_features.insert(all_features.end(), subclass_ptr->features.cbegin(), subclass_ptr->features.cend());
+std::vector<const dnd::Feature*> dnd::Character::allFeatures() const {
+    std::vector<const Feature*> all_features;
+
+    for (auto it = class_ptr->features.cbegin(); it != class_ptr->features.cend(); ++it) {
+        all_features.push_back(it->get());
     }
-    all_features.insert(all_features.end(), race_ptr->features.cbegin(), race_ptr->features.cend());
+
+    if (subclass_ptr != nullptr) {
+        for (auto it = subclass_ptr->features.cbegin(); it != subclass_ptr->features.cend(); ++it) {
+            all_features.push_back(it->get());
+        }
+    }
+
+    for (auto it = race_ptr->features.cbegin(); it != race_ptr->features.cend(); ++it) {
+        all_features.push_back(it->get());
+    }
+
     if (subrace_ptr != nullptr) {
-        all_features.insert(all_features.end(), subrace_ptr->features.cbegin(), subrace_ptr->features.cend());
+        for (auto it = subrace_ptr->features.cbegin(); it != subrace_ptr->features.cend(); ++it) {
+            all_features.push_back(it->get());
+        }
     }
     return all_features;
 }
