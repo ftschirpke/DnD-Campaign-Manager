@@ -35,6 +35,10 @@ public:
 };
 
 class SetupCharacterParserTest {
+public:
+    std::unordered_map<std::string, dnd::Character> characters;
+    SetupCharacterParserTest();
+    TestCharacterFileParser createParser();
 private:
     static bool values_set;
     static std::unordered_map<std::string, const dnd::CharacterClass> character_classes;
@@ -47,10 +51,6 @@ private:
     static void setRaces();
     static void setSubraces();
     static void setSpells();
-public:
-    std::unordered_map<std::string, dnd::Character> characters;
-    SetupCharacterParserTest();
-    TestCharacterFileParser createParser();
 };
 
 bool SetupCharacterParserTest::values_set = false;

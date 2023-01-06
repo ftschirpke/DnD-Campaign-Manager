@@ -13,10 +13,6 @@
 namespace dnd {
 
 class CharacterSubclassFileParser : public FeatureHolderFileParser {
-private:
-    std::unordered_map<std::string, const CharacterSubclass>& results;
-    const std::unordered_map<std::string, const CharacterClass>& classes;
-    std::string character_subclass_name, class_name;
 public:
     CharacterSubclassFileParser(
         std::unordered_map<std::string, const CharacterSubclass>& results,
@@ -25,6 +21,10 @@ public:
     void parse() override;
     bool validate() const override;
     void saveResult() override;
+private:
+    std::unordered_map<std::string, const CharacterSubclass>& results;
+    const std::unordered_map<std::string, const CharacterClass>& classes;
+    std::string character_subclass_name, class_name;
 };
 
 inline CharacterSubclassFileParser::CharacterSubclassFileParser(

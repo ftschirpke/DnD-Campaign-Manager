@@ -21,6 +21,9 @@
 namespace dnd {
 
 class ContentParser {
+public:
+    // parsing content from content_path for a certain campaign
+    Content parse(const std::filesystem::path& content_path, const std::string& campaign_dir_name);
 private:
     static const std::unordered_map<ParsingType, std::string> subdir_names;
     std::unordered_map<std::string, Character> parsed_characters;
@@ -37,9 +40,6 @@ private:
         const ParsingType parsing_type, const std::vector<std::filesystem::directory_entry>& dirs_to_parse
     );
     std::unique_ptr<ContentFileParser> createParser(const ParsingType parsing_type);
-public:
-    // parsing content from content_path for a certain campaign
-    Content parse(const std::filesystem::path& content_path, const std::string& campaign_dir_name);
 };
 
 inline const std::unordered_map<ParsingType, std::string> ContentParser::subdir_names = {

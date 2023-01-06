@@ -71,33 +71,33 @@ public:
 };
 
 class IntNumEffect : public Effect {
-protected:
-    std::unordered_map<std::string, int (*)(int, int)>::mapped_type op;
 public:
     const int value;
     IntNumEffect(const std::string& affected_attribute, const std::string& op_name, int value);
     virtual void applyTo(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const;
+protected:
+    std::unordered_map<std::string, int (*)(int, int)>::mapped_type op;
 };
 
 class FloatNumEffect : public Effect {
-protected:
-    std::unordered_map<std::string, int (*)(int, float)>::mapped_type op;
 public:
     const float value;
     FloatNumEffect(const std::string& affected_attribute, const std::string& op_name, float value);
     virtual void applyTo(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const;
+protected:
+    std::unordered_map<std::string, int (*)(int, float)>::mapped_type op;
 };
 
 class IdentifierEffect : public Effect {
-protected:
-    std::unordered_map<std::string, int (*)(int, int)>::mapped_type op;
 public:
     const std::string identifier;
     IdentifierEffect(const std::string& affected_attribute, const std::string& op_name, const std::string& identifier);
+protected:
+    std::unordered_map<std::string, int (*)(int, int)>::mapped_type op;
 };
 
 class OtherAttributeEffect : public IdentifierEffect {

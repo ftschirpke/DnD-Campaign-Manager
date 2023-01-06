@@ -26,29 +26,29 @@ struct MeasuringSession {
 
 // dirty way of saving threading information into json file that you can view in https://ui.perfetto.dev/
 class Measurer {
-private:
-    MeasuringSession* session;
-    std::chrono::high_resolution_clock::time_point session_start_time;
-    std::ofstream output_stream;
-    static std::mutex write_profile_mutex;
 public:
     Measurer();
     void beginSession(const std::string& name, const std::string& filepath);
     void endSession();
     void writeProfile(const TimerResult& result);
     static Measurer& get();
+private:
+    MeasuringSession* session;
+    std::chrono::high_resolution_clock::time_point session_start_time;
+    std::ofstream output_stream;
+    static std::mutex write_profile_mutex;
 };
 
 // a dirty instrumenation scope timer
 class Timer {
-private:
-    const std::string name;
-    bool stopped;
-    std::chrono::high_resolution_clock::time_point start_time;
 public:
     Timer(const char* name);
     virtual ~Timer();
     void stop();
+private:
+    const std::string name;
+    bool stopped;
+    std::chrono::high_resolution_clock::time_point start_time;
 };
 
 inline std::mutex Measurer::write_profile_mutex;

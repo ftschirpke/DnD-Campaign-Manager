@@ -13,14 +13,14 @@ template <typename T>
 void parseConditional(const nlohmann::json& json, const char* attribute_name, T& output);
 
 class ContentFileParser {
-protected:
-    nlohmann::json json_to_parse;
-    std::string filename;
 public:
     virtual bool openJSON(const std::filesystem::directory_entry& filepath);
     virtual void parse() = 0;
     virtual bool validate() const = 0;
     virtual void saveResult() = 0;
+protected:
+    nlohmann::json json_to_parse;
+    std::string filename;
 };
 
 template <typename T>

@@ -14,14 +14,14 @@
 namespace dnd {
 
 class FeatureHolderFileParser : public ContentFileParser {
+public:
+    FeatureHolderFileParser() = default;
 protected:
     std::vector<Feature> features;
     void parseAndAddEffect(const std::string& effect_str, Feature& feature) const;
     void parseAndAddActivation(const std::string& activation_str, Feature& feature) const;
     Feature createFeature(const std::string& feature_name, const nlohmann::json& feature_json) const;
     virtual void parseFeatures();
-public:
-    FeatureHolderFileParser() = default;
 };
 
 } // namespace dnd

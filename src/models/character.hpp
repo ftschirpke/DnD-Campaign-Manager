@@ -21,13 +21,6 @@ const std::map<int, int> xp_for_level = {
 };
 
 class Character : public Creature {
-private:
-    int level, xp;
-    std::vector<int> hit_dice_rolls;
-    void updateLevel();
-protected:
-    virtual const std::unordered_map<std::string, int> getConstants() const;
-    virtual const std::unordered_map<std::string, int> getInitialAttributeValues() const;
 public:
     // TODO: should these pointers be non-const?
     const CharacterClass* class_ptr;
@@ -52,6 +45,13 @@ public:
     virtual void determineState();
     const std::vector<const Feature*>& activeFeatures() const;
     std::vector<const Feature*> allFeatures() const;
+protected:
+    virtual const std::unordered_map<std::string, int> getConstants() const;
+    virtual const std::unordered_map<std::string, int> getInitialAttributeValues() const;
+private:
+    int level, xp;
+    std::vector<int> hit_dice_rolls;
+    void updateLevel();
 };
 
 inline Character::Character(const std::string& name, const std::array<int, 6>& base_ability_scores)

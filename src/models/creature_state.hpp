@@ -26,9 +26,6 @@ const std::map<std::string, std::string> skills = {
 };
 
 class CreatureState {
-    void applyAbilityScoreEffects();
-    void applyNormalEffects();
-    void determineModifiers();
 public:
     std::unordered_map<std::string, int> constants;
     std::unordered_map<std::string, int> attributes;
@@ -49,6 +46,10 @@ public:
     void calculate();
     static int modifier(int ability_score);
     static bool isAbility(const std::string& attribute_name);
+private:
+    void applyAbilityScoreEffects();
+    void applyNormalEffects();
+    void determineModifiers();
 };
 
 inline CreatureState::CreatureState(
