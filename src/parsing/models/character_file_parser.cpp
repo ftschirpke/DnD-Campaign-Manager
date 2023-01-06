@@ -148,12 +148,13 @@ bool dnd::CharacterFileParser::validate() const {
 void dnd::CharacterFileParser::saveResult() {
     // TODO: change Character constructor
     results.emplace(
-        character_name, std::make_unique<Character>(character_name, base_ability_scores, level, xp, hit_dice_rolls)
+        std::piecewise_construct, std::forward_as_tuple(character_name),
+        std::forward_as_tuple(character_name, base_ability_scores, level, xp, hit_dice_rolls)
     );
-    Character* character_ptr = results.at(character_name).get();
-    character_ptr->features = features;
-    character_ptr->race_ptr = race_ptr;
-    character_ptr->subrace_ptr = subrace_ptr;
-    character_ptr->class_ptr = class_ptr;
-    character_ptr->subclass_ptr = subclass_ptr;
+    Character& character = results.at(character_name);
+    character.features = features;
+    character.race_ptr = race_ptr;
+    character.subrace_ptr = subrace_ptr;
+    character.class_ptr = class_ptr;
+    character.subclass_ptr = subclass_ptr;
 }
