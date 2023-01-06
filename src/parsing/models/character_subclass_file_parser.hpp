@@ -14,14 +14,13 @@ namespace dnd {
 
 class CharacterSubclassFileParser : public FeatureHolderFileParser {
 private:
-    std::unordered_map<std::string, std::shared_ptr<const CharacterSubclass>>& results;
-    const std::unordered_map<std::string, std::shared_ptr<const CharacterClass>>& classes;
+    std::unordered_map<std::string, const CharacterSubclass>& results;
+    const std::unordered_map<std::string, const CharacterClass>& classes;
     std::string character_subclass_name, class_name;
-    std::vector<std::shared_ptr<const Feature>> features;
 public:
     CharacterSubclassFileParser(
-        std::unordered_map<std::string, std::shared_ptr<const CharacterSubclass>>& results,
-        const std::unordered_map<std::string, std::shared_ptr<const CharacterClass>>& classes
+        std::unordered_map<std::string, const CharacterSubclass>& results,
+        const std::unordered_map<std::string, const CharacterClass>& classes
     );
     void parse() override;
     bool validate() const override;
@@ -29,10 +28,10 @@ public:
 };
 
 inline CharacterSubclassFileParser::CharacterSubclassFileParser(
-    std::unordered_map<std::string, std::shared_ptr<const CharacterSubclass>>& results,
-    const std::unordered_map<std::string, std::shared_ptr<const CharacterClass>>& classes
+    std::unordered_map<std::string, const CharacterSubclass>& results,
+    const std::unordered_map<std::string, const CharacterClass>& classes
 )
-    : results(results), classes(classes) {}
+    : FeatureHolderFileParser(), results(results), classes(classes) {}
 
 } // namespace dnd
 

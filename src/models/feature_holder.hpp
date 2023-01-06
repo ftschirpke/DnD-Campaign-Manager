@@ -12,7 +12,7 @@ class FeatureHolder {
 public:
     const std::string name;
     // TODO: should this really be public AND non-const?
-    std::vector<std::shared_ptr<const Feature>> features;
+    std::vector<Feature> features;
     FeatureHolder(const std::string& name);
 };
 

@@ -34,6 +34,8 @@ void dnd::CharacterFileParser::parse() {
     parseLevelAndXP();
     parseClassAndRace();
 
+    // TODO: parse spells
+
     if (json_to_parse.contains("features")) {
         try {
             parseFeatures();
@@ -82,17 +84,21 @@ void dnd::CharacterFileParser::parseLevelAndXP() {
 void dnd::CharacterFileParser::parseClassAndRace() {
     const std::string character_class_name = json_to_parse.at("class").get<std::string>();
     try {
-        class_ptr = character_classes.at(character_class_name);
+        class_ptr = &character_classes.at(character_class_name);
     } catch (const std::out_of_range& e) {
-        throw invalid_attribute(ParsingType::CHARACTER, filename, "class", "does not exist");
+        throw invalid_attribute(
+            ParsingType::CHARACTER, filename, "class", '\"' + character_class_name + "\" does not exist"
+        );
     }
 
     if (json_to_parse.contains("subclass")) {
         const std::string character_subclass_name = json_to_parse.at("subclass").get<std::string>();
         try {
-            subclass_ptr = character_subclasses.at(character_subclass_name);
+            subclass_ptr = &character_subclasses.at(character_subclass_name);
         } catch (const std::out_of_range& e) {
-            throw invalid_attribute(ParsingType::CHARACTER, filename, "subclass", "does not exist");
+            throw invalid_attribute(
+                ParsingType::CHARACTER, filename, "subclass", '\"' + character_subclass_name + "\" does not exist"
+            );
         }
         if (class_ptr->subclass_level > level) {
             std::cerr << "Warning: Character " << character_name << " has subclass although the class \""
@@ -109,9 +115,11 @@ void dnd::CharacterFileParser::parseClassAndRace() {
 
     const std::string character_race_name = json_to_parse.at("race").get<std::string>();
     try {
-        race_ptr = character_races.at(character_race_name);
+        race_ptr = &character_races.at(character_race_name);
     } catch (const std::out_of_range& e) {
-        throw invalid_attribute(ParsingType::CHARACTER, filename, "race", "does not exist");
+        throw invalid_attribute(
+            ParsingType::CHARACTER, filename, "race", '\"' + character_race_name + "\" does not exist"
+        );
     }
 
     if (json_to_parse.contains("subrace")) {
@@ -123,9 +131,11 @@ void dnd::CharacterFileParser::parseClassAndRace() {
         }
         const std::string character_subrace_name = json_to_parse.at("subrace").get<std::string>();
         try {
-            subrace_ptr = character_subraces.at(character_subrace_name);
+            subrace_ptr = &character_subraces.at(character_subrace_name);
         } catch (const std::out_of_range& e) {
-            throw invalid_attribute(ParsingType::CHARACTER, filename, "subrace", "does not exist");
+            throw invalid_attribute(
+                ParsingType::CHARACTER, filename, "subrace", '\"' + character_subrace_name + "\" does not exist"
+            );
         }
     } else if (race_ptr->has_subraces) {
         std::cout << "JSON:\n" << json_to_parse << std::endl;
@@ -145,11 +155,14 @@ bool dnd::CharacterFileParser::validate() const {
 
 void dnd::CharacterFileParser::saveResult() {
     // TODO: change Character constructor
-    auto character = std::make_shared<Character>(character_name, base_ability_scores, level, xp, hit_dice_rolls);
-    character->features = features;
-    character->race_ptr = race_ptr;
-    character->subrace_ptr = subrace_ptr;
-    character->class_ptr = class_ptr;
-    character->subclass_ptr = subclass_ptr;
-    results.emplace(character_name, std::move(character));
+    results.emplace(
+        std::piecewise_construct, std::forward_as_tuple(character_name),
+        std::forward_as_tuple(character_name, base_ability_scores, level, xp, hit_dice_rolls)
+    );
+    Character& character = results.at(character_name);
+    character.features = std::move(features);
+    character.race_ptr = race_ptr;
+    character.subrace_ptr = subrace_ptr;
+    character.class_ptr = class_ptr;
+    character.subclass_ptr = subclass_ptr;
 }

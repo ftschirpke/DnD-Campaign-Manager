@@ -25,13 +25,13 @@
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
 
-void dnd::ContentParser::reset() {
-    parsed_spells = {};
-    parsed_characters = {};
-    parsed_character_classes = {};
-    parsed_character_subclasses = {};
-    parsed_character_races = {};
-    parsed_character_subraces = {};
+void dnd::ContentParser::resetParsed() {
+    parsed_characters.clear();
+    parsed_character_classes.clear();
+    parsed_character_subclasses.clear();
+    parsed_character_races.clear();
+    parsed_character_subraces.clear();
+    parsed_spells.clear();
 }
 
 dnd::Content dnd::ContentParser::parse(
@@ -64,10 +64,10 @@ dnd::Content dnd::ContentParser::parse(
     dirs_to_parse.push_back(std::filesystem::directory_entry(content_path / campaign_dir_name));
     try {
         parseAllOfType(ParsingType::SPELL, dirs_to_parse);
-        parseAllOfType(ParsingType::RACE, dirs_to_parse);
         parseAllOfType(ParsingType::CLASS, dirs_to_parse);
-        parseAllOfType(ParsingType::SUBRACE, dirs_to_parse);
+        parseAllOfType(ParsingType::RACE, dirs_to_parse);
         parseAllOfType(ParsingType::SUBCLASS, dirs_to_parse);
+        parseAllOfType(ParsingType::SUBRACE, dirs_to_parse);
         parseAllOfType(ParsingType::CHARACTER, dirs_to_parse);
     } catch (parsing_error& e) {
         e.relativiseFileName(content_path);
@@ -76,12 +76,13 @@ dnd::Content dnd::ContentParser::parse(
 
     // TODO: change Content constructor
     Content content;
-    content.spells = parsed_spells;
-    content.characters = parsed_characters;
-    content.character_classes = parsed_character_classes;
-    content.character_subclasses = parsed_character_subclasses;
-    content.character_races = parsed_character_races;
-    content.character_subraces = parsed_character_subraces;
+    content.characters = std::move(parsed_characters);
+    content.character_classes = std::move(parsed_character_classes);
+    content.character_subclasses = std::move(parsed_character_subclasses);
+    content.character_races = std::move(parsed_character_races);
+    content.character_subraces = std::move(parsed_character_subraces);
+    content.spells = std::move(parsed_spells);
+    resetParsed();
     return content;
 }
 
@@ -107,13 +108,13 @@ std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createParser(const d
     }
 }
 
-void dnd::ContentParser::parseSingleOfType(
-    const dnd::ParsingType parsing_type, const std::filesystem::directory_entry* file
+void dnd::ContentParser::parseFileOfType(
+    const dnd::ParsingType parsing_type, const std::filesystem::directory_entry& file
 ) {
-    DND_MEASURE_SCOPE(("dnd::ContentParser::parseSingleOfType ( " + subdir_names.at(parsing_type) + " )").c_str());
+    DND_MEASURE_SCOPE(("dnd::ContentParser::parseFileOfType ( " + subdir_names.at(parsing_type) + " )").c_str());
     std::unique_ptr<ContentFileParser> parser = createParser(parsing_type);
 
-    if (!parser->openJSON(*file)) {
+    if (!parser->openJSON(file)) {
         return;
     }
 
@@ -121,10 +122,10 @@ void dnd::ContentParser::parseSingleOfType(
         parser->parse();
     } catch (const nlohmann::json::out_of_range& e) {
         const std::string stripped_what = stripJsonExceptionWhat(e.what());
-        throw attribute_missing(parsing_type, file->path(), stripped_what);
+        throw attribute_missing(parsing_type, file.path(), stripped_what);
     } catch (const nlohmann::json::type_error& e) {
         const std::string stripped_what = stripJsonExceptionWhat(e.what());
-        throw attribute_type_error(parsing_type, file->path(), stripped_what);
+        throw attribute_type_error(parsing_type, file.path(), stripped_what);
     }
 
     if (parser->validate()) {
@@ -155,9 +156,7 @@ void dnd::ContentParser::parseAllOfType(
         }
     }
     for (const auto& file : files) {
-        futures.emplace_back(
-            std::async(std::launch::async, &ContentParser::parseSingleOfType, this, parsing_type, &file)
-        );
+        futures.emplace_back(std::async(std::launch::async, &ContentParser::parseFileOfType, this, parsing_type, file));
     }
     for (auto& future : futures) {
         try {

@@ -63,6 +63,7 @@ public:
     const std::string name, casting_time, range, duration, description;
     const SpellType type;
     const SpellComponents components;
+    Spell() = delete;
     Spell(
         const std::string& name, const SpellType& type, const std::string& casting_time, const std::string& range,
         const SpellComponents& components, const std::string& duration, const std::string& description

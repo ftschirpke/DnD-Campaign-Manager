@@ -45,13 +45,13 @@ void dnd::CreatureState::determineModifiers() {
     }
 }
 
-void dnd::CreatureState::addFeatureHolder(std::shared_ptr<const dnd::FeatureHolder> feature_holder_ptr) {
+void dnd::CreatureState::addFeatureHolder(const FeatureHolder* const feature_holder_ptr) {
     if (feature_holder_ptr == nullptr) {
         return;
     }
-    for (const auto& feature_ptr : feature_holder_ptr->features) {
-        if (feature_ptr->isActive(attributes, constants)) {
-            active_features.push_back(feature_ptr);
+    for (const auto& feature : feature_holder_ptr->features) {
+        if (feature.isActive(attributes, constants)) {
+            active_features.emplace_back(&feature);
         }
     }
 }

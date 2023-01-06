@@ -28,7 +28,7 @@ void dnd::FeatureHolderFileParser::parseFeatures() {
     }
 }
 
-std::shared_ptr<dnd::Feature> dnd::FeatureHolderFileParser::createFeature(
+dnd::Feature dnd::FeatureHolderFileParser::createFeature(
     const std::string& feature_name, const nlohmann::json& feature_json
 ) const {
     if (!feature_json.is_object()) {
@@ -70,7 +70,7 @@ std::shared_ptr<dnd::Feature> dnd::FeatureHolderFileParser::createFeature(
             parseAndAddEffect(effect_str, feature);
         }
     }
-    return std::make_shared<Feature>(std::move(feature));
+    return feature;
 }
 
 void dnd::FeatureHolderFileParser::parseAndAddEffect(const std::string& effect_str, dnd::Feature& feature) const {
@@ -137,9 +137,9 @@ void dnd::FeatureHolderFileParser::parseAndAddEffect(const std::string& effect_s
 
     const EffectTime effect_time = effect_time_for_string.at(effect_time_str);
     if (CreatureState::isAbility(affected_attribute)) {
-        feature.ability_score_effects[effect_time].push_back(std::move(effect_ptr));
+        feature.ability_score_effects[effect_time].emplace_back(std::move(effect_ptr));
     } else {
-        feature.normal_effects[effect_time].push_back(std::move(effect_ptr));
+        feature.normal_effects[effect_time].emplace_back(std::move(effect_ptr));
     }
 }
 

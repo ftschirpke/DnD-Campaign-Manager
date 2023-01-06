@@ -30,10 +30,10 @@ protected:
     virtual const std::unordered_map<std::string, int> getInitialAttributeValues() const;
 public:
     // TODO: should these pointers be non-const?
-    std::shared_ptr<const CharacterClass> class_ptr;
-    std::shared_ptr<const CharacterSubclass> subclass_ptr;
-    std::shared_ptr<const CharacterRace> race_ptr;
-    std::shared_ptr<const CharacterSubrace> subrace_ptr;
+    const CharacterClass* class_ptr;
+    const CharacterSubclass* subclass_ptr;
+    const CharacterRace* race_ptr;
+    const CharacterSubrace* subrace_ptr;
     Character(const std::string& name, const std::array<int, 6>& base_ability_scores);
     Character(
         const std::string& name, const std::array<int, 6>& base_ability_scores, int level, int xp,
@@ -50,8 +50,8 @@ public:
     static int levelForXP(int xp);
     void addHitDiceRoll(int hit_dice_roll);
     virtual void determineState();
-    const std::vector<std::shared_ptr<const Feature>>& activeFeatures() const;
-    std::vector<std::shared_ptr<const Feature>> allFeatures() const;
+    const std::vector<const Feature*>& activeFeatures() const;
+    std::vector<const Feature*> allFeatures() const;
 };
 
 inline Character::Character(const std::string& name, const std::array<int, 6>& base_ability_scores)
@@ -117,9 +117,7 @@ inline void Character::addHitDiceRoll(int hit_dice_roll) {
     }
 }
 
-inline const std::vector<std::shared_ptr<const Feature>>& Character::activeFeatures() const {
-    return state.active_features;
-}
+inline const std::vector<const Feature*>& Character::activeFeatures() const { return state.active_features; }
 
 } // namespace dnd
 
