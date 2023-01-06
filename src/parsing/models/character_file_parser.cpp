@@ -86,7 +86,9 @@ void dnd::CharacterFileParser::parseClassAndRace() {
     try {
         class_ptr = &character_classes.at(character_class_name);
     } catch (const std::out_of_range& e) {
-        throw invalid_attribute(ParsingType::CHARACTER, filename, "class", "does not exist");
+        throw invalid_attribute(
+            ParsingType::CHARACTER, filename, "class", '\"' + character_class_name + "\" does not exist"
+        );
     }
 
     if (json_to_parse.contains("subclass")) {
@@ -94,7 +96,9 @@ void dnd::CharacterFileParser::parseClassAndRace() {
         try {
             subclass_ptr = &character_subclasses.at(character_subclass_name);
         } catch (const std::out_of_range& e) {
-            throw invalid_attribute(ParsingType::CHARACTER, filename, "subclass", "does not exist");
+            throw invalid_attribute(
+                ParsingType::CHARACTER, filename, "subclass", '\"' + character_subclass_name + "\" does not exist"
+            );
         }
         if (class_ptr->subclass_level > level) {
             std::cerr << "Warning: Character " << character_name << " has subclass although the class \""
@@ -113,7 +117,9 @@ void dnd::CharacterFileParser::parseClassAndRace() {
     try {
         race_ptr = &character_races.at(character_race_name);
     } catch (const std::out_of_range& e) {
-        throw invalid_attribute(ParsingType::CHARACTER, filename, "race", "does not exist");
+        throw invalid_attribute(
+            ParsingType::CHARACTER, filename, "race", '\"' + character_race_name + "\" does not exist"
+        );
     }
 
     if (json_to_parse.contains("subrace")) {
@@ -127,7 +133,9 @@ void dnd::CharacterFileParser::parseClassAndRace() {
         try {
             subrace_ptr = &character_subraces.at(character_subrace_name);
         } catch (const std::out_of_range& e) {
-            throw invalid_attribute(ParsingType::CHARACTER, filename, "subrace", "does not exist");
+            throw invalid_attribute(
+                ParsingType::CHARACTER, filename, "subrace", '\"' + character_subrace_name + "\" does not exist"
+            );
         }
     } else if (race_ptr->has_subraces) {
         std::cout << "JSON:\n" << json_to_parse << std::endl;
