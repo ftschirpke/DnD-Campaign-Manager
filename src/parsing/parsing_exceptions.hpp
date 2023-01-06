@@ -14,18 +14,18 @@ std::string stripJsonExceptionWhat(const std::string& original_what);
 
 // thrown when something went wrong while parsing DnD content
 class parsing_error : public std::invalid_argument {
-private:
-    std::filesystem::path path;
-    std::string msg_start;
-    const std::string error_msg;
-    std::string w;
-    void updateWhat();
 public:
     parsing_error(const std::filesystem::path& path, const std::string& error_msg);
     parsing_error(ParsingType parsing_type, const std::filesystem::path& path, const std::string& error_msg);
     void setParsingType(ParsingType parsing_type);
     void relativiseFileName(const std::filesystem::path& root_path);
     const char* what() const noexcept override;
+private:
+    std::filesystem::path path;
+    std::string msg_start;
+    const std::string error_msg;
+    std::string w;
+    void updateWhat();
 };
 
 // thrown when a json file is not formatted the way it's supposed to

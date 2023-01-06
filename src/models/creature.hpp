@@ -11,9 +11,6 @@
 namespace dnd {
 
 class Creature : public FeatureHolder {
-protected:
-    virtual const std::unordered_map<std::string, int> getConstants() const;
-    virtual const std::unordered_map<std::string, int> getInitialAttributeValues() const;
 public:
     const std::array<int, 6> base_ability_scores;
     CreatureState state;
@@ -21,6 +18,9 @@ public:
     // TODO: actions, bonus actions, reactions? - or are they part of the state?
     Creature(const std::string& name, const std::array<int, 6>& base_ability_scores);
     virtual void determineState();
+protected:
+    virtual const std::unordered_map<std::string, int> getConstants() const;
+    virtual const std::unordered_map<std::string, int> getInitialAttributeValues() const;
 };
 
 inline Creature::Creature(const std::string& name, const std::array<int, 6>& base_ability_scores)

@@ -18,6 +18,18 @@
 namespace dnd {
 
 class CharacterFileParser : public FeatureHolderFileParser {
+public:
+    CharacterFileParser(
+        std::unordered_map<std::string, Character>& results,
+        const std::unordered_map<std::string, const CharacterClass>& character_classes,
+        const std::unordered_map<std::string, const CharacterSubclass>& character_subclasses,
+        const std::unordered_map<std::string, const CharacterRace>& character_races,
+        const std::unordered_map<std::string, const CharacterSubrace>& character_subraces,
+        const std::unordered_map<std::string, const Spell>& spells
+    );
+    void parse() override;
+    bool validate() const override;
+    void saveResult() override;
 private:
     std::unordered_map<std::string, Character>& results;
     const std::unordered_map<std::string, const CharacterClass>& character_classes;
@@ -35,18 +47,6 @@ private:
     int level, xp;
     void parseClassAndRace();
     void parseLevelAndXP();
-public:
-    CharacterFileParser(
-        std::unordered_map<std::string, Character>& results,
-        const std::unordered_map<std::string, const CharacterClass>& character_classes,
-        const std::unordered_map<std::string, const CharacterSubclass>& character_subclasses,
-        const std::unordered_map<std::string, const CharacterRace>& character_races,
-        const std::unordered_map<std::string, const CharacterSubrace>& character_subraces,
-        const std::unordered_map<std::string, const Spell>& spells
-    );
-    void parse() override;
-    bool validate() const override;
-    void saveResult() override;
 };
 
 inline CharacterFileParser::CharacterFileParser(
