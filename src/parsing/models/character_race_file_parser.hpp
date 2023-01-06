@@ -17,7 +17,6 @@ private:
     std::unordered_map<std::string, const CharacterRace>& results;
     std::string character_race_name;
     bool has_subraces;
-    std::vector<std::shared_ptr<const Feature>> features;
 public:
     CharacterRaceFileParser(std::unordered_map<std::string, const CharacterRace>& results);
     void parse() override;

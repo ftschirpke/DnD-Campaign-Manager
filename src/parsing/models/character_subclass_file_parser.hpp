@@ -17,7 +17,6 @@ private:
     std::unordered_map<std::string, const CharacterSubclass>& results;
     const std::unordered_map<std::string, const CharacterClass>& classes;
     std::string character_subclass_name, class_name;
-    std::vector<std::shared_ptr<const Feature>> features;
 public:
     CharacterSubclassFileParser(
         std::unordered_map<std::string, const CharacterSubclass>& results,

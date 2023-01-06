@@ -17,7 +17,6 @@ private:
     std::unordered_map<std::string, const CharacterSubrace>& results;
     const std::unordered_map<std::string, const CharacterRace>& races;
     std::string character_subrace_name, race_name;
-    std::vector<std::shared_ptr<const Feature>> features;
 public:
     CharacterSubraceFileParser(
         std::unordered_map<std::string, const CharacterSubrace>& results,
