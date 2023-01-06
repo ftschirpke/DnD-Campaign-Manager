@@ -20,10 +20,10 @@ namespace dnd {
 class CharacterFileParser : public FeatureHolderFileParser {
 private:
     std::unordered_map<std::string, Character>& results;
-    const std::unordered_map<std::string, const CharacterClass> character_classes;
-    const std::unordered_map<std::string, const CharacterSubclass> character_subclasses;
-    const std::unordered_map<std::string, const CharacterRace> character_races;
-    const std::unordered_map<std::string, const CharacterSubrace> character_subraces;
+    const std::unordered_map<std::string, const CharacterClass>& character_classes;
+    const std::unordered_map<std::string, const CharacterSubclass>& character_subclasses;
+    const std::unordered_map<std::string, const CharacterRace>& character_races;
+    const std::unordered_map<std::string, const CharacterSubrace>& character_subraces;
     const std::unordered_map<std::string, const Spell>& spells;
     std::string character_name;
     std::array<int, 6> base_ability_scores;

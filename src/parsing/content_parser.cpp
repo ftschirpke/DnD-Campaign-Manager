@@ -64,10 +64,10 @@ dnd::Content dnd::ContentParser::parse(
     dirs_to_parse.push_back(std::filesystem::directory_entry(content_path / campaign_dir_name));
     try {
         parseAllOfType(ParsingType::SPELL, dirs_to_parse);
-        parseAllOfType(ParsingType::RACE, dirs_to_parse);
         parseAllOfType(ParsingType::CLASS, dirs_to_parse);
-        parseAllOfType(ParsingType::SUBRACE, dirs_to_parse);
+        parseAllOfType(ParsingType::RACE, dirs_to_parse);
         parseAllOfType(ParsingType::SUBCLASS, dirs_to_parse);
+        parseAllOfType(ParsingType::SUBRACE, dirs_to_parse);
         parseAllOfType(ParsingType::CHARACTER, dirs_to_parse);
     } catch (parsing_error& e) {
         e.relativiseFileName(content_path);
@@ -76,12 +76,12 @@ dnd::Content dnd::ContentParser::parse(
 
     // TODO: change Content constructor
     Content content;
-    content.spells = std::move(parsed_spells);
     content.characters = std::move(parsed_characters);
     content.character_classes = std::move(parsed_character_classes);
     content.character_subclasses = std::move(parsed_character_subclasses);
     content.character_races = std::move(parsed_character_races);
     content.character_subraces = std::move(parsed_character_subraces);
+    content.spells = std::move(parsed_spells);
     resetParsed();
     return content;
 }

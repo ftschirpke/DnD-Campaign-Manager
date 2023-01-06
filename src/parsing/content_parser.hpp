@@ -23,12 +23,12 @@ namespace dnd {
 class ContentParser {
 private:
     static const std::unordered_map<ParsingType, std::string> subdir_names;
-    std::unordered_map<std::string, const Spell> parsed_spells;
     std::unordered_map<std::string, Character> parsed_characters;
     std::unordered_map<std::string, const CharacterClass> parsed_character_classes;
     std::unordered_map<std::string, const CharacterSubclass> parsed_character_subclasses;
     std::unordered_map<std::string, const CharacterRace> parsed_character_races;
     std::unordered_map<std::string, const CharacterSubrace> parsed_character_subraces;
+    std::unordered_map<std::string, const Spell> parsed_spells;
     // mutexes used to control the access to each of the content type maps
     std::unordered_map<ParsingType, std::mutex> parsing_mutexes;
     void resetParsed();
