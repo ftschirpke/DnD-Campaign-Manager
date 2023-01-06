@@ -12,8 +12,7 @@
 // class that allows us to test the dnd::SpellsFileParser class
 class TestSpellsFileParser : public dnd::SpellsFileParser {
 public:
-    TestSpellsFileParser(std::unordered_map<std::string, std::shared_ptr<const dnd::Spell>>& results)
-        : dnd::SpellsFileParser(results) {}
+    TestSpellsFileParser(std::unordered_map<std::string, const dnd::Spell>& results) : dnd::SpellsFileParser(results) {}
     dnd::SpellType createSpellTypeForTesting(const std::string& spell_type_str) const {
         return dnd::SpellsFileParser::createSpellType(spell_type_str);
     }
@@ -27,7 +26,7 @@ public:
 
 class SetupSpellsParserTest {
 public:
-    std::unordered_map<std::string, std::shared_ptr<const dnd::Spell>> spells;
+    std::unordered_map<std::string, const dnd::Spell> spells;
     TestSpellsFileParser createParser();
 };
 
