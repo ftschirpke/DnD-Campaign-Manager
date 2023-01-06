@@ -35,7 +35,7 @@ public:
 };
 
 inline Feature::Feature(const std::string& name, const std::string& description)
-    : name(name), description(description) {}
+    : name(name), description(description), subclass(false) {}
 
 } // namespace dnd
 
