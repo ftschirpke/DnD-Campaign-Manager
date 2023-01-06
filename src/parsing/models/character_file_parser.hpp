@@ -21,7 +21,7 @@ class CharacterFileParser : public FeatureHolderFileParser {
 private:
     std::unordered_map<std::string, Character>& results;
     const std::unordered_map<std::string, std::shared_ptr<const CharacterClass>> character_classes;
-    const std::unordered_map<std::string, std::shared_ptr<const CharacterSubclass>> character_subclasses;
+    const std::unordered_map<std::string, const CharacterSubclass> character_subclasses;
     const std::unordered_map<std::string, std::shared_ptr<const CharacterRace>> character_races;
     const std::unordered_map<std::string, std::shared_ptr<const CharacterSubrace>> character_subraces;
     const std::unordered_map<std::string, const Spell>& spells;
@@ -39,7 +39,7 @@ public:
     CharacterFileParser(
         std::unordered_map<std::string, Character>& results,
         const std::unordered_map<std::string, std::shared_ptr<const CharacterClass>>& character_classes,
-        const std::unordered_map<std::string, std::shared_ptr<const CharacterSubclass>>& character_subclasses,
+        const std::unordered_map<std::string, const CharacterSubclass>& character_subclasses,
         const std::unordered_map<std::string, std::shared_ptr<const CharacterRace>>& character_races,
         const std::unordered_map<std::string, std::shared_ptr<const CharacterSubrace>>& character_subraces,
         const std::unordered_map<std::string, const Spell>& spells
@@ -52,7 +52,7 @@ public:
 inline CharacterFileParser::CharacterFileParser(
     std::unordered_map<std::string, Character>& results,
     const std::unordered_map<std::string, std::shared_ptr<const CharacterClass>>& character_classes,
-    const std::unordered_map<std::string, std::shared_ptr<const CharacterSubclass>>& character_subclasses,
+    const std::unordered_map<std::string, const CharacterSubclass>& character_subclasses,
     const std::unordered_map<std::string, std::shared_ptr<const CharacterRace>>& character_races,
     const std::unordered_map<std::string, std::shared_ptr<const CharacterSubrace>>& character_subraces,
     const std::unordered_map<std::string, const Spell>& spells

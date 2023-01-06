@@ -92,7 +92,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
     if (json_to_parse.contains("subclass")) {
         const std::string character_subclass_name = json_to_parse.at("subclass").get<std::string>();
         try {
-            subclass_ptr = character_subclasses.at(character_subclass_name).get();
+            subclass_ptr = &character_subclasses.at(character_subclass_name);
         } catch (const std::out_of_range& e) {
             throw invalid_attribute(ParsingType::CHARACTER, filename, "subclass", "does not exist");
         }

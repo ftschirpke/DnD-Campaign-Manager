@@ -20,7 +20,7 @@ public:
     TestCharacterFileParser(
         std::unordered_map<std::string, dnd::Character>& results,
         const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterClass>>& character_classes,
-        const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterSubclass>>& character_subclasses,
+        const std::unordered_map<std::string, const dnd::CharacterSubclass>& character_subclasses,
         const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterRace>>& character_races,
         const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterSubrace>>& character_subraces,
         const std::unordered_map<std::string, const dnd::Spell>& spells
@@ -37,7 +37,7 @@ public:
 class SetupCharacterParserTest {
 private:
     static const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterClass>> character_classes;
-    static const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterSubclass>> character_subclasses;
+    static const std::unordered_map<std::string, const dnd::CharacterSubclass> character_subclasses;
     static const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterRace>> character_races;
     static const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterSubrace>> character_subraces;
     static const std::unordered_map<std::string, const dnd::Spell> spells;
@@ -51,9 +51,9 @@ inline const std::unordered_map<std::string, std::shared_ptr<const dnd::Characte
         {"Barbarian",
          std::make_shared<dnd::CharacterClass>("Barbarian", "d12", std::vector<int>({4, 8, 12, 16, 19}), 3)},
 };
-inline const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterSubclass>>
+inline const std::unordered_map<std::string, const dnd::CharacterSubclass>
     SetupCharacterParserTest::character_subclasses = {
-        {"Path of the Berserker", std::make_shared<dnd::CharacterSubclass>("Path of the Berserker", "Barbarian")},
+        {"Path of the Berserker", dnd::CharacterSubclass("Path of the Berserker", "Barbarian")},
 };
 inline const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterRace>>
     SetupCharacterParserTest::character_races = {
