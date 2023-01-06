@@ -31,7 +31,7 @@ inline CharacterSubraceFileParser::CharacterSubraceFileParser(
     std::unordered_map<std::string, const CharacterSubrace>& results,
     const std::unordered_map<std::string, const CharacterRace>& races
 )
-    : results(results), races(races) {}
+    : FeatureHolderFileParser(), results(results), races(races) {}
 
 } // namespace dnd
 

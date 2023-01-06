@@ -25,7 +25,7 @@ public:
 };
 
 inline CharacterRaceFileParser::CharacterRaceFileParser(std::unordered_map<std::string, const CharacterRace>& results)
-    : results(results) {}
+    : FeatureHolderFileParser(), results(results) {}
 
 } // namespace dnd
 

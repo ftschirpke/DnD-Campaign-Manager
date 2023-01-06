@@ -20,6 +20,8 @@ protected:
     void parseAndAddActivation(const std::string& activation_str, Feature& feature) const;
     std::shared_ptr<Feature> createFeature(const std::string& feature_name, const nlohmann::json& feature_json) const;
     virtual void parseFeatures();
+public:
+    FeatureHolderFileParser() = default;
 };
 
 } // namespace dnd

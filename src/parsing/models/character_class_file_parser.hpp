@@ -27,7 +27,7 @@ public:
 
 inline CharacterClassFileParser::CharacterClassFileParser(std::unordered_map<std::string, const CharacterClass>& results
 )
-    : results(results) {}
+    : FeatureHolderFileParser(), results(results) {}
 
 } // namespace dnd
 

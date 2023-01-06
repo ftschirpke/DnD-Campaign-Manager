@@ -31,7 +31,7 @@ inline CharacterSubclassFileParser::CharacterSubclassFileParser(
     std::unordered_map<std::string, const CharacterSubclass>& results,
     const std::unordered_map<std::string, const CharacterClass>& classes
 )
-    : results(results), classes(classes) {}
+    : FeatureHolderFileParser(), results(results), classes(classes) {}
 
 } // namespace dnd
 

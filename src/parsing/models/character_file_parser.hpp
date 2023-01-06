@@ -57,8 +57,9 @@ inline CharacterFileParser::CharacterFileParser(
     const std::unordered_map<std::string, const CharacterSubrace>& character_subraces,
     const std::unordered_map<std::string, const Spell>& spells
 )
-    : results(results), character_classes(character_classes), character_subclasses(character_subclasses),
-      character_races(character_races), character_subraces(character_subraces), spells(spells) {}
+    : FeatureHolderFileParser(), results(results), character_classes(character_classes),
+      character_subclasses(character_subclasses), character_races(character_races),
+      character_subraces(character_subraces), spells(spells) {}
 
 } // namespace dnd
 
