@@ -23,6 +23,7 @@ public:
     ProficiencyHolder proficiencies;
     RIVHolder rivs;
     std::unordered_map<EffectTime, std::vector<std::unique_ptr<const Effect>>> ability_score_effects, normal_effects;
+    Feature(Feature&& other) = default;
     Feature(const std::string& name, const std::string& description);
     bool isActive(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants

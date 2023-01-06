@@ -19,10 +19,10 @@ public:
     void parseAndAddActivationForTesting(const std::string& activation_str, dnd::Feature& feature) const {
         dnd::FeatureHolderFileParser::parseAndAddActivation(activation_str, feature);
     }
-    std::shared_ptr<dnd::Feature> createFeatureForTesting(
+    std::unique_ptr<dnd::Feature> createFeatureForTesting(
         const std::string& feature_name, const nlohmann::json& feature_json
     ) const {
-        return dnd::FeatureHolderFileParser::createFeature(feature_name, feature_json);
+        return std::make_unique<dnd::Feature>(dnd::FeatureHolderFileParser::createFeature(feature_name, feature_json));
     }
     void parse() override {}
     bool validate() const override { return true; }
@@ -991,7 +991,7 @@ TEST_CASE("dnd::FeatureHolderFileParser::createFeature: parse valid features") {
         const nlohmann::json feature_json = {
             {"description", description},
         };
-        std::shared_ptr<dnd::Feature> feature;
+        std::unique_ptr<dnd::Feature> feature;
         REQUIRE_NOTHROW(feature = std::move(parser.createFeatureForTesting(name, feature_json)));
         REQUIRE(feature->name == name);
         REQUIRE(feature->description == description);
@@ -1008,7 +1008,7 @@ TEST_CASE("dnd::FeatureHolderFileParser::createFeature: parse valid features") {
             {"description", description},
             {"effects", effects_json},
         };
-        std::shared_ptr<dnd::Feature> feature;
+        std::unique_ptr<dnd::Feature> feature;
         REQUIRE_NOTHROW(feature = std::move(parser.createFeatureForTesting(name, feature_json)));
         REQUIRE(feature->name == name);
         REQUIRE(feature->description == description);
@@ -1045,7 +1045,7 @@ TEST_CASE("dnd::FeatureHolderFileParser::createFeature: parse valid features") {
             {"description", description},
             {"effects", effects_json},
         };
-        std::shared_ptr<dnd::Feature> feature;
+        std::unique_ptr<dnd::Feature> feature;
         REQUIRE_NOTHROW(feature = std::move(parser.createFeatureForTesting(name, feature_json)));
         REQUIRE(feature->name == name);
         REQUIRE(feature->description == description);

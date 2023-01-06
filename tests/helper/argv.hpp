@@ -21,7 +21,7 @@ public:
             auto ptr = std::unique_ptr<char[]>(new char[len]);
 
             strcpy(ptr.get(), *iter);
-            m_args.push_back(std::move(ptr));
+            m_args.emplace_back(std::move(ptr));
             m_argv.get()[i] = m_args.back().get();
 
             iter++;

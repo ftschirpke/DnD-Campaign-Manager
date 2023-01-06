@@ -149,14 +149,14 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse characters of invalid fo
         // JSON is array
         nlohmann::json low_level_bob_array = nlohmann::json::array();
         for (const auto& [key, value] : low_level_bob.items()) {
-            low_level_bob_array.push_back(value);
+            low_level_bob_array.emplace_back(value);
         }
         parser.setJSON(low_level_bob_array);
         REQUIRE_THROWS(parser.parse());
 
         nlohmann::json high_level_bob_array = nlohmann::json::array();
         for (const auto& [key, value] : high_level_bob.items()) {
-            high_level_bob_array.push_back(value);
+            high_level_bob_array.emplace_back(value);
         }
         parser.setJSON(high_level_bob_array);
         REQUIRE_THROWS(parser.parse());

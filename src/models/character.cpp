@@ -62,23 +62,23 @@ void dnd::Character::determineState() {
 std::vector<const dnd::Feature*> dnd::Character::allFeatures() const {
     std::vector<const Feature*> all_features;
 
-    for (auto it = class_ptr->features.cbegin(); it != class_ptr->features.cend(); ++it) {
-        all_features.push_back(it->get());
+    for (const auto& feature : class_ptr->features) {
+        all_features.emplace_back(&feature);
     }
 
     if (subclass_ptr != nullptr) {
-        for (auto it = subclass_ptr->features.cbegin(); it != subclass_ptr->features.cend(); ++it) {
-            all_features.push_back(it->get());
+        for (const auto& feature : subclass_ptr->features) {
+            all_features.emplace_back(&feature);
         }
     }
 
-    for (auto it = race_ptr->features.cbegin(); it != race_ptr->features.cend(); ++it) {
-        all_features.push_back(it->get());
+    for (const auto& feature : race_ptr->features) {
+        all_features.emplace_back(&feature);
     }
 
     if (subrace_ptr != nullptr) {
-        for (auto it = subrace_ptr->features.cbegin(); it != subrace_ptr->features.cend(); ++it) {
-            all_features.push_back(it->get());
+        for (const auto& feature : subrace_ptr->features) {
+            all_features.emplace_back(&feature);
         }
     }
     return all_features;

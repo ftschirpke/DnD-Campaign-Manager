@@ -34,14 +34,14 @@ void dnd::CharacterClassFileParser::parse() {
     }
 
     const Feature* subclass_feature = nullptr;
-    for (auto it = features.cbegin(); it != features.cend(); ++it) {
-        if ((*it)->subclass) {
+    for (const auto& feature : features) {
+        if (feature.subclass) {
             if (subclass_feature != nullptr) {
                 throw invalid_attribute(
                     ParsingType::CLASS, filename, "features", "there must be only one subclass feature."
                 );
             }
-            subclass_feature = it->get();
+            subclass_feature = &feature;
         }
     }
     if (subclass_feature == nullptr) {
