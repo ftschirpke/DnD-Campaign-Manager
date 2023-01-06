@@ -14,19 +14,18 @@ namespace dnd {
 
 class CharacterClassFileParser : public FeatureHolderFileParser {
 private:
-    std::unordered_map<std::string, std::shared_ptr<const CharacterClass>>& results;
+    std::unordered_map<std::string, const CharacterClass>& results;
     std::string character_class_name, character_class_hit_dice;
     std::vector<int> asi_levels;
     int subclass_level;
 public:
-    CharacterClassFileParser(std::unordered_map<std::string, std::shared_ptr<const CharacterClass>>& results);
+    CharacterClassFileParser(std::unordered_map<std::string, const CharacterClass>& results);
     void parse() override;
     bool validate() const override;
     void saveResult() override;
 };
 
-inline CharacterClassFileParser::CharacterClassFileParser(
-    std::unordered_map<std::string, std::shared_ptr<const CharacterClass>>& results
+inline CharacterClassFileParser::CharacterClassFileParser(std::unordered_map<std::string, const CharacterClass>& results
 )
     : results(results) {}
 

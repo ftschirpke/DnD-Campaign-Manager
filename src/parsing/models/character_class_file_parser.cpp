@@ -69,8 +69,9 @@ bool dnd::CharacterClassFileParser::validate() const {
 
 void dnd::CharacterClassFileParser::saveResult() {
     // TODO: change CharacterClass constructor
-    auto character_class =
-        std::make_shared<CharacterClass>(character_class_name, character_class_hit_dice, asi_levels, subclass_level);
-    character_class->features = std::move(features);
-    results.emplace(character_class_name, std::move(character_class));
+    results.emplace(
+        std::piecewise_construct, std::forward_as_tuple(character_class_name),
+        std::forward_as_tuple(character_class_name, character_class_hit_dice, asi_levels, subclass_level)
+    );
+    // TODO: add features
 }

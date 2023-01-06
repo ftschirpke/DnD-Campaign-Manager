@@ -84,7 +84,7 @@ void dnd::CharacterFileParser::parseLevelAndXP() {
 void dnd::CharacterFileParser::parseClassAndRace() {
     const std::string character_class_name = json_to_parse.at("class").get<std::string>();
     try {
-        class_ptr = character_classes.at(character_class_name).get();
+        class_ptr = &character_classes.at(character_class_name);
     } catch (const std::out_of_range& e) {
         throw invalid_attribute(ParsingType::CHARACTER, filename, "class", "does not exist");
     }

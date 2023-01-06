@@ -19,7 +19,7 @@ class TestCharacterFileParser : public dnd::CharacterFileParser {
 public:
     TestCharacterFileParser(
         std::unordered_map<std::string, dnd::Character>& results,
-        const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterClass>>& character_classes,
+        const std::unordered_map<std::string, const dnd::CharacterClass>& character_classes,
         const std::unordered_map<std::string, const dnd::CharacterSubclass>& character_subclasses,
         const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterRace>>& character_races,
         const std::unordered_map<std::string, const dnd::CharacterSubrace>& character_subraces,
@@ -36,7 +36,7 @@ public:
 
 class SetupCharacterParserTest {
 private:
-    static const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterClass>> character_classes;
+    static const std::unordered_map<std::string, const dnd::CharacterClass> character_classes;
     static const std::unordered_map<std::string, const dnd::CharacterSubclass> character_subclasses;
     static const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterRace>> character_races;
     static const std::unordered_map<std::string, const dnd::CharacterSubrace> character_subraces;
@@ -46,10 +46,8 @@ public:
     TestCharacterFileParser createParser();
 };
 
-inline const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterClass>>
-    SetupCharacterParserTest::character_classes = {
-        {"Barbarian",
-         std::make_shared<dnd::CharacterClass>("Barbarian", "d12", std::vector<int>({4, 8, 12, 16, 19}), 3)},
+inline const std::unordered_map<std::string, const dnd::CharacterClass> SetupCharacterParserTest::character_classes = {
+    {"Barbarian", dnd::CharacterClass("Barbarian", "d12", std::vector<int>({4, 8, 12, 16, 19}), 3)},
 };
 inline const std::unordered_map<std::string, const dnd::CharacterSubclass>
     SetupCharacterParserTest::character_subclasses = {
