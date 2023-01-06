@@ -125,7 +125,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
         }
         const std::string character_subrace_name = json_to_parse.at("subrace").get<std::string>();
         try {
-            subrace_ptr = character_subraces.at(character_subrace_name).get();
+            subrace_ptr = &character_subraces.at(character_subrace_name);
         } catch (const std::out_of_range& e) {
             throw invalid_attribute(ParsingType::CHARACTER, filename, "subrace", "does not exist");
         }

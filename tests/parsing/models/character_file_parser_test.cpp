@@ -22,7 +22,7 @@ public:
         const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterClass>>& character_classes,
         const std::unordered_map<std::string, const dnd::CharacterSubclass>& character_subclasses,
         const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterRace>>& character_races,
-        const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterSubrace>>& character_subraces,
+        const std::unordered_map<std::string, const dnd::CharacterSubrace>& character_subraces,
         const std::unordered_map<std::string, const dnd::Spell>& spells
     )
         : dnd::CharacterFileParser(
@@ -39,7 +39,7 @@ private:
     static const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterClass>> character_classes;
     static const std::unordered_map<std::string, const dnd::CharacterSubclass> character_subclasses;
     static const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterRace>> character_races;
-    static const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterSubrace>> character_subraces;
+    static const std::unordered_map<std::string, const dnd::CharacterSubrace> character_subraces;
     static const std::unordered_map<std::string, const dnd::Spell> spells;
 public:
     std::unordered_map<std::string, dnd::Character> characters;
@@ -59,9 +59,9 @@ inline const std::unordered_map<std::string, std::shared_ptr<const dnd::Characte
     SetupCharacterParserTest::character_races = {
         {"Dwarf", std::make_shared<dnd::CharacterRace>("Dwarf", true)},
 };
-inline const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterSubrace>>
-    SetupCharacterParserTest::character_subraces = {
-        {"Hill Dwarf", std::make_shared<dnd::CharacterSubrace>("Hill Dwarf", "Dwarf")},
+inline const std::unordered_map<std::string, const dnd::CharacterSubrace> SetupCharacterParserTest::character_subraces =
+    {
+        {"Hill Dwarf", dnd::CharacterSubrace("Hill Dwarf", "Dwarf")},
 };
 inline const std::unordered_map<std::string, const dnd::Spell> SetupCharacterParserTest::spells = {};
 
