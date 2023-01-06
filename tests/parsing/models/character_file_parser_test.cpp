@@ -36,31 +36,69 @@ public:
 
 class SetupCharacterParserTest {
 private:
-    static const std::unordered_map<std::string, const dnd::CharacterClass> character_classes;
-    static const std::unordered_map<std::string, const dnd::CharacterSubclass> character_subclasses;
-    static const std::unordered_map<std::string, const dnd::CharacterRace> character_races;
-    static const std::unordered_map<std::string, const dnd::CharacterSubrace> character_subraces;
-    static const std::unordered_map<std::string, const dnd::Spell> spells;
+    static bool values_set;
+    static std::unordered_map<std::string, const dnd::CharacterClass> character_classes;
+    static std::unordered_map<std::string, const dnd::CharacterSubclass> character_subclasses;
+    static std::unordered_map<std::string, const dnd::CharacterRace> character_races;
+    static std::unordered_map<std::string, const dnd::CharacterSubrace> character_subraces;
+    static std::unordered_map<std::string, const dnd::Spell> spells;
+    static void setClasses();
+    static void setSubclasses();
+    static void setRaces();
+    static void setSubraces();
+    static void setSpells();
 public:
     std::unordered_map<std::string, dnd::Character> characters;
+    SetupCharacterParserTest();
     TestCharacterFileParser createParser();
 };
 
-inline const std::unordered_map<std::string, const dnd::CharacterClass> SetupCharacterParserTest::character_classes = {
-    {"Barbarian", dnd::CharacterClass("Barbarian", "d12", std::vector<int>({4, 8, 12, 16, 19}), 3)},
-};
-inline const std::unordered_map<std::string, const dnd::CharacterSubclass>
-    SetupCharacterParserTest::character_subclasses = {
-        {"Path of the Berserker", dnd::CharacterSubclass("Path of the Berserker", "Barbarian")},
-};
-inline const std::unordered_map<std::string, const dnd::CharacterRace> SetupCharacterParserTest::character_races = {
-    {"Dwarf", dnd::CharacterRace("Dwarf", true)},
-};
-inline const std::unordered_map<std::string, const dnd::CharacterSubrace> SetupCharacterParserTest::character_subraces =
-    {
-        {"Hill Dwarf", dnd::CharacterSubrace("Hill Dwarf", "Dwarf")},
-};
-inline const std::unordered_map<std::string, const dnd::Spell> SetupCharacterParserTest::spells = {};
+bool SetupCharacterParserTest::values_set = false;
+std::unordered_map<std::string, const dnd::CharacterClass> SetupCharacterParserTest::character_classes = {};
+std::unordered_map<std::string, const dnd::CharacterSubclass> SetupCharacterParserTest::character_subclasses = {};
+std::unordered_map<std::string, const dnd::CharacterRace> SetupCharacterParserTest::character_races = {};
+std::unordered_map<std::string, const dnd::CharacterSubrace> SetupCharacterParserTest::character_subraces = {};
+std::unordered_map<std::string, const dnd::Spell> SetupCharacterParserTest::spells = {};
+
+inline void SetupCharacterParserTest::setClasses() {
+    character_classes.emplace(
+        std::piecewise_construct, std::forward_as_tuple("Barbarian"),
+        std::forward_as_tuple("Barbarian", "d12", std::vector<int>({4, 8, 12, 16, 19}), 3)
+    );
+}
+
+inline void SetupCharacterParserTest::setSubclasses() {
+    character_subclasses.emplace(
+        std::piecewise_construct, std::forward_as_tuple("Path of the Berserker"),
+        std::forward_as_tuple("Path of the Berserker", "Barbarian")
+    );
+}
+
+inline void SetupCharacterParserTest::setRaces() {
+    character_races.emplace(
+        std::piecewise_construct, std::forward_as_tuple("Dwarf"), std::forward_as_tuple("Dwarf", true)
+    );
+}
+
+inline void SetupCharacterParserTest::setSubraces() {
+    character_subraces.emplace(
+        std::piecewise_construct, std::forward_as_tuple("Hill Dwarf"), std::forward_as_tuple("Hill Dwarf", "Dwarf")
+    );
+}
+
+inline void SetupCharacterParserTest::setSpells() {}
+
+
+inline SetupCharacterParserTest::SetupCharacterParserTest() {
+    if (!values_set) {
+        setClasses();
+        setSubclasses();
+        setRaces();
+        setSubraces();
+        setSpells();
+        values_set = true;
+    }
+}
 
 inline TestCharacterFileParser SetupCharacterParserTest::createParser() {
     return TestCharacterFileParser(
