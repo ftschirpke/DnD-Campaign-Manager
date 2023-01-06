@@ -21,7 +21,7 @@ public:
         std::unordered_map<std::string, dnd::Character>& results,
         const std::unordered_map<std::string, const dnd::CharacterClass>& character_classes,
         const std::unordered_map<std::string, const dnd::CharacterSubclass>& character_subclasses,
-        const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterRace>>& character_races,
+        const std::unordered_map<std::string, const dnd::CharacterRace>& character_races,
         const std::unordered_map<std::string, const dnd::CharacterSubrace>& character_subraces,
         const std::unordered_map<std::string, const dnd::Spell>& spells
     )
@@ -38,7 +38,7 @@ class SetupCharacterParserTest {
 private:
     static const std::unordered_map<std::string, const dnd::CharacterClass> character_classes;
     static const std::unordered_map<std::string, const dnd::CharacterSubclass> character_subclasses;
-    static const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterRace>> character_races;
+    static const std::unordered_map<std::string, const dnd::CharacterRace> character_races;
     static const std::unordered_map<std::string, const dnd::CharacterSubrace> character_subraces;
     static const std::unordered_map<std::string, const dnd::Spell> spells;
 public:
@@ -53,9 +53,8 @@ inline const std::unordered_map<std::string, const dnd::CharacterSubclass>
     SetupCharacterParserTest::character_subclasses = {
         {"Path of the Berserker", dnd::CharacterSubclass("Path of the Berserker", "Barbarian")},
 };
-inline const std::unordered_map<std::string, std::shared_ptr<const dnd::CharacterRace>>
-    SetupCharacterParserTest::character_races = {
-        {"Dwarf", std::make_shared<dnd::CharacterRace>("Dwarf", true)},
+inline const std::unordered_map<std::string, const dnd::CharacterRace> SetupCharacterParserTest::character_races = {
+    {"Dwarf", dnd::CharacterRace("Dwarf", true)},
 };
 inline const std::unordered_map<std::string, const dnd::CharacterSubrace> SetupCharacterParserTest::character_subraces =
     {

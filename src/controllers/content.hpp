@@ -18,7 +18,7 @@ public:
     std::unordered_map<std::string, Character> characters;
     std::unordered_map<std::string, const CharacterClass> character_classes;
     std::unordered_map<std::string, const CharacterSubclass> character_subclasses;
-    std::unordered_map<std::string, std::shared_ptr<const CharacterRace>> character_races;
+    std::unordered_map<std::string, const CharacterRace> character_races;
     std::unordered_map<std::string, const CharacterSubrace> character_subraces;
     void printStatus() const;
 };

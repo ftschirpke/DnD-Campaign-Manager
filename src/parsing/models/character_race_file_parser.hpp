@@ -14,20 +14,18 @@ namespace dnd {
 
 class CharacterRaceFileParser : public FeatureHolderFileParser {
 private:
-    std::unordered_map<std::string, std::shared_ptr<const CharacterRace>>& results;
+    std::unordered_map<std::string, const CharacterRace>& results;
     std::string character_race_name;
     bool has_subraces;
     std::vector<std::shared_ptr<const Feature>> features;
 public:
-    CharacterRaceFileParser(std::unordered_map<std::string, std::shared_ptr<const CharacterRace>>& results);
+    CharacterRaceFileParser(std::unordered_map<std::string, const CharacterRace>& results);
     void parse() override;
     bool validate() const override;
     void saveResult() override;
 };
 
-inline CharacterRaceFileParser::CharacterRaceFileParser(
-    std::unordered_map<std::string, std::shared_ptr<const CharacterRace>>& results
-)
+inline CharacterRaceFileParser::CharacterRaceFileParser(std::unordered_map<std::string, const CharacterRace>& results)
     : results(results) {}
 
 } // namespace dnd

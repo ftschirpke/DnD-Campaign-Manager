@@ -42,7 +42,7 @@ bool dnd::CharacterSubraceFileParser::validate() const {
             ParsingType::SUBRACE, filename, "race", "must exist. \"" + race_name + "\" does not exist."
         );
     }
-    if (!races.at(race_name)->has_subraces) {
+    if (!races.at(race_name).has_subraces) {
         throw invalid_attribute(
             ParsingType::SUBRACE, filename, "race", "must have subraces. \"" + race_name + "\" does not have subraces."
         );
