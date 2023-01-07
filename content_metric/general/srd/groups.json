@@ -47,5 +47,6 @@
         "__not_subgroup__": [
             "disguise kit", "forgery kit", "herbalism kit", "navigator's tools", "poisoner's kit", "thieves' tools"
         ]
-    }
+    },
+    "languages": ["Common", "Draconic", "Druidic", "Elvish", "Gnomish", "Halfling", "Infernal", "Orc", "Thieves' Cant"]
 }
