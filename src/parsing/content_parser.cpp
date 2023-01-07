@@ -133,8 +133,8 @@ std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createGeneralParserF
 void dnd::ContentParser::parseFileOfType(
     const std::filesystem::directory_entry& file, const ParsingType parsing_type, bool multi_file
 ) {
-    DND_MEASURE_SCOPE(("dnd::ContentParser::parseFileOfType ( " + parsing_type_names.at(parsing_type)
-                       + ", multi_file: " + multi_file + " )")
+    DND_MEASURE_SCOPE(("dnd::ContentParser::parseFileOfType ( " + parsing_type_names.at(parsing_type) + ", "
+                       + (multi_file ? "multi-file" : "single-file") + " )")
                           .c_str());
 
     std::unique_ptr<ContentFileParser> parser;
@@ -214,7 +214,6 @@ void dnd::ContentParser::parseAllOfSingleFileType(const ParsingType parsing_type
         }
     }
 }
-
 
 void dnd::ContentParser::parseAllOfMultiFileType(const ParsingType parsing_type) {
     DND_MEASURE_SCOPE(
