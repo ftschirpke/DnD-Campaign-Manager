@@ -44,7 +44,7 @@
                 "galley", "keelboat", "longship", "rowboat", "sailing ship", "warship"
             ]
         },
-        "__not_subgroup__": [
+        "__no_subgroup__": [
             "disguise kit", "forgery kit", "herbalism kit", "navigator's tools", "poisoner's kit", "thieves' tools"
         ]
     },

@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "models/feature_holder.hpp"
-#include "models/features/feature.hpp"
+#include "models/effects_holder/feature.hpp"
 
 namespace dnd {
 

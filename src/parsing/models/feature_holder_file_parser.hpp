@@ -7,19 +7,17 @@
 
 #include <nlohmann/json.hpp>
 
-#include "models/features/activation.hpp"
-#include "models/features/feature.hpp"
-#include "parsing/content_file_parser.hpp"
+#include "models/effects_holder/activation.hpp"
+#include "models/effects_holder/feature.hpp"
+#include "parsing/models/effects_holder_file_parser.hpp"
 
 namespace dnd {
 
-class FeatureHolderFileParser : public ContentFileParser {
+class FeatureHolderFileParser : public EffectsHolderFileParser {
 public:
     FeatureHolderFileParser() = default;
 protected:
     std::vector<Feature> features;
-    void parseAndAddEffect(const std::string& effect_str, Feature& feature) const;
-    void parseAndAddActivation(const std::string& activation_str, Feature& feature) const;
     Feature createFeature(const std::string& feature_name, const nlohmann::json& feature_json) const;
     virtual void parseFeatures();
 };

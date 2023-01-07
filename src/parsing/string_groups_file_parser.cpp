@@ -2,7 +2,9 @@
 
 #include "string_groups_file_parser.hpp"
 
+#include <iostream>
 #include <string>
+#include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
@@ -10,6 +12,7 @@
 
 #include "controllers/groups.hpp"
 #include "parsing/parsing_exceptions.hpp"
+#include "parsing/parsing_types.hpp"
 
 std::unordered_set<std::string> dnd::StringGroupsFileParser::parseMap(const nlohmann::json& json_map) {
     std::unordered_set<std::string> no_subgroup_values;
@@ -18,12 +21,15 @@ std::unordered_set<std::string> dnd::StringGroupsFileParser::parseMap(const nloh
             if (name == "__no_subgroup__") {
                 no_subgroup_values = value.get<std::unordered_set<std::string>>();
             } else {
-                parsed_data[name] = value.get<std::unordered_set<std::string>>();
+                auto values = value.get<std::unordered_set<std::string>>();
+                parsed_data[name].insert(values.cbegin(), values.cend());
             }
         } else if (value.is_object()) {
             std::vector<std::string> subgroups;
             for (const auto& [subgroup, _] : value.items()) {
-                subgroups.push_back(subgroup);
+                if (subgroup != "__no_subgroup__") {
+                    subgroups.push_back(subgroup);
+                }
             }
             std::unordered_set<std::string> no_subgroup = parseMap(value);
             parsed_data[name].insert(no_subgroup.cbegin(), no_subgroup.cend());
@@ -54,12 +60,12 @@ bool dnd::StringGroupsFileParser::validate() const {
     for (const auto& [group_name, _] : parsed_data) {
         if (group_name.empty()) {
             valid = false;
-            std::cerr << "Warning: " << filename << " contains group " << group_name << "with invalid name."
+            std::cerr << "Warning: " << filename << " contains group " << group_name << " with invalid name."
                       << " Group names cannot be \"\".\n";
         } else if (group_name[0] == '_' || group_name[group_name.size() - 1] == '_') {
             valid = false;
-            std::cerr << "Warning: " << filename << " contains group " << group_name << "with invalid name."
-                      << " Group names cannot be start or end with an underscore.\n";
+            std::cerr << "Warning: " << filename << " contains group " << group_name << " with invalid name."
+                      << " Group names cannot start or end with an underscore.\n";
         }
     }
     return valid;

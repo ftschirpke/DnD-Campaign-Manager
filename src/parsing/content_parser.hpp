@@ -15,6 +15,7 @@
 #include "models/character_class.hpp"
 #include "models/character_race.hpp"
 #include "models/spell.hpp"
+#include "parsing/content_file_parser.hpp"
 #include "parsing/models/character_file_parser.hpp"
 #include "parsing/parsing_types.hpp"
 

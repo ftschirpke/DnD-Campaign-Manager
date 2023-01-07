@@ -8,8 +8,8 @@
 #include <vector>
 
 #include "models/feature_holder.hpp"
-#include "models/features/effect.hpp"
-#include "models/features/feature.hpp"
+#include "models/effects_holder/effect.hpp"
+#include "models/effects_holder/feature.hpp"
 
 void dnd::CreatureState::applyAbilityScoreEffects() {
     for (const auto& effect_time : effect_times_in_order) {

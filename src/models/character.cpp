@@ -12,7 +12,7 @@
 #include "models/character_race.hpp"
 #include "models/creature.hpp"
 #include "models/creature_state.hpp"
-#include "models/features/feature.hpp"
+#include "models/effects_holder/feature.hpp"
 
 int dnd::Character::levelForXP(int xp) {
     if (xp < 0) {
