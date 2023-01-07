@@ -11,6 +11,7 @@
   - [Spells](#spells)
   - [Features](#features)
   - [Effects](#effects)
+  - [Groups](#groups)
   - [Anything unclear?](#anything-unclear)
 
 This directory is where you store all your content i.e. definitions of classes, races, spells, items, and monsters.
@@ -274,6 +275,52 @@ Examples:
     "MAXHP normal add LEVEL"  // add the character level to its armor class
 ]
 ```
+[Are you still having questions?](#anything-unclear)
+
+## Groups
+Groups define any kind of related things, that you might want to put into a group for the tool to use.
+
+There are two ways of defining groups and subgroups.
+
+You can define groups and subgroups explicitly in a `groups.json` file using maps and arrays. You should use this for things like musical instruments for example, where you want a selection (usually of strings), but the selection itself does not have any calculation consequences. Only the group or subgroup might have consequences (e.g. having a shield or having medium armor vs. having light armor).
+
+An example:
+```jsonc
+{
+    // for all tools see the general/srd/groups.json files, this is just an excerpt
+    "tools": { // a group
+        "artisan's tools": [ // a subgroup with strings as possible choices
+            "alchemist's supplies", "brewer's supplies"
+        ],
+        "musical instruments": [
+            "bagpipes", "drum", "flute", "lute"
+        ],
+        // "thieves' tools", <- because you cannot write single values in a map, do this:
+        "__no_subgroup__": [ // use "__no_subgroup__" to mark all these strings as tools of no subgroup
+            "disguise kit", "forgery kit", "poisoner's kit", "thieves' tools"
+        ],
+        "vehicles": { // a subgroup that has subgroups itself
+            "mounts": [
+                "camel", "elephant", "pony", "warhorse"
+            ],
+            "__no_subgroup__": [ // you can do this for subgroups as well
+                "special vehicle"
+                // this special vehicle is a vehicle that doesn't belong to any vehicle subgroup
+            ]
+        }
+    }
+}
+```
+
+You can also define groups implicitly by creating a file `groups/group_name.json` or `groups/group_name/subgroup1_name/subgroup2_name.json` etc. Thereby you implicitly define the groups and subgroups in the directory and file name. And in the file, you define the members of this (sub)group. You should use this for things like eldritch invocations, where the (sub)group members can be far more complicated than simple strings and selecting one of them can have a large impact.
+
+Because such choices are usually very similar to features that a class or race would grant, group members are formatted and parsed like [features](#features) except that activations are replaced by prerequisites.
+(see one of the `general/srd/groups/` directories for examples)
+
+<!-- TODO: give more information on that -->
+
+If you find that this way of formatting and parsing such groups and their members is not sufficient for your needs, please let me know.
+
 [Are you still having questions?](#anything-unclear)
 
 ## Anything unclear?

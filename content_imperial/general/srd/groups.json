@@ -1,0 +1,51 @@
+{
+    "armor": {
+        "light armor": ["padded", "leather", "studded leather"],
+        "medium armor": ["hide", "chain shirt", "scale mail", "breastplate", "half plate"],
+        "heavy armor": ["ring mail", "chain mail", "splint", "plate"]
+    },
+    "shields": ["Shield"],
+    "weapons": {
+        "simple weapons": {
+            "simple melee weapons": [
+                "club", "dagger", "greatclub", "handaxe", "javelin", "light hammer", "mace", "quarterstaff", "sickle", "spear"
+            ],
+            "simple range weapons": [
+                "light crossbow", "dart", "sling"
+            ]
+        },
+        "martial weapons": {
+            "martial melee weapons": [
+                "battleaxe", "flail", "glaive", "greataxe", "greatsword", "halberd", "lance", "longsword", "maul", "morningstar", "pike", "rapier", "scimitar", "shortsword", "trident", "war pick", "warhammer", "whip"
+            ],
+            "martial ranged weapons": [
+                "blowgun", "hand crossbow", "heavy crossbow", "longbow", "net"
+            ]
+        }
+    },
+    "tools": {
+        "artisan's tools": [
+            "alchemist's supplies", "brewer's supplies", "calligrapher's supplies", "carpenter's tools", "cartographer's tools", "cobbler's tools", "cook's utensils", "glassblower's tools", "jeweler's tools", "leatherworker's tools", "mason's tools", "painter's supplies", "potter's tools", "smith's tools", "tinker's tools", "weaver's tools", "woodcarver's tools"
+        ],
+        "gaming sets": [
+            "dice set", "dragonchess set", "playing card set", "three-dragon ante set"
+        ],
+        "musical instruments": [
+            "bagpipes", "drum", "dulcimer", "flute", "lute", "lyre", "horn", "pan flute", "shawm", "viol"
+        ],
+        "vehicles": {
+            "mounts": [
+                "camel", "donkey or mule", "mule", "elephant", "draft horse", "riding horse", "mastiff", "pony", "warhorse"
+            ],
+            "drawn vehicles": [
+                "carriage", "cart", "chariot", "wagon"
+            ],
+            "waterborne vehicles": [
+                "galley", "keelboat", "longship", "rowboat", "sailing ship", "warship"
+            ]
+        },
+        "__not_subgroup__": [
+            "disguise kit", "forgery kit", "herbalism kit", "navigator's tools", "poisoner's kit", "thieves' tools"
+        ]
+    }
+}

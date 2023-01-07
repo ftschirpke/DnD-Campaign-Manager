@@ -5,6 +5,8 @@ Content that may not be formatted perfectly or a part of it is not implemented a
 ## Features that are description-only for now, but could be implemented in the future
 (vaguely in order of importance)
 
+- Armor, Shield(s), and Weapons are just listed as groups for now, but can/should be Items later
+
 - Ability Score Increases (ASIs) and Feats
   - Characters need to define their ASI choices and/or chosen feats
   - feats need to be defined (probably just like features)
