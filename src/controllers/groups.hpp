@@ -11,15 +11,15 @@ class Groups {
 public:
     const std::unordered_set<std::string>& get(const std::string& group_name) const;
     // add an empty group
-    void addGroup(const std::string& group_name);
-    // add a group and its values
-    void addGroup(const std::string& group_name, const std::unordered_set<std::string>& values);
-    void addGroup(const std::string& group_name, std::unordered_set<std::string>&& values);
-    void addGroup(std::string&& group_name, std::unordered_set<std::string>&& values);
+    void add(const std::string& group_name);
     // add a value to a group (creates the group if it doesn't exist)
-    void addValueToGroup(const std::string& value, const std::string& group_name);
-    // add a value to an existing group (throws exception if group doesn't exist)
-    void addValueToExistingGroup(const std::string& value, const std::string& group_name);
+    void add(const std::string& group_name, const std::string& value);
+    // add values to a group (creates the group if it doesn't exist)
+    void add(const std::string& group_name, const std::unordered_set<std::string>& values);
+    // add values to a group (creates the group if it doesn't exist)
+    void add(const std::string& group_name, std::unordered_set<std::string>&& values);
+    // add values to a group (creates the group if it doesn't exist)
+    void add(std::string&& group_name, std::unordered_set<std::string>&& values);
 private:
     std::unordered_map<std::string, std::unordered_set<std::string>> data;
 };
@@ -28,26 +28,20 @@ inline const std::unordered_set<std::string>& Groups::get(const std::string& gro
     return data.at(group_name);
 }
 
-inline void Groups::addGroup(const std::string& group_name) { data[group_name]; }
+inline void Groups::add(const std::string& group_name) { data[group_name]; }
 
-inline void Groups::addGroup(const std::string& group_name, const std::unordered_set<std::string>& values) {
-    data.emplace(group_name, values);
+inline void Groups::add(const std::string& group_name, const std::string& value) { data[group_name].insert(value); }
+
+inline void Groups::add(const std::string& group_name, const std::unordered_set<std::string>& values) {
+    data[group_name].insert(values.cbegin(), values.cend());
 }
 
-inline void Groups::addGroup(const std::string& group_name, std::unordered_set<std::string>&& values) {
-    data.emplace(group_name, values);
+inline void Groups::add(const std::string& group_name, std::unordered_set<std::string>&& values) {
+    data[group_name].insert(std::make_move_iterator(values.begin()), std::make_move_iterator(values.end()));
 }
 
-inline void Groups::addGroup(std::string&& group_name, std::unordered_set<std::string>&& values) {
-    data.emplace(group_name, values);
-}
-
-inline void Groups::addValueToGroup(const std::string& value, const std::string& group_name) {
-    data[group_name].insert(value);
-}
-
-inline void Groups::addValueToExistingGroup(const std::string& value, const std::string& group_name) {
-    data.at(group_name).insert(value);
+inline void Groups::add(std::string&& group_name, std::unordered_set<std::string>&& values) {
+    data[group_name].insert(std::make_move_iterator(values.begin()), std::make_move_iterator(values.end()));
 }
 
 } // namespace dnd
