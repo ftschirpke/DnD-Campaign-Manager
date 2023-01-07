@@ -25,19 +25,11 @@
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
 
-void dnd::ContentParser::resetParsed() {
-    parsed_characters.clear();
-    parsed_character_classes.clear();
-    parsed_character_subclasses.clear();
-    parsed_character_races.clear();
-    parsed_character_subraces.clear();
-    parsed_spells.clear();
-}
-
 dnd::Content dnd::ContentParser::parse(
     const std::filesystem::path& content_path, const std::string& campaign_dir_name
 ) {
     DND_MEASURE_FUNCTION();
+    parsed_content = Content();
     if (!std::filesystem::exists(content_path)) {
         throw parsing_error(content_path, "does not exist");
     }
@@ -74,35 +66,30 @@ dnd::Content dnd::ContentParser::parse(
         throw e;
     }
 
-    // TODO: change Content constructor
-    Content content;
-    content.characters = std::move(parsed_characters);
-    content.character_classes = std::move(parsed_character_classes);
-    content.character_subclasses = std::move(parsed_character_subclasses);
-    content.character_races = std::move(parsed_character_races);
-    content.character_subraces = std::move(parsed_character_subraces);
-    content.spells = std::move(parsed_spells);
-    resetParsed();
-    return content;
+    return std::move(parsed_content);
 }
 
 std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createParser(const dnd::ParsingType parsing_type) {
     switch (parsing_type) {
         case ParsingType::CHARACTER:
             return std::make_unique<CharacterFileParser>(
-                parsed_characters, parsed_character_classes, parsed_character_subclasses, parsed_character_races,
-                parsed_character_subraces, parsed_spells
+                parsed_content.characters, parsed_content.character_classes, parsed_content.character_subclasses,
+                parsed_content.character_races, parsed_content.character_subraces, parsed_content.spells
             );
         case ParsingType::RACE:
-            return std::make_unique<CharacterRaceFileParser>(parsed_character_races);
+            return std::make_unique<CharacterRaceFileParser>(parsed_content.character_races);
         case ParsingType::SUBRACE:
-            return std::make_unique<CharacterSubraceFileParser>(parsed_character_subraces, parsed_character_races);
+            return std::make_unique<CharacterSubraceFileParser>(
+                parsed_content.character_subraces, parsed_content.character_races
+            );
         case ParsingType::CLASS:
-            return std::make_unique<CharacterClassFileParser>(parsed_character_classes);
+            return std::make_unique<CharacterClassFileParser>(parsed_content.character_classes);
         case ParsingType::SUBCLASS:
-            return std::make_unique<CharacterSubclassFileParser>(parsed_character_subclasses, parsed_character_classes);
+            return std::make_unique<CharacterSubclassFileParser>(
+                parsed_content.character_subclasses, parsed_content.character_classes
+            );
         case ParsingType::SPELL:
-            return std::make_unique<SpellsFileParser>(parsed_spells);
+            return std::make_unique<SpellsFileParser>(parsed_content.spells);
         default:
             return nullptr;
     }
