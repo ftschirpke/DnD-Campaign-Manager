@@ -7,6 +7,7 @@
 namespace dnd {
 
 enum ParsingType {
+    GROUP,
     SPELL,
     RACE,
     CLASS,
@@ -16,8 +17,9 @@ enum ParsingType {
 };
 
 const std::unordered_map<ParsingType, std::string> parsing_type_names = {
-    {ParsingType::SPELL, "Spell"},     {ParsingType::RACE, "Race"},         {ParsingType::CLASS, "Class"},
-    {ParsingType::SUBRACE, "Subrace"}, {ParsingType::SUBCLASS, "Subclass"}, {ParsingType::CHARACTER, "Character"},
+    {ParsingType::GROUP, "Group"},         {ParsingType::SPELL, "Spell"},     {ParsingType::RACE, "Race"},
+    {ParsingType::CLASS, "Class"},         {ParsingType::SUBRACE, "Subrace"}, {ParsingType::SUBCLASS, "Subclass"},
+    {ParsingType::CHARACTER, "Character"},
 };
 
 

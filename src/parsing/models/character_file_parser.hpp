@@ -27,9 +27,9 @@ public:
         const std::unordered_map<std::string, const CharacterSubrace>& character_subraces,
         const std::unordered_map<std::string, const Spell>& spells
     );
-    void parse() override;
-    bool validate() const override;
-    void saveResult() override;
+    virtual void parse() override;
+    virtual bool validate() const override;
+    virtual void saveResult() override;
 private:
     std::unordered_map<std::string, Character>& results;
     const std::unordered_map<std::string, const CharacterClass>& character_classes;

@@ -5,6 +5,7 @@
 #include <string>
 #include <unordered_map>
 
+#include "controllers/groups.hpp"
 #include "models/character.hpp"
 #include "models/character_class.hpp"
 #include "models/character_race.hpp"
@@ -14,6 +15,7 @@ namespace dnd {
 
 class Content {
 public:
+    Groups groups;
     std::unordered_map<std::string, Character> characters;
     std::unordered_map<std::string, const CharacterClass> character_classes;
     std::unordered_map<std::string, const CharacterSubclass> character_subclasses;

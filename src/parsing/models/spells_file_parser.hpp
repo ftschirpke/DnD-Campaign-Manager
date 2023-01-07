@@ -24,9 +24,9 @@ struct SpellParsingInfo {
 class SpellsFileParser : public ContentFileParser {
 public:
     SpellsFileParser(std::unordered_map<std::string, const Spell>& results);
-    void parse() override;
-    bool validate() const override;
-    void saveResult() override;
+    virtual void parse() override;
+    virtual bool validate() const override;
+    virtual void saveResult() override;
 protected:
     void createSpell(std::string_view spell_name, const nlohmann::json& spell_json_ptr);
     SpellType createSpellType(const std::string& spell_type_str) const;

@@ -15,9 +15,9 @@ namespace dnd {
 class CharacterClassFileParser : public FeatureHolderFileParser {
 public:
     CharacterClassFileParser(std::unordered_map<std::string, const CharacterClass>& results);
-    void parse() override;
-    bool validate() const override;
-    void saveResult() override;
+    virtual void parse() override;
+    virtual bool validate() const override;
+    virtual void saveResult() override;
 private:
     std::unordered_map<std::string, const CharacterClass>& results;
     std::string character_class_name, character_class_hit_dice;

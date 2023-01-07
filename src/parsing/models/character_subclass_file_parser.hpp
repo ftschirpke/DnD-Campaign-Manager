@@ -18,9 +18,9 @@ public:
         std::unordered_map<std::string, const CharacterSubclass>& results,
         const std::unordered_map<std::string, const CharacterClass>& classes
     );
-    void parse() override;
-    bool validate() const override;
-    void saveResult() override;
+    virtual void parse() override;
+    virtual bool validate() const override;
+    virtual void saveResult() override;
 private:
     std::unordered_map<std::string, const CharacterSubclass>& results;
     const std::unordered_map<std::string, const CharacterClass>& classes;

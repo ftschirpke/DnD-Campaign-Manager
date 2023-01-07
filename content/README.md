@@ -312,9 +312,9 @@ An example:
 }
 ```
 
-You can also define groups implicitly by creating a file `groups/group_name.json` or `groups/group_name/subgroup1_name/subgroup2_name.json` etc. Thereby you implicitly define the groups and subgroups in the directory and file name. And in the file, you define the members of this (sub)group. You should use this for things like eldritch invocations, where the (sub)group members can be far more complicated than simple strings and selecting one of them can have a large impact.
+You can also define groups implicitly by creating a file `groups/group_name.json`. Thereby you implicitly define a group with the file name (underscores converted to spaces). And in the file, you define the members of this group. You should use this for things like eldritch invocations, where the (sub)group members can be far more complicated than simple strings and selecting one of them can have a large impact.
 
-Because such choices are usually very similar to features that a class or race would grant, group members are formatted and parsed like [features](#features) except that activations are replaced by prerequisites.
+Because such choices are usually very similar to features that a class or race would grant. Group members are formatted and parsed like [features](#features) except that activations are replaced by prerequisites.
 (see one of the `general/srd/groups/` directories for examples)
 
 <!-- TODO: give more information on that -->
