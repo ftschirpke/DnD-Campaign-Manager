@@ -2,6 +2,7 @@
 #define EFFECTS_HOLDER_GROUPS_FILE_PARSER_HPP_
 
 #include "controllers/groups.hpp"
+#include "models/effects_holder/choosable.hpp"
 #include "parsing/models/effects_holder_file_parser.hpp"
 
 namespace dnd {
@@ -14,6 +15,9 @@ public:
     virtual void saveResult() override;
 private:
     Groups& results;
+    std::string group_name;
+    std::unordered_map<std::string, Choosable> choosables;
+    Choosable createChoosable(const std::string& name, const nlohmann::json& choosable_json) const;
 };
 
 inline EffectsHolderGroupsFileParser::EffectsHolderGroupsFileParser(Groups& results) : results(results) {}

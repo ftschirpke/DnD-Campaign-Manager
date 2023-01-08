@@ -1,6 +1,7 @@
 #include "parsing/models/character_file_parser.hpp"
 
 #include <array>
+#include <filesystem>
 #include <memory>
 #include <string>
 #include <vector>
@@ -29,7 +30,7 @@ public:
             results, character_classes, character_subclasses, character_races, character_subraces, spells
         ) {}
     void setJSON(const nlohmann::json& character_json) {
-        filename = "test_file_name.json";
+        filepath = std::filesystem::path("test_file_name.json");
         json_to_parse = character_json;
     }
 };

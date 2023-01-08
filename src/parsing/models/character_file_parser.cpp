@@ -20,12 +20,12 @@
 void dnd::CharacterFileParser::parse() {
     DND_MEASURE_FUNCTION();
     if (!json_to_parse.is_object()) {
-        throw json_format_error(ParsingType::CHARACTER, filename, "map/object");
+        throw json_format_error(ParsingType::CHARACTER, filepath, "map/object");
     }
     character_name = json_to_parse.at("name").get<std::string>();
     if (json_to_parse.at("base_ability_scores").size() != 6) {
         throw invalid_attribute(
-            ParsingType::CHARACTER, filename, "base_ability_scores", "must have exactly 6 entries."
+            ParsingType::CHARACTER, filepath, "base_ability_scores", "must have exactly 6 entries."
         );
     }
     base_ability_scores = json_to_parse.at("base_ability_scores").get<std::array<int, 6>>();
@@ -52,32 +52,32 @@ void dnd::CharacterFileParser::parseLevelAndXP() {
     if (has_level && has_xp) {
         level = json_to_parse.at("level").get<int>();
         if (level < 1 || level > 20) {
-            throw invalid_attribute(ParsingType::CHARACTER, filename, "level", "must be between 1 and 20.");
+            throw invalid_attribute(ParsingType::CHARACTER, filepath, "level", "must be between 1 and 20.");
         }
         xp = json_to_parse.at("xp").get<int>();
         if (xp < 0) {
-            throw invalid_attribute(ParsingType::CHARACTER, filename, "xp", "must be positive.");
+            throw invalid_attribute(ParsingType::CHARACTER, filepath, "xp", "must be positive.");
         }
         if (xp_for_level.at(level) > xp || (level < 20 && xp_for_level.at(level + 1) <= xp)) {
             throw invalid_attribute(
-                ParsingType::CHARACTER, filename, "xp",
+                ParsingType::CHARACTER, filepath, "xp",
                 "corresponsds to a different level than the level value provided."
             );
         }
     } else if (has_level) {
         level = json_to_parse.at("level").get<int>();
         if (level < 1 || level > 20) {
-            throw invalid_attribute(ParsingType::CHARACTER, filename, "level", "must be between 1 and 20.");
+            throw invalid_attribute(ParsingType::CHARACTER, filepath, "level", "must be between 1 and 20.");
         }
         xp = xp_for_level.at(level);
     } else if (has_xp) {
         xp = json_to_parse.at("xp").get<int>();
         if (xp < 0) {
-            throw invalid_attribute(ParsingType::CHARACTER, filename, "xp", "must be positive.");
+            throw invalid_attribute(ParsingType::CHARACTER, filepath, "xp", "must be positive.");
         }
         level = Character::levelForXP(xp);
     } else {
-        throw invalid_attribute(ParsingType::CHARACTER, filename, "level/xp", "at least one must be provided.");
+        throw invalid_attribute(ParsingType::CHARACTER, filepath, "level/xp", "at least one must be provided.");
     }
 }
 
@@ -87,7 +87,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
         class_ptr = &character_classes.at(character_class_name);
     } catch (const std::out_of_range& e) {
         throw invalid_attribute(
-            ParsingType::CHARACTER, filename, "class", '\"' + character_class_name + "\" does not exist"
+            ParsingType::CHARACTER, filepath, "class", '\"' + character_class_name + "\" does not exist"
         );
     }
 
@@ -97,7 +97,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
             subclass_ptr = &character_subclasses.at(character_subclass_name);
         } catch (const std::out_of_range& e) {
             throw invalid_attribute(
-                ParsingType::CHARACTER, filename, "subclass", '\"' + character_subclass_name + "\" does not exist"
+                ParsingType::CHARACTER, filepath, "subclass", '\"' + character_subclass_name + "\" does not exist"
             );
         }
         if (class_ptr->subclass_level > level) {
@@ -107,7 +107,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
         }
     } else if (class_ptr->subclass_level <= level) {
         throw attribute_missing(
-            ParsingType::CHARACTER, filename,
+            ParsingType::CHARACTER, filepath,
             "beginning at level " + std::to_string(class_ptr->subclass_level) + " a subclass is required for "
                 + class_ptr->name + "s."
         );
@@ -118,14 +118,14 @@ void dnd::CharacterFileParser::parseClassAndRace() {
         race_ptr = &character_races.at(character_race_name);
     } catch (const std::out_of_range& e) {
         throw invalid_attribute(
-            ParsingType::CHARACTER, filename, "race", '\"' + character_race_name + "\" does not exist"
+            ParsingType::CHARACTER, filepath, "race", '\"' + character_race_name + "\" does not exist"
         );
     }
 
     if (json_to_parse.contains("subrace")) {
         if (!race_ptr->has_subraces) {
             throw invalid_attribute(
-                ParsingType::CHARACTER, filename, "subrace",
+                ParsingType::CHARACTER, filepath, "subrace",
                 "is invalid because the race \"" + race_ptr->name + "\" has no subraces."
             );
         }
@@ -134,13 +134,13 @@ void dnd::CharacterFileParser::parseClassAndRace() {
             subrace_ptr = &character_subraces.at(character_subrace_name);
         } catch (const std::out_of_range& e) {
             throw invalid_attribute(
-                ParsingType::CHARACTER, filename, "subrace", '\"' + character_subrace_name + "\" does not exist"
+                ParsingType::CHARACTER, filepath, "subrace", '\"' + character_subrace_name + "\" does not exist"
             );
         }
     } else if (race_ptr->has_subraces) {
         std::cout << "JSON:\n" << json_to_parse << std::endl;
         throw attribute_missing(
-            ParsingType::CHARACTER, filename, "The race \"" + race_ptr->name + "\" requires a subrace selection."
+            ParsingType::CHARACTER, filepath, "The race \"" + race_ptr->name + "\" requires a subrace selection."
         );
     }
 }

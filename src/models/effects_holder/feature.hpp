@@ -10,7 +10,7 @@ public:
     bool subclass;
     Feature(const std::string& name, const std::string& description);
     Feature(Feature&& other) = default;
-    Feature(EffectsHolder&& other);
+    Feature(EffectsHolder&& effects_holder);
     bool isActiveForLevel(int level) const;
 };
 

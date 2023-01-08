@@ -17,7 +17,7 @@
 void dnd::FeatureHolderFileParser::parseFeatures() {
     const nlohmann::json& features_json = json_to_parse.at("features");
     if (!features_json.is_object()) {
-        throw attribute_format_error(filename, "features", "map/object");
+        throw attribute_format_error(filepath, "features", "map/object");
     }
 
     features.reserve(features_json.size());
@@ -30,8 +30,6 @@ void dnd::FeatureHolderFileParser::parseFeatures() {
 dnd::Feature dnd::FeatureHolderFileParser::createFeature(
     const std::string& feature_name, const nlohmann::json& feature_json
 ) const {
-    const std::string feature_description = feature_json.at("description").get<std::string>();
-
     // TODO: change feature constructor?
     Feature feature(std::move(createEffectsHolder(feature_name, feature_json)));
 

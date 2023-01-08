@@ -20,7 +20,7 @@ public:
     virtual void saveResult() = 0;
 protected:
     nlohmann::json json_to_parse;
-    std::string filename;
+    std::filesystem::path filepath;
 };
 
 template <typename T>

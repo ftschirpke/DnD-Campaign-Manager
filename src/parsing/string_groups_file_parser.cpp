@@ -37,20 +37,21 @@ std::unordered_set<std::string> dnd::StringGroupsFileParser::parseMap(const nloh
                 parsed_data[name].insert(parsed_data.at(subgroup).cbegin(), parsed_data.at(subgroup).cend());
             }
         } else {
-            throw attribute_format_error(ParsingType::GROUP, filename, name, "map/object or array");
+            throw attribute_format_error(ParsingType::GROUP, filepath, name, "map/object or array");
         }
     }
     return no_subgroup_values;
 }
 
 void dnd::StringGroupsFileParser::parse() {
+    DND_MEASURE_FUNCTION();
     if (!json_to_parse.is_object()) {
-        throw json_format_error(ParsingType::GROUP, filename, "map/object");
+        throw json_format_error(ParsingType::GROUP, filepath, "map/object");
     }
     auto no_subgroup = parseMap(json_to_parse);
     if (!no_subgroup.empty()) {
         throw invalid_attribute(
-            ParsingType::GROUP, filename, "__no_subgroup__", "cannot exist at highest level of the JSON map/object."
+            ParsingType::GROUP, filepath, "__no_subgroup__", "cannot exist at highest level of the JSON map/object."
         );
     }
 }
@@ -60,11 +61,11 @@ bool dnd::StringGroupsFileParser::validate() const {
     for (const auto& [group_name, _] : parsed_data) {
         if (group_name.empty()) {
             valid = false;
-            std::cerr << "Warning: " << filename << " contains group " << group_name << " with invalid name."
+            std::cerr << "Warning: " << filepath << " contains group " << group_name << " with invalid name."
                       << " Group names cannot be \"\".\n";
         } else if (group_name[0] == '_' || group_name[group_name.size() - 1] == '_') {
             valid = false;
-            std::cerr << "Warning: " << filename << " contains group " << group_name << " with invalid name."
+            std::cerr << "Warning: " << filepath << " contains group " << group_name << " with invalid name."
                       << " Group names cannot start or end with an underscore.\n";
         }
     }

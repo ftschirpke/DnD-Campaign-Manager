@@ -34,7 +34,7 @@ void dnd::SpellsFileParser::createSpell(std::string_view spell_name, const nlohm
 void dnd::SpellsFileParser::parse() {
     DND_MEASURE_FUNCTION();
     if (!json_to_parse.is_object()) {
-        throw json_format_error(ParsingType::SPELL, filename, "map/object");
+        throw json_format_error(ParsingType::SPELL, filepath, "map/object");
     }
     spells_in_file = json_to_parse.size();
     spell_parsing_info.reserve(spells_in_file);
@@ -42,7 +42,7 @@ void dnd::SpellsFileParser::parse() {
     std::vector<std::future<void>> futures;
     for (const auto& [spell_name, spell_json] : json_to_parse.items()) {
         if (spell_name.size() == 0) {
-            throw invalid_attribute(ParsingType::SPELL, filename, "spell name", "cannot be \"\".");
+            throw invalid_attribute(ParsingType::SPELL, filepath, "spell name", "cannot be \"\".");
         }
         futures.emplace_back(
             std::async(std::launch::async, &SpellsFileParser::createSpell, this, spell_name, spell_json)
@@ -68,7 +68,7 @@ dnd::SpellType dnd::SpellsFileParser::createSpellType(const std::string& spell_t
                                       " cantrip)");
     if (!std::regex_match(spell_type_str, spell_type_regex)) {
         // TODO: think about how to reintroduce spell name into error message
-        throw attribute_type_error(filename, "invalid spell type format: \"" + spell_type_str + "\"");
+        throw attribute_type_error(filepath, "invalid spell type format: \"" + spell_type_str + "\"");
     }
     SpellType spell_type;
     size_t ritual_idx = spell_type_str.find(" (ritual)");
@@ -97,7 +97,7 @@ dnd::SpellComponents dnd::SpellsFileParser::createSpellComponents(const std::str
     );
     if (!std::regex_match(spell_components_str, spell_components_regex)) {
         // TODO: think about how to reintroduce spell name into error message
-        throw attribute_type_error(filename, "invalid spell components format: \"" + spell_components_str + "\"");
+        throw attribute_type_error(filepath, "invalid spell components format: \"" + spell_components_str + "\"");
     }
     std::string::const_iterator start = spell_components_str.cbegin();
     int parentheses_idx = spell_components_str.find(" (");
