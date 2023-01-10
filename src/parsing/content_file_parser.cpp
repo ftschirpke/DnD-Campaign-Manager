@@ -15,7 +15,6 @@ bool dnd::ContentFileParser::openJSON(const std::filesystem::directory_entry& fi
         return false;
     }
     filepath = file.path();
-    std::string filename = filepath.c_str();
     if (filepath.extension().c_str() == ".json") {
         std::cerr << "Warning: " << filepath << " is not a \".json\" file.\n";
         return false;

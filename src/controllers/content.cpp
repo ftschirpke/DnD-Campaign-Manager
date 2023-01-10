@@ -12,7 +12,7 @@
 #include "models/character_race.hpp"
 #include "models/spell.hpp"
 
-void dnd::Content::printStatus() const {
+void dnd::Content::printStatus() const noexcept {
     groups.printStatus();
     std::cout << "=== Spells ===\n";
     std::cout << "spells parsed: " << spells.size() << '\n';

@@ -12,7 +12,7 @@ namespace dnd {
 
 class EffectsHolderFileParser : public ContentFileParser {
 public:
-    EffectsHolderFileParser() = default;
+    EffectsHolderFileParser() noexcept = default;
 protected:
     void parseAndAddEffect(const std::string& effect_str, EffectsHolder& effects_holder) const;
     void parseAndAddActivation(const std::string& activation_str, EffectsHolder& effects_holder) const;

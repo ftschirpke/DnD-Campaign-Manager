@@ -9,7 +9,7 @@ namespace dnd {
 
 class EffectsHolderGroupsFileParser : public EffectsHolderFileParser {
 public:
-    EffectsHolderGroupsFileParser(Groups& results);
+    EffectsHolderGroupsFileParser(Groups& results) noexcept;
     virtual void parse() override;
     virtual bool validate() const override;
     virtual void saveResult() override;
@@ -20,7 +20,7 @@ private:
     Choosable createChoosable(const std::string& name, const nlohmann::json& choosable_json) const;
 };
 
-inline EffectsHolderGroupsFileParser::EffectsHolderGroupsFileParser(Groups& results) : results(results) {}
+inline EffectsHolderGroupsFileParser::EffectsHolderGroupsFileParser(Groups& results) noexcept : results(results) {}
 
 } // namespace dnd
 

@@ -13,7 +13,7 @@ namespace dnd {
 
 class StringGroupsFileParser : public ContentFileParser {
 public:
-    StringGroupsFileParser(Groups& results);
+    StringGroupsFileParser(Groups& results) noexcept;
     virtual void parse() override;
     virtual bool validate() const override;
     virtual void saveResult() override;
@@ -24,7 +24,7 @@ private:
     std::unordered_map<std::string, std::unordered_set<std::string>> parsed_data;
 };
 
-inline StringGroupsFileParser::StringGroupsFileParser(Groups& results) : results(results) {}
+inline StringGroupsFileParser::StringGroupsFileParser(Groups& results) noexcept : results(results) {}
 
 } // namespace dnd
 

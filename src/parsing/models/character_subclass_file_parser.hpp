@@ -17,7 +17,7 @@ public:
     CharacterSubclassFileParser(
         std::unordered_map<std::string, const CharacterSubclass>& results,
         const std::unordered_map<std::string, const CharacterClass>& classes
-    );
+    ) noexcept;
     virtual void parse() override;
     virtual bool validate() const override;
     virtual void saveResult() override;
@@ -30,7 +30,7 @@ private:
 inline CharacterSubclassFileParser::CharacterSubclassFileParser(
     std::unordered_map<std::string, const CharacterSubclass>& results,
     const std::unordered_map<std::string, const CharacterClass>& classes
-)
+) noexcept
     : FeatureHolderFileParser(), results(results), classes(classes) {}
 
 } // namespace dnd

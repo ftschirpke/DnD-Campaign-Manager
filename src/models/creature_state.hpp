@@ -8,8 +8,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include "models/feature_holder.hpp"
 #include "models/effects_holder/feature.hpp"
+#include "models/feature_holder.hpp"
 
 namespace dnd {
 
@@ -33,18 +33,18 @@ public:
     ActionHolder actions;
     ProficiencyHolder proficiencies;
     RIVHolder rivs;
-    CreatureState() = default;
+    CreatureState() noexcept = default;
     CreatureState(
         const std::unordered_map<std::string, int>& constants,
         const std::unordered_map<std::string, int>& initial_attributes
-    );
+    ) noexcept;
     void reset(
         const std::unordered_map<std::string, int>& new_constants,
         const std::unordered_map<std::string, int>& new_initial_attributes
-    );
+    ) noexcept;
     void addFeatureHolder(const FeatureHolder* const feature_holder_ptr);
     void calculate();
-    static int modifier(int ability_score);
+    static int modifier(int ability_score) noexcept;
     static bool isAbility(const std::string& attribute_name);
 private:
     void applyAbilityScoreEffects();
@@ -55,18 +55,18 @@ private:
 inline CreatureState::CreatureState(
     const std::unordered_map<std::string, int>& constants,
     const std::unordered_map<std::string, int>& initial_attributes
-)
+) noexcept
     : constants(constants), attributes(initial_attributes) {}
 
 inline void CreatureState::reset(
     const std::unordered_map<std::string, int>& new_constants,
     const std::unordered_map<std::string, int>& new_initial_attributes
-) {
+) noexcept {
     constants = new_constants;
     attributes = new_initial_attributes;
 }
 
-inline int CreatureState::modifier(int ability_score) { return ability_score / 2 - 5; }
+inline int CreatureState::modifier(int ability_score) noexcept { return ability_score / 2 - 5; }
 
 inline bool CreatureState::isAbility(const std::string& attribute_name) {
     return std::find(abilities.cbegin(), abilities.cend(), attribute_name) != abilities.cend();

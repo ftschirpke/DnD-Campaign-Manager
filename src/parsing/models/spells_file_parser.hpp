@@ -23,7 +23,7 @@ struct SpellParsingInfo {
 
 class SpellsFileParser : public ContentFileParser {
 public:
-    SpellsFileParser(std::unordered_map<std::string, const Spell>& results);
+    SpellsFileParser(std::unordered_map<std::string, const Spell>& results) noexcept;
     virtual void parse() override;
     virtual bool validate() const override;
     virtual void saveResult() override;
@@ -39,7 +39,8 @@ private:
     std::mutex spell_parsing_mutex;
 };
 
-inline SpellsFileParser::SpellsFileParser(std::unordered_map<std::string, const Spell>& results) : results(results) {}
+inline SpellsFileParser::SpellsFileParser(std::unordered_map<std::string, const Spell>& results) noexcept
+    : results(results) {}
 
 } // namespace dnd
 

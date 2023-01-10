@@ -22,15 +22,15 @@ public:
     ProficiencyHolder proficiencies;
     RIVHolder rivs;
     std::unordered_map<EffectTime, std::vector<std::unique_ptr<const Effect>>> ability_score_effects, normal_effects;
-    EffectsHolder(const std::string& name, const std::string& description);
-    EffectsHolder(EffectsHolder&& other) = default;
+    EffectsHolder(const std::string& name, const std::string& description) noexcept;
+    EffectsHolder(EffectsHolder&& other) noexcept = default;
     // TODO: manage choices (choose one of ...)
     bool isActive(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const;
 };
 
-inline EffectsHolder::EffectsHolder(const std::string& name, const std::string& description)
+inline EffectsHolder::EffectsHolder(const std::string& name, const std::string& description) noexcept
     : name(name), description(description) {}
 
 } // namespace dnd

@@ -13,12 +13,12 @@ namespace dnd {
 class Choosable : public EffectsHolder {
 public:
     std::vector<std::unique_ptr<Prerequisite>> prerequisites;
-    Choosable(Choosable&& other) = default;
-    Choosable(EffectsHolder&& effects_holder);
-    bool isAllowed(const Character& character) const;
+    Choosable(Choosable&& other) noexcept = default;
+    Choosable(EffectsHolder&& effects_holder) noexcept;
+    bool isAllowedFor(const Character& character) const;
 };
 
-inline Choosable::Choosable(EffectsHolder&& effects_holder) : EffectsHolder(std::move(effects_holder)) {}
+inline Choosable::Choosable(EffectsHolder&& effects_holder) noexcept : EffectsHolder(std::move(effects_holder)) {}
 
 } // namespace dnd
 

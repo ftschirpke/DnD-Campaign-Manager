@@ -28,7 +28,7 @@
 #include "parsing/parsing_types.hpp"
 #include "parsing/string_groups_file_parser.hpp"
 
-void dnd::ContentParser::reset() {
+void dnd::ContentParser::reset() noexcept {
     parsed_content = Content();
     dirs_to_parse = std::vector<std::filesystem::directory_entry>();
 }

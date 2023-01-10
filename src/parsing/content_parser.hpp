@@ -32,12 +32,11 @@ private:
     std::vector<std::filesystem::directory_entry> dirs_to_parse;
     // mutexes used to control the access to each of the content type maps within the parsed_content
     std::unordered_map<ParsingType, std::mutex> parsing_mutexes;
-    void reset();
+    void reset() noexcept;
     void parseAllOfType(const ParsingType parsing_type);
     void parseAllOfSingleFileType(const ParsingType parsing_type);
     void parseAllOfMultiFileType(const ParsingType parsing_type);
     void parseFileOfType(const std::filesystem::directory_entry& file, const ParsingType parsing_type, bool multi_file);
-    void parseFileWithParser(const std::filesystem::directory_entry& file, std::unique_ptr<ContentFileParser> parser);
     std::unique_ptr<ContentFileParser> createSingleFileParserForType(const ParsingType parsing_type);
     std::unique_ptr<ContentFileParser> createMultiFileParserForType(const ParsingType parsing_type);
     std::unique_ptr<ContentFileParser> createGeneralParserForType(const ParsingType parsing_type);
