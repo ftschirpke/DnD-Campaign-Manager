@@ -18,7 +18,7 @@ public:
     FeatureHolderFileParser() noexcept = default;
 protected:
     Feature createFeature(const std::string& feature_name, const nlohmann::json& feature_json) const;
-    virtual void parseFeatures();
+    void parseFeatures();
     const std::vector<Feature>& getFeatures() const;
     std::vector<Feature>&& retrieveFeatures();
 private:

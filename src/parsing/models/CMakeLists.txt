@@ -8,6 +8,7 @@ target_sources(dndmanager
     character_subclass_file_parser.cpp
     character_subrace_file_parser.cpp
     spells_file_parser.cpp
+    spellcasting_feature_holder_file_parser.cpp
 )
 
 target_sources(dndmanager_tests
@@ -20,4 +21,5 @@ target_sources(dndmanager_tests
     character_subclass_file_parser.cpp
     character_subrace_file_parser.cpp
     spells_file_parser.cpp
+    spellcasting_feature_holder_file_parser.cpp
 )
