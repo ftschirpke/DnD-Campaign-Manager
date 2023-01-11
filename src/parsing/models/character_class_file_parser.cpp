@@ -32,7 +32,10 @@ void dnd::CharacterClassFileParser::parse() {
         e.setParsingType(ParsingType::CLASS);
         throw e;
     }
+    subclass_level = determineSubclassLevel(getFeatures());
+}
 
+int dnd::CharacterClassFileParser::determineSubclassLevel(const std::vector<dnd::Feature>& features) const {
     const Feature* subclass_feature = nullptr;
     for (const auto& feature : features) {
         if (feature.subclass) {
@@ -48,7 +51,7 @@ void dnd::CharacterClassFileParser::parse() {
         throw invalid_attribute(ParsingType::CLASS, filepath, "features", "there must be one subclass feature.");
     }
 
-    subclass_level = 1;
+    int subclass_level = 1;
     while (!subclass_feature->isActiveForLevel(subclass_level)) {
         ++subclass_level;
     }
@@ -57,6 +60,7 @@ void dnd::CharacterClassFileParser::parse() {
             ParsingType::CLASS, filepath, "features", "subclass feature must be active for a level between 1 and 20."
         );
     }
+    return subclass_level;
 }
 
 bool dnd::CharacterClassFileParser::validate() const {

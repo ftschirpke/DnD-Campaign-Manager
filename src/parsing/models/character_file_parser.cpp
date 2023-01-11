@@ -160,7 +160,7 @@ void dnd::CharacterFileParser::saveResult() {
         std::forward_as_tuple(character_name, base_ability_scores, level, xp, hit_dice_rolls)
     );
     Character& character = results.at(character_name);
-    character.features = std::move(features);
+    character.features = retrieveFeatures();
     character.race_ptr = race_ptr;
     character.subrace_ptr = subrace_ptr;
     character.class_ptr = class_ptr;

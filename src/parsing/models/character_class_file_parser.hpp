@@ -18,6 +18,8 @@ public:
     virtual void parse() override;
     virtual bool validate() const override;
     virtual void saveResult() override;
+protected:
+    int determineSubclassLevel(const std::vector<Feature>& features) const;
 private:
     std::unordered_map<std::string, const CharacterClass>& results;
     std::string character_class_name, character_class_hit_dice;

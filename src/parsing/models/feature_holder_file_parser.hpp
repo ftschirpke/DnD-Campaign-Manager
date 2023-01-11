@@ -17,10 +17,17 @@ class FeatureHolderFileParser : public EffectsHolderFileParser {
 public:
     FeatureHolderFileParser() noexcept = default;
 protected:
-    std::vector<Feature> features;
     Feature createFeature(const std::string& feature_name, const nlohmann::json& feature_json) const;
     virtual void parseFeatures();
+    const std::vector<Feature>& getFeatures() const;
+    std::vector<Feature>&& retrieveFeatures();
+private:
+    std::vector<Feature> features;
 };
+
+inline const std::vector<Feature>& FeatureHolderFileParser::getFeatures() const { return features; }
+
+inline std::vector<Feature>&& FeatureHolderFileParser::retrieveFeatures() { return std::move(features); }
 
 } // namespace dnd
 
