@@ -30,6 +30,15 @@ void dnd::CharacterSubclassFileParser::parse() {
         e.setParsingType(ParsingType::SUBCLASS);
         throw e;
     }
+
+    if (json_to_parse.contains("spellcasting")) {
+        try {
+            parseSpellcasting();
+        } catch (parsing_error& e) {
+            e.setParsingType(ParsingType::SUBCLASS);
+            throw e;
+        }
+    }
 }
 
 bool dnd::CharacterSubclassFileParser::validate() const {

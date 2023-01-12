@@ -18,15 +18,15 @@
 void dnd::SpellcastingFeatureHolderFileParser::parseSize20Array(
     const nlohmann::json& json_to_parse, const char* attribute_name, std::array<int, 20>& output
 ) {
+    if (!json_to_parse.contains(attribute_name)) {
+        output = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        return;
+    }
     const nlohmann::json& attribute_json = json_to_parse.at(attribute_name);
     if (!attribute_json.is_array() || attribute_json.size() != 20) {
         throw invalid_attribute(filepath, attribute_name, "should be an array of 20 numbers.");
     }
-    if (attribute_json.contains(attribute_name)) {
-        output = attribute_json.get<std::array<int, 20>>();
-    } else {
-        output = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    }
+    output = attribute_json.get<std::array<int, 20>>();
 }
 
 void dnd::SpellcastingFeatureHolderFileParser::parseSpellcasting() {

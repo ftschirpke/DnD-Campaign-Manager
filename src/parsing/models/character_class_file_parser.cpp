@@ -33,6 +33,15 @@ void dnd::CharacterClassFileParser::parse() {
         throw e;
     }
     subclass_level = determineSubclassLevel(getFeatures());
+
+    if (json_to_parse.contains("spellcasting")) {
+        try {
+            parseSpellcasting();
+        } catch (parsing_error& e) {
+            e.setParsingType(ParsingType::CLASS);
+            throw e;
+        }
+    }
 }
 
 int dnd::CharacterClassFileParser::determineSubclassLevel(const std::vector<dnd::Feature>& features) const {

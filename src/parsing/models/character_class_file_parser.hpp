@@ -8,11 +8,11 @@
 
 #include "models/character_class.hpp"
 #include "models/effects_holder/feature.hpp"
-#include "parsing/models/feature_holder_file_parser.hpp"
+#include "parsing/models/spellcasting_feature_holder_file_parser.hpp"
 
 namespace dnd {
 
-class CharacterClassFileParser : public FeatureHolderFileParser {
+class CharacterClassFileParser : public SpellcastingFeatureHolderFileParser {
 public:
     CharacterClassFileParser(std::unordered_map<std::string, const CharacterClass>& results) noexcept;
     virtual void parse() override;
@@ -29,7 +29,7 @@ private:
 
 inline CharacterClassFileParser::CharacterClassFileParser(std::unordered_map<std::string, const CharacterClass>& results
 ) noexcept
-    : FeatureHolderFileParser(), results(results) {}
+    : SpellcastingFeatureHolderFileParser(), results(results) {}
 
 } // namespace dnd
 
