@@ -20,6 +20,7 @@
 dnd::EffectsHolder dnd::EffectsHolderFileParser::createEffectsHolder(
     const std::string& name, const nlohmann::json& effect_holder_json
 ) const {
+    DND_MEASURE_FUNCTION();
     if (!effect_holder_json.is_object()) {
         throw attribute_format_error(filepath, name, "map/object");
     }
@@ -31,6 +32,10 @@ dnd::EffectsHolder dnd::EffectsHolderFileParser::createEffectsHolder(
     parseOptional(effect_holder_json, "actions", effects_holder.actions.actions);
     parseOptional(effect_holder_json, "bonus_actions", effects_holder.actions.bonus_actions);
     parseOptional(effect_holder_json, "reactions", effects_holder.actions.reactions);
+
+    parseOptional(effect_holder_json, "cantrips_free", effects_holder.extra_spells.free_cantrips);
+    parseOptional(effect_holder_json, "spells_innate", effects_holder.extra_spells.innate_spells);
+    parseOptional(effect_holder_json, "spells_at_will", effects_holder.extra_spells.spells_at_will);
 
     parseOptional(effect_holder_json, "damage_resistances", effects_holder.rivs.damage_resistances);
     parseOptional(effect_holder_json, "damage_immunities", effects_holder.rivs.damage_immunities);
@@ -75,23 +80,7 @@ dnd::EffectsHolder dnd::EffectsHolderFileParser::createEffectsHolder(
 
 void dnd::EffectsHolderFileParser::parseAndAddEffect(const std::string& effect_str, EffectsHolder& effects_holder)
     const {
-    const std::regex effect_regex("[A-Z][_A-Z0-9]+"
-                                  " "
-                                  "(earliest|early|normal|late|latest)"
-                                  " "
-                                  "("
-                                  "("
-                                  "(add|mult|div|set|max|min) -?\\d+(\\.\\d\\d?)?"
-                                  ")"
-                                  "|"
-                                  "("
-                                  "addOther|multOther|divOther|setOther|maxOther|minOther"
-                                  "|"
-                                  "addConst|multConst|divConst|setConst|maxConst|minConst"
-                                  ")"
-                                  " "
-                                  "[A-Z][_A-Z0-9]+"
-                                  ")");
+    const std::regex effect_regex(effect_regex_str);
     if (!std::regex_match(effect_str, effect_regex)) {
         throw attribute_type_error(
             filepath, "effect holder \"" + effects_holder.name + "\": invalid effect format: \"" + effect_str + "\""
@@ -147,10 +136,7 @@ void dnd::EffectsHolderFileParser::parseAndAddEffect(const std::string& effect_s
 void dnd::EffectsHolderFileParser::parseAndAddActivation(
     const std::string& activation_str, EffectsHolder& effects_holder
 ) const {
-    const std::string operators_allowed = "(==|!=|>=|<=|>|<)";
-    const std::regex activation_regex(
-        "[A-Z][_A-Z0-9]+ " + operators_allowed + " ([A-Z][_A-Z0-9]+|-?\\d+(\\.\\d\\d?)?|true|false)"
-    );
+    const std::regex activation_regex(activation_regex_str);
     if (!std::regex_match(activation_str, activation_regex)) {
         throw attribute_type_error(
             filepath,
