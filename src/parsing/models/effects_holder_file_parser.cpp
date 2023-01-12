@@ -9,6 +9,7 @@
 
 #include <nlohmann/json.hpp>
 
+#include "basic_mechanics/abilities.hpp"
 #include "models/creature_state.hpp"
 #include "models/effects_holder/activation.hpp"
 #include "models/effects_holder/effects_holder.hpp"
@@ -136,7 +137,7 @@ void dnd::EffectsHolderFileParser::parseAndAddEffect(const std::string& effect_s
     }
 
     const EffectTime effect_time = effect_time_for_string.at(effect_time_str);
-    if (CreatureState::isAbility(affected_attribute)) {
+    if (isAbility(affected_attribute)) {
         effects_holder.ability_score_effects[effect_time].emplace_back(std::move(effect_ptr));
     } else {
         effects_holder.normal_effects[effect_time].emplace_back(std::move(effect_ptr));

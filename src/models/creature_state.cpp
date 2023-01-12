@@ -7,9 +7,11 @@
 #include <unordered_map>
 #include <vector>
 
-#include "models/feature_holder.hpp"
+#include "basic_mechanics/abilities.hpp"
+#include "basic_mechanics/skills.hpp"
 #include "models/effects_holder/effect.hpp"
 #include "models/effects_holder/feature.hpp"
+#include "models/feature_holder.hpp"
 
 void dnd::CreatureState::applyAbilityScoreEffects() {
     for (const auto& effect_time : effect_times_in_order) {
@@ -36,11 +38,11 @@ void dnd::CreatureState::applyNormalEffects() {
 }
 
 void dnd::CreatureState::determineModifiers() {
-    for (const std::string& ability_name : abilities) {
+    for (const std::string& ability_name : ability_strings_inorder) {
         attributes[ability_name + "MOD"] = modifier(attributes.at(ability_name));
         attributes[ability_name + "SAVE"] = modifier(attributes.at(ability_name));
     }
-    for (const auto& [skill_name, ability_name] : skills) {
+    for (const auto& [skill_name, ability_name] : skill_abilities) {
         attributes[skill_name] = attributes.at(ability_name + "MOD");
     }
 }

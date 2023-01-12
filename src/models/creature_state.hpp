@@ -13,18 +13,6 @@
 
 namespace dnd {
 
-const std::vector<std::string> abilities = {
-    "STR", "DEX", "CON", "INT", "WIS", "CHA",
-};
-
-const std::map<std::string, std::string> skills = {
-    {"ACROBATICS", "DEX"},    {"ANIMAL_HANDLING", "WIS"}, {"ARCANA", "INT"},   {"ATHLETICS", "STR"},
-    {"DECEPTION", "CHA"},     {"HISTORY", "INT"},         {"INSIGHT", "WIS"},  {"INTIMIDATION", "CHA"},
-    {"INVESTIGATION", "INT"}, {"MEDICINE", "WIS"},        {"NATURE", "INT"},   {"PERCEPTION", "WIS"},
-    {"PERFORMANCE", "CHA"},   {"PERSUASION", "CHA"},      {"RELIGION", "INT"}, {"SLEIGHT_OF_HAND", "DEX"},
-    {"STEALTH", "DEX"},       {"SURVIVAL", "WIS"},
-};
-
 class CreatureState {
 public:
     std::unordered_map<std::string, int> constants;
@@ -45,7 +33,6 @@ public:
     void addFeatureHolder(const FeatureHolder* const feature_holder_ptr);
     void calculate();
     static int modifier(int ability_score) noexcept;
-    static bool isAbility(const std::string& attribute_name);
 private:
     void applyAbilityScoreEffects();
     void applyNormalEffects();
@@ -68,9 +55,6 @@ inline void CreatureState::reset(
 
 inline int CreatureState::modifier(int ability_score) noexcept { return ability_score / 2 - 5; }
 
-inline bool CreatureState::isAbility(const std::string& attribute_name) {
-    return std::find(abilities.cbegin(), abilities.cend(), attribute_name) != abilities.cend();
-}
 
 } // namespace dnd
 
