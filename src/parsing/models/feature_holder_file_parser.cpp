@@ -15,6 +15,7 @@
 #include "parsing/parsing_exceptions.hpp"
 
 void dnd::FeatureHolderFileParser::parseFeatures() {
+    DND_MEASURE_FUNCTION();
     const nlohmann::json& features_json = json_to_parse.at("features");
     if (!features_json.is_object()) {
         throw attribute_format_error(filepath, "features", "map/object");

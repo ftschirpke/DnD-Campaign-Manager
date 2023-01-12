@@ -47,6 +47,7 @@ void dnd::CharacterFileParser::parse() {
 }
 
 void dnd::CharacterFileParser::parseLevelAndXP() {
+    DND_MEASURE_FUNCTION();
     const bool has_level = json_to_parse.contains("level");
     const bool has_xp = json_to_parse.contains("xp");
     if (has_level && has_xp) {
@@ -82,6 +83,7 @@ void dnd::CharacterFileParser::parseLevelAndXP() {
 }
 
 void dnd::CharacterFileParser::parseClassAndRace() {
+    DND_MEASURE_FUNCTION();
     const std::string character_class_name = json_to_parse.at("class").get<std::string>();
     try {
         class_ptr = &character_classes.at(character_class_name);

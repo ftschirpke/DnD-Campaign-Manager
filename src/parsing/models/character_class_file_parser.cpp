@@ -45,6 +45,7 @@ void dnd::CharacterClassFileParser::parse() {
 }
 
 int dnd::CharacterClassFileParser::determineSubclassLevel(const std::vector<dnd::Feature>& features) const {
+    DND_MEASURE_FUNCTION();
     const Feature* subclass_feature = nullptr;
     for (const auto& feature : features) {
         if (feature.subclass) {

@@ -21,6 +21,7 @@ bool dnd::ContentFileParser::openJSON(const std::filesystem::directory_entry& fi
     }
     std::ifstream json_file(filepath);
     try {
+        DND_MEASURE_SCOPE("JSON serialisation");
         json_file >> json_to_parse;
     } catch (const nlohmann::json::parse_error& e) {
         std::cerr << "Warning: Error occured while parsing " << filepath << ":\n" << e.what() << '\n';

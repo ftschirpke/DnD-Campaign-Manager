@@ -30,6 +30,7 @@ void dnd::SpellcastingFeatureHolderFileParser::parseSize20Array(
 }
 
 void dnd::SpellcastingFeatureHolderFileParser::parseSpellcasting() {
+    DND_MEASURE_FUNCTION();
     const nlohmann::json& spellcasting_json = json_to_parse.at("spellcasting");
     ability = spellcasting_json.at("ability").get<std::string>();
     if (!isAbility(ability)) {
