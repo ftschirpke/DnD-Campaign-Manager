@@ -12,7 +12,8 @@
 #include "models/character_race.hpp"
 #include "models/spell.hpp"
 
-void dnd::Content::printStatus() const {
+void dnd::Content::printStatus() const noexcept {
+    groups.printStatus();
     std::cout << "=== Spells ===\n";
     std::cout << "spells parsed: " << spells.size() << '\n';
     std::cout << "=== Character Races ===\n";
@@ -21,4 +22,6 @@ void dnd::Content::printStatus() const {
     std::cout << "=== Character Classes ===\n";
     std::cout << "character classes parsed: " << character_classes.size() << '\n';
     std::cout << "character subclasses parsed: " << character_subclasses.size() << '\n';
+    std::cout << "=== Characters ===\n";
+    std::cout << "characters parsed: " << characters.size() << '\n';
 }

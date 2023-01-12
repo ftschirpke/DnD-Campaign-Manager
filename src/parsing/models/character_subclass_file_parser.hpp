@@ -7,20 +7,21 @@
 #include <vector>
 
 #include "models/character_class.hpp"
-#include "models/features/feature.hpp"
-#include "parsing/models/feature_holder_file_parser.hpp"
+#include "models/effects_holder/feature.hpp"
+#include "parsing/models/spellcasting_feature_holder_file_parser.hpp"
 
 namespace dnd {
 
-class CharacterSubclassFileParser : public FeatureHolderFileParser {
+class CharacterSubclassFileParser : public SpellcastingFeatureHolderFileParser {
 public:
     CharacterSubclassFileParser(
         std::unordered_map<std::string, const CharacterSubclass>& results,
-        const std::unordered_map<std::string, const CharacterClass>& classes
-    );
-    void parse() override;
-    bool validate() const override;
-    void saveResult() override;
+        const std::unordered_map<std::string, const CharacterClass>& classes,
+        const std::unordered_map<std::string, const Spell>& spells
+    ) noexcept;
+    virtual void parse() override;
+    virtual bool validate() const override;
+    virtual void saveResult() override;
 private:
     std::unordered_map<std::string, const CharacterSubclass>& results;
     const std::unordered_map<std::string, const CharacterClass>& classes;
@@ -29,9 +30,10 @@ private:
 
 inline CharacterSubclassFileParser::CharacterSubclassFileParser(
     std::unordered_map<std::string, const CharacterSubclass>& results,
-    const std::unordered_map<std::string, const CharacterClass>& classes
-)
-    : FeatureHolderFileParser(), results(results), classes(classes) {}
+    const std::unordered_map<std::string, const CharacterClass>& classes,
+    const std::unordered_map<std::string, const Spell>& spells
+) noexcept
+    : SpellcastingFeatureHolderFileParser(spells), results(results), classes(classes) {}
 
 } // namespace dnd
 

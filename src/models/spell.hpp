@@ -3,6 +3,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 
 namespace dnd {
 
@@ -61,21 +62,24 @@ struct SpellComponents {
 class Spell {
 public:
     const std::string name, casting_time, range, duration, description;
+    // classes (and subclasses) that can cast this spell
+    const std::unordered_set<std::string> classes;
     const SpellType type;
     const SpellComponents components;
-    Spell() = delete;
     Spell(
         const std::string& name, const SpellType& type, const std::string& casting_time, const std::string& range,
-        const SpellComponents& components, const std::string& duration, const std::string& description
-    );
+        const SpellComponents& components, const std::string& duration, const std::string& description,
+        const std::unordered_set<std::string>& classes
+    ) noexcept;
 };
 
 inline Spell::Spell(
     const std::string& name, const SpellType& type, const std::string& casting_time, const std::string& range,
-    const SpellComponents& components, const std::string& duration, const std::string& description
-)
+    const SpellComponents& components, const std::string& duration, const std::string& description,
+    const std::unordered_set<std::string>& classes
+) noexcept
     : name(name), type(type), casting_time(casting_time), range(range), components(components), duration(duration),
-      description(description) {}
+      description(description), classes(classes) {}
 
 } // namespace dnd
 

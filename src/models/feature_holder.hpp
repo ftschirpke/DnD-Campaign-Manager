@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "models/features/feature.hpp"
+#include "models/effects_holder/feature.hpp"
 
 namespace dnd {
 
@@ -13,10 +13,10 @@ public:
     const std::string name;
     // TODO: should this really be public AND non-const?
     std::vector<Feature> features;
-    FeatureHolder(const std::string& name);
+    FeatureHolder(const std::string& name) noexcept;
 };
 
-inline FeatureHolder::FeatureHolder(const std::string& name) : name(name) {}
+inline FeatureHolder::FeatureHolder(const std::string& name) noexcept : name(name) {}
 
 } // namespace dnd
 

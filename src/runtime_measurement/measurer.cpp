@@ -6,12 +6,14 @@ const std::vector<std::string> values_for_human_readable = {
     "int dnd::launch(int, char**)",
     "Main execution scope",
     "dnd::Content dnd::ContentParser::parse(const std::filesystem::__cxx11::path&, const string&)",
-    "dnd::ContentParser::parseAllOfType ( spells )",
-    "dnd::ContentParser::parseAllOfType ( races )",
-    "dnd::ContentParser::parseAllOfType ( classes )",
-    "dnd::ContentParser::parseAllOfType ( subraces )",
-    "dnd::ContentParser::parseAllOfType ( subclasses )",
-    "dnd::ContentParser::parseAllOfType ( characters )",
+    "dnd::ContentParser::parseAllOfSingleFileType ( Group )",
+    "dnd::ContentParser::parseAllOfMultiFileType ( Group )",
+    "dnd::ContentParser::parseAllOfMultiFileType ( Spell )",
+    "dnd::ContentParser::parseAllOfMultiFileType ( Race )",
+    "dnd::ContentParser::parseAllOfMultiFileType ( Class )",
+    "dnd::ContentParser::parseAllOfMultiFileType ( Subrace )",
+    "dnd::ContentParser::parseAllOfMultiFileType ( Subclass )",
+    "dnd::ContentParser::parseAllOfMultiFileType ( Character )",
 };
 
 void dnd::Measurer::beginSession(const std::string& name, const std::string& filepath = "results.json") {

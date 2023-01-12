@@ -4,7 +4,7 @@
     "features": {
         "Expanded Spell List (The Fiend)": {
             "description": "The Fiend lets you choose from an expanded list of spells when you learn a warlock spell. The following spells are added to the warlock spell list for you.\n\nFiend Expanded Spells\n\nSpell Level|Spells\n1st|Burning Hands, Command\n2nd|Blindness/Deafness, Scorching Ray\n3rd|Fireball, Stinking Cloud\n4th|Fire Shield, Wall of Fire\n5th|Flame Strike, Hallow",
-            "spells_added_to_spelllist": ["Burning Hands", "Command", "Blindness/Deafness", "Scorching Ray", "Fireball", "Stinking Cloud", "Fire Shield", "Wall of Fire", "Flame Strike", "Hallow"]
+            "spells_added_to_spell_list": ["Burning Hands", "Command", "Blindness/Deafness", "Scorching Ray", "Fireball", "Stinking Cloud", "Fire Shield", "Wall of Fire", "Flame Strike", "Hallow"]
         },
         "Dark One's Blessing": {
             "description": "Starting at 1st level, when you reduce a hostile creature to 0 hit points, you gain temporary hit points equal to your Charisma modifier + your warlock level (minimum of 1)."

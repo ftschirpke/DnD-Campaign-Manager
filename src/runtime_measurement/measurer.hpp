@@ -27,7 +27,6 @@ struct MeasuringSession {
 // dirty way of saving threading information into json file that you can view in https://ui.perfetto.dev/
 class Measurer {
 public:
-    Measurer();
     void beginSession(const std::string& name, const std::string& filepath);
     void endSession();
     void writeProfile(const TimerResult& result);
@@ -52,8 +51,6 @@ private:
 };
 
 inline std::mutex Measurer::write_profile_mutex;
-
-inline Measurer::Measurer() : session(nullptr) {}
 
 inline Measurer& Measurer::get() {
     static Measurer instance;

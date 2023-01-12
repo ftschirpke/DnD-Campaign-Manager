@@ -7,12 +7,14 @@
 
 #include <catch2/catch_test_macros.hpp>
 
+#include "controllers/groups.hpp"
 #include "models/spell.hpp"
 
 // class that allows us to test the dnd::SpellsFileParser class
 class TestSpellsFileParser : public dnd::SpellsFileParser {
 public:
-    TestSpellsFileParser(std::unordered_map<std::string, const dnd::Spell>& results) : dnd::SpellsFileParser(results) {}
+    TestSpellsFileParser(std::unordered_map<std::string, const dnd::Spell>& results, dnd::Groups& groups)
+        : dnd::SpellsFileParser(results, groups) {}
     dnd::SpellType createSpellTypeForTesting(const std::string& spell_type_str) const {
         return dnd::SpellsFileParser::createSpellType(spell_type_str);
     }
@@ -27,10 +29,11 @@ public:
 class SetupSpellsParserTest {
 public:
     std::unordered_map<std::string, const dnd::Spell> spells;
+    dnd::Groups groups;
     TestSpellsFileParser createParser();
 };
 
-inline TestSpellsFileParser SetupSpellsParserTest::createParser() { return TestSpellsFileParser(spells); }
+inline TestSpellsFileParser SetupSpellsParserTest::createParser() { return TestSpellsFileParser(spells, groups); }
 
 
 TEST_CASE("dnd::SpellsFileParser::createSpellComponents: parse invalid components") {

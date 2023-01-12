@@ -8,7 +8,7 @@
             "choose": {
                 "cantrips_free": {
                     "amount": 1,
-                    "group": "druid cantrips"
+                    "group": "Druid cantrips"
                 }
             }
         },

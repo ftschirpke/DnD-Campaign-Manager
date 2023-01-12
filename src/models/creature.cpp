@@ -5,6 +5,7 @@
 #include <string>
 #include <unordered_map>
 
+#include "basic_mechanics/abilities.hpp"
 #include "models/creature_state.hpp"
 #include "models/feature_holder.hpp"
 
@@ -15,7 +16,7 @@ const std::unordered_map<std::string, int> dnd::Creature::getInitialAttributeVal
         {"MAXHP", 0},
     };
     for (int i = 0; i < 6; ++i) {
-        initial_values.emplace(abilities[i], base_ability_scores[i]);
+        initial_values.emplace(ability_strings_inorder[i], base_ability_scores[i]);
     }
     return initial_values;
 }
