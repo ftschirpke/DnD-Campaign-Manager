@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <mutex>
+#include <regex>
 #include <string>
 #include <string_view>
 #include <unordered_map>
@@ -28,7 +29,7 @@ public:
     virtual bool validate() const override;
     virtual void saveResult() override;
 protected:
-    static const std::string spell_type_regex_str, spell_components_regex_str;
+    static const std::regex spell_components_regex, spell_type_regex;
     void createSpell(std::string_view spell_name, const nlohmann::json& spell_json_ptr);
     SpellType createSpellType(const std::string& spell_type_str) const;
     SpellComponents createSpellComponents(const std::string& spell_components_str) const;
@@ -43,17 +44,18 @@ private:
 inline SpellsFileParser::SpellsFileParser(std::unordered_map<std::string, const Spell>& results) noexcept
     : results(results) {}
 
-inline const std::string SpellsFileParser::spell_type_regex_str =
-    "((1st|2nd|3rd|[4-9]th)-level "
-    "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|"
-    "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)"
-    "( \\(ritual\\))?)|("
-    "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|"
-    "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)"
-    " cantrip)";
+inline const std::regex SpellsFileParser::spell_components_regex(
+    "(V, S, M (\\((.*)\\))|V, S|V, M (\\((.*)\\))|S, M (\\((.*)\\))|V|S|M (\\((.*)\\)))"
+);
 
-inline const std::string SpellsFileParser::spell_components_regex_str =
-    "(V, S, M (\\((.*)\\))|V, S|V, M (\\((.*)\\))|S, M (\\((.*)\\))|V|S|M (\\((.*)\\)))";
+inline const std::regex SpellsFileParser::spell_type_regex("((1st|2nd|3rd|[4-9]th)-level "
+                                                           "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|"
+                                                           "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)"
+                                                           "( \\(ritual\\))?)|("
+                                                           "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|"
+                                                           "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)"
+                                                           " cantrip)");
+
 
 } // namespace dnd
 

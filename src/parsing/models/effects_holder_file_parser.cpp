@@ -80,7 +80,6 @@ dnd::EffectsHolder dnd::EffectsHolderFileParser::createEffectsHolder(
 
 void dnd::EffectsHolderFileParser::parseAndAddEffect(const std::string& effect_str, EffectsHolder& effects_holder)
     const {
-    const std::regex effect_regex(effect_regex_str);
     if (!std::regex_match(effect_str, effect_regex)) {
         throw attribute_type_error(
             filepath, "effect holder \"" + effects_holder.name + "\": invalid effect format: \"" + effect_str + "\""
@@ -136,7 +135,6 @@ void dnd::EffectsHolderFileParser::parseAndAddEffect(const std::string& effect_s
 void dnd::EffectsHolderFileParser::parseAndAddActivation(
     const std::string& activation_str, EffectsHolder& effects_holder
 ) const {
-    const std::regex activation_regex(activation_regex_str);
     if (!std::regex_match(activation_str, activation_regex)) {
         throw attribute_type_error(
             filepath,

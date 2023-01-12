@@ -59,7 +59,6 @@ void dnd::SpellsFileParser::parse() {
 
 dnd::SpellType dnd::SpellsFileParser::createSpellType(const std::string& spell_type_str) const {
     DND_MEASURE_FUNCTION();
-    const std::regex spell_type_regex(spell_type_regex_str);
     if (!std::regex_match(spell_type_str, spell_type_regex)) {
         // TODO: think about how to reintroduce spell name into error message
         throw attribute_type_error(filepath, "invalid spell type format: \"" + spell_type_str + "\"");
@@ -86,7 +85,6 @@ dnd::SpellType dnd::SpellsFileParser::createSpellType(const std::string& spell_t
 
 dnd::SpellComponents dnd::SpellsFileParser::createSpellComponents(const std::string& spell_components_str) const {
     DND_MEASURE_FUNCTION();
-    const std::regex spell_components_regex(spell_components_regex_str);
     if (!std::regex_match(spell_components_str, spell_components_regex)) {
         // TODO: think about how to reintroduce spell name into error message
         throw attribute_type_error(filepath, "invalid spell components format: \"" + spell_components_str + "\"");
