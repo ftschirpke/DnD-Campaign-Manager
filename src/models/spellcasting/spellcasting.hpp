@@ -3,6 +3,9 @@
 
 #include <array>
 #include <string>
+#include <unordered_map>
+
+#include "models/spell.hpp"
 
 namespace dnd {
 
@@ -11,6 +14,7 @@ public:
     Spellcasting(const std::string& spellcasting_ability, bool ritual_casting);
     const std::string ability;
     const bool ritual_casting;
+    std::unordered_map<std::string, const Spell*> spell_list;
 protected:
     std::array<int, 20> cantrips_known;
     std::array<std::array<int, 20>, 9> spell_slots;

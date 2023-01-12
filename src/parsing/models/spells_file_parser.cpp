@@ -9,6 +9,7 @@
 #include <regex>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 
 #include <nlohmann/json.hpp>
 
@@ -17,16 +18,17 @@
 #include "parsing/parsing_types.hpp"
 
 
-void dnd::SpellsFileParser::createSpell(std::string_view spell_name, const nlohmann::json& spell_json_ptr) {
+void dnd::SpellsFileParser::createSpell(std::string_view spell_name, const nlohmann::json& spell_json) {
     DND_MEASURE_FUNCTION();
     SpellParsingInfo info;
     info.name = spell_name;
-    info.casting_time = spell_json_ptr.at("casting_time").get<std::string>();
-    info.range = spell_json_ptr.at("range").get<std::string>();
-    info.duration = spell_json_ptr.at("duration").get<std::string>();
-    info.description = spell_json_ptr.at("description").get<std::string>();
-    info.type = createSpellType(spell_json_ptr.at("level_type").get<std::string>());
-    info.components = createSpellComponents(spell_json_ptr.at("components").get<std::string>());
+    info.casting_time = spell_json.at("casting_time").get<std::string>();
+    info.range = spell_json.at("range").get<std::string>();
+    info.duration = spell_json.at("duration").get<std::string>();
+    info.description = spell_json.at("description").get<std::string>();
+    info.classes = spell_json.at("classes").get<std::unordered_set<std::string>>();
+    info.type = createSpellType(spell_json.at("level_type").get<std::string>());
+    info.components = createSpellComponents(spell_json.at("components").get<std::string>());
     std::lock_guard<std::mutex> lock(spell_parsing_mutex);
     spell_parsing_info.emplace_back(std::move(info));
 }
@@ -135,7 +137,7 @@ void dnd::SpellsFileParser::saveResult() {
                 std::piecewise_construct, std::forward_as_tuple(info.name),
                 std::forward_as_tuple(
                     info.name, info.type, info.casting_time, info.range, info.components, info.duration,
-                    info.description
+                    info.description, info.classes
                 )
             );
         }

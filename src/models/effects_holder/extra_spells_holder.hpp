@@ -8,7 +8,7 @@ namespace dnd {
 
 class ExtraSpellsHolder {
 public:
-    std::unordered_set<std::string> free_cantrips, spells_at_will, innate_spells;
+    std::unordered_set<std::string> free_cantrips, spells_at_will, innate_spells, added_to_spell_list;
 };
 
 } // namespace dnd

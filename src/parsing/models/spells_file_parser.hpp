@@ -7,6 +7,7 @@
 #include <string>
 #include <string_view>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 #include <nlohmann/json.hpp>
@@ -18,6 +19,7 @@ namespace dnd {
 
 struct SpellParsingInfo {
     std::string name, casting_time, range, duration, description;
+    std::unordered_set<std::string> classes;
     SpellType type;
     SpellComponents components;
 };
@@ -55,7 +57,6 @@ inline const std::regex SpellsFileParser::spell_type_regex("((1st|2nd|3rd|[4-9]t
                                                            "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|"
                                                            "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)"
                                                            " cantrip)");
-
 
 } // namespace dnd
 

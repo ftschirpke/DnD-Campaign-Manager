@@ -3,9 +3,11 @@
 
 #include <array>
 #include <memory>
+#include <unordered_map>
 
 #include <nlohmann/json.hpp>
 
+#include "models/spell.hpp"
 #include "models/spellcasting/preparation_spellcasting.hpp"
 #include "models/spellcasting/spellcasting.hpp"
 #include "models/spellcasting/spells_known_spellcasting.hpp"
@@ -20,20 +22,27 @@ enum SpellcastingType {
 
 class SpellcastingFeatureHolderFileParser : public FeatureHolderFileParser {
 public:
-    SpellcastingFeatureHolderFileParser() noexcept = default;
+    SpellcastingFeatureHolderFileParser(const std::unordered_map<std::string, const Spell>& spells) noexcept;
 protected:
+    const std::unordered_map<std::string, const Spell>& spells;
     void parseSize20Array(const nlohmann::json& json_to_parse, const char* attribute_name, std::array<int, 20>& output);
     void parseSpellcasting();
     std::unique_ptr<Spellcasting> retrieveSpellcasting();
 private:
     std::string ability;
     bool ritual_casting;
+    std::unordered_map<std::string, const Spell*> spell_list;
     SpellcastingType spellcasting_type;
     PreparationSpellcastingType preparation_spellcasting_type;
     std::array<int, 20> spells_known;
     std::array<int, 20> cantrips_known;
     std::array<std::array<int, 20>, 9> spell_slots;
 };
+
+inline SpellcastingFeatureHolderFileParser::SpellcastingFeatureHolderFileParser(
+    const std::unordered_map<std::string, const Spell>& spells
+) noexcept
+    : FeatureHolderFileParser(), spells(spells) {}
 
 } // namespace dnd
 

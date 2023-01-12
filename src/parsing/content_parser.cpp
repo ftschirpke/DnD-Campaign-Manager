@@ -116,10 +116,10 @@ std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createGeneralParserF
                 parsed_content.character_subraces, parsed_content.character_races
             );
         case ParsingType::CLASS:
-            return std::make_unique<CharacterClassFileParser>(parsed_content.character_classes);
+            return std::make_unique<CharacterClassFileParser>(parsed_content.character_classes, parsed_content.spells);
         case ParsingType::SUBCLASS:
             return std::make_unique<CharacterSubclassFileParser>(
-                parsed_content.character_subclasses, parsed_content.character_classes
+                parsed_content.character_subclasses, parsed_content.character_classes, parsed_content.spells
             );
         case ParsingType::SPELL:
             return std::make_unique<SpellsFileParser>(parsed_content.spells);

@@ -36,6 +36,7 @@ dnd::EffectsHolder dnd::EffectsHolderFileParser::createEffectsHolder(
     parseOptional(effect_holder_json, "cantrips_free", effects_holder.extra_spells.free_cantrips);
     parseOptional(effect_holder_json, "spells_innate", effects_holder.extra_spells.innate_spells);
     parseOptional(effect_holder_json, "spells_at_will", effects_holder.extra_spells.spells_at_will);
+    parseOptional(effect_holder_json, "spells_added_to_spell_list", effects_holder.extra_spells.added_to_spell_list);
 
     parseOptional(effect_holder_json, "damage_resistances", effects_holder.rivs.damage_resistances);
     parseOptional(effect_holder_json, "damage_immunities", effects_holder.rivs.damage_immunities);

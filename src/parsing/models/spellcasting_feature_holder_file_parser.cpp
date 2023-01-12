@@ -74,13 +74,19 @@ void dnd::SpellcastingFeatureHolderFileParser::parseSpellcasting() {
 }
 
 std::unique_ptr<dnd::Spellcasting> dnd::SpellcastingFeatureHolderFileParser::retrieveSpellcasting() {
+    std::unique_ptr<dnd::Spellcasting> spellcasting_ptr;
     switch (spellcasting_type) {
-        case PREPARATION:
-            return std::make_unique<PreparationSpellcasting>(ability, ritual_casting, preparation_spellcasting_type);
-        case SPELLS_KNOWN:
-            return std::make_unique<SpellsKnownSpellcasting>(ability, ritual_casting);
+        case SpellcastingType::PREPARATION:
+            spellcasting_ptr =
+                std::make_unique<PreparationSpellcasting>(ability, ritual_casting, preparation_spellcasting_type);
+            break;
+        case SpellcastingType::SPELLS_KNOWN:
+            spellcasting_ptr = std::make_unique<SpellsKnownSpellcasting>(ability, ritual_casting);
+            break;
         default:
             throw std::logic_error("Parsing of spellcasting type not implemented.");
     }
+    spellcasting_ptr->spell_list = std::move(spell_list);
     // TODO: add cantrips_known, spell_slots (and spells_known)
+    return spellcasting_ptr;
 }
