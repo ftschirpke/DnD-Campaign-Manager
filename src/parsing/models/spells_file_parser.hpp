@@ -12,6 +12,7 @@
 
 #include <nlohmann/json.hpp>
 
+#include "controllers/groups.hpp"
 #include "models/spell.hpp"
 #include "parsing/content_file_parser.hpp"
 
@@ -26,7 +27,7 @@ struct SpellParsingInfo {
 
 class SpellsFileParser : public ContentFileParser {
 public:
-    SpellsFileParser(std::unordered_map<std::string, const Spell>& results) noexcept;
+    SpellsFileParser(std::unordered_map<std::string, const Spell>& results, Groups& groups) noexcept;
     virtual void parse() override;
     virtual bool validate() const override;
     virtual void saveResult() override;
@@ -37,14 +38,17 @@ protected:
     SpellComponents createSpellComponents(const std::string& spell_components_str) const;
 private:
     std::unordered_map<std::string, const Spell>& results;
+    Groups& groups;
     int spells_in_file;
     std::vector<SpellParsingInfo> spell_parsing_info;
     mutable std::vector<bool> valid;
     std::mutex spell_parsing_mutex;
 };
 
-inline SpellsFileParser::SpellsFileParser(std::unordered_map<std::string, const Spell>& results) noexcept
-    : results(results) {}
+inline SpellsFileParser::SpellsFileParser(
+    std::unordered_map<std::string, const Spell>& results, Groups& groups
+) noexcept
+    : results(results), groups(groups) {}
 
 inline const std::regex SpellsFileParser::spell_components_regex(
     "(V, S, M (\\((.*)\\))|V, S|V, M (\\((.*)\\))|S, M (\\((.*)\\))|V|S|M (\\((.*)\\)))"

@@ -122,7 +122,7 @@ std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createGeneralParserF
                 parsed_content.character_subclasses, parsed_content.character_classes, parsed_content.spells
             );
         case ParsingType::SPELL:
-            return std::make_unique<SpellsFileParser>(parsed_content.spells);
+            return std::make_unique<SpellsFileParser>(parsed_content.spells, parsed_content.groups);
         default:
             throw std::logic_error(
                 "No general parser for type \"" + parsing_type_names.at(parsing_type) + "\" implemented."

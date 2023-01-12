@@ -129,10 +129,24 @@ bool dnd::SpellsFileParser::validate() const {
     return std::any_of(valid.cbegin(), valid.cend(), [](bool b) { return b; });
 }
 
+const std::unordered_map<int, std::string> level_group_names = {
+    {0, "cantrips"},       {1, "level 1 spells"}, {2, "level 2 spells"}, {3, "level 3 spells"}, {4, "level 4 spells"},
+    {5, "level 5 spells"}, {6, "level 6 spells"}, {7, "level 7 spells"}, {8, "level 8 spells"}, {9, "level 9 spells"},
+};
+
 void dnd::SpellsFileParser::saveResult() {
     for (int i = 0; i < spells_in_file; ++i) {
         if (valid[i]) {
             SpellParsingInfo& info = spell_parsing_info[i];
+
+            groups.add("spells", info.name);
+            const std::string& level_group_name = level_group_names.at(info.type.level);
+            groups.add(level_group_name, info.name);
+            for (const std::string& class_name : info.classes) {
+                groups.add(class_name + " spells", info.name);
+                groups.add(class_name + ' ' + level_group_name, info.name);
+            }
+
             results.emplace(
                 std::piecewise_construct, std::forward_as_tuple(info.name),
                 std::forward_as_tuple(
