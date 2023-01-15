@@ -283,10 +283,10 @@ LEVEL, XP
 Examples:
 ```jsonc
 "effects": [
-    "AC earliest set 12",     // set new default value for armor class to 12
-    "SPEED normal add 1.5",   // increase speed by 1.5
-    "AC normal add DEXMOD",   // add dexterity modifier to armor class
-    "MAXHP normal add LEVEL"  // add the character level to its armor class
+    "AC earliest set 12",           // set new default value for armor class to 12
+    "SPEED normal add 1.5",         // increase speed by 1.5
+    "AC normal addOther DEXMOD",    // add dexterity modifier to armor class
+    "MAXHP normal addConst LEVEL"   // add the character level to its armor class
 ]
 ```
 
