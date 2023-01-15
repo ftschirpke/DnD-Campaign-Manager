@@ -34,9 +34,18 @@ dnd::EffectsHolder dnd::EffectsHolderFileParser::createEffectsHolder(
     parseOptional(effect_holder_json, "reactions", effects_holder.actions.reactions);
 
     parseOptional(effect_holder_json, "cantrips_free", effects_holder.extra_spells.free_cantrips);
-    parseOptional(effect_holder_json, "spells_innate", effects_holder.extra_spells.innate_spells);
-    parseOptional(effect_holder_json, "spells_at_will", effects_holder.extra_spells.spells_at_will);
+    parseOptional(effect_holder_json, "spells_at_will", effects_holder.extra_spells.at_will);
+    parseOptional(effect_holder_json, "spells_innate", effects_holder.extra_spells.innate);
+    parseOptional(effect_holder_json, "spells_free_once_a_day", effects_holder.extra_spells.free_once_a_day);
+    parseOptional(effect_holder_json, "spells_known", effects_holder.extra_spells.spells_known);
+    parseOptional(effect_holder_json, "spells_known_included", effects_holder.extra_spells.spells_known_included);
     parseOptional(effect_holder_json, "spells_added_to_spell_list", effects_holder.extra_spells.added_to_spell_list);
+
+    std::unordered_set<std::string> always_prepared;
+    parseOptional(effect_holder_json, "spells_always_prepared", always_prepared);
+    effects_holder.extra_spells.spells_known.insert(
+        std::make_move_iterator(always_prepared.begin()), std::make_move_iterator(always_prepared.begin())
+    );
 
     parseOptional(effect_holder_json, "damage_resistances", effects_holder.rivs.damage_resistances);
     parseOptional(effect_holder_json, "damage_immunities", effects_holder.rivs.damage_immunities);

@@ -77,8 +77,6 @@ Content that may not be formatted perfectly or a part of it is not implemented a
 
 - "spells_added_to_spell_list" - maybe should be renamed
 
-- a lot of similar spell effects are combined under "spells_innate", "spells_at_will", "spells_always_prepared" and "spells_added_to_spell_list". Consider splitting these up into more categories if it improves clarity
-  - maybe "spells_once_per_day" - e.g. for eldritch invocations
 
 - [Path of the Berserker](subclasses/path_of_the_berserker.json): "Intimidation Presence" - splitting the action into 2 e.g. "Start Intimidation Presence" and "Extend Intimidation Presence"?
 
