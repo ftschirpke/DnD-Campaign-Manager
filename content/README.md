@@ -48,7 +48,6 @@ Each character should be stored in a JSON file as a map (or "object") containing
 | hit_dice_rolls | yes | array of integers | hit dice rolls on level-ups for hit points **without any modifiers applied** (should have one value for each level) <ul><li>**be aware:** if you are using the rule that on level 1 everyone gets the maximum value of the hit die as HP, you still have to provide that value in this array</li></ul> |
 | features | no | [features](#features) map | character-specific features |
 
-[Are you still having questions?](#anything-unclear)
 <!-- TODO: choices -->
 
 ## Races
@@ -74,15 +73,14 @@ Example of a race with only one feature:
     ]
 }
 ```
-[Are you still having questions?](#anything-unclear)
 
 ## Subraces
 Similarly to races, each subrace should be stored in a JSON file as a map (or "object"). The possible values are:
 | Name | required? | format | description |
 |------|:---------:|:------:|-------------|
-| name | required? | string | name of the subrace |
-| race | required? | string | name of the race |
-| features | required? | [features](#features) map | subrace features |
+| name | yes | string | name of the subrace |
+| race | yes | string | name of the race |
+| features | no | [features](#features) map | subrace features |
 
 Example of a subrace of our Example Race with one feature:
 ```json
@@ -96,7 +94,6 @@ Example of a subrace of our Example Race with one feature:
     }
 }
 ```
-[Are you still having questions?](#anything-unclear)
 
 ## Classes
 Each class should be stored in a JSON file as a map (or "object"). The required values are:
@@ -122,7 +119,6 @@ Example of a class without a proficiency feature (for more information on profic
     }
 }
 ```
-[Are you still having questions?](#anything-unclear)
 
 ### Spellcasting
 Some classes allow spellcasting. In that case, you have to provide the key "spellcasting" to the map. And the value mapped to "spellcasting" is another map with (some of) the following values:
@@ -135,7 +131,6 @@ Some classes allow spellcasting. In that case, you have to provide the key "spel
 | cantrips_known | no | array of integers | length-20-array containing the amounts of cantrips known for each level from 1 to 20 <ul><li>if not provided, the tool assumes that the class provides no cantrips (e.g. Paladins and Rangers)</li></ul> |
 | levelX_slots | no | array of integers | length-20-array containing the amounts of spells slots of level X, where X is between 1 and 9, for each level <ul><li>if for example only "level2_slots" and "level3_slots" are provided, the tool assumes that the class provides no spell slots of any other level</li></ul> |
 
-[Are you still having questions?](#anything-unclear)
 
 ## Subclasses
 Similarly to classes, each subclass should be stored in a JSON file as a map (or "object"). The possible values are:
@@ -160,7 +155,6 @@ Example of a subclass with one feature:
     }
 }
 ```
-[Are you still having questions?](#anything-unclear)
 
 ## Spells
 A spell should be an entry in a JSON map (or "object"), where the key is the name of the spell and the value is a map with exactly six entries (any further entries will not be parsed).
@@ -190,7 +184,6 @@ An example of a minimal spell JSON file would be:
     }
 }
 ```
-[Are you still having questions?](#anything-unclear)
 
 <!-- ## Items -->
 <!-- TODO -->
@@ -296,7 +289,6 @@ Examples:
     "MAXHP normal add LEVEL"  // add the character level to its armor class
 ]
 ```
-[Are you still having questions?](#anything-unclear)
 
 ## Groups
 Groups define any kind of related things, that you might want to put into a group for the tool to use.
@@ -342,7 +334,6 @@ Because such choices are usually very similar to features that a class or race w
 
 If you find that this way of formatting and parsing such groups and their members is not sufficient for your needs, please let me know.
 
-[Are you still having questions?](#anything-unclear)
 
 ## Anything unclear?
 
