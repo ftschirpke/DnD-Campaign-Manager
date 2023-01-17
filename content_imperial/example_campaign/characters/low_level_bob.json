@@ -7,7 +7,7 @@
     "level": 2,
     "xp": 600,
     "hit_dice_rolls": [8, 11],
-    "choices": {
+    "decisions": {
         "Barbarian Base": {
             "skill_proficiencies": ["athletics", "intimidation"]
         }
