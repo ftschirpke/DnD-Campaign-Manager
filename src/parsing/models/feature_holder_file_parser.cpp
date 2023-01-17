@@ -10,7 +10,7 @@
 #include <nlohmann/json.hpp>
 
 #include "models/creature_state.hpp"
-#include "models/effects_holder/feature.hpp"
+#include "models/effect_holder/feature.hpp"
 #include "parsing/content_file_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 
@@ -32,7 +32,7 @@ dnd::Feature dnd::FeatureHolderFileParser::createFeature(
     const std::string& feature_name, const nlohmann::json& feature_json
 ) const {
     // TODO: change feature constructor?
-    Feature feature(std::move(createEffectsHolder(feature_name, feature_json)));
+    Feature feature(std::move(createEffectHolder(feature_name, feature_json)));
 
     dnd::parseOptional(feature_json, "subclass", feature.subclass);
 

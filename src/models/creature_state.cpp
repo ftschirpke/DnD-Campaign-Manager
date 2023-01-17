@@ -9,8 +9,8 @@
 
 #include "basic_mechanics/abilities.hpp"
 #include "basic_mechanics/skills.hpp"
-#include "models/effects_holder/effect.hpp"
-#include "models/effects_holder/feature.hpp"
+#include "models/effect_holder/effect.hpp"
+#include "models/effect_holder/feature.hpp"
 #include "models/feature_holder.hpp"
 
 void dnd::CreatureState::applyAbilityScoreEffects() {

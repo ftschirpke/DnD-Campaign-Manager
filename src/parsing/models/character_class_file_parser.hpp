@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "models/character_class.hpp"
-#include "models/effects_holder/feature.hpp"
+#include "models/effect_holder/feature.hpp"
 #include "parsing/models/spellcasting_feature_holder_file_parser.hpp"
 
 namespace dnd {

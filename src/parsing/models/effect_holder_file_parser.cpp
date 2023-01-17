@@ -1,6 +1,6 @@
 #include "dnd_config.hpp"
 
-#include "effects_holder_file_parser.hpp"
+#include "effect_holder_file_parser.hpp"
 
 #include <memory>
 #include <regex>
@@ -11,13 +11,13 @@
 
 #include "basic_mechanics/abilities.hpp"
 #include "models/creature_state.hpp"
-#include "models/effects_holder/activation.hpp"
-#include "models/effects_holder/effects_holder.hpp"
+#include "models/effect_holder/activation.hpp"
+#include "models/effect_holder/effect_holder.hpp"
 #include "parsing/content_file_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
 
-dnd::EffectsHolder dnd::EffectsHolderFileParser::createEffectsHolder(
+dnd::EffectHolder dnd::EffectHolderFileParser::createEffectHolder(
     const std::string& name, const nlohmann::json& effect_holder_json
 ) const {
     DND_MEASURE_FUNCTION();
@@ -26,45 +26,45 @@ dnd::EffectsHolder dnd::EffectsHolderFileParser::createEffectsHolder(
     }
     const std::string description = effect_holder_json.at("description").get<std::string>();
 
-    // TODO: change effects holder constructor?
-    EffectsHolder effects_holder(name, description);
+    // TODO: change effect holder constructor?
+    EffectHolder effect_holder(name, description);
 
-    parseOptional(effect_holder_json, "actions", effects_holder.actions.actions);
-    parseOptional(effect_holder_json, "bonus_actions", effects_holder.actions.bonus_actions);
-    parseOptional(effect_holder_json, "reactions", effects_holder.actions.reactions);
+    parseOptional(effect_holder_json, "actions", effect_holder.actions.actions);
+    parseOptional(effect_holder_json, "bonus_actions", effect_holder.actions.bonus_actions);
+    parseOptional(effect_holder_json, "reactions", effect_holder.actions.reactions);
 
-    parseOptional(effect_holder_json, "cantrips_free", effects_holder.extra_spells.free_cantrips);
-    parseOptional(effect_holder_json, "spells_at_will", effects_holder.extra_spells.at_will);
-    parseOptional(effect_holder_json, "spells_innate", effects_holder.extra_spells.innate);
-    parseOptional(effect_holder_json, "spells_free_once_a_day", effects_holder.extra_spells.free_once_a_day);
-    parseOptional(effect_holder_json, "spells_known", effects_holder.extra_spells.spells_known);
-    parseOptional(effect_holder_json, "spells_known_included", effects_holder.extra_spells.spells_known_included);
-    parseOptional(effect_holder_json, "spells_added_to_spell_list", effects_holder.extra_spells.added_to_spell_list);
+    parseOptional(effect_holder_json, "cantrips_free", effect_holder.extra_spells.free_cantrips);
+    parseOptional(effect_holder_json, "spells_at_will", effect_holder.extra_spells.at_will);
+    parseOptional(effect_holder_json, "spells_innate", effect_holder.extra_spells.innate);
+    parseOptional(effect_holder_json, "spells_free_once_a_day", effect_holder.extra_spells.free_once_a_day);
+    parseOptional(effect_holder_json, "spells_known", effect_holder.extra_spells.spells_known);
+    parseOptional(effect_holder_json, "spells_known_included", effect_holder.extra_spells.spells_known_included);
+    parseOptional(effect_holder_json, "spells_added_to_spell_list", effect_holder.extra_spells.added_to_spell_list);
 
     std::unordered_set<std::string> always_prepared;
     parseOptional(effect_holder_json, "spells_always_prepared", always_prepared);
-    effects_holder.extra_spells.spells_known.insert(
+    effect_holder.extra_spells.spells_known.insert(
         std::make_move_iterator(always_prepared.begin()), std::make_move_iterator(always_prepared.begin())
     );
 
-    parseOptional(effect_holder_json, "damage_resistances", effects_holder.rivs.damage_resistances);
-    parseOptional(effect_holder_json, "damage_immunities", effects_holder.rivs.damage_immunities);
-    parseOptional(effect_holder_json, "damage_vulnerabilities", effects_holder.rivs.damage_vulnerabilities);
-    parseOptional(effect_holder_json, "condition_immunities", effects_holder.rivs.condition_immunities);
+    parseOptional(effect_holder_json, "damage_resistances", effect_holder.rivs.damage_resistances);
+    parseOptional(effect_holder_json, "damage_immunities", effect_holder.rivs.damage_immunities);
+    parseOptional(effect_holder_json, "damage_vulnerabilities", effect_holder.rivs.damage_vulnerabilities);
+    parseOptional(effect_holder_json, "condition_immunities", effect_holder.rivs.condition_immunities);
 
-    parseOptional(effect_holder_json, "armor_proficiencies", effects_holder.proficiencies.armor);
-    parseOptional(effect_holder_json, "weapon_proficiencies", effects_holder.proficiencies.weapons);
-    parseOptional(effect_holder_json, "tool_proficiencies", effects_holder.proficiencies.tools);
-    parseOptional(effect_holder_json, "skill_proficiencies", effects_holder.proficiencies.skills);
-    parseOptional(effect_holder_json, "savingthrow_proficiencies", effects_holder.proficiencies.saving_throws);
-    parseOptional(effect_holder_json, "languages", effects_holder.proficiencies.languages);
-    parseOptional(effect_holder_json, "senses", effects_holder.proficiencies.senses);
+    parseOptional(effect_holder_json, "armor_proficiencies", effect_holder.proficiencies.armor);
+    parseOptional(effect_holder_json, "weapon_proficiencies", effect_holder.proficiencies.weapons);
+    parseOptional(effect_holder_json, "tool_proficiencies", effect_holder.proficiencies.tools);
+    parseOptional(effect_holder_json, "skill_proficiencies", effect_holder.proficiencies.skills);
+    parseOptional(effect_holder_json, "savingthrow_proficiencies", effect_holder.proficiencies.saving_throws);
+    parseOptional(effect_holder_json, "languages", effect_holder.proficiencies.languages);
+    parseOptional(effect_holder_json, "senses", effect_holder.proficiencies.senses);
 
     if (effect_holder_json.contains("activation") && effect_holder_json.contains("activations")) {
         throw invalid_attribute(filepath, name + ":activation/activations", "attributes are mutally exclusive.");
     } else if (effect_holder_json.contains("activation")) {
         const std::string activation_str = effect_holder_json.at("activation").get<std::string>();
-        parseAndAddActivation(activation_str, effects_holder);
+        parseAndAddActivation(activation_str, effect_holder);
     } else if (effect_holder_json.contains("activations")) {
         if (!effect_holder_json.at("activations").is_array()) {
             throw attribute_format_error(filepath, name + ":activations", "array");
@@ -72,7 +72,7 @@ dnd::EffectsHolder dnd::EffectsHolderFileParser::createEffectsHolder(
         const std::vector<std::string> activation_strs =
             effect_holder_json.at("activations").get<std::vector<std::string>>();
         for (const std::string& activation_str : activation_strs) {
-            parseAndAddActivation(activation_str, effects_holder);
+            parseAndAddActivation(activation_str, effect_holder);
         }
     }
 
@@ -82,17 +82,16 @@ dnd::EffectsHolder dnd::EffectsHolderFileParser::createEffectsHolder(
         }
         for (const auto& effect_val : effect_holder_json.at("effects")) {
             const std::string effect_str = effect_val.get<std::string>();
-            parseAndAddEffect(effect_str, effects_holder);
+            parseAndAddEffect(effect_str, effect_holder);
         }
     }
-    return effects_holder;
+    return effect_holder;
 }
 
-void dnd::EffectsHolderFileParser::parseAndAddEffect(const std::string& effect_str, EffectsHolder& effects_holder)
-    const {
+void dnd::EffectHolderFileParser::parseAndAddEffect(const std::string& effect_str, EffectHolder& effect_holder) const {
     if (!std::regex_match(effect_str, effect_regex)) {
         throw attribute_type_error(
-            filepath, "effect holder \"" + effects_holder.name + "\": invalid effect format: \"" + effect_str + "\""
+            filepath, "effect holder \"" + effect_holder.name + "\": invalid effect format: \"" + effect_str + "\""
         );
     }
     std::string::const_iterator it = effect_str.cbegin();
@@ -136,19 +135,18 @@ void dnd::EffectsHolderFileParser::parseAndAddEffect(const std::string& effect_s
 
     const EffectTime effect_time = effect_time_for_string.at(effect_time_str);
     if (isAbility(affected_attribute)) {
-        effects_holder.ability_score_effects[effect_time].emplace_back(std::move(effect_ptr));
+        effect_holder.ability_score_effects[effect_time].emplace_back(std::move(effect_ptr));
     } else {
-        effects_holder.normal_effects[effect_time].emplace_back(std::move(effect_ptr));
+        effect_holder.normal_effects[effect_time].emplace_back(std::move(effect_ptr));
     }
 }
 
-void dnd::EffectsHolderFileParser::parseAndAddActivation(
-    const std::string& activation_str, EffectsHolder& effects_holder
-) const {
+void dnd::EffectHolderFileParser::parseAndAddActivation(const std::string& activation_str, EffectHolder& effect_holder)
+    const {
     if (!std::regex_match(activation_str, activation_regex)) {
         throw attribute_type_error(
             filepath,
-            "effect holder \"" + effects_holder.name + "\": invalid activation format: \"" + activation_str + "\""
+            "effect holder \"" + effect_holder.name + "\": invalid activation format: \"" + activation_str + "\""
         );
     }
     std::string::const_iterator it = activation_str.cbegin();
@@ -166,7 +164,7 @@ void dnd::EffectsHolderFileParser::parseAndAddActivation(
     const std::string last_part(it, activation_str.cend());
 
     if (last_part[0] >= 'A' && last_part[0] <= 'Z') {
-        effects_holder.activations.emplace_back(
+        effect_holder.activations.emplace_back(
             std::make_unique<IdentifierActivation>(left_identifier, op_name, last_part)
         );
         return;
@@ -181,5 +179,5 @@ void dnd::EffectsHolderFileParser::parseAndAddActivation(
         right_value = std::stof(last_part) * 100;
         // attributes are stored as integers * 100, see CreatureState
     }
-    effects_holder.activations.emplace_back(std::make_unique<NumericActivation>(left_identifier, op_name, right_value));
+    effect_holder.activations.emplace_back(std::make_unique<NumericActivation>(left_identifier, op_name, right_value));
 }

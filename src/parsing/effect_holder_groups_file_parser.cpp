@@ -1,6 +1,6 @@
 #include "dnd_config.hpp"
 
-#include "effects_holder_groups_file_parser.hpp"
+#include "effect_holder_groups_file_parser.hpp"
 
 #include <algorithm>
 #include <filesystem>
@@ -8,11 +8,11 @@
 #include <nlohmann/json.hpp>
 
 #include "controllers/groups.hpp"
-#include "models/effects_holder/choosable.hpp"
+#include "models/effect_holder/choosable.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
 
-void dnd::EffectsHolderGroupsFileParser::parse() {
+void dnd::EffectHolderGroupsFileParser::parse() {
     DND_MEASURE_FUNCTION();
     if (!json_to_parse.is_object()) {
         throw json_format_error(ParsingType::GROUP, filepath, "map/object");
@@ -27,11 +27,11 @@ void dnd::EffectsHolderGroupsFileParser::parse() {
     }
 }
 
-dnd::Choosable dnd::EffectsHolderGroupsFileParser::createChoosable(
+dnd::Choosable dnd::EffectHolderGroupsFileParser::createChoosable(
     const std::string& name, const nlohmann::json& choosable_json
 ) const {
     // TODO: change choosable constructor?
-    Choosable choosable(std::move(createEffectsHolder(name, choosable_json)));
+    Choosable choosable(std::move(createEffectHolder(name, choosable_json)));
 
     // TODO: parse prerequisites
 
@@ -39,7 +39,7 @@ dnd::Choosable dnd::EffectsHolderGroupsFileParser::createChoosable(
 }
 
 
-bool dnd::EffectsHolderGroupsFileParser::validate() const {
+bool dnd::EffectHolderGroupsFileParser::validate() const {
     if (group_name.empty()) {
         std::cerr << "Warning: " << filepath << " contains group " << group_name << " with invalid name."
                   << " Group names cannot be \"\".\n";
@@ -52,4 +52,4 @@ bool dnd::EffectsHolderGroupsFileParser::validate() const {
     return true;
 }
 
-void dnd::EffectsHolderGroupsFileParser::saveResult() { results.add(group_name, std::move(choosables)); }
+void dnd::EffectHolderGroupsFileParser::saveResult() { results.add(group_name, std::move(choosables)); }

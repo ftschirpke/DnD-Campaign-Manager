@@ -12,4 +12,4 @@ target_sources(dndmanager_tests
     creature_state.cpp
 )
 
-add_subdirectory(effects_holder)
+add_subdirectory(effect_holder)

@@ -17,7 +17,7 @@
 
 #include "controllers/content.hpp"
 #include "parsing/content_file_parser.hpp"
-#include "parsing/effects_holder_groups_file_parser.hpp"
+#include "parsing/effect_holder_groups_file_parser.hpp"
 #include "parsing/models/character_class_file_parser.hpp"
 #include "parsing/models/character_file_parser.hpp"
 #include "parsing/models/character_race_file_parser.hpp"
@@ -94,7 +94,7 @@ std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createMultiFileParse
 ) {
     switch (parsing_type) {
         case ParsingType::GROUP:
-            return std::make_unique<EffectsHolderGroupsFileParser>(parsed_content.groups);
+            return std::make_unique<EffectHolderGroupsFileParser>(parsed_content.groups);
         default:
             return createGeneralParserForType(parsing_type);
     }

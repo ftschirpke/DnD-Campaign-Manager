@@ -7,13 +7,13 @@
 
 #include <nlohmann/json.hpp>
 
-#include "models/effects_holder/activation.hpp"
-#include "models/effects_holder/feature.hpp"
-#include "parsing/models/effects_holder_file_parser.hpp"
+#include "models/effect_holder/activation.hpp"
+#include "models/effect_holder/feature.hpp"
+#include "parsing/models/effect_holder_file_parser.hpp"
 
 namespace dnd {
 
-class FeatureHolderFileParser : public EffectsHolderFileParser {
+class FeatureHolderFileParser : public EffectHolderFileParser {
 public:
     FeatureHolderFileParser() noexcept = default;
 protected:

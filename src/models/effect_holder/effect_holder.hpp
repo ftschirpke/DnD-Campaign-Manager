@@ -1,20 +1,20 @@
-#ifndef EFFECTS_HOLDER_HPP_
-#define EFFECTS_HOLDER_HPP_
+#ifndef EFFECT_HOLDER_HPP_
+#define EFFECT_HOLDER_HPP_
 
 #include <memory>
 #include <string>
 #include <vector>
 
-#include "models/effects_holder/action_holder.hpp"
-#include "models/effects_holder/activation.hpp"
-#include "models/effects_holder/effect.hpp"
-#include "models/effects_holder/extra_spells_holder.hpp"
-#include "models/effects_holder/proficiency_holder.hpp"
-#include "models/effects_holder/riv_holder.hpp"
+#include "models/effect_holder/action_holder.hpp"
+#include "models/effect_holder/activation.hpp"
+#include "models/effect_holder/effect.hpp"
+#include "models/effect_holder/extra_spells_holder.hpp"
+#include "models/effect_holder/proficiency_holder.hpp"
+#include "models/effect_holder/riv_holder.hpp"
 
 namespace dnd {
 
-class EffectsHolder {
+class EffectHolder {
 public:
     const std::string name, description;
     // TODO: should these really be public AND non-const?
@@ -24,17 +24,17 @@ public:
     ProficiencyHolder proficiencies;
     RIVHolder rivs;
     std::unordered_map<EffectTime, std::vector<std::unique_ptr<const Effect>>> ability_score_effects, normal_effects;
-    EffectsHolder(const std::string& name, const std::string& description) noexcept;
-    EffectsHolder(EffectsHolder&& other) noexcept = default;
+    EffectHolder(const std::string& name, const std::string& description) noexcept;
+    EffectHolder(EffectHolder&& other) noexcept = default;
     // TODO: manage choices (choose one of ...)
     bool isActive(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const;
 };
 
-inline EffectsHolder::EffectsHolder(const std::string& name, const std::string& description) noexcept
+inline EffectHolder::EffectHolder(const std::string& name, const std::string& description) noexcept
     : name(name), description(description) {}
 
 } // namespace dnd
 
-#endif // EFFECTS_HOLDER_HPP_
+#endif // EFFECT_HOLDER_HPP_

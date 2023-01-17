@@ -10,7 +10,7 @@
 #include "models/character_class.hpp"
 #include "models/character_race.hpp"
 #include "models/creature.hpp"
-#include "models/effects_holder/feature.hpp"
+#include "models/effect_holder/feature.hpp"
 
 namespace dnd {
 

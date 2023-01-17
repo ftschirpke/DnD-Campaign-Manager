@@ -1,8 +1,8 @@
 #include "dnd_config.hpp"
 
-#include "effects_holder.hpp"
+#include "effect_holder.hpp"
 
-bool dnd::EffectsHolder::isActive(
+bool dnd::EffectHolder::isActive(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
     for (const auto& activation : activations) {

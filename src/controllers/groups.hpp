@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "models/effects_holder/choosable.hpp"
+#include "models/effect_holder/choosable.hpp"
 
 namespace dnd {
 

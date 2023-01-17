@@ -6,9 +6,9 @@
 #include <nlohmann/json.hpp>
 
 #include "models/creature_state.hpp"
-#include "models/effects_holder/activation.hpp"
-#include "models/effects_holder/effect.hpp"
-#include "models/effects_holder/feature.hpp"
+#include "models/effect_holder/activation.hpp"
+#include "models/effect_holder/effect.hpp"
+#include "models/effect_holder/feature.hpp"
 
 // class that allows us to test the abstract dnd::FeatureHolderFileParser class
 class TestFeatureHolderFileParser : public dnd::FeatureHolderFileParser {
