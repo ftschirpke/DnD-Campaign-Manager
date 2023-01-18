@@ -18,7 +18,7 @@ protected:
     static const std::regex activation_regex, effect_regex;
     void parseAndAddEffect(const std::string& effect_str, EffectHolder& effect_holder) const;
     void parseAndAddActivation(const std::string& activation_str, EffectHolder& effect_holder) const;
-    EffectHolder createEffectHolder(const std::string& name, const nlohmann::json& effect_holder_json) const;
+    EffectHolder createEffectHolder(const nlohmann::json& effect_holder_json) const;
 };
 
 inline const std::regex EffectHolderFileParser::activation_regex(

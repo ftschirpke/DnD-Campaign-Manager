@@ -36,13 +36,13 @@ dnd::Feature dnd::FeatureHolderFileParser::createFeature(
     // TODO: change feature constructor?
     Feature feature(feature_name, description);
 
-    feature.main_part = std::move(createEffectHolder(feature_name, feature_json));
+    feature.main_part = std::move(createEffectHolder(feature_json));
     if (feature_json.contains("multi")) {
         if (!feature_json.is_array()) {
             throw attribute_format_error(filepath, "multi", "array");
         }
         for (const auto& part_json : feature_json) {
-            feature.parts.emplace_back(std::move(createEffectHolder("name", part_json)));
+            feature.parts.emplace_back(std::move(createEffectHolder(part_json)));
         }
     }
 

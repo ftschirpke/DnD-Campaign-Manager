@@ -17,9 +17,7 @@
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
 
-dnd::EffectHolder dnd::EffectHolderFileParser::createEffectHolder(
-    const std::string& name, const nlohmann::json& effect_holder_json
-) const {
+dnd::EffectHolder dnd::EffectHolderFileParser::createEffectHolder(const nlohmann::json& effect_holder_json) const {
     DND_MEASURE_FUNCTION();
 
     // TODO: change effect holder constructor?
@@ -57,13 +55,13 @@ dnd::EffectHolder dnd::EffectHolderFileParser::createEffectHolder(
     parseOptional(effect_holder_json, "senses", effect_holder.proficiencies.senses);
 
     if (effect_holder_json.contains("activation") && effect_holder_json.contains("activations")) {
-        throw invalid_attribute(filepath, name + ":activation/activations", "attributes are mutally exclusive.");
+        throw invalid_attribute(filepath, "activation/activations", "attributes are mutally exclusive.");
     } else if (effect_holder_json.contains("activation")) {
         const std::string activation_str = effect_holder_json.at("activation").get<std::string>();
         parseAndAddActivation(activation_str, effect_holder);
     } else if (effect_holder_json.contains("activations")) {
         if (!effect_holder_json.at("activations").is_array()) {
-            throw attribute_format_error(filepath, name + ":activations", "array");
+            throw attribute_format_error(filepath, "activations", "array");
         }
         const std::vector<std::string> activation_strs =
             effect_holder_json.at("activations").get<std::vector<std::string>>();
@@ -74,7 +72,7 @@ dnd::EffectHolder dnd::EffectHolderFileParser::createEffectHolder(
 
     if (effect_holder_json.contains("effects")) {
         if (!effect_holder_json.at("effects").is_array()) {
-            throw attribute_format_error(filepath, name + ":effects", "array");
+            throw attribute_format_error(filepath, "effects", "array");
         }
         for (const auto& effect_val : effect_holder_json.at("effects")) {
             const std::string effect_str = effect_val.get<std::string>();

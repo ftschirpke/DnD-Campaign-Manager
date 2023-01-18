@@ -35,13 +35,13 @@ dnd::Choosable dnd::EffectHolderGroupsFileParser::createChoosable(
     // TODO: change choosable constructor?
     Choosable choosable(choosable_name, description);
 
-    choosable.main_part = std::move(createEffectHolder(choosable_name, choosable_json));
+    choosable.main_part = std::move(createEffectHolder(choosable_json));
     if (choosable_json.contains("multi")) {
         if (!choosable_json.is_array()) {
             throw attribute_format_error(filepath, "multi", "array");
         }
         for (const auto& part_json : choosable_json) {
-            choosable.parts.emplace_back(std::move(createEffectHolder("name", part_json)));
+            choosable.parts.emplace_back(std::move(createEffectHolder(part_json)));
         }
     }
 
