@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <array>
+#include <stdexcept>
 #include <string>
 #include <unordered_map>
 
@@ -24,12 +25,18 @@ const std::array<Ability, 6> abilities_inorder = {
 
 const std::array<std::string, 6> ability_strings_inorder = {"STR", "DEX", "CON", "INT", "WIS", "CHA"};
 
-const std::unordered_map<std::string, Ability> __ability_strings_mapping = {
+const std::unordered_map<std::string, Ability> ability_strings_mapping = {
     {"STR", Ability::STRENGTH},     {"DEX", Ability::DEXTERITY}, {"CON", Ability::CONSTITUTION},
     {"INT", Ability::INTELLIGENCE}, {"WIS", Ability::WISDOM},    {"CHA", Ability::CHARISMA},
 };
 
-inline Ability stringToAbility(const std::string& ability_str) { return __ability_strings_mapping.at(ability_str); }
+inline Ability stringToAbility(const std::string& ability_str) {
+    try {
+        return ability_strings_mapping.at(ability_str);
+    } catch (const std::out_of_range& e) {
+        throw std::invalid_argument("The ability \"" + ability_str + "\" does not exist.");
+    }
+}
 
 inline std::string abilityToString(Ability ability) {
     switch (ability) {
