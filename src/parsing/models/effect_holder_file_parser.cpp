@@ -21,13 +21,9 @@ dnd::EffectHolder dnd::EffectHolderFileParser::createEffectHolder(
     const std::string& name, const nlohmann::json& effect_holder_json
 ) const {
     DND_MEASURE_FUNCTION();
-    if (!effect_holder_json.is_object()) {
-        throw attribute_format_error(filepath, name, "map/object");
-    }
-    const std::string description = effect_holder_json.at("description").get<std::string>();
 
     // TODO: change effect holder constructor?
-    EffectHolder effect_holder(name, description);
+    EffectHolder effect_holder;
 
     parseOptional(effect_holder_json, "actions", effect_holder.actions.actions);
     parseOptional(effect_holder_json, "bonus_actions", effect_holder.actions.bonus_actions);
@@ -90,9 +86,7 @@ dnd::EffectHolder dnd::EffectHolderFileParser::createEffectHolder(
 
 void dnd::EffectHolderFileParser::parseAndAddEffect(const std::string& effect_str, EffectHolder& effect_holder) const {
     if (!std::regex_match(effect_str, effect_regex)) {
-        throw attribute_type_error(
-            filepath, "effect holder \"" + effect_holder.name + "\": invalid effect format: \"" + effect_str + "\""
-        );
+        throw attribute_type_error(filepath, "invalid effect format: \"" + effect_str + "\"");
     }
     std::string::const_iterator it = effect_str.cbegin();
     while (*it != ' ') {
@@ -144,10 +138,7 @@ void dnd::EffectHolderFileParser::parseAndAddEffect(const std::string& effect_st
 void dnd::EffectHolderFileParser::parseAndAddActivation(const std::string& activation_str, EffectHolder& effect_holder)
     const {
     if (!std::regex_match(activation_str, activation_regex)) {
-        throw attribute_type_error(
-            filepath,
-            "effect holder \"" + effect_holder.name + "\": invalid activation format: \"" + activation_str + "\""
-        );
+        throw attribute_type_error(filepath, "invalid activation format: \"" + activation_str + "\"");
     }
     std::string::const_iterator it = activation_str.cbegin();
     while (*it != ' ') {

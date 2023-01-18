@@ -43,7 +43,6 @@ public:
     static int levelForXP(int xp);
     void addHitDiceRoll(int hit_dice_roll);
     virtual void determineState();
-    const std::vector<const Feature*>& activeFeatures() const noexcept;
     std::vector<const Feature*> allFeatures() const;
 protected:
     virtual const std::unordered_map<std::string, int> getConstants() const;
@@ -116,8 +115,6 @@ inline void Character::addHitDiceRoll(int hit_dice_roll) {
         std::cerr << "Warning: More hit dice rolls than level.\n";
     }
 }
-
-inline const std::vector<const Feature*>& Character::activeFeatures() const noexcept { return state.active_features; }
 
 } // namespace dnd
 

@@ -8,7 +8,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "models/effect_holder/feature.hpp"
+#include "models/effect_holder/effect_holder.hpp"
 #include "models/feature_holder.hpp"
 
 namespace dnd {
@@ -17,7 +17,7 @@ class CreatureState {
 public:
     std::unordered_map<std::string, int> constants;
     std::unordered_map<std::string, int> attributes;
-    std::vector<const Feature*> active_features;
+    std::vector<const EffectHolder*> active_effect_holders;
     ActionHolder actions;
     ProficiencyHolder proficiencies;
     RIVHolder rivs;

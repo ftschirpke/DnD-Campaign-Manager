@@ -22,16 +22,28 @@ void dnd::EffectHolderGroupsFileParser::parse() {
 
     choosables.reserve(json_to_parse.size());
 
-    for (const auto& [name, choosable_json] : json_to_parse.items()) {
-        choosables.emplace(name, createChoosable(name, choosable_json));
+    for (const auto& [choosable_name, choosable_json] : json_to_parse.items()) {
+        choosables.emplace(choosable_name, createChoosable(choosable_name, choosable_json));
     }
 }
 
 dnd::Choosable dnd::EffectHolderGroupsFileParser::createChoosable(
-    const std::string& name, const nlohmann::json& choosable_json
+    const std::string& choosable_name, const nlohmann::json& choosable_json
 ) const {
+    const std::string description = choosable_json.at("description").get<std::string>();
+
     // TODO: change choosable constructor?
-    Choosable choosable(std::move(createEffectHolder(name, choosable_json)));
+    Choosable choosable(choosable_name, description);
+
+    choosable.main_part = std::move(createEffectHolder(choosable_name, choosable_json));
+    if (choosable_json.contains("multi")) {
+        if (!choosable_json.is_array()) {
+            throw attribute_format_error(filepath, "multi", "array");
+        }
+        for (const auto& part_json : choosable_json) {
+            choosable.parts.emplace_back(std::move(createEffectHolder("name", part_json)));
+        }
+    }
 
     // TODO: parse prerequisites
 

@@ -16,7 +16,6 @@ namespace dnd {
 
 class EffectHolder {
 public:
-    const std::string name, description;
     // TODO: should these really be public AND non-const?
     std::vector<std::unique_ptr<Activation>> activations;
     ActionHolder actions;
@@ -24,16 +23,12 @@ public:
     ProficiencyHolder proficiencies;
     RIVHolder rivs;
     std::unordered_map<EffectTime, std::vector<std::unique_ptr<const Effect>>> ability_score_effects, normal_effects;
-    EffectHolder(const std::string& name, const std::string& description) noexcept;
-    EffectHolder(EffectHolder&& other) noexcept = default;
     // TODO: manage choices (choose one of ...)
     bool isActive(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const;
 };
 
-inline EffectHolder::EffectHolder(const std::string& name, const std::string& description) noexcept
-    : name(name), description(description) {}
 
 } // namespace dnd
 

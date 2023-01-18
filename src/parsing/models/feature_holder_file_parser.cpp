@@ -31,8 +31,20 @@ void dnd::FeatureHolderFileParser::parseFeatures() {
 dnd::Feature dnd::FeatureHolderFileParser::createFeature(
     const std::string& feature_name, const nlohmann::json& feature_json
 ) const {
+    const std::string description = feature_json.at("description").get<std::string>();
+
     // TODO: change feature constructor?
-    Feature feature(std::move(createEffectHolder(feature_name, feature_json)));
+    Feature feature(feature_name, description);
+
+    feature.main_part = std::move(createEffectHolder(feature_name, feature_json));
+    if (feature_json.contains("multi")) {
+        if (!feature_json.is_array()) {
+            throw attribute_format_error(filepath, "multi", "array");
+        }
+        for (const auto& part_json : feature_json) {
+            feature.parts.emplace_back(std::move(createEffectHolder("name", part_json)));
+        }
+    }
 
     dnd::parseOptional(feature_json, "subclass", feature.subclass);
 

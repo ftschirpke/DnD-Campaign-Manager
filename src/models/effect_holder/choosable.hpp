@@ -10,15 +10,19 @@
 
 namespace dnd {
 
-class Choosable : public EffectHolder {
+class Choosable {
 public:
+    const std::string name, description;
     std::vector<std::unique_ptr<Prerequisite>> prerequisites;
+    EffectHolder main_part;
+    std::vector<EffectHolder> parts;
+    Choosable(const std::string& name, const std::string& description) noexcept;
     Choosable(Choosable&& other) noexcept = default;
-    Choosable(EffectHolder&& effect_holder) noexcept;
     bool isAllowedFor(const Character& character) const;
 };
 
-inline Choosable::Choosable(EffectHolder&& effect_holder) noexcept : EffectHolder(std::move(effect_holder)) {}
+inline Choosable::Choosable(const std::string& name, const std::string& description) noexcept
+    : name(name), description(description) {}
 
 } // namespace dnd
 

@@ -10,7 +10,7 @@
 bool dnd::Feature::isActiveForLevel(int level) const {
     std::unordered_map<std::string, int> empty_attributes;
     try {
-        return isActive(empty_attributes, {{"CLASS_LEVEL", level * 100}});
+        return main_part.isActive(empty_attributes, {{"CLASS_LEVEL", level * 100}});
     } catch (const std::out_of_range& e) {
         return false;
     }
