@@ -17,42 +17,55 @@
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
 
-dnd::EffectHolder dnd::EffectHolderFileParser::createEffectHolder(const nlohmann::json& effect_holder_json) const {
-    DND_MEASURE_FUNCTION();
 
-    // TODO: change effect holder constructor?
-    EffectHolder effect_holder;
+void parseActionsOptionals(const nlohmann::json& effect_holder_json, dnd::EffectHolder* const effect_holder) {
+    dnd::parseOptional(effect_holder_json, "actions", effect_holder->actions.actions);
+    dnd::parseOptional(effect_holder_json, "bonus_actions", effect_holder->actions.bonus_actions);
+    dnd::parseOptional(effect_holder_json, "reactions", effect_holder->actions.reactions);
+}
 
-    parseOptional(effect_holder_json, "actions", effect_holder.actions.actions);
-    parseOptional(effect_holder_json, "bonus_actions", effect_holder.actions.bonus_actions);
-    parseOptional(effect_holder_json, "reactions", effect_holder.actions.reactions);
-
-    parseOptional(effect_holder_json, "cantrips_free", effect_holder.extra_spells.free_cantrips);
-    parseOptional(effect_holder_json, "spells_at_will", effect_holder.extra_spells.at_will);
-    parseOptional(effect_holder_json, "spells_innate", effect_holder.extra_spells.innate);
-    parseOptional(effect_holder_json, "spells_free_once_a_day", effect_holder.extra_spells.free_once_a_day);
-    parseOptional(effect_holder_json, "spells_known", effect_holder.extra_spells.spells_known);
-    parseOptional(effect_holder_json, "spells_known_included", effect_holder.extra_spells.spells_known_included);
-    parseOptional(effect_holder_json, "spells_added_to_spell_list", effect_holder.extra_spells.added_to_spell_list);
-
-    std::unordered_set<std::string> always_prepared;
-    parseOptional(effect_holder_json, "spells_always_prepared", always_prepared);
-    effect_holder.extra_spells.spells_known.insert(
-        std::make_move_iterator(always_prepared.begin()), std::make_move_iterator(always_prepared.begin())
+void parseExtraSpellsOptionals(const nlohmann::json& effect_holder_json, dnd::EffectHolder* const effect_holder) {
+    dnd::parseOptional(effect_holder_json, "cantrips_free", effect_holder->extra_spells.free_cantrips);
+    dnd::parseOptional(effect_holder_json, "spells_at_will", effect_holder->extra_spells.at_will);
+    dnd::parseOptional(effect_holder_json, "spells_innate", effect_holder->extra_spells.innate);
+    dnd::parseOptional(effect_holder_json, "spells_free_once_a_day", effect_holder->extra_spells.free_once_a_day);
+    dnd::parseOptional(effect_holder_json, "spells_known", effect_holder->extra_spells.spells_known);
+    dnd::parseOptional(effect_holder_json, "spells_known_included", effect_holder->extra_spells.spells_known_included);
+    dnd::parseOptional(
+        effect_holder_json, "spells_added_to_spell_list", effect_holder->extra_spells.added_to_spell_list
     );
 
-    parseOptional(effect_holder_json, "damage_resistances", effect_holder.rivs.damage_resistances);
-    parseOptional(effect_holder_json, "damage_immunities", effect_holder.rivs.damage_immunities);
-    parseOptional(effect_holder_json, "damage_vulnerabilities", effect_holder.rivs.damage_vulnerabilities);
-    parseOptional(effect_holder_json, "condition_immunities", effect_holder.rivs.condition_immunities);
+    std::unordered_set<std::string> always_prepared;
+    dnd::parseOptional(effect_holder_json, "spells_always_prepared", always_prepared);
+    effect_holder->extra_spells.spells_known.insert(
+        std::make_move_iterator(always_prepared.begin()), std::make_move_iterator(always_prepared.begin())
+    );
+}
 
-    parseOptional(effect_holder_json, "armor_proficiencies", effect_holder.proficiencies.armor);
-    parseOptional(effect_holder_json, "weapon_proficiencies", effect_holder.proficiencies.weapons);
-    parseOptional(effect_holder_json, "tool_proficiencies", effect_holder.proficiencies.tools);
-    parseOptional(effect_holder_json, "skill_proficiencies", effect_holder.proficiencies.skills);
-    parseOptional(effect_holder_json, "savingthrow_proficiencies", effect_holder.proficiencies.saving_throws);
-    parseOptional(effect_holder_json, "languages", effect_holder.proficiencies.languages);
-    parseOptional(effect_holder_json, "senses", effect_holder.proficiencies.senses);
+void parseRIVsOptionals(const nlohmann::json& effect_holder_json, dnd::EffectHolder* const effect_holder) {
+    dnd::parseOptional(effect_holder_json, "damage_resistances", effect_holder->rivs.damage_resistances);
+    dnd::parseOptional(effect_holder_json, "damage_immunities", effect_holder->rivs.damage_immunities);
+    dnd::parseOptional(effect_holder_json, "damage_vulnerabilities", effect_holder->rivs.damage_vulnerabilities);
+    dnd::parseOptional(effect_holder_json, "condition_immunities", effect_holder->rivs.condition_immunities);
+}
+
+void parseProficienciesOptionals(const nlohmann::json& effect_holder_json, dnd::EffectHolder* const effect_holder) {
+    dnd::parseOptional(effect_holder_json, "armor_proficiencies", effect_holder->proficiencies.armor);
+    dnd::parseOptional(effect_holder_json, "weapon_proficiencies", effect_holder->proficiencies.weapons);
+    dnd::parseOptional(effect_holder_json, "tool_proficiencies", effect_holder->proficiencies.tools);
+    dnd::parseOptional(effect_holder_json, "skill_proficiencies", effect_holder->proficiencies.skills);
+    dnd::parseOptional(effect_holder_json, "savingthrow_proficiencies", effect_holder->proficiencies.saving_throws);
+    dnd::parseOptional(effect_holder_json, "languages", effect_holder->proficiencies.languages);
+    dnd::parseOptional(effect_holder_json, "senses", effect_holder->proficiencies.senses);
+}
+
+void dnd::EffectHolderFileParser::parseEffectHolder(
+    const nlohmann::json& effect_holder_json, dnd::EffectHolder* const effect_holder
+) const {
+    parseActionsOptionals(effect_holder_json, effect_holder);
+    parseExtraSpellsOptionals(effect_holder_json, effect_holder);
+    parseRIVsOptionals(effect_holder_json, effect_holder);
+    parseProficienciesOptionals(effect_holder_json, effect_holder);
 
     if (effect_holder_json.contains("activation") && effect_holder_json.contains("activations")) {
         throw invalid_attribute(filepath, "activation/activations", "attributes are mutally exclusive.");
@@ -79,10 +92,34 @@ dnd::EffectHolder dnd::EffectHolderFileParser::createEffectHolder(const nlohmann
             parseAndAddEffect(effect_str, effect_holder);
         }
     }
+}
+
+dnd::EffectHolder dnd::EffectHolderFileParser::createEffectHolder(const nlohmann::json& effect_holder_json) const {
+    DND_MEASURE_FUNCTION();
+
+    // TODO: change effect holder constructor?
+    EffectHolder effect_holder;
+
+    parseEffectHolder(effect_holder_json, &effect_holder);
+
     return effect_holder;
 }
 
-void dnd::EffectHolderFileParser::parseAndAddEffect(const std::string& effect_str, EffectHolder& effect_holder) const {
+dnd::EffectHolderWithChoices dnd::EffectHolderFileParser::createEffectHolderWithChoices(
+    const nlohmann::json& effect_holder_json
+) const {
+    DND_MEASURE_FUNCTION();
+
+    // TODO: change effect holder constructor?
+    EffectHolderWithChoices effect_holder;
+
+    parseEffectHolder(effect_holder_json, &effect_holder);
+
+    return effect_holder;
+}
+
+void dnd::EffectHolderFileParser::parseAndAddEffect(const std::string& effect_str, EffectHolder* const effect_holder)
+    const {
     if (!std::regex_match(effect_str, effect_regex)) {
         throw attribute_type_error(filepath, "invalid effect format: \"" + effect_str + "\"");
     }
@@ -127,14 +164,15 @@ void dnd::EffectHolderFileParser::parseAndAddEffect(const std::string& effect_st
 
     const EffectTime effect_time = effect_time_for_string.at(effect_time_str);
     if (isAbility(affected_attribute)) {
-        effect_holder.ability_score_effects[effect_time].emplace_back(std::move(effect_ptr));
+        effect_holder->ability_score_effects[effect_time].emplace_back(std::move(effect_ptr));
     } else {
-        effect_holder.normal_effects[effect_time].emplace_back(std::move(effect_ptr));
+        effect_holder->normal_effects[effect_time].emplace_back(std::move(effect_ptr));
     }
 }
 
-void dnd::EffectHolderFileParser::parseAndAddActivation(const std::string& activation_str, EffectHolder& effect_holder)
-    const {
+void dnd::EffectHolderFileParser::parseAndAddActivation(
+    const std::string& activation_str, EffectHolder* const effect_holder
+) const {
     if (!std::regex_match(activation_str, activation_regex)) {
         throw attribute_type_error(filepath, "invalid activation format: \"" + activation_str + "\"");
     }
@@ -153,7 +191,7 @@ void dnd::EffectHolderFileParser::parseAndAddActivation(const std::string& activ
     const std::string last_part(it, activation_str.cend());
 
     if (last_part[0] >= 'A' && last_part[0] <= 'Z') {
-        effect_holder.activations.emplace_back(
+        effect_holder->activations.emplace_back(
             std::make_unique<IdentifierActivation>(left_identifier, op_name, last_part)
         );
         return;
@@ -168,5 +206,5 @@ void dnd::EffectHolderFileParser::parseAndAddActivation(const std::string& activ
         right_value = std::stof(last_part) * 100;
         // attributes are stored as integers * 100, see CreatureState
     }
-    effect_holder.activations.emplace_back(std::make_unique<NumericActivation>(left_identifier, op_name, right_value));
+    effect_holder->activations.emplace_back(std::make_unique<NumericActivation>(left_identifier, op_name, right_value));
 }

@@ -6,6 +6,11 @@ project(DnD-Campaign-Manager
     VERSION 0.1.2
 )
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # CPM
     set(CPM_DOWNLOAD_VERSION 0.34.0)
 
@@ -49,6 +54,14 @@ CPMAddPackage(
     OPTIONS "CXXOPTS_BUILD_EXAMPLES NO" "CXXOPTS_BUILD_TESTS NO" "CXXOPTS_ENABLE_INSTALL YES"
 )
 
+# CPMAddPackage(
+#     NAME fmt
+#     GITHUB_REPOSITORY fmtlib/fmt
+#     VERSION 9.1.0
+# )
+
+CPMAddPackage("gh:fmtlib/fmt#9.1.0")
+
 add_executable(dndmanager src/main.cpp)
 set_target_properties(dndmanager PROPERTIES EXPORT_COMPILE_COMMANDS ON)
 
@@ -59,7 +72,7 @@ target_include_directories(dndmanager
     PRIVATE
     ${CMAKE_SOURCE_DIR}/src/lib
 )
-target_link_libraries(dndmanager PUBLIC nlohmann_json::nlohmann_json cxxopts::cxxopts)
+target_link_libraries(dndmanager PUBLIC nlohmann_json::nlohmann_json cxxopts::cxxopts fmt::fmt)
 
 add_executable(dndmanager_tests)
 set_target_properties(dndmanager_tests PROPERTIES EXPORT_COMPILE_COMMANDS ON)
@@ -71,17 +84,11 @@ target_include_directories(dndmanager_tests
     PRIVATE
     ${CMAKE_SOURCE_DIR}/src/lib
 )
-target_link_libraries(dndmanager_tests PRIVATE nlohmann_json::nlohmann_json cxxopts::cxxopts Catch2::Catch2WithMain)
+target_link_libraries(dndmanager_tests PRIVATE nlohmann_json::nlohmann_json cxxopts::cxxopts fmt::fmt Catch2::Catch2WithMain)
 
 include(CTest)
 include(Catch.cmake)
 catch_discover_tests(dndmanager_tests) # include catch2 tests
-
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_subdirectory(src)
 

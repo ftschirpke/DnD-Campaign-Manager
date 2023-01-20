@@ -8,10 +8,10 @@
 class TestEffectHolderFileParser : public dnd::EffectHolderFileParser {
 public:
     void parseAndAddEffectForTesting(const std::string& effect_str, dnd::EffectHolder& effect_holder) const {
-        dnd::EffectHolderFileParser::parseAndAddEffect(effect_str, effect_holder);
+        dnd::EffectHolderFileParser::parseAndAddEffect(effect_str, &effect_holder);
     }
     void parseAndAddActivationForTesting(const std::string& activation_str, dnd::EffectHolder& effect_holder) const {
-        dnd::EffectHolderFileParser::parseAndAddActivation(activation_str, effect_holder);
+        dnd::EffectHolderFileParser::parseAndAddActivation(activation_str, &effect_holder);
     }
     dnd::EffectHolder createEffectHolderForTesting(const nlohmann::json& effect_holder_json) const {
         return createEffectHolder(effect_holder_json);

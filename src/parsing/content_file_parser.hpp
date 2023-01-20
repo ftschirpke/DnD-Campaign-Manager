@@ -10,7 +10,7 @@ namespace dnd {
 
 // parse a simple, optional attribute from a json into the output variable
 template <typename T>
-void parseOptional(const nlohmann::json& json, const char* attribute_name, T& output);
+void parseOptional(const nlohmann::json& json_to_parse, const char* attribute_name, T& output);
 
 class ContentFileParser {
 public:

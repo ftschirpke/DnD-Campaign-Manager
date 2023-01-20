@@ -7,6 +7,7 @@
 #include <nlohmann/json.hpp>
 
 #include "models/effect_holder/effect_holder.hpp"
+#include "models/effect_holder/effect_holder_with_choices.hpp"
 #include "parsing/content_file_parser.hpp"
 
 namespace dnd {
@@ -16,9 +17,11 @@ public:
     EffectHolderFileParser() noexcept = default;
 protected:
     static const std::regex activation_regex, effect_regex;
-    void parseAndAddEffect(const std::string& effect_str, EffectHolder& effect_holder) const;
-    void parseAndAddActivation(const std::string& activation_str, EffectHolder& effect_holder) const;
+    void parseAndAddEffect(const std::string& effect_str, EffectHolder* const effect_holder) const;
+    void parseAndAddActivation(const std::string& activation_str, EffectHolder* const effect_holder) const;
+    void parseEffectHolder(const nlohmann::json& effect_holder_json, EffectHolder* const effect_holder) const;
     EffectHolder createEffectHolder(const nlohmann::json& effect_holder_json) const;
+    EffectHolderWithChoices createEffectHolderWithChoices(const nlohmann::json& effect_holder_json) const;
 };
 
 inline const std::regex EffectHolderFileParser::activation_regex(
