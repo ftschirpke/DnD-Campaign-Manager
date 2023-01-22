@@ -13,6 +13,7 @@
 #include "models/creature_state.hpp"
 #include "models/effect_holder/activation.hpp"
 #include "models/effect_holder/effect_holder.hpp"
+#include "models/effect_holder/effect_holder_with_choices.hpp"
 #include "parsing/content_file_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
@@ -115,11 +116,38 @@ dnd::EffectHolderWithChoices dnd::EffectHolderFileParser::createEffectHolderWith
 
     parseEffectHolder(effect_holder_json, &effect_holder);
 
+    if (!effect_holder_json.at("choose").is_object()) {
+        throw attribute_format_error(filepath, "choose", "map/object");
+    }
+    for (const auto& [choice_key, choice_json] : effect_holder_json.at("choose").items()) {
+        parseAndAddChoice(choice_key, choice_json, effect_holder);
+    }
+
     return effect_holder;
 }
 
-void dnd::EffectHolderFileParser::parseAndAddEffect(const std::string& effect_str, EffectHolder* const effect_holder)
-    const {
+void dnd::EffectHolderFileParser::parseAndAddChoice(
+    const std::string& choice_key, const nlohmann::json& choice_json, EffectHolderWithChoices& effect_holder
+) const {
+    int amount = choice_json.at("amount").get<int>();
+
+    if (choice_json.contains("choices")) {
+        std::vector<std::string> selection = choice_json.at("choices").get<std::vector<std::string>>();
+
+        // effect_holder.choices.emplace_back(std::make_unique<SelectionChoice>(amount, choice_key,
+        // std::move(selection)));
+        effect_holder.choice = std::make_unique<SelectionChoice>(amount, choice_key, std::move(selection));
+    } else {
+        if (choice_json.contains("group")) {
+            const std::string group_name = choice_json.at("group").get<std::string>();
+            // if (!groups) {
+
+            // }
+        }
+    }
+}
+
+std::unique_ptr<dnd::Effect> dnd::EffectHolderFileParser::createEffect(const std::string& effect_str) const {
     if (!std::regex_match(effect_str, effect_regex)) {
         throw attribute_type_error(filepath, "invalid effect format: \"" + effect_str + "\"");
     }
@@ -133,7 +161,10 @@ void dnd::EffectHolderFileParser::parseAndAddEffect(const std::string& effect_st
     while (*it != ' ') {
         ++it;
     }
+
     const std::string effect_time_str(start_it, it);
+    const EffectTime effect_time = effect_time_for_string.at(effect_time_str);
+
     start_it = ++it;
     while (*it != ' ') {
         ++it;
@@ -141,13 +172,12 @@ void dnd::EffectHolderFileParser::parseAndAddEffect(const std::string& effect_st
     const std::string effect_type(start_it, it);
 
     const std::string last_part = std::string(++it, effect_str.cend());
-    std::unique_ptr<Effect> effect_ptr;
     if (effect_type.size() < 5) {
         const float effect_value = std::stof(last_part);
         if (effect_type == "mult" || effect_type == "div") {
-            effect_ptr = std::make_unique<FloatNumEffect>(affected_attribute, effect_type, effect_value);
+            return std::make_unique<FloatNumEffect>(affected_attribute, effect_type, effect_time, effect_value);
         } else {
-            effect_ptr = std::make_unique<IntNumEffect>(affected_attribute, effect_type, effect_value * 100);
+            return std::make_unique<IntNumEffect>(affected_attribute, effect_type, effect_time, effect_value * 100);
             // attributes are stored as integers * 100, see CreatureState
         }
     } else {
@@ -155,18 +185,22 @@ void dnd::EffectHolderFileParser::parseAndAddEffect(const std::string& effect_st
         int const_idx = effect_type.find("Const");
         if (other_idx != std::string::npos) {
             const std::string op_name(effect_type.cbegin(), effect_type.cbegin() + other_idx);
-            effect_ptr = std::make_unique<OtherAttributeEffect>(affected_attribute, op_name, last_part);
+            return std::make_unique<OtherAttributeEffect>(affected_attribute, op_name, effect_time, last_part);
         } else if (const_idx != std::string::npos) {
             const std::string op_name(effect_type.cbegin(), effect_type.cbegin() + const_idx);
-            effect_ptr = std::make_unique<ConstEffect>(affected_attribute, op_name, last_part);
+            return std::make_unique<ConstEffect>(affected_attribute, op_name, effect_time, last_part);
         }
     }
+    throw invalid_attribute(filepath, "effect", "unkown effect type");
+}
 
-    const EffectTime effect_time = effect_time_for_string.at(effect_time_str);
-    if (isAbility(affected_attribute)) {
-        effect_holder->ability_score_effects[effect_time].emplace_back(std::move(effect_ptr));
+void dnd::EffectHolderFileParser::parseAndAddEffect(const std::string& effect_str, EffectHolder* const effect_holder)
+    const {
+    auto effect = createEffect(effect_str);
+    if (isAbility(effect->affected_attribute)) {
+        effect_holder->ability_score_effects[effect->time].emplace_back(std::move(effect));
     } else {
-        effect_holder->normal_effects[effect_time].emplace_back(std::move(effect_ptr));
+        effect_holder->normal_effects[effect->time].emplace_back(std::move(effect));
     }
 }
 

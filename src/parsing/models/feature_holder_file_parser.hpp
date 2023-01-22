@@ -15,7 +15,7 @@ namespace dnd {
 
 class FeatureHolderFileParser : public EffectHolderFileParser {
 public:
-    FeatureHolderFileParser() noexcept = default;
+    FeatureHolderFileParser(const Groups& groups) noexcept;
 protected:
     Feature createFeature(const std::string& feature_name, const nlohmann::json& feature_json) const;
     void parseFeatures();
@@ -24,6 +24,9 @@ protected:
 private:
     std::vector<Feature> features;
 };
+
+inline FeatureHolderFileParser::FeatureHolderFileParser(const Groups& groups) noexcept
+    : EffectHolderFileParser(groups) {}
 
 inline const std::vector<Feature>& FeatureHolderFileParser::getFeatures() const { return features; }
 

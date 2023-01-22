@@ -22,7 +22,9 @@ enum SpellcastingType {
 
 class SpellcastingFeatureHolderFileParser : public FeatureHolderFileParser {
 public:
-    SpellcastingFeatureHolderFileParser(const std::unordered_map<std::string, const Spell>& spells) noexcept;
+    SpellcastingFeatureHolderFileParser(
+        const std::unordered_map<std::string, const Spell>& spells, const Groups& groups
+    ) noexcept;
 protected:
     const std::unordered_map<std::string, const Spell>& spells;
     void parseSize20Array(const nlohmann::json& json_to_parse, const char* attribute_name, std::array<int, 20>& output);
@@ -40,9 +42,9 @@ private:
 };
 
 inline SpellcastingFeatureHolderFileParser::SpellcastingFeatureHolderFileParser(
-    const std::unordered_map<std::string, const Spell>& spells
+    const std::unordered_map<std::string, const Spell>& spells, const Groups& groups
 ) noexcept
-    : FeatureHolderFileParser(), spells(spells) {}
+    : FeatureHolderFileParser(groups), spells(spells) {}
 
 } // namespace dnd
 

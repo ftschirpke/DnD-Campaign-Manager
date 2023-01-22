@@ -16,26 +16,38 @@ namespace dnd {
 
 class Choice {
 public:
-    int amount;
-    std::string attribute_name;
+    const int amount;
+    const std::string attribute_name;
+    Choice(int amount, const std::string& attribute_name);
 };
 
-template <typename T>
-class OutOfChoice : public Choice {
+class SelectionChoice : public Choice {
 public:
-    std::vector<T> out_of;
+    std::vector<std::string> selection;
+    SelectionChoice(int amount, const std::string& attribute_name, std::vector<std::string>&& selection);
 };
 
 class GroupChoice : public Choice {
 public:
     std::string group_name;
+    GroupChoice(int amount, const std::string& attribute_name, const std::string& group_name);
 };
 
 class EffectHolderWithChoices : public EffectHolder {
 public:
     // std::vector<std::unique_ptr<Choice>> choices;
-    Choice choice;
+    std::unique_ptr<Choice> choice;
 };
+
+inline Choice::Choice(int amount, const std::string& attribute_name) : amount(amount), attribute_name(attribute_name) {}
+
+inline SelectionChoice::SelectionChoice(
+    int amount, const std::string& attribute_name, std::vector<std::string>&& selection
+)
+    : Choice(amount, attribute_name), selection(selection) {}
+
+inline GroupChoice::GroupChoice(int amount, const std::string& attribute_name, const std::string& group_name)
+    : Choice(amount, attribute_name), group_name(group_name) {}
 
 } // namespace dnd
 

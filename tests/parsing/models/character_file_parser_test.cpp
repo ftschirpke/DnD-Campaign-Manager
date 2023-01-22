@@ -10,6 +10,7 @@
 #include <nlohmann/json.hpp>
 
 #include "controllers/content.hpp"
+#include "controllers/groups.hpp"
 #include "models/character.hpp"
 #include "models/character_class.hpp"
 #include "models/character_race.hpp"
@@ -19,7 +20,7 @@
 class TestCharacterFileParser : public dnd::CharacterFileParser {
 public:
     TestCharacterFileParser(
-        std::unordered_map<std::string, dnd::Character>& results,
+        std::unordered_map<std::string, dnd::Character>& results, const dnd::Groups& groups,
         const std::unordered_map<std::string, const dnd::CharacterClass>& character_classes,
         const std::unordered_map<std::string, const dnd::CharacterSubclass>& character_subclasses,
         const std::unordered_map<std::string, const dnd::CharacterRace>& character_races,
@@ -27,7 +28,7 @@ public:
         const std::unordered_map<std::string, const dnd::Spell>& spells
     )
         : dnd::CharacterFileParser(
-            results, character_classes, character_subclasses, character_races, character_subraces, spells
+            results, groups, character_classes, character_subclasses, character_races, character_subraces, spells
         ) {}
     void setJSON(const nlohmann::json& character_json) {
         filepath = std::filesystem::path("test_file_name.json");
@@ -42,6 +43,7 @@ public:
     TestCharacterFileParser createParser();
 private:
     static bool values_set;
+    static dnd::Groups groups;
     static std::unordered_map<std::string, const dnd::CharacterClass> character_classes;
     static std::unordered_map<std::string, const dnd::CharacterSubclass> character_subclasses;
     static std::unordered_map<std::string, const dnd::CharacterRace> character_races;
@@ -55,6 +57,7 @@ private:
 };
 
 bool SetupCharacterParserTest::values_set = false;
+dnd::Groups SetupCharacterParserTest::groups;
 std::unordered_map<std::string, const dnd::CharacterClass> SetupCharacterParserTest::character_classes = {};
 std::unordered_map<std::string, const dnd::CharacterSubclass> SetupCharacterParserTest::character_subclasses = {};
 std::unordered_map<std::string, const dnd::CharacterRace> SetupCharacterParserTest::character_races = {};
@@ -103,7 +106,7 @@ inline SetupCharacterParserTest::SetupCharacterParserTest() {
 
 inline TestCharacterFileParser SetupCharacterParserTest::createParser() {
     return TestCharacterFileParser(
-        characters, character_classes, character_subclasses, character_races, character_subraces, spells
+        characters, groups, character_classes, character_subclasses, character_races, character_subraces, spells
     );
 }
 

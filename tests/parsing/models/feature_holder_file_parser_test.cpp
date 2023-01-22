@@ -5,6 +5,7 @@
 #include <catch2/catch_test_macros.hpp>
 #include <nlohmann/json.hpp>
 
+#include "controllers/groups.hpp"
 #include "models/creature_state.hpp"
 #include "models/effect_holder/activation.hpp"
 #include "models/effect_holder/effect.hpp"
@@ -13,6 +14,7 @@
 // class that allows us to test the abstract dnd::FeatureHolderFileParser class
 class TestFeatureHolderFileParser : public dnd::FeatureHolderFileParser {
 public:
+    TestFeatureHolderFileParser() noexcept : dnd::FeatureHolderFileParser(dnd::Groups()) {}
     dnd::Feature createFeatureForTesting(const std::string& feature_name, const nlohmann::json& feature_json) const {
         return createFeature(feature_name, feature_json);
     }

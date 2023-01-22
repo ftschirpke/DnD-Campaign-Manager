@@ -15,7 +15,7 @@ namespace dnd {
 class CharacterClassFileParser : public SpellcastingFeatureHolderFileParser {
 public:
     CharacterClassFileParser(
-        std::unordered_map<std::string, const CharacterClass>& results,
+        std::unordered_map<std::string, const CharacterClass>& results, const Groups& groups,
         const std::unordered_map<std::string, const Spell>& spells
     ) noexcept;
     virtual void parse() override;
@@ -31,10 +31,10 @@ private:
 };
 
 inline CharacterClassFileParser::CharacterClassFileParser(
-    std::unordered_map<std::string, const CharacterClass>& results,
+    std::unordered_map<std::string, const CharacterClass>& results, const Groups& groups,
     const std::unordered_map<std::string, const Spell>& spells
 ) noexcept
-    : SpellcastingFeatureHolderFileParser(spells), results(results) {}
+    : SpellcastingFeatureHolderFileParser(spells, groups), results(results) {}
 
 } // namespace dnd
 

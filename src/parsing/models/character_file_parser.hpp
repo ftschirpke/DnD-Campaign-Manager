@@ -20,7 +20,7 @@ namespace dnd {
 class CharacterFileParser : public FeatureHolderFileParser {
 public:
     CharacterFileParser(
-        std::unordered_map<std::string, Character>& results,
+        std::unordered_map<std::string, Character>& results, const Groups& groups,
         const std::unordered_map<std::string, const CharacterClass>& character_classes,
         const std::unordered_map<std::string, const CharacterSubclass>& character_subclasses,
         const std::unordered_map<std::string, const CharacterRace>& character_races,
@@ -50,14 +50,14 @@ private:
 };
 
 inline CharacterFileParser::CharacterFileParser(
-    std::unordered_map<std::string, Character>& results,
+    std::unordered_map<std::string, Character>& results, const Groups& groups,
     const std::unordered_map<std::string, const CharacterClass>& character_classes,
     const std::unordered_map<std::string, const CharacterSubclass>& character_subclasses,
     const std::unordered_map<std::string, const CharacterRace>& character_races,
     const std::unordered_map<std::string, const CharacterSubrace>& character_subraces,
     const std::unordered_map<std::string, const Spell>& spells
 ) noexcept
-    : FeatureHolderFileParser(), results(results), character_classes(character_classes),
+    : FeatureHolderFileParser(groups), results(results), character_classes(character_classes),
       character_subclasses(character_subclasses), character_races(character_races),
       character_subraces(character_subraces), spells(spells) {}
 

@@ -106,20 +106,24 @@ std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createGeneralParserF
     switch (parsing_type) {
         case ParsingType::CHARACTER:
             return std::make_unique<CharacterFileParser>(
-                parsed_content.characters, parsed_content.character_classes, parsed_content.character_subclasses,
-                parsed_content.character_races, parsed_content.character_subraces, parsed_content.spells
+                parsed_content.characters, parsed_content.groups, parsed_content.character_classes,
+                parsed_content.character_subclasses, parsed_content.character_races, parsed_content.character_subraces,
+                parsed_content.spells
             );
         case ParsingType::RACE:
-            return std::make_unique<CharacterRaceFileParser>(parsed_content.character_races);
+            return std::make_unique<CharacterRaceFileParser>(parsed_content.character_races, parsed_content.groups);
         case ParsingType::SUBRACE:
             return std::make_unique<CharacterSubraceFileParser>(
-                parsed_content.character_subraces, parsed_content.character_races
+                parsed_content.character_subraces, parsed_content.groups, parsed_content.character_races
             );
         case ParsingType::CLASS:
-            return std::make_unique<CharacterClassFileParser>(parsed_content.character_classes, parsed_content.spells);
+            return std::make_unique<CharacterClassFileParser>(
+                parsed_content.character_classes, parsed_content.groups, parsed_content.spells
+            );
         case ParsingType::SUBCLASS:
             return std::make_unique<CharacterSubclassFileParser>(
-                parsed_content.character_subclasses, parsed_content.character_classes, parsed_content.spells
+                parsed_content.character_subclasses, parsed_content.groups, parsed_content.character_classes,
+                parsed_content.spells
             );
         case ParsingType::SPELL:
             return std::make_unique<SpellsFileParser>(parsed_content.spells, parsed_content.groups);

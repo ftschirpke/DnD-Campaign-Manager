@@ -20,7 +20,8 @@ private:
     Choosable createChoosable(const std::string& name, const nlohmann::json& choosable_json) const;
 };
 
-inline EffectHolderGroupsFileParser::EffectHolderGroupsFileParser(Groups& results) noexcept : results(results) {}
+inline EffectHolderGroupsFileParser::EffectHolderGroupsFileParser(Groups& results) noexcept
+    : EffectHolderFileParser(results), results(results) {}
 
 } // namespace dnd
 

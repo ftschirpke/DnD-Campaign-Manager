@@ -2,11 +2,13 @@
 
 #include <catch2/catch_test_macros.hpp>
 
+#include "controllers/groups.hpp"
 #include "models/effect_holder/effect_holder.hpp"
 
 // class that allows us to test the abstract dnd::EffectHolderFileParser class
 class TestEffectHolderFileParser : public dnd::EffectHolderFileParser {
 public:
+    TestEffectHolderFileParser() noexcept : dnd::EffectHolderFileParser(dnd::Groups()) {}
     void parseAndAddEffectForTesting(const std::string& effect_str, dnd::EffectHolder& effect_holder) const {
         dnd::EffectHolderFileParser::parseAndAddEffect(effect_str, &effect_holder);
     }

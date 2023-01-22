@@ -39,7 +39,7 @@ dnd::Feature dnd::FeatureHolderFileParser::createFeature(
     feature.main_part = std::move(createEffectHolder(feature_json));
     if (feature_json.contains("choose")) {
         feature.parts_with_choices.emplace_back(
-            std::move(createEffectHolderWithChoices(nlohmann::json{"choose", feature_json.at("choose")}))
+            std::move(createEffectHolderWithChoices(nlohmann::json::object({{"choose", feature_json.at("choose")}})))
         );
     }
     if (feature_json.contains("multi")) {

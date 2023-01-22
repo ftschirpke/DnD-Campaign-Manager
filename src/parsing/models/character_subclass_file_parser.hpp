@@ -15,7 +15,7 @@ namespace dnd {
 class CharacterSubclassFileParser : public SpellcastingFeatureHolderFileParser {
 public:
     CharacterSubclassFileParser(
-        std::unordered_map<std::string, const CharacterSubclass>& results,
+        std::unordered_map<std::string, const CharacterSubclass>& results, const Groups& groups,
         const std::unordered_map<std::string, const CharacterClass>& classes,
         const std::unordered_map<std::string, const Spell>& spells
     ) noexcept;
@@ -29,11 +29,11 @@ private:
 };
 
 inline CharacterSubclassFileParser::CharacterSubclassFileParser(
-    std::unordered_map<std::string, const CharacterSubclass>& results,
+    std::unordered_map<std::string, const CharacterSubclass>& results, const Groups& groups,
     const std::unordered_map<std::string, const CharacterClass>& classes,
     const std::unordered_map<std::string, const Spell>& spells
 ) noexcept
-    : SpellcastingFeatureHolderFileParser(spells), results(results), classes(classes) {}
+    : SpellcastingFeatureHolderFileParser(spells, groups), results(results), classes(classes) {}
 
 } // namespace dnd
 
