@@ -10,6 +10,7 @@
 #include "models/character_class.hpp"
 #include "models/character_race.hpp"
 #include "models/creature.hpp"
+#include "models/effect_holder/character_decision.hpp"
 #include "models/effect_holder/feature.hpp"
 
 namespace dnd {
@@ -27,6 +28,7 @@ public:
     const CharacterSubclass* subclass_ptr;
     const CharacterRace* race_ptr;
     const CharacterSubrace* subrace_ptr;
+    std::vector<CharacterDecision> decisions;
     Character(const std::string& name, const std::array<int, 6>& base_ability_scores) noexcept;
     Character(
         const std::string& name, const std::array<int, 6>& base_ability_scores, int level, int xp,

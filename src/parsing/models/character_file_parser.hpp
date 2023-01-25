@@ -7,11 +7,14 @@
 #include <unordered_map>
 #include <vector>
 
+#include <nlohmann/json.hpp>
+
 #include "controllers/content.hpp"
 #include "models/character.hpp"
 #include "models/character_class.hpp"
 #include "models/character_race.hpp"
 #include "models/creature_state.hpp"
+#include "models/effect_holder/character_decision.hpp"
 #include "models/spell.hpp"
 #include "parsing/models/feature_holder_file_parser.hpp"
 
@@ -30,6 +33,9 @@ public:
     virtual void parse() override;
     virtual bool validate() const override;
     virtual void saveResult() override;
+protected:
+    void parseCharacterDecisions(const std::string& feature_name, const nlohmann::json& feature_decisions_json);
+    CharacterDecision createCharacterDecision(const std::string& feature_name, const nlohmann::json& decision_json);
 private:
     std::unordered_map<std::string, Character>& results;
     const std::unordered_map<std::string, const CharacterClass>& character_classes;
@@ -44,6 +50,7 @@ private:
     const CharacterSubclass* subclass_ptr;
     const CharacterRace* race_ptr;
     const CharacterSubrace* subrace_ptr;
+    std::vector<CharacterDecision> decisions;
     int level, xp;
     void parseClassAndRace();
     void parseLevelAndXP();

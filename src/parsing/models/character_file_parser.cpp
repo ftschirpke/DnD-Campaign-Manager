@@ -12,6 +12,8 @@
 #include "models/character.hpp"
 #include "models/character_class.hpp"
 #include "models/character_race.hpp"
+#include "models/effect_holder/character_decision.hpp"
+#include "models/feature_holder.hpp"
 #include "models/spell.hpp"
 #include "parsing/models/feature_holder_file_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
@@ -44,7 +46,61 @@ void dnd::CharacterFileParser::parse() {
             throw e;
         }
     }
+
+    if (json_to_parse.contains("decisions")) {
+        if (!json_to_parse.at("decisions").is_object()) {
+            throw attribute_format_error(ParsingType::CHARACTER, filepath, "decisions", "map/object");
+        }
+        for (const auto& [feature_name, feature_decisions] : json_to_parse.at("decisions").items()) {
+            if (!feature_decisions.is_object()) {
+                throw attribute_format_error(
+                    ParsingType::CHARACTER, filepath, "decisions:" + feature_name, "map/object"
+                );
+            }
+            parseCharacterDecisions(feature_name, feature_decisions);
+        }
+    }
 }
+
+void dnd::CharacterFileParser::parseCharacterDecisions(
+    const std::string& feature_name, const nlohmann::json& feature_decisions_json
+) {
+    const Feature* feature_ptr = nullptr;
+    const std::vector<const FeatureHolder*> feature_holders{class_ptr, subclass_ptr, race_ptr, subrace_ptr};
+    for (auto feature_holder : feature_holders) {
+        for (const auto& feature : feature_holder->features) {
+            if (feature.name == feature_name) {
+                feature_ptr = &feature;
+                break;
+            }
+        }
+        if (feature_ptr != nullptr) {
+            break;
+        }
+    }
+    if (feature_ptr == nullptr) {
+        throw invalid_attribute(
+            ParsingType::CHARACTER, filepath, "decision:" + feature_name, "no such feature exists."
+        );
+    }
+    // TODO: the feature might also be a choosable i.e. an eldritch invocation or feat
+
+    if (feature_ptr->parts_with_choices.empty()) {
+        throw invalid_attribute(
+            ParsingType::CHARACTER, filepath, "decision:" + feature_name, "the feature has no choices."
+        );
+    }
+    for (const auto& eh_with_choices : feature_ptr->parts_with_choices) {
+        bool found = false;
+        for (auto it = eh_with_choices.choices.cbegin(); it != eh_with_choices.choices.cend(); ++it) {
+            // TODO: find the matching choice
+        }
+    }
+}
+
+// dnd::CharacterDecision dnd::CharacterFileParser::createCharacterDecision(
+//     const std::string& feature_name, const nlohmann::json& decision_json
+// ) {}
 
 void dnd::CharacterFileParser::parseLevelAndXP() {
     DND_MEASURE_FUNCTION();
