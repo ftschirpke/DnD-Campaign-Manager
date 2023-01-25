@@ -29,10 +29,12 @@ public:
     const CharacterRace* race_ptr;
     const CharacterSubrace* subrace_ptr;
     std::vector<CharacterDecision> decisions;
-    Character(const std::string& name, const std::array<int, 6>& base_ability_scores) noexcept;
     Character(
-        const std::string& name, const std::array<int, 6>& base_ability_scores, int level, int xp,
-        const std::vector<int>& hit_dice_rolls
+        const std::string& name, std::vector<Feature>&& features, const std::array<int, 6>& base_ability_scores
+    ) noexcept;
+    Character(
+        const std::string& name, std::vector<Feature>&& features, const std::array<int, 6>& base_ability_scores,
+        int level, int xp, const std::vector<int>& hit_dice_rolls
     ) noexcept;
     int getLevel() const noexcept;
     int getXP() const noexcept;
@@ -55,16 +57,18 @@ private:
     void updateLevel();
 };
 
-inline Character::Character(const std::string& name, const std::array<int, 6>& base_ability_scores) noexcept
-    : Creature(name, base_ability_scores), subclass_ptr(nullptr), subrace_ptr(nullptr) {}
+inline Character::Character(
+    const std::string& name, std::vector<Feature>&& features, const std::array<int, 6>& base_ability_scores
+) noexcept
+    : Creature(name, std::move(features), base_ability_scores), subclass_ptr(nullptr), subrace_ptr(nullptr) {}
 
 
 inline Character::Character(
-    const std::string& name, const std::array<int, 6>& base_ability_scores, int level, int xp,
-    const std::vector<int>& hit_dice_rolls
+    const std::string& name, std::vector<Feature>&& features, const std::array<int, 6>& base_ability_scores, int level,
+    int xp, const std::vector<int>& hit_dice_rolls
 ) noexcept
-    : Creature(name, base_ability_scores), level(level), xp(xp), hit_dice_rolls(hit_dice_rolls), subclass_ptr(nullptr),
-      subrace_ptr(nullptr) {}
+    : Creature(name, std::move(features), base_ability_scores), level(level), xp(xp), hit_dice_rolls(hit_dice_rolls),
+      subclass_ptr(nullptr), subrace_ptr(nullptr) {}
 
 inline int Character::getLevel() const noexcept { return level; }
 

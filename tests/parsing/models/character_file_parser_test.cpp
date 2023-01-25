@@ -14,6 +14,7 @@
 #include "models/character.hpp"
 #include "models/character_class.hpp"
 #include "models/character_race.hpp"
+#include "models/effect_holder/feature.hpp"
 #include "models/spell.hpp"
 #include "parsing/models/character_file_parser.hpp"
 
@@ -67,26 +68,28 @@ std::unordered_map<std::string, const dnd::Spell> SetupCharacterParserTest::spel
 inline void SetupCharacterParserTest::setClasses() {
     character_classes.emplace(
         std::piecewise_construct, std::forward_as_tuple("Barbarian"),
-        std::forward_as_tuple("Barbarian", "d12", std::vector<int>({4, 8, 12, 16, 19}), 3)
+        std::forward_as_tuple("Barbarian", std::vector<dnd::Feature>(), "d12", std::vector<int>({4, 8, 12, 16, 19}), 3)
     );
 }
 
 inline void SetupCharacterParserTest::setSubclasses() {
     character_subclasses.emplace(
         std::piecewise_construct, std::forward_as_tuple("Path of the Berserker"),
-        std::forward_as_tuple("Path of the Berserker", "Barbarian")
+        std::forward_as_tuple("Path of the Berserker", std::vector<dnd::Feature>(), "Barbarian")
     );
 }
 
 inline void SetupCharacterParserTest::setRaces() {
     character_races.emplace(
-        std::piecewise_construct, std::forward_as_tuple("Dwarf"), std::forward_as_tuple("Dwarf", true)
+        std::piecewise_construct, std::forward_as_tuple("Dwarf"),
+        std::forward_as_tuple("Dwarf", std::vector<dnd::Feature>(), true)
     );
 }
 
 inline void SetupCharacterParserTest::setSubraces() {
     character_subraces.emplace(
-        std::piecewise_construct, std::forward_as_tuple("Hill Dwarf"), std::forward_as_tuple("Hill Dwarf", "Dwarf")
+        std::piecewise_construct, std::forward_as_tuple("Hill Dwarf"),
+        std::forward_as_tuple("Hill Dwarf", std::vector<dnd::Feature>(), "Dwarf")
     );
 }
 

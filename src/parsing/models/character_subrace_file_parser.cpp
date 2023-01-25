@@ -51,10 +51,8 @@ bool dnd::CharacterSubraceFileParser::validate() const {
 }
 
 void dnd::CharacterSubraceFileParser::saveResult() {
-    // TODO: change CharacterSubrace constructor
     results.emplace(
         std::piecewise_construct, std::forward_as_tuple(character_subrace_name),
-        std::forward_as_tuple(character_subrace_name, race_name)
+        std::forward_as_tuple(character_subrace_name, retrieveFeatures(), race_name)
     );
-    // TODO: add features
 }

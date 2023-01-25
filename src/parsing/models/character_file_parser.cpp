@@ -13,6 +13,7 @@
 #include "models/character_class.hpp"
 #include "models/character_race.hpp"
 #include "models/effect_holder/character_decision.hpp"
+#include "models/effect_holder/feature.hpp"
 #include "models/feature_holder.hpp"
 #include "models/spell.hpp"
 #include "parsing/models/feature_holder_file_parser.hpp"
@@ -66,8 +67,18 @@ void dnd::CharacterFileParser::parseCharacterDecisions(
     const std::string& feature_name, const nlohmann::json& feature_decisions_json
 ) {
     const Feature* feature_ptr = nullptr;
-    const std::vector<const FeatureHolder*> feature_holders{class_ptr, subclass_ptr, race_ptr, subrace_ptr};
+    std::vector<const FeatureHolder*> feature_holders{class_ptr, race_ptr};
+    if (subclass_ptr != nullptr) {
+        feature_holders.emplace_back(subclass_ptr);
+    }
+    if (subrace_ptr != nullptr) {
+        feature_holders.emplace_back(subrace_ptr);
+    }
+
     for (auto feature_holder : feature_holders) {
+        if (feature_holder == nullptr) {
+            continue;
+        }
         for (const auto& feature : feature_holder->features) {
             if (feature.name == feature_name) {
                 feature_ptr = &feature;
@@ -80,7 +91,7 @@ void dnd::CharacterFileParser::parseCharacterDecisions(
     }
     if (feature_ptr == nullptr) {
         throw invalid_attribute(
-            ParsingType::CHARACTER, filepath, "decision:" + feature_name, "no such feature exists."
+            ParsingType::CHARACTER, filepath, "decision", "no feature \"" + feature_name + "\" exists."
         );
     }
     // TODO: the feature might also be a choosable i.e. an eldritch invocation or feat
@@ -215,10 +226,9 @@ void dnd::CharacterFileParser::saveResult() {
     // TODO: change Character constructor
     results.emplace(
         std::piecewise_construct, std::forward_as_tuple(character_name),
-        std::forward_as_tuple(character_name, base_ability_scores, level, xp, hit_dice_rolls)
+        std::forward_as_tuple(character_name, retrieveFeatures(), base_ability_scores, level, xp, hit_dice_rolls)
     );
     Character& character = results.at(character_name);
-    character.features = retrieveFeatures();
     character.race_ptr = race_ptr;
     character.subrace_ptr = subrace_ptr;
     character.class_ptr = class_ptr;

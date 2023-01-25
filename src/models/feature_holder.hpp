@@ -11,12 +11,12 @@ namespace dnd {
 class FeatureHolder {
 public:
     const std::string name;
-    // TODO: should this really be public AND non-const?
-    std::vector<Feature> features;
-    FeatureHolder(const std::string& name) noexcept;
+    const std::vector<Feature> features;
+    FeatureHolder(const std::string& name, std::vector<Feature>&& features) noexcept;
 };
 
-inline FeatureHolder::FeatureHolder(const std::string& name) noexcept : name(name) {}
+inline FeatureHolder::FeatureHolder(const std::string& name, std::vector<Feature>&& features) noexcept
+    : name(name), features(std::move(features)) {}
 
 } // namespace dnd
 

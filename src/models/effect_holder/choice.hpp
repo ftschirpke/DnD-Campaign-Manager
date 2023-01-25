@@ -33,13 +33,13 @@ inline Choice::Choice(int amount, const std::string& attribute_name) : amount(am
 inline SelectionChoice::SelectionChoice(
     int amount, const std::string& attribute_name, std::vector<std::string>&& selection
 )
-    : Choice(amount, attribute_name), selection(selection) {}
+    : Choice(amount, attribute_name), selection(std::move(selection)) {}
 
 inline GroupChoice::GroupChoice(int amount, const std::string& attribute_name, const std::string& group_name)
     : Choice(amount, attribute_name), group_names({group_name}) {}
 
 inline GroupChoice::GroupChoice(int amount, const std::string& attribute_name, std::vector<std::string>&& group_names)
-    : Choice(amount, attribute_name), group_names(group_names) {}
+    : Choice(amount, attribute_name), group_names(std::move(group_names)) {}
 
 } // namespace dnd
 

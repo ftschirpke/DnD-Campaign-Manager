@@ -66,7 +66,8 @@ inline CharacterFileParser::CharacterFileParser(
 ) noexcept
     : FeatureHolderFileParser(groups), results(results), character_classes(character_classes),
       character_subclasses(character_subclasses), character_races(character_races),
-      character_subraces(character_subraces), spells(spells) {}
+      character_subraces(character_subraces), spells(spells), class_ptr(nullptr), subclass_ptr(nullptr),
+      race_ptr(nullptr), subrace_ptr(nullptr) {}
 
 } // namespace dnd
 

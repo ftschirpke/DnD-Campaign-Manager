@@ -55,10 +55,8 @@ bool dnd::CharacterSubclassFileParser::validate() const {
 }
 
 void dnd::CharacterSubclassFileParser::saveResult() {
-    // TODO: change CharacterSubclass constructor
     results.emplace(
         std::piecewise_construct, std::forward_as_tuple(character_subclass_name),
-        std::forward_as_tuple(character_subclass_name, class_name)
+        std::forward_as_tuple(character_subclass_name, retrieveFeatures(), class_name)
     );
-    // TODO: add features
 }

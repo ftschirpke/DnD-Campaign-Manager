@@ -82,10 +82,10 @@ bool dnd::CharacterClassFileParser::validate() const {
 }
 
 void dnd::CharacterClassFileParser::saveResult() {
-    // TODO: change CharacterClass constructor
     results.emplace(
         std::piecewise_construct, std::forward_as_tuple(character_class_name),
-        std::forward_as_tuple(character_class_name, character_class_hit_dice, asi_levels, subclass_level)
+        std::forward_as_tuple(
+            character_class_name, retrieveFeatures(), character_class_hit_dice, asi_levels, subclass_level
+        )
     );
-    // TODO: add features
 }
