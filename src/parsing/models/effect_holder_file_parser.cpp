@@ -119,10 +119,6 @@ dnd::EffectHolderWithChoices dnd::EffectHolderFileParser::createEffectHolderWith
     if (!effect_holder_json.at("choose").is_object()) {
         throw attribute_format_error(filepath, "choose", "map/object");
     }
-    if (effect_holder_json.at("choose").size() != 1) {
-        throw invalid_attribute(filepath, "choose", "choosing more than one thing at a time is not implemented.");
-    }
-    // TODO this is ugly at the moment
     for (const auto& [choice_key, choice_json] : effect_holder_json.at("choose").items()) {
         parseAndAddChoice(choice_key, choice_json, effect_holder);
     }
@@ -138,16 +134,28 @@ void dnd::EffectHolderFileParser::parseAndAddChoice(
     if (choice_json.contains("choices")) {
         std::vector<std::string> selection = choice_json.at("choices").get<std::vector<std::string>>();
 
-        effect_holder.choice = std::make_unique<SelectionChoice>(amount, choice_key, std::move(selection));
+        effect_holder.choices.emplace_back(std::make_unique<SelectionChoice>(amount, choice_key, std::move(selection)));
     } else {
-        const std::string group_name =
-            choice_json.contains("group") ? choice_json.at("group").get<std::string>() : choice_key;
-
-        if (!groups.isGroup(group_name)) {
-            throw invalid_attribute(filepath, "choose:group", group_name + " is not a group");
+        std::vector<std::string> group_names;
+        if (choice_json.contains("groups")) {
+            group_names = choice_json.at("groups").get<std::vector<std::string>>();
+        } else if (choice_json.contains("group")) {
+            group_names.emplace_back(choice_json.at("group").get<std::string>());
+        } else {
+            group_names.emplace_back(choice_key);
         }
 
-        effect_holder.choice = std::make_unique<GroupChoice>(amount, choice_key, group_name);
+        for (auto& group_name : group_names) {
+            size_t idx = group_name.find('_');
+            while (idx != std::string::npos) {
+                group_name[idx] = ' ';
+                idx = group_name.find('_');
+            }
+            if (!groups.isGroup(group_name)) {
+                throw invalid_attribute(filepath, "choose:group", '\"' + group_name + "\" is not a group");
+            }
+        }
+        effect_holder.choices.emplace_back(std::make_unique<GroupChoice>(amount, choice_key, std::move(group_names)));
     }
 }
 

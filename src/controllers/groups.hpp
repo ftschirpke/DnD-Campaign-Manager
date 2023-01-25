@@ -11,6 +11,7 @@ namespace dnd {
 
 class Groups {
 public:
+    Groups();
     const std::unordered_set<std::string>& get(const std::string& group_name) const;
     // add an empty group
     void add(const std::string& group_name);

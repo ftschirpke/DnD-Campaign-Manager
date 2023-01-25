@@ -29,14 +29,14 @@ public:
 
 class GroupChoice : public Choice {
 public:
-    std::string group_name;
+    std::vector<std::string> group_names;
     GroupChoice(int amount, const std::string& attribute_name, const std::string& group_name);
+    GroupChoice(int amount, const std::string& attribute_name, std::vector<std::string>&& group_names);
 };
 
 class EffectHolderWithChoices : public EffectHolder {
 public:
-    // std::vector<std::unique_ptr<Choice>> choices;
-    std::unique_ptr<Choice> choice;
+    std::vector<std::unique_ptr<Choice>> choices;
 };
 
 inline Choice::Choice(int amount, const std::string& attribute_name) : amount(amount), attribute_name(attribute_name) {}
@@ -47,7 +47,10 @@ inline SelectionChoice::SelectionChoice(
     : Choice(amount, attribute_name), selection(selection) {}
 
 inline GroupChoice::GroupChoice(int amount, const std::string& attribute_name, const std::string& group_name)
-    : Choice(amount, attribute_name), group_name(group_name) {}
+    : Choice(amount, attribute_name), group_names({group_name}) {}
+
+inline GroupChoice::GroupChoice(int amount, const std::string& attribute_name, std::vector<std::string>&& group_names)
+    : Choice(amount, attribute_name), group_names(group_names) {}
 
 } // namespace dnd
 
