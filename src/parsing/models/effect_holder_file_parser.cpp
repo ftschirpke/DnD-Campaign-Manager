@@ -119,6 +119,10 @@ dnd::EffectHolderWithChoices dnd::EffectHolderFileParser::createEffectHolderWith
     if (!effect_holder_json.at("choose").is_object()) {
         throw attribute_format_error(filepath, "choose", "map/object");
     }
+    if (effect_holder_json.at("choose").size() != 1) {
+        throw invalid_attribute(filepath, "choose", "choosing more than one thing at a time is not implemented.");
+    }
+    // TODO this is ugly at the moment
     for (const auto& [choice_key, choice_json] : effect_holder_json.at("choose").items()) {
         parseAndAddChoice(choice_key, choice_json, effect_holder);
     }
@@ -134,16 +138,16 @@ void dnd::EffectHolderFileParser::parseAndAddChoice(
     if (choice_json.contains("choices")) {
         std::vector<std::string> selection = choice_json.at("choices").get<std::vector<std::string>>();
 
-        // effect_holder.choices.emplace_back(std::make_unique<SelectionChoice>(amount, choice_key,
-        // std::move(selection)));
         effect_holder.choice = std::make_unique<SelectionChoice>(amount, choice_key, std::move(selection));
     } else {
-        if (choice_json.contains("group")) {
-            const std::string group_name = choice_json.at("group").get<std::string>();
-            // if (!groups) {
+        const std::string group_name =
+            choice_json.contains("group") ? choice_json.at("group").get<std::string>() : choice_key;
 
-            // }
+        if (!groups.isGroup(group_name)) {
+            throw invalid_attribute(filepath, "choose:group", group_name + " is not a group");
         }
+
+        effect_holder.choice = std::make_unique<GroupChoice>(amount, choice_key, group_name);
     }
 }
 
