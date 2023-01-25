@@ -1,6 +1,6 @@
 #include "dnd_config.hpp"
 
-#include "effect_holder_with_choices.hpp"
+#include "choice.hpp"
 
 #include <algorithm>
 #include <string>
