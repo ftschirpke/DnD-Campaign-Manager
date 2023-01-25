@@ -4,7 +4,6 @@
 #include <memory>
 #include <vector>
 
-#include "models/character.hpp"
 #include "models/effect_holder/effect_holder.hpp"
 #include "models/effect_holder/prerequisite.hpp"
 
@@ -18,7 +17,6 @@ public:
     std::vector<EffectHolder> parts;
     Choosable(const std::string& name, const std::string& description) noexcept;
     Choosable(Choosable&& other) noexcept = default;
-    bool isAllowedFor(const Character& character) const;
 };
 
 inline Choosable::Choosable(const std::string& name, const std::string& description) noexcept

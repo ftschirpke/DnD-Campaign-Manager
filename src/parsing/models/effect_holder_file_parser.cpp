@@ -2,6 +2,7 @@
 
 #include "effect_holder_file_parser.hpp"
 
+#include <algorithm>
 #include <memory>
 #include <regex>
 #include <string>
@@ -12,6 +13,7 @@
 #include "basic_mechanics/abilities.hpp"
 #include "models/creature_state.hpp"
 #include "models/effect_holder/activation.hpp"
+#include "models/effect_holder/choosable.hpp"
 #include "models/effect_holder/effect_holder.hpp"
 #include "models/effect_holder/effect_holder_with_choices.hpp"
 #include "parsing/content_file_parser.hpp"
@@ -155,7 +157,37 @@ void dnd::EffectHolderFileParser::parseAndAddChoice(
                 throw invalid_attribute(filepath, "choose:group", '\"' + group_name + "\" is not a group");
             }
         }
-        effect_holder.choices.emplace_back(std::make_unique<GroupChoice>(amount, choice_key, std::move(group_names)));
+
+        bool all_are_choosable_groups =
+            std::all_of(group_names.begin(), group_names.end(), [&](const std::string& group_name) {
+                return groups.isChoosableGroup(group_name);
+            });
+        bool all_are_string_groups =
+            std::all_of(group_names.begin(), group_names.end(), [&](const std::string& group_name) {
+                return groups.isStringGroup(group_name);
+            });
+
+        if (all_are_choosable_groups) {
+            std::vector<const std::unordered_map<std::string, Choosable>*> group_values;
+            group_values.reserve(group_names.size());
+            for (const auto& group_name : group_names) {
+                group_values.emplace_back(&groups.getChoosableGroup(group_name));
+            }
+            effect_holder.choices.emplace_back(
+                std::make_unique<ChoosableGroupChoice>(amount, choice_key, std::move(group_values))
+            );
+        } else if (all_are_string_groups) {
+            std::vector<const std::unordered_set<std::string>*> group_values;
+            group_values.reserve(group_names.size());
+            for (const auto& group_name : group_names) {
+                group_values.emplace_back(&groups.getStringGroup(group_name));
+            }
+            effect_holder.choices.emplace_back(
+                std::make_unique<StringGroupChoice>(amount, choice_key, std::move(group_values))
+            );
+        } else {
+            throw invalid_attribute(filepath, "choose:group/groups", "all groups must be of the same kind.");
+        }
     }
 }
 

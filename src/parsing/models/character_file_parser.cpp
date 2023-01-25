@@ -13,6 +13,7 @@
 #include "models/character_class.hpp"
 #include "models/character_race.hpp"
 #include "models/effect_holder/character_decision.hpp"
+#include "models/effect_holder/choice.hpp"
 #include "models/effect_holder/feature.hpp"
 #include "models/feature_holder.hpp"
 #include "models/spell.hpp"

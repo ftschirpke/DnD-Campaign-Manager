@@ -3,8 +3,8 @@
 
 #include "dnd_config.hpp"
 
+#include "models/effect_holder/choice.hpp"
 #include "models/effect_holder/effect_holder.hpp"
-#include "models/effect_holder/effect_holder_with_choices.hpp"
 
 namespace dnd {
 

@@ -2,7 +2,9 @@
 #define RACE_HPP_
 
 #include <string>
+#include <vector>
 
+#include "models/effect_holder/feature.hpp"
 #include "models/feature_holder.hpp"
 
 namespace dnd {

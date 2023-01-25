@@ -3,6 +3,13 @@
 
 #include "dnd_config.hpp"
 
+#include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+
+#include "models/effect_holder/choosable.hpp"
+
 namespace dnd {
 
 class Choice {
@@ -20,11 +27,23 @@ public:
     virtual bool isValidDecision(const std::string& decision_str) const;
 };
 
-class GroupChoice : public Choice {
+class ChoosableGroupChoice : public Choice {
 public:
-    std::vector<std::string> group_names;
-    GroupChoice(int amount, const std::string& attribute_name, const std::string& group_name);
-    GroupChoice(int amount, const std::string& attribute_name, std::vector<std::string>&& group_names);
+    std::vector<const std::unordered_map<std::string, Choosable>*> group_values;
+    ChoosableGroupChoice(
+        int amount, const std::string& attribute_name,
+        std::vector<const std::unordered_map<std::string, Choosable>*>&& group_values
+    );
+    virtual bool isValidDecision(const std::string& decision_str) const;
+};
+
+class StringGroupChoice : public Choice {
+public:
+    std::vector<const std::unordered_set<std::string>*> group_values;
+    StringGroupChoice(
+        int amount, const std::string& attribute_name,
+        std::vector<const std::unordered_set<std::string>*>&& group_values
+    );
     virtual bool isValidDecision(const std::string& decision_str) const;
 };
 
@@ -35,11 +54,16 @@ inline SelectionChoice::SelectionChoice(
 )
     : Choice(amount, attribute_name), selection(std::move(selection)) {}
 
-inline GroupChoice::GroupChoice(int amount, const std::string& attribute_name, const std::string& group_name)
-    : Choice(amount, attribute_name), group_names({group_name}) {}
+inline ChoosableGroupChoice::ChoosableGroupChoice(
+    int amount, const std::string& attribute_name,
+    std::vector<const std::unordered_map<std::string, Choosable>*>&& group_values
+)
+    : Choice(amount, attribute_name), group_values(std::move(group_values)) {}
 
-inline GroupChoice::GroupChoice(int amount, const std::string& attribute_name, std::vector<std::string>&& group_names)
-    : Choice(amount, attribute_name), group_names(std::move(group_names)) {}
+inline StringGroupChoice::StringGroupChoice(
+    int amount, const std::string& attribute_name, std::vector<const std::unordered_set<std::string>*>&& group_values
+)
+    : Choice(amount, attribute_name), group_values(std::move(group_values)) {}
 
 } // namespace dnd
 
