@@ -6,6 +6,11 @@ project(DnD-Campaign-Manager
     VERSION 0.1.2
 )
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # CPM
     set(CPM_DOWNLOAD_VERSION 0.34.0)
 
@@ -76,12 +81,6 @@ target_link_libraries(dndmanager_tests PRIVATE nlohmann_json::nlohmann_json cxxo
 include(CTest)
 include(Catch.cmake)
 catch_discover_tests(dndmanager_tests) # include catch2 tests
-
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_subdirectory(src)
 

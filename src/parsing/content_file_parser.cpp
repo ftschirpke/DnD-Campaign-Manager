@@ -14,16 +14,17 @@ bool dnd::ContentFileParser::openJSON(const std::filesystem::directory_entry& fi
         std::cerr << "Warning: " << file.path() << " is not a regular file.\n";
         return false;
     }
-    filename = file.path().c_str();
-    if (filename.compare(filename.length() - 5, filename.length(), ".json") != 0) {
-        std::cerr << "Warning: \"" << filename << "\" is not a \".json\" file.\n";
+    filepath = file.path();
+    if (filepath.extension().c_str() == ".json") {
+        std::cerr << "Warning: " << filepath << " is not a \".json\" file.\n";
         return false;
     }
-    std::ifstream json_file(filename);
+    std::ifstream json_file(filepath);
     try {
+        DND_MEASURE_SCOPE("JSON serialisation");
         json_file >> json_to_parse;
     } catch (const nlohmann::json::parse_error& e) {
-        std::cerr << "Warning: Error occured while parsing \"" << filename << "\":\n" << e.what() << '\n';
+        std::cerr << "Warning: Error occured while parsing " << filepath << ":\n" << e.what() << '\n';
         return false;
     }
     return true;

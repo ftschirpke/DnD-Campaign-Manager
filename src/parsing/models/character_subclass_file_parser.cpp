@@ -16,11 +16,11 @@
 void dnd::CharacterSubclassFileParser::parse() {
     DND_MEASURE_FUNCTION();
     if (!json_to_parse.is_object()) {
-        throw json_format_error(ParsingType::SUBCLASS, filename, "map/object");
+        throw json_format_error(ParsingType::SUBCLASS, filepath, "map/object");
     }
     character_subclass_name = json_to_parse.at("name").get<std::string>();
     if (character_subclass_name.size() == 0) {
-        throw invalid_attribute(ParsingType::SUBCLASS, filename, "name", "cannot be \"\".");
+        throw invalid_attribute(ParsingType::SUBCLASS, filepath, "name", "cannot be \"\".");
     }
     class_name = json_to_parse.at("class").get<std::string>();
 
@@ -29,6 +29,15 @@ void dnd::CharacterSubclassFileParser::parse() {
     } catch (parsing_error& e) {
         e.setParsingType(ParsingType::SUBCLASS);
         throw e;
+    }
+
+    if (json_to_parse.contains("spellcasting")) {
+        try {
+            parseSpellcasting();
+        } catch (parsing_error& e) {
+            e.setParsingType(ParsingType::SUBCLASS);
+            throw e;
+        }
     }
 }
 
@@ -39,17 +48,15 @@ bool dnd::CharacterSubclassFileParser::validate() const {
     }
     if (classes.find(class_name) == classes.cend()) {
         throw invalid_attribute(
-            ParsingType::SUBCLASS, filename, "class", "must exist. \"" + class_name + "\" does not exist."
+            ParsingType::SUBCLASS, filepath, "class", "must exist. \"" + class_name + "\" does not exist."
         );
     }
     return true;
 }
 
 void dnd::CharacterSubclassFileParser::saveResult() {
-    // TODO: change CharacterSubclass constructor
     results.emplace(
         std::piecewise_construct, std::forward_as_tuple(character_subclass_name),
-        std::forward_as_tuple(character_subclass_name, class_name)
+        std::forward_as_tuple(character_subclass_name, retrieveFeatures(), class_name)
     );
-    // TODO: add features
 }

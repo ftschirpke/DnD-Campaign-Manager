@@ -16,15 +16,19 @@ public:
     CreatureState state;
     // TODO: probably needs a revamp, when monsters are introduced
     // TODO: actions, bonus actions, reactions? - or are they part of the state?
-    Creature(const std::string& name, const std::array<int, 6>& base_ability_scores);
+    Creature(
+        const std::string& name, std::vector<Feature>&& features, const std::array<int, 6>& base_ability_scores
+    ) noexcept;
     virtual void determineState();
 protected:
     virtual const std::unordered_map<std::string, int> getConstants() const;
     virtual const std::unordered_map<std::string, int> getInitialAttributeValues() const;
 };
 
-inline Creature::Creature(const std::string& name, const std::array<int, 6>& base_ability_scores)
-    : dnd::FeatureHolder(name), base_ability_scores(base_ability_scores) {}
+inline Creature::Creature(
+    const std::string& name, std::vector<Feature>&& features, const std::array<int, 6>& base_ability_scores
+) noexcept
+    : FeatureHolder(name, std::move(features)), base_ability_scores(base_ability_scores) {}
 
 inline void Creature::determineState() { state = CreatureState(getConstants(), getInitialAttributeValues()); }
 

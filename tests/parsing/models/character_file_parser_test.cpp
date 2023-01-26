@@ -1,6 +1,7 @@
 #include "parsing/models/character_file_parser.hpp"
 
 #include <array>
+#include <filesystem>
 #include <memory>
 #include <string>
 #include <vector>
@@ -9,16 +10,18 @@
 #include <nlohmann/json.hpp>
 
 #include "controllers/content.hpp"
+#include "controllers/groups.hpp"
 #include "models/character.hpp"
 #include "models/character_class.hpp"
 #include "models/character_race.hpp"
+#include "models/effect_holder/feature.hpp"
 #include "models/spell.hpp"
 #include "parsing/models/character_file_parser.hpp"
 
 class TestCharacterFileParser : public dnd::CharacterFileParser {
 public:
     TestCharacterFileParser(
-        std::unordered_map<std::string, dnd::Character>& results,
+        std::unordered_map<std::string, dnd::Character>& results, const dnd::Groups& groups,
         const std::unordered_map<std::string, const dnd::CharacterClass>& character_classes,
         const std::unordered_map<std::string, const dnd::CharacterSubclass>& character_subclasses,
         const std::unordered_map<std::string, const dnd::CharacterRace>& character_races,
@@ -26,10 +29,10 @@ public:
         const std::unordered_map<std::string, const dnd::Spell>& spells
     )
         : dnd::CharacterFileParser(
-            results, character_classes, character_subclasses, character_races, character_subraces, spells
+            results, groups, character_classes, character_subclasses, character_races, character_subraces, spells
         ) {}
     void setJSON(const nlohmann::json& character_json) {
-        filename = "test_file_name.json";
+        filepath = std::filesystem::path("test_file_name.json");
         json_to_parse = character_json;
     }
 };
@@ -41,6 +44,7 @@ public:
     TestCharacterFileParser createParser();
 private:
     static bool values_set;
+    static dnd::Groups groups;
     static std::unordered_map<std::string, const dnd::CharacterClass> character_classes;
     static std::unordered_map<std::string, const dnd::CharacterSubclass> character_subclasses;
     static std::unordered_map<std::string, const dnd::CharacterRace> character_races;
@@ -54,6 +58,7 @@ private:
 };
 
 bool SetupCharacterParserTest::values_set = false;
+dnd::Groups SetupCharacterParserTest::groups;
 std::unordered_map<std::string, const dnd::CharacterClass> SetupCharacterParserTest::character_classes = {};
 std::unordered_map<std::string, const dnd::CharacterSubclass> SetupCharacterParserTest::character_subclasses = {};
 std::unordered_map<std::string, const dnd::CharacterRace> SetupCharacterParserTest::character_races = {};
@@ -63,26 +68,28 @@ std::unordered_map<std::string, const dnd::Spell> SetupCharacterParserTest::spel
 inline void SetupCharacterParserTest::setClasses() {
     character_classes.emplace(
         std::piecewise_construct, std::forward_as_tuple("Barbarian"),
-        std::forward_as_tuple("Barbarian", "d12", std::vector<int>({4, 8, 12, 16, 19}), 3)
+        std::forward_as_tuple("Barbarian", std::vector<dnd::Feature>(), "d12", std::vector<int>({4, 8, 12, 16, 19}), 3)
     );
 }
 
 inline void SetupCharacterParserTest::setSubclasses() {
     character_subclasses.emplace(
         std::piecewise_construct, std::forward_as_tuple("Path of the Berserker"),
-        std::forward_as_tuple("Path of the Berserker", "Barbarian")
+        std::forward_as_tuple("Path of the Berserker", std::vector<dnd::Feature>(), "Barbarian")
     );
 }
 
 inline void SetupCharacterParserTest::setRaces() {
     character_races.emplace(
-        std::piecewise_construct, std::forward_as_tuple("Dwarf"), std::forward_as_tuple("Dwarf", true)
+        std::piecewise_construct, std::forward_as_tuple("Dwarf"),
+        std::forward_as_tuple("Dwarf", std::vector<dnd::Feature>(), true)
     );
 }
 
 inline void SetupCharacterParserTest::setSubraces() {
     character_subraces.emplace(
-        std::piecewise_construct, std::forward_as_tuple("Hill Dwarf"), std::forward_as_tuple("Hill Dwarf", "Dwarf")
+        std::piecewise_construct, std::forward_as_tuple("Hill Dwarf"),
+        std::forward_as_tuple("Hill Dwarf", std::vector<dnd::Feature>(), "Dwarf")
     );
 }
 
@@ -102,7 +109,7 @@ inline SetupCharacterParserTest::SetupCharacterParserTest() {
 
 inline TestCharacterFileParser SetupCharacterParserTest::createParser() {
     return TestCharacterFileParser(
-        characters, character_classes, character_subclasses, character_races, character_subraces, spells
+        characters, groups, character_classes, character_subclasses, character_races, character_subraces, spells
     );
 }
 

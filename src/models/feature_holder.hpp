@@ -4,19 +4,19 @@
 #include <string>
 #include <vector>
 
-#include "models/features/feature.hpp"
+#include "models/effect_holder/feature.hpp"
 
 namespace dnd {
 
 class FeatureHolder {
 public:
     const std::string name;
-    // TODO: should this really be public AND non-const?
-    std::vector<Feature> features;
-    FeatureHolder(const std::string& name);
+    const std::vector<Feature> features;
+    FeatureHolder(const std::string& name, std::vector<Feature>&& features) noexcept;
 };
 
-inline FeatureHolder::FeatureHolder(const std::string& name) : name(name) {}
+inline FeatureHolder::FeatureHolder(const std::string& name, std::vector<Feature>&& features) noexcept
+    : name(name), features(std::move(features)) {}
 
 } // namespace dnd
 

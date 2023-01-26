@@ -11,6 +11,7 @@
   - [Spells](#spells)
   - [Features](#features)
   - [Effects](#effects)
+  - [Groups](#groups)
   - [Anything unclear?](#anything-unclear)
 
 This directory is where you store all your content i.e. definitions of classes, races, spells, items, and monsters.
@@ -34,25 +35,28 @@ The following chapters explain how to format certain types of content.
 
 ## Characters
 Each character should be stored in a JSON file as a map (or "object") containing the following values:
-- "name" (required) - the name of the character
-- "class" (required) - the name of the class
-- "subclass" (required at a certain level) - the name of the subclass
-- "race" (required) - the name of the race
-- "subrace" (required if race has subraces) - the name of the subrace
-- "base_ability_scores" (required) - an array of initial ability scores **without any modifiers applied** (must be of length 6)
-- "level" and "xp" (only one of them is required) - level or XP value of character
-  - you can only provide one of these values e.g. only the levels of characters when you are using milestone levelling
-- "hit_dice_rolls" (required) - an array of hit dice rolls on level-ups for hit points **without any modifiers applied** (should have one value for each level)
-  - **be aware:** if you are using the rule that on level 1 everyone gets the maximum value of the hit dice as HP you still have to provide that value in this array
-- "features" (optional) - map of character-specific [features](#features)
+| Name | required? | format | description |
+|------|:---------:|:------:|-------------|
+| name | yes | string | name of the character |
+| class | yes | string | name of the class |
+| subclass | at certain levels | string | name of the subclass |
+| race | yes | string | name of the race |
+| subrace | if race has subraces | string | name of the subrace |
+| base_ability_scores | yes | array of integers | array of initial ability scores **without any modifiers applied** (must be of length 6) |
+| level | if "xp" not provided | integer | level value of character <ul><li>if you provide this, you do not need to provide XP values which is useful for milestone levelling</li><li>but if you do not want a specific XP value (and not the minimum value for that level), you can and *should* still provide the XP value</li></ul> |
+| xp | if "level" not provided | integer | XP value of character <ul><li>if you provide this, you do not need to provide a level, but you can</li></ul> |
+| hit_dice_rolls | yes | array of integers | hit dice rolls on level-ups for hit points **without any modifiers applied** (should have one value for each level) <ul><li>**be aware:** if you are using the rule that on level 1 everyone gets the maximum value of the hit die as HP, you still have to provide that value in this array</li></ul> |
+| features | no | [features](#features) map | character-specific features |
 
 <!-- TODO: choices -->
 
 ## Races
-Each race should be stored in a JSON file as a map (or "object"). The required values are:
-- "name" - the name of the race
-- "has_subraces" - a boolean whether subraces exist (true or false)
-- "features" - map of [features](#features) (map can be empty) e.g. ability score increases or innate spellcasting abilities
+Each race should be stored in a JSON file as a map (or "object"). The values possible values are:
+| Name | required? | format | description |
+|------|:---------:|:------:|-------------|
+| name | yes | string | name of the race |
+| has_subraces | yes | boolean | describes whether subraces exist (true or false) |
+| features | no | [features](#features) map | racial features e.g. ability score increases or innate spellcasting abilities |
 
 Example of a race with only one feature:
 ```json
@@ -69,13 +73,14 @@ Example of a race with only one feature:
     ]
 }
 ```
-[Are you still having questions?](#anything-unclear)
 
 ## Subraces
-Similarly to races, each subrace should be stored in a JSON file as a map (or "object"). The required values are:
-- "name" - the name of the subrace
-- "race" - the name of the race
-- "features" - map of [features](#features) (map can be empty)
+Similarly to races, each subrace should be stored in a JSON file as a map (or "object"). The possible values are:
+| Name | required? | format | description |
+|------|:---------:|:------:|-------------|
+| name | yes | string | name of the subrace |
+| race | yes | string | name of the race |
+| features | no | [features](#features) map | subrace features |
 
 Example of a subrace of our Example Race with one feature:
 ```json
@@ -89,16 +94,16 @@ Example of a subrace of our Example Race with one feature:
     }
 }
 ```
-[Are you still having questions?](#anything-unclear)
 
 ## Classes
 Each class should be stored in a JSON file as a map (or "object"). The required values are:
-- "name" - the name of the class
-- "hit_dice" - string for hit dice i.e. "d6", "d8", "d10" or "d12"
-- "asi_levels" - an array of the levels at which characters of this class get Ability Score Increases
-- "features" - map of [features](#features) e.g. innate spellcasting abilities
-  - there needs to be at least one feature that has the key-value pair `"subclass": true` (this feature should just be a feature describing that from a certain level on, usually level 1, 2 or 3, a subclass can be chosen)
-  - usually, there is also a feature describing hit dice and proficiencies for armor, weapons, saving throws and skills
+| Name | required? | format | description |
+|------|:---------:|:------:|-------------|
+| name | yes | string | name of the class |
+| hit_dice | yes | string | string for hit dice i.e. "d6", "d8", "d10" or "d12" |
+| asi_levels | yes | array of integers | levels at which characters of this class get Ability Score Increases |
+| spellcasting | no | [spellcasting](#spellcasting) map | all information about spellcasting, if the class is a spellcasting class |
+| features | yes | [features](#features) map | class features <ul><li>there needs to be exactly one feature that has the key-value pair `"subclass": true` (this feature should just be a feature describing that from a certain level you can choose a subclass, usually level 1, 2 or 3)</li><li>usually, there is also a feature describing hit dice and proficiencies for armor, weapons, saving throws and skills</li></ul> |
 
 Example of a class without a proficiency feature (for more information on proficiency features, have a look at the examples provided in the [`content_imperial`](../content_imperial/general/srd/classes/) and [`content_metric`](../content_metric/general/srd/classes/) directories):
 ```json
@@ -114,27 +119,27 @@ Example of a class without a proficiency feature (for more information on profic
     }
 }
 ```
+
 ### Spellcasting
 Some classes allow spellcasting. In that case, you have to provide the key "spellcasting" to the map. And the value mapped to "spellcasting" is another map with (some of) the following values:
-- "ability" (required) - one of "STR", "DEX", "CON", "INT", "WIS", "CHA"
-- "ritual_casting" (required) - boolean whether the class allows spells with the ritual tag to be cast as a ritual
-- "spells_known" or "preparation_caster" (required) - **exactly one** must be provided to describe how many spells a character of this class knows
-  - "spells_known" - a length-20-array containing the amounts of spells known for each level
-  - "preparation_caster" - one of "half" or "full" to describe how many spells can be prepared: `spellcasting ability + (half of) level`
-- "cantrips_known" (optional) - a length-20-array containing the amounts of cantrips known for each level from 1 to 20
-  - if not provided, the tool assumes that the class provides no cantrips (e.g. Paladins and Rangers)
-- "levelX_slots" (optional) - a length-20-array containing the amounts of spells slots of level X, where X is between 1 and 9, for each level
-  - if for example only "level2_slots" and "level3_slots" are provided, the tool assumes that the class provides no spell slots of any other level
+| Name | required? | format | description |
+|------|:---------:|:------:|-------------|
+| ability | yes | string | one of the abilities "STR", "DEX", "CON", "INT", "WIS", "CHA" |
+| ritual_casting | yes | boolean | describes whether the class allows spells with the ritual tag to be cast as a ritual |
+| spells_known | if "preparation_caster" not provided | array of integers | length-20-array containing the amounts of spells known for each level<ul><li>**mutually exclusive to "preparation_caster"**</li></ul> |
+| preparation_caster | if "spells_known" not provided | string | one of "half" or "full" to describe how many spells can be prepared: `spellcasting ability + (half of) level`<ul><li>**mutually exclusive to "spells_known"**</li></ul> |
+| cantrips_known | no | array of integers | length-20-array containing the amounts of cantrips known for each level from 1 to 20 <ul><li>if not provided, the tool assumes that the class provides no cantrips (e.g. Paladins and Rangers)</li></ul> |
+| levelX_slots | no | array of integers | length-20-array containing the amounts of spells slots of level X, where X is between 1 and 9, for each level <ul><li>if for example only "level2_slots" and "level3_slots" are provided, the tool assumes that the class provides no spell slots of any other level</li></ul> |
 
-The last few values are supposed to replace the spell table for the class:
-
-[Are you still having questions?](#anything-unclear)
 
 ## Subclasses
-Similarly to classes, each subclass should be stored in a JSON file as a map (or "object"). The required values are:
-- "name" - the name of the subclass
-- "class" - the name of the class
-- "features" - map of [features](#features) (map can be empty)
+Similarly to classes, each subclass should be stored in a JSON file as a map (or "object"). The possible values are:
+| Name | required? | format | description |
+|------|:---------:|:------:|-------------|
+| name | yes | string | name of the subclass |
+| class | yes | string | name of the class |
+| spellcasting | no | [spellcasting](#spellcasting) map | all information about spellcasting, if the subclass is a spellcasting subclass |
+| features | no | [features](#features) map | subclass features |
 
 Example of a subclass with one feature:
 ```json
@@ -150,19 +155,20 @@ Example of a subclass with one feature:
     }
 }
 ```
-[Are you still having questions?](#anything-unclear)
 
 ## Spells
 A spell should be an entry in a JSON map (or "object"), where the key is the name of the spell and the value is a map with exactly six entries (any further entries will not be parsed).
 These should be
-- "level_type" - the level and type of the spell
-- "casting_time" - the casting time of the spell
-- "range" - the range of the spell
-- "components" - the required components for the spell
-- "duration" - the duration of the spell
-- "description" - a description of what the spell does and how it works
+| Name | required? | format | description |
+|------|:---------:|:------:|-------------|
+| level_type | yes | string | level and type of the spell |
+| casting_time | yes | string | casting time of the spell |
+| range | yes | string | range of the spell |
+| components | yes | string | required components for the spell |
+| duration | yes | string | duration of the spell |
+| description | yes | string | description of what the spell does and how it works |
 
-It is expected that all of the values are formatted in the typical D&D fashion, but especially the "level_type" and "components" must be in the typical format e.g. "2nd-level transmutation" or "V, M (a bit of fur)" respectively.
+It is expected that all of the values are formatted in the typical D&D fashion, but especially the "level_type" and "components" **must be** in the typical format e.g. "2nd-level transmutation" or "V, M (a bit of fur)" respectively.
 
 An example of a minimal spell JSON file would be:
 
@@ -178,7 +184,6 @@ An example of a minimal spell JSON file would be:
     }
 }
 ```
-[Are you still having questions?](#anything-unclear)
 
 <!-- ## Items -->
 <!-- TODO -->
@@ -198,24 +203,34 @@ Races, subraces, classes, subclasses and characters can all have features. In th
 }
 ```
 Each feature is represented as a key-value pair where the key is the name of the feature and the value is another JSON map containing the following values:
-- "description" (required) - a human-readable description of the feature
-- "effects" (optional) - an array of [effects](#effects) that are applied to the creature (these are parsed by the DnD-Campaign Manager tool and then used in calculations)
-- "activation" (optional) - a machine-readable description of when this feature activates, the most common version of class features activating at a certain class level: `"activation": "CLASS_LEVEL >= 3"`
-  - "activations" (optional) - if you want to provide multiple activations per feature, which all have to be true, you can also put multiple of them into an array
-  - please provide either "activation", "activations", or neither of them **but not both**
-- "damage_resistances" (optional) - an array of damage resistances this feature gives you
-- "damage_immunities" (optional) - an array of damage immunities this feature gives you
-- "condition_immunities" (optional) - an array of condition immunities this feature gives you
-- "languages" (optional) - an array of languages this feature allows you to understand
-- "senses" (optional) - an array of senses this feature provides you with
-- "armor_proficiencies" (optional) - an array of armor proficiencies this feature provides
-- "weapon_proficiencies" (optional) - an array of weapon proficiencies this feature provides
-- "tool_proficiencies" (optional) - an array of tool proficiencies this feature provides
-- "savingthrow_proficiencies" (optional) - an array of saving throw proficiencies this feature provides
-- "skill_proficiencies" (optional) - an array of skill proficiencies this feature provides
-- "actions" (optional) - a map of actions (key: expressive name, value: short description) which this feature allows
-- "bonus_actions" (optional) - a map of bonus actions (key: expressive name, value: short description) which this feature allows
-- "reactions" (optional) - a map of reactions (key: expressive name, value: short description) which this feature allows
+
+| Name | required? | format | description |
+|------|:---------:|:------:|-------------|
+| description | yes | string | a human-readable description of the feature|
+| effects | no | array of [effects](#effects) | effect are applied to the creature (these are parsed by the DnD-Campaign Manager tool and then used in calculations) |
+| activation | no | string | a machine-readable description of when this feature activates, the most common version of class features activating at a certain class level: `"activation": "CLASS_LEVEL >= 3"` |
+| activations | no | array of strings | If you want to provide multiple activations per feature, which all have to be true, you can put multiple of them into an array. Please provide either "activation", "activations", or neither of them **but not both**. |
+| damage_resistances | no | array of strings | damage resistances this feature gives you |
+| damage_immunities | no | array of strings | damage immunities this feature gives you |
+| condition_immunities | no | array of strings | condition immunities this feature gives you |
+| languages | no | array of strings | languages this feature allows you to understand |
+| senses | no | array of strings | senses this feature provides you with |
+| armor_proficiencies | no | array of strings | armor proficiencies this feature provides |
+| weapon_proficiencies | no | array of strings | weapon proficiencies this feature provides |
+| tool_proficiencies | no | array of strings | tool proficiencies this feature provides |
+| savingthrow_proficiencies | no | array of strings | saving throw proficiencies this feature provides |
+| skill_proficiencies | no | array of strings | skill proficiencies this feature provides |
+| cantrips_free | no | array of strings | cantrips that do not count against the number of cantrips known |
+| spells_at_will | no | array of strings | spells that you can cast at will i.e. without expending a spell slot or material components |
+| spells_innate | no | array of strings | spells that you can cast once a day (or rather once between two long rests) **without** expending a spell slot<ul><li>examples: innate spellcasting such as Tiefling's Infernal Legacy</li></ul> |
+| spells_free_once_a_day | no | array of strings | spells that you can cast once a day (or rather once between two long rests) **with** expending a spell slot<ul><li>examples: eldritch invocations</li></ul> |
+| spells_known | no | array of strings | spells that are added to your spell list and you know them / you always have them prepared <ul><li>these spells do not count to the number of spells you know</li><li>examples: Cleric's domain spells, Paladin's oath spells</li></ul> |
+| spells_always_prepared | no | array of strings | a synonym for "spells_known"<ul><li>It doesn't matter whether you write "spells_known" or "spells_always_prepared", the tool will treat them the same and will know what to do with the spells, this is just for convenience and readability</li></ul> |
+| spells_known_included | no | array of strings | spells that are added to your spell list and you know them / you always have them prepared <ul><li> **BUT** these spells **do** count to the number of spells you know / the number of spells you can prepare</li><li>you probably will not ever need this, but the Bard's "Magical Secrets" require this</li></ul> |
+| spells_added_to_spell_list | no | array of strings | spells that are added to your spell list <ul><li>you **do not need to do this manually for any of the above**, so just use this if these spells are **only** added to your spell list</li><li>examples: Druid's circle spells, Warlock's patron spells</li></ul> |
+| actions | no | string-string map | map of actions (key: expressive name, value: short description) which this feature allows |
+| bonus_actions | no | string-string map | map of bonus actions (key: expressive name, value: short description) which this feature allows |
+| reactions | no | string-string map | map of reactions (key: expressive name, value: short description) which this feature allows |
 
 Try to keep the descriptions for your actions, bonus action, and reactions as short as possible. They should just be short and descriptive, reminding the reader of what the action/bonus action/reaction does. For the full explanation, you can always read the feature's description which should be complete and impossible to misunderstand.
 
@@ -268,13 +283,57 @@ LEVEL, XP
 Examples:
 ```jsonc
 "effects": [
-    "AC earliest set 12",     // set new default value for armor class to 12
-    "SPEED normal add 1.5",   // increase speed by 1.5
-    "AC normal add DEXMOD",   // add dexterity modifier to armor class
-    "MAXHP normal add LEVEL"  // add the character level to its armor class
+    "AC earliest set 12",           // set new default value for armor class to 12
+    "SPEED normal add 1.5",         // increase speed by 1.5
+    "AC normal addOther DEXMOD",    // add dexterity modifier to armor class
+    "MAXHP normal addConst LEVEL"   // add the character level to its armor class
 ]
 ```
-[Are you still having questions?](#anything-unclear)
+
+## Groups
+Groups define any kind of related things, that you might want to put into a group for the tool to use.
+
+There are two ways of defining groups and subgroups.
+
+You can define groups and subgroups explicitly in a `groups.json` file using maps and arrays. You should use this for things like musical instruments for example, where you want a selection (usually of strings), but the selection itself does not have any calculation consequences. Only the group or subgroup might have consequences (e.g. having a shield or having medium armor vs. having light armor).
+
+An example:
+```jsonc
+{
+    // for all tools see the general/srd/groups.json files, this is just an excerpt
+    "tools": { // a group
+        "artisan's tools": [ // a subgroup with strings as possible choices
+            "alchemist's supplies", "brewer's supplies"
+        ],
+        "musical instruments": [
+            "bagpipes", "drum", "flute", "lute"
+        ],
+        // "thieves' tools", <- because you cannot write single values in a map, do this:
+        "__no_subgroup__": [ // use "__no_subgroup__" to mark all these strings as tools of no subgroup
+            "disguise kit", "forgery kit", "poisoner's kit", "thieves' tools"
+        ],
+        "vehicles": { // a subgroup that has subgroups itself
+            "mounts": [
+                "camel", "elephant", "pony", "warhorse"
+            ],
+            "__no_subgroup__": [ // you can do this for subgroups as well
+                "special vehicle"
+                // this special vehicle is a vehicle that doesn't belong to any vehicle subgroup
+            ]
+        }
+    }
+}
+```
+
+You can also define groups implicitly by creating a file `groups/group_name.json`. Thereby you implicitly define a group with the file name (underscores converted to spaces). And in the file, you define the members of this group. You should use this for things like eldritch invocations, where the (sub)group members can be far more complicated than simple strings and selecting one of them can have a large impact.
+
+Because such choices are usually very similar to features that a class or race would grant. Group members are formatted and parsed like [features](#features) except that activations are replaced by prerequisites.
+(see one of the `general/srd/groups/` directories for examples)
+
+<!-- TODO: give more information on that -->
+
+If you find that this way of formatting and parsing such groups and their members is not sufficient for your needs, please let me know.
+
 
 ## Anything unclear?
 

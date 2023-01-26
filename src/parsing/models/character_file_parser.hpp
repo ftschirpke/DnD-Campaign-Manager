@@ -7,11 +7,16 @@
 #include <unordered_map>
 #include <vector>
 
+#include <nlohmann/json.hpp>
+
 #include "controllers/content.hpp"
 #include "models/character.hpp"
 #include "models/character_class.hpp"
 #include "models/character_race.hpp"
 #include "models/creature_state.hpp"
+#include "models/effect_holder/character_decision.hpp"
+#include "models/effect_holder/choosable.hpp"
+#include "models/effect_holder/feature.hpp"
 #include "models/spell.hpp"
 #include "parsing/models/feature_holder_file_parser.hpp"
 
@@ -20,16 +25,18 @@ namespace dnd {
 class CharacterFileParser : public FeatureHolderFileParser {
 public:
     CharacterFileParser(
-        std::unordered_map<std::string, Character>& results,
+        std::unordered_map<std::string, Character>& results, const Groups& groups,
         const std::unordered_map<std::string, const CharacterClass>& character_classes,
         const std::unordered_map<std::string, const CharacterSubclass>& character_subclasses,
         const std::unordered_map<std::string, const CharacterRace>& character_races,
         const std::unordered_map<std::string, const CharacterSubrace>& character_subraces,
         const std::unordered_map<std::string, const Spell>& spells
-    );
-    void parse() override;
-    bool validate() const override;
-    void saveResult() override;
+    ) noexcept;
+    virtual void parse() override;
+    virtual bool validate() const override;
+    virtual void saveResult() override;
+protected:
+    void parseCharacterDecisions(const std::string& feature_name, const nlohmann::json& feature_decisions_json);
 private:
     std::unordered_map<std::string, Character>& results;
     const std::unordered_map<std::string, const CharacterClass>& character_classes;
@@ -44,22 +51,24 @@ private:
     const CharacterSubclass* subclass_ptr;
     const CharacterRace* race_ptr;
     const CharacterSubrace* subrace_ptr;
+    std::vector<CharacterDecision> decisions;
     int level, xp;
     void parseClassAndRace();
     void parseLevelAndXP();
 };
 
 inline CharacterFileParser::CharacterFileParser(
-    std::unordered_map<std::string, Character>& results,
+    std::unordered_map<std::string, Character>& results, const Groups& groups,
     const std::unordered_map<std::string, const CharacterClass>& character_classes,
     const std::unordered_map<std::string, const CharacterSubclass>& character_subclasses,
     const std::unordered_map<std::string, const CharacterRace>& character_races,
     const std::unordered_map<std::string, const CharacterSubrace>& character_subraces,
     const std::unordered_map<std::string, const Spell>& spells
-)
-    : FeatureHolderFileParser(), results(results), character_classes(character_classes),
+) noexcept
+    : FeatureHolderFileParser(groups), results(results), character_classes(character_classes),
       character_subclasses(character_subclasses), character_races(character_races),
-      character_subraces(character_subraces), spells(spells) {}
+      character_subraces(character_subraces), spells(spells), class_ptr(nullptr), subclass_ptr(nullptr),
+      race_ptr(nullptr), subrace_ptr(nullptr) {}
 
 } // namespace dnd
 

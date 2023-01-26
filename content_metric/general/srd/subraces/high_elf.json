@@ -17,7 +17,7 @@
             "choose": {
                 "cantrips_free": {
                     "amount": 1,
-                    "group": "wizard cantrips"
+                    "group": "Wizard cantrips"
                 }
             }
         },

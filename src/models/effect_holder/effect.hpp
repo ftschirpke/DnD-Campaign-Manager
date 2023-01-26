@@ -64,7 +64,8 @@ const std::unordered_map<std::string, int (*)(int, float)> float_effect_operator
 class Effect {
 public:
     const std::string affected_attribute, op_name;
-    Effect(const std::string& affected_attribute, const std::string& op_name);
+    const EffectTime time;
+    Effect(const std::string& affected_attribute, const std::string& op_name, const EffectTime time) noexcept;
     virtual void applyTo(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const = 0;
@@ -73,7 +74,7 @@ public:
 class IntNumEffect : public Effect {
 public:
     const int value;
-    IntNumEffect(const std::string& affected_attribute, const std::string& op_name, int value);
+    IntNumEffect(const std::string& affected_attribute, const std::string& op_name, const EffectTime time, int value);
     virtual void applyTo(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const;
@@ -84,7 +85,9 @@ protected:
 class FloatNumEffect : public Effect {
 public:
     const float value;
-    FloatNumEffect(const std::string& affected_attribute, const std::string& op_name, float value);
+    FloatNumEffect(
+        const std::string& affected_attribute, const std::string& op_name, const EffectTime time, float value
+    );
     virtual void applyTo(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const;
@@ -95,7 +98,10 @@ protected:
 class IdentifierEffect : public Effect {
 public:
     const std::string identifier;
-    IdentifierEffect(const std::string& affected_attribute, const std::string& op_name, const std::string& identifier);
+    IdentifierEffect(
+        const std::string& affected_attribute, const std::string& op_name, const EffectTime time,
+        const std::string& identifier
+    );
 protected:
     std::unordered_map<std::string, int (*)(int, int)>::mapped_type op;
 };
@@ -103,7 +109,8 @@ protected:
 class OtherAttributeEffect : public IdentifierEffect {
 public:
     OtherAttributeEffect(
-        const std::string& affected_attribute, const std::string& op_name, const std::string& identifier
+        const std::string& affected_attribute, const std::string& op_name, const EffectTime time,
+        const std::string& identifier
     );
     virtual void applyTo(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
@@ -112,18 +119,23 @@ public:
 
 class ConstEffect : public IdentifierEffect {
 public:
-    ConstEffect(const std::string& affected_attribute, const std::string& op_name, const std::string& identifier);
+    ConstEffect(
+        const std::string& affected_attribute, const std::string& op_name, const EffectTime time,
+        const std::string& identifier
+    );
     virtual void applyTo(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const;
 };
 
 
-inline Effect::Effect(const std::string& affected_attribute, const std::string& op_name)
-    : affected_attribute(affected_attribute), op_name(op_name) {}
+inline Effect::Effect(const std::string& affected_attribute, const std::string& op_name, const EffectTime time) noexcept
+    : affected_attribute(affected_attribute), op_name(op_name), time(time) {}
 
-inline IntNumEffect::IntNumEffect(const std::string& affected_attribute, const std::string& op_name, int value)
-    : Effect(affected_attribute, op_name), value(value), op(nullptr) {
+inline IntNumEffect::IntNumEffect(
+    const std::string& affected_attribute, const std::string& op_name, const EffectTime time, int value
+)
+    : Effect(affected_attribute, op_name, time), value(value), op(nullptr) {
     try {
         op = int_effect_operators.at(op_name);
     } catch (const std::out_of_range& e) {
@@ -137,8 +149,10 @@ inline void IntNumEffect::applyTo(
     attributes[affected_attribute] = int_effect_operators.at(op_name)(attributes[affected_attribute], value);
 }
 
-inline FloatNumEffect::FloatNumEffect(const std::string& affected_attribute, const std::string& op_name, float value)
-    : Effect(affected_attribute, op_name), value(value) {
+inline FloatNumEffect::FloatNumEffect(
+    const std::string& affected_attribute, const std::string& op_name, const EffectTime time, float value
+)
+    : Effect(affected_attribute, op_name, time), value(value) {
     try {
         op = float_effect_operators.at(op_name);
     } catch (const std::out_of_range& e) {
@@ -153,9 +167,10 @@ inline void FloatNumEffect::applyTo(
 }
 
 inline IdentifierEffect::IdentifierEffect(
-    const std::string& affected_attribute, const std::string& op_name, const std::string& identifier
+    const std::string& affected_attribute, const std::string& op_name, const EffectTime time,
+    const std::string& identifier
 )
-    : Effect(affected_attribute, op_name), identifier(identifier), op(nullptr) {
+    : Effect(affected_attribute, op_name, time), identifier(identifier), op(nullptr) {
     try {
         op = int_effect_operators.at(op_name);
     } catch (const std::out_of_range& e) {
@@ -164,9 +179,10 @@ inline IdentifierEffect::IdentifierEffect(
 }
 
 inline OtherAttributeEffect::OtherAttributeEffect(
-    const std::string& affected_attribute, const std::string& op_name, const std::string& identifier
+    const std::string& affected_attribute, const std::string& op_name, const EffectTime time,
+    const std::string& identifier
 )
-    : IdentifierEffect(affected_attribute, op_name, identifier) {}
+    : IdentifierEffect(affected_attribute, op_name, time, identifier) {}
 
 inline void OtherAttributeEffect::applyTo(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
@@ -179,9 +195,10 @@ inline void OtherAttributeEffect::applyTo(
 }
 
 inline ConstEffect::ConstEffect(
-    const std::string& affected_attribute, const std::string& op_name, const std::string& identifier
+    const std::string& affected_attribute, const std::string& op_name, const EffectTime time,
+    const std::string& identifier
 )
-    : IdentifierEffect(affected_attribute, op_name, identifier) {}
+    : IdentifierEffect(affected_attribute, op_name, time, identifier) {}
 
 inline void ConstEffect::applyTo(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants

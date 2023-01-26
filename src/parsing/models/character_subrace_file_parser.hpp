@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "models/character_race.hpp"
-#include "models/features/feature.hpp"
+#include "models/effect_holder/feature.hpp"
 #include "parsing/models/feature_holder_file_parser.hpp"
 
 namespace dnd {
@@ -15,12 +15,12 @@ namespace dnd {
 class CharacterSubraceFileParser : public FeatureHolderFileParser {
 public:
     CharacterSubraceFileParser(
-        std::unordered_map<std::string, const CharacterSubrace>& results,
+        std::unordered_map<std::string, const CharacterSubrace>& results, const Groups& groups,
         const std::unordered_map<std::string, const CharacterRace>& races
-    );
-    void parse() override;
-    bool validate() const override;
-    void saveResult() override;
+    ) noexcept;
+    virtual void parse() override;
+    virtual bool validate() const override;
+    virtual void saveResult() override;
 private:
     std::unordered_map<std::string, const CharacterSubrace>& results;
     const std::unordered_map<std::string, const CharacterRace>& races;
@@ -28,10 +28,10 @@ private:
 };
 
 inline CharacterSubraceFileParser::CharacterSubraceFileParser(
-    std::unordered_map<std::string, const CharacterSubrace>& results,
+    std::unordered_map<std::string, const CharacterSubrace>& results, const Groups& groups,
     const std::unordered_map<std::string, const CharacterRace>& races
-)
-    : FeatureHolderFileParser(), results(results), races(races) {}
+) noexcept
+    : FeatureHolderFileParser(groups), results(results), races(races) {}
 
 } // namespace dnd
 

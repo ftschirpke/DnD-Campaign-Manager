@@ -1,5 +1,4 @@
 .vscode/*
-!.vscode/c_cpp_properties.json
 build/
 debug/
 # users can put their content within the content directory without causing git problems

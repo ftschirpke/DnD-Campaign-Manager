@@ -16,11 +16,11 @@
 void dnd::CharacterRaceFileParser::parse() {
     DND_MEASURE_FUNCTION();
     if (!json_to_parse.is_object()) {
-        throw json_format_error(ParsingType::RACE, filename, "map/object");
+        throw json_format_error(ParsingType::RACE, filepath, "map/object");
     }
     character_race_name = json_to_parse.at("name").get<std::string>();
     if (character_race_name.size() == 0) {
-        throw invalid_attribute(ParsingType::RACE, filename, "name", "cannot be \"\".");
+        throw invalid_attribute(ParsingType::RACE, filepath, "name", "cannot be \"\".");
     }
     has_subraces = json_to_parse.at("has_subraces").get<bool>();
 
@@ -41,10 +41,8 @@ bool dnd::CharacterRaceFileParser::validate() const {
 }
 
 void dnd::CharacterRaceFileParser::saveResult() {
-    // TODO: change CharacterRace constructor
     results.emplace(
         std::piecewise_construct, std::forward_as_tuple(character_race_name),
-        std::forward_as_tuple(character_race_name, has_subraces)
+        std::forward_as_tuple(character_race_name, retrieveFeatures(), has_subraces)
     );
-    // TODO: add features
 }
