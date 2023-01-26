@@ -15,6 +15,8 @@
 #include "models/character_race.hpp"
 #include "models/creature_state.hpp"
 #include "models/effect_holder/character_decision.hpp"
+#include "models/effect_holder/choosable.hpp"
+#include "models/effect_holder/feature.hpp"
 #include "models/spell.hpp"
 #include "parsing/models/feature_holder_file_parser.hpp"
 
@@ -35,7 +37,6 @@ public:
     virtual void saveResult() override;
 protected:
     void parseCharacterDecisions(const std::string& feature_name, const nlohmann::json& feature_decisions_json);
-    CharacterDecision createCharacterDecision(const std::string& feature_name, const nlohmann::json& decision_json);
 private:
     std::unordered_map<std::string, Character>& results;
     const std::unordered_map<std::string, const CharacterClass>& character_classes;

@@ -54,14 +54,6 @@ CPMAddPackage(
     OPTIONS "CXXOPTS_BUILD_EXAMPLES NO" "CXXOPTS_BUILD_TESTS NO" "CXXOPTS_ENABLE_INSTALL YES"
 )
 
-# CPMAddPackage(
-#     NAME fmt
-#     GITHUB_REPOSITORY fmtlib/fmt
-#     VERSION 9.1.0
-# )
-
-CPMAddPackage("gh:fmtlib/fmt#9.1.0")
-
 add_executable(dndmanager src/main.cpp)
 set_target_properties(dndmanager PROPERTIES EXPORT_COMPILE_COMMANDS ON)
 
@@ -72,7 +64,7 @@ target_include_directories(dndmanager
     PRIVATE
     ${CMAKE_SOURCE_DIR}/src/lib
 )
-target_link_libraries(dndmanager PUBLIC nlohmann_json::nlohmann_json cxxopts::cxxopts fmt::fmt)
+target_link_libraries(dndmanager PUBLIC nlohmann_json::nlohmann_json cxxopts::cxxopts)
 
 add_executable(dndmanager_tests)
 set_target_properties(dndmanager_tests PROPERTIES EXPORT_COMPILE_COMMANDS ON)
@@ -84,7 +76,7 @@ target_include_directories(dndmanager_tests
     PRIVATE
     ${CMAKE_SOURCE_DIR}/src/lib
 )
-target_link_libraries(dndmanager_tests PRIVATE nlohmann_json::nlohmann_json cxxopts::cxxopts fmt::fmt Catch2::Catch2WithMain)
+target_link_libraries(dndmanager_tests PRIVATE nlohmann_json::nlohmann_json cxxopts::cxxopts Catch2::Catch2WithMain)
 
 include(CTest)
 include(Catch.cmake)

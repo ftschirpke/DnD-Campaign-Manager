@@ -14,9 +14,12 @@
 #include "models/character_race.hpp"
 #include "models/effect_holder/character_decision.hpp"
 #include "models/effect_holder/choice.hpp"
+#include "models/effect_holder/choosable.hpp"
+#include "models/effect_holder/effect_holder_with_choices.hpp"
 #include "models/effect_holder/feature.hpp"
 #include "models/feature_holder.hpp"
 #include "models/spell.hpp"
+#include "parsing/models/effect_holder_file_parser.hpp"
 #include "parsing/models/feature_holder_file_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
@@ -64,18 +67,10 @@ void dnd::CharacterFileParser::parse() {
     }
 }
 
-void dnd::CharacterFileParser::parseCharacterDecisions(
-    const std::string& feature_name, const nlohmann::json& feature_decisions_json
+const dnd::Feature* determineFeature(
+    const std::string& feature_name, const std::vector<const dnd::FeatureHolder*> feature_holders
 ) {
-    const Feature* feature_ptr = nullptr;
-    std::vector<const FeatureHolder*> feature_holders{class_ptr, race_ptr};
-    if (subclass_ptr != nullptr) {
-        feature_holders.emplace_back(subclass_ptr);
-    }
-    if (subrace_ptr != nullptr) {
-        feature_holders.emplace_back(subrace_ptr);
-    }
-
+    const dnd::Feature* feature_ptr = nullptr;
     for (auto feature_holder : feature_holders) {
         if (feature_holder == nullptr) {
             continue;
@@ -90,6 +85,51 @@ void dnd::CharacterFileParser::parseCharacterDecisions(
             break;
         }
     }
+    return feature_ptr;
+}
+
+const dnd::Choice* determineChoice(
+    const std::vector<dnd::CharacterDecision>& parsed_decisions, const std::string& attribute_name,
+    const nlohmann::json& decision_json, const std::vector<dnd::EffectHolderWithChoices>& ehs_with_choices
+) {
+    for (const auto& eh : ehs_with_choices) {
+        for (auto choice_it = eh.choices.cbegin(); choice_it != eh.choices.cend(); ++choice_it) {
+            auto decision_has_choice = [&](const dnd::CharacterDecision& decision) {
+                return decision.choice == choice_it->get();
+            };
+            if (std::any_of(parsed_decisions.cbegin(), parsed_decisions.cend(), decision_has_choice)) {
+                // skip this choice if a decision already belongs to it
+                continue;
+            }
+
+            if (attribute_name != choice_it->get()->attribute_name) {
+                continue;
+            }
+
+            auto isValidValue = [&](const nlohmann::json& chosen_val) -> bool {
+                return choice_it->get()->isValidDecision(chosen_val.get<std::string>());
+            };
+            if (std::all_of(decision_json.cbegin(), decision_json.cend(), isValidValue)) {
+                return choice_it->get();
+            }
+        }
+    }
+    return nullptr;
+}
+
+void dnd::CharacterFileParser::parseCharacterDecisions(
+    const std::string& feature_name, const nlohmann::json& feature_decisions_json
+) {
+    std::vector<const FeatureHolder*> feature_holders{class_ptr, race_ptr};
+    if (subclass_ptr != nullptr) {
+        feature_holders.emplace_back(subclass_ptr);
+    }
+    if (subrace_ptr != nullptr) {
+        feature_holders.emplace_back(subrace_ptr);
+    }
+
+    const Feature* feature_ptr = determineFeature(feature_name, feature_holders);
+
     if (feature_ptr == nullptr) {
         throw invalid_attribute(
             ParsingType::CHARACTER, filepath, "decision", "no feature \"" + feature_name + "\" exists."
@@ -102,17 +142,28 @@ void dnd::CharacterFileParser::parseCharacterDecisions(
             ParsingType::CHARACTER, filepath, "decision:" + feature_name, "the feature has no choices."
         );
     }
-    for (const auto& eh_with_choices : feature_ptr->parts_with_choices) {
-        bool found = false;
-        for (auto it = eh_with_choices.choices.cbegin(); it != eh_with_choices.choices.cend(); ++it) {
-            // TODO: find the matching choice
+
+    decisions.reserve(feature_decisions_json.size());
+
+    for (const auto& [attribute_name, decision_json] : feature_decisions_json.items()) {
+        if (!decision_json.is_array()) {
+            throw attribute_format_error(ParsingType::CHARACTER, filepath, "decision:" + feature_name, "array");
         }
+
+        const Choice* determined_choice =
+            determineChoice(decisions, attribute_name, decision_json, feature_ptr->parts_with_choices);
+        if (determined_choice == nullptr) {
+            throw invalid_attribute(
+                ParsingType::CHARACTER, filepath, "decision:" + feature_name + ':' + attribute_name,
+                "is not valid for any choice of \"" + feature_name + "\"."
+            );
+        }
+
+        CharacterDecision new_decision(determined_choice);
+        parseEffectHolder(nlohmann::json::object({{attribute_name, decision_json}}), &new_decision.decision_effects);
+        decisions.emplace_back(std::move(new_decision));
     }
 }
-
-// dnd::CharacterDecision dnd::CharacterFileParser::createCharacterDecision(
-//     const std::string& feature_name, const nlohmann::json& decision_json
-// ) {}
 
 void dnd::CharacterFileParser::parseLevelAndXP() {
     DND_MEASURE_FUNCTION();
