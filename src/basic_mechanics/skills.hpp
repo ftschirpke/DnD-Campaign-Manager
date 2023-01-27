@@ -1,6 +1,8 @@
 #ifndef SKILLS_HPP_
 #define SKILLS_HPP_
 
+#include "dnd_config.hpp"
+
 #include <map>
 #include <string>
 

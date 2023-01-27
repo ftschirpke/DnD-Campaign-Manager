@@ -1,6 +1,8 @@
 #ifndef CREATURE_HPP_
 #define CREATURE_HPP_
 
+#include "dnd_config.hpp"
+
 #include <array>
 #include <string>
 #include <unordered_map>

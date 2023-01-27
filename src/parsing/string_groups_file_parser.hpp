@@ -1,6 +1,8 @@
 #ifndef STRING_GROUPS_FILE_PARSER_HPP_
 #define STRING_GROUPS_FILE_PARSER_HPP_
 
+#include "dnd_config.hpp"
+
 #include <string>
 #include <unordered_map>
 #include <unordered_set>

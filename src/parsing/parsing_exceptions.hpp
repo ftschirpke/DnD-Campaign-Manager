@@ -1,6 +1,8 @@
 #ifndef PARSING_EXCEPTIONS_HPP_
 #define PARSING_EXCEPTIONS_HPP_
 
+#include "dnd_config.hpp"
+
 #include <filesystem>
 #include <stdexcept>
 #include <string>

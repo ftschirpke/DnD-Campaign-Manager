@@ -1,6 +1,8 @@
 #ifndef FEATURE_HOLDER_HPP_
 #define FEATURE_HOLDER_HPP_
 
+#include "dnd_config.hpp"
+
 #include <string>
 #include <utility>
 #include <vector>

@@ -1,6 +1,8 @@
 #ifndef CHOOSABLE_HPP_
 #define CHOOSABLE_HPP_
 
+#include "dnd_config.hpp"
+
 #include <memory>
 #include <string>
 #include <vector>

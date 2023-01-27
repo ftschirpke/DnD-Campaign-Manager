@@ -1,6 +1,8 @@
 #ifndef EFFECT_HOLDER_GROUPS_FILE_PARSER_HPP_
 #define EFFECT_HOLDER_GROUPS_FILE_PARSER_HPP_
 
+#include "dnd_config.hpp"
+
 #include <string>
 #include <unordered_map>
 

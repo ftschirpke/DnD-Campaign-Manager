@@ -1,6 +1,8 @@
 #ifndef CHARACTER_HPP_
 #define CHARACTER_HPP_
 
+#include "dnd_config.hpp"
+
 #include <array>
 #include <iostream>
 #include <map>

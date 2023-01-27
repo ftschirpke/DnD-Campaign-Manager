@@ -1,6 +1,8 @@
 #ifndef CONTENT_PARSER_HPP_
 #define CONTENT_PARSER_HPP_
 
+#include "dnd_config.hpp"
+
 #include <filesystem>
 #include <memory>
 #include <mutex>

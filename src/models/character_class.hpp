@@ -1,6 +1,8 @@
 #ifndef CHARACTER_CLASS_HPP_
 #define CHARACTER_CLASS_HPP_
 
+#include "dnd_config.hpp"
+
 #include <string>
 #include <utility>
 #include <vector>

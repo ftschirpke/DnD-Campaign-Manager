@@ -1,6 +1,8 @@
 #ifndef FEATURE_HOLDER_FILE_PARSER_HPP_
 #define FEATURE_HOLDER_FILE_PARSER_HPP_
 
+#include "dnd_config.hpp"
+
 #include <memory>
 #include <string>
 #include <utility>

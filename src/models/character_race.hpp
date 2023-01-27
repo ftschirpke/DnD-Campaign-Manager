@@ -1,6 +1,8 @@
 #ifndef RACE_HPP_
 #define RACE_HPP_
 
+#include "dnd_config.hpp"
+
 #include <string>
 #include <utility>
 #include <vector>

@@ -1,6 +1,8 @@
 #ifndef CONTENT_HPP_
 #define CONTENT_HPP_
 
+#include "dnd_config.hpp"
+
 #include <string>
 #include <unordered_map>
 

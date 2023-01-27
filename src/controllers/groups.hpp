@@ -1,6 +1,8 @@
 #ifndef GROUPS_HPP_
 #define GROUPS_HPP_
 
+#include "dnd_config.hpp"
+
 #include <iterator>
 #include <string>
 #include <unordered_map>

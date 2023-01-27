@@ -1,6 +1,8 @@
 #ifndef ACTIVATION_HPP_
 #define ACTIVATION_HPP_
 
+#include "dnd_config.hpp"
+
 #include <stdexcept>
 #include <string>
 #include <unordered_map>

@@ -1,6 +1,8 @@
 #ifndef ABILITIES_HPP_
 #define ABILITIES_HPP_
 
+#include "dnd_config.hpp"
+
 #include <algorithm>
 #include <array>
 #include <stdexcept>

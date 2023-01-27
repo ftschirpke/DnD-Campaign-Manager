@@ -1,6 +1,8 @@
 #ifndef EFFECT_HOLDER_WITH_CHOICES_HPP_
 #define EFFECT_HOLDER_WITH_CHOICES_HPP_
 
+#include "dnd_config.hpp"
+
 #include <memory>
 #include <vector>
 

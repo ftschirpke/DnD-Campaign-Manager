@@ -1,6 +1,8 @@
 #ifndef CHARACTER_SUBCLASS_FILE_PARSER_HPP_
 #define CHARACTER_SUBCLASS_FILE_PARSER_HPP_
 
+#include "dnd_config.hpp"
+
 #include <string>
 #include <unordered_map>
 

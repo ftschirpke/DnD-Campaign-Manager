@@ -1,6 +1,8 @@
 #ifndef CREATURE_STATE_HPP_
 #define CREATURE_STATE_HPP_
 
+#include "dnd_config.hpp"
+
 #include <algorithm>
 #include <map>
 #include <string>

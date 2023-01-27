@@ -1,6 +1,8 @@
 #ifndef CHARACTER_FILE_PARSER_HPP_
 #define CHARACTER_FILE_PARSER_HPP_
 
+#include "dnd_config.hpp"
+
 #include <array>
 #include <string>
 #include <unordered_map>

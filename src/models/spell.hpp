@@ -1,6 +1,8 @@
 #ifndef SPELL_HPP_
 #define SPELL_HPP_
 
+#include "dnd_config.hpp"
+
 #include <string>
 #include <unordered_map>
 #include <unordered_set>

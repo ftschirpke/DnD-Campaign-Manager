@@ -1,6 +1,8 @@
 #ifndef RIV_HOLDER_HPP_
 #define RIV_HOLDER_HPP_
 
+#include "dnd_config.hpp"
+
 #include <string>
 #include <unordered_set>
 
