@@ -9,6 +9,7 @@
 #include <utility>
 
 #include "models/character_race.hpp"
+#include "models/character_subrace.hpp"
 #include "parsing/models/feature_holder_file_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"

@@ -16,21 +16,10 @@ public:
     CharacterRace(const std::string& name, std::vector<Feature>&& features, const bool has_subraces) noexcept;
 };
 
-class CharacterSubrace : public FeatureHolder {
-public:
-    const std::string race_name;
-    CharacterSubrace(const std::string& name, std::vector<Feature>&& features, const std::string& race_name) noexcept;
-};
-
 inline CharacterRace::CharacterRace(
     const std::string& name, std::vector<Feature>&& features, const bool has_subraces
 ) noexcept
     : FeatureHolder(name, std::move(features)), has_subraces(has_subraces) {}
-
-inline CharacterSubrace::CharacterSubrace(
-    const std::string& name, std::vector<Feature>&& features, const std::string& race_name
-) noexcept
-    : FeatureHolder(name, std::move(features)), race_name(race_name) {}
 
 } // namespace dnd
 

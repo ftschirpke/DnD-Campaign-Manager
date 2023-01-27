@@ -9,6 +9,7 @@
 #include "models/character_class.hpp"
 #include "models/character_race.hpp"
 #include "models/character_subclass.hpp"
+#include "models/character_subrace.hpp"
 #include "models/spell.hpp"
 
 namespace dnd {
