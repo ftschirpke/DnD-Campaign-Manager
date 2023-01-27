@@ -18,5 +18,5 @@ PenaltyReturnTypeOnItsOwnLine: 10000
 PenaltyBreakAssignment: 10000
 PointerAlignment: Left
 SpaceInEmptyBlock: false
-Standard: c++17
+Standard: c++20
 ...
