@@ -55,7 +55,7 @@ int dnd::launch(int argc, char** argv) {
         const std::string campaign_dir_name = args["campaign"].as<std::string>();
         std::cout << "Content directory:       " << content_path.c_str() << '\n';
         std::cout << "Campaign directory name: " << campaign_dir_name << "\n\n";
-        if (campaign_dir_name.size() == 0) {
+        if (campaign_dir_name.empty()) {
             throw std::invalid_argument("Campaign directory name cannot be \"\".");
         }
         ContentParser parser;

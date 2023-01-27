@@ -19,7 +19,7 @@ void dnd::CharacterSubraceFileParser::parse() {
         throw json_format_error(ParsingType::SUBRACE, filepath, "map/object");
     }
     character_subrace_name = json_to_parse.at("name").get<std::string>();
-    if (character_subrace_name.size() == 0) {
+    if (character_subrace_name.empty()) {
         throw invalid_attribute(ParsingType::SUBRACE, filepath, "name", "cannot be \"\".");
     }
     race_name = json_to_parse.at("race").get<std::string>();

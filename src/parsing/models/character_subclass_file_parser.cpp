@@ -22,7 +22,7 @@ void dnd::CharacterSubclassFileParser::parse() {
         throw json_format_error(ParsingType::SUBCLASS, filepath, "map/object");
     }
     character_subclass_name = json_to_parse.at("name").get<std::string>();
-    if (character_subclass_name.size() == 0) {
+    if (character_subclass_name.empty()) {
         throw invalid_attribute(ParsingType::SUBCLASS, filepath, "name", "cannot be \"\".");
     }
     class_name = json_to_parse.at("class").get<std::string>();

@@ -49,7 +49,7 @@ void dnd::SpellsFileParser::parse() {
 
     std::vector<std::future<void>> futures;
     for (const auto& [spell_name, spell_json] : json_to_parse.items()) {
-        if (spell_name.size() == 0) {
+        if (spell_name.empty()) {
             throw invalid_attribute(ParsingType::SPELL, filepath, "spell name", "cannot be \"\".");
         }
         futures.emplace_back(
