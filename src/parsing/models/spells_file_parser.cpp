@@ -124,7 +124,7 @@ dnd::SpellComponents dnd::SpellsFileParser::createSpellComponents(const std::str
 bool dnd::SpellsFileParser::validate() const {
     valid.reserve(spells_in_file);
     for (const SpellParsingInfo& info : spell_parsing_info) {
-        if (results.find(info.name) != results.end()) {
+        if (results.contains(info.name)) {
             std::cerr << "Warning: Duplicate of spell \"" << info.name << "\" found.\n";
             valid.emplace_back(false);
             continue;

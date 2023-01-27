@@ -35,7 +35,7 @@ void dnd::CharacterRaceFileParser::parse() {
 }
 
 bool dnd::CharacterRaceFileParser::validate() const {
-    if (results.find(character_race_name) != results.end()) {
+    if (results.contains(character_race_name)) {
         std::cerr << "Warning: Duplicate of race \"" << character_race_name << "\" found.\n";
         return false;
     }

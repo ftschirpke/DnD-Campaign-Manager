@@ -15,7 +15,7 @@
 void dnd::CreatureState::applyAbilityScoreEffects() {
     for (const auto& effect_time : effect_times_in_order) {
         for (const auto& eh_ptr : active_effect_holders) {
-            if (eh_ptr->ability_score_effects.find(effect_time) != eh_ptr->ability_score_effects.cend()) {
+            if (eh_ptr->ability_score_effects.contains(effect_time)) {
                 for (const auto& effect_ptr : eh_ptr->ability_score_effects.at(effect_time)) {
                     effect_ptr->applyTo(attributes, constants);
                 }
@@ -27,7 +27,7 @@ void dnd::CreatureState::applyAbilityScoreEffects() {
 void dnd::CreatureState::applyNormalEffects() {
     for (const auto& effect_time : effect_times_in_order) {
         for (const auto& eh_ptr : active_effect_holders) {
-            if (eh_ptr->normal_effects.find(effect_time) != eh_ptr->normal_effects.cend()) {
+            if (eh_ptr->normal_effects.contains(effect_time)) {
                 for (const auto& effect_ptr : eh_ptr->normal_effects.at(effect_time)) {
                     effect_ptr->applyTo(attributes, constants);
                 }

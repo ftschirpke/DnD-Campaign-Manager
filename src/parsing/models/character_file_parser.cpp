@@ -266,7 +266,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
 }
 
 bool dnd::CharacterFileParser::validate() const {
-    if (results.find(character_name) != results.end()) {
+    if (results.contains(character_name)) {
         std::cerr << "Warning: Duplicate of character \"" << character_name << "\" found.\n";
         return false;
     }
