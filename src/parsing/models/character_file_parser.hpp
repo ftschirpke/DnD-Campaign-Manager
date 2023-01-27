@@ -12,6 +12,7 @@
 #include "models/character.hpp"
 #include "models/character_class.hpp"
 #include "models/character_race.hpp"
+#include "models/character_subclass.hpp"
 #include "models/effect_holder/character_decision.hpp"
 #include "models/spell.hpp"
 #include "parsing/models/feature_holder_file_parser.hpp"

@@ -6,6 +6,7 @@
 
 #include "controllers/groups.hpp"
 #include "models/character_class.hpp"
+#include "models/character_subclass.hpp"
 #include "models/spell.hpp"
 #include "parsing/models/spellcasting_feature_holder_file_parser.hpp"
 
