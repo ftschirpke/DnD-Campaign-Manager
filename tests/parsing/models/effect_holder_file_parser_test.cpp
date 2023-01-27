@@ -1,8 +1,15 @@
 #include "parsing/models/effect_holder_file_parser.hpp"
 
+#include <string>
+#include <unordered_map>
+#include <utility>
+
 #include <catch2/catch_test_macros.hpp>
+#include <nlohmann/json.hpp>
 
 #include "controllers/groups.hpp"
+#include "models/effect_holder/activation.hpp"
+#include "models/effect_holder/effect.hpp"
 #include "models/effect_holder/effect_holder.hpp"
 
 // class that allows us to test the abstract dnd::EffectHolderFileParser class
@@ -581,7 +588,7 @@ TEST_CASE("dnd::EffectHolderFileParser::parseAndAddEffect: parse effect combinat
         REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP late multOther STR", eh));
         REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP late mult -1", eh));
         REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP latest addConst LEVEL", eh));
-        REQUIRE(eh.ability_score_effects.size() == 0);
+        REQUIRE(eh.ability_score_effects.empty());
         REQUIRE(eh.normal_effects.size() == 5);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::EARLIEST).size() == 1);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::EARLY).size() == 1);
@@ -660,7 +667,7 @@ TEST_CASE("dnd::EffectHolderFileParser::parseAndAddActivation: parse invalid act
 TEST_CASE("dnd::EffectHolderFileParser::parseAndAddActivation: parse valid numeric activations") {
     TestEffectHolderFileParser parser;
     dnd::EffectHolder eh;
-    REQUIRE(eh.activations.size() == 0);
+    REQUIRE(eh.activations.empty());
     std::unordered_map<std::string, int> attributes = {{"MAXHP", 4000}, {"STR", 1600}, {"CON", 1300}, {"INT", 800}};
     const std::unordered_map<std::string, int> constants = {{"LEVEL", 500}, {"CLASS_LEVEL", 500}, {"ARMOR_ON", 1}};
     int idx = 0;
@@ -789,7 +796,7 @@ TEST_CASE("dnd::EffectHolderFileParser::parseAndAddActivation: parse valid numer
 TEST_CASE("dnd::EffectHolderFileParser::createActivation: parse valid identifier activations") {
     TestEffectHolderFileParser parser;
     dnd::EffectHolder eh;
-    REQUIRE(eh.activations.size() == 0);
+    REQUIRE(eh.activations.empty());
     std::unordered_map<std::string, int> attributes1 = {{"MAXHP", 4000}, {"STR", 1600}, {"CON", 1300}, {"INT", 800}};
     const std::unordered_map<std::string, int> constants1 = {{"LEVEL", 500}, {"CLASS_LEVEL", 500}, {"ARMOR_ON", 1}};
     std::unordered_map<std::string, int> attributes2 = {{"MAXHP", 2300}, {"STR", 800}, {"CON", 1000}, {"INT", 1800}};
@@ -964,8 +971,8 @@ TEST_CASE("dnd::EffectHolderFileParser::createFeature: parse valid ehs") {
         };
         dnd::EffectHolder eh;
         REQUIRE_NOTHROW(eh = std::move(parser.createEffectHolderForTesting(eh_json)));
-        REQUIRE(eh.ability_score_effects.size() == 0);
-        REQUIRE(eh.normal_effects.size() == 0);
+        REQUIRE(eh.ability_score_effects.empty());
+        REQUIRE(eh.normal_effects.empty());
     }
     SECTION("effect combination 1 (order of calculation)") {
         const nlohmann::json effects_json = {
@@ -979,7 +986,7 @@ TEST_CASE("dnd::EffectHolderFileParser::createFeature: parse valid ehs") {
         };
         dnd::EffectHolder eh;
         REQUIRE_NOTHROW(eh = std::move(parser.createEffectHolderForTesting(eh_json)));
-        REQUIRE(eh.ability_score_effects.size() == 0);
+        REQUIRE(eh.ability_score_effects.empty());
         REQUIRE(eh.normal_effects.size() == 5);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::EARLIEST).size() == 1);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::EARLY).size() == 1);

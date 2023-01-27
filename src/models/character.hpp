@@ -1,14 +1,20 @@
 #ifndef CHARACTER_HPP_
 #define CHARACTER_HPP_
 
+#include "dnd_config.hpp"
+
 #include <array>
 #include <iostream>
 #include <map>
-#include <memory>
+#include <string>
+#include <unordered_map>
+#include <utility>
 #include <vector>
 
 #include "models/character_class.hpp"
 #include "models/character_race.hpp"
+#include "models/character_subclass.hpp"
+#include "models/character_subrace.hpp"
 #include "models/creature.hpp"
 #include "models/effect_holder/character_decision.hpp"
 #include "models/effect_holder/feature.hpp"

@@ -2,6 +2,14 @@
 
 #include "measurer.hpp"
 
+#include <algorithm>
+#include <chrono>
+#include <fstream>
+#include <mutex>
+#include <string>
+#include <thread>
+#include <vector>
+
 const std::vector<std::string> values_for_human_readable = {
     "int dnd::launch(int, char**)",
     "Main execution scope",

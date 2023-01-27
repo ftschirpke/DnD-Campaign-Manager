@@ -1,6 +1,8 @@
 #ifndef ACTION_HOLDER_HPP_
 #define ACTION_HOLDER_HPP_
 
+#include "dnd_config.hpp"
+
 #include <string>
 #include <unordered_map>
 

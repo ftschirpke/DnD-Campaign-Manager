@@ -1,7 +1,10 @@
 #ifndef SPELLS_KNOWN_SPELLCASTING_HPP_
 #define SPELLS_KNOWN_SPELLCASTING_HPP_
 
+#include "dnd_config.hpp"
+
 #include <array>
+#include <string>
 
 #include "models/spellcasting/spellcasting.hpp"
 

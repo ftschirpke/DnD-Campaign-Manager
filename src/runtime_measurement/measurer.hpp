@@ -1,11 +1,12 @@
 #ifndef MEASURER_HPP_
 #define MEASURER_HPP_
 
-#include <algorithm>
+#include "dnd_config.hpp"
+
+#include <chrono>
 #include <fstream>
 #include <mutex>
 #include <string>
-#include <thread>
 
 #include <nlohmann/json.hpp>
 

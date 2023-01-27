@@ -3,12 +3,13 @@
 #include "character_subrace_file_parser.hpp"
 
 #include <iostream>
-#include <memory>
 #include <string>
+#include <tuple>
 #include <unordered_map>
-#include <vector>
+#include <utility>
 
 #include "models/character_race.hpp"
+#include "models/character_subrace.hpp"
 #include "parsing/models/feature_holder_file_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
@@ -19,7 +20,7 @@ void dnd::CharacterSubraceFileParser::parse() {
         throw json_format_error(ParsingType::SUBRACE, filepath, "map/object");
     }
     character_subrace_name = json_to_parse.at("name").get<std::string>();
-    if (character_subrace_name.size() == 0) {
+    if (character_subrace_name.empty()) {
         throw invalid_attribute(ParsingType::SUBRACE, filepath, "name", "cannot be \"\".");
     }
     race_name = json_to_parse.at("race").get<std::string>();

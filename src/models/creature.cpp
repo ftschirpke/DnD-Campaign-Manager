@@ -6,8 +6,6 @@
 #include <unordered_map>
 
 #include "basic_mechanics/abilities.hpp"
-#include "models/creature_state.hpp"
-#include "models/feature_holder.hpp"
 
 const std::unordered_map<std::string, int> dnd::Creature::getConstants() const { return {}; }
 

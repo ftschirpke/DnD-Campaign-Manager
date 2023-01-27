@@ -1,13 +1,16 @@
 #ifndef CHARACTER_CLASS_FILE_PARSER_HPP_
 #define CHARACTER_CLASS_FILE_PARSER_HPP_
 
-#include <memory>
+#include "dnd_config.hpp"
+
 #include <string>
 #include <unordered_map>
 #include <vector>
 
+#include "controllers/groups.hpp"
 #include "models/character_class.hpp"
 #include "models/effect_holder/feature.hpp"
+#include "models/spell.hpp"
 #include "parsing/models/spellcasting_feature_holder_file_parser.hpp"
 
 namespace dnd {

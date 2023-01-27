@@ -1,6 +1,8 @@
 #ifndef PARSING_TYPES_HPP_
 #define PARSING_TYPES_HPP_
 
+#include "dnd_config.hpp"
+
 #include <string>
 #include <unordered_map>
 

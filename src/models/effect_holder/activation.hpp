@@ -1,6 +1,8 @@
 #ifndef ACTIVATION_HPP_
 #define ACTIVATION_HPP_
 
+#include "dnd_config.hpp"
+
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
@@ -69,7 +71,7 @@ inline bool NumericActivation::check(
             left_value = attributes.at(left_identifier);
         }
     } catch (const std::out_of_range& e) {
-        throw std::out_of_range("\"" + left_identifier + "\" does not exist. It is neither an attribute or constant.");
+        throw std::out_of_range("\"" + left_identifier + "\" does not exist. It is neither an attribute nor constant.");
     }
     return op(left_value, right_value);
 }

@@ -1,6 +1,8 @@
 #ifndef SPELLCASTING_HPP_
 #define SPELLCASTING_HPP_
 
+#include "dnd_config.hpp"
+
 #include <array>
 #include <string>
 #include <unordered_map>

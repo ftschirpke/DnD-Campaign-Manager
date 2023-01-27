@@ -1,8 +1,11 @@
 #ifndef SPELLCASTING_FEATURE_HOLDER_FILE_PARSER_HPP_
 #define SPELLCASTING_FEATURE_HOLDER_FILE_PARSER_HPP_
 
+#include "dnd_config.hpp"
+
 #include <array>
 #include <memory>
+#include <string>
 #include <unordered_map>
 
 #include <nlohmann/json.hpp>

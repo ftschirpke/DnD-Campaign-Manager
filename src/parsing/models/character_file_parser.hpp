@@ -1,22 +1,22 @@
 #ifndef CHARACTER_FILE_PARSER_HPP_
 #define CHARACTER_FILE_PARSER_HPP_
 
+#include "dnd_config.hpp"
+
 #include <array>
-#include <memory>
 #include <string>
 #include <unordered_map>
 #include <vector>
 
 #include <nlohmann/json.hpp>
 
-#include "controllers/content.hpp"
+#include "controllers/groups.hpp"
 #include "models/character.hpp"
 #include "models/character_class.hpp"
 #include "models/character_race.hpp"
-#include "models/creature_state.hpp"
+#include "models/character_subclass.hpp"
+#include "models/character_subrace.hpp"
 #include "models/effect_holder/character_decision.hpp"
-#include "models/effect_holder/choosable.hpp"
-#include "models/effect_holder/feature.hpp"
 #include "models/spell.hpp"
 #include "parsing/models/feature_holder_file_parser.hpp"
 

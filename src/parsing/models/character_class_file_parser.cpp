@@ -3,12 +3,16 @@
 #include "character_class_file_parser.hpp"
 
 #include <iostream>
-#include <memory>
 #include <string>
+#include <tuple>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
+#include <nlohmann/json.hpp>
+
 #include "models/character_class.hpp"
+#include "models/effect_holder/feature.hpp"
 #include "parsing/models/feature_holder_file_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
@@ -19,7 +23,7 @@ void dnd::CharacterClassFileParser::parse() {
         throw json_format_error(ParsingType::CLASS, filepath, "map/object");
     }
     character_class_name = json_to_parse.at("name").get<std::string>();
-    if (character_class_name.size() == 0) {
+    if (character_class_name.empty()) {
         throw invalid_attribute(ParsingType::CLASS, filepath, "name", "cannot be \"\".");
     }
     character_class_hit_dice = json_to_parse.at("hit_dice").get<std::string>();

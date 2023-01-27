@@ -1,14 +1,12 @@
 #include "parsing/models/feature_holder_file_parser.hpp"
 
+#include <string>
 #include <unordered_map>
 
 #include <catch2/catch_test_macros.hpp>
 #include <nlohmann/json.hpp>
 
 #include "controllers/groups.hpp"
-#include "models/creature_state.hpp"
-#include "models/effect_holder/activation.hpp"
-#include "models/effect_holder/effect.hpp"
 #include "models/effect_holder/feature.hpp"
 
 // class that allows us to test the abstract dnd::FeatureHolderFileParser class

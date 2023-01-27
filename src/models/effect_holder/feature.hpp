@@ -1,6 +1,8 @@
 #ifndef FEATURE_HPP_
 #define FEATURE_HPP_
 
+#include "dnd_config.hpp"
+
 #include <string>
 #include <vector>
 

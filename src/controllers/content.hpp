@@ -1,7 +1,8 @@
 #ifndef CONTENT_HPP_
 #define CONTENT_HPP_
 
-#include <memory>
+#include "dnd_config.hpp"
+
 #include <string>
 #include <unordered_map>
 
@@ -9,6 +10,8 @@
 #include "models/character.hpp"
 #include "models/character_class.hpp"
 #include "models/character_race.hpp"
+#include "models/character_subclass.hpp"
+#include "models/character_subrace.hpp"
 #include "models/spell.hpp"
 
 namespace dnd {

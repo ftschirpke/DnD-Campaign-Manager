@@ -1,8 +1,9 @@
 #ifndef CONTENT_FILE_PARSER_HPP_
 #define CONTENT_FILE_PARSER_HPP_
 
+#include "dnd_config.hpp"
+
 #include <filesystem>
-#include <string>
 
 #include <nlohmann/json.hpp>
 

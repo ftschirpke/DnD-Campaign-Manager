@@ -1,6 +1,8 @@
 #ifndef EFFECT_HOLDER_HPP_
 #define EFFECT_HOLDER_HPP_
 
+#include "dnd_config.hpp"
+
 #include <memory>
 #include <string>
 #include <unordered_map>

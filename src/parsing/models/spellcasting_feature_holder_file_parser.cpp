@@ -5,6 +5,8 @@
 #include <array>
 #include <memory>
 #include <stdexcept>
+#include <string>
+#include <utility>
 
 #include <nlohmann/json.hpp>
 
@@ -71,6 +73,8 @@ void dnd::SpellcastingFeatureHolderFileParser::parseSpellcasting() {
     parseSize20Array(spellcasting_json, "level7_slots", spell_slots[6]);
     parseSize20Array(spellcasting_json, "level8_slots", spell_slots[7]);
     parseSize20Array(spellcasting_json, "level9_slots", spell_slots[8]);
+
+    // TODO: parse spell list
 }
 
 std::unique_ptr<dnd::Spellcasting> dnd::SpellcastingFeatureHolderFileParser::retrieveSpellcasting() {

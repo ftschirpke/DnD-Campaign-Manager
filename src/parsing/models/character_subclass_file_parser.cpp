@@ -3,13 +3,17 @@
 #include "character_subclass_file_parser.hpp"
 
 #include <iostream>
-#include <memory>
 #include <string>
+#include <tuple>
 #include <unordered_map>
-#include <vector>
+#include <utility>
+
+#include <nlohmann/json.hpp>
 
 #include "models/character_class.hpp"
+#include "models/character_subclass.hpp"
 #include "parsing/models/feature_holder_file_parser.hpp"
+#include "parsing/models/spellcasting_feature_holder_file_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
 
@@ -19,7 +23,7 @@ void dnd::CharacterSubclassFileParser::parse() {
         throw json_format_error(ParsingType::SUBCLASS, filepath, "map/object");
     }
     character_subclass_name = json_to_parse.at("name").get<std::string>();
-    if (character_subclass_name.size() == 0) {
+    if (character_subclass_name.empty()) {
         throw invalid_attribute(ParsingType::SUBCLASS, filepath, "name", "cannot be \"\".");
     }
     class_name = json_to_parse.at("class").get<std::string>();

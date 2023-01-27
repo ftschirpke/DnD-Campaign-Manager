@@ -1,6 +1,8 @@
 #ifndef SPELLS_FILE_PARSER_HPP_
 #define SPELLS_FILE_PARSER_HPP_
 
+#include "dnd_config.hpp"
+
 #include <memory>
 #include <mutex>
 #include <regex>
