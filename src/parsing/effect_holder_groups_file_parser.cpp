@@ -4,11 +4,16 @@
 
 #include <algorithm>
 #include <filesystem>
+#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <utility>
 
 #include <nlohmann/json.hpp>
 
 #include "controllers/groups.hpp"
 #include "models/effect_holder/choosable.hpp"
+#include "parsing/models/effect_holder_file_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
 

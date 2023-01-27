@@ -2,23 +2,27 @@
 
 #include "character_file_parser.hpp"
 
+#include <algorithm>
 #include <array>
 #include <iostream>
+#include <map>
 #include <memory>
 #include <string>
+#include <tuple>
 #include <unordered_map>
+#include <utility>
 #include <vector>
+
+#include <nlohmann/json.hpp>
 
 #include "models/character.hpp"
 #include "models/character_class.hpp"
 #include "models/character_race.hpp"
 #include "models/effect_holder/character_decision.hpp"
 #include "models/effect_holder/choice.hpp"
-#include "models/effect_holder/choosable.hpp"
 #include "models/effect_holder/effect_holder_with_choices.hpp"
 #include "models/effect_holder/feature.hpp"
 #include "models/feature_holder.hpp"
-#include "models/spell.hpp"
 #include "parsing/models/effect_holder_file_parser.hpp"
 #include "parsing/models/feature_holder_file_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
@@ -106,10 +110,10 @@ const dnd::Choice* determineChoice(
                 continue;
             }
 
-            auto isValidValue = [&](const nlohmann::json& chosen_val) -> bool {
+            auto is_valid_decision = [&](const nlohmann::json& chosen_val) -> bool {
                 return choice_it->get()->isValidDecision(chosen_val.get<std::string>());
             };
-            if (std::all_of(decision_json.cbegin(), decision_json.cend(), isValidValue)) {
+            if (std::all_of(decision_json.cbegin(), decision_json.cend(), is_valid_decision)) {
                 return choice_it->get();
             }
         }
@@ -181,7 +185,7 @@ void dnd::CharacterFileParser::parseLevelAndXP() {
         if (xp_for_level.at(level) > xp || (level < 20 && xp_for_level.at(level + 1) <= xp)) {
             throw invalid_attribute(
                 ParsingType::CHARACTER, filepath, "xp",
-                "corresponsds to a different level than the level value provided."
+                "corresponds to a different level than the level value provided."
             );
         }
     } else if (has_level) {

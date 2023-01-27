@@ -3,16 +3,22 @@
 #include "spells_file_parser.hpp"
 
 #include <algorithm>
+#include <cctype>
 #include <future>
-#include <memory>
+#include <iostream>
 #include <mutex>
 #include <regex>
 #include <string>
+#include <string_view>
+#include <tuple>
 #include <unordered_map>
 #include <unordered_set>
+#include <utility>
+#include <vector>
 
 #include <nlohmann/json.hpp>
 
+#include "controllers/groups.hpp"
 #include "models/spell.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"

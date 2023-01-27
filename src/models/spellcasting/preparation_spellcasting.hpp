@@ -1,6 +1,8 @@
 #ifndef PREPARATION_SPELLCASTING_HPP_
 #define PREPARATION_SPELLCASTING_HPP_
 
+#include <string>
+
 #include "models/spellcasting/spellcasting.hpp"
 
 namespace dnd {

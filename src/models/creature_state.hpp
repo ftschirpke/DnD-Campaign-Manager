@@ -3,12 +3,14 @@
 
 #include <algorithm>
 #include <map>
-#include <memory>
 #include <string>
 #include <unordered_map>
 #include <vector>
 
+#include "models/effect_holder/action_holder.hpp"
 #include "models/effect_holder/effect_holder.hpp"
+#include "models/effect_holder/proficiency_holder.hpp"
+#include "models/effect_holder/riv_holder.hpp"
 #include "models/feature_holder.hpp"
 
 namespace dnd {

@@ -4,6 +4,8 @@
 #include <array>
 #include <string>
 #include <unordered_map>
+#include <utility>
+#include <vector>
 
 #include "models/creature_state.hpp"
 #include "models/feature_holder.hpp"

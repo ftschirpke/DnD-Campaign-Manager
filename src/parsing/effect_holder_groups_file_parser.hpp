@@ -1,6 +1,11 @@
 #ifndef EFFECT_HOLDER_GROUPS_FILE_PARSER_HPP_
 #define EFFECT_HOLDER_GROUPS_FILE_PARSER_HPP_
 
+#include <string>
+#include <unordered_map>
+
+#include <nlohmann/json.hpp>
+
 #include "controllers/groups.hpp"
 #include "models/effect_holder/choosable.hpp"
 #include "parsing/models/effect_holder_file_parser.hpp"

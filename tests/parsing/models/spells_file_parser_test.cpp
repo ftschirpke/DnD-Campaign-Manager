@@ -1,8 +1,9 @@
 #include "parsing/models/spells_file_parser.hpp"
 
 #include <cctype>
-#include <memory>
 #include <random>
+#include <string>
+#include <unordered_map>
 #include <vector>
 
 #include <catch2/catch_test_macros.hpp>

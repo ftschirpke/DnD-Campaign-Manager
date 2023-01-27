@@ -1,6 +1,7 @@
 #ifndef EFFECT_HOLDER_FILE_PARSER_HPP_
 #define EFFECT_HOLDER_FILE_PARSER_HPP_
 
+#include <memory>
 #include <regex>
 #include <string>
 

@@ -2,7 +2,6 @@
 #define CONTENT_FILE_PARSER_HPP_
 
 #include <filesystem>
-#include <string>
 
 #include <nlohmann/json.hpp>
 

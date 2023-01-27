@@ -3,8 +3,11 @@
 #include "groups.hpp"
 
 #include <algorithm>
+#include <cctype>
 #include <iostream>
+#include <string>
 #include <unordered_map>
+#include <unordered_set>
 
 #include "basic_mechanics/abilities.hpp"
 #include "basic_mechanics/skills.hpp"

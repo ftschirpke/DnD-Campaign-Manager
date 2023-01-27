@@ -6,16 +6,24 @@
 #include <memory>
 #include <regex>
 #include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <utility>
 #include <vector>
 
 #include <nlohmann/json.hpp>
 
 #include "basic_mechanics/abilities.hpp"
-#include "models/creature_state.hpp"
+#include "controllers/groups.hpp"
+#include "models/effect_holder/action_holder.hpp"
 #include "models/effect_holder/activation.hpp"
-#include "models/effect_holder/choosable.hpp"
+#include "models/effect_holder/choice.hpp"
+#include "models/effect_holder/effect.hpp"
 #include "models/effect_holder/effect_holder.hpp"
 #include "models/effect_holder/effect_holder_with_choices.hpp"
+#include "models/effect_holder/extra_spells_holder.hpp"
+#include "models/effect_holder/proficiency_holder.hpp"
+#include "models/effect_holder/riv_holder.hpp"
 #include "parsing/content_file_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"

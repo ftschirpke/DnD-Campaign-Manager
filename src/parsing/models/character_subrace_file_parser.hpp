@@ -1,13 +1,12 @@
 #ifndef CHARACTER_SUBRACE_FILE_PARSER_HPP_
 #define CHARACTER_SUBRACE_FILE_PARSER_HPP_
 
-#include <memory>
 #include <string>
 #include <unordered_map>
 #include <vector>
 
+#include "controllers/groups.hpp"
 #include "models/character_race.hpp"
-#include "models/effect_holder/feature.hpp"
 #include "parsing/models/feature_holder_file_parser.hpp"
 
 namespace dnd {

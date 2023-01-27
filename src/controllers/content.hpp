@@ -1,7 +1,6 @@
 #ifndef CONTENT_HPP_
 #define CONTENT_HPP_
 
-#include <memory>
 #include <string>
 #include <unordered_map>
 

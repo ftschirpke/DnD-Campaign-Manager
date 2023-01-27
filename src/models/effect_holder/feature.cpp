@@ -6,6 +6,8 @@
 #include <string>
 #include <unordered_map>
 
+#include "models/effect_holder/effect_holder.hpp"
+
 // Do not call this function too often, unless you are sure the feature activation is only level-dependent.
 bool dnd::Feature::isActiveForLevel(int level) const {
     std::unordered_map<std::string, int> empty_attributes;

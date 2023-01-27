@@ -3,12 +3,16 @@
 #include "character_class_file_parser.hpp"
 
 #include <iostream>
-#include <memory>
 #include <string>
+#include <tuple>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
+#include <nlohmann/json.hpp>
+
 #include "models/character_class.hpp"
+#include "models/effect_holder/feature.hpp"
 #include "parsing/models/feature_holder_file_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"

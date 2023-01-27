@@ -2,6 +2,7 @@
 #define CHOOSABLE_HPP_
 
 #include <memory>
+#include <string>
 #include <vector>
 
 #include "models/effect_holder/effect_holder.hpp"

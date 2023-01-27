@@ -7,6 +7,7 @@ namespace dnd {
 
 class Prerequisite : public Activation {
 public:
+    // TODO
 };
 
 } // namespace dnd

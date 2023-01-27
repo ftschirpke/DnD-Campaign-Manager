@@ -2,6 +2,7 @@
 #define SPELLS_KNOWN_SPELLCASTING_HPP_
 
 #include <array>
+#include <string>
 
 #include "models/spellcasting/spellcasting.hpp"
 
