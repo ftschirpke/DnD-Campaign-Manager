@@ -154,8 +154,9 @@ void dnd::CharacterFileParser::parseCharacterDecisions(
             throw attribute_format_error(ParsingType::CHARACTER, filepath, "decision:" + feature_name, "array");
         }
 
-        const Choice* determined_choice =
-            determineChoice(decisions, attribute_name, decision_json, feature_ptr->parts_with_choices);
+        const Choice* determined_choice = determineChoice(
+            decisions, attribute_name, decision_json, feature_ptr->parts_with_choices
+        );
         if (determined_choice == nullptr) {
             throw invalid_attribute(
                 ParsingType::CHARACTER, filepath, "decision:" + feature_name + ':' + attribute_name,

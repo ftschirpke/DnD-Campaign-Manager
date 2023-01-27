@@ -81,8 +81,9 @@ std::unique_ptr<dnd::Spellcasting> dnd::SpellcastingFeatureHolderFileParser::ret
     std::unique_ptr<dnd::Spellcasting> spellcasting_ptr;
     switch (spellcasting_type) {
         case SpellcastingType::PREPARATION:
-            spellcasting_ptr =
-                std::make_unique<PreparationSpellcasting>(ability, ritual_casting, preparation_spellcasting_type);
+            spellcasting_ptr = std::make_unique<PreparationSpellcasting>(
+                ability, ritual_casting, preparation_spellcasting_type
+            );
             break;
         case SpellcastingType::SPELLS_KNOWN:
             spellcasting_ptr = std::make_unique<SpellsKnownSpellcasting>(ability, ritual_casting);

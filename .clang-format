@@ -15,6 +15,7 @@ IndentCaseLabels: true
 KeepEmptyLinesAtTheStartOfBlocks: false
 MaxEmptyLinesToKeep: 2
 PenaltyReturnTypeOnItsOwnLine: 10000
+PenaltyBreakAssignment: 10000
 PointerAlignment: Left
 SpaceInEmptyBlock: false
 Standard: c++17
