@@ -87,8 +87,8 @@ void dnd::EffectHolderFileParser::parseEffectHolder(
         if (!effect_holder_json.at("activations").is_array()) {
             throw attribute_format_error(filepath, "activations", "array");
         }
-        const std::vector<std::string> activation_strs =
-            effect_holder_json.at("activations").get<std::vector<std::string>>();
+        const std::vector<std::string> activation_strs = effect_holder_json.at("activations")
+                                                             .get<std::vector<std::string>>();
         for (const std::string& activation_str : activation_strs) {
             parseAndAddActivation(activation_str, effect_holder);
         }
@@ -166,14 +166,14 @@ void dnd::EffectHolderFileParser::parseAndAddChoice(
             }
         }
 
-        bool all_are_choosable_groups =
-            std::all_of(group_names.begin(), group_names.end(), [&](const std::string& group_name) {
-                return groups.isChoosableGroup(group_name);
-            });
-        bool all_are_string_groups =
-            std::all_of(group_names.begin(), group_names.end(), [&](const std::string& group_name) {
-                return groups.isStringGroup(group_name);
-            });
+        bool all_are_choosable_groups = std::all_of(
+            group_names.begin(), group_names.end(),
+            [&](const std::string& group_name) { return groups.isChoosableGroup(group_name); }
+        );
+        bool all_are_string_groups = std::all_of(
+            group_names.begin(), group_names.end(),
+            [&](const std::string& group_name) { return groups.isStringGroup(group_name); }
+        );
 
         if (all_are_choosable_groups) {
             std::vector<const std::unordered_map<std::string, Choosable>*> group_values;
@@ -203,13 +203,13 @@ std::unique_ptr<dnd::Effect> dnd::EffectHolderFileParser::createEffect(const std
     if (!std::regex_match(effect_str, effect_regex)) {
         throw attribute_type_error(filepath, "invalid effect format: \"" + effect_str + "\"");
     }
-    std::string::const_iterator it = effect_str.cbegin();
+    auto it = effect_str.cbegin();
     while (*it != ' ') {
         ++it;
     }
     const std::string affected_attribute(effect_str.cbegin(), it);
     ++it;
-    std::string::const_iterator start_it = it;
+    auto start_it = it;
     while (*it != ' ') {
         ++it;
     }
@@ -262,13 +262,13 @@ void dnd::EffectHolderFileParser::parseAndAddActivation(
     if (!std::regex_match(activation_str, activation_regex)) {
         throw attribute_type_error(filepath, "invalid activation format: \"" + activation_str + "\"");
     }
-    std::string::const_iterator it = activation_str.cbegin();
+    auto it = activation_str.cbegin();
     while (*it != ' ') {
         ++it;
     }
     const std::string left_identifier(activation_str.cbegin(), it);
     ++it;
-    const std::string::const_iterator last_it = it;
+    const auto last_it = it;
     while (*it != ' ') {
         ++it;
     }

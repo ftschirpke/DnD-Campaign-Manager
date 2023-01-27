@@ -46,11 +46,11 @@ void dnd::CharacterSubclassFileParser::parse() {
 }
 
 bool dnd::CharacterSubclassFileParser::validate() const {
-    if (results.find(character_subclass_name) != results.end()) {
+    if (results.contains(character_subclass_name)) {
         std::cerr << "Warning: Duplicate of subclass \"" << character_subclass_name << "\" found.\n";
         return false;
     }
-    if (classes.find(class_name) == classes.cend()) {
+    if (!classes.contains(class_name)) {
         throw invalid_attribute(
             ParsingType::SUBCLASS, filepath, "class", "must exist. \"" + class_name + "\" does not exist."
         );

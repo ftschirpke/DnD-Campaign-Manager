@@ -82,8 +82,7 @@ dnd::SpellType dnd::SpellsFileParser::createSpellType(const std::string& spell_t
     } else {
         spell_type.level = SpellLevel(std::atoi(&spell_type_str[0]));
         size_t i = spell_type_str.find("level ") + 6;
-        std::string::const_iterator end_it =
-            spell_type.is_ritual ? spell_type_str.cbegin() + ritual_idx : spell_type_str.cend();
+        auto end_it = spell_type.is_ritual ? spell_type_str.cbegin() + ritual_idx : spell_type_str.cend();
         magic_school_str = std::string(spell_type_str.cbegin() + i, end_it);
     }
     std::transform(magic_school_str.begin(), magic_school_str.end(), magic_school_str.begin(), ::tolower);
@@ -97,10 +96,10 @@ dnd::SpellComponents dnd::SpellsFileParser::createSpellComponents(const std::str
         // TODO: think about how to reintroduce spell name into error message
         throw attribute_type_error(filepath, "invalid spell components format: \"" + spell_components_str + "\"");
     }
-    std::string::const_iterator start = spell_components_str.cbegin();
+    auto start = spell_components_str.cbegin();
     size_t parentheses_idx = spell_components_str.find(" (");
-    std::string first_part =
-        (parentheses_idx == std::string::npos) ? spell_components_str : std::string(start, start + parentheses_idx);
+    std::string first_part = (parentheses_idx == std::string::npos) ? spell_components_str
+                                                                    : std::string(start, start + parentheses_idx);
     SpellComponents spell_components;
     if (first_part.size() == 7) {
         spell_components.verbal = true;
@@ -125,7 +124,7 @@ dnd::SpellComponents dnd::SpellsFileParser::createSpellComponents(const std::str
 bool dnd::SpellsFileParser::validate() const {
     valid.reserve(spells_in_file);
     for (const SpellParsingInfo& info : spell_parsing_info) {
-        if (results.find(info.name) != results.end()) {
+        if (results.contains(info.name)) {
             std::cerr << "Warning: Duplicate of spell \"" << info.name << "\" found.\n";
             valid.emplace_back(false);
             continue;

@@ -78,7 +78,7 @@ int dnd::CharacterClassFileParser::determineSubclassLevel(const std::vector<dnd:
 }
 
 bool dnd::CharacterClassFileParser::validate() const {
-    if (results.find(character_class_name) != results.end()) {
+    if (results.contains(character_class_name)) {
         std::cerr << "Warning: Duplicate of class \"" << character_class_name << "\" found.\n";
         return false;
     }

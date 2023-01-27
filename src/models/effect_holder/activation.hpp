@@ -65,7 +65,7 @@ inline bool NumericActivation::check(
 ) const {
     int left_value;
     try {
-        if (constants.find(left_identifier) != constants.cend()) {
+        if (constants.contains(left_identifier)) {
             left_value = constants.at(left_identifier);
         } else {
             left_value = attributes.at(left_identifier);
@@ -86,7 +86,7 @@ inline bool IdentifierActivation::check(
 ) const {
     int left_value, right_value;
     try {
-        if (constants.find(left_identifier) != constants.cend()) {
+        if (constants.contains(left_identifier)) {
             left_value = constants.at(left_identifier);
         } else {
             left_value = attributes.at(left_identifier);
@@ -95,7 +95,7 @@ inline bool IdentifierActivation::check(
         throw std::out_of_range("\"" + left_identifier + "\" does not exist. It is neither an attribute or constant.");
     }
     try {
-        if (constants.find(right_identifier) != constants.cend()) {
+        if (constants.contains(right_identifier)) {
             right_value = constants.at(right_identifier);
         } else {
             right_value = attributes.at(right_identifier);

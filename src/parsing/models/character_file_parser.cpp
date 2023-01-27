@@ -154,8 +154,9 @@ void dnd::CharacterFileParser::parseCharacterDecisions(
             throw attribute_format_error(ParsingType::CHARACTER, filepath, "decision:" + feature_name, "array");
         }
 
-        const Choice* determined_choice =
-            determineChoice(decisions, attribute_name, decision_json, feature_ptr->parts_with_choices);
+        const Choice* determined_choice = determineChoice(
+            decisions, attribute_name, decision_json, feature_ptr->parts_with_choices
+        );
         if (determined_choice == nullptr) {
             throw invalid_attribute(
                 ParsingType::CHARACTER, filepath, "decision:" + feature_name + ':' + attribute_name,
@@ -265,7 +266,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
 }
 
 bool dnd::CharacterFileParser::validate() const {
-    if (results.find(character_name) != results.end()) {
+    if (results.contains(character_name)) {
         std::cerr << "Warning: Duplicate of character \"" << character_name << "\" found.\n";
         return false;
     }

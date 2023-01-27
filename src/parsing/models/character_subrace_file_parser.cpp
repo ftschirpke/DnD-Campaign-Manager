@@ -34,11 +34,11 @@ void dnd::CharacterSubraceFileParser::parse() {
 }
 
 bool dnd::CharacterSubraceFileParser::validate() const {
-    if (results.find(character_subrace_name) != results.end()) {
+    if (results.contains(character_subrace_name)) {
         std::cerr << "Warning: Duplicate of subrace \"" << character_subrace_name << "\" found.\n";
         return false;
     }
-    if (races.find(race_name) == races.cend()) {
+    if (!races.contains(race_name)) {
         throw invalid_attribute(
             ParsingType::SUBRACE, filepath, "race", "must exist. \"" + race_name + "\" does not exist."
         );
