@@ -45,7 +45,11 @@ const std::unordered_map<std::string, int (*)(int, int)> int_effect_operators = 
             return (int)(a / (b / 100.0f));
         },
     },
-    {"set", [](int a, int b) { return b; }},
+    {"set",
+     [](int a, int b) {
+         UNUSED(a);
+         return b;
+     }},
     {"max", [](int a, int b) { return std::max(a, b); }},
     {"min", [](int a, int b) { return std::min(a, b); }},
 };
@@ -148,6 +152,7 @@ inline IntNumEffect::IntNumEffect(
 inline void IntNumEffect::applyTo(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
+    UNUSED(constants);
     attributes[affected_attribute] = int_effect_operators.at(op_name)(attributes[affected_attribute], value);
 }
 
@@ -165,6 +170,7 @@ inline FloatNumEffect::FloatNumEffect(
 inline void FloatNumEffect::applyTo(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
+    UNUSED(constants);
     attributes[affected_attribute] = float_effect_operators.at(op_name)(attributes[affected_attribute], value);
 }
 
@@ -190,6 +196,7 @@ inline void OtherAttributeEffect::applyTo(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
     try {
+        UNUSED(constants);
         attributes[affected_attribute] = op(attributes[affected_attribute], attributes.at(identifier));
     } catch (const std::out_of_range& e) {
         throw std::out_of_range("Other attribute \"" + identifier + "\" does not exist.");

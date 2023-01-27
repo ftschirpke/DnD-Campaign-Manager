@@ -39,8 +39,8 @@ void dnd::CharacterFileParser::parse() {
             ParsingType::CHARACTER, filepath, "base_ability_scores", "must have exactly 6 entries."
         );
     }
-    base_ability_scores = json_to_parse.at("base_ability_scores").get<std::array<int, 6>>();
-    hit_dice_rolls = json_to_parse.at("hit_dice_rolls").get<std::vector<int>>();
+    base_ability_scores = json_to_parse.at("base_ability_scores").get<std::array<unsigned int, 6>>();
+    hit_dice_rolls = json_to_parse.at("hit_dice_rolls").get<std::vector<unsigned int>>();
 
     parseLevelAndXP();
     parseClassAndRace();
@@ -174,14 +174,11 @@ void dnd::CharacterFileParser::parseLevelAndXP() {
     const bool has_level = json_to_parse.contains("level");
     const bool has_xp = json_to_parse.contains("xp");
     if (has_level && has_xp) {
-        level = json_to_parse.at("level").get<int>();
+        level = json_to_parse.at("level").get<unsigned int>();
         if (level < 1 || level > 20) {
             throw invalid_attribute(ParsingType::CHARACTER, filepath, "level", "must be between 1 and 20.");
         }
-        xp = json_to_parse.at("xp").get<int>();
-        if (xp < 0) {
-            throw invalid_attribute(ParsingType::CHARACTER, filepath, "xp", "must be positive.");
-        }
+        xp = json_to_parse.at("xp").get<unsigned int>();
         if (xp_for_level.at(level) > xp || (level < 20 && xp_for_level.at(level + 1) <= xp)) {
             throw invalid_attribute(
                 ParsingType::CHARACTER, filepath, "xp",
@@ -189,16 +186,13 @@ void dnd::CharacterFileParser::parseLevelAndXP() {
             );
         }
     } else if (has_level) {
-        level = json_to_parse.at("level").get<int>();
+        level = json_to_parse.at("level").get<unsigned int>();
         if (level < 1 || level > 20) {
             throw invalid_attribute(ParsingType::CHARACTER, filepath, "level", "must be between 1 and 20.");
         }
         xp = xp_for_level.at(level);
     } else if (has_xp) {
-        xp = json_to_parse.at("xp").get<int>();
-        if (xp < 0) {
-            throw invalid_attribute(ParsingType::CHARACTER, filepath, "xp", "must be positive.");
-        }
+        xp = json_to_parse.at("xp").get<unsigned int>();
         level = Character::levelForXP(xp);
     } else {
         throw invalid_attribute(ParsingType::CHARACTER, filepath, "level/xp", "at least one must be provided.");

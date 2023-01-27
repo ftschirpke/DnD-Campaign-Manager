@@ -11,6 +11,8 @@
 #define DND_Debug 1
 #define DND_Release 0
 
+#define UNUSED(...) (void)(__VA_ARGS__)
+
 #define DND_DEBUG_MODE DND_@CMAKE_BUILD_TYPE@
 
 // runtime measurement if in debug mode

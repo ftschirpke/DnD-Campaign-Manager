@@ -233,8 +233,8 @@ std::unique_ptr<dnd::Effect> dnd::EffectHolderFileParser::createEffect(const std
             // attributes are stored as integers * 100, see CreatureState
         }
     } else {
-        int other_idx = effect_type.find("Other");
-        int const_idx = effect_type.find("Const");
+        size_t other_idx = effect_type.find("Other");
+        size_t const_idx = effect_type.find("Const");
         if (other_idx != std::string::npos) {
             const std::string op_name(effect_type.cbegin(), effect_type.cbegin() + other_idx);
             return std::make_unique<OtherAttributeEffect>(affected_attribute, op_name, effect_time, last_part);

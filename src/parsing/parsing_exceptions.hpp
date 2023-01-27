@@ -78,21 +78,21 @@ public:
 
 inline std::string stripJsonExceptionWhat(const std::string& original_what) {
     std::string what = original_what;
-    if (int i = what.find("]"); i != std::string::npos) {
+    if (size_t i = what.find("]"); i != std::string::npos) {
         what.erase(0, i + 2);
     }
     return what;
 }
 
 inline parsing_error::parsing_error(const std::filesystem::path& path, const std::string& error_msg)
-    : std::invalid_argument(""), msg_start("File"), path(path), error_msg(error_msg) {
+    : std::invalid_argument(""), path(path), msg_start("File"), error_msg(error_msg) {
     updateWhat();
 }
 
 inline parsing_error::parsing_error(
     ParsingType parsing_type, const std::filesystem::path& path, const std::string& error_msg
 )
-    : std::invalid_argument(""), msg_start(parsing_type_names.at(parsing_type) + " in file"), path(path),
+    : std::invalid_argument(""), path(path), msg_start(parsing_type_names.at(parsing_type) + " in file"),
       error_msg(error_msg) {
     updateWhat();
 }

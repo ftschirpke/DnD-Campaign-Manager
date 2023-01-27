@@ -269,14 +269,17 @@ void testBasicValuesFromJSON(const nlohmann::json& character_json, const dnd::Ch
     if (character_json.contains("subrace")) {
         REQUIRE(character_ptr->subrace_ptr->name == character_json.at("subrace").get<std::string>());
     }
-    REQUIRE(character_ptr->base_ability_scores == character_json.at("base_ability_scores").get<std::array<int, 6>>());
+    REQUIRE(
+        character_ptr->base_ability_scores
+        == character_json.at("base_ability_scores").get<std::array<unsigned int, 6>>()
+    );
     if (character_json.contains("level")) {
-        REQUIRE(character_ptr->getLevel() == character_json.at("level").get<int>());
+        REQUIRE(character_ptr->getLevel() == character_json.at("level").get<unsigned int>());
     }
     if (character_json.contains("xp")) {
-        REQUIRE(character_ptr->getXP() == character_json.at("xp").get<int>());
+        REQUIRE(character_ptr->getXP() == character_json.at("xp").get<unsigned int>());
     }
-    REQUIRE(character_ptr->getHitDiceRolls() == character_json.at("hit_dice_rolls").get<std::vector<int>>());
+    REQUIRE(character_ptr->getHitDiceRolls() == character_json.at("hit_dice_rolls").get<std::vector<unsigned int>>());
 }
 
 TEST_CASE("dnd::CharacterParser::createCharacter: parse minimum characters") {

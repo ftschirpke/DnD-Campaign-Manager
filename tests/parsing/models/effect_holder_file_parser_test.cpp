@@ -670,7 +670,7 @@ TEST_CASE("dnd::EffectHolderFileParser::parseAndAddActivation: parse valid numer
     REQUIRE(eh.activations.empty());
     std::unordered_map<std::string, int> attributes = {{"MAXHP", 4000}, {"STR", 1600}, {"CON", 1300}, {"INT", 800}};
     const std::unordered_map<std::string, int> constants = {{"LEVEL", 500}, {"CLASS_LEVEL", 500}, {"ARMOR_ON", 1}};
-    int idx = 0;
+    size_t idx = 0;
     SECTION("==") {
         REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("LEVEL == 5", eh));
         REQUIRE(eh.activations.size() == idx + 1);
@@ -801,7 +801,7 @@ TEST_CASE("dnd::EffectHolderFileParser::createActivation: parse valid identifier
     const std::unordered_map<std::string, int> constants1 = {{"LEVEL", 500}, {"CLASS_LEVEL", 500}, {"ARMOR_ON", 1}};
     std::unordered_map<std::string, int> attributes2 = {{"MAXHP", 2300}, {"STR", 800}, {"CON", 1000}, {"INT", 1800}};
     const std::unordered_map<std::string, int> constants2 = {{"LEVEL", 1300}, {"CLASS_LEVEL", 1300}, {"ARMOR_ON", 0}};
-    int idx = 0;
+    size_t idx = 0;
     SECTION("==") {
         REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("LEVEL == CLASS_LEVEL", eh));
         REQUIRE(eh.activations.size() == idx + 1);
