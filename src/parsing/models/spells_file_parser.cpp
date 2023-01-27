@@ -98,7 +98,7 @@ dnd::SpellComponents dnd::SpellsFileParser::createSpellComponents(const std::str
         throw attribute_type_error(filepath, "invalid spell components format: \"" + spell_components_str + "\"");
     }
     std::string::const_iterator start = spell_components_str.cbegin();
-    int parentheses_idx = spell_components_str.find(" (");
+    size_t parentheses_idx = spell_components_str.find(" (");
     std::string first_part =
         (parentheses_idx == std::string::npos) ? spell_components_str : std::string(start, start + parentheses_idx);
     SpellComponents spell_components;

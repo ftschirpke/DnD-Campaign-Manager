@@ -15,10 +15,7 @@
 #include "models/creature_state.hpp"
 #include "models/effect_holder/feature.hpp"
 
-int dnd::Character::levelForXP(int xp) {
-    if (xp < 0) {
-        throw std::invalid_argument("XP cannot be negative.");
-    }
+unsigned int dnd::Character::levelForXP(unsigned int xp) {
     for (const auto [lv, min_xp] : xp_for_level) {
         if (min_xp > xp) {
             return lv - 1;

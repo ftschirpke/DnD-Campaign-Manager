@@ -45,14 +45,14 @@ private:
     const std::unordered_map<std::string, const CharacterSubrace>& character_subraces;
     const std::unordered_map<std::string, const Spell>& spells;
     std::string character_name;
-    std::array<int, 6> base_ability_scores;
-    std::vector<int> hit_dice_rolls;
+    std::array<unsigned int, 6> base_ability_scores;
+    std::vector<unsigned int> hit_dice_rolls;
     const CharacterClass* class_ptr;
     const CharacterSubclass* subclass_ptr;
     const CharacterRace* race_ptr;
     const CharacterSubrace* subrace_ptr;
     std::vector<CharacterDecision> decisions;
-    int level, xp;
+    unsigned int level, xp;
     void parseClassAndRace();
     void parseLevelAndXP();
 };

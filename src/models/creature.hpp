@@ -16,12 +16,12 @@ namespace dnd {
 
 class Creature : public FeatureHolder {
 public:
-    const std::array<int, 6> base_ability_scores;
+    const std::array<unsigned int, 6> base_ability_scores;
     CreatureState state;
     // TODO: probably needs a revamp, when monsters are introduced
     // TODO: actions, bonus actions, reactions? - or are they part of the state?
     Creature(
-        const std::string& name, std::vector<Feature>&& features, const std::array<int, 6>& base_ability_scores
+        const std::string& name, std::vector<Feature>&& features, const std::array<unsigned int, 6>& base_ability_scores
     ) noexcept;
     virtual void determineState();
 protected:
@@ -30,7 +30,7 @@ protected:
 };
 
 inline Creature::Creature(
-    const std::string& name, std::vector<Feature>&& features, const std::array<int, 6>& base_ability_scores
+    const std::string& name, std::vector<Feature>&& features, const std::array<unsigned int, 6>& base_ability_scores
 ) noexcept
     : FeatureHolder(name, std::move(features)), base_ability_scores(base_ability_scores) {}
 

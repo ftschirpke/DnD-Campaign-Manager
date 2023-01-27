@@ -80,8 +80,8 @@ inline Spell::Spell(
     const SpellComponents& components, const std::string& duration, const std::string& description,
     const std::unordered_set<std::string>& classes
 ) noexcept
-    : name(name), type(type), casting_time(casting_time), range(range), components(components), duration(duration),
-      description(description), classes(classes) {}
+    : name(name), casting_time(casting_time), range(range), duration(duration), description(description),
+      classes(classes), type(type), components(components) {}
 
 } // namespace dnd
 

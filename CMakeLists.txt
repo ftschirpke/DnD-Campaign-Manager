@@ -57,6 +57,11 @@ CPMAddPackage(
 add_executable(dndmanager src/main.cpp)
 set_target_properties(dndmanager PROPERTIES EXPORT_COMPILE_COMMANDS ON)
 
+target_compile_options(dndmanager PRIVATE
+  $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
+  $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Werror>
+)
+
 target_include_directories(dndmanager
     PUBLIC
     ${PROJECT_BINARY_DIR}/src
@@ -68,6 +73,11 @@ target_link_libraries(dndmanager PUBLIC nlohmann_json::nlohmann_json cxxopts::cx
 
 add_executable(dndmanager_tests)
 set_target_properties(dndmanager_tests PROPERTIES EXPORT_COMPILE_COMMANDS ON)
+
+target_compile_options(dndmanager_tests PRIVATE
+  $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
+  $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Werror>
+)
 
 target_include_directories(dndmanager_tests
     PUBLIC

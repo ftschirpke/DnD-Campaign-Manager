@@ -63,7 +63,7 @@ void dnd::Measurer::endSession() {
         for (auto& measurement : session->json.at("traceEvents")) {
             if (measurement.at("name") == human_readable_value) {
                 output_stream << human_readable_value;
-                for (int i = 0; i < max_str_len - human_readable_value.size(); ++i) {
+                for (size_t i = 0; i < max_str_len - human_readable_value.size(); ++i) {
                     output_stream << ' ';
                 }
                 output_stream << measurement.at("dur").get<int>() / 1000.0f << " ms\n";
