@@ -20,7 +20,8 @@ int dnd::launch(int argc, char** argv) {
     cxxopts::Options options(DND_CAMPAIGN_MANAGER_NAME, DND_CAMPAIGN_MANAGER_DESCRIPTION);
 
     options.add_options()("c,campaign", "Name of campaign directory", cxxopts::value<std::string>())(
-        "d,directory", "Content directory", cxxopts::value<std::string>()->default_value((cur_path / "content").c_str())
+        "d,directory", "Content directory",
+        cxxopts::value<std::string>()->default_value((cur_path / "content").string())
     )("v,version", "Print version")("h,help", "Print usage");
 
     cxxopts::ParseResult args;
@@ -62,7 +63,7 @@ int dnd::launch(int argc, char** argv) {
         Content content = parser.parse(content_path, campaign_dir_name);
         content.printStatus();
 
-        // DND_MEASURE_SCOPE("Main execution scope without parsing");
+        DND_MEASURE_SCOPE("Main execution scope without parsing");
 
         std::cout << "\n=== CHARACTER INITIALISATION ===\n";
         for (auto& [name, character] : content.characters) {
