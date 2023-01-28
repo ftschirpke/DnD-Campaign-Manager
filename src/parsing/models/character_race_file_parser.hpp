@@ -17,15 +17,13 @@ namespace dnd {
 
 class CharacterRaceFileParser : public ContentFileParser {
 public:
-    CharacterRaceFileParser(
-        std::unordered_map<std::string, const CharacterRace>& results, const Groups& groups
-    ) noexcept;
+    CharacterRaceFileParser(std::unordered_map<std::string, const CharacterRace>& races, const Groups& groups) noexcept;
     virtual void parse() override;
     virtual bool validate() const override;
     virtual void saveResult() override;
 private:
     static const ParsingType type;
-    std::unordered_map<std::string, const CharacterRace>& results;
+    std::unordered_map<std::string, const CharacterRace>& races;
     std::string character_race_name;
     bool has_subraces;
     FeaturesParser features_parser;
@@ -35,9 +33,9 @@ private:
 inline const ParsingType CharacterRaceFileParser::type = ParsingType::RACE;
 
 inline CharacterRaceFileParser::CharacterRaceFileParser(
-    std::unordered_map<std::string, const CharacterRace>& results, const Groups& groups
+    std::unordered_map<std::string, const CharacterRace>& races, const Groups& groups
 ) noexcept
-    : ContentFileParser(), results(results), features_parser(groups) {}
+    : ContentFileParser(), races(races), features_parser(groups) {}
 
 inline void CharacterRaceFileParser::configureSubparsers() { features_parser.configure(type, filepath); }
 

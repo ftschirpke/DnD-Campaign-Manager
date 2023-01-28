@@ -244,7 +244,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
 }
 
 bool dnd::CharacterFileParser::validate() const {
-    if (results.contains(character_name)) {
+    if (characters.contains(character_name)) {
         std::cerr << "Warning: Duplicate of character \"" << character_name << "\" found.\n";
         return false;
     }
@@ -253,14 +253,14 @@ bool dnd::CharacterFileParser::validate() const {
 
 void dnd::CharacterFileParser::saveResult() {
     // TODO: change Character constructor
-    results.emplace(
+    characters.emplace(
         std::piecewise_construct, std::forward_as_tuple(character_name),
         std::forward_as_tuple(
             character_name, std::move(features_parser.retrieveFeatures()), base_ability_scores, level, xp,
             hit_dice_rolls
         )
     );
-    Character& character = results.at(character_name);
+    Character& character = characters.at(character_name);
     character.race_ptr = race_ptr;
     character.subrace_ptr = subrace_ptr;
     character.class_ptr = class_ptr;

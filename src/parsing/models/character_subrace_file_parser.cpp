@@ -29,7 +29,7 @@ void dnd::CharacterSubraceFileParser::parse() {
 }
 
 bool dnd::CharacterSubraceFileParser::validate() const {
-    if (results.contains(character_subrace_name)) {
+    if (subraces.contains(character_subrace_name)) {
         std::cerr << "Warning: Duplicate of subrace \"" << character_subrace_name << "\" found.\n";
         return false;
     }
@@ -45,7 +45,7 @@ bool dnd::CharacterSubraceFileParser::validate() const {
 }
 
 void dnd::CharacterSubraceFileParser::saveResult() {
-    results.emplace(
+    subraces.emplace(
         std::piecewise_construct, std::forward_as_tuple(character_subrace_name),
         std::forward_as_tuple(character_subrace_name, std::move(features_parser.retrieveFeatures()), race_name)
     );

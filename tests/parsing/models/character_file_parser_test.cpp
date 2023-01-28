@@ -24,7 +24,7 @@
 class TestCharacterFileParser : public dnd::CharacterFileParser {
 public:
     TestCharacterFileParser(
-        std::unordered_map<std::string, dnd::Character>& results, const dnd::Groups& groups,
+        std::unordered_map<std::string, dnd::Character>& characters, const dnd::Groups& groups,
         const std::unordered_map<std::string, const dnd::CharacterClass>& character_classes,
         const std::unordered_map<std::string, const dnd::CharacterSubclass>& character_subclasses,
         const std::unordered_map<std::string, const dnd::CharacterRace>& character_races,
@@ -32,7 +32,7 @@ public:
         const std::unordered_map<std::string, const dnd::Spell>& spells
     )
         : dnd::CharacterFileParser(
-            results, groups, character_classes, character_subclasses, character_races, character_subraces, spells
+            characters, groups, character_classes, character_subclasses, character_races, character_subraces, spells
         ) {}
     void setJSON(const nlohmann::json& character_json) {
         filepath = std::filesystem::path("test_file_name.json");

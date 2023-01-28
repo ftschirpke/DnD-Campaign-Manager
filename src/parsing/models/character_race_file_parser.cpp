@@ -30,7 +30,7 @@ void dnd::CharacterRaceFileParser::parse() {
 }
 
 bool dnd::CharacterRaceFileParser::validate() const {
-    if (results.contains(character_race_name)) {
+    if (races.contains(character_race_name)) {
         std::cerr << "Warning: Duplicate of race \"" << character_race_name << "\" found.\n";
         return false;
     }
@@ -38,7 +38,7 @@ bool dnd::CharacterRaceFileParser::validate() const {
 }
 
 void dnd::CharacterRaceFileParser::saveResult() {
-    results.emplace(
+    races.emplace(
         std::piecewise_construct, std::forward_as_tuple(character_race_name),
         std::forward_as_tuple(character_race_name, std::move(features_parser.retrieveFeatures()), has_subraces)
     );

@@ -36,7 +36,7 @@ void dnd::CharacterSubclassFileParser::parse() {
 }
 
 bool dnd::CharacterSubclassFileParser::validate() const {
-    if (results.contains(character_subclass_name)) {
+    if (subclasses.contains(character_subclass_name)) {
         std::cerr << "Warning: Duplicate of subclass \"" << character_subclass_name << "\" found.\n";
         return false;
     }
@@ -47,7 +47,7 @@ bool dnd::CharacterSubclassFileParser::validate() const {
 }
 
 void dnd::CharacterSubclassFileParser::saveResult() {
-    results.emplace(
+    subclasses.emplace(
         std::piecewise_construct, std::forward_as_tuple(character_subclass_name),
         std::forward_as_tuple(character_subclass_name, std::move(features_parser.retrieveFeatures()), class_name)
     );

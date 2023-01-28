@@ -70,4 +70,4 @@ bool dnd::EffectHolderGroupsFileParser::validate() const {
     return true;
 }
 
-void dnd::EffectHolderGroupsFileParser::saveResult() { results.add(group_name, std::move(choosables)); }
+void dnd::EffectHolderGroupsFileParser::saveResult() { groups.add(group_name, std::move(choosables)); }

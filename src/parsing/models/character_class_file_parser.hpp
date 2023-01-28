@@ -22,7 +22,7 @@ namespace dnd {
 class CharacterClassFileParser : public ContentFileParser {
 public:
     CharacterClassFileParser(
-        std::unordered_map<std::string, const CharacterClass>& results, const Groups& groups,
+        std::unordered_map<std::string, const CharacterClass>& classes, const Groups& groups,
         const std::unordered_map<std::string, const Spell>& spells
     ) noexcept;
     virtual void parse() override;
@@ -32,7 +32,7 @@ protected:
     int determineSubclassLevel(const std::vector<Feature>& features) const;
 private:
     static const ParsingType type;
-    std::unordered_map<std::string, const CharacterClass>& results;
+    std::unordered_map<std::string, const CharacterClass>& classes;
     std::string character_class_name, character_class_hit_dice;
     std::vector<int> asi_levels;
     int subclass_level;
@@ -44,10 +44,10 @@ private:
 inline const ParsingType CharacterClassFileParser::type = ParsingType::CLASS;
 
 inline CharacterClassFileParser::CharacterClassFileParser(
-    std::unordered_map<std::string, const CharacterClass>& results, const Groups& groups,
+    std::unordered_map<std::string, const CharacterClass>& classes, const Groups& groups,
     const std::unordered_map<std::string, const Spell>& spells
 ) noexcept
-    : ContentFileParser(), results(results), features_parser(groups), spellcasting_parser(spells) {}
+    : ContentFileParser(), classes(classes), features_parser(groups), spellcasting_parser(spells) {}
 
 inline void CharacterClassFileParser::configureSubparsers() {
     features_parser.configure(type, filepath);

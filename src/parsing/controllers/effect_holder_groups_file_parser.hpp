@@ -17,13 +17,13 @@ namespace dnd {
 
 class EffectHolderGroupsFileParser : public ContentFileParser {
 public:
-    EffectHolderGroupsFileParser(Groups& results) noexcept;
+    EffectHolderGroupsFileParser(Groups& groups) noexcept;
     virtual void parse() override;
     virtual bool validate() const override;
     virtual void saveResult() override;
 private:
     static const ParsingType type;
-    Groups& results;
+    Groups& groups;
     std::string group_name;
     std::unordered_map<std::string, Choosable> choosables;
     EffectHolderParser effect_holder_parser;
@@ -33,8 +33,8 @@ private:
 
 inline const ParsingType EffectHolderGroupsFileParser::type = ParsingType::GROUP;
 
-inline EffectHolderGroupsFileParser::EffectHolderGroupsFileParser(Groups& results) noexcept
-    : ContentFileParser(), results(results), effect_holder_parser(results) {}
+inline EffectHolderGroupsFileParser::EffectHolderGroupsFileParser(Groups& groups) noexcept
+    : ContentFileParser(), groups(groups), effect_holder_parser(groups) {}
 
 inline void EffectHolderGroupsFileParser::configureSubparsers() { effect_holder_parser.configure(type, filepath); }
 

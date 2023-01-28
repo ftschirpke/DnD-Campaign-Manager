@@ -20,7 +20,7 @@ namespace dnd {
 class CharacterSubclassFileParser : public ContentFileParser {
 public:
     CharacterSubclassFileParser(
-        std::unordered_map<std::string, const CharacterSubclass>& results, const Groups& groups,
+        std::unordered_map<std::string, const CharacterSubclass>& subclasses, const Groups& groups,
         const std::unordered_map<std::string, const CharacterClass>& classes,
         const std::unordered_map<std::string, const Spell>& spells
     ) noexcept;
@@ -29,7 +29,7 @@ public:
     virtual void saveResult() override;
 private:
     static const ParsingType type;
-    std::unordered_map<std::string, const CharacterSubclass>& results;
+    std::unordered_map<std::string, const CharacterSubclass>& subclasses;
     const std::unordered_map<std::string, const CharacterClass>& classes;
     std::string character_subclass_name, class_name;
     FeaturesParser features_parser;
@@ -40,11 +40,12 @@ private:
 inline const ParsingType CharacterSubclassFileParser::type = ParsingType::SUBCLASS;
 
 inline CharacterSubclassFileParser::CharacterSubclassFileParser(
-    std::unordered_map<std::string, const CharacterSubclass>& results, const Groups& groups,
+    std::unordered_map<std::string, const CharacterSubclass>& subclasses, const Groups& groups,
     const std::unordered_map<std::string, const CharacterClass>& classes,
     const std::unordered_map<std::string, const Spell>& spells
 ) noexcept
-    : ContentFileParser(), results(results), classes(classes), features_parser(groups), spellcasting_parser(spells) {}
+    : ContentFileParser(), subclasses(subclasses), classes(classes), features_parser(groups),
+      spellcasting_parser(spells) {}
 
 inline void CharacterSubclassFileParser::configureSubparsers() {
     features_parser.configure(type, filepath);

@@ -20,7 +20,7 @@ namespace dnd {
 class CharacterSubraceFileParser : public ContentFileParser {
 public:
     CharacterSubraceFileParser(
-        std::unordered_map<std::string, const CharacterSubrace>& results, const Groups& groups,
+        std::unordered_map<std::string, const CharacterSubrace>& subraces, const Groups& groups,
         const std::unordered_map<std::string, const CharacterRace>& races
     ) noexcept;
     virtual void parse() override;
@@ -28,7 +28,7 @@ public:
     virtual void saveResult() override;
 private:
     static const ParsingType type;
-    std::unordered_map<std::string, const CharacterSubrace>& results;
+    std::unordered_map<std::string, const CharacterSubrace>& subraces;
     const std::unordered_map<std::string, const CharacterRace>& races;
     std::string character_subrace_name, race_name;
     FeaturesParser features_parser;
@@ -38,10 +38,10 @@ private:
 inline const ParsingType CharacterSubraceFileParser::type = ParsingType::SUBRACE;
 
 inline CharacterSubraceFileParser::CharacterSubraceFileParser(
-    std::unordered_map<std::string, const CharacterSubrace>& results, const Groups& groups,
+    std::unordered_map<std::string, const CharacterSubrace>& subraces, const Groups& groups,
     const std::unordered_map<std::string, const CharacterRace>& races
 ) noexcept
-    : ContentFileParser(), results(results), races(races), features_parser(groups) {}
+    : ContentFileParser(), subraces(subraces), races(races), features_parser(groups) {}
 
 inline void CharacterSubraceFileParser::configureSubparsers() { features_parser.configure(type, filepath); }
 

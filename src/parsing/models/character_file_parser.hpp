@@ -28,7 +28,7 @@ namespace dnd {
 class CharacterFileParser : public ContentFileParser {
 public:
     CharacterFileParser(
-        std::unordered_map<std::string, Character>& results, const Groups& groups,
+        std::unordered_map<std::string, Character>& characters, const Groups& groups,
         const std::unordered_map<std::string, const CharacterClass>& character_classes,
         const std::unordered_map<std::string, const CharacterSubclass>& character_subclasses,
         const std::unordered_map<std::string, const CharacterRace>& character_races,
@@ -42,7 +42,7 @@ protected:
     void parseCharacterDecisions(const std::string& feature_name, const nlohmann::json& feature_decisions_json);
 private:
     static const ParsingType type;
-    std::unordered_map<std::string, Character>& results;
+    std::unordered_map<std::string, Character>& characters;
     const std::unordered_map<std::string, const CharacterClass>& character_classes;
     const std::unordered_map<std::string, const CharacterSubclass>& character_subclasses;
     const std::unordered_map<std::string, const CharacterRace>& character_races;
@@ -65,14 +65,14 @@ private:
 };
 
 inline CharacterFileParser::CharacterFileParser(
-    std::unordered_map<std::string, Character>& results, const Groups& groups,
+    std::unordered_map<std::string, Character>& characters, const Groups& groups,
     const std::unordered_map<std::string, const CharacterClass>& character_classes,
     const std::unordered_map<std::string, const CharacterSubclass>& character_subclasses,
     const std::unordered_map<std::string, const CharacterRace>& character_races,
     const std::unordered_map<std::string, const CharacterSubrace>& character_subraces,
     const std::unordered_map<std::string, const Spell>& spells
 ) noexcept
-    : ContentFileParser(), results(results), character_classes(character_classes),
+    : ContentFileParser(), characters(characters), character_classes(character_classes),
       character_subclasses(character_subclasses), character_races(character_races),
       character_subraces(character_subraces), spells(spells), class_ptr(nullptr), subclass_ptr(nullptr),
       race_ptr(nullptr), subrace_ptr(nullptr), effect_holder_parser(groups), features_parser(groups) {}

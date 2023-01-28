@@ -68,7 +68,7 @@ int dnd::CharacterClassFileParser::determineSubclassLevel(const std::vector<dnd:
 }
 
 bool dnd::CharacterClassFileParser::validate() const {
-    if (results.contains(character_class_name)) {
+    if (classes.contains(character_class_name)) {
         std::cerr << "Warning: Duplicate of class \"" << character_class_name << "\" found.\n";
         return false;
     }
@@ -76,7 +76,7 @@ bool dnd::CharacterClassFileParser::validate() const {
 }
 
 void dnd::CharacterClassFileParser::saveResult() {
-    results.emplace(
+    classes.emplace(
         std::piecewise_construct, std::forward_as_tuple(character_class_name),
         std::forward_as_tuple(
             character_class_name, std::move(features_parser.retrieveFeatures()), character_class_hit_dice, asi_levels,

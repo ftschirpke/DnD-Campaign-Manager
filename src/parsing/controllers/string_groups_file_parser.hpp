@@ -18,13 +18,13 @@ namespace dnd {
 
 class StringGroupsFileParser : public ContentFileParser {
 public:
-    StringGroupsFileParser(Groups& results) noexcept;
+    StringGroupsFileParser(Groups& groups) noexcept;
     virtual void parse() override;
     virtual bool validate() const override;
     virtual void saveResult() override;
 private:
     static const ParsingType type;
-    Groups& results;
+    Groups& groups;
     std::unordered_map<std::string, std::unordered_set<std::string>> parsed_data;
     EffectHolderParser effect_holder_parser;
     std::unordered_set<std::string> parseMap(const nlohmann::json& json_map);
@@ -33,8 +33,8 @@ private:
 
 inline const ParsingType StringGroupsFileParser::type = ParsingType::GROUP;
 
-inline StringGroupsFileParser::StringGroupsFileParser(Groups& results) noexcept
-    : ContentFileParser(), results(results), effect_holder_parser(results) {}
+inline StringGroupsFileParser::StringGroupsFileParser(Groups& groups) noexcept
+    : ContentFileParser(), groups(groups), effect_holder_parser(groups) {}
 
 inline void StringGroupsFileParser::configureSubparsers() { effect_holder_parser.configure(type, filepath); }
 
