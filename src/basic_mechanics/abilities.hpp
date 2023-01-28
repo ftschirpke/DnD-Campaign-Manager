@@ -7,6 +7,7 @@
 #include <array>
 #include <stdexcept>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 
 namespace dnd {
@@ -57,7 +58,7 @@ inline std::string abilityToString(Ability ability) {
     }
 }
 
-inline bool isAbility(const std::string& attribute_name) {
+inline bool isAbility(std::string_view attribute_name) {
     return std::find(ability_strings_inorder.cbegin(), ability_strings_inorder.cend(), attribute_name)
            != ability_strings_inorder.cend();
 }

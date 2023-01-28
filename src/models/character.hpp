@@ -46,8 +46,8 @@ public:
         const std::array<unsigned int, 6>& base_ability_scores, unsigned int level, unsigned int xp,
         const std::vector<unsigned int>& hit_dice_rolls
     ) noexcept;
-    // unsigned int getLevel() const noexcept;
-    // unsigned int getXP() const noexcept;
+    unsigned int getLevel() const noexcept;
+    unsigned int getXP() const noexcept;
     // void levelUp();
     // void setLevel(unsigned int new_level);
     // void setXP(unsigned int new_xp);
@@ -70,16 +70,16 @@ private:
 inline Character::Character(
     const std::string& name, std::vector<Feature>&& features, const std::array<unsigned int, 6>& base_ability_scores
 ) noexcept
-    : FeatureHolder(name, std::move(features)), base_ability_scores(base_ability_scores), subclass_ptr(nullptr),
-      subrace_ptr(nullptr) {}
+    : FeatureHolder(name, std::move(features)), base_ability_scores(base_ability_scores), state(decisions),
+      subclass_ptr(nullptr), subrace_ptr(nullptr) {}
 
 
 inline Character::Character(
     const std::string& name, std::vector<Feature>&& features, const std::array<unsigned int, 6>& base_ability_scores,
     unsigned int level, unsigned int xp, const std::vector<unsigned int>& hit_dice_rolls
 ) noexcept
-    : FeatureHolder(name, std::move(features)), base_ability_scores(base_ability_scores), subclass_ptr(nullptr),
-      subrace_ptr(nullptr), level(level), xp(xp), hit_dice_rolls(hit_dice_rolls) {}
+    : FeatureHolder(name, std::move(features)), base_ability_scores(base_ability_scores), state(decisions),
+      subclass_ptr(nullptr), subrace_ptr(nullptr), level(level), xp(xp), hit_dice_rolls(hit_dice_rolls) {}
 
 inline unsigned int Character::getLevel() const noexcept { return level; }
 

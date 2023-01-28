@@ -61,6 +61,15 @@ int dnd::launch(int argc, char** argv) {
         ContentParser parser;
         Content content = parser.parse(content_path, campaign_dir_name);
         content.printStatus();
+
+        // DND_MEASURE_SCOPE("Main execution scope without parsing");
+
+        std::cout << "\n=== CHARACTER INITIALISATION ===\n";
+        for (auto& [name, character] : content.characters) {
+            std::cout << "# " << name << '\n';
+            character.determineState();
+            std::cout << "#\n\n";
+        }
     } catch (const parsing_error& e) {
         std::cerr << "Parsing Error: " << e.what() << '\n';
         return -1;

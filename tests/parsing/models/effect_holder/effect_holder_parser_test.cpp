@@ -947,7 +947,7 @@ TEST_CASE("dnd::EffectHolderParser::createActivation: parse valid identifier act
     }
 }
 
-TEST_CASE("dnd::EffectHolderParser::createFeature: parse valid ehs") {
+TEST_CASE("dnd::EffectHolderParser::createFeature: parse valid effect holders") {
     TestEffectHolderParser parser;
     const std::unordered_map<std::string, int> constants = {
         {"LEVEL", 200},

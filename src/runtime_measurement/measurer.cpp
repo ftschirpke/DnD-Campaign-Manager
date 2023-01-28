@@ -22,6 +22,7 @@ const std::vector<std::string> values_for_human_readable = {
     "dnd::ContentParser::parseAllOfMultiFileType ( Subrace )",
     "dnd::ContentParser::parseAllOfMultiFileType ( Subclass )",
     "dnd::ContentParser::parseAllOfMultiFileType ( Character )",
+    "Main execution scope without parsing",
 };
 
 void dnd::Measurer::beginSession(const std::string& name, const std::string& filepath = "results.json") {

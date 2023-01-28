@@ -261,6 +261,7 @@ void dnd::CharacterFileParser::saveResult() {
         )
     );
     Character& character = characters.at(character_name);
+    character.decisions = std::move(decisions);
     character.race_ptr = race_ptr;
     character.subrace_ptr = subrace_ptr;
     character.class_ptr = class_ptr;
