@@ -1,6 +1,6 @@
 #include "dnd_config.hpp"
 
-#include "feature_holder_file_parser.hpp"
+#include "features_parser.hpp"
 
 #include <regex>
 #include <string>
@@ -14,16 +14,13 @@
 #include "parsing/parse_optionals.hpp"
 #include "parsing/parsing_exceptions.hpp"
 
-void dnd::FeatureHolderFileParser::configureSubparsers() {
-    // TODO: type is wrong
-    effect_holder_parser.configure(ParsingType::SPELL, filepath);
-}
-
-void dnd::FeatureHolderFileParser::parseFeatures() {
+void dnd::FeaturesParser::parseFeatures(const nlohmann::json& features_json) {
     DND_MEASURE_FUNCTION();
-    const nlohmann::json& features_json = json_to_parse.at("features");
+
+    requiresConfiguration();
+
     if (!features_json.is_object()) {
-        throw attribute_format_error(filepath, "features", "map/object");
+        throw attribute_format_error(type, filepath, "features", "map/object");
     }
 
     features.reserve(features_json.size());
@@ -33,9 +30,10 @@ void dnd::FeatureHolderFileParser::parseFeatures() {
     }
 }
 
-dnd::Feature dnd::FeatureHolderFileParser::createFeature(
-    const std::string& feature_name, const nlohmann::json& feature_json
-) const {
+dnd::Feature dnd::FeaturesParser::createFeature(const std::string& feature_name, const nlohmann::json& feature_json)
+    const {
+    requiresConfiguration();
+
     const std::string description = feature_json.at("description").get<std::string>();
 
     // TODO: change feature constructor?
@@ -49,7 +47,7 @@ dnd::Feature dnd::FeatureHolderFileParser::createFeature(
     }
     if (feature_json.contains("multi")) {
         if (!feature_json.is_array()) {
-            throw attribute_format_error(filepath, "multi", "array");
+            throw attribute_format_error(type, filepath, "multi", "array");
         }
         for (const auto& part_json : feature_json) {
             if (part_json.contains("choose")) {

@@ -30,5 +30,3 @@ bool dnd::ContentFileParser::openJSON(const std::filesystem::directory_entry& fi
     configureSubparsers();
     return true;
 }
-
-void dnd::ContentFileParser::configureSubparsers() {}

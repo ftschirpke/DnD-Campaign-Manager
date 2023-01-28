@@ -11,6 +11,8 @@
 
 #include "controllers/groups.hpp"
 #include "parsing/content_file_parser.hpp"
+#include "parsing/models/effect_holder/effect_holder_parser.hpp"
+#include "parsing/subparser.hpp"
 
 namespace dnd {
 
@@ -20,14 +22,21 @@ public:
     virtual void parse() override;
     virtual bool validate() const override;
     virtual void saveResult() override;
-protected:
-    std::unordered_set<std::string> parseMap(const nlohmann::json& json_map);
 private:
+    static const ParsingType type;
     Groups& results;
     std::unordered_map<std::string, std::unordered_set<std::string>> parsed_data;
+    EffectHolderParser effect_holder_parser;
+    std::unordered_set<std::string> parseMap(const nlohmann::json& json_map);
+    virtual void configureSubparsers() override;
 };
 
-inline StringGroupsFileParser::StringGroupsFileParser(Groups& results) noexcept : results(results) {}
+inline const ParsingType StringGroupsFileParser::type = ParsingType::GROUP;
+
+inline StringGroupsFileParser::StringGroupsFileParser(Groups& results) noexcept
+    : ContentFileParser(), results(results), effect_holder_parser(results) {}
+
+inline void StringGroupsFileParser::configureSubparsers() { effect_holder_parser.configure(type, filepath); }
 
 } // namespace dnd
 

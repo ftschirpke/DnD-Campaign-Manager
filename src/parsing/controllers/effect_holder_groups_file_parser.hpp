@@ -31,10 +31,12 @@ private:
     virtual void configureSubparsers() override;
 };
 
+inline const ParsingType EffectHolderGroupsFileParser::type = ParsingType::GROUP;
+
 inline EffectHolderGroupsFileParser::EffectHolderGroupsFileParser(Groups& results) noexcept
     : ContentFileParser(), results(results), effect_holder_parser(results) {}
 
-inline const ParsingType EffectHolderGroupsFileParser::type = ParsingType::GROUP;
+inline void EffectHolderGroupsFileParser::configureSubparsers() { effect_holder_parser.configure(type, filepath); }
 
 } // namespace dnd
 

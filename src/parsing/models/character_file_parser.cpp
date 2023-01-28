@@ -23,13 +23,11 @@
 #include "models/effect_holder/effect_holder_with_choices.hpp"
 #include "models/effect_holder/feature.hpp"
 #include "models/feature_holder.hpp"
+#include "parsing/content_file_parser.hpp"
 #include "parsing/models/effect_holder/effect_holder_parser.hpp"
-#include "parsing/models/feature_holder_file_parser.hpp"
+#include "parsing/models/effect_holder/features_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
-
-
-void dnd::CharacterFileParser::configureSubparsers() { effect_holder_parser.configure(type, filepath); }
 
 void dnd::CharacterFileParser::parse() {
     DND_MEASURE_FUNCTION();
@@ -49,12 +47,7 @@ void dnd::CharacterFileParser::parse() {
     // TODO: parse spells
 
     if (json_to_parse.contains("features")) {
-        try {
-            parseFeatures();
-        } catch (parsing_error& e) {
-            e.setParsingType(type);
-            throw e;
-        }
+        features_parser.parseFeatures(json_to_parse.at("features"));
     }
 
     if (json_to_parse.contains("decisions")) {
@@ -262,7 +255,10 @@ void dnd::CharacterFileParser::saveResult() {
     // TODO: change Character constructor
     results.emplace(
         std::piecewise_construct, std::forward_as_tuple(character_name),
-        std::forward_as_tuple(character_name, retrieveFeatures(), base_ability_scores, level, xp, hit_dice_rolls)
+        std::forward_as_tuple(
+            character_name, std::move(features_parser.retrieveFeatures()), base_ability_scores, level, xp,
+            hit_dice_rolls
+        )
     );
     Character& character = results.at(character_name);
     character.race_ptr = race_ptr;

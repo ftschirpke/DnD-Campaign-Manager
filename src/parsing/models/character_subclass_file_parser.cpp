@@ -12,36 +12,26 @@
 
 #include "models/character_class.hpp"
 #include "models/character_subclass.hpp"
-#include "parsing/models/feature_holder_file_parser.hpp"
-#include "parsing/models/spellcasting_feature_holder_file_parser.hpp"
+#include "parsing/models/effect_holder/features_parser.hpp"
+#include "parsing/models/spellcasting/spellcasting_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
 
 void dnd::CharacterSubclassFileParser::parse() {
     DND_MEASURE_FUNCTION();
     if (!json_to_parse.is_object()) {
-        throw json_format_error(ParsingType::SUBCLASS, filepath, "map/object");
+        throw json_format_error(type, filepath, "map/object");
     }
     character_subclass_name = json_to_parse.at("name").get<std::string>();
     if (character_subclass_name.empty()) {
-        throw invalid_attribute(ParsingType::SUBCLASS, filepath, "name", "cannot be \"\".");
+        throw invalid_attribute(type, filepath, "name", "cannot be \"\".");
     }
     class_name = json_to_parse.at("class").get<std::string>();
 
-    try {
-        parseFeatures();
-    } catch (parsing_error& e) {
-        e.setParsingType(ParsingType::SUBCLASS);
-        throw e;
-    }
+    features_parser.parseFeatures(json_to_parse.at("features"));
 
     if (json_to_parse.contains("spellcasting")) {
-        try {
-            parseSpellcasting();
-        } catch (parsing_error& e) {
-            e.setParsingType(ParsingType::SUBCLASS);
-            throw e;
-        }
+        spellcasting_parser.parseSpellcasting(json_to_parse.at("spellcasting"));
     }
 }
 
@@ -51,9 +41,7 @@ bool dnd::CharacterSubclassFileParser::validate() const {
         return false;
     }
     if (!classes.contains(class_name)) {
-        throw invalid_attribute(
-            ParsingType::SUBCLASS, filepath, "class", "must exist. \"" + class_name + "\" does not exist."
-        );
+        throw invalid_attribute(type, filepath, "class", "must exist. \"" + class_name + "\" does not exist.");
     }
     return true;
 }
@@ -61,6 +49,7 @@ bool dnd::CharacterSubclassFileParser::validate() const {
 void dnd::CharacterSubclassFileParser::saveResult() {
     results.emplace(
         std::piecewise_construct, std::forward_as_tuple(character_subclass_name),
-        std::forward_as_tuple(character_subclass_name, retrieveFeatures(), class_name)
+        std::forward_as_tuple(character_subclass_name, std::move(features_parser.retrieveFeatures()), class_name)
     );
+    // TODO: add spellcasting
 }

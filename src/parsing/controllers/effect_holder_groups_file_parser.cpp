@@ -18,8 +18,6 @@
 #include "parsing/parsing_types.hpp"
 #include "parsing/subparser.hpp"
 
-void dnd::EffectHolderGroupsFileParser::configureSubparsers() { effect_holder_parser.configure(type, filepath); }
-
 void dnd::EffectHolderGroupsFileParser::parse() {
     DND_MEASURE_FUNCTION();
     if (!json_to_parse.is_object()) {

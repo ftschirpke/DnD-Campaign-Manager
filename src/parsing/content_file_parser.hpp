@@ -39,7 +39,7 @@ protected:
      * @brief This function is automatically called after successfully opening the JSON file to set the properties of
      * subparsers if necessary.
      */
-    virtual void configureSubparsers();
+    virtual void configureSubparsers() = 0;
 };
 
 } // namespace dnd

@@ -23,7 +23,7 @@ public:
      * @param type the type of content of the file that is being parsed
      * @param filepath the file that is being parsed
      */
-    void configure(ParsingType type, const std::filesystem::path& filepath) noexcept;
+    virtual void configure(ParsingType type, const std::filesystem::path& filepath) noexcept;
 protected:
     // the type of content of the file that is being parsed
     ParsingType type;
