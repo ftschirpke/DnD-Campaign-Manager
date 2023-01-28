@@ -9,6 +9,7 @@ namespace dnd {
 
 class Prerequisite : public Activation {
 public:
+    virtual ~Prerequisite() noexcept = default;
     // TODO
 };
 
