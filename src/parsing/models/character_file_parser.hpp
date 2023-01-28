@@ -64,6 +64,8 @@ private:
     void parseLevelAndXP();
 };
 
+inline const ParsingType CharacterFileParser::type = ParsingType::CHARACTER;
+
 inline CharacterFileParser::CharacterFileParser(
     std::unordered_map<std::string, Character>& characters, const Groups& groups,
     const std::unordered_map<std::string, const CharacterClass>& character_classes,
@@ -76,8 +78,6 @@ inline CharacterFileParser::CharacterFileParser(
       character_subclasses(character_subclasses), character_races(character_races),
       character_subraces(character_subraces), spells(spells), class_ptr(nullptr), subclass_ptr(nullptr),
       race_ptr(nullptr), subrace_ptr(nullptr), effect_holder_parser(groups), features_parser(groups) {}
-
-inline const ParsingType CharacterFileParser::type = ParsingType::CHARACTER;
 
 inline void CharacterFileParser::configureSubparsers() { effect_holder_parser.configure(type, filepath); }
 

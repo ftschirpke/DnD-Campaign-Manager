@@ -48,9 +48,7 @@ private:
     virtual void configureSubparsers() override;
 };
 
-inline SpellsFileParser::SpellsFileParser(
-    std::unordered_map<std::string, const Spell>& spells, Groups& groups
-) noexcept
+inline SpellsFileParser::SpellsFileParser(std::unordered_map<std::string, const Spell>& spells, Groups& groups) noexcept
     : ContentFileParser(), spells(spells), groups(groups) {}
 
 inline const std::regex SpellsFileParser::spell_components_regex(
