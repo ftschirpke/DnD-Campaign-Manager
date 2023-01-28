@@ -1,7 +1,7 @@
 # TODO: better way of adding test files
 set(TEST_FILES
     launcher_test.cpp
-    parsing/content_parser_test.cpp
+    parsing/controllers/content_parser_test.cpp
     parsing/models/character_file_parser_test.cpp
     parsing/models/effect_holder_file_parser_test.cpp
     parsing/models/feature_holder_file_parser_test.cpp
