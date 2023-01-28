@@ -1,5 +1,5 @@
-#ifndef CREATURE_STATE_HPP_
-#define CREATURE_STATE_HPP_
+#ifndef CHARACTER_STATE_HPP_
+#define CHARACTER_STATE_HPP_
 
 #include "dnd_config.hpp"
 
@@ -17,7 +17,7 @@
 
 namespace dnd {
 
-class CreatureState {
+class CharacterState {
 public:
     std::unordered_map<std::string, int> constants;
     std::unordered_map<std::string, int> attributes;
@@ -25,8 +25,8 @@ public:
     ActionHolder actions;
     ProficiencyHolder proficiencies;
     RIVHolder rivs;
-    CreatureState() noexcept = default;
-    CreatureState(
+    CharacterState() noexcept = default;
+    CharacterState(
         const std::unordered_map<std::string, int>& constants,
         const std::unordered_map<std::string, int>& initial_attributes
     ) noexcept;
@@ -43,13 +43,13 @@ private:
     void determineModifiers();
 };
 
-inline CreatureState::CreatureState(
+inline CharacterState::CharacterState(
     const std::unordered_map<std::string, int>& constants,
     const std::unordered_map<std::string, int>& initial_attributes
 ) noexcept
     : constants(constants), attributes(initial_attributes) {}
 
-inline void CreatureState::reset(
+inline void CharacterState::reset(
     const std::unordered_map<std::string, int>& new_constants,
     const std::unordered_map<std::string, int>& new_initial_attributes
 ) noexcept {
@@ -57,9 +57,9 @@ inline void CreatureState::reset(
     attributes = new_initial_attributes;
 }
 
-inline int CreatureState::modifier(int ability_score) noexcept { return ability_score / 2 - 5; }
+inline int CharacterState::modifier(int ability_score) noexcept { return ability_score / 2 - 5; }
 
 
 } // namespace dnd
 
-#endif // CREATURE_STATE_HPP_
+#endif // CHARACTER_STATE_HPP_

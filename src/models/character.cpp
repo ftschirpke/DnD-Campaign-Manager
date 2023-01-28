@@ -11,8 +11,8 @@
 
 #include "models/character_class.hpp"
 #include "models/character_race.hpp"
+#include "models/character_state.hpp"
 #include "models/creature.hpp"
-#include "models/creature_state.hpp"
 #include "models/effect_holder/feature.hpp"
 
 unsigned int dnd::Character::levelForXP(unsigned int xp) {
@@ -38,8 +38,12 @@ const std::unordered_map<std::string, int> dnd::Character::getConstants() const 
 const std::unordered_map<std::string, int> dnd::Character::getInitialAttributeValues() const {
     const std::unordered_map<std::string, int> creature_initial_values = Creature::getInitialAttributeValues();
     std::unordered_map<std::string, int> character_initial_values = {
+        {"MAXHP", 0},
         {"ARMOR_ON", false},
     };
+    for (int i = 0; i < 6; ++i) {
+        initial_values.emplace(ability_strings_inorder[i], base_ability_scores[i]);
+    }
     // TODO: removed fixed values and multiply by 100 (except booleans)
     character_initial_values.insert(creature_initial_values.cbegin(), creature_initial_values.cend());
     return character_initial_values;

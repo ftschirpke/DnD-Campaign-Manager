@@ -238,7 +238,7 @@ std::unique_ptr<dnd::Effect> dnd::EffectHolderParser::createEffect(const std::st
             return std::make_unique<FloatNumEffect>(affected_attribute, effect_type, effect_time, effect_value);
         } else {
             return std::make_unique<IntNumEffect>(affected_attribute, effect_type, effect_time, effect_value * 100);
-            // attributes are stored as integers * 100, see CreatureState
+            // attributes are stored as integers * 100, see CharacterState
         }
     } else {
         size_t other_idx = effect_type.find("Other");
@@ -300,7 +300,7 @@ void dnd::EffectHolderParser::parseAndAddActivation(
         right_value = false;
     } else {
         right_value = std::stof(last_part) * 100;
-        // attributes are stored as integers * 100, see CreatureState
+        // attributes are stored as integers * 100, see CharacterState
     }
     effect_holder->activations.emplace_back(std::make_unique<NumericActivation>(left_identifier, op_name, right_value));
 }

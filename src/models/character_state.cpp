@@ -1,6 +1,6 @@
 #include "dnd_config.hpp"
 
-#include "creature_state.hpp"
+#include "character_state.hpp"
 
 #include <string>
 #include <unordered_map>
@@ -12,7 +12,7 @@
 #include "models/effect_holder/effect_holder.hpp"
 #include "models/feature_holder.hpp"
 
-void dnd::CreatureState::applyAbilityScoreEffects() {
+void dnd::CharacterState::applyAbilityScoreEffects() {
     for (const auto& effect_time : effect_times_in_order) {
         for (const auto& eh_ptr : active_effect_holders) {
             if (eh_ptr->ability_score_effects.contains(effect_time)) {
@@ -24,7 +24,7 @@ void dnd::CreatureState::applyAbilityScoreEffects() {
     }
 }
 
-void dnd::CreatureState::applyNormalEffects() {
+void dnd::CharacterState::applyNormalEffects() {
     for (const auto& effect_time : effect_times_in_order) {
         for (const auto& eh_ptr : active_effect_holders) {
             if (eh_ptr->normal_effects.contains(effect_time)) {
@@ -36,7 +36,7 @@ void dnd::CreatureState::applyNormalEffects() {
     }
 }
 
-void dnd::CreatureState::determineModifiers() {
+void dnd::CharacterState::determineModifiers() {
     for (const std::string& ability_name : ability_strings_inorder) {
         attributes[ability_name + "MOD"] = modifier(attributes.at(ability_name));
         attributes[ability_name + "SAVE"] = modifier(attributes.at(ability_name));
@@ -46,7 +46,7 @@ void dnd::CreatureState::determineModifiers() {
     }
 }
 
-void dnd::CreatureState::addFeatureHolder(const FeatureHolder* const feature_holder_ptr) {
+void dnd::CharacterState::addFeatureHolder(const FeatureHolder* const feature_holder_ptr) {
     if (feature_holder_ptr == nullptr) {
         return;
     }
@@ -62,7 +62,7 @@ void dnd::CreatureState::addFeatureHolder(const FeatureHolder* const feature_hol
     }
 }
 
-void dnd::CreatureState::calculate() {
+void dnd::CharacterState::calculate() {
     applyAbilityScoreEffects();
     determineModifiers();
     applyNormalEffects();
