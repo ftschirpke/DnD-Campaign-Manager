@@ -16,7 +16,8 @@
 
 #include "controllers/content.hpp"
 #include "parsing/content_file_parser.hpp"
-#include "parsing/effect_holder_groups_file_parser.hpp"
+#include "parsing/controllers/effect_holder_groups_file_parser.hpp"
+#include "parsing/controllers/string_groups_file_parser.hpp"
 #include "parsing/models/character_class_file_parser.hpp"
 #include "parsing/models/character_file_parser.hpp"
 #include "parsing/models/character_race_file_parser.hpp"
@@ -25,7 +26,6 @@
 #include "parsing/models/spells_file_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
-#include "parsing/string_groups_file_parser.hpp"
 
 void dnd::ContentParser::reset() noexcept {
     parsed_content = Content();

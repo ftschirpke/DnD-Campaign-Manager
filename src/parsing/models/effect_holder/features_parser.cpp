@@ -1,6 +1,6 @@
 #include "dnd_config.hpp"
 
-#include "feature_holder_file_parser.hpp"
+#include "features_parser.hpp"
 
 #include <regex>
 #include <string>
@@ -11,13 +11,16 @@
 
 #include "models/effect_holder/feature.hpp"
 #include "parsing/content_file_parser.hpp"
+#include "parsing/parse_optionals.hpp"
 #include "parsing/parsing_exceptions.hpp"
 
-void dnd::FeatureHolderFileParser::parseFeatures() {
+void dnd::FeaturesParser::parseFeatures(const nlohmann::json& features_json) {
     DND_MEASURE_FUNCTION();
-    const nlohmann::json& features_json = json_to_parse.at("features");
+
+    requiresConfiguration();
+
     if (!features_json.is_object()) {
-        throw attribute_format_error(filepath, "features", "map/object");
+        throw attribute_format_error(type, filepath, "features", "map/object");
     }
 
     features.reserve(features_json.size());
@@ -27,29 +30,32 @@ void dnd::FeatureHolderFileParser::parseFeatures() {
     }
 }
 
-dnd::Feature dnd::FeatureHolderFileParser::createFeature(
-    const std::string& feature_name, const nlohmann::json& feature_json
-) const {
+dnd::Feature dnd::FeaturesParser::createFeature(const std::string& feature_name, const nlohmann::json& feature_json)
+    const {
+    requiresConfiguration();
+
     const std::string description = feature_json.at("description").get<std::string>();
 
     // TODO: change feature constructor?
     Feature feature(feature_name, description);
 
-    feature.main_part = std::move(createEffectHolder(feature_json));
+    feature.main_part = std::move(effect_holder_parser.createEffectHolder(feature_json));
     if (feature_json.contains("choose")) {
-        feature.parts_with_choices.emplace_back(
-            std::move(createEffectHolderWithChoices(nlohmann::json::object({{"choose", feature_json.at("choose")}})))
-        );
+        feature.parts_with_choices.emplace_back(std::move(effect_holder_parser.createEffectHolderWithChoices(
+            nlohmann::json::object({{"choose", feature_json.at("choose")}})
+        )));
     }
     if (feature_json.contains("multi")) {
         if (!feature_json.is_array()) {
-            throw attribute_format_error(filepath, "multi", "array");
+            throw attribute_format_error(type, filepath, "multi", "array");
         }
         for (const auto& part_json : feature_json) {
             if (part_json.contains("choose")) {
-                feature.parts_with_choices.emplace_back(std::move(createEffectHolderWithChoices(part_json)));
+                feature.parts_with_choices.emplace_back(
+                    std::move(effect_holder_parser.createEffectHolderWithChoices(part_json))
+                );
             } else {
-                feature.parts.emplace_back(std::move(createEffectHolder(part_json)));
+                feature.parts.emplace_back(std::move(effect_holder_parser.createEffectHolder(part_json)));
             }
         }
     }

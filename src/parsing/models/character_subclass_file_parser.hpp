@@ -10,14 +10,17 @@
 #include "models/character_class.hpp"
 #include "models/character_subclass.hpp"
 #include "models/spell.hpp"
-#include "parsing/models/spellcasting_feature_holder_file_parser.hpp"
+#include "parsing/content_file_parser.hpp"
+#include "parsing/models/effect_holder/features_parser.hpp"
+#include "parsing/models/spellcasting/spellcasting_parser.hpp"
+#include "parsing/subparser.hpp"
 
 namespace dnd {
 
-class CharacterSubclassFileParser : public SpellcastingFeatureHolderFileParser {
+class CharacterSubclassFileParser : public ContentFileParser {
 public:
     CharacterSubclassFileParser(
-        std::unordered_map<std::string, const CharacterSubclass>& results, const Groups& groups,
+        std::unordered_map<std::string, const CharacterSubclass>& subclasses, const Groups& groups,
         const std::unordered_map<std::string, const CharacterClass>& classes,
         const std::unordered_map<std::string, const Spell>& spells
     ) noexcept;
@@ -25,17 +28,29 @@ public:
     virtual bool validate() const override;
     virtual void saveResult() override;
 private:
-    std::unordered_map<std::string, const CharacterSubclass>& results;
+    static const ParsingType type;
+    std::unordered_map<std::string, const CharacterSubclass>& subclasses;
     const std::unordered_map<std::string, const CharacterClass>& classes;
     std::string character_subclass_name, class_name;
+    FeaturesParser features_parser;
+    SpellcastingParser spellcasting_parser;
+    virtual void configureSubparsers() override;
 };
 
+inline const ParsingType CharacterSubclassFileParser::type = ParsingType::SUBCLASS;
+
 inline CharacterSubclassFileParser::CharacterSubclassFileParser(
-    std::unordered_map<std::string, const CharacterSubclass>& results, const Groups& groups,
+    std::unordered_map<std::string, const CharacterSubclass>& subclasses, const Groups& groups,
     const std::unordered_map<std::string, const CharacterClass>& classes,
     const std::unordered_map<std::string, const Spell>& spells
 ) noexcept
-    : SpellcastingFeatureHolderFileParser(spells, groups), results(results), classes(classes) {}
+    : ContentFileParser(), subclasses(subclasses), classes(classes), features_parser(groups),
+      spellcasting_parser(spells) {}
+
+inline void CharacterSubclassFileParser::configureSubparsers() {
+    features_parser.configure(type, filepath);
+    spellcasting_parser.configure(type, filepath);
+}
 
 } // namespace dnd
 

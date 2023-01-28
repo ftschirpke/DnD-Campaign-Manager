@@ -1,4 +1,4 @@
-#include "parsing/models/effect_holder_file_parser.hpp"
+#include "parsing/models/effect_holder/effect_holder_parser.hpp"
 
 #include <string>
 #include <unordered_map>
@@ -11,27 +11,26 @@
 #include "models/effect_holder/activation.hpp"
 #include "models/effect_holder/effect.hpp"
 #include "models/effect_holder/effect_holder.hpp"
+#include "parsing/parsing_types.hpp"
 
-// class that allows us to test the abstract dnd::EffectHolderFileParser class
-class TestEffectHolderFileParser : public dnd::EffectHolderFileParser {
+// class that allows us to test the abstract dnd::EffectHolderParser class
+class TestEffectHolderParser : public dnd::EffectHolderParser {
 public:
-    TestEffectHolderFileParser() noexcept : dnd::EffectHolderFileParser(dnd::Groups()) {}
+    TestEffectHolderParser() noexcept : dnd::EffectHolderParser(dnd::Groups()) {}
     void parseAndAddEffectForTesting(const std::string& effect_str, dnd::EffectHolder& effect_holder) const {
-        dnd::EffectHolderFileParser::parseAndAddEffect(effect_str, &effect_holder);
+        dnd::EffectHolderParser::parseAndAddEffect(effect_str, &effect_holder);
     }
     void parseAndAddActivationForTesting(const std::string& activation_str, dnd::EffectHolder& effect_holder) const {
-        dnd::EffectHolderFileParser::parseAndAddActivation(activation_str, &effect_holder);
+        dnd::EffectHolderParser::parseAndAddActivation(activation_str, &effect_holder);
     }
     dnd::EffectHolder createEffectHolderForTesting(const nlohmann::json& effect_holder_json) const {
         return createEffectHolder(effect_holder_json);
     }
-    void parse() override {}
-    bool validate() const override { return true; }
-    void saveResult() override {}
+    virtual void requiresConfiguration() const override {} // for testing, no configuration is required
 };
 
-TEST_CASE("dnd::EffectHolderFileParser::parseAndAddEffect: parse invalid effects") {
-    TestEffectHolderFileParser parser;
+TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse invalid effects") {
+    TestEffectHolderParser parser;
     dnd::EffectHolder eh;
     SECTION("wrong format or order") {
         REQUIRE_THROWS(parser.parseAndAddEffectForTesting("hello", eh));
@@ -73,8 +72,8 @@ TEST_CASE("dnd::EffectHolderFileParser::parseAndAddEffect: parse invalid effects
     }
 }
 
-TEST_CASE("dnd::EffectHolderFileParser::parseAndAddEffect: parse valid numeric effects") {
-    TestEffectHolderFileParser parser;
+TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse valid numeric effects") {
+    TestEffectHolderParser parser;
     dnd::EffectHolder eh;
     const std::unordered_map<std::string, int> constants;
     std::unordered_map<std::string, int> attributes = {
@@ -235,8 +234,8 @@ TEST_CASE("dnd::EffectHolderFileParser::parseAndAddEffect: parse valid numeric e
     }
 }
 
-TEST_CASE("dnd::EffectHolderFileParser::parseAndAddEffect: parse valid 'Other' identifier effects") {
-    TestEffectHolderFileParser parser;
+TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse valid 'Other' identifier effects") {
+    TestEffectHolderParser parser;
     dnd::EffectHolder eh;
     const std::unordered_map<std::string, int> constants;
     std::unordered_map<std::string, int> attributes = {
@@ -385,8 +384,8 @@ TEST_CASE("dnd::EffectHolderFileParser::parseAndAddEffect: parse valid 'Other' i
     }
 }
 
-TEST_CASE("dnd::EffectHolderFileParser::parseAndAddEffect: parse valid 'Const' identifier effects") {
-    TestEffectHolderFileParser parser;
+TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse valid 'Const' identifier effects") {
+    TestEffectHolderParser parser;
     dnd::EffectHolder eh;
     const std::unordered_map<std::string, int> constants = {
         {"LEVEL", 200},
@@ -566,8 +565,8 @@ TEST_CASE("dnd::EffectHolderFileParser::parseAndAddEffect: parse valid 'Const' i
     }
 }
 
-TEST_CASE("dnd::EffectHolderFileParser::parseAndAddEffect: parse effect combinations") {
-    TestEffectHolderFileParser parser;
+TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse effect combinations") {
+    TestEffectHolderParser parser;
     dnd::EffectHolder eh;
     const std::unordered_map<std::string, int> constants = {
         {"LEVEL", 200},
@@ -643,8 +642,8 @@ TEST_CASE("dnd::EffectHolderFileParser::parseAndAddEffect: parse effect combinat
     }
 }
 
-TEST_CASE("dnd::EffectHolderFileParser::parseAndAddActivation: parse invalid activations") {
-    TestEffectHolderFileParser parser;
+TEST_CASE("dnd::EffectHolderParser::parseAndAddActivation: parse invalid activations") {
+    TestEffectHolderParser parser;
     dnd::EffectHolder eh;
     SECTION("wrong format or order") {
         REQUIRE_THROWS(parser.parseAndAddActivationForTesting("hello", eh));
@@ -664,8 +663,8 @@ TEST_CASE("dnd::EffectHolderFileParser::parseAndAddActivation: parse invalid act
     }
 }
 
-TEST_CASE("dnd::EffectHolderFileParser::parseAndAddActivation: parse valid numeric activations") {
-    TestEffectHolderFileParser parser;
+TEST_CASE("dnd::EffectHolderParser::parseAndAddActivation: parse valid numeric activations") {
+    TestEffectHolderParser parser;
     dnd::EffectHolder eh;
     REQUIRE(eh.activations.empty());
     std::unordered_map<std::string, int> attributes = {{"MAXHP", 4000}, {"STR", 1600}, {"CON", 1300}, {"INT", 800}};
@@ -793,8 +792,8 @@ TEST_CASE("dnd::EffectHolderFileParser::parseAndAddActivation: parse valid numer
     }
 }
 
-TEST_CASE("dnd::EffectHolderFileParser::createActivation: parse valid identifier activations") {
-    TestEffectHolderFileParser parser;
+TEST_CASE("dnd::EffectHolderParser::createActivation: parse valid identifier activations") {
+    TestEffectHolderParser parser;
     dnd::EffectHolder eh;
     REQUIRE(eh.activations.empty());
     std::unordered_map<std::string, int> attributes1 = {{"MAXHP", 4000}, {"STR", 1600}, {"CON", 1300}, {"INT", 800}};
@@ -948,8 +947,8 @@ TEST_CASE("dnd::EffectHolderFileParser::createActivation: parse valid identifier
     }
 }
 
-TEST_CASE("dnd::EffectHolderFileParser::createFeature: parse valid ehs") {
-    TestEffectHolderFileParser parser;
+TEST_CASE("dnd::EffectHolderParser::createFeature: parse valid ehs") {
+    TestEffectHolderParser parser;
     const std::unordered_map<std::string, int> constants = {
         {"LEVEL", 200},
         {"XP", 125},

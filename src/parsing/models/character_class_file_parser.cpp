@@ -13,38 +13,30 @@
 
 #include "models/character_class.hpp"
 #include "models/effect_holder/feature.hpp"
-#include "parsing/models/feature_holder_file_parser.hpp"
+#include "parsing/models/effect_holder/features_parser.hpp"
+#include "parsing/models/spellcasting/spellcasting_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
 
 void dnd::CharacterClassFileParser::parse() {
     DND_MEASURE_FUNCTION();
     if (!json_to_parse.is_object()) {
-        throw json_format_error(ParsingType::CLASS, filepath, "map/object");
+        throw json_format_error(type, filepath, "map/object");
     }
     character_class_name = json_to_parse.at("name").get<std::string>();
     if (character_class_name.empty()) {
-        throw invalid_attribute(ParsingType::CLASS, filepath, "name", "cannot be \"\".");
+        throw invalid_attribute(type, filepath, "name", "cannot be \"\".");
     }
     character_class_hit_dice = json_to_parse.at("hit_dice").get<std::string>();
     // TODO: change int to short
     asi_levels = json_to_parse.at("asi_levels").get<std::vector<int>>();
 
-    try {
-        parseFeatures();
-    } catch (parsing_error& e) {
-        e.setParsingType(ParsingType::CLASS);
-        throw e;
-    }
-    subclass_level = determineSubclassLevel(getFeatures());
+    features_parser.parseFeatures(json_to_parse.at("features"));
+
+    subclass_level = determineSubclassLevel(features_parser.getFeatures());
 
     if (json_to_parse.contains("spellcasting")) {
-        try {
-            parseSpellcasting();
-        } catch (parsing_error& e) {
-            e.setParsingType(ParsingType::CLASS);
-            throw e;
-        }
+        spellcasting_parser.parseSpellcasting(json_to_parse.at("spellcasting"));
     }
 }
 
@@ -54,15 +46,13 @@ int dnd::CharacterClassFileParser::determineSubclassLevel(const std::vector<dnd:
     for (const auto& feature : features) {
         if (feature.subclass) {
             if (subclass_feature != nullptr) {
-                throw invalid_attribute(
-                    ParsingType::CLASS, filepath, "features", "there must be only one subclass feature."
-                );
+                throw invalid_attribute(type, filepath, "features", "there must be only one subclass feature.");
             }
             subclass_feature = &feature;
         }
     }
     if (subclass_feature == nullptr) {
-        throw invalid_attribute(ParsingType::CLASS, filepath, "features", "there must be one subclass feature.");
+        throw invalid_attribute(type, filepath, "features", "there must be one subclass feature.");
     }
 
     int subclass_level = 1;
@@ -71,14 +61,14 @@ int dnd::CharacterClassFileParser::determineSubclassLevel(const std::vector<dnd:
     }
     if (subclass_level < 1 || subclass_level > 20) {
         throw invalid_attribute(
-            ParsingType::CLASS, filepath, "features", "subclass feature must be active for a level between 1 and 20."
+            type, filepath, "features", "subclass feature must be active for a level between 1 and 20."
         );
     }
     return subclass_level;
 }
 
 bool dnd::CharacterClassFileParser::validate() const {
-    if (results.contains(character_class_name)) {
+    if (classes.contains(character_class_name)) {
         std::cerr << "Warning: Duplicate of class \"" << character_class_name << "\" found.\n";
         return false;
     }
@@ -86,10 +76,12 @@ bool dnd::CharacterClassFileParser::validate() const {
 }
 
 void dnd::CharacterClassFileParser::saveResult() {
-    results.emplace(
+    classes.emplace(
         std::piecewise_construct, std::forward_as_tuple(character_class_name),
         std::forward_as_tuple(
-            character_class_name, retrieveFeatures(), character_class_hit_dice, asi_levels, subclass_level
+            character_class_name, std::move(features_parser.retrieveFeatures()), character_class_hit_dice, asi_levels,
+            subclass_level
         )
     );
+    // TODO: add spellcasting
 }

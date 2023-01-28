@@ -1,4 +1,4 @@
-#include "parsing/models/feature_holder_file_parser.hpp"
+#include "parsing/models/effect_holder/features_parser.hpp"
 
 #include <string>
 #include <unordered_map>
@@ -9,20 +9,18 @@
 #include "controllers/groups.hpp"
 #include "models/effect_holder/feature.hpp"
 
-// class that allows us to test the abstract dnd::FeatureHolderFileParser class
-class TestFeatureHolderFileParser : public dnd::FeatureHolderFileParser {
+// class that allows us to test the abstract dnd::FeaturesParser class
+class TestFeaturesParser : public dnd::FeaturesParser {
 public:
-    TestFeatureHolderFileParser() noexcept : dnd::FeatureHolderFileParser(dnd::Groups()) {}
+    TestFeaturesParser() noexcept : dnd::FeaturesParser(dnd::Groups()) {}
     dnd::Feature createFeatureForTesting(const std::string& feature_name, const nlohmann::json& feature_json) const {
         return createFeature(feature_name, feature_json);
     }
-    void parse() override {}
-    bool validate() const override { return true; }
-    void saveResult() override {}
+    virtual void requiresConfiguration() const override {} // for testing, no configuration is required
 };
 
-TEST_CASE("dnd::FeatureHolderFileParser::createFeature: invalid JSON format") {
-    TestFeatureHolderFileParser parser;
+TEST_CASE("dnd::FeaturesParser::createFeature: invalid JSON format") {
+    TestFeaturesParser parser;
     SECTION("JSON is array") {
         const nlohmann::json feature_json = {
             "feature for testing of effect parsing",

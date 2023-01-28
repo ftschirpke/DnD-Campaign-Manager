@@ -13,14 +13,15 @@
 
 #include "controllers/groups.hpp"
 #include "models/effect_holder/choosable.hpp"
-#include "parsing/models/effect_holder_file_parser.hpp"
+#include "parsing/models/effect_holder/effect_holder_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
+#include "parsing/subparser.hpp"
 
 void dnd::EffectHolderGroupsFileParser::parse() {
     DND_MEASURE_FUNCTION();
     if (!json_to_parse.is_object()) {
-        throw json_format_error(ParsingType::GROUP, filepath, "map/object");
+        throw json_format_error(type, filepath, "map/object");
     }
     group_name = filepath.stem().c_str();
     std::replace(group_name.begin(), group_name.end(), '_', ' ');
@@ -40,13 +41,13 @@ dnd::Choosable dnd::EffectHolderGroupsFileParser::createChoosable(
     // TODO: change choosable constructor?
     Choosable choosable(choosable_name, description);
 
-    choosable.main_part = std::move(createEffectHolder(choosable_json));
+    choosable.main_part = std::move(effect_holder_parser.createEffectHolder(choosable_json));
     if (choosable_json.contains("multi")) {
         if (!choosable_json.is_array()) {
             throw attribute_format_error(filepath, "multi", "array");
         }
         for (const auto& part_json : choosable_json) {
-            choosable.parts.emplace_back(std::move(createEffectHolder(part_json)));
+            choosable.parts.emplace_back(std::move(effect_holder_parser.createEffectHolder(part_json)));
         }
     }
 
@@ -69,4 +70,4 @@ bool dnd::EffectHolderGroupsFileParser::validate() const {
     return true;
 }
 
-void dnd::EffectHolderGroupsFileParser::saveResult() { results.add(group_name, std::move(choosables)); }
+void dnd::EffectHolderGroupsFileParser::saveResult() { groups.add(group_name, std::move(choosables)); }

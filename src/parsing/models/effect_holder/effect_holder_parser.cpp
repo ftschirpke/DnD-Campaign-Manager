@@ -1,6 +1,6 @@
 #include "dnd_config.hpp"
 
-#include "effect_holder_file_parser.hpp"
+#include "effect_holder_parser.hpp"
 
 #include <algorithm>
 #include <memory>
@@ -24,10 +24,10 @@
 #include "models/effect_holder/extra_spells_holder.hpp"
 #include "models/effect_holder/proficiency_holder.hpp"
 #include "models/effect_holder/riv_holder.hpp"
-#include "parsing/content_file_parser.hpp"
+#include "parsing/parse_optionals.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
-
+#include "parsing/subparser.hpp"
 
 void parseActionsOptionals(const nlohmann::json& effect_holder_json, dnd::EffectHolder* const effect_holder) {
     dnd::parseOptional(effect_holder_json, "actions", effect_holder->actions.actions);
@@ -70,22 +70,24 @@ void parseProficienciesOptionals(const nlohmann::json& effect_holder_json, dnd::
     dnd::parseOptional(effect_holder_json, "senses", effect_holder->proficiencies.senses);
 }
 
-void dnd::EffectHolderFileParser::parseEffectHolder(
+void dnd::EffectHolderParser::parseEffectHolder(
     const nlohmann::json& effect_holder_json, dnd::EffectHolder* const effect_holder
 ) const {
+    requiresConfiguration();
+
     parseActionsOptionals(effect_holder_json, effect_holder);
     parseExtraSpellsOptionals(effect_holder_json, effect_holder);
     parseRIVsOptionals(effect_holder_json, effect_holder);
     parseProficienciesOptionals(effect_holder_json, effect_holder);
 
     if (effect_holder_json.contains("activation") && effect_holder_json.contains("activations")) {
-        throw invalid_attribute(filepath, "activation/activations", "attributes are mutally exclusive.");
+        throw invalid_attribute(type, filepath, "activation/activations", "attributes are mutally exclusive.");
     } else if (effect_holder_json.contains("activation")) {
         const std::string activation_str = effect_holder_json.at("activation").get<std::string>();
         parseAndAddActivation(activation_str, effect_holder);
     } else if (effect_holder_json.contains("activations")) {
         if (!effect_holder_json.at("activations").is_array()) {
-            throw attribute_format_error(filepath, "activations", "array");
+            throw attribute_format_error(type, filepath, "activations", "array");
         }
         const std::vector<std::string> activation_strs = effect_holder_json.at("activations")
                                                              .get<std::vector<std::string>>();
@@ -96,7 +98,7 @@ void dnd::EffectHolderFileParser::parseEffectHolder(
 
     if (effect_holder_json.contains("effects")) {
         if (!effect_holder_json.at("effects").is_array()) {
-            throw attribute_format_error(filepath, "effects", "array");
+            throw attribute_format_error(type, filepath, "effects", "array");
         }
         for (const auto& effect_val : effect_holder_json.at("effects")) {
             const std::string effect_str = effect_val.get<std::string>();
@@ -105,7 +107,7 @@ void dnd::EffectHolderFileParser::parseEffectHolder(
     }
 }
 
-dnd::EffectHolder dnd::EffectHolderFileParser::createEffectHolder(const nlohmann::json& effect_holder_json) const {
+dnd::EffectHolder dnd::EffectHolderParser::createEffectHolder(const nlohmann::json& effect_holder_json) const {
     DND_MEASURE_FUNCTION();
 
     // TODO: change effect holder constructor?
@@ -116,10 +118,12 @@ dnd::EffectHolder dnd::EffectHolderFileParser::createEffectHolder(const nlohmann
     return effect_holder;
 }
 
-dnd::EffectHolderWithChoices dnd::EffectHolderFileParser::createEffectHolderWithChoices(
+dnd::EffectHolderWithChoices dnd::EffectHolderParser::createEffectHolderWithChoices(
     const nlohmann::json& effect_holder_json
 ) const {
     DND_MEASURE_FUNCTION();
+
+    requiresConfiguration();
 
     // TODO: change effect holder constructor?
     EffectHolderWithChoices effect_holder;
@@ -127,7 +131,7 @@ dnd::EffectHolderWithChoices dnd::EffectHolderFileParser::createEffectHolderWith
     parseEffectHolder(effect_holder_json, &effect_holder);
 
     if (!effect_holder_json.at("choose").is_object()) {
-        throw attribute_format_error(filepath, "choose", "map/object");
+        throw attribute_format_error(type, filepath, "choose", "map/object");
     }
     for (const auto& [choice_key, choice_json] : effect_holder_json.at("choose").items()) {
         parseAndAddChoice(choice_key, choice_json, effect_holder);
@@ -136,9 +140,11 @@ dnd::EffectHolderWithChoices dnd::EffectHolderFileParser::createEffectHolderWith
     return effect_holder;
 }
 
-void dnd::EffectHolderFileParser::parseAndAddChoice(
+void dnd::EffectHolderParser::parseAndAddChoice(
     const std::string& choice_key, const nlohmann::json& choice_json, EffectHolderWithChoices& effect_holder
 ) const {
+    requiresConfiguration();
+
     int amount = choice_json.at("amount").get<int>();
 
     if (choice_json.contains("choices")) {
@@ -162,7 +168,7 @@ void dnd::EffectHolderFileParser::parseAndAddChoice(
                 idx = group_name.find('_');
             }
             if (!groups.isGroup(group_name)) {
-                throw invalid_attribute(filepath, "choose:group", '\"' + group_name + "\" is not a group");
+                throw invalid_attribute(type, filepath, "choose:group", '\"' + group_name + "\" is not a group");
             }
         }
 
@@ -194,14 +200,16 @@ void dnd::EffectHolderFileParser::parseAndAddChoice(
                 std::make_unique<StringGroupChoice>(amount, choice_key, std::move(group_values))
             );
         } else {
-            throw invalid_attribute(filepath, "choose:group/groups", "all groups must be of the same kind.");
+            throw invalid_attribute(type, filepath, "choose:group/groups", "all groups must be of the same kind.");
         }
     }
 }
 
-std::unique_ptr<dnd::Effect> dnd::EffectHolderFileParser::createEffect(const std::string& effect_str) const {
+std::unique_ptr<dnd::Effect> dnd::EffectHolderParser::createEffect(const std::string& effect_str) const {
+    requiresConfiguration();
+
     if (!std::regex_match(effect_str, effect_regex)) {
-        throw attribute_type_error(filepath, "invalid effect format: \"" + effect_str + "\"");
+        throw attribute_type_error(type, filepath, "invalid effect format: \"" + effect_str + "\"");
     }
     auto it = effect_str.cbegin();
     while (*it != ' ') {
@@ -243,10 +251,10 @@ std::unique_ptr<dnd::Effect> dnd::EffectHolderFileParser::createEffect(const std
             return std::make_unique<ConstEffect>(affected_attribute, op_name, effect_time, last_part);
         }
     }
-    throw invalid_attribute(filepath, "effect", "unkown effect type");
+    throw invalid_attribute(type, filepath, "effect", "unkown effect type");
 }
 
-void dnd::EffectHolderFileParser::parseAndAddEffect(const std::string& effect_str, EffectHolder* const effect_holder)
+void dnd::EffectHolderParser::parseAndAddEffect(const std::string& effect_str, EffectHolder* const effect_holder)
     const {
     auto effect = createEffect(effect_str);
     if (isAbility(effect->affected_attribute)) {
@@ -256,11 +264,13 @@ void dnd::EffectHolderFileParser::parseAndAddEffect(const std::string& effect_st
     }
 }
 
-void dnd::EffectHolderFileParser::parseAndAddActivation(
+void dnd::EffectHolderParser::parseAndAddActivation(
     const std::string& activation_str, EffectHolder* const effect_holder
 ) const {
+    requiresConfiguration();
+
     if (!std::regex_match(activation_str, activation_regex)) {
-        throw attribute_type_error(filepath, "invalid activation format: \"" + activation_str + "\"");
+        throw attribute_type_error(type, filepath, "invalid activation format: \"" + activation_str + "\"");
     }
     auto it = activation_str.cbegin();
     while (*it != ' ') {

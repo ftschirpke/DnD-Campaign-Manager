@@ -10,7 +10,7 @@
 #include <cxxopts.hpp>
 
 #include "controllers/content.hpp"
-#include "parsing/content_parser.hpp"
+#include "parsing/controllers/content_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 
 int dnd::launch(int argc, char** argv) {

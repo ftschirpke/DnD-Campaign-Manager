@@ -29,7 +29,7 @@ struct SpellParsingInfo {
 
 class SpellsFileParser : public ContentFileParser {
 public:
-    SpellsFileParser(std::unordered_map<std::string, const Spell>& results, Groups& groups) noexcept;
+    SpellsFileParser(std::unordered_map<std::string, const Spell>& spells, Groups& groups) noexcept;
     virtual void parse() override;
     virtual bool validate() const override;
     virtual void saveResult() override;
@@ -39,18 +39,17 @@ protected:
     SpellType createSpellType(const std::string& spell_type_str) const;
     SpellComponents createSpellComponents(const std::string& spell_components_str) const;
 private:
-    std::unordered_map<std::string, const Spell>& results;
+    std::unordered_map<std::string, const Spell>& spells;
     Groups& groups;
     int spells_in_file;
     std::vector<SpellParsingInfo> spell_parsing_info;
     mutable std::vector<bool> valid;
     std::mutex spell_parsing_mutex;
+    virtual void configureSubparsers() override;
 };
 
-inline SpellsFileParser::SpellsFileParser(
-    std::unordered_map<std::string, const Spell>& results, Groups& groups
-) noexcept
-    : results(results), groups(groups) {}
+inline SpellsFileParser::SpellsFileParser(std::unordered_map<std::string, const Spell>& spells, Groups& groups) noexcept
+    : ContentFileParser(), spells(spells), groups(groups) {}
 
 inline const std::regex SpellsFileParser::spell_components_regex(
     "(V, S, M (\\((.*)\\))|V, S|V, M (\\((.*)\\))|S, M (\\((.*)\\))|V|S|M (\\((.*)\\)))"
@@ -63,6 +62,8 @@ inline const std::regex SpellsFileParser::spell_type_regex("((1st|2nd|3rd|[4-9]t
                                                            "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|"
                                                            "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)"
                                                            " cantrip)");
+
+inline void SpellsFileParser::configureSubparsers() {} // SpellsFileParser has no subparsers
 
 } // namespace dnd
 
