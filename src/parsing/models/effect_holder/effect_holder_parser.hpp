@@ -17,21 +17,40 @@
 
 namespace dnd {
 
+/**
+ * @brief A subparser for parsing effect holders.
+ */
 class EffectHolderParser : public Subparser {
 public:
     EffectHolderParser(const Groups& groups) noexcept;
+    /**
+     * @brief Parse and create an effect holder (without any choices to be made)
+     * @param effect_holder_json the JSON containing the effect holder
+     * @return the created effect holder
+     */
     EffectHolder createEffectHolder(const nlohmann::json& effect_holder_json) const;
+    /**
+     * @brief Parse and create an effect holder with choices to be made
+     * @param effect_holder_json the JSON containing the effect holder
+     * @return the created effect holder with choices
+     */
     EffectHolderWithChoices createEffectHolderWithChoices(const nlohmann::json& effect_holder_json) const;
+    /**
+     * @brief Parse all (optional) parts from a JSON into an existing effect holder
+     * @param effect_holder_json the JSON containing the effect holder
+     * @param effect_holder the effect holder to parse the values into
+     */
     void parseEffectHolder(const nlohmann::json& effect_holder_json, EffectHolder* const effect_holder) const;
 protected:
-    const Groups& groups;
-    static const std::regex activation_regex, effect_regex;
     std::unique_ptr<Effect> createEffect(const std::string& effect_str) const;
     void parseAndAddEffect(const std::string& effect_str, EffectHolder* const effect_holder) const;
     void parseAndAddActivation(const std::string& activation_str, EffectHolder* const effect_holder) const;
     void parseAndAddChoice(
         const std::string& choice_key, const nlohmann::json& choice_json, EffectHolderWithChoices& effect_holder
     ) const;
+private:
+    const Groups& groups;
+    static const std::regex activation_regex, effect_regex;
 };
 
 inline const std::regex EffectHolderParser::activation_regex(

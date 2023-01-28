@@ -17,11 +17,6 @@ namespace dnd {
 class Subparser {
 public:
     Subparser() noexcept;
-protected:
-    // the type of content of the file that is being parsed
-    ParsingType type;
-    // the file that is being parsed
-    std::filesystem::path filepath;
     /**
      * @brief Configure the parsing type and the file path for the subparser that will be used when throwing exceptions
      * for example.
@@ -29,11 +24,16 @@ protected:
      * @param filepath the file that is being parsed
      */
     void configure(ParsingType type, const std::filesystem::path& filepath) noexcept;
+protected:
+    // the type of content of the file that is being parsed
+    ParsingType type;
+    // the file that is being parsed
+    std::filesystem::path filepath;
     /**
      * @brief Asserts whether the subparser was configured.
      * @throws std::logic_error if subparser is unconfigured
      */
-    void requiresConfiguration() const;
+    virtual void requiresConfiguration() const;
 private:
     bool configured;
 };

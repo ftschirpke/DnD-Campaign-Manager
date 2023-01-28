@@ -11,7 +11,13 @@
 
 #include "models/effect_holder/feature.hpp"
 #include "parsing/content_file_parser.hpp"
+#include "parsing/parse_optionals.hpp"
 #include "parsing/parsing_exceptions.hpp"
+
+void dnd::FeatureHolderFileParser::configureSubparsers() {
+    // TODO: type is wrong
+    effect_holder_parser.configure(ParsingType::SPELL, filepath);
+}
 
 void dnd::FeatureHolderFileParser::parseFeatures() {
     DND_MEASURE_FUNCTION();
@@ -35,11 +41,11 @@ dnd::Feature dnd::FeatureHolderFileParser::createFeature(
     // TODO: change feature constructor?
     Feature feature(feature_name, description);
 
-    feature.main_part = std::move(createEffectHolder(feature_json));
+    feature.main_part = std::move(effect_holder_parser.createEffectHolder(feature_json));
     if (feature_json.contains("choose")) {
-        feature.parts_with_choices.emplace_back(
-            std::move(createEffectHolderWithChoices(nlohmann::json::object({{"choose", feature_json.at("choose")}})))
-        );
+        feature.parts_with_choices.emplace_back(std::move(effect_holder_parser.createEffectHolderWithChoices(
+            nlohmann::json::object({{"choose", feature_json.at("choose")}})
+        )));
     }
     if (feature_json.contains("multi")) {
         if (!feature_json.is_array()) {
@@ -47,9 +53,11 @@ dnd::Feature dnd::FeatureHolderFileParser::createFeature(
         }
         for (const auto& part_json : feature_json) {
             if (part_json.contains("choose")) {
-                feature.parts_with_choices.emplace_back(std::move(createEffectHolderWithChoices(part_json)));
+                feature.parts_with_choices.emplace_back(
+                    std::move(effect_holder_parser.createEffectHolderWithChoices(part_json))
+                );
             } else {
-                feature.parts.emplace_back(std::move(createEffectHolder(part_json)));
+                feature.parts.emplace_back(std::move(effect_holder_parser.createEffectHolder(part_json)));
             }
         }
     }

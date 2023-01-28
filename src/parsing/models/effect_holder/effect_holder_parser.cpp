@@ -24,6 +24,7 @@
 #include "models/effect_holder/extra_spells_holder.hpp"
 #include "models/effect_holder/proficiency_holder.hpp"
 #include "models/effect_holder/riv_holder.hpp"
+#include "parsing/parse_optionals.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
 #include "parsing/subparser.hpp"

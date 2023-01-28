@@ -10,25 +10,31 @@
 
 #include "controllers/groups.hpp"
 #include "models/effect_holder/choosable.hpp"
-#include "parsing/models/effect_holder_file_parser.hpp"
+#include "parsing/content_file_parser.hpp"
+#include "parsing/models/effect_holder/effect_holder_parser.hpp"
 
 namespace dnd {
 
-class EffectHolderGroupsFileParser : public EffectHolderFileParser {
+class EffectHolderGroupsFileParser : public ContentFileParser {
 public:
     EffectHolderGroupsFileParser(Groups& results) noexcept;
     virtual void parse() override;
     virtual bool validate() const override;
     virtual void saveResult() override;
 private:
+    static const ParsingType type;
     Groups& results;
     std::string group_name;
     std::unordered_map<std::string, Choosable> choosables;
+    EffectHolderParser effect_holder_parser;
     Choosable createChoosable(const std::string& name, const nlohmann::json& choosable_json) const;
+    virtual void configureSubparsers() override;
 };
 
 inline EffectHolderGroupsFileParser::EffectHolderGroupsFileParser(Groups& results) noexcept
-    : EffectHolderFileParser(results), results(results) {}
+    : ContentFileParser(), results(results), effect_holder_parser(results) {}
+
+inline const ParsingType EffectHolderGroupsFileParser::type = ParsingType::GROUP;
 
 } // namespace dnd
 

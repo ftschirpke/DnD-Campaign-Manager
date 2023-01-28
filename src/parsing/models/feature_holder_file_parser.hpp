@@ -12,11 +12,12 @@
 
 #include "controllers/groups.hpp"
 #include "models/effect_holder/feature.hpp"
-#include "parsing/models/effect_holder_file_parser.hpp"
+#include "parsing/content_file_parser.hpp"
+#include "parsing/models/effect_holder/effect_holder_parser.hpp"
 
 namespace dnd {
 
-class FeatureHolderFileParser : public EffectHolderFileParser {
+class FeatureHolderFileParser : public ContentFileParser {
 public:
     FeatureHolderFileParser(const Groups& groups) noexcept;
 protected:
@@ -26,10 +27,12 @@ protected:
     std::vector<Feature>&& retrieveFeatures();
 private:
     std::vector<Feature> features;
+    EffectHolderParser effect_holder_parser;
+    virtual void configureSubparsers() override;
 };
 
 inline FeatureHolderFileParser::FeatureHolderFileParser(const Groups& groups) noexcept
-    : EffectHolderFileParser(groups) {}
+    : ContentFileParser(), effect_holder_parser(groups) {}
 
 inline const std::vector<Feature>& FeatureHolderFileParser::getFeatures() const { return features; }
 

@@ -23,21 +23,22 @@
 #include "models/effect_holder/effect_holder_with_choices.hpp"
 #include "models/effect_holder/feature.hpp"
 #include "models/feature_holder.hpp"
-#include "parsing/models/effect_holder_file_parser.hpp"
+#include "parsing/models/effect_holder/effect_holder_parser.hpp"
 #include "parsing/models/feature_holder_file_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
 
+
+void dnd::CharacterFileParser::configureSubparsers() { effect_holder_parser.configure(type, filepath); }
+
 void dnd::CharacterFileParser::parse() {
     DND_MEASURE_FUNCTION();
     if (!json_to_parse.is_object()) {
-        throw json_format_error(ParsingType::CHARACTER, filepath, "map/object");
+        throw json_format_error(type, filepath, "map/object");
     }
     character_name = json_to_parse.at("name").get<std::string>();
     if (json_to_parse.at("base_ability_scores").size() != 6) {
-        throw invalid_attribute(
-            ParsingType::CHARACTER, filepath, "base_ability_scores", "must have exactly 6 entries."
-        );
+        throw invalid_attribute(type, filepath, "base_ability_scores", "must have exactly 6 entries.");
     }
     base_ability_scores = json_to_parse.at("base_ability_scores").get<std::array<unsigned int, 6>>();
     hit_dice_rolls = json_to_parse.at("hit_dice_rolls").get<std::vector<unsigned int>>();
@@ -51,20 +52,18 @@ void dnd::CharacterFileParser::parse() {
         try {
             parseFeatures();
         } catch (parsing_error& e) {
-            e.setParsingType(ParsingType::CHARACTER);
+            e.setParsingType(type);
             throw e;
         }
     }
 
     if (json_to_parse.contains("decisions")) {
         if (!json_to_parse.at("decisions").is_object()) {
-            throw attribute_format_error(ParsingType::CHARACTER, filepath, "decisions", "map/object");
+            throw attribute_format_error(type, filepath, "decisions", "map/object");
         }
         for (const auto& [feature_name, feature_decisions] : json_to_parse.at("decisions").items()) {
             if (!feature_decisions.is_object()) {
-                throw attribute_format_error(
-                    ParsingType::CHARACTER, filepath, "decisions:" + feature_name, "map/object"
-                );
+                throw attribute_format_error(type, filepath, "decisions:" + feature_name, "map/object");
             }
             parseCharacterDecisions(feature_name, feature_decisions);
         }
@@ -135,23 +134,19 @@ void dnd::CharacterFileParser::parseCharacterDecisions(
     const Feature* feature_ptr = determineFeature(feature_name, feature_holders);
 
     if (feature_ptr == nullptr) {
-        throw invalid_attribute(
-            ParsingType::CHARACTER, filepath, "decision", "no feature \"" + feature_name + "\" exists."
-        );
+        throw invalid_attribute(type, filepath, "decision", "no feature \"" + feature_name + "\" exists.");
     }
     // TODO: the feature might also be a choosable i.e. an eldritch invocation or feat
 
     if (feature_ptr->parts_with_choices.empty()) {
-        throw invalid_attribute(
-            ParsingType::CHARACTER, filepath, "decision:" + feature_name, "the feature has no choices."
-        );
+        throw invalid_attribute(type, filepath, "decision:" + feature_name, "the feature has no choices.");
     }
 
     decisions.reserve(feature_decisions_json.size());
 
     for (const auto& [attribute_name, decision_json] : feature_decisions_json.items()) {
         if (!decision_json.is_array()) {
-            throw attribute_format_error(ParsingType::CHARACTER, filepath, "decision:" + feature_name, "array");
+            throw attribute_format_error(type, filepath, "decision:" + feature_name, "array");
         }
 
         const Choice* determined_choice = determineChoice(
@@ -159,13 +154,15 @@ void dnd::CharacterFileParser::parseCharacterDecisions(
         );
         if (determined_choice == nullptr) {
             throw invalid_attribute(
-                ParsingType::CHARACTER, filepath, "decision:" + feature_name + ':' + attribute_name,
+                type, filepath, "decision:" + feature_name + ':' + attribute_name,
                 "is not valid for any choice of \"" + feature_name + "\"."
             );
         }
 
         CharacterDecision new_decision(determined_choice);
-        parseEffectHolder(nlohmann::json::object({{attribute_name, decision_json}}), &new_decision.decision_effects);
+        effect_holder_parser.parseEffectHolder(
+            nlohmann::json::object({{attribute_name, decision_json}}), &new_decision.decision_effects
+        );
         decisions.emplace_back(std::move(new_decision));
     }
 }
@@ -177,26 +174,25 @@ void dnd::CharacterFileParser::parseLevelAndXP() {
     if (has_level && has_xp) {
         level = json_to_parse.at("level").get<unsigned int>();
         if (level < 1 || level > 20) {
-            throw invalid_attribute(ParsingType::CHARACTER, filepath, "level", "must be between 1 and 20.");
+            throw invalid_attribute(type, filepath, "level", "must be between 1 and 20.");
         }
         xp = json_to_parse.at("xp").get<unsigned int>();
         if (xp_for_level.at(level) > xp || (level < 20 && xp_for_level.at(level + 1) <= xp)) {
             throw invalid_attribute(
-                ParsingType::CHARACTER, filepath, "xp",
-                "corresponds to a different level than the level value provided."
+                type, filepath, "xp", "corresponds to a different level than the level value provided."
             );
         }
     } else if (has_level) {
         level = json_to_parse.at("level").get<unsigned int>();
         if (level < 1 || level > 20) {
-            throw invalid_attribute(ParsingType::CHARACTER, filepath, "level", "must be between 1 and 20.");
+            throw invalid_attribute(type, filepath, "level", "must be between 1 and 20.");
         }
         xp = xp_for_level.at(level);
     } else if (has_xp) {
         xp = json_to_parse.at("xp").get<unsigned int>();
         level = Character::levelForXP(xp);
     } else {
-        throw invalid_attribute(ParsingType::CHARACTER, filepath, "level/xp", "at least one must be provided.");
+        throw invalid_attribute(type, filepath, "level/xp", "at least one must be provided.");
     }
 }
 
@@ -206,9 +202,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
     try {
         class_ptr = &character_classes.at(character_class_name);
     } catch (const std::out_of_range& e) {
-        throw invalid_attribute(
-            ParsingType::CHARACTER, filepath, "class", '\"' + character_class_name + "\" does not exist"
-        );
+        throw invalid_attribute(type, filepath, "class", '\"' + character_class_name + "\" does not exist");
     }
 
     if (json_to_parse.contains("subclass")) {
@@ -216,9 +210,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
         try {
             subclass_ptr = &character_subclasses.at(character_subclass_name);
         } catch (const std::out_of_range& e) {
-            throw invalid_attribute(
-                ParsingType::CHARACTER, filepath, "subclass", '\"' + character_subclass_name + "\" does not exist"
-            );
+            throw invalid_attribute(type, filepath, "subclass", '\"' + character_subclass_name + "\" does not exist");
         }
         if (class_ptr->subclass_level > level) {
             std::cerr << "Warning: Character " << character_name << " has subclass although the class \""
@@ -227,7 +219,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
         }
     } else if (class_ptr->subclass_level <= level) {
         throw attribute_missing(
-            ParsingType::CHARACTER, filepath,
+            type, filepath,
             "beginning at level " + std::to_string(class_ptr->subclass_level) + " a subclass is required for "
                 + class_ptr->name + "s."
         );
@@ -237,31 +229,24 @@ void dnd::CharacterFileParser::parseClassAndRace() {
     try {
         race_ptr = &character_races.at(character_race_name);
     } catch (const std::out_of_range& e) {
-        throw invalid_attribute(
-            ParsingType::CHARACTER, filepath, "race", '\"' + character_race_name + "\" does not exist"
-        );
+        throw invalid_attribute(type, filepath, "race", '\"' + character_race_name + "\" does not exist");
     }
 
     if (json_to_parse.contains("subrace")) {
         if (!race_ptr->has_subraces) {
             throw invalid_attribute(
-                ParsingType::CHARACTER, filepath, "subrace",
-                "is invalid because the race \"" + race_ptr->name + "\" has no subraces."
+                type, filepath, "subrace", "is invalid because the race \"" + race_ptr->name + "\" has no subraces."
             );
         }
         const std::string character_subrace_name = json_to_parse.at("subrace").get<std::string>();
         try {
             subrace_ptr = &character_subraces.at(character_subrace_name);
         } catch (const std::out_of_range& e) {
-            throw invalid_attribute(
-                ParsingType::CHARACTER, filepath, "subrace", '\"' + character_subrace_name + "\" does not exist"
-            );
+            throw invalid_attribute(type, filepath, "subrace", '\"' + character_subrace_name + "\" does not exist");
         }
     } else if (race_ptr->has_subraces) {
         std::cout << "JSON:\n" << json_to_parse << std::endl;
-        throw attribute_missing(
-            ParsingType::CHARACTER, filepath, "The race \"" + race_ptr->name + "\" requires a subrace selection."
-        );
+        throw attribute_missing(type, filepath, "The race \"" + race_ptr->name + "\" requires a subrace selection.");
     }
 }
 

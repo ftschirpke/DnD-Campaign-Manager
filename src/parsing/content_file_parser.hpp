@@ -11,10 +11,6 @@
 
 namespace dnd {
 
-// parse a simple, optional attribute from a json into the output variable
-template <typename T>
-void parseOptional(const nlohmann::json& json_to_parse, const char* attribute_name, T& output);
-
 class ContentFileParser {
 public:
     /**
@@ -45,13 +41,6 @@ protected:
      */
     virtual void configureSubparsers();
 };
-
-template <typename T>
-inline void parseOptional(const nlohmann::json& json_to_parse, const char* attribute_name, T& output) {
-    if (json_to_parse.contains(attribute_name)) {
-        output = json_to_parse.at(attribute_name).get<T>();
-    }
-}
 
 } // namespace dnd
 

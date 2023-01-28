@@ -1,7 +1,6 @@
 target_sources(dndmanager
     PRIVATE
     character_file_parser.cpp
-    effect_holder_file_parser.cpp
     feature_holder_file_parser.cpp
     character_class_file_parser.cpp
     character_race_file_parser.cpp
@@ -14,7 +13,6 @@ target_sources(dndmanager
 target_sources(dndmanager_tests
     PRIVATE
     character_file_parser.cpp
-    effect_holder_file_parser.cpp
     feature_holder_file_parser.cpp
     character_class_file_parser.cpp
     character_race_file_parser.cpp
@@ -23,3 +21,5 @@ target_sources(dndmanager_tests
     spells_file_parser.cpp
     spellcasting_feature_holder_file_parser.cpp
 )
+
+add_subdirectory(effect_holder)
