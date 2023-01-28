@@ -33,14 +33,14 @@ void dnd::CharacterClassFileParser::parse() {
 
     features_parser.parseFeatures(json_to_parse.at("features"));
 
-    subclass_level = determineSubclassLevel(features_parser.getFeatures());
+    determineSubclassLevel(features_parser.getFeatures());
 
     if (json_to_parse.contains("spellcasting")) {
         spellcasting_parser.parseSpellcasting(json_to_parse.at("spellcasting"));
     }
 }
 
-int dnd::CharacterClassFileParser::determineSubclassLevel(const std::vector<dnd::Feature>& features) const {
+void dnd::CharacterClassFileParser::determineSubclassLevel(const std::vector<dnd::Feature>& features) {
     DND_MEASURE_FUNCTION();
     const Feature* subclass_feature = nullptr;
     for (const auto& feature : features) {
@@ -64,7 +64,6 @@ int dnd::CharacterClassFileParser::determineSubclassLevel(const std::vector<dnd:
             type, filepath, "features", "subclass feature must be active for a level between 1 and 20."
         );
     }
-    return subclass_level;
 }
 
 bool dnd::CharacterClassFileParser::validate() const {

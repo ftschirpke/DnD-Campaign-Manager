@@ -29,7 +29,7 @@ public:
     virtual bool validate() const override;
     virtual void saveResult() override;
 protected:
-    int determineSubclassLevel(const std::vector<Feature>& features) const;
+    void determineSubclassLevel(const std::vector<Feature>& features);
 private:
     static const ParsingType type;
     std::unordered_map<std::string, const CharacterClass>& classes;
