@@ -20,15 +20,11 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Configure CMake
-      run: cmake -B ${{ github.workspace }}/build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+      run: cmake -B ${{ github.workspace }} -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
 
-    - name: Build Application
-      run: cmake --build ${{ github.workspace }}/build --config ${{ env.BUILD_TYPE }} --target dndmanager
+    - name: Build Unit Tests
+      run: cmake --build ${{ github.workspace }} --config ${{env.BUILD_TYPE}} --target dndmanager_tests
 
-    - name: Run Integration Test - Imperial
+    - name: Run Unit Tests
       working-directory: ${{ github.workspace }}
-      run: ./build/dndmanager -c example_campaign -d ${{ github.workspace }}/content_imperial
-
-    - name: Run Integration Test - Metric
-      working-directory: ${{ github.workspace }}
-      run: ./build/dndmanager -c example_campaign -d ${{ github.workspace }}/content_metric
+      run: ctest -C ${{ env.BUILD_TYPE }}
