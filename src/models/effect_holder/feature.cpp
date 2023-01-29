@@ -14,6 +14,7 @@ bool dnd::Feature::isActiveForLevel(int level) const {
     try {
         return main_part.isActive(empty_attributes, {{"CLASS_LEVEL", level * 100}});
     } catch (const std::out_of_range& e) {
+        UNUSED(e);
         return false;
     }
 }

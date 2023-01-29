@@ -13,6 +13,7 @@ namespace dnd {
 
 class ContentFileParser {
 public:
+    virtual ~ContentFileParser() noexcept = default;
     /**
      * @brief Opens a json file to be parsed and deserialises the JSON.
      * @param filepath the file to open

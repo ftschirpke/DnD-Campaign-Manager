@@ -10,8 +10,8 @@
 bool dnd::EffectHolder::isActive(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
-    for (const auto& activation : activations) {
-        if (!activation->check(attributes, constants)) {
+    for (auto activation_it = activations.cbegin(); activation_it != activations.cend(); ++activation_it) {
+        if (!(*activation_it)->check(attributes, constants)) {
             return false;
         }
     }

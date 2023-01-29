@@ -23,7 +23,7 @@ void dnd::EffectHolderGroupsFileParser::parse() {
     if (!json_to_parse.is_object()) {
         throw json_format_error(type, filepath, "map/object");
     }
-    group_name = filepath.stem().c_str();
+    group_name = filepath.stem().string();
     std::replace(group_name.begin(), group_name.end(), '_', ' ');
 
     choosables.reserve(json_to_parse.size());

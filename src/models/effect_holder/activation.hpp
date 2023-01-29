@@ -20,6 +20,19 @@ public:
     const std::string left_identifier, op_name;
     std::unordered_map<std::string, bool (*)(int, int)>::mapped_type op;
     Activation(const std::string& left_identifier, const std::string& op_name);
+    Activation() noexcept = default;
+    Activation(const Activation& other) noexcept {
+        UNUSED(other);
+        std::cout << "copy construction\n";
+    }
+    Activation(Activation&& other) noexcept = default;
+    Activation& operator=(const Activation& other) noexcept {
+        UNUSED(other);
+        std::cout << "copy assignment\n";
+        return *this;
+    }
+    Activation& operator=(Activation&& other) noexcept = default;
+    virtual ~Activation() noexcept = default;
     virtual bool check(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const = 0;
@@ -51,6 +64,7 @@ inline Activation::Activation(const std::string& left_identifier, const std::str
     try {
         op = activation_operators.at(op_name);
     } catch (const std::out_of_range& e) {
+        UNUSED(e);
         throw std::invalid_argument("Operator \"" + op_name + "\" does not exist.");
     }
 }
@@ -71,6 +85,7 @@ inline bool NumericActivation::check(
             left_value = attributes.at(left_identifier);
         }
     } catch (const std::out_of_range& e) {
+        UNUSED(e);
         throw std::out_of_range("\"" + left_identifier + "\" does not exist. It is neither an attribute nor constant.");
     }
     return op(left_value, right_value);
@@ -92,6 +107,7 @@ inline bool IdentifierActivation::check(
             left_value = attributes.at(left_identifier);
         }
     } catch (const std::out_of_range& e) {
+        UNUSED(e);
         throw std::out_of_range("\"" + left_identifier + "\" does not exist. It is neither an attribute or constant.");
     }
     try {
@@ -101,6 +117,7 @@ inline bool IdentifierActivation::check(
             right_value = attributes.at(right_identifier);
         }
     } catch (const std::out_of_range& e) {
+        UNUSED(e);
         throw std::out_of_range("\"" + right_identifier + "\" does not exist. It is neither an attribute or constant.");
     }
     return op(left_value, right_value);

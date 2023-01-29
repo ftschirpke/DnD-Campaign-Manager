@@ -97,7 +97,7 @@ inline parsing_error::parsing_error(
     updateWhat();
 }
 
-inline void parsing_error::updateWhat() { w = msg_start + " \"" + path.c_str() + "\" " + error_msg; }
+inline void parsing_error::updateWhat() { w = msg_start + " \"" + path.string() + "\" " + error_msg; }
 
 inline void parsing_error::setParsingType(ParsingType parsing_type) {
     msg_start = parsing_type_names.at(parsing_type) + " in file";

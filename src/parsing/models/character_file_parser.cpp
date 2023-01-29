@@ -98,12 +98,12 @@ const dnd::Choice* determineChoice(
                 continue;
             }
 
-            if (attribute_name != choice_it->get()->attribute_name) {
+            if (attribute_name != (*choice_it)->attribute_name) {
                 continue;
             }
 
             auto is_valid_decision = [&](const nlohmann::json& chosen_val) -> bool {
-                return choice_it->get()->isValidDecision(chosen_val.get<std::string>());
+                return (*choice_it)->isValidDecision(chosen_val.get<std::string>());
             };
             if (std::all_of(decision_json.cbegin(), decision_json.cend(), is_valid_decision)) {
                 return choice_it->get();
@@ -195,6 +195,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
     try {
         class_ptr = &character_classes.at(character_class_name);
     } catch (const std::out_of_range& e) {
+        UNUSED(e);
         throw invalid_attribute(type, filepath, "class", '\"' + character_class_name + "\" does not exist");
     }
 
@@ -203,6 +204,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
         try {
             subclass_ptr = &character_subclasses.at(character_subclass_name);
         } catch (const std::out_of_range& e) {
+            UNUSED(e);
             throw invalid_attribute(type, filepath, "subclass", '\"' + character_subclass_name + "\" does not exist");
         }
         if (class_ptr->subclass_level > level) {
@@ -222,6 +224,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
     try {
         race_ptr = &character_races.at(character_race_name);
     } catch (const std::out_of_range& e) {
+        UNUSED(e);
         throw invalid_attribute(type, filepath, "race", '\"' + character_race_name + "\" does not exist");
     }
 
@@ -235,6 +238,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
         try {
             subrace_ptr = &character_subraces.at(character_subrace_name);
         } catch (const std::out_of_range& e) {
+            UNUSED(e);
             throw invalid_attribute(type, filepath, "subrace", '\"' + character_subrace_name + "\" does not exist");
         }
     } else if (race_ptr->has_subraces) {
@@ -261,6 +265,7 @@ void dnd::CharacterFileParser::saveResult() {
         )
     );
     Character& character = characters.at(character_name);
+    character.decisions = std::move(decisions);
     character.race_ptr = race_ptr;
     character.subrace_ptr = subrace_ptr;
     character.class_ptr = class_ptr;

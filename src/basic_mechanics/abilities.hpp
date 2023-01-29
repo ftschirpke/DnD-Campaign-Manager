@@ -7,6 +7,7 @@
 #include <array>
 #include <stdexcept>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 
 namespace dnd {
@@ -36,6 +37,7 @@ inline Ability stringToAbility(const std::string& ability_str) {
     try {
         return ability_strings_mapping.at(ability_str);
     } catch (const std::out_of_range& e) {
+        UNUSED(e);
         throw std::invalid_argument("The ability \"" + ability_str + "\" does not exist.");
     }
 }
@@ -57,7 +59,7 @@ inline std::string abilityToString(Ability ability) {
     }
 }
 
-inline bool isAbility(const std::string& attribute_name) {
+inline bool isAbility(std::string_view attribute_name) {
     return std::find(ability_strings_inorder.cbegin(), ability_strings_inorder.cend(), attribute_name)
            != ability_strings_inorder.cend();
 }

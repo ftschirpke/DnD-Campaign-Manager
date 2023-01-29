@@ -9,10 +9,10 @@
 #include <unordered_map>
 #include <vector>
 
+#include "basic_mechanics/abilities.hpp"
 #include "models/character_class.hpp"
 #include "models/character_race.hpp"
-#include "models/creature.hpp"
-#include "models/creature_state.hpp"
+#include "models/character_state.hpp"
 #include "models/effect_holder/feature.hpp"
 
 unsigned int dnd::Character::levelForXP(unsigned int xp) {
@@ -25,27 +25,29 @@ unsigned int dnd::Character::levelForXP(unsigned int xp) {
 }
 
 const std::unordered_map<std::string, int> dnd::Character::getConstants() const {
-    const std::unordered_map<std::string, int> creature_constants = Creature::getConstants();
     std::unordered_map<std::string, int> character_constants = {
-        {"LEVEL", 1},
-        {"XP", 230},
+        {"LEVEL", getLevel() * 100},
+        {"CLASS_LEVEL", getLevel() * 100},
+        {"XP", getXP() * 100},
     };
-    // TODO: removed fixed values and multiply by 100 (except booleans)
-    character_constants.insert(creature_constants.cbegin(), creature_constants.cend());
     return character_constants;
 }
 
 const std::unordered_map<std::string, int> dnd::Character::getInitialAttributeValues() const {
-    const std::unordered_map<std::string, int> creature_initial_values = Creature::getInitialAttributeValues();
     std::unordered_map<std::string, int> character_initial_values = {
+        {"MAXHP", 0},
         {"ARMOR_ON", false},
     };
-    // TODO: removed fixed values and multiply by 100 (except booleans)
-    character_initial_values.insert(creature_initial_values.cbegin(), creature_initial_values.cend());
+    for (int i = 0; i < 6; ++i) {
+        character_initial_values.emplace(ability_strings_inorder[i], base_ability_scores[i] * 100);
+        character_initial_values.emplace(ability_strings_inorder[i] + "MAX", 2000);
+    }
     return character_initial_values;
 }
 
 void dnd::Character::determineState() {
+    DND_MEASURE_FUNCTION();
+
     state.reset(getConstants(), getInitialAttributeValues());
 
     state.addFeatureHolder(this);

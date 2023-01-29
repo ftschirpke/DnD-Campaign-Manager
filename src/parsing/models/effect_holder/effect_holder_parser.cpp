@@ -211,13 +211,13 @@ std::unique_ptr<dnd::Effect> dnd::EffectHolderParser::createEffect(const std::st
     if (!std::regex_match(effect_str, effect_regex)) {
         throw attribute_type_error(type, filepath, "invalid effect format: \"" + effect_str + "\"");
     }
-    auto it = effect_str.cbegin();
+    std::string::const_iterator it = effect_str.cbegin();
     while (*it != ' ') {
         ++it;
     }
     const std::string affected_attribute(effect_str.cbegin(), it);
     ++it;
-    auto start_it = it;
+    std::string::const_iterator start_it = it;
     while (*it != ' ') {
         ++it;
     }
@@ -237,8 +237,10 @@ std::unique_ptr<dnd::Effect> dnd::EffectHolderParser::createEffect(const std::st
         if (effect_type == "mult" || effect_type == "div") {
             return std::make_unique<FloatNumEffect>(affected_attribute, effect_type, effect_time, effect_value);
         } else {
-            return std::make_unique<IntNumEffect>(affected_attribute, effect_type, effect_time, effect_value * 100);
-            // attributes are stored as integers * 100, see CreatureState
+            return std::make_unique<IntNumEffect>(
+                affected_attribute, effect_type, effect_time, static_cast<int>(effect_value * 100)
+            );
+            // attributes are stored as integers * 100, see CharacterState
         }
     } else {
         size_t other_idx = effect_type.find("Other");
@@ -257,7 +259,7 @@ std::unique_ptr<dnd::Effect> dnd::EffectHolderParser::createEffect(const std::st
 void dnd::EffectHolderParser::parseAndAddEffect(const std::string& effect_str, EffectHolder* const effect_holder)
     const {
     auto effect = createEffect(effect_str);
-    if (isAbility(effect->affected_attribute)) {
+    if (isAbility(std::string_view(effect->affected_attribute.c_str(), 3))) {
         effect_holder->ability_score_effects[effect->time].emplace_back(std::move(effect));
     } else {
         effect_holder->normal_effects[effect->time].emplace_back(std::move(effect));
@@ -299,8 +301,8 @@ void dnd::EffectHolderParser::parseAndAddActivation(
     } else if (last_part == "false") {
         right_value = false;
     } else {
-        right_value = std::stof(last_part) * 100;
-        // attributes are stored as integers * 100, see CreatureState
+        right_value = (int)std::stof(last_part) * 100;
+        // attributes are stored as integers * 100, see CharacterState
     }
     effect_holder->activations.emplace_back(std::make_unique<NumericActivation>(left_identifier, op_name, right_value));
 }

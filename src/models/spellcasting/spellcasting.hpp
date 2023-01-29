@@ -14,6 +14,7 @@ namespace dnd {
 class Spellcasting {
 public:
     Spellcasting(const std::string& spellcasting_ability, bool ritual_casting);
+    virtual ~Spellcasting() noexcept = default;
     const std::string ability;
     const bool ritual_casting;
     std::unordered_map<std::string, const Spell*> spell_list;

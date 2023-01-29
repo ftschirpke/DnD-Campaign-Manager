@@ -72,6 +72,7 @@ public:
     const std::string affected_attribute, op_name;
     const EffectTime time;
     Effect(const std::string& affected_attribute, const std::string& op_name, const EffectTime time) noexcept;
+    virtual ~Effect() noexcept = default;
     virtual void applyTo(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const = 0;
@@ -145,6 +146,7 @@ inline IntNumEffect::IntNumEffect(
     try {
         op = int_effect_operators.at(op_name);
     } catch (const std::out_of_range& e) {
+        UNUSED(e);
         throw std::out_of_range("Operator \"" + op_name + "\" does not exist.");
     }
 }
@@ -163,6 +165,7 @@ inline FloatNumEffect::FloatNumEffect(
     try {
         op = float_effect_operators.at(op_name);
     } catch (const std::out_of_range& e) {
+        UNUSED(e);
         throw std::out_of_range("Operator \"" + op_name + "\" does not exist.");
     }
 }
@@ -182,6 +185,7 @@ inline IdentifierEffect::IdentifierEffect(
     try {
         op = int_effect_operators.at(op_name);
     } catch (const std::out_of_range& e) {
+        UNUSED(e);
         throw std::out_of_range("Operator \"" + op_name + "\" does not exist.");
     }
 }
@@ -199,6 +203,7 @@ inline void OtherAttributeEffect::applyTo(
         UNUSED(constants);
         attributes[affected_attribute] = op(attributes[affected_attribute], attributes.at(identifier));
     } catch (const std::out_of_range& e) {
+        UNUSED(e);
         throw std::out_of_range("Other attribute \"" + identifier + "\" does not exist.");
     }
 }
@@ -215,6 +220,7 @@ inline void ConstEffect::applyTo(
     try {
         attributes[affected_attribute] = op(attributes[affected_attribute], constants.at(identifier));
     } catch (const std::out_of_range& e) {
+        UNUSED(e);
         throw std::out_of_range("Constant \"" + identifier + "\" does not exist.");
     }
 }

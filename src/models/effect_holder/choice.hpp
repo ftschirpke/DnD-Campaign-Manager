@@ -18,6 +18,7 @@ public:
     const int amount;
     const std::string attribute_name;
     Choice(int amount, const std::string& attribute_name);
+    virtual ~Choice() noexcept = default;
     virtual bool isValidDecision(const std::string& decision_str) const = 0;
 };
 
