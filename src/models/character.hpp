@@ -71,7 +71,8 @@ inline Character::Character(
     const std::string& name, std::vector<Feature>&& features, const std::array<unsigned int, 6>& base_ability_scores
 ) noexcept
     : FeatureHolder(name, std::move(features)), base_ability_scores(base_ability_scores), state(decisions),
-      subclass_ptr(nullptr), subrace_ptr(nullptr) {}
+      class_ptr(nullptr), subclass_ptr(nullptr), race_ptr(nullptr), subrace_ptr(nullptr), level(1), xp(0),
+      hit_dice_rolls() {}
 
 
 inline Character::Character(
@@ -79,7 +80,8 @@ inline Character::Character(
     unsigned int level, unsigned int xp, const std::vector<unsigned int>& hit_dice_rolls
 ) noexcept
     : FeatureHolder(name, std::move(features)), base_ability_scores(base_ability_scores), state(decisions),
-      subclass_ptr(nullptr), subrace_ptr(nullptr), level(level), xp(xp), hit_dice_rolls(hit_dice_rolls) {}
+      class_ptr(nullptr), subclass_ptr(nullptr), race_ptr(nullptr), subrace_ptr(nullptr), level(level), xp(xp),
+      hit_dice_rolls(hit_dice_rolls) {}
 
 inline unsigned int Character::getLevel() const noexcept { return level; }
 

@@ -25,7 +25,7 @@ public:
     void parseFeatures(const nlohmann::json& features_json);
     const std::vector<Feature>& getFeatures() const;
     std::vector<Feature>&& retrieveFeatures();
-    virtual void configure(ParsingType type, const std::filesystem::path& filepath) noexcept override;
+    virtual void configure(ParsingType conf_type, const std::filesystem::path& conf_filepath) noexcept override;
 protected:
     Feature createFeature(const std::string& feature_name, const nlohmann::json& feature_json) const;
 private:
@@ -39,9 +39,9 @@ inline const std::vector<Feature>& FeaturesParser::getFeatures() const { return 
 
 inline std::vector<Feature>&& FeaturesParser::retrieveFeatures() { return std::move(features); }
 
-inline void FeaturesParser::configure(ParsingType type, const std::filesystem::path& filepath) noexcept {
-    Subparser::configure(type, filepath);
-    effect_holder_parser.configure(type, filepath);
+inline void FeaturesParser::configure(ParsingType conf_type, const std::filesystem::path& conf_filepath) noexcept {
+    Subparser::configure(conf_type, conf_filepath);
+    effect_holder_parser.configure(conf_type, conf_filepath);
 }
 
 } // namespace dnd

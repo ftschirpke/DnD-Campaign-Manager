@@ -55,7 +55,7 @@ void dnd::CharacterClassFileParser::determineSubclassLevel(const std::vector<dnd
         throw invalid_attribute(type, filepath, "features", "there must be one subclass feature.");
     }
 
-    int subclass_level = 1;
+    subclass_level = 1;
     while (!subclass_feature->isActiveForLevel(subclass_level)) {
         ++subclass_level;
     }

@@ -8,6 +8,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include <iostream>
+
 #include "models/effect_holder/action_holder.hpp"
 #include "models/effect_holder/activation.hpp"
 #include "models/effect_holder/effect.hpp"

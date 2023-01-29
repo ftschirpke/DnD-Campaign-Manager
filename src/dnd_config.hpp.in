@@ -18,10 +18,20 @@
 // runtime measurement if in debug mode
 #if DND_DEBUG_MODE
 #include "runtime_measurement/measurer.hpp"
+
+#define DUMMY_CONCATENATE(x,y) x##y
+#define CONCATENATE(x,y) DUMMY_CONCATENATE(x,y)
+
 #define DND_START_MEASURING_SESSION(name, filepath) ::dnd::Measurer::get().beginSession(name, filepath)
 #define DND_END_MEASURING_SESSION() ::dnd::Measurer::get().endSession()
+
+#ifdef _MSC_VER
+#define DND_MEASURE_FUNCTION() DND_MEASURE_SCOPE(__FUNCSIG__)
+#else
 #define DND_MEASURE_FUNCTION() DND_MEASURE_SCOPE(__PRETTY_FUNCTION__)
-#define DND_MEASURE_SCOPE(name) ::dnd::Timer timer##__LINE__(name);
+#endif
+
+#define DND_MEASURE_SCOPE(name) ::dnd::Timer CONCATENATE(timer,__LINE__(name));
 #else
 #define DND_START_MEASURING_SESSION(name, filepath)
 #define DND_END_MEASURING_SESSION()

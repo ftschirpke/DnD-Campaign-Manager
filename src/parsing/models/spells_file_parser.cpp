@@ -44,7 +44,7 @@ void dnd::SpellsFileParser::parse() {
     if (!json_to_parse.is_object()) {
         throw json_format_error(ParsingType::SPELL, filepath, "map/object");
     }
-    spells_in_file = json_to_parse.size();
+    spells_in_file = static_cast<int>(json_to_parse.size());
     spell_parsing_info.reserve(spells_in_file);
 
     std::vector<std::future<void>> futures;
@@ -85,7 +85,8 @@ dnd::SpellType dnd::SpellsFileParser::createSpellType(const std::string& spell_t
         auto end_it = spell_type.is_ritual ? spell_type_str.cbegin() + ritual_idx : spell_type_str.cend();
         magic_school_str = std::string(spell_type_str.cbegin() + i, end_it);
     }
-    std::transform(magic_school_str.begin(), magic_school_str.end(), magic_school_str.begin(), ::tolower);
+    auto tolower = [](unsigned char c) { return std::tolower(c); };
+    std::transform(magic_school_str.begin(), magic_school_str.end(), magic_school_str.begin(), tolower);
     spell_type.magic_school = magic_schools.at(magic_school_str);
     return spell_type;
 }

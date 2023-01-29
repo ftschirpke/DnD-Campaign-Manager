@@ -26,12 +26,12 @@ const std::vector<std::string> values_for_human_readable = {
 };
 
 void dnd::Measurer::beginSession(const std::string& name, const std::string& filepath = "results.json") {
-    session_start_time = std::chrono::high_resolution_clock::now();
+    session_start_time = std::chrono::system_clock::now();
     session = new MeasuringSession{name, filepath, {{"traceEvents", nlohmann::json::array()}}};
 }
 
 void dnd::Measurer::endSession() {
-    auto session_end_time = std::chrono::high_resolution_clock::now();
+    auto session_end_time = std::chrono::system_clock::now();
 
     // convert thread ids to consecutive integers
     std::vector<size_t> thread_ids;
@@ -39,7 +39,7 @@ void dnd::Measurer::endSession() {
     for (auto& measurement : session->json.at("traceEvents")) {
         auto it = find(thread_ids.begin(), thread_ids.end(), measurement.at("tid"));
         if (it != thread_ids.end()) {
-            int idx = it - thread_ids.begin();
+            auto idx = it - thread_ids.begin();
             measurement.at("tid") = idx;
         } else {
             thread_ids.emplace_back(measurement.at("tid"));
@@ -99,7 +99,7 @@ void dnd::Measurer::writeProfile(const TimerResult& result) {
 }
 
 void dnd::Timer::stop() {
-    std::chrono::high_resolution_clock::time_point end_time = std::chrono::high_resolution_clock::now();
+    std::chrono::system_clock::time_point end_time = std::chrono::system_clock::now();
 
     long long start = std::chrono::time_point_cast<std::chrono::microseconds>(start_time).time_since_epoch().count();
     long long end = std::chrono::time_point_cast<std::chrono::microseconds>(end_time).time_since_epoch().count();

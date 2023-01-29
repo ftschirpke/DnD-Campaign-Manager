@@ -18,7 +18,8 @@ dnd::Groups::Groups() {
     std::string lowercase_skill;
     for (const auto& [skill, _] : skill_abilities) {
         lowercase_skill = skill;
-        std::transform(lowercase_skill.cbegin(), lowercase_skill.cend(), lowercase_skill.begin(), ::tolower);
+        auto tolower = [](unsigned char c) { return std::tolower(c); };
+        std::transform(lowercase_skill.cbegin(), lowercase_skill.cend(), lowercase_skill.begin(), tolower);
         size_t idx = lowercase_skill.find('_');
         while (idx != std::string::npos) {
             lowercase_skill[idx] = ' ';

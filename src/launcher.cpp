@@ -54,7 +54,7 @@ int dnd::launch(int argc, char** argv) {
         DND_MEASURE_SCOPE("Main execution scope");
         const std::filesystem::path content_path(args["directory"].as<std::string>());
         const std::string campaign_dir_name = args["campaign"].as<std::string>();
-        std::cout << "Content directory:       " << content_path.c_str() << '\n';
+        std::cout << "Content directory:       " << content_path.string() << '\n';
         std::cout << "Campaign directory name: " << campaign_dir_name << "\n\n";
         if (campaign_dir_name.empty()) {
             throw std::invalid_argument("Campaign directory name cannot be \"\".");

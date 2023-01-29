@@ -28,13 +28,14 @@ struct MeasuringSession {
 // dirty way of saving threading information into json file that you can view in https://ui.perfetto.dev/
 class Measurer {
 public:
+    Measurer() noexcept;
     void beginSession(const std::string& name, const std::string& filepath);
     void endSession();
     void writeProfile(const TimerResult& result);
     static Measurer& get();
 private:
     MeasuringSession* session;
-    std::chrono::high_resolution_clock::time_point session_start_time;
+    std::chrono::system_clock::time_point session_start_time;
     std::ofstream output_stream;
     static std::mutex write_profile_mutex;
 };
@@ -48,19 +49,19 @@ public:
 private:
     const std::string name;
     bool stopped;
-    std::chrono::high_resolution_clock::time_point start_time;
+    std::chrono::system_clock::time_point start_time;
 };
 
 inline std::mutex Measurer::write_profile_mutex;
+
+inline Measurer::Measurer() noexcept : session(nullptr) {}
 
 inline Measurer& Measurer::get() {
     static Measurer instance;
     return instance;
 }
 
-inline Timer::Timer(const char* name) : name(name), stopped(false) {
-    start_time = std::chrono::high_resolution_clock::now();
-}
+inline Timer::Timer(const char* name) : name(name), stopped(false) { start_time = std::chrono::system_clock::now(); }
 
 inline Timer::~Timer() {
     if (!stopped) {

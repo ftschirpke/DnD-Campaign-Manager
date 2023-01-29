@@ -18,10 +18,11 @@
 
 void dnd::CharacterState::applyAbilityScoreEffects() {
     for (const auto& effect_time : effect_times_in_order) {
-        for (const auto& effect_holder_ptr : active_effect_holders) {
+        for (const auto effect_holder_ptr : active_effect_holders) {
             if (effect_holder_ptr->ability_score_effects.contains(effect_time)) {
-                for (const auto& effect_ptr : effect_holder_ptr->ability_score_effects.at(effect_time)) {
-                    effect_ptr->applyTo(attributes, constants);
+                const auto& ability_effects = effect_holder_ptr->ability_score_effects.at(effect_time);
+                for (auto effect_it = ability_effects.cbegin(); effect_it != ability_effects.cend(); ++effect_it) {
+                    (*effect_it)->applyTo(attributes, constants);
                 }
             }
         }
@@ -33,10 +34,11 @@ void dnd::CharacterState::applyAbilityScoreEffects() {
 
 void dnd::CharacterState::applyNormalEffects() {
     for (const auto& effect_time : effect_times_in_order) {
-        for (const auto& effect_holder_ptr : active_effect_holders) {
+        for (const auto effect_holder_ptr : active_effect_holders) {
             if (effect_holder_ptr->normal_effects.contains(effect_time)) {
-                for (const auto& effect_ptr : effect_holder_ptr->normal_effects.at(effect_time)) {
-                    effect_ptr->applyTo(attributes, constants);
+                const auto& ability_effects = effect_holder_ptr->normal_effects.at(effect_time);
+                for (auto effect_it = ability_effects.cbegin(); effect_it != ability_effects.cend(); ++effect_it) {
+                    (*effect_it)->applyTo(attributes, constants);
                 }
             }
         }
@@ -90,8 +92,8 @@ bool dnd::CharacterState::addEffectHolderWithChoices(const dnd::EffectHolderWith
         if (decision_it != decisions.cend()) {
             active_effect_holders.emplace_back(&decision_it->decision_effects);
         } else {
-            std::cerr << "Warning: You still have to choose " << it->get()->amount << " values for \""
-                      << it->get()->attribute_name << "\"\n";
+            std::cerr << "Warning: You still have to choose " << (*it)->amount << " values for \""
+                      << (*it)->attribute_name << "\"\n";
         }
     }
 

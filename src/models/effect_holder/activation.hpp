@@ -52,6 +52,7 @@ inline Activation::Activation(const std::string& left_identifier, const std::str
     try {
         op = activation_operators.at(op_name);
     } catch (const std::out_of_range& e) {
+        UNUSED(e);
         throw std::invalid_argument("Operator \"" + op_name + "\" does not exist.");
     }
 }
@@ -72,6 +73,7 @@ inline bool NumericActivation::check(
             left_value = attributes.at(left_identifier);
         }
     } catch (const std::out_of_range& e) {
+        UNUSED(e);
         throw std::out_of_range("\"" + left_identifier + "\" does not exist. It is neither an attribute nor constant.");
     }
     return op(left_value, right_value);
@@ -93,6 +95,7 @@ inline bool IdentifierActivation::check(
             left_value = attributes.at(left_identifier);
         }
     } catch (const std::out_of_range& e) {
+        UNUSED(e);
         throw std::out_of_range("\"" + left_identifier + "\" does not exist. It is neither an attribute or constant.");
     }
     try {
@@ -102,6 +105,7 @@ inline bool IdentifierActivation::check(
             right_value = attributes.at(right_identifier);
         }
     } catch (const std::out_of_range& e) {
+        UNUSED(e);
         throw std::out_of_range("\"" + right_identifier + "\" does not exist. It is neither an attribute or constant.");
     }
     return op(left_value, right_value);

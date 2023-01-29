@@ -299,7 +299,7 @@ void dnd::EffectHolderParser::parseAndAddActivation(
     } else if (last_part == "false") {
         right_value = false;
     } else {
-        right_value = std::stof(last_part) * 100;
+        right_value = (int)std::stof(last_part) * 100;
         // attributes are stored as integers * 100, see CharacterState
     }
     effect_holder->activations.emplace_back(std::make_unique<NumericActivation>(left_identifier, op_name, right_value));

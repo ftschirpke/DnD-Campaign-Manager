@@ -23,7 +23,7 @@ public:
      * @param type the type of content of the file that is being parsed
      * @param filepath the file that is being parsed
      */
-    virtual void configure(ParsingType type, const std::filesystem::path& filepath) noexcept;
+    virtual void configure(ParsingType conf_type, const std::filesystem::path& conf_filepath) noexcept;
 protected:
     // the type of content of the file that is being parsed
     ParsingType type;
@@ -38,11 +38,12 @@ private:
     bool configured;
 };
 
-inline Subparser::Subparser() noexcept : configured(false) {}
+inline Subparser::Subparser() noexcept
+    : type(ParsingType::CHARACTER /* just setting some inital value */), filepath(), configured(false) {}
 
-inline void Subparser::configure(ParsingType type, const std::filesystem::path& filepath) noexcept {
-    this->type = type;
-    this->filepath = filepath;
+inline void Subparser::configure(ParsingType conf_type, const std::filesystem::path& conf_filepath) noexcept {
+    type = conf_type;
+    filepath = conf_filepath;
     configured = true;
 }
 
