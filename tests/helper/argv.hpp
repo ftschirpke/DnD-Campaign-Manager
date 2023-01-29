@@ -25,7 +25,7 @@ inline Argv::Argv(std::initializer_list<const char*> args)
     int i = 0;
     auto iter = args.begin();
     while (iter != args.end()) {
-        int len = strlen(*iter) + 1;
+        size_t len = strlen(*iter) + 1;
         auto ptr = std::unique_ptr<char[]>(new char[len]);
 
         strcpy(ptr.get(), *iter);

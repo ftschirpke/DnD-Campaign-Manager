@@ -211,13 +211,13 @@ std::unique_ptr<dnd::Effect> dnd::EffectHolderParser::createEffect(const std::st
     if (!std::regex_match(effect_str, effect_regex)) {
         throw attribute_type_error(type, filepath, "invalid effect format: \"" + effect_str + "\"");
     }
-    auto it = effect_str.cbegin();
+    std::string::const_iterator it = effect_str.cbegin();
     while (*it != ' ') {
         ++it;
     }
     const std::string affected_attribute(effect_str.cbegin(), it);
     ++it;
-    auto start_it = it;
+    std::string::const_iterator start_it = it;
     while (*it != ' ') {
         ++it;
     }
@@ -237,7 +237,9 @@ std::unique_ptr<dnd::Effect> dnd::EffectHolderParser::createEffect(const std::st
         if (effect_type == "mult" || effect_type == "div") {
             return std::make_unique<FloatNumEffect>(affected_attribute, effect_type, effect_time, effect_value);
         } else {
-            return std::make_unique<IntNumEffect>(affected_attribute, effect_type, effect_time, effect_value * 100);
+            return std::make_unique<IntNumEffect>(
+                affected_attribute, effect_type, effect_time, static_cast<int>(effect_value * 100)
+            );
             // attributes are stored as integers * 100, see CharacterState
         }
     } else {

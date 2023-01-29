@@ -102,7 +102,5 @@ set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
 
 if(MSVC)
-    set(DND_FUNCTION_SIGNATURE __FUNCSIG__)
-else()
-    set(DND_FUNCTION_SIGNATURE __PRETTY_FUNCTION__)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()

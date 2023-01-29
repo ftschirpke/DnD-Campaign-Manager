@@ -28,6 +28,9 @@ public:
     ProficiencyHolder proficiencies;
     RIVHolder rivs;
     std::unordered_map<EffectTime, std::vector<std::unique_ptr<const Effect>>> ability_score_effects, normal_effects;
+    EffectHolder() noexcept = default;
+    EffectHolder(EffectHolder&& other) noexcept = default;
+    EffectHolder& operator=(EffectHolder&& other) noexcept = default;
     // TODO: manage choices (choose one of ...)
     bool isActive(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
