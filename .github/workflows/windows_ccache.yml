@@ -25,6 +25,9 @@ jobs:
       run: Expand-Archive -Path '${{ github.workspace }}\ccache.zip' -DestinationPath '{{ github.workspace }}'
 
     - name: List ccache Directory
+      run: Get-ChildItem '${{ github.workspace }}'
+
+    - name: List ccache Directory
       run: Get-ChildItem '${{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64'
 
     - name: echo Path before
