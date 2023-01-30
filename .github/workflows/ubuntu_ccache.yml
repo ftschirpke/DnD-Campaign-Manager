@@ -54,7 +54,8 @@ jobs:
 
     - name: test step output
       run: |
-        echo ${{ steps.ccache-path.outputs }}
+        echo ${{ steps.ccache-path.outputs. }}
+        echo ${{ steps.ccache-path.outputs[""] }}
 
     - name: Save ccache
       id: cache-ccache-save
