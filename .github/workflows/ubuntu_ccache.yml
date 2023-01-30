@@ -52,7 +52,7 @@ jobs:
       run: cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -G "Ninja"
 
     - name: Build Application
-      run: cmake --build ${{ github.workspace }} --config ${{ env.BUILD_TYPE }} --target ${{ env.DND_TARGET }}
+      run: cmake --build ${{ github.workspace }}/build --config ${{ env.BUILD_TYPE }} --target ${{ env.DND_TARGET }}
 
     - name: ccache statistics
       run: ccache -s
