@@ -60,13 +60,19 @@ jobs:
         $env:Path += ";${{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64"
         cmake --build ${{ github.workspace }} --config ${{ env.BUILD_TYPE }} --target dndmanager
 
-    - name: ccache statistics
+    - name: show ccache path
       run: |
         $env:Path += ";${{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64"
-        cmake -P file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}" ccache_basedir)
-        cmake -P set(ENV{CCACHE_BASEDIR} "${ccache_basedir}")
-        cmake -P set(ENV{CCACHE_DIR} "${ccache_basedir}/.ccache")
-        ccache -s
+        ccache -p
+
+    # - name: ccache statistics
+    #   run: |
+    #     $env:Path += ";${{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64"
+    #     cmake -P file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}" ccache_basedir)
+    #     cmake -P set(ENV{CCACHE_BASEDIR} "${ccache_basedir}")
+    #     cmake -P set(ENV{CCACHE_DIR} "${ccache_basedir}/.ccache")
+    #     ccache -s
+
 
     - name: Save ccache
       id: cache-ccache-save

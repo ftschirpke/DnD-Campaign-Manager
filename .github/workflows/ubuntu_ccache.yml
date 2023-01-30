@@ -46,7 +46,7 @@ jobs:
     - name: find ccache path
       run: |
         echo "=========="
-        echo "$CCACHE_DIR"
+        ccache -p
         echo "=========="
 
     - name: ccache statistics
