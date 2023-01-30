@@ -21,16 +21,7 @@ public:
     std::unordered_map<std::string, bool (*)(int, int)>::mapped_type op;
     Activation(const std::string& left_identifier, const std::string& op_name);
     Activation() noexcept = default;
-    Activation(const Activation& other) noexcept {
-        UNUSED(other);
-        std::cout << "copy construction\n";
-    }
     Activation(Activation&& other) noexcept = default;
-    Activation& operator=(const Activation& other) noexcept {
-        UNUSED(other);
-        std::cout << "copy assignment\n";
-        return *this;
-    }
     Activation& operator=(Activation&& other) noexcept = default;
     virtual ~Activation() noexcept = default;
     virtual bool check(

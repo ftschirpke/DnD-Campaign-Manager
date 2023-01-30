@@ -54,10 +54,10 @@ CPMAddPackage(
     OPTIONS "CXXOPTS_BUILD_EXAMPLES NO" "CXXOPTS_BUILD_TESTS NO" "CXXOPTS_ENABLE_INSTALL YES"
 )
 
-find_program(CCACHE_FOUND ccache)
-add_compile_options(-DCMAKE_CXX_COMPILER_LAUNCHER=ccache)
-# if(CCACHE_FOUND)
-# endif(CCACHE_FOUND)
+find_program(CCACHE_PROGRAM ccache)
+if(CCACHE_PROGRAM)
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_PROGRAM}")
+endif()
 
 if(MSVC)
     add_compile_options(/W4 /WX)
