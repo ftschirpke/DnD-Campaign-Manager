@@ -64,13 +64,16 @@ jobs:
     - name: print ccache path
       run: |
         $env:Path += ";${{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64"
-        & ccache -p | Select-String cache_dir | ForEach-Object { $_.Line.Split(" ")[3] }
+        Write-Output "path=$(& ccache -p | Select-String cache_dir | ForEach-Object { $_.Line.Split(" ")[3] })"
 
     - name: ccache statistics
       run: |
         $env:Path += ";${{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64"
         ccache -s
 
+    - name: test step output
+      run: |
+        Write-Output "${{ steps.ccache-path.outputs.path }}"
 
     - name: Save ccache
       id: cache-ccache-save
