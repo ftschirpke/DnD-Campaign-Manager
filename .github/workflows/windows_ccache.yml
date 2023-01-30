@@ -19,13 +19,13 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Download ccache
-      run: Invoke-WebRequest -Uri https://github.com/ccache/ccache/releases/download/v${{ env.CCACHE_VERSION }}/ccache-${{ env.CCACHE_VERSION }}-windows-x86_64.zip  -OutFile '${{ github.workspace }}\\ccache.zip'
+      run: Invoke-WebRequest -Uri https://github.com/ccache/ccache/releases/download/v${{ env.CCACHE_VERSION }}/ccache-${{ env.CCACHE_VERSION }}-windows-x86_64.zip  -OutFile '${{ github.workspace }}\ccache.zip'
 
     - name: Unzip ccache
-      run: Expand-Archive -Path '${{ github.workspace }}\\ccache.zip' -DestinationPath '{{ github.workspace }}\\build'
+      run: Expand-Archive -Path '${{ github.workspace }}\ccache.zip' -DestinationPath '{{ github.workspace }}\build'
 
-    # - name: list
-    #   shell: dir build/
+    - name: list
+      shell: Get-ChildItem '{{ github.workspace }}\build'
 
     # - name: CMake ccache Setup
     #   shell: cmake -P {0}
