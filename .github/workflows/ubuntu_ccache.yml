@@ -33,7 +33,7 @@ jobs:
       run: |
         echo "hardcoded ccache path: ${{ env.CCACHE_DIR }}"
         echo "real ccache path:"
-        ccache -p | grep cache_dir | awk '{ print $4 }')
+        ccache -p | grep cache_dir | awk '{ print $4 }'
 
     - name: Restore cached ccache
       id: cache-ccache-restore

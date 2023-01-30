@@ -44,7 +44,7 @@ jobs:
       uses: actions/cache/restore@v3
       with:
         path: ${{ env.CCACHE_DIR }}"
-        key: ${{ runner.os }}-ccache-${{ env.DND_TARGET }}
+        key: ${{ runner.os }}-ccache-${{ env.DND_TARGET }}-
 
     - name: Configure CMake
       run: cmake -B ${{ github.workspace }} -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
@@ -64,5 +64,5 @@ jobs:
       uses: actions/cache/save@v3
       with:
         path: ${{ env.CCACHE_DIR }}"
-        key: ${{ steps.cache-ccache-restore.outputs.cache-primary-key }}
+        key: ${{ runner.os }}-ccache-${{ env.DND_TARGET }}-${{ runner.id }}
   
