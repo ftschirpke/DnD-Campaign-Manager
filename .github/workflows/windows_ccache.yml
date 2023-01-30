@@ -1,0 +1,61 @@
+name: Windows use ccache
+
+on: [push]
+
+env:
+  BUILD_TYPE: Release
+  CCACHE_VERSION: 4.7.4
+  
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Download ccache
+      shell: wget https://github.com/ccache/ccache/releases/download/v${{ env.CCACHE_VERSION }}/ccache-${{ env.CCACHE_VERSION }}-windows-x86_64.zip
+
+    - name: Unzip ccache
+      shell: Expand-Archive -Path '${{ github.workspace }}\\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64.zip' -DestinationPath '{{ github.workspace }}\\build'
+
+    - name: list
+      shell: dir build/
+
+    - name: CMake ccache Setup
+      shell: cmake -P {0}
+      run: |
+        file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}" ccache_basedir)
+        set(ENV{CCACHE_BASEDIR} "${ccache_basedir}")
+        set(ENV{CCACHE_DIR} "${ccache_basedir}/.ccache")
+        set(ENV{CCACHE_COMPRESS} "true")
+        set(ENV{CCACHE_COMPRESSLEVEL} "6")
+        set(ENV{CCACHE_MAXSIZE} "600M")
+
+    - name: Prepare ccache timestamp
+      id: ccache_cache_timestamp
+      shell: cmake -P {0}
+      run: |
+        string(TIMESTAMP current_date "%Y-%m-%d-%H;%M;%S" UTC)
+        file(APPEND "$ENV{GITHUB_OUTPUT}" "timestamp=${current_date}")
+
+    # - name: ccache cache files
+    #   uses: actions/cache@v3
+    #   with:
+    #     path: .ccache
+    #     key: ${{ matrix.config.name }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
+    #     restore-keys: |
+    #       ${{ matrix.config.name }}-ccache-
+
+    # - name: ccache statistics
+    #   shell: cmake -P {0}
+    #   run: |
+    #     file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}" ccache_basedir)
+    #     set(ENV{CCACHE_BASEDIR} "${ccache_basedir}")
+    #     set(ENV{CCACHE_DIR} "${ccache_basedir}/.ccache")
+
+    #     execute_process(COMMAND ccache -s)
+  

@@ -54,13 +54,19 @@ CPMAddPackage(
     OPTIONS "CXXOPTS_BUILD_EXAMPLES NO" "CXXOPTS_BUILD_TESTS NO" "CXXOPTS_ENABLE_INSTALL YES"
 )
 
+find_program(CCACHE_FOUND ccache)
+if(CCACHE_FOUND)
+    add_compile_options(-DCMAKE_CXX_COMPILER_LAUNCHER=ccache)
+endif(CCACHE_FOUND)
+
+if(MSVC)
+    add_compile_options(/W4 /WX)
+else()
+    add_compile_options(-Wall -Wextra -Wpedantic -Werror -pedantic-errors)
+endif()
+
 add_executable(dndmanager src/main.cpp)
 set_target_properties(dndmanager PROPERTIES EXPORT_COMPILE_COMMANDS ON)
-
-target_compile_options(dndmanager PRIVATE
-  $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
-  $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Werror>
-)
 
 target_include_directories(dndmanager
     PUBLIC
@@ -73,11 +79,6 @@ target_link_libraries(dndmanager PUBLIC nlohmann_json::nlohmann_json cxxopts::cx
 
 add_executable(dndmanager_tests)
 set_target_properties(dndmanager_tests PROPERTIES EXPORT_COMPILE_COMMANDS ON)
-
-target_compile_options(dndmanager_tests PRIVATE
-  $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
-  $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Werror>
-)
 
 target_include_directories(dndmanager_tests
     PUBLIC
