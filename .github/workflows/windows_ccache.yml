@@ -32,11 +32,14 @@ jobs:
         set(ENV{CCACHE_COMPRESSLEVEL} "6")
         set(ENV{CCACHE_MAXSIZE} "600M")
 
+    # - name: determine ccache path
+    #   run: |
+    #     $env:Path += ";${{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64"
+    #     $env:GITHUB_OUTPUT
+    #     $env:GITHUB_OUTPUT += "path=$(& ccache -p | Select-String cache_dir | ForEach-Object { $_.Line.Split(" ")[3] })"
     - name: determine ccache path
-      run: |
-        $env:Path += ";${{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64"
-        $env:GITHUB_OUTPUT
-        $env:GITHUB_OUTPUT += "path=$(& ccache -p | Select-String cache_dir | ForEach-Object { $_.Line.Split(" ")[3] })"
+      id: ccache-path
+      run: echo "path=$(ccache -p | grep cache_dir | awk '{ print $4 }')" >> $GITHUB_OUTPUT
 
     - name: Restore cached ccache
       id: cache-ccache-restore
