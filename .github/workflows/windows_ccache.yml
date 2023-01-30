@@ -22,10 +22,10 @@ jobs:
       run: Invoke-WebRequest -Uri https://github.com/ccache/ccache/releases/download/v${{ env.CCACHE_VERSION }}/ccache-${{ env.CCACHE_VERSION }}-windows-x86_64.zip  -OutFile '${{ github.workspace }}\ccache.zip'
 
     - name: Unzip ccache
-      run: Expand-Archive -Path '${{ github.workspace }}\ccache.zip' -DestinationPath '{{ github.workspace }}\build'
+      run: Expand-Archive -Path '${{ github.workspace }}\ccache.zip' -DestinationPath '{{ github.workspace }}'
 
     - name: list
-      run: Get-ChildItem '{{ github.workspace }}\build'
+      run: Get-ChildItem '{{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64'
 
     # - name: CMake ccache Setup
     #   shell: cmake -P {0}
