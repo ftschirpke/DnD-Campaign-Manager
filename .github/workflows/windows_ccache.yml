@@ -38,12 +38,13 @@ jobs:
     - name: CMake ccache Setup
       shell: cmake -P {0}
       run: |
-        file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}" ccache_basedir)
-        set(ENV{CCACHE_BASEDIR} "${ccache_basedir}")
-        set(ENV{CCACHE_DIR} "${ccache_basedir}/.ccache")
         set(ENV{CCACHE_COMPRESS} "true")
         set(ENV{CCACHE_COMPRESSLEVEL} "6")
         set(ENV{CCACHE_MAXSIZE} "600M")
+
+# file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}" ccache_basedir)
+# set(ENV{CCACHE_BASEDIR} "${ccache_basedir}")
+# set(ENV{CCACHE_DIR} "${ccache_basedir}/.ccache")
 
     - name: Restore cached ccache
       id: cache-ccache-restore
@@ -63,15 +64,12 @@ jobs:
     - name: show ccache path
       run: |
         $env:Path += ";${{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64"
-        ccache -p
+        (Get-Content -Path ccache -p | Select-String cache_dir).Line | Foreach-Object { $_.Split(" ")[3] }
 
-    # - name: ccache statistics
-    #   run: |
-    #     $env:Path += ";${{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64"
-    #     cmake -P file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}" ccache_basedir)
-    #     cmake -P set(ENV{CCACHE_BASEDIR} "${ccache_basedir}")
-    #     cmake -P set(ENV{CCACHE_DIR} "${ccache_basedir}/.ccache")
-    #     ccache -s
+    - name: ccache statistics
+      run: |
+        $env:Path += ";${{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64"
+        ccache -s
 
 
     - name: Save ccache
