@@ -31,10 +31,11 @@ jobs:
       run: ($env:Path).Replace(';',"`n")
 
     - name: add ccache to Path
-      run: $env:Path += ";{{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64"
 
     - name: echo Path after
-      run: ($env:Path).Replace(';',"`n")
+      run: |
+        $env:Path += ";{{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64"
+        ($env:Path).Replace(';',"`n")
 
     # - name: CMake ccache Setup
     #   shell: cmake -P {0}
