@@ -61,10 +61,10 @@ jobs:
         $env:Path += ";${{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64"
         cmake --build ${{ github.workspace }} --config ${{ env.BUILD_TYPE }} --target dndmanager
 
-    - name: show ccache path
+    - name: print ccache path
       run: |
         $env:Path += ";${{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64"
-        (Get-Content -Path ccache -p | Select-String cache_dir).Line | Foreach-Object { $_.Split(" ")[3] }
+        & ccache -p | Select-String cache_dir | ForEach-Object { $_.Line.Split(" ")[3] }
 
     - name: ccache statistics
       run: |

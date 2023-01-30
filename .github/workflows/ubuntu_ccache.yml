@@ -45,11 +45,16 @@ jobs:
       run: cmake --build ${{ github.workspace }} --config ${{ env.BUILD_TYPE }} --target dndmanager
 
     - name: print ccache path
+      id: ccache-path
       run: |
         ccache -p | grep cache_dir | awk '{ print $4 }'
 
     - name: ccache statistics
       run: ccache -s
+
+    - name: test step output
+      run: |
+        echo ${{ steps.ccache-path.outputs }}
 
     - name: Save ccache
       id: cache-ccache-save
