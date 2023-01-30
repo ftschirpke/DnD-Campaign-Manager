@@ -24,8 +24,11 @@ jobs:
     - name: Unzip ccache
       run: Expand-Archive -Path '${{ github.workspace }}\ccache.zip' -DestinationPath '{{ github.workspace }}'
 
-    - name: list
+    - name: List ccache Directory
       run: Get-ChildItem '{{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64'
+
+    - name: echo Path
+      run: ($env:Path).Replace(';',"`n")
 
     # - name: CMake ccache Setup
     #   shell: cmake -P {0}
