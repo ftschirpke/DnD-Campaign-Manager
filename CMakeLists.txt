@@ -55,9 +55,9 @@ CPMAddPackage(
 )
 
 find_program(CCACHE_FOUND ccache)
-if(CCACHE_FOUND)
-    add_compile_options(-DCMAKE_CXX_COMPILER_LAUNCHER=ccache)
-endif(CCACHE_FOUND)
+add_compile_options(-DCMAKE_CXX_COMPILER_LAUNCHER=ccache)
+# if(CCACHE_FOUND)
+# endif(CCACHE_FOUND)
 
 if(MSVC)
     add_compile_options(/W4 /WX)
