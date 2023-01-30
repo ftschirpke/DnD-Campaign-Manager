@@ -30,8 +30,6 @@ jobs:
     - name: echo Path before
       run: ($env:Path).Replace(';',"`n")
 
-    - name: add ccache to Path
-
     - name: echo Path after
       run: |
         $env:Path += ";{{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64"
