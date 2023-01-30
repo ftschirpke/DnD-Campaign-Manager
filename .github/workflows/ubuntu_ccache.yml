@@ -47,7 +47,7 @@ jobs:
     - name: print ccache path
       id: ccache-path
       run: |
-        echo "path=$(ccache -p | grep cache_dir | awk '{ print $4 }')"
+        echo "path=$(ccache -p | grep cache_dir | awk '{ print $4 }')" >> $GITHUB_OUTPUT
 
     - name: ccache statistics
       run: ccache -s

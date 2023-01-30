@@ -73,7 +73,7 @@ jobs:
 
     - name: test step output
       run: |
-        Write-Output "${{ steps.ccache-path.outputs.path }}"
+        Write-Output "${{ steps.ccache-path.outputs.path }}" >> $GITHUB_OUTPUT
 
     - name: Save ccache
       id: cache-ccache-save
