@@ -25,7 +25,7 @@ jobs:
       run: Expand-Archive -Path '${{ github.workspace }}\ccache.zip' -DestinationPath '{{ github.workspace }}\build'
 
     - name: list
-      shell: Get-ChildItem '{{ github.workspace }}\build'
+      run: Get-ChildItem '{{ github.workspace }}\build'
 
     # - name: CMake ccache Setup
     #   shell: cmake -P {0}
