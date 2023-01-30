@@ -38,7 +38,6 @@ jobs:
     - name: CMake ccache Setup
       shell: cmake -P {0}
       run: |
-        $env:Path += ";${{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64"
         file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}" ccache_basedir)
         set(ENV{CCACHE_BASEDIR} "${ccache_basedir}")
         set(ENV{CCACHE_DIR} "${ccache_basedir}/.ccache")
@@ -70,12 +69,12 @@ jobs:
 
     #     execute_process(COMMAND ccache -s)
 
-    - name: Save ccache
-      id: cache-ccache-save
-      uses: actions/cache/save@v3
-      with:
-        path: .ccache
-        key: ${{ steps.cache-ccache-restore.outputs.cache-primary-key }}
+    # - name: Save ccache
+    #   id: cache-ccache-save
+    #   uses: actions/cache/save@v3
+    #   with:
+    #     path: .ccache
+    #     key: ${{ steps.cache-ccache-restore.outputs.cache-primary-key }}
 
     # - name: CMake ccache Setup
     #   shell: cmake -P {0}
