@@ -7,6 +7,7 @@ on:
 env:
   BUILD_TYPE: Release
   DND_TARGET: dndmanager
+  CCACHE_DIR: "D:\\a\\AppData\\Local\\.cache/ccache"
   CCACHE_VERSION: 4.7.4
   
 
@@ -31,21 +32,18 @@ jobs:
         set(ENV{CCACHE_COMPRESS} "true")
         set(ENV{CCACHE_COMPRESSLEVEL} "6")
         set(ENV{CCACHE_MAXSIZE} "600M")
-
-    # - name: determine ccache path
-    #   run: |
-    #     $env:Path += ";${{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64"
-    #     $env:GITHUB_OUTPUT
-    #     $env:GITHUB_OUTPUT += "path=$(& ccache -p | Select-String cache_dir | ForEach-Object { $_.Line.Split(" ")[3] })"
+  
     - name: determine ccache path
-      id: ccache-path
-      run: echo "path=$(ccache -p | grep cache_dir | awk '{ print $4 }')" >> $GITHUB_OUTPUT
+      run: |
+        Write-Output "hardcoded ccache path: ${{ env.CCACHE_DIR }}"
+        Write-Output "real ccache path:"
+        & ccache -p | Select-String cache_dir | ForEach-Object { $_.Line.Split(" ")[3] }
 
     - name: Restore cached ccache
       id: cache-ccache-restore
       uses: actions/cache/restore@v3
       with:
-        path: ${{ steps.ccache-path.outputs.path }}
+        path: ${{ env.CCACHE_DIR }}"
         key: ${{ runner.os }}-ccache-${{ env.DND_TARGET }}
 
     - name: Configure CMake
@@ -65,6 +63,6 @@ jobs:
       id: cache-ccache-save
       uses: actions/cache/save@v3
       with:
-        path: ${{ steps.ccache-path.outputs.path }}
+        path: ${{ env.CCACHE_DIR }}"
         key: ${{ steps.cache-ccache-restore.outputs.cache-primary-key }}
   
