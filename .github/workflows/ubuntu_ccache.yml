@@ -45,6 +45,13 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-ccache-
 
+    - name: Restore cached ccache
+      id: cache-ccache-restore
+      uses: actions/cache/restore@v3
+      with:
+        path: .ccache
+        key: ${{ runner.os }}-ccache
+
     - name: Configure CMake
       run: cmake -B ${{ github.workspace }} -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
 
@@ -59,4 +66,11 @@ jobs:
         set(ENV{CCACHE_DIR} "${ccache_basedir}/.ccache")
 
         execute_process(COMMAND ccache -s)
+
+    - name: Save ccache
+      id: cache-ccache-save
+      uses: actions/cache/save@v3
+      with:
+        path: .ccache
+        key: ${{ steps.cache-ccache-restore.outputs.cache-primary-key }}
   
