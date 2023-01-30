@@ -1,6 +1,8 @@
 name: Windows use ccache
 
-on: [push]
+on: 
+  push:
+    branches: [ "ccache" ]
 
 env:
   BUILD_TYPE: Release
