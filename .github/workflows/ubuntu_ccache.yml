@@ -7,7 +7,7 @@ on:
 env:
   BUILD_TYPE: Release
   DND_TARGET: dndmanager
-  CCACHE_DIR: "/home/runnder/.cache/ccache"
+  CCACHE_DIR: "/home/runner/.cache/ccache"
   
 
 jobs:

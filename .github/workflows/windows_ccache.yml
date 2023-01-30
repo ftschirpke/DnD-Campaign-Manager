@@ -44,7 +44,7 @@ jobs:
       uses: actions/cache/restore@v3
       with:
         path: ${{ env.CCACHE_DIR }}"
-        key: ${{ runner.os }}-ccache-${{ env.DND_TARGET }}-${{ runner.id }}
+        key: ${{ runner.os }}-ccache-${{ env.DND_TARGET }}-${{ github.run_id }}
         restore-keys: |
           ${{ runner.os }}-ccache-${{ env.DND_TARGET }}-
           ${{ runner.os }}-ccache-
@@ -67,5 +67,5 @@ jobs:
       uses: actions/cache/save@v3
       with:
         path: ${{ env.CCACHE_DIR }}"
-        key: ${{ runner.os }}-ccache-${{ env.DND_TARGET }}-${{ runner.id }}
+        key: ${{ runner.os }}-ccache-${{ env.DND_TARGET }}-${{ github.run_id }}
   
