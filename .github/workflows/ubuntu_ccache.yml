@@ -44,18 +44,12 @@ jobs:
     - name: Build Application
       run: cmake --build ${{ github.workspace }} --config ${{ env.BUILD_TYPE }} --target dndmanager
 
-    - name: find ccache path
+    - name: print ccache path
       run: |
         ccache -p | grep cache_dir | awk '{ print $4 }'
 
     - name: ccache statistics
-      shell: cmake -P {0}
-      run: |
-        file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}" ccache_basedir)
-        set(ENV{CCACHE_BASEDIR} "${ccache_basedir}")
-        set(ENV{CCACHE_DIR} "${ccache_basedir}/.ccache")
-
-        execute_process(COMMAND ccache -s)
+      run: ccache -s
 
     - name: Save ccache
       id: cache-ccache-save
