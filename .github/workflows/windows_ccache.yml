@@ -35,7 +35,8 @@ jobs:
   
     - name: determine ccache path
       run: |
-        Write-Output "hardcoded ccache path: ${{ env.CCACHE_DIR }}"
+        Write-Output "hardcoded ccache path:"
+        Write-Output "${{ env.CCACHE_DIR }}"
         Write-Output "real ccache path:"
         & ccache -p | Select-String cache_dir | ForEach-Object { $_.Line.Split(" ")[3] }
 
@@ -50,7 +51,7 @@ jobs:
           ${{ runner.os }}-ccache-
 
     - name: Configure CMake
-      run: cmake -B ${{ github.workspace }} -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+      run: cmake -B ${{ github.workspace }} -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -G "Ninja"
 
     - name: Build Application
       run: |
