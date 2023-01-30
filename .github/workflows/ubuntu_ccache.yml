@@ -44,7 +44,10 @@ jobs:
       run: cmake --build ${{ github.workspace }} --config ${{ env.BUILD_TYPE }} --target dndmanager
 
     - name: find ccache path
-      run: echo $CCACHE_DIR
+      run: |
+        echo "=========="
+        echo "$CCACHE_DIR"
+        echo "=========="
 
     - name: ccache statistics
       shell: cmake -P {0}
