@@ -18,7 +18,7 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Install ccache
-      run: sudo apt install -y ccache
+      run: apt install -y ccache
 
     # - name: CMake ccache Setup
     #   shell: cmake -P {0}

@@ -19,6 +19,6 @@ jobs:
       run: clang-format --version
 
     - name: Check format of C++ files
-      working-directory: ${{github.workspace}}
-      run: bash ${{github.workspace}}/.github/workflows/check_file_formats.sh
+      working-directory: ${{ github.workspace }}
+      run: bash ${{ github.workspace }}/.github/workflows/check_file_formats.sh
 
