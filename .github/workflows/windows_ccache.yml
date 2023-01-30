@@ -46,11 +46,16 @@ jobs:
 # set(ENV{CCACHE_BASEDIR} "${ccache_basedir}")
 # set(ENV{CCACHE_DIR} "${ccache_basedir}/.ccache")
 
+    - name: determine ccache path
+      run: |
+        $env:Path += ";${{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64"
+        Write-Output "path=$(& ccache -p | Select-String cache_dir | ForEach-Object { $_.Line.Split(" ")[3] })"
+
     - name: Restore cached ccache
       id: cache-ccache-restore
       uses: actions/cache/restore@v3
       with:
-        path: .ccache
+        path: ${{ steps.ccache-path.outputs.path }}
         key: ${{ runner.os }}-ccache
 
     - name: Configure CMake
@@ -61,24 +66,15 @@ jobs:
         $env:Path += ";${{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64"
         cmake --build ${{ github.workspace }} --config ${{ env.BUILD_TYPE }} --target dndmanager
 
-    - name: print ccache path
-      run: |
-        $env:Path += ";${{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64"
-        Write-Output "path=$(& ccache -p | Select-String cache_dir | ForEach-Object { $_.Line.Split(" ")[3] })"
-
     - name: ccache statistics
       run: |
         $env:Path += ";${{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64"
         ccache -s
 
-    - name: test step output
-      run: |
-        Write-Output "${{ steps.ccache-path.outputs.path }}" >> $GITHUB_OUTPUT
-
     - name: Save ccache
       id: cache-ccache-save
       uses: actions/cache/save@v3
       with:
-        path: .ccache
+        path: ${{ steps.ccache-path.outputs.path }}
         key: ${{ steps.cache-ccache-restore.outputs.cache-primary-key }}
   
