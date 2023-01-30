@@ -27,7 +27,13 @@ jobs:
     - name: List ccache Directory
       run: Get-ChildItem '{{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64'
 
-    - name: echo Path
+    - name: echo Path before
+      run: ($env:Path).Replace(';',"`n")
+
+    - name: add ccache to Path
+      run: $env:Path += ";{{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64"
+
+    - name: echo Path after
       run: ($env:Path).Replace(';',"`n")
 
     # - name: CMake ccache Setup
