@@ -51,6 +51,11 @@ jobs:
 
     - name: ccache statistics
       run: ccache -s
+      
+    - name: List ccache Directories
+      run: |
+        ls -lisah '/home/runner/.cache'
+        ls -lisah '/home/runner/.cache/ccache'
 
     - name: Save ccache
       id: cache-ccache-save

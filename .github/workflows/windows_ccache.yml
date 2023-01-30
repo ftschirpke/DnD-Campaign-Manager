@@ -49,7 +49,7 @@ jobs:
     - name: determine ccache path
       run: |
         $env:Path += ";${{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64"
-        Write-Output "path=$(& ccache -p | Select-String cache_dir | ForEach-Object { $_.Line.Split(" ")[3] })"
+        "path=$(& ccache -p | Select-String cache_dir | ForEach-Object { $_.Line.Split(" ")[3] })" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
 
     - name: Restore cached ccache
       id: cache-ccache-restore
@@ -70,6 +70,11 @@ jobs:
       run: |
         $env:Path += ";${{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64"
         ccache -s
+
+    - name: List ccache Directories
+      run: |
+        Get-ChildItem 'C:\Users\runneradmin\AppData\Roaming'
+        Get-ChildItem 'C:\Users\runneradmin\AppData\Roaming/ccache'
 
     - name: Save ccache
       id: cache-ccache-save
