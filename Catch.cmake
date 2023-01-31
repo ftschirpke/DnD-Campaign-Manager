@@ -159,7 +159,6 @@ function(catch_discover_tests TARGET)
     TARGET ${TARGET}
     PROPERTY CROSSCOMPILING_EMULATOR
   )
- 
   add_custom_command(
     TARGET ${TARGET} POST_BUILD
     BYPRODUCTS "${ctest_tests_file}"
