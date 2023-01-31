@@ -6,6 +6,9 @@ project(DnD-Campaign-Manager
     VERSION 0.1.2
 )
 
+set(DND_APP_TARGET dndmanager)
+set(DND_TEST_TARGET dndmanager_tests)
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
@@ -65,43 +68,44 @@ else()
     add_compile_options(-Wall -Wextra -Wpedantic -Werror -pedantic-errors)
 endif()
 
-add_executable(dndmanager src/main.cpp)
-set_target_properties(dndmanager PROPERTIES EXPORT_COMPILE_COMMANDS ON)
+add_executable(${DND_APP_TARGET} src/main.cpp)
+set_target_properties(${DND_APP_TARGET} PROPERTIES EXPORT_COMPILE_COMMANDS ON)
 
-target_include_directories(dndmanager
+target_include_directories(${DND_APP_TARGET}
     PUBLIC
     ${PROJECT_BINARY_DIR}/src
     ${CMAKE_SOURCE_DIR}/src
     PRIVATE
     ${CMAKE_SOURCE_DIR}/src/lib
 )
-target_link_libraries(dndmanager PUBLIC nlohmann_json::nlohmann_json cxxopts::cxxopts)
+target_link_libraries(${DND_APP_TARGET} PUBLIC nlohmann_json::nlohmann_json cxxopts::cxxopts)
 
-add_executable(dndmanager_tests)
-set_target_properties(dndmanager_tests PROPERTIES EXPORT_COMPILE_COMMANDS ON)
+add_executable(${DND_TEST_TARGET})
+set_target_properties(${DND_TEST_TARGET} PROPERTIES EXPORT_COMPILE_COMMANDS ON)
 
-target_include_directories(dndmanager_tests
+target_include_directories(${DND_TEST_TARGET}
     PUBLIC
     ${PROJECT_BINARY_DIR}/src
     ${CMAKE_SOURCE_DIR}/src
     PRIVATE
     ${CMAKE_SOURCE_DIR}/src/lib
 )
-target_link_libraries(dndmanager_tests PRIVATE nlohmann_json::nlohmann_json cxxopts::cxxopts Catch2::Catch2WithMain)
+target_link_libraries(${DND_TEST_TARGET} PRIVATE nlohmann_json::nlohmann_json cxxopts::cxxopts Catch2::Catch2WithMain)
 
 include(CTest)
-include(Catch.cmake)
-catch_discover_tests(dndmanager_tests) # include catch2 tests
+enable_testing()
 
-# add_test("dnd::launch: the program is run with the -h argument")
-# add_test("dnd::launch: the program is run with the -v argument")
-# add_test("dnd::launch: the program is run without a -c argument")
-# add_test("dnd::launch: the program is run without empty -c argument")
+include(Catch.cmake)
+
+if (WIN32)
+    add_test(NAME ${DND_TEST_TARGET} COMMAND ${DND_TEST_TARGET})
+else()
+    catch_discover_tests(${DND_TEST_TARGET}) # include catch2 tests
+endif()
 
 add_subdirectory(src)
 
 add_subdirectory(tests)
-enable_testing()
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

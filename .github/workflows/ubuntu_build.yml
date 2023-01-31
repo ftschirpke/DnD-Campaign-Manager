@@ -132,11 +132,11 @@ jobs:
       with:
         category: "/language:'cpp'"
 
-    - name: Run Integration Test - Imperial
+    - name: Run Application with Imperial Data
       working-directory: ${{ github.workspace }}
       run: ./build/${{ env.DND_APP_TARGET }} -c example_campaign -d content_imperial
 
-    - name: Run Integration Test - Metric
+    - name: Run Application with Metric Data
       working-directory: ${{ github.workspace }}
       run: ./build/${{ env.DND_APP_TARGET }} -c example_campaign -d content_metric
   
