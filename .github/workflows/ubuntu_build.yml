@@ -136,9 +136,9 @@ jobs:
 
     - name: Run Integration Test - Imperial
       working-directory: ${{ github.workspace }}
-      run: ${{ github.workspace }}/dndmanager -c example_campaign -d ${{ github.workspace }}/content_imperial
+      run: build/dndmanager -c example_campaign -d content_imperial
 
     - name: Run Integration Test - Metric
       working-directory: ${{ github.workspace }}
-      run: ${{ github.workspace }}/dndmanager -c example_campaign -d ${{ github.workspace }}/content_metric
+      run: build/dndmanager -c example_campaign -d content_metric
   
