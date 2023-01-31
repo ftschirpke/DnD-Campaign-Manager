@@ -32,7 +32,7 @@ private:
     const std::unordered_map<std::string, const CharacterRace>& races;
     std::string character_subrace_name, race_name;
     FeaturesParser features_parser;
-    virtual void configureSubparsers();
+    virtual void configureSubparsers() override;
 };
 
 inline const ParsingType CharacterSubraceFileParser::type = ParsingType::SUBRACE;
