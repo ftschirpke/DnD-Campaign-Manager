@@ -27,7 +27,7 @@ private:
     std::string character_race_name;
     bool has_subraces;
     FeaturesParser features_parser;
-    virtual void configureSubparsers();
+    virtual void configureSubparsers() override;
 };
 
 inline const ParsingType CharacterRaceFileParser::type = ParsingType::RACE;
