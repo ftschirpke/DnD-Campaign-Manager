@@ -143,10 +143,10 @@ jobs:
     - name: Run Integration Test - Imperial
       working-directory: ${{ github.workspace }}
       run: |
-        & ".\build\${{ env.DND_APP_TARGET }}.exe" -c example_campaign -d content_imperial
+        & ".\build\${{ env.DND_APP_TARGET }}.exe -c example_campaign -d content_imperial"
 
     - name: Run Integration Test - Metric
       working-directory: ${{ github.workspace }}
       run: |
-        & ".\build\${{ env.DND_APP_TARGET }}.exe" -c example_campaign -d content_metric
+        & ".\build\${{ env.DND_APP_TARGET }}.exe -c example_campaign -d content_metric"
   
