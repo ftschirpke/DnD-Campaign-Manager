@@ -52,7 +52,7 @@ jobs:
           ${{ runner.os }}-ccache-
 
     - name: Configure CMake
-      run: cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -G "Ninja"
+      run: cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -G "Ninja" -D CMAKE_MAKE_PROGRAM=ninja -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
 
     - name: Build Application
       run: cmake --build ${{ github.workspace }}/build --config ${{ env.BUILD_TYPE }} --target ${{ env.DND_TEST_TARGET }}
