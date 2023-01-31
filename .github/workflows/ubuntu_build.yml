@@ -1,0 +1,144 @@
+name: "UBUNTU: Build and Test"
+
+on: 
+  pull_request:
+    branches: [ "main" ]
+  push:
+    branches: [ "ccache" ]
+
+env:
+  BUILD_TYPE: Release
+  DND_APP_TARGET: dndmanager
+  DND_TEST_TARGET: dndmanager_tests
+  CCACHE_DIR: "/home/runner/.cache/ccache"
+
+
+jobs:
+  UnitTests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: lukka/get-cmake@latest
+
+    - name: Install ccache
+      run: sudo apt-get install -y ccache
+
+    - name: CMake ccache Setup
+      shell: cmake -P {0}
+      run: |
+        set(ENV{CCACHE_COMPRESS} "true")
+        set(ENV{CCACHE_COMPRESSLEVEL} "6")
+        set(ENV{CCACHE_MAXSIZE} "600M")
+
+    - name: determine ccache path
+      run: |
+        echo "hardcoded ccache path:"
+        echo "${{ env.CCACHE_DIR }}"
+        echo "real ccache path:"
+        ccache -p | grep cache_dir | awk '{ print $4 }'
+
+    - name: Restore cached ccache
+      id: cache-ccache-restore
+      uses: actions/cache/restore@v3
+      with:
+        path: ${{ env.CCACHE_DIR }}
+        key: ${{ runner.os }}-ccache-${{ env.DND_TEST_TARGET }}-${{ github.run_id }}
+        restore-keys: |
+          ${{ runner.os }}-ccache-${{ env.DND_TEST_TARGET }}-
+          ${{ runner.os }}-ccache-
+
+    - name: Configure CMake
+      run: cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -G "Ninja"
+
+    - name: Build Application
+      run: cmake --build ${{ github.workspace }}/build --config ${{ env.BUILD_TYPE }} --target ${{ env.DND_TEST_TARGET }}
+
+    - name: ccache statistics
+      run: ccache -s
+
+    - name: Save ccache
+      id: cache-ccache-save
+      uses: actions/cache/save@v3
+      with:
+        path: ${{ env.CCACHE_DIR }}
+        key: ${{ runner.os }}-ccache-${{ env.DND_TEST_TARGET }}-${{ github.run_id }}
+
+    - name: Run Unit Tests
+      working-directory: ${{ github.workspace }}/build
+      run: ctest -C ${{ env.BUILD_TYPE }}
+
+  App:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: lukka/get-cmake@latest
+
+    - name: Install ccache
+      run: sudo apt-get install -y ccache
+
+    - name: CMake ccache Setup
+      shell: cmake -P {0}
+      run: |
+        set(ENV{CCACHE_COMPRESS} "true")
+        set(ENV{CCACHE_COMPRESSLEVEL} "6")
+        set(ENV{CCACHE_MAXSIZE} "600M")
+
+    - name: determine ccache path
+      run: |
+        echo "hardcoded ccache path:"
+        echo "${{ env.CCACHE_DIR }}"
+        echo "real ccache path:"
+        ccache -p | grep cache_dir | awk '{ print $4 }'
+
+    - name: Restore cached ccache
+      id: cache-ccache-restore
+      uses: actions/cache/restore@v3
+      with:
+        path: ${{ env.CCACHE_DIR }}
+        key: ${{ runner.os }}-ccache-${{ env.DND_APP_TARGET }}-${{ github.run_id }}
+        restore-keys: |
+          ${{ runner.os }}-ccache-${{ env.DND_APP_TARGET }}-
+          ${{ runner.os }}-ccache-
+    
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: 'cpp'
+
+    - name: Configure CMake
+      run: cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -G "Ninja"
+
+    - name: Build Application
+      run: cmake --build ${{ github.workspace }}/build --config ${{ env.BUILD_TYPE }} --target ${{ env.DND_APP_TARGET }}
+
+    - name: ccache statistics
+      run: ccache -s
+
+    - name: Save ccache
+      id: cache-ccache-save
+      uses: actions/cache/save@v3
+      with:
+        path: ${{ env.CCACHE_DIR }}
+        key: ${{ runner.os }}-ccache-${{ env.DND_APP_TARGET }}-${{ github.run_id }}
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+      with:
+        category: "/language:'cpp'"
+
+    - name: Run Integration Test - Imperial
+      working-directory: ${{ github.workspace }}
+      run: ${{ github.workspace }}/dndmanager -c example_campaign -d ${{ github.workspace }}/content_imperial
+
+    - name: Run Integration Test - Metric
+      working-directory: ${{ github.workspace }}
+      run: ${{ github.workspace }}/dndmanager -c example_campaign -d ${{ github.workspace }}/content_metric
+  
