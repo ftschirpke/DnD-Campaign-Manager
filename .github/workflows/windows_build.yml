@@ -59,7 +59,6 @@ jobs:
       run: cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -G "Ninja" -D CMAKE_MAKE_PROGRAM=ninja -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
 
     - name: Build Unit Tests
-      shell: bash
       run: |
         $env:Path += ";${{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64"
         cmake --build ${{ github.workspace }}/build --config ${{ env.BUILD_TYPE }} --target ${{ env.DND_TEST_TARGET }}
@@ -143,9 +142,9 @@ jobs:
 
     - name: Run Integration Test - Imperial
       working-directory: ${{ github.workspace }}
-      run: "./build/${{ env.DND_APP_TARGET }}.exe -c example_campaign -d content_imperial"
+      run: ".\\build\\${{ env.DND_APP_TARGET }}.exe -c example_campaign -d content_imperial"
 
     - name: Run Integration Test - Metric
       working-directory: ${{ github.workspace }}
-      run: "./build/${{ env.DND_APP_TARGET }}.exe -c example_campaign -d content_metric"
+      run: ".\\build\\${{ env.DND_APP_TARGET }}.exe -c example_campaign -d content_metric"
   
