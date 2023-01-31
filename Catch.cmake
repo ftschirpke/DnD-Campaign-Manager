@@ -164,13 +164,14 @@ function(catch_discover_tests TARGET)
   set(TEST_EXECUTABLE "$<TARGET_FILE:${TARGET}>")
   message("${TEST_EXECUTABLE}")
   message("=====================")
-
+  
+  # -D "TEST_EXECUTABLE=$<TARGET_FILE:${TARGET}>"
   add_custom_command(
     TARGET ${TARGET} POST_BUILD
     BYPRODUCTS "${ctest_tests_file}"
     COMMAND "${CMAKE_COMMAND}"
             -D "TEST_TARGET=${TARGET}"
-            -D "TEST_EXECUTABLE=$<TARGET_FILE:${TARGET}>"
+            -D "TEST_EXECUTABLE=D:\\a\\DnD-Campaign-Manager\\DnD-Campaign-Manager/build/dndmanager_tests.exe"
             -D "TEST_EXECUTOR=${crosscompiling_emulator}"
             -D "TEST_WORKING_DIR=${_WORKING_DIRECTORY}"
             -D "TEST_SPEC=${_TEST_SPEC}"

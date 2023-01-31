@@ -141,11 +141,20 @@ jobs:
         path: ${{ env.CCACHE_DIR }}
         key: ${{ runner.os }}-ccache-${{ env.DND_APP_TARGET }}-${{ github.run_id }}
 
+    - name: Find Integration Test
+      working-directory: ${{ github.workspace }}
+      run: |
+        Get-ChildItem build
+        Test-Path -Path build/dndmanager.exe -PathType Leaf
+        Test-Path -Path build\\dndmanager.exe -PathType Leaf
+
     - name: Run Integration Test - Imperial
       working-directory: ${{ github.workspace }}
-      run: "& build\\${{ env.DND_APP_TARGET }}.exe -c example_campaign -d content_imperial"
+      shell: bash
+      run: "./build\\${{ env.DND_APP_TARGET }}.exe -c example_campaign -d content_imperial"
 
     - name: Run Integration Test - Metric
       working-directory: ${{ github.workspace }}
-      run: "& build\\${{ env.DND_APP_TARGET }}.exe -c example_campaign -d content_metric"
+      shell: bash
+      run: "./build\\${{ env.DND_APP_TARGET }}.exe -c example_campaign -d content_metric"
   
