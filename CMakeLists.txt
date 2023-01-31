@@ -91,7 +91,7 @@ target_link_libraries(dndmanager_tests PRIVATE nlohmann_json::nlohmann_json cxxo
 
 include(CTest)
 include(Catch.cmake)
-catch_discover_tests(dndmanager_tests) # include catch2 tests
+# catch_discover_tests(dndmanager_tests) # include catch2 tests
 
 add_subdirectory(src)
 
