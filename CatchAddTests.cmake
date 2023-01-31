@@ -38,12 +38,6 @@ function(add_command NAME)
   set(script "${script}${NAME}(${_args})\n" PARENT_SCOPE)
 endfunction()
 
-message("=== BUT I GOT HERE ??? ===")
-
-execute_process(COMMAND "${TEST_EXECUTABLE}")
-
-message("=== BUT I GOT HERE2 ??? ===")
-
 # Run test executable to get list of available tests
 if(NOT EXISTS "${TEST_EXECUTABLE}")
   message(FATAL_ERROR
@@ -55,6 +49,12 @@ if(dl_paths)
   cmake_path(CONVERT "${dl_paths}" TO_NATIVE_PATH_LIST paths)
   set(ENV{${dl_paths_variable_name}} "${paths}")
 endif()
+
+execute_process(
+  COMMAND "${TEST_EXECUTABLE}" --list-tests
+)
+
+message("HEY")
 
 execute_process(
   COMMAND ${TEST_EXECUTOR} "${TEST_EXECUTABLE}" ${spec} --list-tests --verbosity quiet

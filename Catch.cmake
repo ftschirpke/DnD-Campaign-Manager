@@ -128,8 +128,6 @@ same as the Catch name; see also ``TEST_PREFIX`` and ``TEST_SUFFIX``.
 #------------------------------------------------------------------------------
 function(catch_discover_tests TARGET)
 
-  message("FIND 3")
-  
   cmake_parse_arguments(
     ""
     ""
@@ -150,8 +148,6 @@ function(catch_discover_tests TARGET)
         message(FATAL_ERROR "The DL_PATHS option requires at least cmake 3.22")
     endif()
   endif()
-
-  message("FIND 4")
 
   ## Generate a unique name based on the extra arguments
   string(SHA1 args_hash "${_TEST_SPEC} ${_EXTRA_ARGS} ${_REPORTER} ${_OUTPUT_DIR} ${_OUTPUT_PREFIX} ${_OUTPUT_SUFFIX}")
@@ -188,8 +184,6 @@ function(catch_discover_tests TARGET)
     VERBATIM
   )
 
-  message("FIND 5")
-
   file(WRITE "${ctest_include_file}"
     "if(EXISTS \"${ctest_tests_file}\")\n"
     "  include(\"${ctest_tests_file}\")\n"
@@ -220,8 +214,6 @@ function(catch_discover_tests TARGET)
 endfunction()
 
 ###############################################################################
-
-message("FIND 6")
 
 set(_CATCH_DISCOVER_TESTS_SCRIPT
   ${CMAKE_CURRENT_LIST_DIR}/CatchAddTests.cmake
