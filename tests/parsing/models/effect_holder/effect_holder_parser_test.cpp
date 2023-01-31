@@ -969,7 +969,7 @@ TEST_CASE("dnd::EffectHolderParser::createFeature: parse valid effect holders") 
             {"description", description},
         };
         dnd::EffectHolder eh;
-        REQUIRE_NOTHROW(eh = std::move(parser.createEffectHolderForTesting(eh_json)));
+        REQUIRE_NOTHROW(eh = parser.createEffectHolderForTesting(eh_json));
         REQUIRE(eh.ability_score_effects.empty());
         REQUIRE(eh.normal_effects.empty());
     }
@@ -984,7 +984,7 @@ TEST_CASE("dnd::EffectHolderParser::createFeature: parse valid effect holders") 
             {"effects", effects_json},
         };
         dnd::EffectHolder eh;
-        REQUIRE_NOTHROW(eh = std::move(parser.createEffectHolderForTesting(eh_json)));
+        REQUIRE_NOTHROW(eh = parser.createEffectHolderForTesting(eh_json));
         REQUIRE(eh.ability_score_effects.empty());
         REQUIRE(eh.normal_effects.size() == 5);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::EARLIEST).size() == 1);
@@ -1019,7 +1019,7 @@ TEST_CASE("dnd::EffectHolderParser::createFeature: parse valid effect holders") 
             {"effects", effects_json},
         };
         dnd::EffectHolder eh;
-        REQUIRE_NOTHROW(eh = std::move(parser.createEffectHolderForTesting(eh_json)));
+        REQUIRE_NOTHROW(eh = parser.createEffectHolderForTesting(eh_json));
         REQUIRE(eh.ability_score_effects.size() == 2);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLY).size() == 1);
