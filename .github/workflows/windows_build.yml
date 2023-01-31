@@ -13,49 +13,59 @@ env:
 
 jobs:
 
-  # ===
-  # TODO: Unit tests are not working on Windows yet,  
-  # ===
+  ===
+  TODO: Unit tests are not working on Windows with ccache yet  
+  ===
 
-  # UnitTests:
-  #   runs-on: windows-latest
-  #   strategy:
-  #     fail-fast: false
+  UnitTests:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
 
-  #   steps:
-  #   - uses: actions/checkout@v3
+    steps:
+    - uses: actions/checkout@v3
 
-  #   - uses: lukka/get-cmake@latest
+    - uses: lukka/get-cmake@latest
 
-  #   - name: Download ccache
-  #     run: Invoke-WebRequest -Uri https://github.com/ccache/ccache/releases/download/v${{ env.CCACHE_VERSION }}/ccache-${{ env.CCACHE_VERSION }}-windows-x86_64.zip  -OutFile '${{ github.workspace }}\ccache.zip'
+    - name: Download ccache
+      run: Invoke-WebRequest -Uri https://github.com/ccache/ccache/releases/download/v${{ env.CCACHE_VERSION }}/ccache-${{ env.CCACHE_VERSION }}-windows-x86_64.zip  -OutFile '${{ github.workspace }}\ccache.zip'
 
-  #   - name: Unzip ccache
-  #     run: Expand-Archive -Path '${{ github.workspace }}\ccache.zip' -DestinationPath '${{ github.workspace }}'
+    - name: Unzip ccache
+      run: Expand-Archive -Path '${{ github.workspace }}\ccache.zip' -DestinationPath '${{ github.workspace }}'
 
-  #   - name: CMake ccache Setup
-  #     shell: cmake -P {0}
-  #     run: |
-  #       set(ENV{CCACHE_COMPRESS} "true")
-  #       set(ENV{CCACHE_COMPRESSLEVEL} "6")
-  #       set(ENV{CCACHE_MAXSIZE} "600M")
+    - name: CMake ccache Setup
+      shell: cmake -P {0}
+      run: |
+        set(ENV{CCACHE_COMPRESS} "true")
+        set(ENV{CCACHE_COMPRESSLEVEL} "6")
+        set(ENV{CCACHE_MAXSIZE} "600M")
   
-  #   - name: determine ccache path
-  #     run: |
-  #       Write-Output "hardcoded ccache path:"
-  #       Write-Output "${{ env.CCACHE_DIR }}"
-  #       Write-Output "real ccache path:"
-  #       & ccache -p | Select-String cache_dir | ForEach-Object { $_.Line.Split(" ")[3] }
+    - name: determine ccache path
+      run: |
+        Write-Output "hardcoded ccache path:"
+        Write-Output "${{ env.CCACHE_DIR }}"
+        Write-Output "real ccache path:"
+        & ccache -p | Select-String cache_dir | ForEach-Object { $_.Line.Split(" ")[3] }
 
-  #   - name: Restore cached ccache
-  #     id: cache-ccache-restore
-  #     uses: actions/cache/restore@v3
-  #     with:
-  #       path: ${{ env.CCACHE_DIR }}
-  #       key: ${{ runner.os }}-ccache-${{ env.DND_TEST_TARGET }}-${{ github.run_id }}
-  #       restore-keys: |
-  #         ${{ runner.os }}-ccache-${{ env.DND_TEST_TARGET }}-
-  #         ${{ runner.os }}-ccache-
+    - name: Restore cached ccache
+      id: cache-ccache-restore
+      uses: actions/cache/restore@v3
+      with:
+        path: ${{ env.CCACHE_DIR }}
+        key: ${{ runner.os }}-ccache-${{ env.DND_TEST_TARGET }}-${{ github.run_id }}
+        restore-keys: |
+          ${{ runner.os }}-ccache-${{ env.DND_TEST_TARGET }}-
+          ${{ runner.os }}-ccache-
+
+    - name: Configure CMake
+      run: cmake -B ${{ github.workspace }} -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+
+    - name: Build Unit Tests
+      run: cmake --build ${{ github.workspace }} --config ${{env.BUILD_TYPE}} --target dndmanager_tests
+
+    - name: Run Unit Tests
+      working-directory: ${{ github.workspace }}
+      run: ctest -C ${{ env.BUILD_TYPE }}
 
   #   - name: Configure CMake
   #     run: cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -G "Ninja" -D CMAKE_MAKE_PROGRAM=ninja -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
