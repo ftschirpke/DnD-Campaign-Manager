@@ -159,6 +159,12 @@ function(catch_discover_tests TARGET)
     TARGET ${TARGET}
     PROPERTY CROSSCOMPILING_EMULATOR
   )
+
+  message("=== MY EXPERIMENT ===")
+  set(TEST_EXECUTABLE $<TARGET_FILE:${TARGET}>)
+  message("${TEST_EXECUTABLE}")
+  message("=====================")
+
   add_custom_command(
     TARGET ${TARGET} POST_BUILD
     BYPRODUCTS "${ctest_tests_file}"
