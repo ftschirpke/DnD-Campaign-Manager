@@ -60,7 +60,7 @@ jobs:
           ${{ runner.os }}-ccache-
 
     - name: Configure CMake
-      run: cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -G "Ninja" -D CMAKE_MAKE_PROGRAM=ninja
+      run: cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -G "Ninja" -D CMAKE_MAKE_PROGRAM=ninja -DCMAKE_C_COMPILER=C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.34.31933/bin/Hostx64/x64/cl.exe -DCMAKE_CXX_COMPILER=C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.34.31933/bin/Hostx64/x64/cl.exe
 
     - name: Build Unit Tests
       run: cmake --build ${{ github.workspace }}/build --config ${{env.BUILD_TYPE}} --target dndmanager_tests
@@ -128,7 +128,7 @@ jobs:
           ${{ runner.os }}-ccache-
 
     - name: Configure CMake
-      run: cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -G "Ninja" -D CMAKE_MAKE_PROGRAM=ninja
+      run: cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -G "Ninja" -D CMAKE_MAKE_PROGRAM=ninja -DCMAKE_C_COMPILER=C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.34.31933/bin/Hostx64/x64/cl.exe -DCMAKE_CXX_COMPILER=C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.34.31933/bin/Hostx64/x64/cl.exe
 
     - name: Build Application
       run: |
