@@ -97,11 +97,7 @@ enable_testing()
 
 include(Catch.cmake)
 
-if (WIN32)
-#     add_test(NAME ${DND_TEST_TARGET} COMMAND ${DND_TEST_TARGET})
-else()
-    catch_discover_tests(${DND_TEST_TARGET}) # include catch2 tests
-endif()
+catch_discover_tests(${DND_TEST_TARGET}) # include catch2 tests
 
 add_subdirectory(src)
 
