@@ -51,12 +51,6 @@ if(dl_paths)
 endif()
 
 execute_process(
-  COMMAND "${TEST_EXECUTABLE}" --list-tests
-)
-
-message("HEY")
-
-execute_process(
   COMMAND ${TEST_EXECUTOR} "${TEST_EXECUTABLE}" ${spec} --list-tests --verbosity quiet
   OUTPUT_VARIABLE output
   RESULT_VARIABLE result

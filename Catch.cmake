@@ -127,7 +127,6 @@ same as the Catch name; see also ``TEST_PREFIX`` and ``TEST_SUFFIX``.
 
 #------------------------------------------------------------------------------
 function(catch_discover_tests TARGET)
-
   cmake_parse_arguments(
     ""
     ""

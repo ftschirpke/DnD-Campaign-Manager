@@ -91,12 +91,12 @@ target_link_libraries(dndmanager_tests PRIVATE nlohmann_json::nlohmann_json cxxo
 
 include(CTest)
 include(Catch.cmake)
-# catch_discover_tests(dndmanager_tests) # include catch2 tests
+catch_discover_tests(dndmanager_tests) # include catch2 tests
 
-add_test("dnd::launch: the program is run with the -h argument")
-add_test("dnd::launch: the program is run with the -v argument")
-add_test("dnd::launch: the program is run without a -c argument")
-add_test("dnd::launch: the program is run without empty -c argument")
+# add_test("dnd::launch: the program is run with the -h argument")
+# add_test("dnd::launch: the program is run with the -v argument")
+# add_test("dnd::launch: the program is run without a -c argument")
+# add_test("dnd::launch: the program is run without empty -c argument")
 
 add_subdirectory(src)
 
