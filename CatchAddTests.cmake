@@ -38,7 +38,11 @@ function(add_command NAME)
   set(script "${script}${NAME}(${_args})\n" PARENT_SCOPE)
 endfunction()
 
+message("=== BUT I GOT HERE ??? ===")
+
 execute_process(COMMAND "${TEST_EXECUTABLE}")
+
+message("=== BUT I GOT HERE2 ??? ===")
 
 # Run test executable to get list of available tests
 if(NOT EXISTS "${TEST_EXECUTABLE}")
