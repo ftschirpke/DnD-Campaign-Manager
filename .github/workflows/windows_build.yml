@@ -61,7 +61,7 @@ jobs:
     - name: Build Unit Tests
       shell: bash
       run: |
-        "PATH=$PATH:${{ github.workspace }}\ccache-${{ env.CCACHE_VERSION }}-windows-x86_64"
+        "PATH=$PATH:/d/a/DnD-Campaign-Manager/DnD-Campaign-Manager/ccache-4.7.4-windows-x86_64"
         cmake --build ${{ github.workspace }}/build --config ${{ env.BUILD_TYPE }} --target ${{ env.DND_TEST_TARGET }}
 
     - name: ccache statistics
@@ -143,6 +143,7 @@ jobs:
 
     - name: Run Integration Test - Imperial
       working-directory: ${{ github.workspace }}
+      shell: bash
       run: ./build/${{ env.DND_APP_TARGET }}.exe -c example_campaign -d content_imperial
 
     - name: Run Integration Test - Metric
