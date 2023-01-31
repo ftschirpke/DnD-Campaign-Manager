@@ -22,7 +22,6 @@ public:
     Activation(const std::string& left_identifier, const std::string& op_name);
     Activation() noexcept = default;
     Activation(Activation&& other) noexcept = default;
-    Activation& operator=(Activation&& other) noexcept = default;
     virtual ~Activation() noexcept = default;
     virtual bool check(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
