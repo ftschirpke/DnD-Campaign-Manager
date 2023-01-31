@@ -8,7 +8,8 @@ on:
 
 env:
   BUILD_TYPE: Release
-  CCACHE_VERSION: 4.7.4
+  CCACHE_VERSION: 4.7.3
+  DND_APP_TARGET: dndmanager
   DND_TEST_TARGET: dndmanager_tests
 
 jobs:
@@ -142,7 +143,7 @@ jobs:
         execute_process(COMMAND ccache -z)
 
         execute_process(
-          COMMAND cmake --build build --target ${{ DND_TEST_TARGET }}
+          COMMAND cmake --build build --target ${{ env.DND_TEST_TARGET }}
           RESULT_VARIABLE result
           OUTPUT_VARIABLE output
           ERROR_VARIABLE output

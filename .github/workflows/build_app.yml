@@ -8,8 +8,9 @@ on:
 
 env:
   BUILD_TYPE: Release
-  CCACHE_VERSION: 4.7.4
+  CCACHE_VERSION: 4.7.3
   DND_APP_TARGET: dndmanager
+  DND_TEST_TARGET: dndmanager_tests
 
 jobs:
   build:
