@@ -64,7 +64,7 @@ jobs:
       id: ccache_cache_timestamp
       shell: cmake -P {0}
       run: |
-        string(TIMESTAMP current_date "%Y-%m-%d-%H;%M;%S" UTC)
+        string(TIMESTAMP current_date "%d/%m/%Y %H:%M:%S" UTC)
         file(APPEND "$ENV{GITHUB_OUTPUT}" "timestamp=${current_date}")
 
     - name: ccache cache files
@@ -164,5 +164,15 @@ jobs:
         set(ENV{CCACHE_DIR} "${ccache_basedir}/.ccache")
 
         execute_process(COMMAND ccache -s)
+
+    - name: Run Application with Imperial Data
+      working-directory: ${{ github.workspace }}
+      shell: bash
+      run: ./build/${{ env.DND_APP_TARGET }} -c example_campaign -d content_imperial
+
+    - name: Run Application with Metric Data
+      working-directory: ${{ github.workspace }}
+      shell: bash
+      run: ./build/${{ env.DND_APP_TARGET }} -c example_campaign -d content_metric
 
 
