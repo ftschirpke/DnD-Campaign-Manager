@@ -45,7 +45,7 @@ jobs:
     - uses: lukka/get-cmake@latest
 
     - name: Download ccache
-      run: ${{ matrix.install_cmd }} install ccache
+      run: ${{ matrix.config.install_cmd }} install ccache
 
     - name: Prepare ccache timestamp
       id: ccache_cache_timestamp
