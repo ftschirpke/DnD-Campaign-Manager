@@ -168,19 +168,14 @@ void dnd::ContentParser::parseFileOfType(
 }
 
 void dnd::ContentParser::parseAllOfType(const dnd::ParsingType parsing_type) {
-    try {
-        switch (parsing_type) {
-            case ParsingType::GROUP:
-                // groups need single-file and multi-file parsing
-                parseAllOfSingleFileType(parsing_type);
-                [[fallthrough]];
-            default:
-                parseAllOfMultiFileType(parsing_type);
-                break;
-        }
-    } catch (const std::exception& e) {
-        std::cerr << "Error happening withing parsing of " << parsing_type_names.at(parsing_type) << '\n';
-        throw e;
+    switch (parsing_type) {
+        case ParsingType::GROUP:
+            // groups need single-file and multi-file parsing
+            parseAllOfSingleFileType(parsing_type);
+            [[fallthrough]];
+        default:
+            parseAllOfMultiFileType(parsing_type);
+            break;
     }
 }
 
