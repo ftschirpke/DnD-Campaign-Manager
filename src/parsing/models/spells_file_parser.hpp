@@ -41,7 +41,7 @@ protected:
 private:
     std::unordered_map<std::string, const Spell>& spells;
     Groups& groups;
-    int spells_in_file;
+    unsigned int spells_in_file;
     std::vector<SpellParsingInfo> spell_parsing_info;
     mutable std::vector<bool> valid;
     std::mutex spell_parsing_mutex;

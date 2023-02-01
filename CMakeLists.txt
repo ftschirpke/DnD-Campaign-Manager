@@ -66,7 +66,9 @@ endif()
 if(MSVC)
     add_compile_options(/W4 /WX)
 else()
-    add_compile_options(-Wall -Wextra -Wpedantic -Werror -pedantic-errors)
+    add_compile_options(-pedantic -Wall -Wextra -Wpedantic -Werror -Winline -Wdisabled-optimization -Wcast-qual
+    -Wlogical-op -Wnoexcept -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wsign-conversion
+    -Wstrict-null-sentinel -Wstrict-overflow=5 -Wzero-as-null-pointer-constant -Wuseless-cast)
 endif()
 
 add_executable(${DND_APP_TARGET} src/main.cpp)

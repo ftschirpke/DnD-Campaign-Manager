@@ -246,10 +246,10 @@ std::unique_ptr<dnd::Effect> dnd::EffectHolderParser::createEffect(const std::st
         size_t other_idx = effect_type.find("Other");
         size_t const_idx = effect_type.find("Const");
         if (other_idx != std::string::npos) {
-            const std::string op_name(effect_type.cbegin(), effect_type.cbegin() + other_idx);
+            const std::string op_name = effect_type.substr(0, other_idx);
             return std::make_unique<OtherAttributeEffect>(affected_attribute, op_name, effect_time, last_part);
         } else if (const_idx != std::string::npos) {
-            const std::string op_name(effect_type.cbegin(), effect_type.cbegin() + const_idx);
+            const std::string op_name = effect_type.substr(0, const_idx);
             return std::make_unique<ConstEffect>(affected_attribute, op_name, effect_time, last_part);
         }
     }
@@ -301,7 +301,7 @@ void dnd::EffectHolderParser::parseAndAddActivation(
     } else if (last_part == "false") {
         right_value = false;
     } else {
-        right_value = (int)std::stof(last_part) * 100;
+        right_value = static_cast<int>(std::stof(last_part) * 100);
         // attributes are stored as integers * 100, see CharacterState
     }
     effect_holder->activations.emplace_back(std::make_unique<NumericActivation>(left_identifier, op_name, right_value));
