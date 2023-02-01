@@ -52,13 +52,23 @@ jobs:
         endif()
         file(APPEND "$ENV{GITHUB_PATH}" "$ENV{GITHUB_WORKSPACE}${path_separator}${cmake_dir}")
 
-    - name: Download ccache
-      id: ccache
-      shell: cmake -P {0}
-      run: |
-        set(ccache_url "https://github.com/cristianadam/ccache/releases/download/v$ENV{CCACHE_VERSION}/${{ runner.os }}.tar.xz")
-        file(DOWNLOAD "${ccache_url}" ./ccache.tar.xz SHOW_PROGRESS)
-        execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./ccache.tar.xz)
+      # shell: cmake -P {0}
+      # run: |
+      #   set(ccache_url "https://github.com/cristianadam/ccache/releases/download/v$ENV{CCACHE_VERSION}/${{ runner.os }}.tar.xz")
+      #   file(DOWNLOAD "${ccache_url}" ./ccache.tar.xz SHOW_PROGRESS)
+      #   execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./ccache.tar.xz)
+
+    - name: Download ccache (ubuntu)
+      if: runner.os == "Linux"
+      run: sudo apt-get install -y ccache
+
+    - name: Download ccache (macOS)
+      if: runner.os == "macOS"
+      run: brew install ccache
+
+    - name: Download ccache (windows)
+      if: runner.os == "Windows"
+      run: choco install ccache
 
     - name: Prepare ccache timestamp
       id: ccache_cache_timestamp
