@@ -61,6 +61,12 @@ jobs:
           ${{ matrix.config.name }}-ccache-${{ env.DND_APP_TARGET }}-
           ${{ matrix.config.name }}-
 
+    - name: Initialize CodeQL (ubuntu only)
+      if: matrix.config.os == ubuntu-latest
+      uses: github/codeql-action/init@v2
+      with:
+        languages: 'cpp'
+    
     - name: Configure
       shell: cmake -P {0}
       run: |
@@ -150,6 +156,12 @@ jobs:
         set(ENV{CCACHE_DIR} "${ccache_basedir}/.ccache")
 
         execute_process(COMMAND ccache -s)
+
+    - name: Perform CodeQL Analysis (ubuntu only)
+      if: matrix.config.os == ubuntu-latest
+      uses: github/codeql-action/analyze@v2
+      with:
+        category: "/language:'cpp'"
 
     - name: Run Application with Imperial Data
       working-directory: ${{ github.workspace }}
