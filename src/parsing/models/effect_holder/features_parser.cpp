@@ -39,11 +39,11 @@ dnd::Feature dnd::FeaturesParser::createFeature(const std::string& feature_name,
     // TODO: change feature constructor?
     Feature feature(feature_name, description);
 
-    feature.main_part = std::move(effect_holder_parser.createEffectHolder(feature_json));
+    feature.main_part = effect_holder_parser.createEffectHolder(feature_json);
     if (feature_json.contains("choose")) {
-        feature.parts_with_choices.emplace_back(std::move(effect_holder_parser.createEffectHolderWithChoices(
+        feature.parts_with_choices.emplace_back(effect_holder_parser.createEffectHolderWithChoices(
             nlohmann::json::object({{"choose", feature_json.at("choose")}})
-        )));
+        ));
     }
     if (feature_json.contains("multi")) {
         if (!feature_json.is_array()) {
@@ -51,11 +51,9 @@ dnd::Feature dnd::FeaturesParser::createFeature(const std::string& feature_name,
         }
         for (const auto& part_json : feature_json) {
             if (part_json.contains("choose")) {
-                feature.parts_with_choices.emplace_back(
-                    std::move(effect_holder_parser.createEffectHolderWithChoices(part_json))
-                );
+                feature.parts_with_choices.emplace_back(effect_holder_parser.createEffectHolderWithChoices(part_json));
             } else {
-                feature.parts.emplace_back(std::move(effect_holder_parser.createEffectHolder(part_json)));
+                feature.parts.emplace_back(effect_holder_parser.createEffectHolder(part_json));
             }
         }
     }

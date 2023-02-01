@@ -199,8 +199,9 @@ void dnd::ContentParser::parseAllOfSingleFileType(const ParsingType parsing_type
             continue;
         }
         if (!type_file.is_regular_file()) {
-            std::cerr << "Warning: Rename " << type_file << " so that it cannot be confused with a file containing "
-                      << file_names.at(parsing_type) << '\n';
+            std::cerr << "Warning: Rename " << type_file.path().string()
+                      << " so that it cannot be confused with a file containing " << file_names.at(parsing_type)
+                      << '\n';
             continue;
         }
         files_to_parse.emplace_back(type_file);
@@ -241,7 +242,7 @@ void dnd::ContentParser::parseAllOfMultiFileType(const ParsingType parsing_type)
             continue;
         }
         if (!type_subdir.is_directory()) {
-            std::cerr << "Warning: Rename " << type_subdir
+            std::cerr << "Warning: Rename " << type_subdir.path().string()
                       << " so that it cannot be confused with a directory containing " << subdir_names.at(parsing_type)
                       << '\n';
             continue;

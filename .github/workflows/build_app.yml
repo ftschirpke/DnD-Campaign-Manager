@@ -1,0 +1,178 @@
+name: Build App
+
+on:
+  pull_request:
+    branches: ["main"]
+  push:
+    branches: ["main"]
+
+env:
+  BUILD_TYPE: Release
+  DND_APP_TARGET: dndmanager
+  DND_TEST_TARGET: dndmanager_tests
+
+jobs:
+  build:
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        - {
+            name: "BUILD: Windows Latest MSVC",
+            os: windows-latest,
+            cc: "cl", cxx: "cl",
+            environment_script: "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvars64.bat",
+            install_cmd: "choco"
+          }
+        - {
+            name: "BUILD: Ubuntu Latest GCC",
+            os: ubuntu-latest,
+            cc: "gcc", cxx: "g++",
+            install_cmd: "sudo apt-get -y"
+          }
+        - {
+            name: "BUILD: macOS Latest Clang",
+            os: macos-latest,
+            cc: "clang", cxx: "clang++",
+            install_cmd: "brew"
+          }
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: lukka/get-cmake@latest
+
+    - name: Download ccache
+      run: ${{ matrix.config.install_cmd }} install ccache
+
+    - name: Prepare ccache timestamp
+      id: ccache_cache_timestamp
+      shell: cmake -P {0}
+      run: |
+        string(TIMESTAMP current_date "%d/%m/%Y %H:%M:%S" UTC)
+        file(APPEND "$ENV{GITHUB_OUTPUT}" "timestamp=${current_date}")
+
+    - name: ccache cache files
+      uses: actions/cache@v3
+      with:
+        path: .ccache
+        key: ${{ matrix.config.name }}-ccache-${{ env.DND_APP_TARGET }}-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
+        restore-keys: |
+          ${{ matrix.config.name }}-ccache-${{ env.DND_APP_TARGET }}-
+          ${{ matrix.config.name }}-
+
+    - name: Initialize CodeQL (ubuntu only)
+      if: matrix.config.os == 'ubuntu-latest'
+      uses: github/codeql-action/init@v2
+      with:
+        languages: 'cpp'
+    
+    - name: Configure
+      shell: cmake -P {0}
+      run: |
+        set(ENV{CC} ${{ matrix.config.cc }})
+        set(ENV{CXX} ${{ matrix.config.cxx }})
+
+        if ("${{ runner.os }}" STREQUAL "Windows" AND NOT "x${{ matrix.config.environment_script }}" STREQUAL "x")
+          execute_process(
+            COMMAND "${{ matrix.config.environment_script }}" && set
+            OUTPUT_FILE environment_script_output.txt
+          )
+          file(STRINGS environment_script_output.txt output_lines)
+          foreach(line IN LISTS output_lines)
+            if (line MATCHES "^([a-zA-Z0-9_-]+)=(.*)$")
+              set(ENV{${CMAKE_MATCH_1}} "${CMAKE_MATCH_2}")
+            endif()
+          endforeach()
+        endif()
+
+        set(path_separator ":")
+        if ("${{ runner.os }}" STREQUAL "Windows")
+          set(path_separator ";")
+        endif()
+        set(ENV{PATH} "$ENV{GITHUB_WORKSPACE}${path_separator}$ENV{PATH}")
+
+        execute_process(
+          COMMAND cmake
+            -S .
+            -B build
+            -D CMAKE_BUILD_TYPE=$ENV{BUILD_TYPE}
+            -G Ninja
+            -D CMAKE_MAKE_PROGRAM=ninja
+            -D CMAKE_C_COMPILER_LAUNCHER=ccache
+            -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
+          RESULT_VARIABLE result
+        )
+        if (NOT result EQUAL 0)
+          message(FATAL_ERROR "Bad exit status")
+        endif()
+
+    - name: Build
+      shell: cmake -P {0}
+      run: |
+        set(ENV{NINJA_STATUS} "[%f/%t %o/sec] ")
+
+        if ("${{ runner.os }}" STREQUAL "Windows" AND NOT "x${{ matrix.config.environment_script }}" STREQUAL "x")
+          file(STRINGS environment_script_output.txt output_lines)
+          foreach(line IN LISTS output_lines)
+            if (line MATCHES "^([a-zA-Z0-9_-]+)=(.*)$")
+              set(ENV{${CMAKE_MATCH_1}} "${CMAKE_MATCH_2}")
+            endif()
+          endforeach()
+        endif()
+
+        file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}" ccache_basedir)
+        set(ENV{CCACHE_BASEDIR} "${ccache_basedir}")
+        set(ENV{CCACHE_DIR} "${ccache_basedir}/.ccache")
+        set(ENV{CCACHE_COMPRESS} "true")
+        set(ENV{CCACHE_COMPRESSLEVEL} "6")
+        set(ENV{CCACHE_MAXSIZE} "400M")
+        if ("${{ matrix.config.cxx }}" STREQUAL "cl")
+          set(ENV{CCACHE_MAXSIZE} "600M")
+        endif()
+
+        execute_process(COMMAND ccache -p)
+        execute_process(COMMAND ccache -z)
+
+        execute_process(
+          COMMAND cmake --build build --target ${{ env.DND_APP_TARGET }}
+          RESULT_VARIABLE result
+          OUTPUT_VARIABLE output
+          ERROR_VARIABLE output
+          ECHO_OUTPUT_VARIABLE ECHO_ERROR_VARIABLE
+        )
+        if (NOT result EQUAL 0)
+          string(REGEX MATCH "FAILED:.*$" error_message "${output}")
+          string(REPLACE "\n" "%0A" error_message "${error_message}")
+          message("::error::${error_message}")
+          message(FATAL_ERROR "Build failed")
+        endif()
+
+    - name: ccache statistics
+      shell: cmake -P {0}
+      run: |
+        file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}" ccache_basedir)
+        set(ENV{CCACHE_BASEDIR} "${ccache_basedir}")
+        set(ENV{CCACHE_DIR} "${ccache_basedir}/.ccache")
+
+        execute_process(COMMAND ccache -s)
+
+    - name: Perform CodeQL Analysis (ubuntu only)
+      if: matrix.config.os == 'ubuntu-latest'
+      uses: github/codeql-action/analyze@v2
+      with:
+        category: "/language:'cpp'"
+
+    - name: Run Application with Imperial Data
+      working-directory: ${{ github.workspace }}
+      shell: bash
+      run: ./build/${{ env.DND_APP_TARGET }} -c example_campaign -d content_imperial
+
+    - name: Run Application with Metric Data
+      working-directory: ${{ github.workspace }}
+      shell: bash
+      run: ./build/${{ env.DND_APP_TARGET }} -c example_campaign -d content_metric
+
+

@@ -6,6 +6,9 @@ project(DnD-Campaign-Manager
     VERSION 0.1.2
 )
 
+set(DND_APP_TARGET dndmanager)
+set(DND_TEST_TARGET dndmanager_tests)
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
@@ -54,48 +57,52 @@ CPMAddPackage(
     OPTIONS "CXXOPTS_BUILD_EXAMPLES NO" "CXXOPTS_BUILD_TESTS NO" "CXXOPTS_ENABLE_INSTALL YES"
 )
 
-add_executable(dndmanager src/main.cpp)
-set_target_properties(dndmanager PROPERTIES EXPORT_COMPILE_COMMANDS ON)
+find_program(CCACHE_PROGRAM ccache)
+if(CCACHE_PROGRAM)
+    set_property(GLOBAL PROPERTY CMAKE_C_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
+    set_property(GLOBAL PROPERTY CMAKE_CXX_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
+endif()
 
-target_compile_options(dndmanager PRIVATE
-  $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
-  $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Werror>
-)
+if(MSVC)
+    add_compile_options(/W4 /WX)
+else()
+    add_compile_options(-Wall -Wextra -Wpedantic -Werror -pedantic-errors)
+endif()
 
-target_include_directories(dndmanager
+add_executable(${DND_APP_TARGET} src/main.cpp)
+set_target_properties(${DND_APP_TARGET} PROPERTIES EXPORT_COMPILE_COMMANDS ON)
+
+target_include_directories(${DND_APP_TARGET}
     PUBLIC
     ${PROJECT_BINARY_DIR}/src
     ${CMAKE_SOURCE_DIR}/src
     PRIVATE
     ${CMAKE_SOURCE_DIR}/src/lib
 )
-target_link_libraries(dndmanager PUBLIC nlohmann_json::nlohmann_json cxxopts::cxxopts)
+target_link_libraries(${DND_APP_TARGET} PUBLIC nlohmann_json::nlohmann_json cxxopts::cxxopts)
 
-add_executable(dndmanager_tests)
-set_target_properties(dndmanager_tests PROPERTIES EXPORT_COMPILE_COMMANDS ON)
+add_executable(${DND_TEST_TARGET})
+set_target_properties(${DND_TEST_TARGET} PROPERTIES EXPORT_COMPILE_COMMANDS ON)
 
-target_compile_options(dndmanager_tests PRIVATE
-  $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
-  $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Werror>
-)
-
-target_include_directories(dndmanager_tests
+target_include_directories(${DND_TEST_TARGET}
     PUBLIC
     ${PROJECT_BINARY_DIR}/src
     ${CMAKE_SOURCE_DIR}/src
     PRIVATE
     ${CMAKE_SOURCE_DIR}/src/lib
 )
-target_link_libraries(dndmanager_tests PRIVATE nlohmann_json::nlohmann_json cxxopts::cxxopts Catch2::Catch2WithMain)
+target_link_libraries(${DND_TEST_TARGET} PRIVATE nlohmann_json::nlohmann_json cxxopts::cxxopts Catch2::Catch2WithMain)
 
 include(CTest)
+enable_testing()
+
 include(Catch.cmake)
-catch_discover_tests(dndmanager_tests) # include catch2 tests
+
+catch_discover_tests(${DND_TEST_TARGET}) # include catch2 tests
 
 add_subdirectory(src)
 
 add_subdirectory(tests)
-enable_testing()
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

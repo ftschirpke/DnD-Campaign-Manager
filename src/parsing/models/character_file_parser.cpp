@@ -45,6 +45,7 @@ void dnd::CharacterFileParser::parse() {
     parseClassAndRace();
 
     // TODO: parse spells
+    UNUSED(spells);
 
     if (json_to_parse.contains("features")) {
         features_parser.parseFeatures(json_to_parse.at("features"));
