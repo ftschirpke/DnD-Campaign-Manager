@@ -61,6 +61,7 @@ jobs:
         key: ${{ matrix.config.name }}-ccache-${{ env.DND_APP_TARGET }}-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
         restore-keys: |
           ${{ matrix.config.name }}-ccache-${{ env.DND_APP_TARGET }}-
+          ${{ matrix.config.name }}-
 
     - name: Configure
       shell: cmake -P {0}

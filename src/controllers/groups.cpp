@@ -32,6 +32,7 @@ dnd::Groups::Groups() {
 bool dnd::Groups::isStringGroup(const std::string& group_name) const { return data.contains(group_name); }
 
 bool dnd::Groups::isChoosableGroup(const std::string& group_name) const { return choosables.contains(group_name); }
+
 bool dnd::Groups::isPartOfGroup(const std::string& name, const std::string& group_name) const {
     if (isStringGroup(group_name)) {
         return std::find(data.at(group_name).cbegin(), data.at(group_name).cend(), name) != data.at(group_name).cend();

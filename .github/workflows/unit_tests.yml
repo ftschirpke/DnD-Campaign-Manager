@@ -3,8 +3,6 @@ name: Unit Tests
 on:
   pull_request:
     branches: ["main"]
-  push:
-    branches: ["ccache"]
 
 env:
   BUILD_TYPE: Release
@@ -61,6 +59,7 @@ jobs:
         key: ${{ matrix.config.name }}-ccache-${{ env.DND_TEST_TARGET }}-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
         restore-keys: |
           ${{ matrix.config.name }}-ccache-${{ env.DND_TEST_TARGET }}-
+          ${{ matrix.config.name }}-
 
     - name: Configure
       shell: cmake -P {0}
