@@ -62,7 +62,7 @@ jobs:
           ${{ matrix.config.name }}-
 
     - name: Initialize CodeQL (ubuntu only)
-      if: matrix.config.os == ubuntu-latest
+      if: matrix.config.os == 'ubuntu-latest'
       uses: github/codeql-action/init@v2
       with:
         languages: 'cpp'
@@ -158,7 +158,7 @@ jobs:
         execute_process(COMMAND ccache -s)
 
     - name: Perform CodeQL Analysis (ubuntu only)
-      if: matrix.config.os == ubuntu-latest
+      if: matrix.config.os == 'ubuntu-latest'
       uses: github/codeql-action/analyze@v2
       with:
         category: "/language:'cpp'"
