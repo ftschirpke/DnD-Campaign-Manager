@@ -44,7 +44,7 @@ dnd::Choosable dnd::EffectHolderGroupsFileParser::createChoosable(
     choosable.main_part = effect_holder_parser.createEffectHolder(choosable_json);
     if (choosable_json.contains("multi")) {
         if (!choosable_json.is_array()) {
-            throw attribute_format_error(filepath, "multi", "array");
+            throw attribute_format_error(type, filepath, "multi", "array");
         }
         for (const auto& part_json : choosable_json) {
             choosable.parts.emplace_back(effect_holder_parser.createEffectHolder(part_json));

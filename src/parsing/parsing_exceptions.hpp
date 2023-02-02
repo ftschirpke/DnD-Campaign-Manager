@@ -18,7 +18,6 @@ class parsing_error : public std::invalid_argument {
 public:
     parsing_error(const std::filesystem::path& path, const std::string& error_msg);
     parsing_error(ParsingType parsing_type, const std::filesystem::path& path, const std::string& error_msg);
-    void setParsingType(ParsingType parsing_type);
     void relativiseFileName(const std::filesystem::path& root_path);
     const char* what() const noexcept override;
 private:
@@ -32,16 +31,12 @@ private:
 // thrown when a json file is not formatted the way it's supposed to
 class json_format_error : public parsing_error {
 public:
-    json_format_error(const std::filesystem::path& path, const std::string& desired_format);
     json_format_error(ParsingType parsing_type, const std::filesystem::path& path, const std::string& desired_format);
 };
 
 // thrown when an attribute is not formatted the way it's supposed to
 class attribute_format_error : public parsing_error {
 public:
-    attribute_format_error(
-        const std::filesystem::path& path, const std::string& attribute, const std::string& desired_format
-    );
     attribute_format_error(
         ParsingType parsing_type, const std::filesystem::path& path, const std::string& attribute,
         const std::string& desired_format
@@ -51,7 +46,6 @@ public:
 // thrown when a required attribute is missing i.e. the key is missing in the JSON file
 class attribute_missing : public parsing_error {
 public:
-    attribute_missing(const std::filesystem::path& path, const std::string& missing_attribute_msg);
     attribute_missing(
         ParsingType parsing_type, const std::filesystem::path& path, const std::string& missing_attribute_msg
     );
@@ -60,7 +54,6 @@ public:
 // throw when an attribute is of a wrong type
 class attribute_type_error : public parsing_error {
 public:
-    attribute_type_error(const std::filesystem::path& path, const std::string& type_error_msg);
     attribute_type_error(
         ParsingType parsing_type, const std::filesystem::path& path, const std::string& type_error_msg
     );
@@ -69,7 +62,6 @@ public:
 // thrown when an attribute has a logically wrong or forbidden value
 class invalid_attribute : public parsing_error {
 public:
-    invalid_attribute(const std::filesystem::path& path, const std::string& attribute, const std::string& error_msg);
     invalid_attribute(
         ParsingType parsing_type, const std::filesystem::path& path, const std::string& attribute,
         const std::string& error_msg
@@ -99,11 +91,6 @@ inline parsing_error::parsing_error(
 
 inline void parsing_error::updateWhat() { w = msg_start + " \"" + path.string() + "\" " + error_msg; }
 
-inline void parsing_error::setParsingType(ParsingType parsing_type) {
-    msg_start = parsing_type_names.at(parsing_type) + " in file";
-    updateWhat();
-}
-
 
 inline void parsing_error::relativiseFileName(const std::filesystem::path& root_path) {
     path = path.lexically_relative(root_path);
@@ -112,20 +99,11 @@ inline void parsing_error::relativiseFileName(const std::filesystem::path& root_
 
 inline const char* parsing_error::what() const noexcept { return w.c_str(); }
 
-inline json_format_error::json_format_error(const std::filesystem::path& path, const std::string& desired_format)
-    : parsing_error(path, "has wrong format: should be " + desired_format) {}
-
 
 inline json_format_error::json_format_error(
     dnd::ParsingType parsing_type, const std::filesystem::path& path, const std::string& desired_format
 )
     : parsing_error(parsing_type, path, "has wrong format: should be " + desired_format) {}
-
-
-inline attribute_format_error::attribute_format_error(
-    const std::filesystem::path& path, const std::string& attribute, const std::string& desired_format
-)
-    : parsing_error(path, "has attribute of wrong format: \"" + attribute + "\" should be " + desired_format) {}
 
 
 inline attribute_format_error::attribute_format_error(
@@ -137,30 +115,16 @@ inline attribute_format_error::attribute_format_error(
     ) {}
 
 
-inline attribute_missing::attribute_missing(const std::filesystem::path& path, const std::string& missing_attribute_msg)
-    : parsing_error(path, "is missing an attribute: " + missing_attribute_msg) {}
-
-
 inline attribute_missing::attribute_missing(
     dnd::ParsingType parsing_type, const std::filesystem::path& path, const std::string& missing_attribute_msg
 )
     : parsing_error(parsing_type, path, "is missing an attribute: " + missing_attribute_msg) {}
 
 
-inline attribute_type_error::attribute_type_error(const std::filesystem::path& path, const std::string& type_error_msg)
-    : parsing_error(path, "has attribute of wrong type: " + type_error_msg) {}
-
-
 inline attribute_type_error::attribute_type_error(
     ParsingType parsing_type, const std::filesystem::path& path, const std::string& type_error_msg
 )
     : parsing_error(parsing_type, path, "has attribute of wrong type: " + type_error_msg) {}
-
-
-inline invalid_attribute::invalid_attribute(
-    const std::filesystem::path& path, const std::string& attribute, const std::string& error_msg
-)
-    : parsing_error(path, "has invalid attribute \"" + attribute + "\": " + error_msg) {}
 
 
 inline invalid_attribute::invalid_attribute(
