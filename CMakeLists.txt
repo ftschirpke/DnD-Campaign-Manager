@@ -67,7 +67,7 @@ if(MSVC)
     add_compile_options(/W4 /WX)
 else()
     add_compile_options(
-        -pedantic -Wall -Wextra -Wpedantic -Werror -Winline -Wdisabled-optimization -Wcast-qual -Wold-style-cast
+        -pedantic -Wall -Wextra -Wpedantic -Werror -Wdisabled-optimization -Wcast-qual -Wold-style-cast
         -Woverloaded-virtual -Wredundant-decls -Wsign-conversion -Wstrict-overflow=5 -Wzero-as-null-pointer-constant
     )
     if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
