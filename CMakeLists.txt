@@ -65,6 +65,7 @@ endif()
 
 if(MSVC)
     add_compile_options(/W4 /WX)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 else()
     add_compile_options(
         -pedantic -Wall -Wextra -Wpedantic -Werror -Wdisabled-optimization -Wcast-qual -Wold-style-cast
@@ -75,6 +76,7 @@ else()
     endif()
 endif()
 
+# Main Application
 add_executable(${DND_APP_TARGET} src/main.cpp)
 set_target_properties(${DND_APP_TARGET} PROPERTIES EXPORT_COMPILE_COMMANDS ON)
 
@@ -87,6 +89,7 @@ target_include_directories(${DND_APP_TARGET}
 )
 target_link_libraries(${DND_APP_TARGET} PUBLIC nlohmann_json::nlohmann_json cxxopts::cxxopts)
 
+# Unit Tests
 add_executable(${DND_TEST_TARGET})
 set_target_properties(${DND_TEST_TARGET} PROPERTIES EXPORT_COMPILE_COMMANDS ON)
 
@@ -107,13 +110,8 @@ include(Catch.cmake)
 catch_discover_tests(${DND_TEST_TARGET}) # include catch2 tests
 
 add_subdirectory(src)
-
 add_subdirectory(tests)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
-
-if(MSVC)
-    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-endif()
