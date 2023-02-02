@@ -34,7 +34,9 @@ public:
      */
     virtual void saveResult() = 0;
 protected:
+    // the json content that is being parsed
     nlohmann::json json_to_parse;
+    // the file which is being parsed (useful for error messages)
     std::filesystem::path filepath;
     /**
      * @brief This function is automatically called after successfully opening the JSON file to set the properties of

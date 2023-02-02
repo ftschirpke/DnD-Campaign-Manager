@@ -8,6 +8,7 @@
 
 namespace dnd {
 
+// describes the types of contents that can be parsed
 enum ParsingType {
     GROUP,
     SPELL,
@@ -18,6 +19,7 @@ enum ParsingType {
     CHARACTER,
 };
 
+// the name of the parsing types as strings
 const std::unordered_map<ParsingType, std::string> parsing_type_names = {
     {ParsingType::GROUP, "Group"},         {ParsingType::SPELL, "Spell"},     {ParsingType::RACE, "Race"},
     {ParsingType::CLASS, "Class"},         {ParsingType::SUBRACE, "Subrace"}, {ParsingType::SUBCLASS, "Subclass"},

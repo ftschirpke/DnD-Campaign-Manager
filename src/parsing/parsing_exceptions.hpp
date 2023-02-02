@@ -11,6 +11,11 @@
 
 namespace dnd {
 
+/**
+ * @brief Removes the ugly parts of nlohmann::json exceptions.
+ * @param original_what the original exception message
+ * @return a stripped version of the same message
+ */
 std::string stripJsonExceptionWhat(const std::string& original_what);
 
 // thrown when something went wrong while parsing DnD content
@@ -18,13 +23,24 @@ class parsing_error : public std::invalid_argument {
 public:
     parsing_error(const std::filesystem::path& path, const std::string& error_msg);
     parsing_error(ParsingType parsing_type, const std::filesystem::path& path, const std::string& error_msg);
+    /**
+     * @brief Relativises the file path of the parsing_error to the given path (helps making the error message cleaner)
+     * @param root_path the updated path will be relative to this root path
+     */
     void relativiseFileName(const std::filesystem::path& root_path);
     const char* what() const noexcept override;
 private:
+    // path to the file the error occured
     std::filesystem::path path;
+    // start of the error message (where did it happen)
     std::string msg_start;
+    // body of the error message (what happened)
     const std::string error_msg;
+    // the constructed error message that will be thrown by what()
     std::string w;
+    /**
+     * @brief reconstructs the error message (e.g. after relativising the file path)
+     */
     void updateWhat();
 };
 
