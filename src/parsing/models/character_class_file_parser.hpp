@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "basic_mechanics/dice.hpp"
 #include "controllers/groups.hpp"
 #include "models/character_class.hpp"
 #include "models/effect_holder/feature.hpp"
@@ -33,7 +34,8 @@ protected:
 private:
     static const ParsingType type;
     std::unordered_map<std::string, const CharacterClass>& classes;
-    std::string character_class_name, character_class_hit_dice;
+    std::string character_class_name;
+    Dice character_class_hit_dice;
     std::vector<int> asi_levels;
     int subclass_level;
     FeaturesParser features_parser;

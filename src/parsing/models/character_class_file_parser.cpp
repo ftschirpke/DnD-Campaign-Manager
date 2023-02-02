@@ -27,12 +27,11 @@ void dnd::CharacterClassFileParser::parse() {
     if (character_class_name.empty()) {
         throw invalid_attribute(type, filepath, "name", "cannot be \"\".");
     }
-    character_class_hit_dice = json_to_parse.at("hit_dice").get<std::string>();
-    // TODO: change int to short
+
+    character_class_hit_dice = diceFromString(json_to_parse.at("hit_dice").get<std::string>());
     asi_levels = json_to_parse.at("asi_levels").get<std::vector<int>>();
 
     features_parser.parseFeatures(json_to_parse.at("features"));
-
     determineSubclassLevel(features_parser.getFeatures());
 
     if (json_to_parse.contains("spellcasting")) {

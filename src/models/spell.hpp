@@ -52,10 +52,10 @@ struct SpellType {
     MagicSchool magic_school;
     SpellLevel level;
     bool is_ritual = false;
-    unsigned int levelAsNumber() const;
+    int levelAsNumber() const;
 };
 
-inline unsigned int SpellType::levelAsNumber() const { return static_cast<unsigned int>(level); }
+inline int SpellType::levelAsNumber() const { return static_cast<int>(level); }
 
 struct SpellComponents {
     bool verbal = false;

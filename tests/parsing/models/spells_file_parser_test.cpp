@@ -81,12 +81,12 @@ TEST_CASE("dnd::SpellsFileParser::createSpellComponents: parse valid components"
     std::uniform_int_distribution<> len_distrib(1, 255);
     std::uniform_int_distribution<> distrib(32, 255);
     std::string random_str;
-    size_t l = static_cast<unsigned int>(len_distrib(gen));
+    size_t l = static_cast<size_t>(len_distrib(gen));
     random_str.resize(l);
     for (size_t i = 0; i < l; ++i) {
-        unsigned int ascii = static_cast<unsigned int>(distrib(gen));
+        int ascii = distrib(gen);
         while (126 < ascii && ascii < 161) {
-            ascii = static_cast<unsigned int>(distrib(gen));
+            ascii = distrib(gen);
         }
         random_str[i] = char(ascii);
     }
@@ -218,8 +218,9 @@ TEST_CASE("dnd::SpellsFileParser::createSpellType: parse valid types") {
     const std::vector<std::string> spell_levels = {"", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"};
     SECTION("non-cantrip spells") {
         for (const auto& spelling : allowed_magic_school_spellings) {
-            for (unsigned int level = 1; level <= 9; ++level) {
-                s = spell_levels[level] + "-level " + spelling;
+            auto spell_level_it = spell_levels.cbegin();
+            for (int level = 1; level <= 9; ++level) {
+                s = *(++spell_level_it) + "-level " + spelling;
                 REQUIRE_NOTHROW(type = parser.createSpellTypeForTesting(s));
                 REQUIRE(type.levelAsNumber() == level);
                 std::string lowercase_spelling = spelling;
