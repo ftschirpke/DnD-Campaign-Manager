@@ -17,6 +17,7 @@
 #include "controllers/groups.hpp"
 #include "models/spell.hpp"
 #include "parsing/content_file_parser.hpp"
+#include "parsing/parsing_types.hpp"
 
 namespace dnd {
 
@@ -39,6 +40,7 @@ protected:
     SpellType createSpellType(const std::string& spell_type_str) const;
     SpellComponents createSpellComponents(const std::string& spell_components_str) const;
 private:
+    static const ParsingType type;
     std::unordered_map<std::string, const Spell>& spells;
     Groups& groups;
     size_t spells_in_file;
@@ -47,6 +49,8 @@ private:
     std::mutex spell_parsing_mutex;
     virtual void configureSubparsers() override;
 };
+
+inline const ParsingType SpellsFileParser::type = ParsingType::SPELL;
 
 inline SpellsFileParser::SpellsFileParser(std::unordered_map<std::string, const Spell>& spells, Groups& groups) noexcept
     : ContentFileParser(), spells(spells), groups(groups) {}
