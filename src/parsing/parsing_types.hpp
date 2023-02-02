@@ -8,7 +8,9 @@
 
 namespace dnd {
 
-// describes the types of contents that can be parsed
+/**
+ * @brief An enum containing the types of contents that can be parsed
+ */
 enum ParsingType {
     GROUP,
     SPELL,

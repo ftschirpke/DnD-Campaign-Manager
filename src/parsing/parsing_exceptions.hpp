@@ -18,7 +18,9 @@ namespace dnd {
  */
 std::string stripJsonExceptionWhat(const std::string& original_what);
 
-// thrown when something went wrong while parsing DnD content
+/**
+ * @brief An exception that is thrown when something went wrong while parsing DnD content
+ */
 class parsing_error : public std::invalid_argument {
 public:
     parsing_error(const std::filesystem::path& path, const std::string& error_msg);
@@ -44,13 +46,17 @@ private:
     void updateWhat();
 };
 
-// thrown when a json file is not formatted the way it's supposed to
+/**
+ * @brief An exception that is thrown when a json file is not formatted the way it's supposed to
+ */
 class json_format_error : public parsing_error {
 public:
     json_format_error(ParsingType parsing_type, const std::filesystem::path& path, const std::string& desired_format);
 };
 
-// thrown when an attribute is not formatted the way it's supposed to
+/**
+ * @brief An exception that is thrown when an attribute is not formatted the way it's supposed to
+ */
 class attribute_format_error : public parsing_error {
 public:
     attribute_format_error(
@@ -59,7 +65,9 @@ public:
     );
 };
 
-// thrown when a required attribute is missing i.e. the key is missing in the JSON file
+/**
+ * @brief An exception that is thrown when a required attribute is missing i.e. the key is missing in the JSON file
+ */
 class attribute_missing : public parsing_error {
 public:
     attribute_missing(
@@ -67,7 +75,9 @@ public:
     );
 };
 
-// throw when an attribute is of a wrong type
+/**
+ * @brief An exception that is throw when an attribute is of a wrong type
+ */
 class attribute_type_error : public parsing_error {
 public:
     attribute_type_error(
@@ -75,7 +85,9 @@ public:
     );
 };
 
-// thrown when an attribute has a logically wrong or forbidden value
+/**
+ * @brief An exception that is thrown when an attribute has a logically wrong or forbidden value
+ */
 class invalid_attribute : public parsing_error {
 public:
     invalid_attribute(

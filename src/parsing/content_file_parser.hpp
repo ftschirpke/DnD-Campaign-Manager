@@ -11,6 +11,10 @@
 
 namespace dnd {
 
+/**
+ * @brief A class is parsing a content JSON file.
+ * It might use subparsers for smaller units of the file.
+ */
 class ContentFileParser {
 public:
     virtual ~ContentFileParser() noexcept = default;

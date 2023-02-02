@@ -14,7 +14,7 @@
 namespace dnd {
 
 /**
- * @brief A class handling all the groups for a certain session.
+ * @brief A class handling all the groups for a certain session or campaign
  * String groups (such as "musical instruments") are mostly cosmetic whereas choosable groups (such as "feats") contain
  * values that can be chosen and affect a characters stats and abilities.
  */

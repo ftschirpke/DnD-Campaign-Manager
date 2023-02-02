@@ -16,7 +16,9 @@
 
 namespace dnd {
 
-// A class that holds all the content for a certain session or campaign
+/**
+ * @brief A class that holds all the content for a certain session or campaign
+ */
 class Content {
 public:
     // the controller holding all the groups for the campaign
