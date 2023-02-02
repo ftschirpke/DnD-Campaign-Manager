@@ -36,7 +36,7 @@ public:
     // the spells to their names
     std::unordered_map<std::string, const Spell> spells;
     /**
-     * @brief Prints how many of each content type exist
+     * @brief Prints how much content this controller holds
      */
     void printStatus() const;
 };
