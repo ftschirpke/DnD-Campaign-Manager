@@ -35,14 +35,14 @@ const std::unordered_map<std::string, EffectTime> effect_time_for_string = {
 
 const std::unordered_map<std::string, int (*)(int, int)> int_effect_operators = {
     {"add", [](int a, int b) { return a + b; }},
-    {"mult", [](int a, int b) { return (int)(a * b / 100.0f); }},
+    {"mult", [](int a, int b) { return static_cast<int>(a * b / 100.0f); }},
     {
         "div",
         [](int a, int b) {
             if (b == 0) {
                 throw std::invalid_argument("Cannot divide by zero.");
             }
-            return (int)(a / (b / 100.0f));
+            return static_cast<int>(a / (b / 100.0f));
         },
     },
     {"set",
@@ -55,14 +55,14 @@ const std::unordered_map<std::string, int (*)(int, int)> int_effect_operators = 
 };
 
 const std::unordered_map<std::string, int (*)(int, float)> float_effect_operators = {
-    {"mult", [](int a, float b) { return (int)(a * b); }},
+    {"mult", [](int a, float b) { return static_cast<int>(a * b); }},
     {
         "div",
         [](int a, float b) {
             if (b == 0) {
                 throw std::invalid_argument("Cannot divide by zero.");
             }
-            return (int)(a / b);
+            return static_cast<int>(a / b);
         },
     },
 };

@@ -44,7 +44,7 @@ void dnd::SpellsFileParser::parse() {
     if (!json_to_parse.is_object()) {
         throw json_format_error(ParsingType::SPELL, filepath, "map/object");
     }
-    spells_in_file = static_cast<int>(json_to_parse.size());
+    spells_in_file = json_to_parse.size();
     spell_parsing_info.reserve(spells_in_file);
 
     std::vector<std::future<void>> futures;
@@ -78,12 +78,15 @@ dnd::SpellType dnd::SpellsFileParser::createSpellType(const std::string& spell_t
     size_t cantrip_idx = spell_type_str.find(" cantrip");
     if (cantrip_idx != std::string::npos) {
         spell_type.level = SpellLevel::CANTRIP;
-        magic_school_str = std::string(spell_type_str.cbegin(), spell_type_str.cbegin() + cantrip_idx);
+        magic_school_str = spell_type_str.substr(0, cantrip_idx);
     } else {
         spell_type.level = SpellLevel(std::atoi(&spell_type_str[0]));
         size_t i = spell_type_str.find("level ") + 6;
-        auto end_it = spell_type.is_ritual ? spell_type_str.cbegin() + ritual_idx : spell_type_str.cend();
-        magic_school_str = std::string(spell_type_str.cbegin() + i, end_it);
+        if (spell_type.is_ritual) {
+            magic_school_str = spell_type_str.substr(i, ritual_idx - i);
+        } else {
+            magic_school_str = spell_type_str.substr(i, spell_type_str.size() - i);
+        }
     }
     auto tolower = [](unsigned char c) { return static_cast<unsigned char>(std::tolower(c)); };
     std::transform(magic_school_str.begin(), magic_school_str.end(), magic_school_str.begin(), tolower);
@@ -97,10 +100,9 @@ dnd::SpellComponents dnd::SpellsFileParser::createSpellComponents(const std::str
         // TODO: think about how to reintroduce spell name into error message
         throw attribute_type_error(filepath, "invalid spell components format: \"" + spell_components_str + "\"");
     }
-    auto start = spell_components_str.cbegin();
     size_t parentheses_idx = spell_components_str.find(" (");
     std::string first_part = (parentheses_idx == std::string::npos) ? spell_components_str
-                                                                    : std::string(start, start + parentheses_idx);
+                                                                    : spell_components_str.substr(0, parentheses_idx);
     SpellComponents spell_components;
     if (first_part.size() == 7) {
         spell_components.verbal = true;
@@ -116,7 +118,9 @@ dnd::SpellComponents dnd::SpellsFileParser::createSpellComponents(const std::str
         spell_components.material = first_part == "M";
     }
     if (spell_components.material) {
-        spell_components.materials_needed = std::string(start + parentheses_idx + 2, spell_components_str.cend() - 1);
+        spell_components.materials_needed = spell_components_str.substr(
+            parentheses_idx + 2, spell_components_str.size() - parentheses_idx - 3
+        );
     }
     return spell_components;
 }
@@ -135,18 +139,18 @@ bool dnd::SpellsFileParser::validate() const {
     return std::any_of(valid.cbegin(), valid.cend(), [](bool b) { return b; });
 }
 
-const std::unordered_map<int, std::string> level_group_names = {
+const std::unordered_map<unsigned int, std::string> level_group_names = {
     {0, "cantrips"},       {1, "level 1 spells"}, {2, "level 2 spells"}, {3, "level 3 spells"}, {4, "level 4 spells"},
     {5, "level 5 spells"}, {6, "level 6 spells"}, {7, "level 7 spells"}, {8, "level 8 spells"}, {9, "level 9 spells"},
 };
 
 void dnd::SpellsFileParser::saveResult() {
-    for (int i = 0; i < spells_in_file; ++i) {
+    for (size_t i = 0; i < spells_in_file; ++i) {
         if (valid[i]) {
             SpellParsingInfo& info = spell_parsing_info[i];
 
             groups.add("spells", info.name);
-            const std::string& level_group_name = level_group_names.at(info.type.level);
+            const std::string& level_group_name = level_group_names.at(info.type.levelAsNumber());
             groups.add(level_group_name, info.name);
             for (const std::string& class_name : info.classes) {
                 groups.add(class_name + " spells", info.name);

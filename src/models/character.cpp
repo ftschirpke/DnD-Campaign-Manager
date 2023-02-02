@@ -38,7 +38,7 @@ const std::unordered_map<std::string, int> dnd::Character::getInitialAttributeVa
         {"MAXHP", 0},
         {"ARMOR_ON", false},
     };
-    for (int i = 0; i < 6; ++i) {
+    for (size_t i = 0; i < 6; ++i) {
         character_initial_values.emplace(ability_strings_inorder[i], base_ability_scores[i] * 100);
         character_initial_values.emplace(ability_strings_inorder[i] + "MAX", 2000);
     }

@@ -66,7 +66,13 @@ endif()
 if(MSVC)
     add_compile_options(/W4 /WX)
 else()
-    add_compile_options(-Wall -Wextra -Wpedantic -Werror -pedantic-errors)
+    add_compile_options(
+        -pedantic -Wall -Wextra -Wpedantic -Werror -Wdisabled-optimization -Wcast-qual -Wold-style-cast
+        -Woverloaded-virtual -Wredundant-decls -Wsign-conversion -Wstrict-overflow=5 -Wzero-as-null-pointer-constant
+    )
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        add_compile_options(-Wlogical-op -Wnoexcept -Wstrict-null-sentinel -Wuseless-cast)
+    endif()
 endif()
 
 add_executable(${DND_APP_TARGET} src/main.cpp)
