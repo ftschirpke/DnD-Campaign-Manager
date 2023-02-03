@@ -12,7 +12,13 @@ namespace dnd {
 class ProficiencyHolder {
 public:
     std::unordered_set<std::string> armor, weapons, tools, skills, saving_throws, languages, senses;
+    bool empty() const;
 };
+
+inline bool ProficiencyHolder::empty() const {
+    return armor.empty() && weapons.empty() && tools.empty() && skills.empty() && saving_throws.empty()
+           && languages.empty() && senses.empty();
+}
 
 } // namespace dnd
 

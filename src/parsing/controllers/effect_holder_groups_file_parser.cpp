@@ -43,10 +43,16 @@ dnd::Choosable dnd::EffectHolderGroupsFileParser::createChoosable(
 
     choosable.main_part = effect_holder_parser.createEffectHolder(choosable_json);
     if (choosable_json.contains("multi")) {
-        if (!choosable_json.is_array()) {
+        if (!choosable_json.at("multi").is_array()) {
             throw attribute_format_error(type, filepath, "multi", "array");
         }
+        if (choosable_json.at("multi").empty()) {
+            throw invalid_attribute(type, filepath, "multi", "cannot be empty");
+        }
         for (const auto& part_json : choosable_json) {
+            if (part_json.empty()) {
+                throw invalid_attribute(type, filepath, "multi", "cannot have empty entry");
+            }
             choosable.parts.emplace_back(effect_holder_parser.createEffectHolder(part_json));
         }
     }

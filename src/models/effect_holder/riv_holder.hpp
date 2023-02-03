@@ -12,7 +12,13 @@ namespace dnd {
 class RIVHolder {
 public:
     std::unordered_set<std::string> damage_resistances, damage_immunities, damage_vulnerabilities, condition_immunities;
+    bool empty() const;
 };
+
+inline bool RIVHolder::empty() const {
+    return damage_resistances.empty() && damage_immunities.empty() && damage_vulnerabilities.empty()
+           && condition_immunities.empty();
+}
 
 } // namespace dnd
 

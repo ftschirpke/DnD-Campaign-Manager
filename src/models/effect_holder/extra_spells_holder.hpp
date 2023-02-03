@@ -28,7 +28,13 @@ public:
     std::unordered_set<std::string> spells_known_included;
     // spells that are added to your spell list
     std::unordered_set<std::string> added_to_spell_list;
+    bool empty() const;
 };
+
+inline bool ExtraSpellsHolder::empty() const {
+    return free_cantrips.empty() && at_will.empty() && innate.empty() && free_once_a_day.empty() && spells_known.empty()
+           && spells_known_included.empty() && added_to_spell_list.empty();
+}
 
 } // namespace dnd
 

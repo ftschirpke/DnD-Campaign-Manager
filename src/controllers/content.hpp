@@ -25,7 +25,7 @@ public:
     std::unordered_map<std::string, const CharacterRace> character_races;
     std::unordered_map<std::string, const CharacterSubrace> character_subraces;
     std::unordered_map<std::string, const Spell> spells;
-    void printStatus() const noexcept;
+    void printStatus() const;
 };
 
 } // namespace dnd

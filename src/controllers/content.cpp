@@ -6,7 +6,7 @@
 #include <string>
 #include <unordered_map>
 
-void dnd::Content::printStatus() const noexcept {
+void dnd::Content::printStatus() const {
     groups.printStatus();
     std::cout << "=== Spells ===\n";
     std::cout << "spells parsed: " << spells.size() << '\n';
