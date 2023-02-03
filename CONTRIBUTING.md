@@ -34,6 +34,8 @@ In most cases changing the [clang-format file](.clang-format) itself might be th
 
 Please abide by the style guidelines below.
 
+Besides that, try to write readable code that abides by the common points listed in popular style guides e.g. [Google's C++ Style Guide](https://google.github.io/styleguide/cppguide.html).
+
 ### File Names
 Source code files should have the extensions `.cpp` and `.hpp`. The names of the files should be descriptive but not too long. For files that only define one class, which is the preferred way of doing things, the file name should be the "snake_case" version of the class name (which should be in "camelCase").
 
