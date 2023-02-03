@@ -42,9 +42,8 @@ public:
         const std::string& name, std::vector<Feature>&& features, const std::array<int, 6>& base_ability_scores
     ) noexcept;
     Character(
-        const std::string& name, std::vector<Feature>&& features,
-        const std::array<int, 6>& base_ability_scores, int level, int xp,
-        const std::vector<int>& hit_dice_rolls
+        const std::string& name, std::vector<Feature>&& features, const std::array<int, 6>& base_ability_scores,
+        int level, int xp, const std::vector<int>& hit_dice_rolls
     ) noexcept;
     int getLevel() const noexcept;
     int getXP() const noexcept;
@@ -76,8 +75,8 @@ inline Character::Character(
 
 
 inline Character::Character(
-    const std::string& name, std::vector<Feature>&& features, const std::array<int, 6>& base_ability_scores,
-    int level, int xp, const std::vector<int>& hit_dice_rolls
+    const std::string& name, std::vector<Feature>&& features, const std::array<int, 6>& base_ability_scores, int level,
+    int xp, const std::vector<int>& hit_dice_rolls
 ) noexcept
     : FeatureHolder(name, std::move(features)), base_ability_scores(base_ability_scores), state(decisions),
       class_ptr(nullptr), subclass_ptr(nullptr), race_ptr(nullptr), subrace_ptr(nullptr), level(level), xp(xp),
