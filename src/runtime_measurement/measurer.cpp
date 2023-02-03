@@ -10,7 +10,7 @@
 #include <thread>
 #include <vector>
 
-const std::vector<std::string> values_for_human_readable = {
+static const std::vector<std::string> values_for_human_readable = {
     "int dnd::launch(int, char**)",
     "Main execution scope",
     "dnd::Content dnd::ContentParser::parse(const std::filesystem::__cxx11::path&, const string&)",

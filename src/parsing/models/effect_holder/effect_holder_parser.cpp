@@ -29,13 +29,15 @@
 #include "parsing/parsing_types.hpp"
 #include "parsing/subparser.hpp"
 
-void parseActionsOptionals(const nlohmann::json& effect_holder_json, dnd::EffectHolder* const effect_holder) {
+static void parseActionsOptionals(const nlohmann::json& effect_holder_json, dnd::EffectHolder* const effect_holder) {
     dnd::parseOptional(effect_holder_json, "actions", effect_holder->actions.actions);
     dnd::parseOptional(effect_holder_json, "bonus_actions", effect_holder->actions.bonus_actions);
     dnd::parseOptional(effect_holder_json, "reactions", effect_holder->actions.reactions);
 }
 
-void parseExtraSpellsOptionals(const nlohmann::json& effect_holder_json, dnd::EffectHolder* const effect_holder) {
+static void parseExtraSpellsOptionals(
+    const nlohmann::json& effect_holder_json, dnd::EffectHolder* const effect_holder
+) {
     dnd::parseOptional(effect_holder_json, "cantrips_free", effect_holder->extra_spells.free_cantrips);
     dnd::parseOptional(effect_holder_json, "spells_at_will", effect_holder->extra_spells.at_will);
     dnd::parseOptional(effect_holder_json, "spells_innate", effect_holder->extra_spells.innate);
@@ -53,14 +55,16 @@ void parseExtraSpellsOptionals(const nlohmann::json& effect_holder_json, dnd::Ef
     );
 }
 
-void parseRIVsOptionals(const nlohmann::json& effect_holder_json, dnd::EffectHolder* const effect_holder) {
+static void parseRIVsOptionals(const nlohmann::json& effect_holder_json, dnd::EffectHolder* const effect_holder) {
     dnd::parseOptional(effect_holder_json, "damage_resistances", effect_holder->rivs.damage_resistances);
     dnd::parseOptional(effect_holder_json, "damage_immunities", effect_holder->rivs.damage_immunities);
     dnd::parseOptional(effect_holder_json, "damage_vulnerabilities", effect_holder->rivs.damage_vulnerabilities);
     dnd::parseOptional(effect_holder_json, "condition_immunities", effect_holder->rivs.condition_immunities);
 }
 
-void parseProficienciesOptionals(const nlohmann::json& effect_holder_json, dnd::EffectHolder* const effect_holder) {
+static void parseProficienciesOptionals(
+    const nlohmann::json& effect_holder_json, dnd::EffectHolder* const effect_holder
+) {
     dnd::parseOptional(effect_holder_json, "armor_proficiencies", effect_holder->proficiencies.armor);
     dnd::parseOptional(effect_holder_json, "weapon_proficiencies", effect_holder->proficiencies.weapons);
     dnd::parseOptional(effect_holder_json, "tool_proficiencies", effect_holder->proficiencies.tools);

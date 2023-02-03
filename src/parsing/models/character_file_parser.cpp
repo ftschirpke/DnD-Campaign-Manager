@@ -81,7 +81,7 @@ void dnd::CharacterFileParser::parse() {
     }
 }
 
-const dnd::Feature* determineFeature(
+static const dnd::Feature* determineFeature(
     const std::string& feature_name, const std::vector<const dnd::FeatureHolder*> feature_holders
 ) {
     const dnd::Feature* feature_ptr = nullptr;
@@ -102,7 +102,7 @@ const dnd::Feature* determineFeature(
     return feature_ptr;
 }
 
-const dnd::Choice* determineChoice(
+static const dnd::Choice* determineChoice(
     const std::vector<dnd::CharacterDecision>& parsed_decisions, const std::string& attribute_name,
     const nlohmann::json& decision_json, const std::vector<dnd::EffectHolderWithChoices>& ehs_with_choices
 ) {
