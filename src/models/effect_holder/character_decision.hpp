@@ -13,7 +13,6 @@ public:
     CharacterDecision(const Choice* const choice) noexcept;
     const Choice* const choice;
     EffectHolder decision_effects;
-    EffectHolder createEffectHolder() const;
 };
 
 inline CharacterDecision::CharacterDecision(const Choice* const choice) noexcept : choice(choice) {}

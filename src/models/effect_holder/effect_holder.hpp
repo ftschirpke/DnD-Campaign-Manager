@@ -31,12 +31,17 @@ public:
     EffectHolder() noexcept = default;
     EffectHolder(EffectHolder&& other) noexcept = default;
     EffectHolder& operator=(EffectHolder&& other) noexcept = default;
+    bool empty() const;
     // TODO: manage choices (choose one of ...)
     bool isActive(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const;
 };
 
+inline bool EffectHolder::empty() const {
+    return activations.empty() && actions.empty() && extra_spells.empty() && proficiencies.empty() && rivs.empty()
+           && ability_score_effects.empty() && normal_effects.empty();
+}
 
 } // namespace dnd
 

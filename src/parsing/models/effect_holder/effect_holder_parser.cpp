@@ -133,6 +133,9 @@ dnd::EffectHolderWithChoices dnd::EffectHolderParser::createEffectHolderWithChoi
     if (!effect_holder_json.at("choose").is_object()) {
         throw attribute_format_error(type, filepath, "choose", "map/object");
     }
+    if (effect_holder_json.at("choose").empty()) {
+        throw invalid_attribute(type, filepath, "choose", "cannot be empty");
+    }
     for (const auto& [choice_key, choice_json] : effect_holder_json.at("choose").items()) {
         parseAndAddChoice(choice_key, choice_json, effect_holder);
     }

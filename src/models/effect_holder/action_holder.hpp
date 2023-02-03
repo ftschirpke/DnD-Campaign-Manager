@@ -12,7 +12,10 @@ namespace dnd {
 class ActionHolder {
 public:
     std::unordered_map<std::string, std::string> actions, bonus_actions, reactions;
+    bool empty() const;
 };
+
+inline bool ActionHolder::empty() const { return actions.empty() && bonus_actions.empty() && reactions.empty(); }
 
 } // namespace dnd
 

@@ -20,9 +20,7 @@ public:
     const std::string left_identifier, op_name;
     std::unordered_map<std::string, bool (*)(int, int)>::mapped_type op;
     Activation(const std::string& left_identifier, const std::string& op_name);
-    Activation() noexcept = default;
     Activation(Activation&& other) noexcept = default;
-    virtual ~Activation() noexcept = default;
     virtual bool check(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const = 0;

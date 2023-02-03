@@ -46,10 +46,16 @@ dnd::Feature dnd::FeaturesParser::createFeature(const std::string& feature_name,
         ));
     }
     if (feature_json.contains("multi")) {
-        if (!feature_json.is_array()) {
+        if (!feature_json.at("multi").is_array()) {
             throw attribute_format_error(type, filepath, "multi", "array");
         }
+        if (feature_json.at("multi").empty()) {
+            throw invalid_attribute(type, filepath, "multi", "cannot be empty");
+        }
         for (const auto& part_json : feature_json) {
+            if (part_json.empty()) {
+                throw invalid_attribute(type, filepath, "multi", "cannot have empty entry");
+            }
             if (part_json.contains("choose")) {
                 feature.parts_with_choices.emplace_back(effect_holder_parser.createEffectHolderWithChoices(part_json));
             } else {
