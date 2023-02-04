@@ -24,7 +24,7 @@ public:
     Feature(const std::string& name, const std::string& description) noexcept;
     Feature(Feature&& other) noexcept = default;
     /**
-     * @brief Checks whether the feature is active for a character of a certain level
+     * @brief Checks whether the feature is active (provides its effects) for a character of a certain level
      * @param level a character level
      * @return "true" if the feature is always active for a character of that level i.e there are no other conditions,
      * "false" otherwise

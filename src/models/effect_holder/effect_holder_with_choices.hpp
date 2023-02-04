@@ -11,13 +11,23 @@
 
 namespace dnd {
 
+/**
+ * @brief A class representing a part of a feature that provides certain effects to a character and
+ * additionally requires the character to make choices
+ */
 class EffectHolderWithChoices : public EffectHolder {
 public:
-    std::vector<std::unique_ptr<Choice>> choices;
     EffectHolderWithChoices() noexcept = default;
     EffectHolderWithChoices(EffectHolderWithChoices&& other) noexcept = default;
     EffectHolderWithChoices& operator=(EffectHolderWithChoices&& other) noexcept = default;
+    /**
+     * @brief Returns true if the EffectHolderWithChoices is empty
+     * @return "true" if the EffectHolderWithChoices is empty, "false" otherwise
+     */
     bool empty() const;
+
+    // the choices this effect holder needs the character to make
+    std::vector<std::unique_ptr<Choice>> choices;
 };
 
 inline bool EffectHolderWithChoices::empty() const { return EffectHolder::empty() && choices.empty(); }

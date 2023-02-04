@@ -1,8 +1,6 @@
 #ifndef DND_CONFIG_HPP_
 #define DND_CONFIG_HPP_
 
-// #define _CRT_SECURE_NO_WARNINGS
-
 #define DND_CAMPAIGN_MANAGER_NAME "@CMAKE_PROJECT_NAME@"
 #define DND_CAMPAIGN_MANAGER_DESCRIPTION "@CMAKE_PROJECT_DESCRIPTION@"
 
@@ -21,8 +19,8 @@
 #if DND_DEBUG_MODE
 #include "runtime_measurement/measurer.hpp"
 
-#define DUMMY_CONCATENATE(x,y) x##y
-#define CONCATENATE(x,y) DUMMY_CONCATENATE(x,y)
+#define DND_DUMMY_CONCATENATE(x,y) x##y
+#define DND_CONCATENATE(x,y) DND_DUMMY_CONCATENATE(x,y)
 
 #define DND_START_MEASURING_SESSION(name, filepath) ::dnd::Measurer::get().beginSession(name, filepath)
 #define DND_END_MEASURING_SESSION() ::dnd::Measurer::get().endSession()
