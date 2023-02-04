@@ -6,6 +6,23 @@
 #include <string>
 #include <unordered_map>
 
+bool dnd::NumericActivation::check(
+    const std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
+) const {
+    int left_value;
+    try {
+        if (constants.contains(left_identifier)) {
+            left_value = constants.at(left_identifier);
+        } else {
+            left_value = attributes.at(left_identifier);
+        }
+    } catch (const std::out_of_range& e) {
+        UNUSED(e);
+        throw std::out_of_range("\"" + left_identifier + "\" does not exist. It is neither an attribute nor constant.");
+    }
+    return op(left_value, right_value);
+}
+
 bool dnd::IdentifierActivation::check(
     const std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {

@@ -126,23 +126,6 @@ inline NumericActivation::NumericActivation(
 )
     : Activation(left_identifier, op_name), right_value(right_value) {}
 
-inline bool NumericActivation::check(
-    const std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
-) const {
-    int left_value;
-    try {
-        if (constants.contains(left_identifier)) {
-            left_value = constants.at(left_identifier);
-        } else {
-            left_value = attributes.at(left_identifier);
-        }
-    } catch (const std::out_of_range& e) {
-        UNUSED(e);
-        throw std::out_of_range("\"" + left_identifier + "\" does not exist. It is neither an attribute nor constant.");
-    }
-    return op(left_value, right_value);
-}
-
 inline IdentifierActivation::IdentifierActivation(
     const std::string& left_identifier, const std::string& op_name, const std::string& right_identifier
 )
