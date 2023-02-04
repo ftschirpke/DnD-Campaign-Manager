@@ -14,7 +14,7 @@ namespace dnd {
 class CharacterDecision {
 public:
     /**
-     * @brief Initialises the character decision with the choice it refers to.
+     * @brief Constructs the character decision with the choice it refers to.
      * @param choice a pointer to the choice this decision is for
      */
     CharacterDecision(const Choice* const choice) noexcept;

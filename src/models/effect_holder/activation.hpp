@@ -15,7 +15,7 @@ namespace dnd {
 class Activation {
 public:
     /**
-     * @brief Initialises the activation with left part of the comparison and its operator function
+     * @brief Constructs the activation with left part of the comparison and its operator function
      * @param left_identifier left part of the comparison
      * @param op_name string representation of the comparison operator
      * @throws std::invalid_argument if op_name is not a valid name for an operator function
@@ -59,7 +59,7 @@ public:
     // numeric value on the right side of the comparison
     const int right_value;
     /**
-     * @brief Initialises the numeric activation
+     * @brief Constructs the numeric activation
      * @param left_identifier left part of the comparison
      * @param op_name string representation of the comparison operator
      * @param right_value integer value of the numeric value on the right side of the comparison
@@ -87,7 +87,7 @@ public:
     // right part of the comparison which must be an attribute or constant of the character
     const std::string right_identifier;
     /**
-     * @brief Initialises the identifier activation
+     * @brief Constructs the identifier activation
      * @param left_identifier left part of the comparison (attribute or constant)
      * @param op_name string representation of the comparison operator
      * @param right_identifier right part of the comparison
