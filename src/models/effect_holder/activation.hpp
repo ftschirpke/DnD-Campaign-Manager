@@ -116,7 +116,7 @@ inline Activation::Activation(const std::string& left_identifier, const std::str
     try {
         op = operators.at(op_name);
     } catch (const std::out_of_range& e) {
-        UNUSED(e);
+        DND_UNUSED(e);
         throw std::invalid_argument("Operator \"" + op_name + "\" does not exist.");
     }
 }

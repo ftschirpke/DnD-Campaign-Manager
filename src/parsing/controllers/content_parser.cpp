@@ -190,7 +190,7 @@ void dnd::ContentParser::parseAllOfSingleFileType(const ParsingType parsing_type
         try {
             type_file = std::filesystem::directory_entry(dir.path() / (file_names.at(parsing_type) + ".json"));
         } catch (const std::out_of_range& e) {
-            UNUSED(e);
+            DND_UNUSED(e);
             throw std::logic_error(
                 "Cannot parse type \"" + parsing_type_names.at(parsing_type) + "\" as single file type."
             );
@@ -232,7 +232,7 @@ void dnd::ContentParser::parseAllOfMultiFileType(const ParsingType parsing_type)
         try {
             type_subdir = std::filesystem::directory_entry(dir.path() / subdir_names.at(parsing_type));
         } catch (const std::out_of_range& e) {
-            UNUSED(e);
+            DND_UNUSED(e);
             throw std::logic_error(
                 "Cannot parse type \"" + parsing_type_names.at(parsing_type) + "\" as multi file type."
             );

@@ -47,7 +47,7 @@ inline Ability stringToAbility(const std::string& ability_str) {
     try {
         return ability_strings_mapping.at(ability_str);
     } catch (const std::out_of_range& e) {
-        UNUSED(e);
+        DND_UNUSED(e);
         throw std::invalid_argument("The ability \"" + ability_str + "\" does not exist.");
     }
 }
