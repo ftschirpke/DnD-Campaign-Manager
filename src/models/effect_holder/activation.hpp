@@ -14,14 +14,6 @@ namespace dnd {
  */
 class Activation {
 public:
-    // the supported comparison operators for activations
-    static const std::unordered_map<std::string, bool (*)(int, int)> operators;
-    // left part of the comparison which must be an attribute or constant of the character
-    const std::string left_identifier;
-    // the operator in its string representation
-    const std::string op_name;
-    // the operator function
-    std::unordered_map<std::string, bool (*)(int, int)>::mapped_type op;
     /**
      * @brief Initialises the activation with left part of the comparison and its operator function
      * @param left_identifier left part of the comparison
@@ -41,6 +33,15 @@ public:
     virtual bool check(
         const std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const = 0;
+
+    // the supported comparison operators for activations
+    static const std::unordered_map<std::string, bool (*)(int, int)> operators;
+    // left part of the comparison which must be an attribute or constant of the character
+    const std::string left_identifier;
+    // the operator in its string representation
+    const std::string op_name;
+    // the activation's comparison operator function
+    std::unordered_map<std::string, bool (*)(int, int)>::mapped_type op;
 };
 
 inline const std::unordered_map<std::string, bool (*)(int, int)> Activation::operators = {

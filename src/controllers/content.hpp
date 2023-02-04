@@ -21,6 +21,11 @@ namespace dnd {
  */
 class Content {
 public:
+    /**
+     * @brief Prints how much content this controller holds
+     */
+    void printStatus() const;
+
     // the controller holding all the groups for the campaign
     Groups groups;
     // the characters mapped to their names
@@ -35,10 +40,6 @@ public:
     std::unordered_map<std::string, const CharacterSubrace> character_subraces;
     // the spells to their names
     std::unordered_map<std::string, const Spell> spells;
-    /**
-     * @brief Prints how much content this controller holds
-     */
-    void printStatus() const;
 };
 
 } // namespace dnd

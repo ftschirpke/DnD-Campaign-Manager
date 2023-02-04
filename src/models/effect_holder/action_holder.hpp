@@ -13,17 +13,18 @@ namespace dnd {
  */
 class ActionHolder {
 public:
+    /**
+     * @brief Returns true if the ActionHolder is empty
+     * @return "true" if the ActionHolder is empty, "false" otherwise
+     */
+    bool empty() const;
+
     // actions represented as a pair of a name (key) and a short description (value)
     std::unordered_map<std::string, std::string> actions;
     // bonus actions represented as a pair of a name (key) and a short description (value)
     std::unordered_map<std::string, std::string> bonus_actions;
     // reactions represented as a pair of a name (key) and a short description (value)
     std::unordered_map<std::string, std::string> reactions;
-    /**
-     * @brief Returns true if the ActionHolder is empty
-     * @return "true" if the ActionHolder is empty, "false" otherwise
-     */
-    bool empty() const;
 };
 
 inline bool ActionHolder::empty() const { return actions.empty() && bonus_actions.empty() && reactions.empty(); }

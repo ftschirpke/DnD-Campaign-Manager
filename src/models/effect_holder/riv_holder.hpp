@@ -13,6 +13,12 @@ namespace dnd {
  */
 class RIVHolder {
 public:
+    /**
+     * @brief Returns true if the RIVHolder is empty
+     * @return "true" if the RIVHolder is empty, "false" otherwise
+     */
+    bool empty() const;
+
     // the damage types the creature is resistant to
     std::unordered_set<std::string> damage_resistances;
     // the damage types the creature is immune to
@@ -21,11 +27,6 @@ public:
     std::unordered_set<std::string> damage_vulnerabilities;
     // the conditions the creature is immune to
     std::unordered_set<std::string> condition_immunities;
-    /**
-     * @brief Returns true if the RIVHolder is empty
-     * @return "true" if the RIVHolder is empty, "false" otherwise
-     */
-    bool empty() const;
 };
 
 inline bool RIVHolder::empty() const {

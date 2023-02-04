@@ -13,6 +13,12 @@ namespace dnd {
  */
 class ProficiencyHolder {
 public:
+    /**
+     * @brief Returns true if the ProficiencyHolder is empty
+     * @return "true" if the ProficiencyHolder is empty, "false" otherwise
+     */
+    bool empty() const;
+
     // the types of armor the character is proficient with
     std::unordered_set<std::string> armor;
     // the types of weapons the character is proficient with
@@ -27,11 +33,6 @@ public:
     std::unordered_set<std::string> languages;
     // special types of senses the character has e.g. darkvision
     std::unordered_set<std::string> senses;
-    /**
-     * @brief Returns true if the ProficiencyHolder is empty
-     * @return "true" if the ProficiencyHolder is empty, "false" otherwise
-     */
-    bool empty() const;
 };
 
 inline bool ProficiencyHolder::empty() const {

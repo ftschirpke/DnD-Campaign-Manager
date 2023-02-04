@@ -13,6 +13,12 @@ namespace dnd {
  */
 class ExtraSpellsHolder {
 public:
+    /**
+     * @brief Returns true if the ExtraSpellsHolder is empty
+     * @return "true" if the ExtraSpellsHolder is empty, "false" otherwise
+     */
+    bool empty() const;
+
     // cantrips that do not count against the number of cantrips known
     std::unordered_set<std::string> free_cantrips;
     // spells that you can cast without expending a spell slot or material components
@@ -31,11 +37,6 @@ public:
     std::unordered_set<std::string> spells_known_included;
     // spells that are added to your spell list
     std::unordered_set<std::string> added_to_spell_list;
-    /**
-     * @brief Returns true if the ExtraSpellsHolder is empty
-     * @return "true" if the ExtraSpellsHolder is empty, "false" otherwise
-     */
-    bool empty() const;
 };
 
 inline bool ExtraSpellsHolder::empty() const {
