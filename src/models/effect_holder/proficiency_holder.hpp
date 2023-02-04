@@ -8,10 +8,29 @@
 
 namespace dnd {
 
-// This class holds a creature's proficiencies, its known languages, and special senses it has.
+/**
+ * @brief This class holds a characters's proficiencies, its known languages, and special senses it has.
+ */
 class ProficiencyHolder {
 public:
-    std::unordered_set<std::string> armor, weapons, tools, skills, saving_throws, languages, senses;
+    // the types of armor the character is proficient with
+    std::unordered_set<std::string> armor;
+    // the types of weapons the character is proficient with
+    std::unordered_set<std::string> weapons;
+    // the tools the character is proficient with
+    std::unordered_set<std::string> tools;
+    // the skills the character is proficient at
+    std::unordered_set<std::string> skills;
+    // the saving throws the character is proficient at
+    std::unordered_set<std::string> saving_throws;
+    // the languages the character knows
+    std::unordered_set<std::string> languages;
+    // special types of senses the character has e.g. darkvision
+    std::unordered_set<std::string> senses;
+    /**
+     * @brief Returns true if the ProficiencyHolder is empty
+     * @return "true" if the ProficiencyHolder is empty, "false" otherwise
+     */
     bool empty() const;
 };
 

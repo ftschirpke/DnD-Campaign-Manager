@@ -8,6 +8,9 @@
 
 namespace dnd {
 
+/**
+ * @brief This class hold any spells a character gains through any other means than his class' spellcasting feature.
+ */
 class ExtraSpellsHolder {
 public:
     // cantrips that do not count against the number of cantrips known
@@ -28,6 +31,10 @@ public:
     std::unordered_set<std::string> spells_known_included;
     // spells that are added to your spell list
     std::unordered_set<std::string> added_to_spell_list;
+    /**
+     * @brief Returns true if the ExtraSpellsHolder is empty
+     * @return "true" if the ExtraSpellsHolder is empty, "false" otherwise
+     */
     bool empty() const;
 };
 
