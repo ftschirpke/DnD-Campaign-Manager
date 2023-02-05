@@ -35,6 +35,7 @@ protected:
      */
     virtual void requiresConfiguration() const;
 private:
+    // "true" if the type and filepath for the subparser were configured already, "false" otherwise
     bool configured;
 };
 

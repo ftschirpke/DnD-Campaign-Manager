@@ -94,7 +94,9 @@ public:
      */
     void printStatus() const;
 private:
+    // a map containing all string groups - the members of a string group mapped to the name of the group
     std::unordered_map<std::string, std::unordered_set<std::string>> data;
+    // a map containing all choosable groups - the members of a choosable group mapped to the name of the group
     std::unordered_map<std::string, std::unordered_map<std::string, Choosable>> choosables;
 };
 
