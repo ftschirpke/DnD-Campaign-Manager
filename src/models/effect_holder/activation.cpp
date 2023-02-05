@@ -7,12 +7,9 @@
 #include <unordered_map>
 
 constexpr std::array<std::pair<const char*, bool (*)(int, int)>, 6> dnd::Activation::operators = {
-    std::make_pair("==", [](int a, int b) { return a == b; }),
-    std::make_pair("!=", [](int a, int b) { return a != b; }),
-    std::make_pair(">=", [](int a, int b) { return a >= b; }),
-    std::make_pair("<=", [](int a, int b) { return a <= b; }),
-    std::make_pair(">", [](int a, int b) { return a > b; }),
-    std::make_pair("<", [](int a, int b) { return a < b; }),
+    std::pair("==", [](int a, int b) { return a == b; }), std::pair("!=", [](int a, int b) { return a != b; }),
+    std::pair(">=", [](int a, int b) { return a >= b; }), std::pair("<=", [](int a, int b) { return a <= b; }),
+    std::pair(">", [](int a, int b) { return a > b; }),   std::pair("<", [](int a, int b) { return a < b; }),
 };
 
 bool dnd::NumericActivation::check(

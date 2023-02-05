@@ -89,7 +89,7 @@ dnd::SpellType dnd::SpellsFileParser::createSpellType(const std::string& spell_t
     }
     auto tolower = [](unsigned char c) { return static_cast<unsigned char>(std::tolower(c)); };
     std::transform(magic_school_str.begin(), magic_school_str.end(), magic_school_str.begin(), tolower);
-    spell_type.magic_school = magic_schools.at(magic_school_str);
+    spell_type.magic_school = magicSchoolFromName(magic_school_str);
     return spell_type;
 }
 

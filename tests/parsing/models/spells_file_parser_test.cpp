@@ -211,7 +211,7 @@ TEST_CASE("dnd::SpellsFileParser::createSpellType: parse valid types") {
             REQUIRE(type.levelAsNumber() == 0);
             std::string lowercase_spelling = spelling;
             lowercase_spelling[0] = my_tolower(lowercase_spelling[0]);
-            REQUIRE(type.magic_school == dnd::magic_schools.at(lowercase_spelling));
+            REQUIRE(type.magic_school == dnd::magicSchoolFromName(lowercase_spelling));
             REQUIRE(type.is_ritual == false);
         }
     }
@@ -225,12 +225,12 @@ TEST_CASE("dnd::SpellsFileParser::createSpellType: parse valid types") {
                 REQUIRE(type.levelAsNumber() == level);
                 std::string lowercase_spelling = spelling;
                 lowercase_spelling[0] = my_tolower(lowercase_spelling[0]);
-                REQUIRE(type.magic_school == dnd::magic_schools.at(lowercase_spelling));
+                REQUIRE(type.magic_school == dnd::magicSchoolFromName(lowercase_spelling));
                 REQUIRE(type.is_ritual == false);
                 s += " (ritual)";
                 REQUIRE_NOTHROW(type = parser.createSpellTypeForTesting(s));
                 REQUIRE(type.levelAsNumber() == level);
-                REQUIRE(type.magic_school == dnd::magic_schools.at(lowercase_spelling));
+                REQUIRE(type.magic_school == dnd::magicSchoolFromName(lowercase_spelling));
                 REQUIRE(type.is_ritual == true);
             }
         }

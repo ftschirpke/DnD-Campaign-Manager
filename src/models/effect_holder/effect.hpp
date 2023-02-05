@@ -31,9 +31,9 @@ enum EffectTime {
 
 // the effect times in their proper order paired with their names
 const std::array<std::pair<const char*, EffectTime>, 5> effect_times_in_order = {
-    std::make_pair("earliest", EffectTime::EARLIEST), std::make_pair("early", EffectTime::EARLY),
-    std::make_pair("normal", EffectTime::NORMAL),     std::make_pair("late", EffectTime::LATE),
-    std::make_pair("latest", EffectTime::LATEST),
+    std::pair("earliest", EffectTime::EARLIEST), std::pair("early", EffectTime::EARLY),
+    std::pair("normal", EffectTime::NORMAL),     std::pair("late", EffectTime::LATE),
+    std::pair("latest", EffectTime::LATEST),
 };
 
 /**
