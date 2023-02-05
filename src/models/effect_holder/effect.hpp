@@ -222,9 +222,10 @@ inline IntNumEffect::IntNumEffect(
     for (const auto& [operator_name, operator_func] : int_operators) {
         if (operator_name == op_name) {
             op = operator_func;
+            return;
         }
     }
-    throw std::out_of_range("Operator \"" + op_name + "\" does not exist.");
+    throw std::out_of_range("Integer Effect Operator \"" + op_name + "\" does not exist.");
 }
 
 inline void IntNumEffect::applyTo(
@@ -241,9 +242,10 @@ inline FloatNumEffect::FloatNumEffect(
     for (const auto& [operator_name, operator_func] : float_operators) {
         if (operator_name == op_name) {
             op = operator_func;
+            return;
         }
     }
-    throw std::out_of_range("Operator \"" + op_name + "\" does not exist.");
+    throw std::out_of_range("Float Effect Operator \"" + op_name + "\" does not exist.");
 }
 
 inline void FloatNumEffect::applyTo(
@@ -261,9 +263,10 @@ inline IdentifierEffect::IdentifierEffect(
     for (const auto& [operator_name, operator_func] : int_operators) {
         if (operator_name == op_name) {
             op = operator_func;
+            return;
         }
     }
-    throw std::out_of_range("Operator \"" + op_name + "\" does not exist.");
+    throw std::out_of_range("Integer Effect Operator \"" + op_name + "\" does not exist.");
 }
 
 inline OtherAttributeEffect::OtherAttributeEffect(

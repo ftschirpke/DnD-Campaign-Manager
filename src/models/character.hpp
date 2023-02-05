@@ -92,7 +92,8 @@ public:
 
     // TODO: should these pointers be non-const?
 
-    static const std::array<std::pair<int, int>, 20> xp_for_level;
+    // the respective minimum XP values for levels 1 through 20 (indices 0 to 19)
+    static const std::array<int, 20> minxp_for_level;
     // the 6 base values for the character's ability scores
     const std::array<int, 6> base_ability_scores;
     // the current state of the character
@@ -159,7 +160,7 @@ inline void Character::updateLevel() { level = levelForXP(xp); }
 //         std::cerr << "Warning: Cannot level up beyond level 20.\n"; // TODO: consider throwing exception instead
 //         return;
 //     }
-//     xp = xp_for_level.at(++level);
+//     xp = minxp_for_level.at(++level);
 // }
 
 // inline void Character::setLevel(int new_level) {
@@ -168,7 +169,7 @@ inline void Character::updateLevel() { level = levelForXP(xp); }
 //         return;
 //     }
 //     level = new_level;
-//     xp = xp_for_level.at(level);
+//     xp = minxp_for_level.at(level);
 // }
 
 // inline void Character::setXP(int new_xp) {

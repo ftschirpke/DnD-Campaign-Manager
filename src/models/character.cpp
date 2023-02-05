@@ -15,21 +15,18 @@
 #include "models/character_state.hpp"
 #include "models/effect_holder/feature.hpp"
 
-constexpr std::array<std::pair<int, int>, 20> dnd::Character::xp_for_level = {
-    std::make_pair(1, 0),       std::make_pair(2, 300),     std::make_pair(3, 900),     std::make_pair(4, 2700),
-    std::make_pair(5, 6500),    std::make_pair(6, 14000),   std::make_pair(7, 23000),   std::make_pair(8, 34000),
-    std::make_pair(9, 48000),   std::make_pair(10, 64000),  std::make_pair(11, 85000),  std::make_pair(12, 100000),
-    std::make_pair(13, 120000), std::make_pair(14, 140000), std::make_pair(15, 165000), std::make_pair(16, 195000),
-    std::make_pair(17, 225000), std::make_pair(18, 265000), std::make_pair(19, 305000), std::make_pair(20, 355000),
+constexpr std::array<int, 20> dnd::Character::minxp_for_level = {
+    0,     300,    900,    2700,   6500,   14000,  23000,  34000,  48000,  64000,
+    85000, 100000, 120000, 140000, 165000, 195000, 225000, 265000, 305000, 355000,
 };
 
 int dnd::Character::levelForXP(int xp) {
     if (xp < 0) {
         throw std::invalid_argument("XP value cannot be negative.");
     }
-    for (const auto& [lv, min_xp] : xp_for_level) {
-        if (min_xp > xp) {
-            return lv - 1;
+    for (size_t lv = 0; lv < 20; ++lv) {
+        if (minxp_for_level[lv] > xp) {
+            return lv;
         }
     }
     return 20;

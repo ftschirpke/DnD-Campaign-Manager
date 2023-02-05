@@ -114,7 +114,7 @@ inline Activation::Activation(const std::string& left_identifier, const std::str
             return;
         }
     }
-    throw std::invalid_argument("Operator \"" + op_name + "\" does not exist.");
+    throw std::out_of_range("Operator \"" + op_name + "\" does not exist.");
 }
 
 inline NumericActivation::NumericActivation(
