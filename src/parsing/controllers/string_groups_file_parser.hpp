@@ -16,19 +16,49 @@
 
 namespace dnd {
 
+/**
+ * @brief A class for parsing single-file groups i.e. string groups
+ */
 class StringGroupsFileParser : public ContentFileParser {
 public:
+    /**
+     * @brief Constructs an StringGroupsFileParser
+     * @param groups the already-parsed
+     */
     StringGroupsFileParser(Groups& groups) noexcept;
+    /**
+     * @brief Parses JSON file containing a string group.
+     */
     virtual void parse() override;
+    /**
+     * @brief Checks whether the parsed string group is valid
+     * @return "true" if the group is valid, "false" otherwise
+     */
     virtual bool validate() const override;
+    /**
+     * @brief Saves the parsed group to the groups.
+     */
     virtual void saveResult() override;
 private:
-    static const ParsingType type;
-    Groups& groups;
-    std::unordered_map<std::string, std::unordered_set<std::string>> parsed_data;
-    EffectHolderParser effect_holder_parser;
+    /**
+     * @brief Parses one level of the input-map and saves the results in parsed_data
+     * @param json_map the part of the JSON map that should be parsed
+     * @return any values parsed as "__no_subgroup__" meaning they belong to the level above
+     */
     std::unordered_set<std::string> parseMap(const nlohmann::json& json_map);
+    /**
+     * @brief Configures the subparsers used
+     */
     virtual void configureSubparsers() override;
+
+    // the type of content that this parser parses: string groups
+    static const ParsingType type;
+    // the already-parsed groups where the result is added in the end
+    Groups& groups;
+    // the parsed groups
+    std::unordered_map<std::string, std::unordered_set<std::string>> parsed_data;
+    // a subparser for effect holders used for parsing the effect holders for the choosable
+    EffectHolderParser effect_holder_parser;
 };
 
 inline const ParsingType StringGroupsFileParser::type = ParsingType::GROUP;

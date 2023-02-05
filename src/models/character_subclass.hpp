@@ -20,7 +20,7 @@ public:
     /**
      * @brief Constructs a CharacterSubclass
      * @param name the name of the subclass
-     * @param features a collection of subclass features
+     * @param features the collection of features this subclass provides to a character
      * @param class_name the name of the class this is a subclass of
      */
     CharacterSubclass(const std::string& name, std::vector<Feature>&& features, const std::string& class_name) noexcept;
