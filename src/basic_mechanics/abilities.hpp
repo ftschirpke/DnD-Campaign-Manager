@@ -12,7 +12,9 @@
 
 namespace dnd {
 
-// the basic 6 abilities
+/**
+ * @brief An enum for the basic 6 abilities
+ */
 enum Ability {
     STRENGTH,
     DEXTERITY,
@@ -83,7 +85,6 @@ inline bool isAbility(std::string_view attribute_name) {
     return std::find(ability_strings_inorder.cbegin(), ability_strings_inorder.cend(), attribute_name)
            != ability_strings_inorder.cend();
 }
-
 
 /**
  * @brief Checks whether the given 3-letter string represents an ability

@@ -12,10 +12,21 @@
 
 namespace dnd {
 
+/**
+ * @brief A class representing a character's subclass
+ */
 class CharacterSubclass : public FeatureHolder {
 public:
-    const std::string class_name;
+    /**
+     * @brief Constructs a CharacterSubclass
+     * @param name the name of the subclass
+     * @param features a collection of subclass features
+     * @param class_name the name of the class this is a subclass of
+     */
     CharacterSubclass(const std::string& name, std::vector<Feature>&& features, const std::string& class_name) noexcept;
+
+    // the name of the class this is a subclass of
+    const std::string class_name;
 };
 
 inline CharacterSubclass::CharacterSubclass(

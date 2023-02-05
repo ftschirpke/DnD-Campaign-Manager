@@ -12,10 +12,21 @@
 
 namespace dnd {
 
+/**
+ * @brief A class representing a character's subrace.
+ */
 class CharacterSubrace : public FeatureHolder {
 public:
-    const std::string race_name;
+    /**
+     * @brief Constructs a CharacterSubrace
+     * @param name the name of the subrace
+     * @param features a collection of features this subrace provides to a character
+     * @param race_name the name of the race this is a subrace of
+     */
     CharacterSubrace(const std::string& name, std::vector<Feature>&& features, const std::string& race_name) noexcept;
+
+    // the name of the race this is a subrace of
+    const std::string race_name;
 };
 
 inline CharacterSubrace::CharacterSubrace(
