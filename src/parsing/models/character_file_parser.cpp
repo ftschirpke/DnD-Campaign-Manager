@@ -62,7 +62,7 @@ void dnd::CharacterFileParser::parse() {
     }
 
     // TODO: parse spells
-    UNUSED(spells);
+    DND_UNUSED(spells);
 
     if (json_to_parse.contains("features")) {
         features_parser.parseFeatures(json_to_parse.at("features"));
@@ -213,7 +213,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
     try {
         class_ptr = &character_classes.at(character_class_name);
     } catch (const std::out_of_range& e) {
-        UNUSED(e);
+        DND_UNUSED(e);
         throw invalid_attribute(type, filepath, "class", '\"' + character_class_name + "\" does not exist");
     }
 
@@ -222,7 +222,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
         try {
             subclass_ptr = &character_subclasses.at(character_subclass_name);
         } catch (const std::out_of_range& e) {
-            UNUSED(e);
+            DND_UNUSED(e);
             throw invalid_attribute(type, filepath, "subclass", '\"' + character_subclass_name + "\" does not exist");
         }
         if (class_ptr->subclass_level > level) {
@@ -242,7 +242,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
     try {
         race_ptr = &character_races.at(character_race_name);
     } catch (const std::out_of_range& e) {
-        UNUSED(e);
+        DND_UNUSED(e);
         throw invalid_attribute(type, filepath, "race", '\"' + character_race_name + "\" does not exist");
     }
 
@@ -256,7 +256,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
         try {
             subrace_ptr = &character_subraces.at(character_subrace_name);
         } catch (const std::out_of_range& e) {
-            UNUSED(e);
+            DND_UNUSED(e);
             throw invalid_attribute(type, filepath, "subrace", '\"' + character_subrace_name + "\" does not exist");
         }
     } else if (race_ptr->has_subraces) {

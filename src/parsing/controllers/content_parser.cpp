@@ -84,22 +84,13 @@ std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createSingleFilePars
         case ParsingType::GROUP:
             return std::make_unique<StringGroupsFileParser>(parsed_content.groups);
         default:
-            return createGeneralParserForType(parsing_type);
+            throw std::logic_error(
+                "No single-file parser for content type \"" + parsing_type_names.at(parsing_type) + "\" exists."
+            );
     }
 }
 
 std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createMultiFileParserForType(
-    const dnd::ParsingType parsing_type
-) {
-    switch (parsing_type) {
-        case ParsingType::GROUP:
-            return std::make_unique<EffectHolderGroupsFileParser>(parsed_content.groups);
-        default:
-            return createGeneralParserForType(parsing_type);
-    }
-}
-
-std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createGeneralParserForType(
     const dnd::ParsingType parsing_type
 ) {
     switch (parsing_type) {
@@ -126,9 +117,11 @@ std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createGeneralParserF
             );
         case ParsingType::SPELL:
             return std::make_unique<SpellsFileParser>(parsed_content.spells, parsed_content.groups);
+        case ParsingType::GROUP:
+            return std::make_unique<EffectHolderGroupsFileParser>(parsed_content.groups);
         default:
             throw std::logic_error(
-                "No general parser for type \"" + parsing_type_names.at(parsing_type) + "\" implemented."
+                "No multi-file parser for content type \"" + parsing_type_names.at(parsing_type) + "\" exists."
             );
     }
 }
@@ -190,7 +183,7 @@ void dnd::ContentParser::parseAllOfSingleFileType(const ParsingType parsing_type
         try {
             type_file = std::filesystem::directory_entry(dir.path() / (file_names.at(parsing_type) + ".json"));
         } catch (const std::out_of_range& e) {
-            UNUSED(e);
+            DND_UNUSED(e);
             throw std::logic_error(
                 "Cannot parse type \"" + parsing_type_names.at(parsing_type) + "\" as single file type."
             );
@@ -232,7 +225,7 @@ void dnd::ContentParser::parseAllOfMultiFileType(const ParsingType parsing_type)
         try {
             type_subdir = std::filesystem::directory_entry(dir.path() / subdir_names.at(parsing_type));
         } catch (const std::out_of_range& e) {
-            UNUSED(e);
+            DND_UNUSED(e);
             throw std::logic_error(
                 "Cannot parse type \"" + parsing_type_names.at(parsing_type) + "\" as multi file type."
             );

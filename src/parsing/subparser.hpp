@@ -20,8 +20,8 @@ public:
     /**
      * @brief Configure the parsing type and the file path for the subparser that will be used when throwing exceptions
      * for example.
-     * @param type the type of content of the file that is being parsed
-     * @param filepath the file that is being parsed
+     * @param conf_type the type of content of the file that is being parsed
+     * @param conf_filepath the file that is being parsed
      */
     virtual void configure(ParsingType conf_type, const std::filesystem::path& conf_filepath) noexcept;
 protected:
@@ -35,6 +35,7 @@ protected:
      */
     virtual void requiresConfiguration() const;
 private:
+    // "true" if the type and filepath for the subparser were configured already, "false" otherwise
     bool configured;
 };
 

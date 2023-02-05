@@ -27,7 +27,8 @@ static const std::vector<std::string> values_for_human_readable = {
 
 void dnd::Measurer::beginSession(const std::string& name, const std::string& filepath = "results.json") {
     session_start_time = std::chrono::system_clock::now();
-    session = new MeasuringSession{name, filepath, {{"traceEvents", nlohmann::json::array()}}};
+    session = std::unique_ptr<MeasuringSession>(new MeasuringSession{
+        name, filepath, {{"traceEvents", nlohmann::json::array()}}});
 }
 
 void dnd::Measurer::endSession() {
@@ -47,6 +48,7 @@ void dnd::Measurer::endSession() {
         }
     }
 
+    std::ofstream output_stream;
     // write some important values to a human readable file
     output_stream.open(session->filepath + ".txt");
     size_t max_str_len = 0;
@@ -80,7 +82,6 @@ void dnd::Measurer::endSession() {
     output_stream.open(session->filepath);
     output_stream << std::setw(4) << session->json << std::flush;
     output_stream.close();
-    delete session;
     session = nullptr;
 }
 

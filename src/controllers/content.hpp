@@ -16,16 +16,30 @@
 
 namespace dnd {
 
+/**
+ * @brief A class that holds all the content for a certain session or campaign
+ */
 class Content {
 public:
-    Groups groups;
-    std::unordered_map<std::string, Character> characters;
-    std::unordered_map<std::string, const CharacterClass> character_classes;
-    std::unordered_map<std::string, const CharacterSubclass> character_subclasses;
-    std::unordered_map<std::string, const CharacterRace> character_races;
-    std::unordered_map<std::string, const CharacterSubrace> character_subraces;
-    std::unordered_map<std::string, const Spell> spells;
+    /**
+     * @brief Prints how much content this controller holds
+     */
     void printStatus() const;
+
+    // the controller holding all the groups for the campaign
+    Groups groups;
+    // the characters mapped to their names
+    std::unordered_map<std::string, Character> characters;
+    // the character classes mapped to their names
+    std::unordered_map<std::string, const CharacterClass> character_classes;
+    // the character subclasses mapped to their names
+    std::unordered_map<std::string, const CharacterSubclass> character_subclasses;
+    // the character races mapped to their names
+    std::unordered_map<std::string, const CharacterRace> character_races;
+    // the character subraces mapped to their names
+    std::unordered_map<std::string, const CharacterSubrace> character_subraces;
+    // the spells to their names
+    std::unordered_map<std::string, const Spell> spells;
 };
 
 } // namespace dnd

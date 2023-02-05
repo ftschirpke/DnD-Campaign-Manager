@@ -1,8 +1,6 @@
 #ifndef DND_CONFIG_HPP_
 #define DND_CONFIG_HPP_
 
-// #define _CRT_SECURE_NO_WARNINGS
-
 #define DND_CAMPAIGN_MANAGER_NAME "@CMAKE_PROJECT_NAME@"
 #define DND_CAMPAIGN_MANAGER_DESCRIPTION "@CMAKE_PROJECT_DESCRIPTION@"
 
@@ -13,7 +11,7 @@
 #define DND_Debug 1
 #define DND_Release 0
 
-#define UNUSED(...) (void)(__VA_ARGS__)
+#define DND_UNUSED(...) (void)(__VA_ARGS__)
 
 #define DND_DEBUG_MODE DND_@CMAKE_BUILD_TYPE@
 
@@ -21,8 +19,8 @@
 #if DND_DEBUG_MODE
 #include "runtime_measurement/measurer.hpp"
 
-#define DUMMY_CONCATENATE(x,y) x##y
-#define CONCATENATE(x,y) DUMMY_CONCATENATE(x,y)
+#define DND_DUMMY_CONCATENATE(x,y) x##y
+#define DND_CONCATENATE(x,y) DND_DUMMY_CONCATENATE(x,y)
 
 #define DND_START_MEASURING_SESSION(name, filepath) ::dnd::Measurer::get().beginSession(name, filepath)
 #define DND_END_MEASURING_SESSION() ::dnd::Measurer::get().endSession()
@@ -33,7 +31,7 @@
 #define DND_MEASURE_FUNCTION() DND_MEASURE_SCOPE(__PRETTY_FUNCTION__)
 #endif
 
-#define DND_MEASURE_SCOPE(name) ::dnd::Timer CONCATENATE(timer,__LINE__(name));
+#define DND_MEASURE_SCOPE(name) ::dnd::Timer DND_CONCATENATE(timer,__LINE__(name));
 #else
 #define DND_START_MEASURING_SESSION(name, filepath)
 #define DND_END_MEASURING_SESSION()

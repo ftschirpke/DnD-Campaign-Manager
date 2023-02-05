@@ -81,7 +81,7 @@ void dnd::SpellcastingParser::parseSpellcasting(const nlohmann::json& spellcasti
     parseSize20Array(spellcasting_json, "level9_slots", spell_slots[8]);
 
     // TODO: parse spell list
-    UNUSED(spells);
+    DND_UNUSED(spells);
 }
 
 std::unique_ptr<dnd::Spellcasting> dnd::SpellcastingParser::retrieveSpellcasting() {

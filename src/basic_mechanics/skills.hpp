@@ -8,6 +8,7 @@
 
 namespace dnd {
 
+// the names of the skills (in CAPS_SNAKECASE) mapped to their respective abilities (in 3-letter representation)
 const std::map<std::string, std::string> skill_abilities = {
     {"ACROBATICS", "DEX"},    {"ANIMAL_HANDLING", "WIS"}, {"ARCANA", "INT"},   {"ATHLETICS", "STR"},
     {"DECEPTION", "CHA"},     {"HISTORY", "INT"},         {"INSIGHT", "WIS"},  {"INTIMIDATION", "CHA"},

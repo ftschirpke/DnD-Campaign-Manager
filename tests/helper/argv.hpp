@@ -9,10 +9,25 @@
 #include <utility>
 #include <vector>
 
+/**
+ * @brief A class to help set up command line arguments for testing
+ */
 class Argv {
 public:
+    /**
+     * @brief Constructs Argv object
+     * @param args arguments
+     */
     Argv(std::initializer_list<const char*> args);
+    /**
+     * @brief Get command line arguments
+     * @return array of command line arguments
+     */
     char** argv() const;
+    /**
+     * @brief Get the amount of command line arguments
+     * @return the amount of command line arguments
+     */
     int argc() const;
 private:
     std::vector<std::unique_ptr<char[]>> m_args{};

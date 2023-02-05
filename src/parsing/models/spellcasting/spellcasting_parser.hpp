@@ -18,27 +18,61 @@
 
 namespace dnd {
 
+/**
+ * @brief An enum for the types of spellcasting
+ */
 enum SpellcastingType {
     PREPARATION,
     SPELLS_KNOWN,
 };
 
+/**
+ * @brief A subparser for parsing spellcasting features of a class or subclass
+ */
 class SpellcastingParser : public Subparser {
 public:
+    /**
+     * @brief Constructs a SpellcastingParser
+     * @param spells the already-parsed spells
+     */
     SpellcastingParser(const std::unordered_map<std::string, const Spell>& spells) noexcept;
+    /**
+     * @brief Parses the spellcasting feature from a given JSON
+     * @param spellcasting_json the JSON that needs to be parsed
+     */
     void parseSpellcasting(const nlohmann::json& spellcasting_json);
+    /**
+     * @brief Creates and returns the parsed spellcasting feature while giving up ownership over all the parsed values
+     * @return a unique pointer to the parsed spellcasting
+     */
     std::unique_ptr<Spellcasting> retrieveSpellcasting();
 private:
-    const std::unordered_map<std::string, const Spell>& spells;
-    std::string ability;
-    bool ritual_casting;
-    std::unordered_map<std::string, const Spell*> spell_list;
-    SpellcastingType spellcasting_type;
-    PreparationSpellcastingType preparation_spellcasting_type;
-    std::array<int, 20> spells_known;
-    std::array<int, 20> cantrips_known;
-    std::array<std::array<int, 20>, 9> spell_slots;
+    /**
+     * @brief A helper function to parse optional attributes of which the value should be an length-20 integer array
+     * @param json_to_parse the JSON the optional attribute should be in, if it exists
+     * @param attribute_name the name of the attribute
+     * @param output the output to write the value of the attribute to if it exists or an array full of zeros otherwise
+     */
     void parseSize20Array(const nlohmann::json& json_to_parse, const char* attribute_name, std::array<int, 20>& output);
+
+    // the already-parsed spells to look up spell lists in
+    const std::unordered_map<std::string, const Spell>& spells;
+    // the parsed spellcasting ability
+    std::string ability;
+    // the parsed ritual_casting value for the spellcasting
+    bool ritual_casting;
+    // the parsed spell list for the spellcasting
+    std::unordered_map<std::string, const Spell*> spell_list;
+    // the type of the spellcasting
+    SpellcastingType spellcasting_type;
+    // the type of preparation spellcasting if it is a preparation spellcasting
+    PreparationSpellcastingType preparation_spellcasting_type;
+    // the parsed array of spells known values for the spellcasting
+    std::array<int, 20> spells_known;
+    // the parsed array of cantrips known values for the spellcasting
+    std::array<int, 20> cantrips_known;
+    // the parsed arrays of spell slots for the spellcasting
+    std::array<std::array<int, 20>, 9> spell_slots;
 };
 
 inline SpellcastingParser::SpellcastingParser(const std::unordered_map<std::string, const Spell>& spells) noexcept

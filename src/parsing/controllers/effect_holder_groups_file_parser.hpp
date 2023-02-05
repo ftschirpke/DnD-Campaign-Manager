@@ -15,20 +15,52 @@
 
 namespace dnd {
 
+/**
+ * @brief A class for parsing multi-file groups i.e. choosable groups
+ */
 class EffectHolderGroupsFileParser : public ContentFileParser {
 public:
+    /**
+     * @brief Constructs an EffectHolderGroupsFileParser
+     * @param groups the already-parsed groups
+     */
     EffectHolderGroupsFileParser(Groups& groups) noexcept;
+    /**
+     * @brief Parses JSON file containing a choosable group.
+     */
     virtual void parse() override;
+    /**
+     * @brief Checks whether the parsed choosable group is valid
+     * @return "true" if the group is valid, "false" otherwise
+     */
     virtual bool validate() const override;
+    /**
+     * @brief Saves the parsed group to the groups.
+     */
     virtual void saveResult() override;
 private:
-    static const ParsingType type;
-    Groups& groups;
-    std::string group_name;
-    std::unordered_map<std::string, Choosable> choosables;
-    EffectHolderParser effect_holder_parser;
+    /**
+     * @brief Parse and create a choosable
+     * @param name the name of the choosable
+     * @param choosable_json the body of the choosable definition
+     * @return a choosable with the given name and the properties defined in the body
+     */
     Choosable createChoosable(const std::string& name, const nlohmann::json& choosable_json) const;
+    /**
+     * @brief Configures the subparsers used
+     */
     virtual void configureSubparsers() override;
+
+    // the type of content that this parser parses - choosable groups
+    static const ParsingType type;
+    // the already-parsed groups where the result is added in the end
+    Groups& groups;
+    // the name of the parsed group
+    std::string group_name;
+    // the parsed choosables mapped to their respective names
+    std::unordered_map<std::string, Choosable> choosables;
+    // a subparser for effect holders used for parsing the effect holders for the choosable
+    EffectHolderParser effect_holder_parser;
 };
 
 inline const ParsingType EffectHolderGroupsFileParser::type = ParsingType::GROUP;

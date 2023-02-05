@@ -23,7 +23,6 @@
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
 
-
 void dnd::SpellsFileParser::createSpell(std::string_view spell_name, const nlohmann::json& spell_json) {
     DND_MEASURE_FUNCTION();
     SpellParsingInfo info;

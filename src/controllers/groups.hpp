@@ -14,7 +14,7 @@
 namespace dnd {
 
 /**
- * @brief A class handling all the groups for a certain session.
+ * @brief A class handling all the groups for a certain session or campaign
  * String groups (such as "musical instruments") are mostly cosmetic whereas choosable groups (such as "feats") contain
  * values that can be chosen and affect a characters stats and abilities.
  */
@@ -94,7 +94,9 @@ public:
      */
     void printStatus() const;
 private:
+    // a map containing all string groups - the members of a string group mapped to the name of the group
     std::unordered_map<std::string, std::unordered_set<std::string>> data;
+    // a map containing all choosable groups - the members of a choosable group mapped to the name of the group
     std::unordered_map<std::string, std::unordered_map<std::string, Choosable>> choosables;
 };
 

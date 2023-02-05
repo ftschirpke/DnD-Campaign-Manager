@@ -8,10 +8,20 @@
 
 namespace dnd {
 
+/**
+ * @brief A class that represents a character's decision for a certain choice required by a feature for example
+ */
 class CharacterDecision {
 public:
+    /**
+     * @brief Constructs the character decision with the choice it refers to.
+     * @param choice a pointer to the choice this decision is for
+     */
     CharacterDecision(const Choice* const choice) noexcept;
+
+    // the choice this decision was made for
     const Choice* const choice;
+    // the effects of the decision
     EffectHolder decision_effects;
 };
 

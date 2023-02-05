@@ -17,22 +17,52 @@
 
 namespace dnd {
 
+/**
+ * @brief A class for parsing character subraces (multi-file)
+ */
 class CharacterSubraceFileParser : public ContentFileParser {
 public:
+    /**
+     * @brief Constructs a CharacterSubraceFileParser
+     * @param subraces the already-parsed subraces
+     * @param groups the already-parsed groups
+     * @param races the already-parsed races
+     */
     CharacterSubraceFileParser(
         std::unordered_map<std::string, const CharacterSubrace>& subraces, const Groups& groups,
         const std::unordered_map<std::string, const CharacterRace>& races
     ) noexcept;
+    /**
+     * @brief Parses JSON file containing a subrace.
+     */
     virtual void parse() override;
+    /**
+     * @brief Checks whether the parsed subrace is valid
+     * @return "true" if the subrace is valid, "false" otherwise
+     */
     virtual bool validate() const override;
+    /**
+     * @brief Saves the parsed subrace
+     */
     virtual void saveResult() override;
 private:
-    static const ParsingType type;
-    std::unordered_map<std::string, const CharacterSubrace>& subraces;
-    const std::unordered_map<std::string, const CharacterRace>& races;
-    std::string character_subrace_name, race_name;
-    FeaturesParser features_parser;
+    /**
+     * @brief Configures the subparsers used
+     */
     virtual void configureSubparsers() override;
+
+    // the type of content that this parser parses - subraces
+    static const ParsingType type;
+    // the name of the parsed subrace
+    std::string character_subrace_name;
+    // the name of the race for the parsed subrace
+    std::string race_name;
+    // the already-parsed subraces to add the parsed subrace to
+    std::unordered_map<std::string, const CharacterSubrace>& subraces;
+    // the already-parsed races to check whether such a race exists and has subraces
+    const std::unordered_map<std::string, const CharacterRace>& races;
+    // a subparser used for parsing the subrace's features
+    FeaturesParser features_parser;
 };
 
 inline const ParsingType CharacterSubraceFileParser::type = ParsingType::SUBRACE;
