@@ -159,7 +159,7 @@ inline parsing_error::parsing_error(const std::filesystem::path& path, const std
 inline parsing_error::parsing_error(
     ParsingType parsing_type, const std::filesystem::path& path, const std::string& error_msg
 )
-    : std::invalid_argument(""), path(path), msg_start(parsing_type_names.at(parsing_type) + " in file"),
+    : std::invalid_argument(""), path(path), msg_start(std::string(parsingTypeName(parsing_type)) + " in file"),
       error_msg(error_msg) {
     updateWhat();
 }
