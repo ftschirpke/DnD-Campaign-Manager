@@ -26,7 +26,7 @@ class FeaturesParser : public Subparser {
 public:
     /**
      * @brief Constructs an FeaturesParser
-     * @param groups the already-parsed groups used for checking choices
+     * @param groups the already-parsed groups
      */
     FeaturesParser(const Groups& groups) noexcept;
     /**

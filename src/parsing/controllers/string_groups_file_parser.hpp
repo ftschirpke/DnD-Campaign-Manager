@@ -23,7 +23,7 @@ class StringGroupsFileParser : public ContentFileParser {
 public:
     /**
      * @brief Constructs an StringGroupsFileParser
-     * @param groups the already-parsed
+     * @param groups the already-parsed groups
      */
     StringGroupsFileParser(Groups& groups) noexcept;
     /**

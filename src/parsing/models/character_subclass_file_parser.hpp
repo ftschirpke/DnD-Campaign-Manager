@@ -19,22 +19,51 @@ namespace dnd {
 
 class CharacterSubclassFileParser : public ContentFileParser {
 public:
+    /**
+     * @brief Constructs a CharacterSubclassFileParser
+     * @param subclasses the already-parsed subclasses
+     * @param groups the already-parsed groups
+     * @param classes the already-parsed classes
+     * @param spells the already-parsed spells
+     */
     CharacterSubclassFileParser(
         std::unordered_map<std::string, const CharacterSubclass>& subclasses, const Groups& groups,
         const std::unordered_map<std::string, const CharacterClass>& classes,
         const std::unordered_map<std::string, const Spell>& spells
     ) noexcept;
+    /**
+     * @brief Parses JSON file containing a subclass.
+     */
     virtual void parse() override;
+    /**
+     * @brief Checks whether the parsed subclass is valid
+     * @return "true" if the subclass is valid, "false" otherwise
+     */
     virtual bool validate() const override;
+    /**
+     * @brief Saves the parsed subclass
+     */
     virtual void saveResult() override;
 private:
-    static const ParsingType type;
-    std::unordered_map<std::string, const CharacterSubclass>& subclasses;
-    const std::unordered_map<std::string, const CharacterClass>& classes;
-    std::string character_subclass_name, class_name;
-    FeaturesParser features_parser;
-    SpellcastingParser spellcasting_parser;
+    /**
+     * @brief Configures the subparsers used
+     */
     virtual void configureSubparsers() override;
+
+    // the type of content that this parser parses - subclasses
+    static const ParsingType type;
+    // the name of the parsed subclass
+    std::string character_subclass_name;
+    // the name of the class for the parsed subclass
+    std::string class_name;
+    // the already-parsed subclasses to add the parsed subclass to
+    std::unordered_map<std::string, const CharacterSubclass>& subclasses;
+    // the already-parsed classes to check whether such a class exists
+    const std::unordered_map<std::string, const CharacterClass>& classes;
+    // a subparser used for parsing the subclass' features
+    FeaturesParser features_parser;
+    // a subparser used for parsing the subclass' spellcasting feature if it exists
+    SpellcastingParser spellcasting_parser;
 };
 
 inline const ParsingType CharacterSubclassFileParser::type = ParsingType::SUBCLASS;

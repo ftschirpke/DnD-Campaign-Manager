@@ -22,7 +22,7 @@ class EffectHolderGroupsFileParser : public ContentFileParser {
 public:
     /**
      * @brief Constructs an EffectHolderGroupsFileParser
-     * @param groups the already-parsed groups to add the result to
+     * @param groups the already-parsed groups
      */
     EffectHolderGroupsFileParser(Groups& groups) noexcept;
     /**

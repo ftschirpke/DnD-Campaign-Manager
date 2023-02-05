@@ -33,7 +33,7 @@ class SpellcastingParser : public Subparser {
 public:
     /**
      * @brief Constructs a SpellcastingParser
-     * @param spells the already-parsed spells to look up spell lists in
+     * @param spells the already-parsed spells
      */
     SpellcastingParser(const std::unordered_map<std::string, const Spell>& spells) noexcept;
     /**

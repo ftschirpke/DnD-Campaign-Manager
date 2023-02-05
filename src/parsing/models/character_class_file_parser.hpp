@@ -22,25 +22,57 @@ namespace dnd {
 
 class CharacterClassFileParser : public ContentFileParser {
 public:
+    /**
+     * @brief Constructs a CharacterClassFileParser
+     * @param classes the already-parsed classes
+     * @param groups the already-parsed groups
+     * @param spells the already-parsed spells
+     */
     CharacterClassFileParser(
         std::unordered_map<std::string, const CharacterClass>& classes, const Groups& groups,
         const std::unordered_map<std::string, const Spell>& spells
     ) noexcept;
+    /**
+     * @brief Parses JSON file containing a class.
+     */
     virtual void parse() override;
+    /**
+     * @brief Checks whether the parsed class is valid
+     * @return "true" if the class is valid, "false" otherwise
+     */
     virtual bool validate() const override;
+    /**
+     * @brief Saves the parsed class
+     */
     virtual void saveResult() override;
 protected:
+    /**
+     * @brief Determine the subclass level for the parsed class
+     * @param features the classes' features of which one should be a subclass feature
+     */
     void determineSubclassLevel(const std::vector<Feature>& features);
 private:
-    static const ParsingType type;
-    std::unordered_map<std::string, const CharacterClass>& classes;
-    std::string character_class_name;
-    Dice character_class_hit_dice;
-    std::vector<int> asi_levels;
-    int subclass_level;
-    FeaturesParser features_parser;
-    SpellcastingParser spellcasting_parser;
+    /**
+     * @brief Configures the subparsers used
+     */
     virtual void configureSubparsers() override;
+
+    // the type of content that this parser parses - classes
+    static const ParsingType type;
+    // the name of the parsed class
+    std::string character_class_name;
+    // the hit dice of the parsed class
+    Dice character_class_hit_dice;
+    // the levels the parsed class allows ability score increases
+    std::vector<int> asi_levels;
+    // the subclass level of the parsed class
+    int subclass_level;
+    // the already-parsed classes to add the parsed class to
+    std::unordered_map<std::string, const CharacterClass>& classes;
+    // a subparser used for parsing the class' features
+    FeaturesParser features_parser;
+    // a subparser used for parsing the subclass' spellcasting feature if it exists
+    SpellcastingParser spellcasting_parser;
 };
 
 inline const ParsingType CharacterClassFileParser::type = ParsingType::CLASS;

@@ -27,6 +27,16 @@ namespace dnd {
 
 class CharacterFileParser : public ContentFileParser {
 public:
+    /**
+     * @brief Constructs a CharacterFileParser
+     * @param characters the already-parsed characters
+     * @param groups the already-parsed groups
+     * @param character_classes the already-parsed classes
+     * @param character_subclasses the already-parsed subclasses
+     * @param character_races the already-parsed races
+     * @param character_subraces the already-parsed subraces
+     * @param spells the already-parsed spells
+     */
     CharacterFileParser(
         std::unordered_map<std::string, Character>& characters, const Groups& groups,
         const std::unordered_map<std::string, const CharacterClass>& character_classes,
@@ -35,33 +45,79 @@ public:
         const std::unordered_map<std::string, const CharacterSubrace>& character_subraces,
         const std::unordered_map<std::string, const Spell>& spells
     ) noexcept;
+    /**
+     * @brief Parses JSON file containing a class.
+     */
     virtual void parse() override;
+    /**
+     * @brief Checks whether the parsed class is valid
+     * @return "true" if the class is valid, "false" otherwise
+     */
     virtual bool validate() const override;
+    /**
+     * @brief Saves the parsed class
+     */
     virtual void saveResult() override;
 protected:
+    /**
+     * @brief Parse the character decision for a choice required by a particular feature-like object
+     * @param feature_name the name of the feature-like object
+     * @param feature_decisions_json the JSON containing the decisions for that feature-like object
+     */
     void parseCharacterDecisions(const std::string& feature_name, const nlohmann::json& feature_decisions_json);
 private:
-    static const ParsingType type;
-    std::unordered_map<std::string, Character>& characters;
-    const std::unordered_map<std::string, const CharacterClass>& character_classes;
-    const std::unordered_map<std::string, const CharacterSubclass>& character_subclasses;
-    const std::unordered_map<std::string, const CharacterRace>& character_races;
-    const std::unordered_map<std::string, const CharacterSubrace>& character_subraces;
-    const std::unordered_map<std::string, const Spell>& spells;
-    std::string character_name;
-    std::array<int, 6> base_ability_scores;
-    std::vector<int> hit_dice_rolls;
-    const CharacterClass* class_ptr;
-    const CharacterSubclass* subclass_ptr;
-    const CharacterRace* race_ptr;
-    const CharacterSubrace* subrace_ptr;
-    std::vector<CharacterDecision> decisions;
-    int level, xp;
-    EffectHolderParser effect_holder_parser;
-    FeaturesParser features_parser;
+    /**
+     * @brief Configures the subparsers used
+     */
     virtual void configureSubparsers() override;
+    /**
+     * @brief Parses the class, race, subclass, and subrace of the character
+     */
     void parseClassAndRace();
+    /**
+     * @brief Parses the level and XP values of the character
+     * And if only one of them was provided the other value is determined from the first
+     */
     void parseLevelAndXP();
+
+    // the type of content that this parser parses - characters
+    static const ParsingType type;
+    // the name of the parsed character
+    std::string character_name;
+    // the base ability scores of the parsed character
+    std::array<int, 6> base_ability_scores;
+    // the hit dice rolls of the parsed character
+    std::vector<int> hit_dice_rolls;
+    // a pointer to the class of the parsed character
+    const CharacterClass* class_ptr;
+    // a pointer to the subclass of the parsed character
+    const CharacterSubclass* subclass_ptr;
+    // a pointer to the race of the parsed character
+    const CharacterRace* race_ptr;
+    // a pointer to the subrace of the parsed character
+    const CharacterSubrace* subrace_ptr;
+    // the decisions of the parsed character
+    std::vector<CharacterDecision> decisions;
+    // the level of the parsed character
+    int level;
+    // the XP value of the parsed character
+    int xp;
+    // the already-parsed characters to add the parsed character to
+    std::unordered_map<std::string, Character>& characters;
+    // the already-parsed classes to find the parsed character's class
+    const std::unordered_map<std::string, const CharacterClass>& character_classes;
+    // the already-parsed classes to find the parsed character's subclass
+    const std::unordered_map<std::string, const CharacterSubclass>& character_subclasses;
+    // the already-parsed classes to find the parsed character's race
+    const std::unordered_map<std::string, const CharacterRace>& character_races;
+    // the already-parsed classes to find the parsed character's subrace
+    const std::unordered_map<std::string, const CharacterSubrace>& character_subraces;
+    // the already-parsed spells
+    const std::unordered_map<std::string, const Spell>& spells;
+    // a subparser for effect holders used for parsing the effect holders for the character decisions
+    EffectHolderParser effect_holder_parser;
+    // a subparser used for parsing the character's features
+    FeaturesParser features_parser;
 };
 
 inline const ParsingType CharacterFileParser::type = ParsingType::CHARACTER;

@@ -21,33 +21,95 @@
 
 namespace dnd {
 
+/**
+ * @brief A struct to save a spell's information during parsing
+ */
 struct SpellParsingInfo {
-    std::string name, casting_time, range, duration, description;
+    // the name of the spell
+    std::string name;
+    // a description of how long the spell takes to cast
+    std::string casting_time;
+    // a description of the range of the spell
+    std::string range;
+    // a description of how long the effect of the spell lasts
+    std::string duration;
+    // a full description of the spell
+    std::string description;
+    // the names of classes (and subclasses) that can cast the spell
     std::unordered_set<std::string> classes;
+    // the type of the spell
     SpellType type;
+    // the components required to cast the spell
     SpellComponents components;
 };
 
+/**
+ * @brief A class for parsing spells (multi-file)
+ */
 class SpellsFileParser : public ContentFileParser {
 public:
+    /**
+     * @brief Constructs a SpellsFileParser
+     * @param spells the already-parsed spells
+     * @param groups the already-parsed groups
+     */
     SpellsFileParser(std::unordered_map<std::string, const Spell>& spells, Groups& groups) noexcept;
+    /**
+     * @brief Parses JSON file containing a collection of spells.
+     */
     virtual void parse() override;
+    /**
+     * @brief Checks whether the parsed spells are valid
+     * @return "true" if the spells are valid, "false" otherwise
+     */
     virtual bool validate() const override;
+    /**
+     * @brief Saves the parsed spells
+     */
     virtual void saveResult() override;
 protected:
-    static const std::regex spell_components_regex, spell_type_regex;
-    void createSpell(std::string_view spell_name, const nlohmann::json& spell_json_ptr);
+    /**
+     * @brief Parses a spell and saves its information
+     * @param spell_name the name of the spell
+     * @param spell_json the JSON containing the spell's information
+     */
+    void createSpell(std::string_view spell_name, const nlohmann::json& spell_json);
+    /**
+     * @brief Parses and creates a spell type
+     * @param spell_type_str the string to parse
+     * @return the spell type parsed from the string
+     */
     SpellType createSpellType(const std::string& spell_type_str) const;
+    /**
+     * @brief Parses and creates a spell components object
+     * @param spell_components_str the string to parse
+     * @return the spell components object parsed from the string
+     */
     SpellComponents createSpellComponents(const std::string& spell_components_str) const;
 private:
-    static const ParsingType type;
-    std::unordered_map<std::string, const Spell>& spells;
-    Groups& groups;
-    size_t spells_in_file;
-    std::vector<SpellParsingInfo> spell_parsing_info;
-    mutable std::vector<bool> valid;
-    std::mutex spell_parsing_mutex;
+    /**
+     * @brief Configures the subparsers used
+     */
     virtual void configureSubparsers() override;
+
+    // the type of content that this parser parses - spells
+    static const ParsingType type;
+    // the regular expression to check the validity of spell components
+    static const std::regex spell_components_regex;
+    // the regular expression to check the validity of a spell type
+    static const std::regex spell_type_regex;
+    // the already-parsed spells to add the parsed spells to
+    std::unordered_map<std::string, const Spell>& spells;
+    // the already-parsed groups to add spell-groups to
+    Groups& groups;
+    // the amount of spells to be parsed in the current file
+    size_t spells_in_file;
+    // the spell information already parsed for the current file
+    std::vector<SpellParsingInfo> spell_parsing_info;
+    // a vector to keep track of which spells in this file are valid
+    mutable std::vector<bool> valid;
+    // a mutex to control writing access to the spell_parsing_info vector
+    std::mutex spell_parsing_mutex;
 };
 
 inline const ParsingType SpellsFileParser::type = ParsingType::SPELL;

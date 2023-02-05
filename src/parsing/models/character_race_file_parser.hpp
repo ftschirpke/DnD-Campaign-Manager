@@ -17,17 +17,41 @@ namespace dnd {
 
 class CharacterRaceFileParser : public ContentFileParser {
 public:
+    /**
+     * @brief Constructs a CharacterRaceFileParser
+     * @param races the already-parsed races
+     * @param groups the already-parsed groups
+     */
     CharacterRaceFileParser(std::unordered_map<std::string, const CharacterRace>& races, const Groups& groups) noexcept;
+    /**
+     * @brief Parses JSON file containing a race.
+     */
     virtual void parse() override;
+    /**
+     * @brief Checks whether the parsed race is valid
+     * @return "true" if the race is valid, "false" otherwise
+     */
     virtual bool validate() const override;
+    /**
+     * @brief Saves the parsed race
+     */
     virtual void saveResult() override;
 private:
-    static const ParsingType type;
-    std::unordered_map<std::string, const CharacterRace>& races;
-    std::string character_race_name;
-    bool has_subraces;
-    FeaturesParser features_parser;
+    /**
+     * @brief Configures the subparsers used
+     */
     virtual void configureSubparsers() override;
+
+    // the type of content that this parser parses - races
+    static const ParsingType type;
+    // the name of the parsed race
+    std::string character_race_name;
+    // boolean for whether the parsed race has subraces
+    bool has_subraces;
+    // the already-parsed races to add the parsed race to
+    std::unordered_map<std::string, const CharacterRace>& races;
+    // a subparser used for parsing the race's features
+    FeaturesParser features_parser;
 };
 
 inline const ParsingType CharacterRaceFileParser::type = ParsingType::RACE;

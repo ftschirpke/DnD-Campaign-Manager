@@ -24,7 +24,7 @@ class EffectHolderParser : public Subparser {
 public:
     /**
      * @brief Constructs an EffectHolderParser
-     * @param groups the already-parsed groups used for checking choices
+     * @param groups the already-parsed groups
      */
     EffectHolderParser(const Groups& groups) noexcept;
     /**
