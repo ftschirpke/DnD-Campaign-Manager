@@ -13,7 +13,9 @@
 #include "basic_mechanics/skills.hpp"
 
 dnd::Groups::Groups() {
-    data["abilities"] = std::unordered_set<std::string>(ability_strings_inorder.begin(), ability_strings_inorder.end());
+    data["abilities"] = std::unordered_set<std::string>(
+        ability_cstrings_inorder.begin(), ability_cstrings_inorder.end()
+    );
 
     std::string lowercase_skill;
     for (const auto& [skill, _] : skill_abilities) {

@@ -27,7 +27,8 @@ void dnd::CharacterState::applyAbilityScoreEffects() {
             }
         }
     }
-    for (const auto& ability : ability_strings_inorder) {
+    for (const auto& ability_cstr : ability_cstrings_inorder) {
+        const std::string ability(ability_cstr);
         attributes[ability] = std::min(attributes[ability], attributes[ability + "MAX"]);
     }
 }
@@ -46,7 +47,8 @@ void dnd::CharacterState::applyNormalEffects() {
 }
 
 void dnd::CharacterState::determineModifiers() {
-    for (const std::string& ability_name : ability_strings_inorder) {
+    for (const auto& ability_name_cstr : ability_cstrings_inorder) {
+        const std::string ability_name(ability_name_cstr);
         attributes[ability_name + "MOD"] = modifier(attributes.at(ability_name));
         attributes[ability_name + "SAVE"] = modifier(attributes.at(ability_name));
     }
