@@ -22,12 +22,6 @@
 
 namespace dnd {
 
-const std::map<int, int> xp_for_level = {
-    {1, 0},       {2, 300},     {3, 900},     {4, 2700},    {5, 6500},    {6, 14000},   {7, 23000},
-    {8, 34000},   {9, 48000},   {10, 64000},  {11, 85000},  {12, 100000}, {13, 120000}, {14, 140000},
-    {15, 165000}, {16, 195000}, {17, 225000}, {18, 265000}, {19, 305000}, {20, 355000},
-};
-
 /**
  * @brief A class representing a character
  */
@@ -98,6 +92,7 @@ public:
 
     // TODO: should these pointers be non-const?
 
+    static const std::array<std::pair<int, int>, 20> xp_for_level;
     // the 6 base values for the character's ability scores
     const std::array<int, 6> base_ability_scores;
     // the current state of the character
@@ -124,16 +119,17 @@ protected:
      */
     virtual const std::unordered_map<std::string, int> getInitialAttributeValues() const;
 private:
+    /**
+     * @brief Sets the character's level to the value that corresponds to the current XP value of the character
+     */
+    void updateLevel();
+
     // level the level of the character
     int level;
     // xp the XP value of the character
     int xp;
     // the values rolled for maxHP at each level-up using your hit dice (including level 1)
     std::vector<int> hit_dice_rolls;
-    /**
-     * @brief Sets the character's level to the value that corresponds to the current XP value of the character
-     */
-    void updateLevel();
 };
 
 inline Character::Character(
