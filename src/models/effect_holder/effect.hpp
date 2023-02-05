@@ -4,9 +4,11 @@
 #include "dnd_config.hpp"
 
 #include <algorithm>
+#include <array>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 namespace dnd {
@@ -27,15 +29,11 @@ enum EffectTime {
     LATEST
 };
 
-// the effect times in their proper order
-const std::vector<EffectTime> effect_times_in_order = {
-    EffectTime::EARLIEST, EffectTime::EARLY, EffectTime::NORMAL, EffectTime::LATE, EffectTime::LATEST,
-};
-
-// the effect times mapped to their names
-const std::unordered_map<std::string, EffectTime> effect_time_for_string = {
-    {"earliest", EffectTime::EARLIEST}, {"early", EffectTime::EARLY},   {"normal", EffectTime::NORMAL},
-    {"late", EffectTime::LATE},         {"latest", EffectTime::LATEST},
+// the effect times in their proper order paired with their names
+const std::array<std::pair<const char*, EffectTime>, 5> effect_times_in_order = {
+    std::make_pair("earliest", EffectTime::EARLIEST), std::make_pair("early", EffectTime::EARLY),
+    std::make_pair("normal", EffectTime::NORMAL),     std::make_pair("late", EffectTime::LATE),
+    std::make_pair("latest", EffectTime::LATEST),
 };
 
 // the effect calculations supported for integers mapped to their string representations

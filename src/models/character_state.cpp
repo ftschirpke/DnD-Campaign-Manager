@@ -17,7 +17,7 @@
 #include "models/feature_holder.hpp"
 
 void dnd::CharacterState::applyAbilityScoreEffects() {
-    for (const auto& effect_time : effect_times_in_order) {
+    for (const auto& [_, effect_time] : effect_times_in_order) {
         for (const auto effect_holder_ptr : active_effect_holders) {
             if (effect_holder_ptr->ability_score_effects.contains(effect_time)) {
                 const auto& ability_effects = effect_holder_ptr->ability_score_effects.at(effect_time);
@@ -34,7 +34,7 @@ void dnd::CharacterState::applyAbilityScoreEffects() {
 }
 
 void dnd::CharacterState::applyNormalEffects() {
-    for (const auto& effect_time : effect_times_in_order) {
+    for (const auto& [_, effect_time] : effect_times_in_order) {
         for (const auto effect_holder_ptr : active_effect_holders) {
             if (effect_holder_ptr->normal_effects.contains(effect_time)) {
                 const auto& ability_effects = effect_holder_ptr->normal_effects.at(effect_time);

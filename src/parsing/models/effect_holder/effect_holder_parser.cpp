@@ -230,7 +230,19 @@ std::unique_ptr<dnd::Effect> dnd::EffectHolderParser::createEffect(const std::st
     }
 
     const std::string effect_time_str(start_it, it);
-    const EffectTime effect_time = effect_time_for_string.at(effect_time_str);
+
+    bool effect_time_found = false;
+    EffectTime effect_time = EffectTime::NORMAL; // just setting an initial value
+    for (const auto& [effect_time_name, effect_time_val] : effect_times_in_order) {
+        if (effect_time_name == effect_time_str) {
+            effect_time = effect_time_val;
+            effect_time_found = true;
+            break;
+        }
+    }
+    if (!effect_time_found) {
+        throw attribute_type_error(type, filepath, "effect type \"" + effect_time_str + "\" does not exist");
+    }
 
     start_it = ++it;
     while (*it != ' ') {
