@@ -130,10 +130,10 @@ inline CharacterFileParser::CharacterFileParser(
     const std::unordered_map<std::string, const CharacterSubrace>& character_subraces,
     const std::unordered_map<std::string, const Spell>& spells
 ) noexcept
-    : ContentFileParser(), characters(characters), character_classes(character_classes),
-      character_subclasses(character_subclasses), character_races(character_races),
-      character_subraces(character_subraces), spells(spells), class_ptr(nullptr), subclass_ptr(nullptr),
-      race_ptr(nullptr), subrace_ptr(nullptr), effect_holder_parser(groups), features_parser(groups) {}
+    : ContentFileParser(), class_ptr(nullptr), subclass_ptr(nullptr), race_ptr(nullptr), subrace_ptr(nullptr),
+      characters(characters), character_classes(character_classes), character_subclasses(character_subclasses),
+      character_races(character_races), character_subraces(character_subraces), spells(spells),
+      effect_holder_parser(groups), features_parser(groups) {}
 
 inline void CharacterFileParser::configureSubparsers() { effect_holder_parser.configure(type, filepath); }
 
