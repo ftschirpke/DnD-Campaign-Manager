@@ -72,25 +72,15 @@ private:
     std::unique_ptr<ContentFileParser> createMultiFileParserForType(const ParsingType parsing_type);
 
     // the names of the files containing single-file content types
-    static const std::unordered_map<ParsingType, std::string> file_names;
+    static const std::array<std::pair<dnd::ParsingType, const char*>, 1> file_names;
     // the names of the directories containing multi-file content types
-    static const std::unordered_map<ParsingType, std::string> subdir_names;
+    static const std::array<std::pair<dnd::ParsingType, const char*>, 7> subdir_names;
     // the variable where the parsed content is accumulated
     Content parsed_content;
     // the content directories that should be parsed
     std::vector<std::filesystem::directory_entry> dirs_to_parse;
     // mutexes used to control the access to each of the content type maps within the parsed_content
     std::unordered_map<ParsingType, std::mutex> parsing_mutexes;
-};
-
-inline const std::unordered_map<ParsingType, std::string> ContentParser::file_names = {
-    {ParsingType::GROUP, "groups"},
-};
-
-inline const std::unordered_map<ParsingType, std::string> ContentParser::subdir_names = {
-    {ParsingType::GROUP, "groups"},        {ParsingType::CHARACTER, "characters"}, {ParsingType::CLASS, "classes"},
-    {ParsingType::SUBCLASS, "subclasses"}, {ParsingType::RACE, "races"},           {ParsingType::SUBRACE, "subraces"},
-    {ParsingType::SPELL, "spells"},
 };
 
 } // namespace dnd
