@@ -123,8 +123,6 @@ private:
     FeaturesParser features_parser;
 };
 
-inline const ParsingType CharacterFileParser::type = ParsingType::CHARACTER;
-
 inline CharacterFileParser::CharacterFileParser(
     std::unordered_map<std::string, Character>& characters, const Groups& groups,
     const std::unordered_map<std::string, const CharacterClass>& character_classes,

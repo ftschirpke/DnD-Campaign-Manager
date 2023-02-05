@@ -61,8 +61,6 @@ private:
     EffectHolderParser effect_holder_parser;
 };
 
-inline const ParsingType StringGroupsFileParser::type = ParsingType::GROUP;
-
 inline StringGroupsFileParser::StringGroupsFileParser(Groups& groups) noexcept
     : ContentFileParser(), groups(groups), effect_holder_parser(groups) {}
 

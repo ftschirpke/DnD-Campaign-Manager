@@ -57,8 +57,6 @@ private:
     FeaturesParser features_parser;
 };
 
-inline const ParsingType CharacterRaceFileParser::type = ParsingType::RACE;
-
 inline CharacterRaceFileParser::CharacterRaceFileParser(
     std::unordered_map<std::string, const CharacterRace>& races, const Groups& groups
 ) noexcept

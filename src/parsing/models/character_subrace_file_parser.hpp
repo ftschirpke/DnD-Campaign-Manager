@@ -65,8 +65,6 @@ private:
     FeaturesParser features_parser;
 };
 
-inline const ParsingType CharacterSubraceFileParser::type = ParsingType::SUBRACE;
-
 inline CharacterSubraceFileParser::CharacterSubraceFileParser(
     std::unordered_map<std::string, const CharacterSubrace>& subraces, const Groups& groups,
     const std::unordered_map<std::string, const CharacterRace>& races

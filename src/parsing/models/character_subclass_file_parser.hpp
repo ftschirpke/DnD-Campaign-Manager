@@ -69,8 +69,6 @@ private:
     SpellcastingParser spellcasting_parser;
 };
 
-inline const ParsingType CharacterSubclassFileParser::type = ParsingType::SUBCLASS;
-
 inline CharacterSubclassFileParser::CharacterSubclassFileParser(
     std::unordered_map<std::string, const CharacterSubclass>& subclasses, const Groups& groups,
     const std::unordered_map<std::string, const CharacterClass>& classes,

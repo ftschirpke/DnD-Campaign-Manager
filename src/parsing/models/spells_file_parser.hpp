@@ -112,8 +112,6 @@ private:
     std::mutex spell_parsing_mutex;
 };
 
-inline const ParsingType SpellsFileParser::type = ParsingType::SPELL;
-
 inline SpellsFileParser::SpellsFileParser(std::unordered_map<std::string, const Spell>& spells, Groups& groups) noexcept
     : ContentFileParser(), spells(spells), groups(groups) {}
 
