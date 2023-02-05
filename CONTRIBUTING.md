@@ -2,6 +2,7 @@
 - [Contributing](#contributing)
   - [Requirements](#requirements)
   - [Format](#format)
+  - [Comments](#comments)
   - [Style](#style)
     - [File Names](#file-names)
     - [Includes](#includes)
@@ -21,14 +22,54 @@ I would be happy to clarify and explain my ideas. I am also open to any ideas to
 
 ## Requirements
 
-- a good knowledge of the C++ programming language
-- [CMake](https://cmake.org/) to build the project
+You only need a C++ compiler and [CMake](https://cmake.org/) to build the project.
 
 ## Format
 
 Please use the format defined by the [clang-format file](.clang-format) as much as possible.
 You may deviate from this format whenever doing so greatly improves the readability of the code. However, this should be the exception.
 In most cases changing the [clang-format file](.clang-format) itself might be the better solution.
+
+## Comments
+
+Please try to add at least a few words of explanation to every piece of code that is either hard to understand or part of the public interface of a class.
+I usually try to add a short explanation to protected and private class members as well. I generally try to write a short comment for everything in a header file to reduce the amount a developer that does not know my code needs to look up what things do and instead only needs to read a header file or maybe their code editor even displays the comment for them directly.
+
+For classes, structs, and enums, I use a small java-style doxygen comment:
+
+```c++
+/**
+ * @brief An empty class
+ */
+class MyClass {};
+```
+For functions, I use the java-style doxygen comments as well:
+```c++
+/**
+ * @brief Returns the given value, unless its zero then an exception is thrown
+ * @param a some parameter without use
+ * @return the input parameter a
+ * @throws std::invalid_argument if a is zero
+ */
+int myFunction(int a) {
+    if (a == 0) {
+        throw std::invalid_argument("Argument cannot be zero.");
+    }
+    return a;
+}
+```
+And for (member) variables, I just use a single-line comment because that usually suffices
+```c++
+/**
+ * @brief A class to represent animals
+ */
+class Animal {
+    // the name of the animal
+    int name;
+};
+```
+
+So, please try to add comments to your code, and if you don't, please make clear that this still needs to be done (by writing a sentence in your PR or opening an issue).
 
 ## Style
 

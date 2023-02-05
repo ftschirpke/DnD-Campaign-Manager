@@ -15,6 +15,9 @@
 
 namespace dnd {
 
+/**
+ * @brief A class for parsing character races (multi-file)
+ */
 class CharacterRaceFileParser : public ContentFileParser {
 public:
     /**

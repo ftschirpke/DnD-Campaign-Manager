@@ -17,6 +17,9 @@
 
 namespace dnd {
 
+/**
+ * @brief A class for parsing character subclasses (multi-file)
+ */
 class CharacterSubclassFileParser : public ContentFileParser {
 public:
     /**
