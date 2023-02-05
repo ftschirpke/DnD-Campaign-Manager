@@ -36,42 +36,6 @@ const std::array<std::pair<const char*, EffectTime>, 5> effect_times_in_order = 
     std::make_pair("latest", EffectTime::LATEST),
 };
 
-// the effect calculations supported for integers mapped to their string representations
-const std::unordered_map<std::string, int (*)(int, int)> int_effect_operators = {
-    {"add", [](int a, int b) { return a + b; }},
-    {"mult", [](int a, int b) { return static_cast<int>(a * b / 100.0f); }},
-    {
-        "div",
-        [](int a, int b) {
-            if (b == 0) {
-                throw std::invalid_argument("Cannot divide by zero.");
-            }
-            return static_cast<int>(a / (b / 100.0f));
-        },
-    },
-    {"set",
-     [](int a, int b) {
-         DND_UNUSED(a);
-         return b;
-     }},
-    {"max", [](int a, int b) { return std::max(a, b); }},
-    {"min", [](int a, int b) { return std::min(a, b); }},
-};
-
-// the effect calculations supported for floats mapped to their string representations
-const std::unordered_map<std::string, int (*)(int, float)> float_effect_operators = {
-    {"mult", [](int a, float b) { return static_cast<int>(a * b); }},
-    {
-        "div",
-        [](int a, float b) {
-            if (b == 0) {
-                throw std::invalid_argument("Cannot divide by zero.");
-            }
-            return static_cast<int>(a / b);
-        },
-    },
-};
-
 /**
  * @brief A class representing the effect a feature has on the calculation of an attribute
  */
@@ -94,6 +58,10 @@ public:
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const = 0;
 
+    // the effect calculations supported for integers paired with their c-style string representations
+    static const std::array<std::pair<const char*, int (*)(int, int)>, 6> int_operators;
+    // the effect calculations supported for floats paired with their c-style string representations
+    static const std::array<std::pair<const char*, int (*)(int, float)>, 2> float_operators;
     // the name of the attribute whose calculation is affected by this effect
     const std::string affected_attribute;
     // the string representation of the operation that is performed when applying this effect
@@ -251,38 +219,38 @@ inline IntNumEffect::IntNumEffect(
     const std::string& affected_attribute, const std::string& op_name, const EffectTime time, int value
 )
     : Effect(affected_attribute, op_name, time), value(value), op(nullptr) {
-    try {
-        op = int_effect_operators.at(op_name);
-    } catch (const std::out_of_range& e) {
-        DND_UNUSED(e);
-        throw std::out_of_range("Operator \"" + op_name + "\" does not exist.");
+    for (const auto& [operator_name, operator_func] : int_operators) {
+        if (operator_name == op_name) {
+            op = operator_func;
+        }
     }
+    throw std::out_of_range("Operator \"" + op_name + "\" does not exist.");
 }
 
 inline void IntNumEffect::applyTo(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
     DND_UNUSED(constants);
-    attributes[affected_attribute] = int_effect_operators.at(op_name)(attributes[affected_attribute], value);
+    attributes[affected_attribute] = op(attributes[affected_attribute], value);
 }
 
 inline FloatNumEffect::FloatNumEffect(
     const std::string& affected_attribute, const std::string& op_name, const EffectTime time, float value
 )
     : Effect(affected_attribute, op_name, time), value(value) {
-    try {
-        op = float_effect_operators.at(op_name);
-    } catch (const std::out_of_range& e) {
-        DND_UNUSED(e);
-        throw std::out_of_range("Operator \"" + op_name + "\" does not exist.");
+    for (const auto& [operator_name, operator_func] : float_operators) {
+        if (operator_name == op_name) {
+            op = operator_func;
+        }
     }
+    throw std::out_of_range("Operator \"" + op_name + "\" does not exist.");
 }
 
 inline void FloatNumEffect::applyTo(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
     DND_UNUSED(constants);
-    attributes[affected_attribute] = float_effect_operators.at(op_name)(attributes[affected_attribute], value);
+    attributes[affected_attribute] = op(attributes[affected_attribute], value);
 }
 
 inline IdentifierEffect::IdentifierEffect(
@@ -290,12 +258,12 @@ inline IdentifierEffect::IdentifierEffect(
     const std::string& identifier
 )
     : Effect(affected_attribute, op_name, time), identifier(identifier), op(nullptr) {
-    try {
-        op = int_effect_operators.at(op_name);
-    } catch (const std::out_of_range& e) {
-        DND_UNUSED(e);
-        throw std::out_of_range("Operator \"" + op_name + "\" does not exist.");
+    for (const auto& [operator_name, operator_func] : int_operators) {
+        if (operator_name == op_name) {
+            op = operator_func;
+        }
     }
+    throw std::out_of_range("Operator \"" + op_name + "\" does not exist.");
 }
 
 inline OtherAttributeEffect::OtherAttributeEffect(
