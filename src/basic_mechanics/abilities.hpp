@@ -9,7 +9,6 @@
 #include <string>
 #include <string_view>
 #include <unordered_map>
-#include <utility>
 
 namespace dnd {
 
@@ -31,7 +30,7 @@ constexpr std::array<Ability, 6> abilities_inorder = {
     Ability::INTELLIGENCE, Ability::WISDOM,    Ability::CHARISMA,
 };
 
-// the 3-letter strings for the abilities in order
+// the 3-letter c-style strings for the abilities in order
 constexpr std::array<const char*, 6> ability_cstrings_inorder = {"STR", "DEX", "CON", "INT", "WIS", "CHA"};
 
 /**

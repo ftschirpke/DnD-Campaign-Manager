@@ -52,7 +52,8 @@ void dnd::CharacterState::determineModifiers() {
         attributes[ability_name + "MOD"] = modifier(attributes.at(ability_name));
         attributes[ability_name + "SAVE"] = modifier(attributes.at(ability_name));
     }
-    for (const auto& [skill_name, ability_name] : skill_abilities) {
+    for (const auto& [skill_name, ability_name_cstr] : skill_abilities) {
+        const std::string ability_name(ability_name_cstr);
         attributes[skill_name] = attributes.at(ability_name + "MOD");
     }
 }
