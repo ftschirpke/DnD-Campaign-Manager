@@ -19,17 +19,49 @@
 
 namespace dnd {
 
+/**
+ * @brief A subparser for parsing features.
+ */
 class FeaturesParser : public Subparser {
 public:
+    /**
+     * @brief Constructs an FeaturesParser
+     * @param groups the already-parsed groups used for checking choices
+     */
     FeaturesParser(const Groups& groups) noexcept;
+    /**
+     * @brief Parse features from a JSON
+     * @param features_json the JSON that need s ot be parsed
+     */
     void parseFeatures(const nlohmann::json& features_json);
+    /**
+     * @brief Returns the parsed features while maintaining ownership
+     * @return the parsed features as l-value-reference
+     */
     const std::vector<Feature>& getFeatures() const;
+    /**
+     * @brief Returns and gives up ownership of the parsed features
+     * @return the parsed features as r-value-reference
+     */
     std::vector<Feature>&& retrieveFeatures();
+    /**
+     * @brief Configure the parsing type and the file path for the parser and all its subparsers
+     * @param conf_type the type of content of the file that is being parsed
+     * @param conf_filepath the file that is being parsed
+     */
     virtual void configure(ParsingType conf_type, const std::filesystem::path& conf_filepath) noexcept override;
 protected:
+    /**
+     * @brief Parse and create a feature
+     * @param feature_name name of the feature
+     * @param feature_json the body of the feature as JSON containing the properties of the feature
+     * @return the feature with the given name and the properties parsed from the body
+     */
     Feature createFeature(const std::string& feature_name, const nlohmann::json& feature_json) const;
 private:
+    // the parsed features
     std::vector<Feature> features;
+    // the subparser used for parsing effect holders
     EffectHolderParser effect_holder_parser;
 };
 
