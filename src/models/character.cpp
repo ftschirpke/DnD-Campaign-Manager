@@ -26,7 +26,7 @@ int dnd::Character::levelForXP(int xp) {
     }
     for (size_t lv = 0; lv < 20; ++lv) {
         if (minxp_for_level[lv] > xp) {
-            return lv;
+            return static_cast<int>(lv);
         }
     }
     return 20;
