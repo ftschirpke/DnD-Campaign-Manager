@@ -23,7 +23,17 @@
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
 
-constexpr dnd::ParsingType dnd::SpellsFileParser::type = ParsingType::SPELL;
+constexpr const char*
+    dnd::SpellsFileParser::spell_components_regex_cstr = "((1st|2nd|3rd|[4-9]th)-level "
+                                                         "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|"
+                                                         "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)"
+                                                         "( \\(ritual\\))?)|("
+                                                         "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|"
+                                                         "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)"
+                                                         " cantrip)";
+
+constexpr const char* dnd::SpellsFileParser::
+    spell_type_regex_cstr = "(V, S, M (\\((.*)\\))|V, S|V, M (\\((.*)\\))|S, M (\\((.*)\\))|V|S|M (\\((.*)\\)))";
 
 void dnd::SpellsFileParser::createSpell(std::string_view spell_name, const nlohmann::json& spell_json) {
     DND_MEASURE_FUNCTION();

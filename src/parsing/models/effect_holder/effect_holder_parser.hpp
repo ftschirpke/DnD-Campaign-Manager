@@ -74,27 +74,20 @@ protected:
         const std::string& choice_key, const nlohmann::json& choice_json, EffectHolderWithChoices& effect_holder
     ) const;
 private:
+    // the c-style string to create the regular expression for checking the validity of an activation from
+    static const char* const activation_regex_cstr;
+    // the c-style string to create the regular expression for checking the validity of an effect from
+    static const char* const effect_regex_cstr;
     // the regular expression to check the validity of an activation
-    static const std::regex activation_regex;
+    const std::regex activation_regex;
     // the regular expression to check the validity of an effect
-    static const std::regex effect_regex;
+    const std::regex effect_regex;
     // the already-parsed groups used for checking choices
     const Groups& groups;
 };
 
-inline EffectHolderParser::EffectHolderParser(const Groups& groups) noexcept : groups(groups) {}
-
-inline const std::regex EffectHolderParser::activation_regex(
-    "[A-Z][_A-Z0-9]+ (==|!=|>=|<=|>|<) ([A-Z][_A-Z0-9]+|-?\\d+(\\.\\d\\d?)?|true|false)"
-);
-
-inline const std::regex EffectHolderParser::effect_regex("[A-Z][_A-Z0-9]+ (earliest|early|normal|late|latest) (("
-                                                         "(add|mult|div|set|max|min) -?\\d+(\\.\\d\\d?)?)"
-                                                         "|("
-                                                         "addOther|multOther|divOther|setOther|maxOther|minOther"
-                                                         "|"
-                                                         "addConst|multConst|divConst|setConst|maxConst|minConst"
-                                                         ") [A-Z][_A-Z0-9]+)");
+inline EffectHolderParser::EffectHolderParser(const Groups& groups) noexcept
+    : activation_regex(activation_regex_cstr), effect_regex(effect_regex_cstr), groups(groups) {}
 
 } // namespace dnd
 

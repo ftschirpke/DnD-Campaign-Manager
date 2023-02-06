@@ -29,6 +29,18 @@
 #include "parsing/parsing_types.hpp"
 #include "parsing/subparser.hpp"
 
+constexpr const char* dnd::EffectHolderParser::
+    activation_regex_cstr = "[A-Z][_A-Z0-9]+ (==|!=|>=|<=|>|<) ([A-Z][_A-Z0-9]+|-?\\d+(\\.\\d\\d?)?|true|false)";
+
+constexpr const char*
+    dnd::EffectHolderParser::effect_regex_cstr = "[A-Z][_A-Z0-9]+ (earliest|early|normal|late|latest) (("
+                                                 "(add|mult|div|set|max|min) -?\\d+(\\.\\d\\d?)?)"
+                                                 "|("
+                                                 "addOther|multOther|divOther|setOther|maxOther|minOther"
+                                                 "|"
+                                                 "addConst|multConst|divConst|setConst|maxConst|minConst"
+                                                 ") [A-Z][_A-Z0-9]+)";
+
 static void parseActionsOptionals(const nlohmann::json& effect_holder_json, dnd::EffectHolder* const effect_holder) {
     dnd::parseOptional(effect_holder_json, "actions", effect_holder->actions.actions);
     dnd::parseOptional(effect_holder_json, "bonus_actions", effect_holder->actions.bonus_actions);
