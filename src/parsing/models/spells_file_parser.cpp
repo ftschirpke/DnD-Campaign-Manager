@@ -150,9 +150,9 @@ bool dnd::SpellsFileParser::validate() const {
     return std::any_of(valid.cbegin(), valid.cend(), [](bool b) { return b; });
 }
 
-static const std::unordered_map<int, std::string> level_group_names = {
-    {0, "cantrips"},       {1, "level 1 spells"}, {2, "level 2 spells"}, {3, "level 3 spells"}, {4, "level 4 spells"},
-    {5, "level 5 spells"}, {6, "level 6 spells"}, {7, "level 7 spells"}, {8, "level 8 spells"}, {9, "level 9 spells"},
+static constexpr std::array<const char*, 10> level_group_names = {
+    "cantrips",       "level 1 spells", "level 2 spells", "level 3 spells", "level 4 spells",
+    "level 5 spells", "level 6 spells", "level 7 spells", "level 8 spells", "level 9 spells",
 };
 
 void dnd::SpellsFileParser::saveResult() {
@@ -161,7 +161,7 @@ void dnd::SpellsFileParser::saveResult() {
             SpellParsingInfo& info = spell_parsing_info[i];
 
             groups.add("spells", info.name);
-            const std::string& level_group_name = level_group_names.at(info.type.levelAsNumber());
+            const std::string& level_group_name = level_group_names.at(static_cast<size_t>(info.type.levelAsNumber()));
             groups.add(level_group_name, info.name);
             for (const std::string& class_name : info.classes) {
                 groups.add(class_name + " spells", info.name);
