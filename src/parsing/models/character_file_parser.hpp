@@ -84,7 +84,7 @@ private:
     void parseLevelAndXP();
 
     // the type of content that this parser parses - characters
-    static const ParsingType type;
+    static constexpr ParsingType type = ParsingType::CHARACTER;
     // the name of the parsed character
     std::string character_name;
     // the base ability scores of the parsed character

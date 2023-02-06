@@ -15,8 +15,6 @@
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
 
-constexpr dnd::ParsingType dnd::StringGroupsFileParser::type = ParsingType::GROUP;
-
 std::unordered_set<std::string> dnd::StringGroupsFileParser::parseMap(const nlohmann::json& json_map) {
     std::unordered_set<std::string> no_subgroup_values;
     for (const auto& [name, value] : json_map.items()) {

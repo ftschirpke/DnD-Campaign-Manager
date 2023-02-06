@@ -61,7 +61,7 @@ private:
     virtual void configureSubparsers() override;
 
     // the type of content that this parser parses - classes
-    static const ParsingType type;
+    static constexpr ParsingType type = ParsingType::CLASS;
     // the name of the parsed class
     std::string character_class_name;
     // the hit dice of the parsed class

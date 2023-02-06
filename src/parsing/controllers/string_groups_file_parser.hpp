@@ -51,8 +51,8 @@ private:
      */
     virtual void configureSubparsers() override;
 
-    // the type of content that this parser parses: string groups
-    static const ParsingType type;
+    // the type of content that this parser parses - string groups
+    static constexpr ParsingType type = ParsingType::GROUP;
     // the already-parsed groups where the result is added in the end
     Groups& groups;
     // the parsed groups

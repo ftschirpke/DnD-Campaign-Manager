@@ -29,8 +29,6 @@
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
 
-constexpr dnd::ParsingType dnd::CharacterFileParser::type = ParsingType::CHARACTER;
-
 void dnd::CharacterFileParser::parse() {
     DND_MEASURE_FUNCTION();
     if (!json_to_parse.is_object()) {

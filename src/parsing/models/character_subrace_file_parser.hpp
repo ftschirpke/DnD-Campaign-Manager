@@ -52,7 +52,7 @@ private:
     virtual void configureSubparsers() override;
 
     // the type of content that this parser parses - subraces
-    static const ParsingType type;
+    static constexpr ParsingType type = ParsingType::SUBRACE;
     // the name of the parsed subrace
     std::string character_subrace_name;
     // the name of the race for the parsed subrace
