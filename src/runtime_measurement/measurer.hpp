@@ -70,7 +70,7 @@ private:
     // a mutex to control writing access to the results json
     static std::mutex write_profile_mutex;
     // the current measuring session, nullptr if there is none
-    std::unique_ptr<MeasuringSession> session;
+    MeasuringSession* session;
     // the start of the current session
     std::chrono::system_clock::time_point session_start_time;
 };
