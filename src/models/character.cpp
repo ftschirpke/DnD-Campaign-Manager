@@ -15,13 +15,18 @@
 #include "models/character_state.hpp"
 #include "models/effect_holder/feature.hpp"
 
+constexpr std::array<int, 20> dnd::Character::minxp_for_level = {
+    0,     300,    900,    2700,   6500,   14000,  23000,  34000,  48000,  64000,
+    85000, 100000, 120000, 140000, 165000, 195000, 225000, 265000, 305000, 355000,
+};
+
 int dnd::Character::levelForXP(int xp) {
     if (xp < 0) {
         throw std::invalid_argument("XP value cannot be negative.");
     }
-    for (const auto& [lv, min_xp] : xp_for_level) {
-        if (min_xp > xp) {
-            return lv - 1;
+    for (size_t lv = 0; lv < 20; ++lv) {
+        if (minxp_for_level[lv] > xp) {
+            return static_cast<int>(lv);
         }
     }
     return 20;
@@ -42,8 +47,9 @@ const std::unordered_map<std::string, int> dnd::Character::getInitialAttributeVa
         {"ARMOR_ON", false},
     };
     for (size_t i = 0; i < 6; ++i) {
-        character_initial_values.emplace(ability_strings_inorder[i], base_ability_scores[i] * 100);
-        character_initial_values.emplace(ability_strings_inorder[i] + "MAX", 2000);
+        const std::string ability_str(ability_cstrings_inorder[i]);
+        character_initial_values.emplace(ability_str, base_ability_scores[i] * 100);
+        character_initial_values.emplace(ability_str + "MAX", 2000);
     }
     return character_initial_values;
 }

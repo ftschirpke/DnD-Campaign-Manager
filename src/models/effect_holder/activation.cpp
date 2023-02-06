@@ -6,6 +6,12 @@
 #include <string>
 #include <unordered_map>
 
+constexpr std::array<std::pair<const char*, bool (*)(int, int)>, 6> dnd::Activation::operators = {
+    std::pair("==", [](int a, int b) { return a == b; }), std::pair("!=", [](int a, int b) { return a != b; }),
+    std::pair(">=", [](int a, int b) { return a >= b; }), std::pair("<=", [](int a, int b) { return a <= b; }),
+    std::pair(">", [](int a, int b) { return a > b; }),   std::pair("<", [](int a, int b) { return a < b; }),
+};
+
 bool dnd::NumericActivation::check(
     const std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {

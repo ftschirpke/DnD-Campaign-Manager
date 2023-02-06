@@ -93,11 +93,15 @@ private:
     virtual void configureSubparsers() override;
 
     // the type of content that this parser parses - spells
-    static const ParsingType type;
+    static constexpr ParsingType type = ParsingType::SPELL;
+    // the c-style string to create the regular expression to check the validity of spell components from
+    static const char* const spell_components_regex_cstr;
+    // the c-style string to create the regular expression to check the validity of a spell type as c-style string from
+    static const char* const spell_type_regex_cstr;
     // the regular expression to check the validity of spell components
-    static const std::regex spell_components_regex;
+    const std::regex spell_components_regex;
     // the regular expression to check the validity of a spell type
-    static const std::regex spell_type_regex;
+    const std::regex spell_type_regex;
     // the already-parsed spells to add the parsed spells to
     std::unordered_map<std::string, const Spell>& spells;
     // the already-parsed groups to add spell-groups to
@@ -112,22 +116,9 @@ private:
     std::mutex spell_parsing_mutex;
 };
 
-inline const ParsingType SpellsFileParser::type = ParsingType::SPELL;
-
 inline SpellsFileParser::SpellsFileParser(std::unordered_map<std::string, const Spell>& spells, Groups& groups) noexcept
-    : ContentFileParser(), spells(spells), groups(groups) {}
-
-inline const std::regex SpellsFileParser::spell_components_regex(
-    "(V, S, M (\\((.*)\\))|V, S|V, M (\\((.*)\\))|S, M (\\((.*)\\))|V|S|M (\\((.*)\\)))"
-);
-
-inline const std::regex SpellsFileParser::spell_type_regex("((1st|2nd|3rd|[4-9]th)-level "
-                                                           "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|"
-                                                           "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)"
-                                                           "( \\(ritual\\))?)|("
-                                                           "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|"
-                                                           "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)"
-                                                           " cantrip)");
+    : ContentFileParser(), spell_components_regex(spell_type_regex_cstr), spell_type_regex(spell_components_regex_cstr),
+      spells(spells), groups(groups) {}
 
 inline void SpellsFileParser::configureSubparsers() {} // SpellsFileParser has no subparsers
 

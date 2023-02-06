@@ -2,6 +2,7 @@
 
 #include "content_parser.hpp"
 
+#include <array>
 #include <filesystem>
 #include <future>
 #include <iostream>
@@ -26,6 +27,17 @@
 #include "parsing/models/spells_file_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
+
+constexpr std::array<std::pair<dnd::ParsingType, const char*>, 1> dnd::ContentParser::file_names = {
+    std::pair(ParsingType::GROUP, "groups"),
+};
+
+constexpr std::array<std::pair<dnd::ParsingType, const char*>, 7> dnd::ContentParser::subdir_names = {
+    std::pair(ParsingType::GROUP, "groups"),  std::pair(ParsingType::CHARACTER, "characters"),
+    std::pair(ParsingType::CLASS, "classes"), std::pair(ParsingType::SUBCLASS, "subclasses"),
+    std::pair(ParsingType::RACE, "races"),    std::pair(ParsingType::SUBRACE, "subraces"),
+    std::pair(ParsingType::SPELL, "spells"),
+};
 
 void dnd::ContentParser::reset() noexcept {
     parsed_content = Content();
@@ -85,7 +97,7 @@ std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createSingleFilePars
             return std::make_unique<StringGroupsFileParser>(parsed_content.groups);
         default:
             throw std::logic_error(
-                "No single-file parser for content type \"" + parsing_type_names.at(parsing_type) + "\" exists."
+                "No single-file parser for content type \"" + std::string(parsingTypeName(parsing_type)) + "\" exists."
             );
     }
 }
@@ -121,7 +133,7 @@ std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createMultiFileParse
             return std::make_unique<EffectHolderGroupsFileParser>(parsed_content.groups);
         default:
             throw std::logic_error(
-                "No multi-file parser for content type \"" + parsing_type_names.at(parsing_type) + "\" exists."
+                "No multi-file parser for content type \"" + std::string(parsingTypeName(parsing_type)) + "\" exists."
             );
     }
 }
@@ -129,7 +141,7 @@ std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createMultiFileParse
 void dnd::ContentParser::parseFileOfType(
     const std::filesystem::directory_entry& file, const ParsingType parsing_type, bool multi_file
 ) {
-    DND_MEASURE_SCOPE(("dnd::ContentParser::parseFileOfType ( " + parsing_type_names.at(parsing_type) + ", "
+    DND_MEASURE_SCOPE(("dnd::ContentParser::parseFileOfType ( " + std::string(parsingTypeName(parsing_type)) + ", "
                        + (multi_file ? "multi-file" : "single-file") + " )")
                           .c_str());
 
@@ -174,27 +186,30 @@ void dnd::ContentParser::parseAllOfType(const dnd::ParsingType parsing_type) {
 
 void dnd::ContentParser::parseAllOfSingleFileType(const ParsingType parsing_type) {
     DND_MEASURE_SCOPE(
-        ("dnd::ContentParser::parseAllOfSingleFileType ( " + parsing_type_names.at(parsing_type) + " )").c_str()
+        ("dnd::ContentParser::parseAllOfSingleFileType ( " + std::string(parsingTypeName(parsing_type)) + " )").c_str()
     );
     std::vector<std::filesystem::directory_entry> files_to_parse;
     std::vector<std::future<void>> futures;
     for (const auto& dir : dirs_to_parse) {
-        std::filesystem::directory_entry type_file;
-        try {
-            type_file = std::filesystem::directory_entry(dir.path() / (file_names.at(parsing_type) + ".json"));
-        } catch (const std::out_of_range& e) {
-            DND_UNUSED(e);
+        auto type_file_it = std::find_if(
+            file_names.cbegin(), file_names.cend(),
+            [parsing_type](const std::pair<ParsingType, const char*>& p) { return p.first == parsing_type; }
+        );
+        if (type_file_it == file_names.end()) {
             throw std::logic_error(
-                "Cannot parse type \"" + parsing_type_names.at(parsing_type) + "\" as single file type."
+                "Cannot parse type \"" + std::string(parsingTypeName(parsing_type)) + "\" as single-file type."
             );
         }
+        const std::string type_file_name = type_file_it->second;
+        std::filesystem::directory_entry type_file = std::filesystem::directory_entry(
+            dir.path() / (type_file_name + ".json")
+        );
         if (!type_file.exists()) {
             continue;
         }
         if (!type_file.is_regular_file()) {
             std::cerr << "Warning: Rename " << type_file.path().string()
-                      << " so that it cannot be confused with a file containing " << file_names.at(parsing_type)
-                      << '\n';
+                      << " so that it cannot be confused with a file containing " << type_file_name << '\n';
             continue;
         }
         files_to_parse.emplace_back(type_file);
@@ -216,28 +231,29 @@ void dnd::ContentParser::parseAllOfSingleFileType(const ParsingType parsing_type
 
 void dnd::ContentParser::parseAllOfMultiFileType(const ParsingType parsing_type) {
     DND_MEASURE_SCOPE(
-        ("dnd::ContentParser::parseAllOfMultiFileType ( " + parsing_type_names.at(parsing_type) + " )").c_str()
+        ("dnd::ContentParser::parseAllOfMultiFileType ( " + std::string(parsingTypeName(parsing_type)) + " )").c_str()
     );
     std::vector<std::filesystem::directory_entry> files_to_parse;
     std::vector<std::future<void>> futures;
     for (const auto& dir : dirs_to_parse) {
-        std::filesystem::directory_entry type_subdir;
-        try {
-            type_subdir = std::filesystem::directory_entry(dir.path() / subdir_names.at(parsing_type));
-        } catch (const std::out_of_range& e) {
-            DND_UNUSED(e);
+        auto type_dir_it = std::find_if(
+            subdir_names.cbegin(), subdir_names.cend(),
+            [parsing_type](const std::pair<ParsingType, const char*>& p) { return p.first == parsing_type; }
+        );
+        if (type_dir_it == subdir_names.end()) {
             throw std::logic_error(
-                "Cannot parse type \"" + parsing_type_names.at(parsing_type) + "\" as multi file type."
+                "Cannot parse type \"" + std::string(parsingTypeName(parsing_type)) + "\" as multi-file type."
             );
         }
+        const std::string type_dir_name = type_dir_it->second;
+        std::filesystem::directory_entry type_subdir = std::filesystem::directory_entry(dir.path() / type_dir_name);
 
         if (!type_subdir.exists()) {
             continue;
         }
         if (!type_subdir.is_directory()) {
             std::cerr << "Warning: Rename " << type_subdir.path().string()
-                      << " so that it cannot be confused with a directory containing " << subdir_names.at(parsing_type)
-                      << '\n';
+                      << " so that it cannot be confused with a directory containing " << type_dir_name << '\n';
             continue;
         }
         for (const auto& file : std::filesystem::directory_iterator(type_subdir)) {

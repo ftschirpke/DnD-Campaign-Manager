@@ -23,6 +23,18 @@
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
 
+constexpr const char*
+    dnd::SpellsFileParser::spell_components_regex_cstr = "((1st|2nd|3rd|[4-9]th)-level "
+                                                         "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|"
+                                                         "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)"
+                                                         "( \\(ritual\\))?)|("
+                                                         "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|"
+                                                         "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)"
+                                                         " cantrip)";
+
+constexpr const char* dnd::SpellsFileParser::
+    spell_type_regex_cstr = "(V, S, M (\\((.*)\\))|V, S|V, M (\\((.*)\\))|S, M (\\((.*)\\))|V|S|M (\\((.*)\\)))";
+
 void dnd::SpellsFileParser::createSpell(std::string_view spell_name, const nlohmann::json& spell_json) {
     DND_MEASURE_FUNCTION();
     SpellParsingInfo info;
@@ -89,7 +101,7 @@ dnd::SpellType dnd::SpellsFileParser::createSpellType(const std::string& spell_t
     }
     auto tolower = [](unsigned char c) { return static_cast<unsigned char>(std::tolower(c)); };
     std::transform(magic_school_str.begin(), magic_school_str.end(), magic_school_str.begin(), tolower);
-    spell_type.magic_school = magic_schools.at(magic_school_str);
+    spell_type.magic_school = magicSchoolFromName(magic_school_str);
     return spell_type;
 }
 
@@ -138,9 +150,9 @@ bool dnd::SpellsFileParser::validate() const {
     return std::any_of(valid.cbegin(), valid.cend(), [](bool b) { return b; });
 }
 
-static const std::unordered_map<int, std::string> level_group_names = {
-    {0, "cantrips"},       {1, "level 1 spells"}, {2, "level 2 spells"}, {3, "level 3 spells"}, {4, "level 4 spells"},
-    {5, "level 5 spells"}, {6, "level 6 spells"}, {7, "level 7 spells"}, {8, "level 8 spells"}, {9, "level 9 spells"},
+static constexpr std::array<const char*, 10> level_group_names = {
+    "cantrips",       "level 1 spells", "level 2 spells", "level 3 spells", "level 4 spells",
+    "level 5 spells", "level 6 spells", "level 7 spells", "level 8 spells", "level 9 spells",
 };
 
 void dnd::SpellsFileParser::saveResult() {
@@ -149,7 +161,7 @@ void dnd::SpellsFileParser::saveResult() {
             SpellParsingInfo& info = spell_parsing_info[i];
 
             groups.add("spells", info.name);
-            const std::string& level_group_name = level_group_names.at(info.type.levelAsNumber());
+            const std::string& level_group_name = level_group_names.at(static_cast<size_t>(info.type.levelAsNumber()));
             groups.add(level_group_name, info.name);
             for (const std::string& class_name : info.classes) {
                 groups.add(class_name + " spells", info.name);

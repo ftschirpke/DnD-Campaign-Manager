@@ -3,8 +3,9 @@
 
 #include "dnd_config.hpp"
 
-#include <string>
-#include <unordered_map>
+#include <array>
+#include <stdexcept>
+#include <utility>
 
 namespace dnd {
 
@@ -21,13 +22,27 @@ enum ParsingType {
     CHARACTER,
 };
 
-// the name of the parsing types as strings
-const std::unordered_map<ParsingType, std::string> parsing_type_names = {
-    {ParsingType::GROUP, "Group"},         {ParsingType::SPELL, "Spell"},     {ParsingType::RACE, "Race"},
-    {ParsingType::CLASS, "Class"},         {ParsingType::SUBRACE, "Subrace"}, {ParsingType::SUBCLASS, "Subclass"},
-    {ParsingType::CHARACTER, "Character"},
+// the parsing types paired with their c-style string names
+constexpr std::array<std::pair<ParsingType, const char*>, 7> parsing_type_names = {
+    std::pair(ParsingType::GROUP, "Group"),         std::pair(ParsingType::SPELL, "Spell"),
+    std::pair(ParsingType::RACE, "Race"),           std::pair(ParsingType::CLASS, "Class"),
+    std::pair(ParsingType::SUBRACE, "Subrace"),     std::pair(ParsingType::SUBCLASS, "Subclass"),
+    std::pair(ParsingType::CHARACTER, "Character"),
 };
 
+/**
+ * @brief Returns the name of a parsing type
+ * @param parsing_type the parsing type
+ * @return the name of the parsing type
+ */
+constexpr const char* parsingTypeName(ParsingType parsing_type) {
+    for (const auto& [parsing_type_val, parsing_type_name] : parsing_type_names) {
+        if (parsing_type_val == parsing_type) {
+            return parsing_type_name;
+        }
+    }
+    throw std::out_of_range("No such parsing type exists.");
+}
 
 } // namespace dnd
 

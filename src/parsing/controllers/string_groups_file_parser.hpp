@@ -51,8 +51,8 @@ private:
      */
     virtual void configureSubparsers() override;
 
-    // the type of content that this parser parses: string groups
-    static const ParsingType type;
+    // the type of content that this parser parses - string groups
+    static constexpr ParsingType type = ParsingType::GROUP;
     // the already-parsed groups where the result is added in the end
     Groups& groups;
     // the parsed groups
@@ -60,8 +60,6 @@ private:
     // a subparser for effect holders used for parsing the effect holders for the choosable
     EffectHolderParser effect_holder_parser;
 };
-
-inline const ParsingType StringGroupsFileParser::type = ParsingType::GROUP;
 
 inline StringGroupsFileParser::StringGroupsFileParser(Groups& groups) noexcept
     : ContentFileParser(), groups(groups), effect_holder_parser(groups) {}

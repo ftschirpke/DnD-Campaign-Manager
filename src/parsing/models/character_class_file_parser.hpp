@@ -61,7 +61,7 @@ private:
     virtual void configureSubparsers() override;
 
     // the type of content that this parser parses - classes
-    static const ParsingType type;
+    static constexpr ParsingType type = ParsingType::CLASS;
     // the name of the parsed class
     std::string character_class_name;
     // the hit dice of the parsed class
@@ -77,8 +77,6 @@ private:
     // a subparser used for parsing the subclass' spellcasting feature if it exists
     SpellcastingParser spellcasting_parser;
 };
-
-inline const ParsingType CharacterClassFileParser::type = ParsingType::CLASS;
 
 inline CharacterClassFileParser::CharacterClassFileParser(
     std::unordered_map<std::string, const CharacterClass>& classes, const Groups& groups,

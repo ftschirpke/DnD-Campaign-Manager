@@ -46,7 +46,7 @@ private:
     virtual void configureSubparsers() override;
 
     // the type of content that this parser parses - races
-    static const ParsingType type;
+    static constexpr ParsingType type = ParsingType::RACE;
     // the name of the parsed race
     std::string character_race_name;
     // boolean for whether the parsed race has subraces
@@ -56,8 +56,6 @@ private:
     // a subparser used for parsing the race's features
     FeaturesParser features_parser;
 };
-
-inline const ParsingType CharacterRaceFileParser::type = ParsingType::RACE;
 
 inline CharacterRaceFileParser::CharacterRaceFileParser(
     std::unordered_map<std::string, const CharacterRace>& races, const Groups& groups

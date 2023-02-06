@@ -84,7 +84,7 @@ private:
     void parseLevelAndXP();
 
     // the type of content that this parser parses - characters
-    static const ParsingType type;
+    static constexpr ParsingType type = ParsingType::CHARACTER;
     // the name of the parsed character
     std::string character_name;
     // the base ability scores of the parsed character
@@ -122,8 +122,6 @@ private:
     // a subparser used for parsing the character's features
     FeaturesParser features_parser;
 };
-
-inline const ParsingType CharacterFileParser::type = ParsingType::CHARACTER;
 
 inline CharacterFileParser::CharacterFileParser(
     std::unordered_map<std::string, Character>& characters, const Groups& groups,

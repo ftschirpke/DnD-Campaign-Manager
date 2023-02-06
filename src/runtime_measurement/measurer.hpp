@@ -22,9 +22,9 @@ struct TimerResult {
     // the name of the timer
     std::string name;
     // the start time id
-    long long start;
+    int64_t start;
     // the end time id
-    long long end;
+    int64_t end;
     // the thread id
     size_t thread_id;
 };
@@ -70,7 +70,7 @@ private:
     // a mutex to control writing access to the results json
     static std::mutex write_profile_mutex;
     // the current measuring session, nullptr if there is none
-    std::unique_ptr<MeasuringSession> session;
+    MeasuringSession* session;
     // the start of the current session
     std::chrono::system_clock::time_point session_start_time;
 };

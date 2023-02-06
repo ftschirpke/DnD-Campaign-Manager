@@ -3,9 +3,11 @@
 
 #include "dnd_config.hpp"
 
+#include <array>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
+#include <utility>
 
 namespace dnd {
 
@@ -35,19 +37,13 @@ public:
     ) const = 0;
 
     // the supported comparison operators for activations
-    static const std::unordered_map<std::string, bool (*)(int, int)> operators;
+    static const std::array<std::pair<const char*, bool (*)(int, int)>, 6> operators;
     // left part of the comparison which must be an attribute or constant of the character
     const std::string left_identifier;
     // the operator in its string representation
     const std::string op_name;
     // the activation's comparison operator function
     std::unordered_map<std::string, bool (*)(int, int)>::mapped_type op;
-};
-
-inline const std::unordered_map<std::string, bool (*)(int, int)> Activation::operators = {
-    {"==", [](int a, int b) { return a == b; }}, {"!=", [](int a, int b) { return a != b; }},
-    {">=", [](int a, int b) { return a >= b; }}, {"<=", [](int a, int b) { return a <= b; }},
-    {">", [](int a, int b) { return a > b; }},   {"<", [](int a, int b) { return a < b; }},
 };
 
 /**
@@ -110,15 +106,15 @@ public:
     ) const;
 };
 
-
 inline Activation::Activation(const std::string& left_identifier, const std::string& op_name)
     : left_identifier(left_identifier), op_name(op_name), op(nullptr) {
-    try {
-        op = operators.at(op_name);
-    } catch (const std::out_of_range& e) {
-        DND_UNUSED(e);
-        throw std::invalid_argument("Operator \"" + op_name + "\" does not exist.");
+    for (const auto& [operator_name, operator_func] : operators) {
+        if (operator_name == op_name) {
+            op = operator_func;
+            return;
+        }
     }
+    throw std::out_of_range("Operator \"" + op_name + "\" does not exist.");
 }
 
 inline NumericActivation::NumericActivation(

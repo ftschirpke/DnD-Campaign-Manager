@@ -188,7 +188,8 @@ void dnd::CharacterFileParser::parseLevelAndXP() {
             throw invalid_attribute(type, filepath, "level", "must be between 1 and 20.");
         }
         xp = json_to_parse.at("xp").get<int>();
-        if (xp_for_level.at(level) > xp || (level < 20 && xp_for_level.at(level + 1) <= xp)) {
+        if (Character::minxp_for_level.at(static_cast<size_t>(level - 1)) > xp
+            || (level < 20 && Character::minxp_for_level.at(static_cast<size_t>(level)) <= xp)) {
             throw invalid_attribute(
                 type, filepath, "xp", "corresponds to a different level than the level value provided."
             );
@@ -198,7 +199,7 @@ void dnd::CharacterFileParser::parseLevelAndXP() {
         if (level < 1 || level > 20) {
             throw invalid_attribute(type, filepath, "level", "must be between 1 and 20.");
         }
-        xp = xp_for_level.at(level);
+        xp = Character::minxp_for_level.at(static_cast<size_t>(level - 1));
     } else if (has_xp) {
         xp = json_to_parse.at("xp").get<int>();
         level = Character::levelForXP(xp);

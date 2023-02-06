@@ -3,9 +3,12 @@
 
 #include "dnd_config.hpp"
 
+#include <array>
+#include <stdexcept>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
+#include <utility>
 
 namespace dnd {
 
@@ -31,13 +34,28 @@ enum MagicSchool {
     TRANSMUTATION
 };
 
-// the magic schools mapped to their names
-const std::unordered_map<std::string, MagicSchool> magic_schools = {
-    {"abjuration", MagicSchool::ABJURATION}, {"conjuration", MagicSchool::CONJURATION},
-    {"divination", MagicSchool::DIVINATION}, {"enchantment", MagicSchool::ENCHANTMENT},
-    {"evocation", MagicSchool::EVOCATION},   {"illusion", MagicSchool::ILLUSION},
-    {"necromancy", MagicSchool::NECROMANCY}, {"transmutation", MagicSchool::TRANSMUTATION},
+// the magic schools paired with their names as c-style strings
+constexpr std::array<std::pair<const char*, MagicSchool>, 8> magic_schools = {
+    std::pair("abjuration", MagicSchool::ABJURATION), std::pair("conjuration", MagicSchool::CONJURATION),
+    std::pair("divination", MagicSchool::DIVINATION), std::pair("enchantment", MagicSchool::ENCHANTMENT),
+    std::pair("evocation", MagicSchool::EVOCATION),   std::pair("illusion", MagicSchool::ILLUSION),
+    std::pair("necromancy", MagicSchool::NECROMANCY), std::pair("transmutation", MagicSchool::TRANSMUTATION),
 };
+
+/**
+ * @brief Determines the magic school given its name
+ * @param magic_school_name the name of the magic school
+ * @return the name of the magic school with the given name
+ * @throws std::out_of_range if no magic school with that name exists
+ */
+constexpr MagicSchool magicSchoolFromName(const std::string& magic_school_name) {
+    for (const auto& [ms_name, ms_val] : magic_schools) {
+        if (magic_school_name == ms_name) {
+            return ms_val;
+        }
+    }
+    throw std::out_of_range("The magic school \"" + magic_school_name + "\" does not exist.");
+}
 
 /**
  * @brief An enum for the possible spell levels

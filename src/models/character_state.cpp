@@ -17,7 +17,7 @@
 #include "models/feature_holder.hpp"
 
 void dnd::CharacterState::applyAbilityScoreEffects() {
-    for (const auto& effect_time : effect_times_in_order) {
+    for (const auto& [_, effect_time] : effect_times_in_order) {
         for (const auto effect_holder_ptr : active_effect_holders) {
             if (effect_holder_ptr->ability_score_effects.contains(effect_time)) {
                 const auto& ability_effects = effect_holder_ptr->ability_score_effects.at(effect_time);
@@ -27,13 +27,14 @@ void dnd::CharacterState::applyAbilityScoreEffects() {
             }
         }
     }
-    for (const auto& ability : ability_strings_inorder) {
+    for (const auto& ability_cstr : ability_cstrings_inorder) {
+        const std::string ability(ability_cstr);
         attributes[ability] = std::min(attributes[ability], attributes[ability + "MAX"]);
     }
 }
 
 void dnd::CharacterState::applyNormalEffects() {
-    for (const auto& effect_time : effect_times_in_order) {
+    for (const auto& [_, effect_time] : effect_times_in_order) {
         for (const auto effect_holder_ptr : active_effect_holders) {
             if (effect_holder_ptr->normal_effects.contains(effect_time)) {
                 const auto& ability_effects = effect_holder_ptr->normal_effects.at(effect_time);
@@ -46,11 +47,13 @@ void dnd::CharacterState::applyNormalEffects() {
 }
 
 void dnd::CharacterState::determineModifiers() {
-    for (const std::string& ability_name : ability_strings_inorder) {
+    for (const auto& ability_name_cstr : ability_cstrings_inorder) {
+        const std::string ability_name(ability_name_cstr);
         attributes[ability_name + "MOD"] = modifier(attributes.at(ability_name));
         attributes[ability_name + "SAVE"] = modifier(attributes.at(ability_name));
     }
-    for (const auto& [skill_name, ability_name] : skill_abilities) {
+    for (const auto& [skill_name, ability_name_cstr] : skill_abilities) {
+        const std::string ability_name(ability_name_cstr);
         attributes[skill_name] = attributes.at(ability_name + "MOD");
     }
 }
