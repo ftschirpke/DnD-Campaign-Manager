@@ -22,9 +22,9 @@ struct TimerResult {
     // the name of the timer
     std::string name;
     // the start time id
-    long long start;
+    int64_t start;
     // the end time id
-    long long end;
+    int64_t end;
     // the thread id
     size_t thread_id;
 };

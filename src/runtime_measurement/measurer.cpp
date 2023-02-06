@@ -58,11 +58,9 @@ void dnd::Measurer::endSession() {
     max_str_len += 4;
 
     auto start = std::chrono::system_clock::to_time_t(session_start_time);
-    // output_stream << "Session started at: " << std::put_time(std::localtime(&start), "%F %T\n");
-    output_stream << "Session started at: " << start << '\n';
+    output_stream << "Session started at: " << std::put_time(std::localtime(&start), "%F %T\n");
     auto end = std::chrono::system_clock::to_time_t(session_end_time);
-    // output_stream << "Session stopped at: " << std::put_time(std::localtime(&end), "%F %T\n\n");
-    output_stream << "Session stopped at: " << end << '\n';
+    output_stream << "Session stopped at: " << std::put_time(std::localtime(&end), "%F %T\n\n");
 
     for (const auto& human_readable_value : values_for_human_readable) {
         for (auto& measurement : session->json.at("traceEvents")) {
@@ -104,8 +102,8 @@ void dnd::Measurer::writeProfile(const TimerResult& result) {
 void dnd::Timer::stop() {
     std::chrono::system_clock::time_point end_time = std::chrono::system_clock::now();
 
-    long long start = std::chrono::time_point_cast<std::chrono::microseconds>(start_time).time_since_epoch().count();
-    long long end = std::chrono::time_point_cast<std::chrono::microseconds>(end_time).time_since_epoch().count();
+    int64_t start = std::chrono::time_point_cast<std::chrono::microseconds>(start_time).time_since_epoch().count();
+    int64_t end = std::chrono::time_point_cast<std::chrono::microseconds>(end_time).time_since_epoch().count();
 
     size_t thread_id = std::hash<std::thread::id>{}(std::this_thread::get_id());
 
