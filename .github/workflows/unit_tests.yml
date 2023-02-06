@@ -30,7 +30,7 @@ jobs:
             name: "TEST: Ubuntu Latest GCC",
             os: ubuntu-latest,
             cc: "gcc", cxx: "g++",
-            install_cmd: "sudo apt-get -y"
+            install_cmd: "sudo apt-get update && sudo apt-get -y"
           }
         - {
             name: "TEST: macOS Latest Clang",
