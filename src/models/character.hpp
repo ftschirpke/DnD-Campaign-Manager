@@ -75,6 +75,7 @@ public:
      * @brief Determines the level for a character with a given XP value
      * @param xp the XP value of a character
      * @return the corresponding character level for this XP value
+     * @throws std::invalid_argument if the XP value is smaller than zero
      */
     static int levelForXP(int xp);
 

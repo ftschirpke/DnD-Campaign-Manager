@@ -82,6 +82,7 @@ public:
      * @param op_name the string representation of the operation that is performed when applying this effect
      * @param time the time at which this effect should be applied in the order of execution
      * @param value the fixed integer value used in the operation
+     * @throws std::out_of_range if no operator with such a name exists
      */
     IntNumEffect(const std::string& affected_attribute, const std::string& op_name, const EffectTime time, int value);
     /**
@@ -112,6 +113,7 @@ public:
      * @param op_name the string representation of the operation that is performed when applying this effect
      * @param time the time at which this effect should be applied in the order of execution
      * @param value the fixed float value used in the operation
+     * @throws std::out_of_range if no operator with such a name exists
      */
     FloatNumEffect(
         const std::string& affected_attribute, const std::string& op_name, const EffectTime time, float value
@@ -144,6 +146,7 @@ public:
      * @param op_name the string representation of the operation that is performed when applying this effect
      * @param time the time at which this effect should be applied in the order of execution
      * @param identifier the name of the attribute or constant used in the operation
+     * @throws std::out_of_range if no operator with such a name exists
      */
     IdentifierEffect(
         const std::string& affected_attribute, const std::string& op_name, const EffectTime time,
@@ -169,6 +172,8 @@ public:
      * @param op_name the string representation of the operation that is performed when applying this effect
      * @param time the time at which this effect should be applied in the order of execution
      * @param other_attribute the name of the attribute used in the operation
+     * @throws std::out_of_range if no operator with such a name exists
+     * @throws std::out_of_range if the other attribute does not exist
      */
     OtherAttributeEffect(
         const std::string& affected_attribute, const std::string& op_name, const EffectTime time,
@@ -196,6 +201,8 @@ public:
      * @param op_name the string representation of the operation that is performed when applying this effect
      * @param time the time at which this effect should be applied in the order of execution
      * @param constant the name of the constant used in the operation
+     * @throws std::out_of_range if no operator with such a name exists
+     * @throws std::out_of_range if the constant does not exist
      */
     ConstEffect(
         const std::string& affected_attribute, const std::string& op_name, const EffectTime time,
