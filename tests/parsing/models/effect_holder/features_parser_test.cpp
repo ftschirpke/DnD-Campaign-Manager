@@ -8,15 +8,17 @@
 
 #include "controllers/groups.hpp"
 #include "models/effect_holder/feature.hpp"
+#include "parsing/parsing_types.hpp"
 
-// class that allows us to test the abstract dnd::FeaturesParser class
+/**
+ * @brief A class that allows us to test the dnd::FeaturesParser class
+ */
 class TestFeaturesParser : public dnd::FeaturesParser {
 public:
-    TestFeaturesParser() noexcept : dnd::FeaturesParser(dnd::Groups()) {}
+    TestFeaturesParser() noexcept : dnd::FeaturesParser(dnd::ParsingType::CHARACTER, "testing", dnd::Groups()) {}
     dnd::Feature createFeatureForTesting(const std::string& feature_name, const nlohmann::json& feature_json) const {
         return createFeature(feature_name, feature_json);
     }
-    virtual void requiresConfiguration() const override {} // for testing, no configuration is required
 };
 
 TEST_CASE("dnd::FeaturesParser::createFeature: invalid JSON format") {

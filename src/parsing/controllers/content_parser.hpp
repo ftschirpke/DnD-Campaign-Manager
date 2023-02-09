@@ -55,27 +55,31 @@ private:
      */
     void parseAllOfMultiFileType(const ParsingType parsing_type);
     /**
-     * @brief Handles parsing of one file given the way of how it should be parsed
-     * @param file the file path
-     * @param parsing_type the type of content in the file that should be parsed
-     * @param multi_file "true" if the content type should be parsed in a multi-file way, "false" otherwise
-     * @throws parsing_error if any error occured while trying to parse the file
+     * @brief Handles parsing of one file by one parser
+     * @param parser the parser
+     * @throws parsing_error if any error occured while trying to parse the file with the parser
      */
-    void parseFileOfType(const std::filesystem::directory_entry& file, const ParsingType parsing_type, bool multi_file);
+    void parseFile(std::unique_ptr<ContentFileParser> parser);
     /**
      * @brief Creates a Parser for single-file parsing of a certain type
+     * @param filepath the file to parse
      * @param parsing_type the content type to be parser
      * @return the single-file parser for that content type
      * @throws std::logic_error if no single-file parser exists for that content type
      */
-    std::unique_ptr<ContentFileParser> createSingleFileParserForType(const ParsingType parsing_type);
+    std::unique_ptr<ContentFileParser> createSingleFileParser(
+        const std::filesystem::path filepath, const ParsingType parsing_type
+    );
     /**
      * @brief Creates a Parser for multi-file parsing of a certain type
+     * @param filepath the file to parse
      * @param parsing_type the content type to be parser
      * @return the multi-file parser for that content type
      * @throws std::logic_error if no single-file parser exists for that content type
      */
-    std::unique_ptr<ContentFileParser> createMultiFileParserForType(const ParsingType parsing_type);
+    std::unique_ptr<ContentFileParser> createMultiFileParser(
+        const std::filesystem::path filepath, const ParsingType parsing_type
+    );
 
     // the names of the files containing single-file content types
     static const std::array<std::pair<dnd::ParsingType, const char*>, 1> file_names;

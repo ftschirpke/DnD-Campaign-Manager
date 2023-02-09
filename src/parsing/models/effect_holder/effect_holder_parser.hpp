@@ -26,7 +26,7 @@ public:
      * @brief Constructs an EffectHolderParser
      * @param groups the already-parsed groups
      */
-    EffectHolderParser(const Groups& groups) noexcept;
+    EffectHolderParser(ParsingType type, const std::filesystem::path& filepath, const Groups& groups) noexcept;
     /**
      * @brief Parse and create an effect holder (without any choices to be made)
      * @param effect_holder_json the JSON containing the effect holder
@@ -96,8 +96,11 @@ private:
     const Groups& groups;
 };
 
-inline EffectHolderParser::EffectHolderParser(const Groups& groups) noexcept
-    : activation_regex(activation_regex_cstr), effect_regex(effect_regex_cstr), groups(groups) {}
+inline EffectHolderParser::EffectHolderParser(
+    ParsingType type, const std::filesystem::path& filepath, const Groups& groups
+) noexcept
+    : Subparser(type, filepath), activation_regex(activation_regex_cstr), effect_regex(effect_regex_cstr),
+      groups(groups) {}
 
 } // namespace dnd
 

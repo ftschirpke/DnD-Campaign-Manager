@@ -17,8 +17,6 @@
 void dnd::FeaturesParser::parseFeatures(const nlohmann::json& features_json) {
     DND_MEASURE_FUNCTION();
 
-    requiresConfiguration();
-
     if (!features_json.is_object()) {
         throw attribute_format_error(type, filepath, "features", "map/object");
     }
@@ -32,8 +30,6 @@ void dnd::FeaturesParser::parseFeatures(const nlohmann::json& features_json) {
 
 dnd::Feature dnd::FeaturesParser::createFeature(const std::string& feature_name, const nlohmann::json& feature_json)
     const {
-    requiresConfiguration();
-
     const std::string description = feature_json.at("description").get<std::string>();
 
     // TODO: change feature constructor?

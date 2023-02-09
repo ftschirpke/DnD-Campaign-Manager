@@ -3,6 +3,7 @@
 
 #include "dnd_config.hpp"
 
+#include <filesystem>
 #include <string>
 #include <unordered_map>
 
@@ -22,9 +23,10 @@ class EffectHolderGroupsFileParser : public ContentFileParser {
 public:
     /**
      * @brief Constructs an EffectHolderGroupsFileParser
+     * @param filepath the file to parse
      * @param groups the already-parsed groups
      */
-    EffectHolderGroupsFileParser(Groups& groups) noexcept;
+    EffectHolderGroupsFileParser(const std::filesystem::path& filepath, Groups& groups) noexcept;
     /**
      * @brief Parses JSON file containing a choosable group
      * @throws parsing_error if any error occured while trying to parse the content file
@@ -41,6 +43,11 @@ public:
      * @brief Saves the parsed group to the groups.
      */
     virtual void saveResult() override;
+    /**
+     * @brief Returns the type of content that this parser parses - choosable groups
+     * @return the type of content that this parser parses - choosable groups
+     */
+    virtual constexpr ParsingType getType() const override { return type; };
 private:
     /**
      * @brief Parse and create a choosable
@@ -52,10 +59,6 @@ private:
      * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
     Choosable createChoosable(const std::string& name, const nlohmann::json& choosable_json) const;
-    /**
-     * @brief Configures the subparsers used
-     */
-    virtual void configureSubparsers() override;
 
     // the type of content that this parser parses - choosable groups
     static constexpr ParsingType type = ParsingType::GROUP;
@@ -69,10 +72,10 @@ private:
     EffectHolderParser effect_holder_parser;
 };
 
-inline EffectHolderGroupsFileParser::EffectHolderGroupsFileParser(Groups& groups) noexcept
-    : ContentFileParser(), groups(groups), effect_holder_parser(groups) {}
-
-inline void EffectHolderGroupsFileParser::configureSubparsers() { effect_holder_parser.configure(type, filepath); }
+inline EffectHolderGroupsFileParser::EffectHolderGroupsFileParser(
+    const std::filesystem::path& filepath, Groups& groups
+) noexcept
+    : ContentFileParser(filepath), groups(groups), effect_holder_parser(type, filepath, groups) {}
 
 } // namespace dnd
 

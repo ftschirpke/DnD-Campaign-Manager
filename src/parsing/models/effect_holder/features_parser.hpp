@@ -28,7 +28,7 @@ public:
      * @brief Constructs an FeaturesParser
      * @param groups the already-parsed groups
      */
-    FeaturesParser(const Groups& groups) noexcept;
+    FeaturesParser(ParsingType type, const std::filesystem::path& filepath, const Groups& groups) noexcept;
     /**
      * @brief Parse features from a JSON
      * @param features_json the JSON that need s ot be parsed
@@ -45,12 +45,6 @@ public:
      * @return the parsed features as r-value-reference
      */
     std::vector<Feature>&& retrieveFeatures();
-    /**
-     * @brief Configure the parsing type and the file path for the parser and all its subparsers
-     * @param conf_type the type of content of the file that is being parsed
-     * @param conf_filepath the file that is being parsed
-     */
-    virtual void configure(ParsingType conf_type, const std::filesystem::path& conf_filepath) noexcept override;
 protected:
     /**
      * @brief Parse and create a feature
@@ -69,16 +63,14 @@ private:
     EffectHolderParser effect_holder_parser;
 };
 
-inline FeaturesParser::FeaturesParser(const Groups& groups) noexcept : Subparser(), effect_holder_parser(groups) {}
+inline FeaturesParser::FeaturesParser(
+    ParsingType type, const std::filesystem::path& filepath, const Groups& groups
+) noexcept
+    : Subparser(type, filepath), effect_holder_parser(type, filepath, groups) {}
 
 inline const std::vector<Feature>& FeaturesParser::getFeatures() const { return features; }
 
 inline std::vector<Feature>&& FeaturesParser::retrieveFeatures() { return std::move(features); }
-
-inline void FeaturesParser::configure(ParsingType conf_type, const std::filesystem::path& conf_filepath) noexcept {
-    Subparser::configure(conf_type, conf_filepath);
-    effect_holder_parser.configure(conf_type, conf_filepath);
-}
 
 } // namespace dnd
 

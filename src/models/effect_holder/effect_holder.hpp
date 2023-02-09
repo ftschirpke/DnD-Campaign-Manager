@@ -25,6 +25,7 @@ namespace dnd {
 class EffectHolder {
 public:
     EffectHolder() noexcept = default;
+    virtual ~EffectHolder() noexcept = default;
     EffectHolder(EffectHolder&& other) noexcept = default;
     EffectHolder& operator=(EffectHolder&& other) noexcept = default;
     /**

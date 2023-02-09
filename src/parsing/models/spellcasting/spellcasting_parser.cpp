@@ -22,8 +22,6 @@
 void dnd::SpellcastingParser::parseSize20Array(
     const nlohmann::json& json_to_parse, const char* attribute_name, std::array<int, 20>& output
 ) {
-    requiresConfiguration();
-
     if (!json_to_parse.contains(attribute_name)) {
         output = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         return;
@@ -37,8 +35,6 @@ void dnd::SpellcastingParser::parseSize20Array(
 
 void dnd::SpellcastingParser::parseSpellcasting(const nlohmann::json& spellcasting_json) {
     DND_MEASURE_FUNCTION();
-
-    requiresConfiguration();
 
     ability = spellcasting_json.at("ability").get<std::string>();
     if (!isAbility(ability)) {

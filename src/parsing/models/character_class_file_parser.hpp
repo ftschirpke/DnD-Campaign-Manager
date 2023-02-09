@@ -27,13 +27,14 @@ class CharacterClassFileParser : public ContentFileParser {
 public:
     /**
      * @brief Constructs a CharacterClassFileParser
+     * @param filepath the file to parse
      * @param classes the already-parsed classes
      * @param groups the already-parsed groups
      * @param spells the already-parsed spells
      */
     CharacterClassFileParser(
-        std::unordered_map<std::string, const CharacterClass>& classes, const Groups& groups,
-        const std::unordered_map<std::string, const Spell>& spells
+        const std::filesystem::path& filepath, std::unordered_map<std::string, const CharacterClass>& classes,
+        const Groups& groups, const std::unordered_map<std::string, const Spell>& spells
     ) noexcept;
     /**
      * @brief Parses JSON file containing a class
@@ -51,6 +52,11 @@ public:
      * @brief Saves the parsed class
      */
     virtual void saveResult() override;
+    /**
+     * @brief Returns the type of content that this parser parses - classes
+     * @return the type of content that this parser parses - classes
+     */
+    virtual constexpr ParsingType getType() const override { return type; };
 protected:
     /**
      * @brief Determine the subclass level for the parsed class
@@ -59,11 +65,6 @@ protected:
      */
     void determineSubclassLevel(const std::vector<Feature>& features);
 private:
-    /**
-     * @brief Configures the subparsers used
-     */
-    virtual void configureSubparsers() override;
-
     // the type of content that this parser parses - classes
     static constexpr ParsingType type = ParsingType::CLASS;
     // the name of the parsed class
@@ -83,15 +84,11 @@ private:
 };
 
 inline CharacterClassFileParser::CharacterClassFileParser(
-    std::unordered_map<std::string, const CharacterClass>& classes, const Groups& groups,
-    const std::unordered_map<std::string, const Spell>& spells
+    const std::filesystem::path& filepath, std::unordered_map<std::string, const CharacterClass>& classes,
+    const Groups& groups, const std::unordered_map<std::string, const Spell>& spells
 ) noexcept
-    : ContentFileParser(), classes(classes), features_parser(groups), spellcasting_parser(spells) {}
-
-inline void CharacterClassFileParser::configureSubparsers() {
-    features_parser.configure(type, filepath);
-    spellcasting_parser.configure(type, filepath);
-}
+    : ContentFileParser(filepath), classes(classes), features_parser(type, filepath, groups),
+      spellcasting_parser(type, filepath, spells) {}
 
 } // namespace dnd
 

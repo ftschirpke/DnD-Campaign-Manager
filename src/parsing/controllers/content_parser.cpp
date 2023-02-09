@@ -89,12 +89,12 @@ dnd::Content dnd::ContentParser::parse(
     return std::move(parsed_content);
 }
 
-std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createSingleFileParserForType(
-    const dnd::ParsingType parsing_type
+std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createSingleFileParser(
+    const std::filesystem::path filepath, const dnd::ParsingType parsing_type
 ) {
     switch (parsing_type) {
         case ParsingType::GROUP:
-            return std::make_unique<StringGroupsFileParser>(parsed_content.groups);
+            return std::make_unique<StringGroupsFileParser>(filepath, parsed_content.groups);
         default:
             throw std::logic_error(
                 "No single-file parser for content type \"" + std::string(parsingTypeName(parsing_type)) + "\" exists."
@@ -102,35 +102,37 @@ std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createSingleFilePars
     }
 }
 
-std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createMultiFileParserForType(
-    const dnd::ParsingType parsing_type
+std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createMultiFileParser(
+    const std::filesystem::path filepath, const dnd::ParsingType parsing_type
 ) {
     switch (parsing_type) {
         case ParsingType::CHARACTER:
             return std::make_unique<CharacterFileParser>(
-                parsed_content.characters, parsed_content.groups, parsed_content.character_classes,
+                filepath, parsed_content.characters, parsed_content.groups, parsed_content.character_classes,
                 parsed_content.character_subclasses, parsed_content.character_races, parsed_content.character_subraces,
                 parsed_content.spells
             );
         case ParsingType::RACE:
-            return std::make_unique<CharacterRaceFileParser>(parsed_content.character_races, parsed_content.groups);
+            return std::make_unique<CharacterRaceFileParser>(
+                filepath, parsed_content.character_races, parsed_content.groups
+            );
         case ParsingType::SUBRACE:
             return std::make_unique<CharacterSubraceFileParser>(
-                parsed_content.character_subraces, parsed_content.groups, parsed_content.character_races
+                filepath, parsed_content.character_subraces, parsed_content.groups, parsed_content.character_races
             );
         case ParsingType::CLASS:
             return std::make_unique<CharacterClassFileParser>(
-                parsed_content.character_classes, parsed_content.groups, parsed_content.spells
+                filepath, parsed_content.character_classes, parsed_content.groups, parsed_content.spells
             );
         case ParsingType::SUBCLASS:
             return std::make_unique<CharacterSubclassFileParser>(
-                parsed_content.character_subclasses, parsed_content.groups, parsed_content.character_classes,
+                filepath, parsed_content.character_subclasses, parsed_content.groups, parsed_content.character_classes,
                 parsed_content.spells
             );
         case ParsingType::SPELL:
-            return std::make_unique<SpellsFileParser>(parsed_content.spells, parsed_content.groups);
+            return std::make_unique<SpellsFileParser>(filepath, parsed_content.spells, parsed_content.groups);
         case ParsingType::GROUP:
-            return std::make_unique<EffectHolderGroupsFileParser>(parsed_content.groups);
+            return std::make_unique<EffectHolderGroupsFileParser>(filepath, parsed_content.groups);
         default:
             throw std::logic_error(
                 "No multi-file parser for content type \"" + std::string(parsingTypeName(parsing_type)) + "\" exists."
@@ -138,21 +140,12 @@ std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createMultiFileParse
     }
 }
 
-void dnd::ContentParser::parseFileOfType(
-    const std::filesystem::directory_entry& file, const ParsingType parsing_type, bool multi_file
-) {
-    DND_MEASURE_SCOPE(("dnd::ContentParser::parseFileOfType ( " + std::string(parsingTypeName(parsing_type)) + ", "
-                       + (multi_file ? "multi-file" : "single-file") + " )")
+void dnd::ContentParser::parseFile(std::unique_ptr<ContentFileParser> parser) {
+    DND_MEASURE_SCOPE(("dnd::ContentParser::parseFile ( " + std::string(parsingTypeName(parser->getType())) + ", "
+                       + parser->filepath.filename().string() + " )")
                           .c_str());
 
-    std::unique_ptr<ContentFileParser> parser;
-    if (multi_file) {
-        parser = createMultiFileParserForType(parsing_type);
-    } else {
-        parser = createSingleFileParserForType(parsing_type);
-    }
-
-    if (!parser->openJSON(file)) {
+    if (!parser->openJSON()) {
         return;
     }
 
@@ -160,14 +153,14 @@ void dnd::ContentParser::parseFileOfType(
         parser->parse();
     } catch (const nlohmann::json::out_of_range& e) {
         const std::string stripped_what = stripJsonExceptionWhat(e.what());
-        throw attribute_missing(parsing_type, file.path(), stripped_what);
+        throw attribute_missing(parser->getType(), parser->filepath, stripped_what);
     } catch (const nlohmann::json::type_error& e) {
         const std::string stripped_what = stripJsonExceptionWhat(e.what());
-        throw attribute_type_error(parsing_type, file.path(), stripped_what);
+        throw attribute_type_error(parser->getType(), parser->filepath, stripped_what);
     }
 
     if (parser->validate()) {
-        std::lock_guard<std::mutex> lock(parsing_mutexes[parsing_type]);
+        std::lock_guard<std::mutex> lock(parsing_mutexes[parser->getType()]);
         parser->saveResult();
     }
 }
@@ -188,7 +181,7 @@ void dnd::ContentParser::parseAllOfSingleFileType(const ParsingType parsing_type
     DND_MEASURE_SCOPE(
         ("dnd::ContentParser::parseAllOfSingleFileType ( " + std::string(parsingTypeName(parsing_type)) + " )").c_str()
     );
-    std::vector<std::filesystem::directory_entry> files_to_parse;
+    std::vector<std::unique_ptr<ContentFileParser>> to_parse;
     std::vector<std::future<void>> futures;
     for (const auto& dir : dirs_to_parse) {
         auto type_file_it = std::find_if(
@@ -212,13 +205,11 @@ void dnd::ContentParser::parseAllOfSingleFileType(const ParsingType parsing_type
                       << " so that it cannot be confused with a file containing " << type_file_name << '\n';
             continue;
         }
-        files_to_parse.emplace_back(type_file);
+        to_parse.emplace_back(createSingleFileParser(type_file.path(), parsing_type));
     }
 
-    for (const auto& file : files_to_parse) {
-        futures.emplace_back(
-            std::async(std::launch::async, &ContentParser::parseFileOfType, this, file, parsing_type, false)
-        );
+    for (auto& parser : to_parse) {
+        futures.emplace_back(std::async(std::launch::async, &ContentParser::parseFile, this, std::move(parser)));
     }
     for (auto& future : futures) {
         try {
@@ -233,7 +224,7 @@ void dnd::ContentParser::parseAllOfMultiFileType(const ParsingType parsing_type)
     DND_MEASURE_SCOPE(
         ("dnd::ContentParser::parseAllOfMultiFileType ( " + std::string(parsingTypeName(parsing_type)) + " )").c_str()
     );
-    std::vector<std::filesystem::directory_entry> files_to_parse;
+    std::vector<std::unique_ptr<ContentFileParser>> to_parse;
     std::vector<std::future<void>> futures;
     for (const auto& dir : dirs_to_parse) {
         auto type_dir_it = std::find_if(
@@ -257,14 +248,16 @@ void dnd::ContentParser::parseAllOfMultiFileType(const ParsingType parsing_type)
             continue;
         }
         for (const auto& file : std::filesystem::directory_iterator(type_subdir)) {
-            files_to_parse.emplace_back(file);
+            if (!file.is_regular_file()) {
+                std::cerr << "Warning: " << file.path() << " is not a regular file.\n";
+                continue;
+            }
+            to_parse.emplace_back(createMultiFileParser(file.path(), parsing_type));
         }
     }
 
-    for (const auto& file : files_to_parse) {
-        futures.emplace_back(
-            std::async(std::launch::async, &ContentParser::parseFileOfType, this, file, parsing_type, true)
-        );
+    for (auto& parser : to_parse) {
+        futures.emplace_back(std::async(std::launch::async, &ContentParser::parseFile, this, std::move(parser)));
     }
     for (auto& future : futures) {
         try {

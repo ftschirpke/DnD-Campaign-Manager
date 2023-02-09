@@ -32,6 +32,7 @@ class CharacterFileParser : public ContentFileParser {
 public:
     /**
      * @brief Constructs a CharacterFileParser
+     * @param filepath the file to parse
      * @param characters the already-parsed characters
      * @param groups the already-parsed groups
      * @param character_classes the already-parsed classes
@@ -41,8 +42,8 @@ public:
      * @param spells the already-parsed spells
      */
     CharacterFileParser(
-        std::unordered_map<std::string, Character>& characters, const Groups& groups,
-        const std::unordered_map<std::string, const CharacterClass>& character_classes,
+        const std::filesystem::path& filepath, std::unordered_map<std::string, Character>& characters,
+        const Groups& groups, const std::unordered_map<std::string, const CharacterClass>& character_classes,
         const std::unordered_map<std::string, const CharacterSubclass>& character_subclasses,
         const std::unordered_map<std::string, const CharacterRace>& character_races,
         const std::unordered_map<std::string, const CharacterSubrace>& character_subraces,
@@ -64,6 +65,11 @@ public:
      * @brief Saves the parsed character
      */
     virtual void saveResult() override;
+    /**
+     * @brief Returns the type of content that this parser parses - characters
+     * @return the type of content that this parser parses - characters
+     */
+    virtual constexpr ParsingType getType() const override { return type; };
 protected:
     /**
      * @brief Parse the character decision for a choice required by a particular feature-like object
@@ -75,10 +81,6 @@ protected:
      */
     void parseCharacterDecisions(const std::string& feature_name, const nlohmann::json& feature_decisions_json);
 private:
-    /**
-     * @brief Configures the subparsers used
-     */
-    virtual void configureSubparsers() override;
     /**
      * @brief Parses the class, race, subclass, and subrace of the character
      * @throws parsing_error if the chosen class, race, subclass, or subrace is invalid
@@ -136,19 +138,17 @@ private:
 };
 
 inline CharacterFileParser::CharacterFileParser(
-    std::unordered_map<std::string, Character>& characters, const Groups& groups,
+    const std::filesystem::path& filepath, std::unordered_map<std::string, Character>& characters, const Groups& groups,
     const std::unordered_map<std::string, const CharacterClass>& character_classes,
     const std::unordered_map<std::string, const CharacterSubclass>& character_subclasses,
     const std::unordered_map<std::string, const CharacterRace>& character_races,
     const std::unordered_map<std::string, const CharacterSubrace>& character_subraces,
     const std::unordered_map<std::string, const Spell>& spells
 ) noexcept
-    : ContentFileParser(), class_ptr(nullptr), subclass_ptr(nullptr), race_ptr(nullptr), subrace_ptr(nullptr),
+    : ContentFileParser(filepath), class_ptr(nullptr), subclass_ptr(nullptr), race_ptr(nullptr), subrace_ptr(nullptr),
       characters(characters), character_classes(character_classes), character_subclasses(character_subclasses),
       character_races(character_races), character_subraces(character_subraces), spells(spells),
-      effect_holder_parser(groups), features_parser(groups) {}
-
-inline void CharacterFileParser::configureSubparsers() { effect_holder_parser.configure(type, filepath); }
+      effect_holder_parser(type, filepath, groups), features_parser(type, filepath, groups) {}
 
 } // namespace dnd
 

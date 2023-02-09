@@ -17,13 +17,18 @@ namespace dnd {
  */
 class ContentFileParser {
 public:
+    /**
+     * @brief Constructs a ContentFileParser for a given file
+     * @param filepath the file to parse
+     */
+    ContentFileParser(const std::filesystem::path& filepath) noexcept;
+    ContentFileParser(ContentFileParser&& other) noexcept = default;
     virtual ~ContentFileParser() noexcept = default;
     /**
-     * @brief Opens a json file to be parsed and deserialises the JSON.
-     * @param filepath the file to open
+     * @brief Opens the json file to be parsed and deserialises the JSON.
      * @return "true" if opening and deserialising was successful, "false" otherwise
      */
-    virtual bool openJSON(const std::filesystem::directory_entry& filepath);
+    virtual bool openJSON();
     /**
      * @brief Parses JSON content file.
      * @throws parsing_error if any error occured while trying to parse the content file
@@ -40,17 +45,20 @@ public:
      * @brief Saves the parsed content.
      */
     virtual void saveResult() = 0;
+    /**
+     * @brief Returns the type of content that this parser parses
+     * @return the type of content that this parser parses
+     */
+    virtual ParsingType getType() const = 0;
+
+    // the file which is being parsed
+    const std::filesystem::path filepath;
 protected:
     // the json content that is being parsed
     nlohmann::json json_to_parse;
-    // the file which is being parsed (useful for error messages)
-    std::filesystem::path filepath;
-    /**
-     * @brief This function is automatically called after successfully opening the JSON file to set the properties of
-     * subparsers if necessary.
-     */
-    virtual void configureSubparsers() = 0;
 };
+
+inline ContentFileParser::ContentFileParser(const std::filesystem::path& filepath) noexcept : filepath(filepath) {}
 
 } // namespace dnd
 

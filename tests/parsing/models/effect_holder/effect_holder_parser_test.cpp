@@ -13,10 +13,13 @@
 #include "models/effect_holder/effect_holder.hpp"
 #include "parsing/parsing_types.hpp"
 
-// class that allows us to test the abstract dnd::EffectHolderParser class
+/**
+ * @brief A class that allows us to test the dnd::EffectHolderParser class
+ */
 class TestEffectHolderParser : public dnd::EffectHolderParser {
 public:
-    TestEffectHolderParser() noexcept : dnd::EffectHolderParser(dnd::Groups()) {}
+    TestEffectHolderParser() noexcept
+        : dnd::EffectHolderParser(dnd::ParsingType::CHARACTER, "testing", dnd::Groups()) {}
     void parseAndAddEffectForTesting(const std::string& effect_str, dnd::EffectHolder& effect_holder) const {
         dnd::EffectHolderParser::parseAndAddEffect(effect_str, &effect_holder);
     }
@@ -26,7 +29,6 @@ public:
     dnd::EffectHolder createEffectHolderForTesting(const nlohmann::json& effect_holder_json) const {
         return createEffectHolder(effect_holder_json);
     }
-    virtual void requiresConfiguration() const override {} // for testing, no configuration is required
 };
 
 TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse invalid effects") {
