@@ -23,6 +23,5 @@ bool dnd::ContentFileParser::openJSON() {
         std::cerr << "Warning: Error occured while parsing " << filepath << ":\n" << e.what() << '\n';
         return false;
     }
-    configureSubparsers();
     return true;
 }

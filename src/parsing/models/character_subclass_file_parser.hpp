@@ -58,11 +58,6 @@ public:
      */
     virtual constexpr ParsingType getType() const override { return type; };
 private:
-    /**
-     * @brief Configures the subparsers used
-     */
-    virtual void configureSubparsers() override;
-
     // the type of content that this parser parses - subclasses
     static constexpr ParsingType type = ParsingType::SUBCLASS;
     // the name of the parsed subclass
@@ -84,13 +79,8 @@ inline CharacterSubclassFileParser::CharacterSubclassFileParser(
     const Groups& groups, const std::unordered_map<std::string, const CharacterClass>& classes,
     const std::unordered_map<std::string, const Spell>& spells
 ) noexcept
-    : ContentFileParser(filepath), subclasses(subclasses), classes(classes), features_parser(groups),
-      spellcasting_parser(spells) {}
-
-inline void CharacterSubclassFileParser::configureSubparsers() {
-    features_parser.configure(type, filepath);
-    spellcasting_parser.configure(type, filepath);
-}
+    : ContentFileParser(filepath), subclasses(subclasses), classes(classes), features_parser(type, filepath, groups),
+      spellcasting_parser(type, filepath, spells) {}
 
 } // namespace dnd
 

@@ -56,10 +56,6 @@ private:
      * @throws attribute_format_error if the map's format is invalid
      */
     std::unordered_set<std::string> parseMap(const nlohmann::json& json_map);
-    /**
-     * @brief Configures the subparsers used
-     */
-    virtual void configureSubparsers() override;
 
     // the type of content that this parser parses - string groups
     static constexpr ParsingType type = ParsingType::GROUP;
@@ -72,9 +68,7 @@ private:
 };
 
 inline StringGroupsFileParser::StringGroupsFileParser(const std::filesystem::path& filepath, Groups& groups) noexcept
-    : ContentFileParser(filepath), groups(groups), effect_holder_parser(groups) {}
-
-inline void StringGroupsFileParser::configureSubparsers() { effect_holder_parser.configure(type, filepath); }
+    : ContentFileParser(filepath), groups(groups), effect_holder_parser(type, filepath, groups) {}
 
 } // namespace dnd
 

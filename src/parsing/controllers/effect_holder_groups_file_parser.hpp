@@ -59,10 +59,6 @@ private:
      * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
     Choosable createChoosable(const std::string& name, const nlohmann::json& choosable_json) const;
-    /**
-     * @brief Configures the subparsers used
-     */
-    virtual void configureSubparsers() override;
 
     // the type of content that this parser parses - choosable groups
     static constexpr ParsingType type = ParsingType::GROUP;
@@ -79,9 +75,7 @@ private:
 inline EffectHolderGroupsFileParser::EffectHolderGroupsFileParser(
     const std::filesystem::path& filepath, Groups& groups
 ) noexcept
-    : ContentFileParser(filepath), groups(groups), effect_holder_parser(groups) {}
-
-inline void EffectHolderGroupsFileParser::configureSubparsers() { effect_holder_parser.configure(type, filepath); }
+    : ContentFileParser(filepath), groups(groups), effect_holder_parser(type, filepath, groups) {}
 
 } // namespace dnd
 

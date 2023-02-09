@@ -56,11 +56,6 @@ public:
      */
     virtual constexpr ParsingType getType() const override { return type; };
 private:
-    /**
-     * @brief Configures the subparsers used
-     */
-    virtual void configureSubparsers() override;
-
     // the type of content that this parser parses - subraces
     static constexpr ParsingType type = ParsingType::SUBRACE;
     // the name of the parsed subrace
@@ -79,9 +74,7 @@ inline CharacterSubraceFileParser::CharacterSubraceFileParser(
     const std::filesystem::path& filepath, std::unordered_map<std::string, const CharacterSubrace>& subraces,
     const Groups& groups, const std::unordered_map<std::string, const CharacterRace>& races
 ) noexcept
-    : ContentFileParser(filepath), subraces(subraces), races(races), features_parser(groups) {}
-
-inline void CharacterSubraceFileParser::configureSubparsers() { features_parser.configure(type, filepath); }
+    : ContentFileParser(filepath), subraces(subraces), races(races), features_parser(type, filepath, groups) {}
 
 } // namespace dnd
 

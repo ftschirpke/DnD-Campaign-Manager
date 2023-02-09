@@ -65,11 +65,6 @@ protected:
      */
     void determineSubclassLevel(const std::vector<Feature>& features);
 private:
-    /**
-     * @brief Configures the subparsers used
-     */
-    virtual void configureSubparsers() override;
-
     // the type of content that this parser parses - classes
     static constexpr ParsingType type = ParsingType::CLASS;
     // the name of the parsed class
@@ -92,12 +87,8 @@ inline CharacterClassFileParser::CharacterClassFileParser(
     const std::filesystem::path& filepath, std::unordered_map<std::string, const CharacterClass>& classes,
     const Groups& groups, const std::unordered_map<std::string, const Spell>& spells
 ) noexcept
-    : ContentFileParser(filepath), classes(classes), features_parser(groups), spellcasting_parser(spells) {}
-
-inline void CharacterClassFileParser::configureSubparsers() {
-    features_parser.configure(type, filepath);
-    spellcasting_parser.configure(type, filepath);
-}
+    : ContentFileParser(filepath), classes(classes), features_parser(type, filepath, groups),
+      spellcasting_parser(type, filepath, spells) {}
 
 } // namespace dnd
 

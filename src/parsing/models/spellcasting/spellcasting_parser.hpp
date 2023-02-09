@@ -35,7 +35,10 @@ public:
      * @brief Constructs a SpellcastingParser
      * @param spells the already-parsed spells
      */
-    SpellcastingParser(const std::unordered_map<std::string, const Spell>& spells) noexcept;
+    SpellcastingParser(
+        ParsingType type, const std::filesystem::path& filepath,
+        const std::unordered_map<std::string, const Spell>& spells
+    ) noexcept;
     /**
      * @brief Parses the spellcasting feature from a given JSON
      * @param spellcasting_json the JSON that needs to be parsed
@@ -81,8 +84,10 @@ private:
     std::array<std::array<int, 20>, 9> spell_slots;
 };
 
-inline SpellcastingParser::SpellcastingParser(const std::unordered_map<std::string, const Spell>& spells) noexcept
-    : Subparser(), spells(spells) {}
+inline SpellcastingParser::SpellcastingParser(
+    ParsingType type, const std::filesystem::path& filepath, const std::unordered_map<std::string, const Spell>& spells
+) noexcept
+    : Subparser(type, filepath), spells(spells) {}
 
 } // namespace dnd
 

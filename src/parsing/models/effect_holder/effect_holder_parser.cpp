@@ -89,8 +89,6 @@ static void parseProficienciesOptionals(
 void dnd::EffectHolderParser::parseEffectHolder(
     const nlohmann::json& effect_holder_json, dnd::EffectHolder* const effect_holder
 ) const {
-    requiresConfiguration();
-
     parseActionsOptionals(effect_holder_json, effect_holder);
     parseExtraSpellsOptionals(effect_holder_json, effect_holder);
     parseRIVsOptionals(effect_holder_json, effect_holder);
@@ -139,8 +137,6 @@ dnd::EffectHolderWithChoices dnd::EffectHolderParser::createEffectHolderWithChoi
 ) const {
     DND_MEASURE_FUNCTION();
 
-    requiresConfiguration();
-
     // TODO: change effect holder constructor?
     EffectHolderWithChoices effect_holder;
 
@@ -162,8 +158,6 @@ dnd::EffectHolderWithChoices dnd::EffectHolderParser::createEffectHolderWithChoi
 void dnd::EffectHolderParser::parseAndAddChoice(
     const std::string& choice_key, const nlohmann::json& choice_json, EffectHolderWithChoices& effect_holder
 ) const {
-    requiresConfiguration();
-
     int amount = choice_json.at("amount").get<int>();
 
     if (choice_json.contains("choices")) {
@@ -225,8 +219,6 @@ void dnd::EffectHolderParser::parseAndAddChoice(
 }
 
 std::unique_ptr<dnd::Effect> dnd::EffectHolderParser::createEffect(const std::string& effect_str) const {
-    requiresConfiguration();
-
     if (!std::regex_match(effect_str, effect_regex)) {
         throw attribute_type_error(type, filepath, "invalid effect format: \"" + effect_str + "\"");
     }
@@ -300,8 +292,6 @@ void dnd::EffectHolderParser::parseAndAddEffect(const std::string& effect_str, E
 void dnd::EffectHolderParser::parseAndAddActivation(
     const std::string& activation_str, EffectHolder* const effect_holder
 ) const {
-    requiresConfiguration();
-
     if (!std::regex_match(activation_str, activation_regex)) {
         throw attribute_type_error(type, filepath, "invalid activation format: \"" + activation_str + "\"");
     }

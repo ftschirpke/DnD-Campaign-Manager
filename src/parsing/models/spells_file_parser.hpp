@@ -103,11 +103,6 @@ protected:
      */
     SpellComponents createSpellComponents(const std::string& spell_components_str) const;
 private:
-    /**
-     * @brief Configures the subparsers used
-     */
-    virtual void configureSubparsers() override;
-
     // the type of content that this parser parses - spells
     static constexpr ParsingType type = ParsingType::SPELL;
     // the c-style string to create the regular expression to check the validity of spell components from
@@ -137,8 +132,6 @@ inline SpellsFileParser::SpellsFileParser(
 ) noexcept
     : ContentFileParser(filepath), spell_components_regex(spell_type_regex_cstr),
       spell_type_regex(spell_components_regex_cstr), spells(spells), groups(groups) {}
-
-inline void SpellsFileParser::configureSubparsers() {} // SpellsFileParser has no subparsers
 
 } // namespace dnd
 

@@ -54,12 +54,6 @@ public:
     // the file which is being parsed
     const std::filesystem::path filepath;
 protected:
-    /**
-     * @brief This function is automatically called after successfully opening the JSON file to set the properties of
-     * subparsers if necessary.
-     */
-    virtual void configureSubparsers() = 0;
-
     // the json content that is being parsed
     nlohmann::json json_to_parse;
 };

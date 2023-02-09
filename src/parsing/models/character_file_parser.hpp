@@ -82,10 +82,6 @@ protected:
     void parseCharacterDecisions(const std::string& feature_name, const nlohmann::json& feature_decisions_json);
 private:
     /**
-     * @brief Configures the subparsers used
-     */
-    virtual void configureSubparsers() override;
-    /**
      * @brief Parses the class, race, subclass, and subrace of the character
      * @throws parsing_error if the chosen class, race, subclass, or subrace is invalid
      * @throws nlohmann::json::out_of_range if any required attribute does not exist
@@ -152,9 +148,7 @@ inline CharacterFileParser::CharacterFileParser(
     : ContentFileParser(filepath), class_ptr(nullptr), subclass_ptr(nullptr), race_ptr(nullptr), subrace_ptr(nullptr),
       characters(characters), character_classes(character_classes), character_subclasses(character_subclasses),
       character_races(character_races), character_subraces(character_subraces), spells(spells),
-      effect_holder_parser(groups), features_parser(groups) {}
-
-inline void CharacterFileParser::configureSubparsers() { effect_holder_parser.configure(type, filepath); }
+      effect_holder_parser(type, filepath, groups), features_parser(type, filepath, groups) {}
 
 } // namespace dnd
 
