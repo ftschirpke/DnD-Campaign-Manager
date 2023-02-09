@@ -28,6 +28,8 @@ public:
     /**
      * @brief Parses JSON file containing a choosable group
      * @throws parsing_error if any error occured while trying to parse the content file
+     * @throws nlohmann::json::out_of_range if any required attribute does not exist
+     * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
     virtual void parse() override;
     /**
@@ -45,7 +47,9 @@ private:
      * @param name the name of the choosable
      * @param choosable_json the body of the choosable definition
      * @return a choosable with the given name and the properties defined in the body
-     * @throws parsing_error if choosable_json does not contain a valid definition of a choosable
+     * @throws parsing_error if any error occured while trying to parse the choosable_json
+     * @throws nlohmann::json::out_of_range if any required attribute does not exist
+     * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
     Choosable createChoosable(const std::string& name, const nlohmann::json& choosable_json) const;
     /**

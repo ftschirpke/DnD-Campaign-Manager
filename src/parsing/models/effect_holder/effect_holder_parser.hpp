@@ -31,20 +31,24 @@ public:
      * @brief Parse and create an effect holder (without any choices to be made)
      * @param effect_holder_json the JSON containing the effect holder
      * @return the created effect holder
+     * @throws parsing_error if any error occured while trying to parse the effect_holder_json
+     * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
     EffectHolder createEffectHolder(const nlohmann::json& effect_holder_json) const;
     /**
      * @brief Parse and create an effect holder with choices to be made
      * @param effect_holder_json the JSON containing the effect holder
      * @return the created effect holder with choices
-     * @throws parsing_error if effect_holder_json does not define choices
+     * @throws parsing_error if any error occured while trying to parse the effect_holder_json
+     * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
     EffectHolderWithChoices createEffectHolderWithChoices(const nlohmann::json& effect_holder_json) const;
     /**
      * @brief Parse all (optional) parts from a JSON into an existing effect holder
      * @param effect_holder_json the JSON containing the effect holder
      * @param effect_holder the effect holder to parse the values into
-     * @throws parsing_error if any errors occured while parsing the effect holders
+     * @throws parsing_error if any error occured while trying to parse the effect_holder_json
+     * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
     void parseEffectHolder(const nlohmann::json& effect_holder_json, EffectHolder* const effect_holder) const;
 protected:
@@ -59,6 +63,7 @@ protected:
      * @brief Parse an effect and add it to an existing effect holder
      * @param effect_str the string that needs to be parsed
      * @param effect_holder the effect holder the effect will be added to
+     * @throws parsing_error if effect_str does not define a valid effect
      */
     void parseAndAddEffect(const std::string& effect_str, EffectHolder* const effect_holder) const;
     /**

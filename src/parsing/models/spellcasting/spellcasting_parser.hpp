@@ -39,12 +39,15 @@ public:
     /**
      * @brief Parses the spellcasting feature from a given JSON
      * @param spellcasting_json the JSON that needs to be parsed
-     * @throws parsing_error
+     * @throws parsing_error if any error occured while trying to parse the spellcasting_json
+     * @throws nlohmann::json::out_of_range if any required attribute does not exist
+     * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
     void parseSpellcasting(const nlohmann::json& spellcasting_json);
     /**
      * @brief Creates and returns the parsed spellcasting feature while giving up ownership over all the parsed values
      * @return a unique pointer to the parsed spellcasting
+     * @throws attribute_type_error if the creation of this spellcasting type is not implemented
      */
     std::unique_ptr<Spellcasting> retrieveSpellcasting();
 private:
@@ -53,7 +56,8 @@ private:
      * @param json_to_parse the JSON the optional attribute should be in, if it exists
      * @param attribute_name the name of the attribute
      * @param output the output to write the value of the attribute to if it exists or an array full of zeros otherwise
-     * @throws invalid_attribute
+     * @throws invalid_attribute if the attribute's value is not an array of size 20
+     * @throws nlohmann::json::type_error if the array entries aren't integers
      */
     void parseSize20Array(const nlohmann::json& json_to_parse, const char* attribute_name, std::array<int, 20>& output);
 

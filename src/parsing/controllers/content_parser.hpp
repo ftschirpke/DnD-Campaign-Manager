@@ -26,7 +26,7 @@ public:
      * @brief Parses content from content_path for a certain campaign
      * @param content_path a path to the directory the content to be parsed is located in
      * @param campaign_dir_name the name of the campaign-specific directory
-     * @return parsed content
+     * @return the parsed content
      * @throws parsing_error if any error occured while trying to parse the content
      */
     Content parse(const std::filesystem::path& content_path, const std::string& campaign_dir_name);

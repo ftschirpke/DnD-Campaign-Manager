@@ -51,6 +51,8 @@ public:
     /**
      * @brief Parses JSON file containing a character
      * @throws parsing_error if any error occured while trying to parse the content file
+     * @throws nlohmann::json::out_of_range if any required attribute does not exist
+     * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
     virtual void parse() override;
     /**
@@ -67,7 +69,9 @@ protected:
      * @brief Parse the character decision for a choice required by a particular feature-like object
      * @param feature_name the name of the feature-like object
      * @param feature_decisions_json the JSON containing the decisions for that feature-like object
-     * @throws parsing_error if feature_decisions_json does not contain a valid definition of character decisions
+     * @throws parsing_error if any error occured while trying to parse the feature_decisions_json
+     * @throws nlohmann::json::out_of_range if any required attribute does not exist
+     * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
     void parseCharacterDecisions(const std::string& feature_name, const nlohmann::json& feature_decisions_json);
 private:
@@ -78,12 +82,16 @@ private:
     /**
      * @brief Parses the class, race, subclass, and subrace of the character
      * @throws parsing_error if the chosen class, race, subclass, or subrace is invalid
+     * @throws nlohmann::json::out_of_range if any required attribute does not exist
+     * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
     void parseClassAndRace();
     /**
      * @brief Parses the level and XP values of the character
      * And if only one of them was provided the other value is determined from the first
      * @throws parsing_error if the chosen level or XP value is invalid
+     * @throws nlohmann::json::out_of_range if any required attribute does not exist
+     * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
     void parseLevelAndXP();
 

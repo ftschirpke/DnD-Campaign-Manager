@@ -57,6 +57,9 @@ protected:
      * @param feature_name name of the feature
      * @param feature_json the body of the feature as JSON containing the properties of the feature
      * @return the feature with the given name and the properties parsed from the body
+     * @throws parsing_error if any error occured while trying to parse the feature_json
+     * @throws nlohmann::json::out_of_range if any required attribute does not exist
+     * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
     Feature createFeature(const std::string& feature_name, const nlohmann::json& feature_json) const;
 private:
