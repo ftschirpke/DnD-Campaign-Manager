@@ -96,7 +96,7 @@ std::unique_ptr<dnd::Spellcasting> dnd::SpellcastingParser::retrieveSpellcasting
             spellcasting_ptr = std::make_unique<SpellsKnownSpellcasting>(ability, ritual_casting);
             break;
         default:
-            throw std::logic_error("Parsing of spellcasting type not implemented.");
+            throw attribute_type_error(type, filepath, "Parsing of spellcasting type not implemented.");
     }
     spellcasting_ptr->spell_list = std::move(spell_list);
     // TODO: add cantrips_known, spell_slots (and spells_known)

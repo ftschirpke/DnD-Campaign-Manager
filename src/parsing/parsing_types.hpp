@@ -34,6 +34,7 @@ constexpr std::array<std::pair<ParsingType, const char*>, 7> parsing_type_names 
  * @brief Returns the name of a parsing type
  * @param parsing_type the parsing type
  * @return the name of the parsing type
+ * @throws std::out_of_range if the parsing type does not exist or no name is implemented for it
  */
 constexpr const char* parsingTypeName(ParsingType parsing_type) {
     for (const auto& [parsing_type_val, parsing_type_name] : parsing_type_names) {

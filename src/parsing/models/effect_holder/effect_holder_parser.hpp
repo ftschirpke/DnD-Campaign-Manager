@@ -31,18 +31,24 @@ public:
      * @brief Parse and create an effect holder (without any choices to be made)
      * @param effect_holder_json the JSON containing the effect holder
      * @return the created effect holder
+     * @throws parsing_error if any error occured while trying to parse the effect_holder_json
+     * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
     EffectHolder createEffectHolder(const nlohmann::json& effect_holder_json) const;
     /**
      * @brief Parse and create an effect holder with choices to be made
      * @param effect_holder_json the JSON containing the effect holder
      * @return the created effect holder with choices
+     * @throws parsing_error if any error occured while trying to parse the effect_holder_json
+     * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
     EffectHolderWithChoices createEffectHolderWithChoices(const nlohmann::json& effect_holder_json) const;
     /**
      * @brief Parse all (optional) parts from a JSON into an existing effect holder
      * @param effect_holder_json the JSON containing the effect holder
      * @param effect_holder the effect holder to parse the values into
+     * @throws parsing_error if any error occured while trying to parse the effect_holder_json
+     * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
     void parseEffectHolder(const nlohmann::json& effect_holder_json, EffectHolder* const effect_holder) const;
 protected:
@@ -50,18 +56,21 @@ protected:
      * @brief Parse and create an effect
      * @param effect_str the string that needs to be parsed
      * @return the created effect
+     * @throws parsing_error if effect_str does not define a valid effect
      */
     std::unique_ptr<Effect> createEffect(const std::string& effect_str) const;
     /**
      * @brief Parse an effect and add it to an existing effect holder
      * @param effect_str the string that needs to be parsed
      * @param effect_holder the effect holder the effect will be added to
+     * @throws parsing_error if effect_str does not define a valid effect
      */
     void parseAndAddEffect(const std::string& effect_str, EffectHolder* const effect_holder) const;
     /**
      * @brief Parse an activation and add it to an existing effect holder
      * @param activation_str the string that needs to be parsed
      * @param effect_holder the effect holder the activation will be added to
+     * @throws parsing_error if activation_str does not define a valid activation
      */
     void parseAndAddActivation(const std::string& activation_str, EffectHolder* const effect_holder) const;
     /**
@@ -69,6 +78,7 @@ protected:
      * @param choice_key the key of the choice in the JSON map (the attribute name that is affected by the choice)
      * @param choice_json the body of the choice in the JSON map
      * @param effect_holder the effect holder with choices the choice will be added to
+     * @throws invalid_attribute if a non-existent group was chosen or multiple groups of different types were chosen
      */
     void parseAndAddChoice(
         const std::string& choice_key, const nlohmann::json& choice_json, EffectHolderWithChoices& effect_holder

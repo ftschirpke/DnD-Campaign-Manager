@@ -36,7 +36,10 @@ public:
         const std::unordered_map<std::string, const Spell>& spells
     ) noexcept;
     /**
-     * @brief Parses JSON file containing a class.
+     * @brief Parses JSON file containing a class
+     * @throws parsing_error if any error occured while trying to parse the content file
+     * @throws nlohmann::json::out_of_range if any required attribute does not exist
+     * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
     virtual void parse() override;
     /**
@@ -52,6 +55,7 @@ protected:
     /**
      * @brief Determine the subclass level for the parsed class
      * @param features the classes' features of which one should be a subclass feature
+     * @throws invalid_attribute if class does not have exactly one subclass feature or the subclass level is invalid
      */
     void determineSubclassLevel(const std::vector<Feature>& features);
 private:

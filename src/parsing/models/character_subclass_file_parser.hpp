@@ -35,12 +35,16 @@ public:
         const std::unordered_map<std::string, const Spell>& spells
     ) noexcept;
     /**
-     * @brief Parses JSON file containing a subclass.
+     * @brief Parses JSON file containing a subclass
+     * @throws parsing_error if any error occured while trying to parse the content file
+     * @throws nlohmann::json::out_of_range if any required attribute does not exist
+     * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
     virtual void parse() override;
     /**
      * @brief Checks whether the parsed subclass is valid
      * @return "true" if the subclass is valid, "false" otherwise
+     * @throws invalid_attribute if the chosen corresponding class does not exist
      */
     virtual bool validate() const override;
     /**

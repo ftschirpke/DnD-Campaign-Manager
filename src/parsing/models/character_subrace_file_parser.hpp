@@ -33,12 +33,16 @@ public:
         const std::unordered_map<std::string, const CharacterRace>& races
     ) noexcept;
     /**
-     * @brief Parses JSON file containing a subrace.
+     * @brief Parses JSON file containing a subrace
+     * @throws parsing_error if any error occured while trying to parse the content file
+     * @throws nlohmann::json::out_of_range if any required attribute does not exist
+     * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
     virtual void parse() override;
     /**
      * @brief Checks whether the parsed subrace is valid
      * @return "true" if the subrace is valid, "false" otherwise
+     * @throws invalid_attribute if the chosen corresponding race does not exist or does not have subraces
      */
     virtual bool validate() const override;
     /**
