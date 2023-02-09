@@ -22,6 +22,7 @@ public:
      * @param features a collection of features this holder provides to a character of its type
      */
     FeatureHolder(const std::string& name, std::vector<Feature>&& features) noexcept;
+    virtual ~FeatureHolder() noexcept = default;
 
     // the name of the feature holder
     const std::string name;

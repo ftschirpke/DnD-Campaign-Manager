@@ -13,7 +13,9 @@
 #include "models/effect_holder/effect_holder.hpp"
 #include "parsing/parsing_types.hpp"
 
-// class that allows us to test the abstract dnd::EffectHolderParser class
+/**
+ * @brief A class that allows us to test the dnd::EffectHolderParser class
+ */
 class TestEffectHolderParser : public dnd::EffectHolderParser {
 public:
     TestEffectHolderParser() noexcept

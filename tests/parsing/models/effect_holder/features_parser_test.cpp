@@ -10,7 +10,9 @@
 #include "models/effect_holder/feature.hpp"
 #include "parsing/parsing_types.hpp"
 
-// class that allows us to test the abstract dnd::FeaturesParser class
+/**
+ * @brief A class that allows us to test the dnd::FeaturesParser class
+ */
 class TestFeaturesParser : public dnd::FeaturesParser {
 public:
     TestFeaturesParser() noexcept : dnd::FeaturesParser(dnd::ParsingType::CHARACTER, "testing", dnd::Groups()) {}

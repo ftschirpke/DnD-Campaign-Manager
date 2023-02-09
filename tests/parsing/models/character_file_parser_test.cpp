@@ -22,6 +22,9 @@
 #include "models/effect_holder/feature.hpp"
 #include "models/spell.hpp"
 
+/**
+ * @brief A class that allows us to test the dnd::CharacterFileParser class
+ */
 class TestCharacterFileParser : public dnd::CharacterFileParser {
 public:
     TestCharacterFileParser(

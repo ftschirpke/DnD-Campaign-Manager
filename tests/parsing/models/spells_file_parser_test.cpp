@@ -11,7 +11,9 @@
 #include "controllers/groups.hpp"
 #include "models/spell.hpp"
 
-// class that allows us to test the dnd::SpellsFileParser class
+/**
+ * @brief A class that allows us to test the dnd::SpellsFileParser class
+ */
 class TestSpellsFileParser : public dnd::SpellsFileParser {
 public:
     TestSpellsFileParser(std::unordered_map<std::string, const dnd::Spell>& spells, dnd::Groups& groups)
