@@ -32,6 +32,7 @@ public:
     /**
      * @brief Parse features from a JSON
      * @param features_json the JSON that need s ot be parsed
+     * @throws attribute_format_error if features_json has wrong format
      */
     void parseFeatures(const nlohmann::json& features_json);
     /**

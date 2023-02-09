@@ -49,16 +49,17 @@ public:
         const std::unordered_map<std::string, const Spell>& spells
     ) noexcept;
     /**
-     * @brief Parses JSON file containing a class.
+     * @brief Parses JSON file containing a character
+     * @throws parsing_error if any error occured while trying to parse the content file
      */
     virtual void parse() override;
     /**
-     * @brief Checks whether the parsed class is valid
-     * @return "true" if the class is valid, "false" otherwise
+     * @brief Checks whether the parsed character is valid
+     * @return "true" if the character is valid, "false" otherwise
      */
     virtual bool validate() const override;
     /**
-     * @brief Saves the parsed class
+     * @brief Saves the parsed character
      */
     virtual void saveResult() override;
 protected:
@@ -66,6 +67,7 @@ protected:
      * @brief Parse the character decision for a choice required by a particular feature-like object
      * @param feature_name the name of the feature-like object
      * @param feature_decisions_json the JSON containing the decisions for that feature-like object
+     * @throws parsing_error if feature_decisions_json does not contain a valid definition of character decisions
      */
     void parseCharacterDecisions(const std::string& feature_name, const nlohmann::json& feature_decisions_json);
 private:
@@ -75,11 +77,13 @@ private:
     virtual void configureSubparsers() override;
     /**
      * @brief Parses the class, race, subclass, and subrace of the character
+     * @throws parsing_error if the chosen class, race, subclass, or subrace is invalid
      */
     void parseClassAndRace();
     /**
      * @brief Parses the level and XP values of the character
      * And if only one of them was provided the other value is determined from the first
+     * @throws parsing_error if the chosen level or XP value is invalid
      */
     void parseLevelAndXP();
 

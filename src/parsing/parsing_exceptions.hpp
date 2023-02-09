@@ -110,7 +110,7 @@ public:
 };
 
 /**
- * @brief An exception that is throw when an attribute is of a wrong type
+ * @brief An exception that is thrown when an attribute is of a wrong type
  */
 class attribute_type_error : public parsing_error {
 public:

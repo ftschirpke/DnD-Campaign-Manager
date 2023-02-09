@@ -39,6 +39,7 @@ public:
     /**
      * @brief Parses the spellcasting feature from a given JSON
      * @param spellcasting_json the JSON that needs to be parsed
+     * @throws parsing_error
      */
     void parseSpellcasting(const nlohmann::json& spellcasting_json);
     /**
@@ -52,6 +53,7 @@ private:
      * @param json_to_parse the JSON the optional attribute should be in, if it exists
      * @param attribute_name the name of the attribute
      * @param output the output to write the value of the attribute to if it exists or an array full of zeros otherwise
+     * @throws invalid_attribute
      */
     void parseSize20Array(const nlohmann::json& json_to_parse, const char* attribute_name, std::array<int, 20>& output);
 

@@ -55,7 +55,8 @@ public:
      */
     SpellsFileParser(std::unordered_map<std::string, const Spell>& spells, Groups& groups) noexcept;
     /**
-     * @brief Parses JSON file containing a collection of spells.
+     * @brief Parses JSON file containing a collection of spells
+     * @throws parsing_error if any error occured while trying to parse the content file
      */
     virtual void parse() override;
     /**
@@ -78,12 +79,14 @@ protected:
      * @brief Parses and creates a spell type
      * @param spell_type_str the string to parse
      * @return the spell type parsed from the string
+     * @throws attribute_type_error if spell_type_str does not define a valid spell type
      */
     SpellType createSpellType(const std::string& spell_type_str) const;
     /**
      * @brief Parses and creates a spell components object
      * @param spell_components_str the string to parse
      * @return the spell components object parsed from the string
+     * @throws attribute_type_error if spell_components_str does not define valid spell components
      */
     SpellComponents createSpellComponents(const std::string& spell_components_str) const;
 private:

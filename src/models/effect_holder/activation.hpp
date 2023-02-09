@@ -20,7 +20,7 @@ public:
      * @brief Constructs the activation with left part of the comparison and its operator function
      * @param left_identifier left part of the comparison
      * @param op_name string representation of the comparison operator
-     * @throws std::invalid_argument if op_name is not a valid name for an operator function
+     * @throws std::out_of_range if op_name is not a valid name for an operator function
      */
     Activation(const std::string& left_identifier, const std::string& op_name);
     Activation(Activation&& other) noexcept = default;

@@ -27,7 +27,8 @@ public:
      */
     StringGroupsFileParser(Groups& groups) noexcept;
     /**
-     * @brief Parses JSON file containing a string group.
+     * @brief Parses JSON file containing a string group
+     * @throws parsing_error if any error occured while trying to parse the content file
      */
     virtual void parse() override;
     /**
@@ -44,6 +45,7 @@ private:
      * @brief Parses one level of the input-map and saves the results in parsed_data
      * @param json_map the part of the JSON map that should be parsed
      * @return any values parsed as "__no_subgroup__" meaning they belong to the level above
+     * @throws attribute_format_error if the map's format is invalid
      */
     std::unordered_set<std::string> parseMap(const nlohmann::json& json_map);
     /**

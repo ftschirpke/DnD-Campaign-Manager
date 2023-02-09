@@ -27,7 +27,8 @@ public:
      */
     CharacterRaceFileParser(std::unordered_map<std::string, const CharacterRace>& races, const Groups& groups) noexcept;
     /**
-     * @brief Parses JSON file containing a race.
+     * @brief Parses JSON file containing a race
+     * @throws parsing_error if any error occured while trying to parse the content file
      */
     virtual void parse() override;
     /**

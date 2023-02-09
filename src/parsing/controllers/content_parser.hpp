@@ -26,7 +26,8 @@ public:
      * @brief Parses content from content_path for a certain campaign
      * @param content_path a path to the directory the content to be parsed is located in
      * @param campaign_dir_name the name of the campaign-specific directory
-     * @return
+     * @return parsed content
+     * @throws parsing_error if any error occured while trying to parse the content
      */
     Content parse(const std::filesystem::path& content_path, const std::string& campaign_dir_name);
 private:
@@ -42,11 +43,15 @@ private:
     /**
      * @brief Handles parsing for a certain content type where the content is all in one file
      * @param parsing_type the content type to be parsed
+     * @throws std::logic_error if parsing type cannot be parsed as a single-file type
+     * @throws parsing_error if any error occured while trying to parse the content
      */
     void parseAllOfSingleFileType(const ParsingType parsing_type);
     /**
      * @brief Handles parsing for a certain content type where the content is found within a directory in multiple files
      * @param parsing_type the content type to be parsed
+     * @throws std::logic_error if parsing type cannot be parsed as a multi-file type
+     * @throws parsing_error if any error occured while trying to parse the content
      */
     void parseAllOfMultiFileType(const ParsingType parsing_type);
     /**
@@ -54,6 +59,7 @@ private:
      * @param file the file path
      * @param parsing_type the type of content in the file that should be parsed
      * @param multi_file "true" if the content type should be parsed in a multi-file way, "false" otherwise
+     * @throws parsing_error if any error occured while trying to parse the file
      */
     void parseFileOfType(const std::filesystem::directory_entry& file, const ParsingType parsing_type, bool multi_file);
     /**
