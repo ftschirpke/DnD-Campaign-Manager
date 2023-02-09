@@ -205,7 +205,7 @@ void dnd::ContentParser::parseAllOfSingleFileType(const ParsingType parsing_type
                       << " so that it cannot be confused with a file containing " << type_file_name << '\n';
             continue;
         }
-        to_parse.emplace_back(std::move(createSingleFileParser(type_file.path(), parsing_type)));
+        to_parse.emplace_back(createSingleFileParser(type_file.path(), parsing_type));
     }
 
     for (auto& parser : to_parse) {
@@ -252,7 +252,7 @@ void dnd::ContentParser::parseAllOfMultiFileType(const ParsingType parsing_type)
                 std::cerr << "Warning: " << file.path() << " is not a regular file.\n";
                 continue;
             }
-            to_parse.emplace_back(std::move(createMultiFileParser(file.path(), parsing_type)));
+            to_parse.emplace_back(createMultiFileParser(file.path(), parsing_type));
         }
     }
 
