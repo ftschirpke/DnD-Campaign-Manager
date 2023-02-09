@@ -23,9 +23,10 @@ class StringGroupsFileParser : public ContentFileParser {
 public:
     /**
      * @brief Constructs an StringGroupsFileParser
+     * @param filepath the file to parse
      * @param groups the already-parsed groups
      */
-    StringGroupsFileParser(Groups& groups) noexcept;
+    StringGroupsFileParser(const std::filesystem::path& filepath, Groups& groups) noexcept;
     /**
      * @brief Parses JSON file containing a string group
      * @throws parsing_error if any error occured while trying to parse the content file
@@ -42,6 +43,11 @@ public:
      * @brief Saves the parsed group to the groups.
      */
     virtual void saveResult() override;
+    /**
+     * @brief Returns the type of content that this parser parses - string groups
+     * @return the type of content that this parser parses - string groups
+     */
+    virtual constexpr ParsingType getType() const override { return type; };
 private:
     /**
      * @brief Parses one level of the input-map and saves the results in parsed_data
@@ -65,8 +71,8 @@ private:
     EffectHolderParser effect_holder_parser;
 };
 
-inline StringGroupsFileParser::StringGroupsFileParser(Groups& groups) noexcept
-    : ContentFileParser(), groups(groups), effect_holder_parser(groups) {}
+inline StringGroupsFileParser::StringGroupsFileParser(const std::filesystem::path& filepath, Groups& groups) noexcept
+    : ContentFileParser(filepath), groups(groups), effect_holder_parser(groups) {}
 
 inline void StringGroupsFileParser::configureSubparsers() { effect_holder_parser.configure(type, filepath); }
 

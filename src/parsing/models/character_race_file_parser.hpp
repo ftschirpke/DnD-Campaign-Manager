@@ -22,10 +22,14 @@ class CharacterRaceFileParser : public ContentFileParser {
 public:
     /**
      * @brief Constructs a CharacterRaceFileParser
+     * @param filepath the file to parse
      * @param races the already-parsed races
      * @param groups the already-parsed groups
      */
-    CharacterRaceFileParser(std::unordered_map<std::string, const CharacterRace>& races, const Groups& groups) noexcept;
+    CharacterRaceFileParser(
+        const std::filesystem::path& filepath, std::unordered_map<std::string, const CharacterRace>& races,
+        const Groups& groups
+    ) noexcept;
     /**
      * @brief Parses JSON file containing a race
      * @throws parsing_error if any error occured while trying to parse the content file
@@ -42,6 +46,11 @@ public:
      * @brief Saves the parsed race
      */
     virtual void saveResult() override;
+    /**
+     * @brief Returns the type of content that this parser parses - races
+     * @return the type of content that this parser parses - races
+     */
+    virtual constexpr ParsingType getType() const override { return type; };
 private:
     /**
      * @brief Configures the subparsers used
@@ -61,9 +70,10 @@ private:
 };
 
 inline CharacterRaceFileParser::CharacterRaceFileParser(
-    std::unordered_map<std::string, const CharacterRace>& races, const Groups& groups
+    const std::filesystem::path& filepath, std::unordered_map<std::string, const CharacterRace>& races,
+    const Groups& groups
 ) noexcept
-    : ContentFileParser(), races(races), features_parser(groups) {}
+    : ContentFileParser(filepath), races(races), features_parser(groups) {}
 
 inline void CharacterRaceFileParser::configureSubparsers() { features_parser.configure(type, filepath); }
 

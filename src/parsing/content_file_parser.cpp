@@ -8,13 +8,9 @@
 
 #include <nlohmann/json.hpp>
 
-bool dnd::ContentFileParser::openJSON(const std::filesystem::directory_entry& file) {
+bool dnd::ContentFileParser::openJSON() {
     DND_MEASURE_FUNCTION();
-    if (!file.is_regular_file()) {
-        std::cerr << "Warning: " << file.path() << " is not a regular file.\n";
-        return false;
-    }
-    filepath = file.path();
+
     if (filepath.extension().string() != ".json") {
         std::cerr << "Warning: " << filepath << " is not a \".json\" file.\n";
         return false;

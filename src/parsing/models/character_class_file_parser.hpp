@@ -27,13 +27,14 @@ class CharacterClassFileParser : public ContentFileParser {
 public:
     /**
      * @brief Constructs a CharacterClassFileParser
+     * @param filepath the file to parse
      * @param classes the already-parsed classes
      * @param groups the already-parsed groups
      * @param spells the already-parsed spells
      */
     CharacterClassFileParser(
-        std::unordered_map<std::string, const CharacterClass>& classes, const Groups& groups,
-        const std::unordered_map<std::string, const Spell>& spells
+        const std::filesystem::path& filepath, std::unordered_map<std::string, const CharacterClass>& classes,
+        const Groups& groups, const std::unordered_map<std::string, const Spell>& spells
     ) noexcept;
     /**
      * @brief Parses JSON file containing a class
@@ -51,6 +52,11 @@ public:
      * @brief Saves the parsed class
      */
     virtual void saveResult() override;
+    /**
+     * @brief Returns the type of content that this parser parses - classes
+     * @return the type of content that this parser parses - classes
+     */
+    virtual constexpr ParsingType getType() const override { return type; };
 protected:
     /**
      * @brief Determine the subclass level for the parsed class
@@ -83,10 +89,10 @@ private:
 };
 
 inline CharacterClassFileParser::CharacterClassFileParser(
-    std::unordered_map<std::string, const CharacterClass>& classes, const Groups& groups,
-    const std::unordered_map<std::string, const Spell>& spells
+    const std::filesystem::path& filepath, std::unordered_map<std::string, const CharacterClass>& classes,
+    const Groups& groups, const std::unordered_map<std::string, const Spell>& spells
 ) noexcept
-    : ContentFileParser(), classes(classes), features_parser(groups), spellcasting_parser(spells) {}
+    : ContentFileParser(filepath), classes(classes), features_parser(groups), spellcasting_parser(spells) {}
 
 inline void CharacterClassFileParser::configureSubparsers() {
     features_parser.configure(type, filepath);

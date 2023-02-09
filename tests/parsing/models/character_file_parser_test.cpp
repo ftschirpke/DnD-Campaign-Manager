@@ -25,20 +25,18 @@
 class TestCharacterFileParser : public dnd::CharacterFileParser {
 public:
     TestCharacterFileParser(
-        std::unordered_map<std::string, dnd::Character>& characters, const dnd::Groups& groups,
-        const std::unordered_map<std::string, const dnd::CharacterClass>& character_classes,
+        const std::filesystem::path& filepath, std::unordered_map<std::string, dnd::Character>& characters,
+        const dnd::Groups& groups, const std::unordered_map<std::string, const dnd::CharacterClass>& character_classes,
         const std::unordered_map<std::string, const dnd::CharacterSubclass>& character_subclasses,
         const std::unordered_map<std::string, const dnd::CharacterRace>& character_races,
         const std::unordered_map<std::string, const dnd::CharacterSubrace>& character_subraces,
         const std::unordered_map<std::string, const dnd::Spell>& spells
     )
         : dnd::CharacterFileParser(
-            characters, groups, character_classes, character_subclasses, character_races, character_subraces, spells
+            filepath, characters, groups, character_classes, character_subclasses, character_races, character_subraces,
+            spells
         ) {}
-    void setJSON(const nlohmann::json& character_json) {
-        filepath = std::filesystem::path("test_file_name.json");
-        json_to_parse = character_json;
-    }
+    void setJSON(const nlohmann::json& character_json) { json_to_parse = character_json; }
 };
 
 class SetupCharacterParserTest {
@@ -47,27 +45,19 @@ public:
     SetupCharacterParserTest();
     TestCharacterFileParser createParser();
 private:
-    static bool values_set;
-    static dnd::Groups groups;
-    static std::unordered_map<std::string, const dnd::CharacterClass> character_classes;
-    static std::unordered_map<std::string, const dnd::CharacterSubclass> character_subclasses;
-    static std::unordered_map<std::string, const dnd::CharacterRace> character_races;
-    static std::unordered_map<std::string, const dnd::CharacterSubrace> character_subraces;
-    static std::unordered_map<std::string, const dnd::Spell> spells;
-    static void setClasses();
-    static void setSubclasses();
-    static void setRaces();
-    static void setSubraces();
-    static void setSpells();
+    dnd::Groups groups;
+    const std::filesystem::path filepath;
+    std::unordered_map<std::string, const dnd::CharacterClass> character_classes;
+    std::unordered_map<std::string, const dnd::CharacterSubclass> character_subclasses;
+    std::unordered_map<std::string, const dnd::CharacterRace> character_races;
+    std::unordered_map<std::string, const dnd::CharacterSubrace> character_subraces;
+    std::unordered_map<std::string, const dnd::Spell> spells;
+    void setClasses();
+    void setSubclasses();
+    void setRaces();
+    void setSubraces();
+    void setSpells();
 };
-
-bool SetupCharacterParserTest::values_set = false;
-dnd::Groups SetupCharacterParserTest::groups;
-std::unordered_map<std::string, const dnd::CharacterClass> SetupCharacterParserTest::character_classes = {};
-std::unordered_map<std::string, const dnd::CharacterSubclass> SetupCharacterParserTest::character_subclasses = {};
-std::unordered_map<std::string, const dnd::CharacterRace> SetupCharacterParserTest::character_races = {};
-std::unordered_map<std::string, const dnd::CharacterSubrace> SetupCharacterParserTest::character_subraces = {};
-std::unordered_map<std::string, const dnd::Spell> SetupCharacterParserTest::spells = {};
 
 inline void SetupCharacterParserTest::setClasses() {
     character_classes.emplace(
@@ -102,20 +92,18 @@ inline void SetupCharacterParserTest::setSubraces() {
 inline void SetupCharacterParserTest::setSpells() {}
 
 
-inline SetupCharacterParserTest::SetupCharacterParserTest() {
-    if (!values_set) {
-        setClasses();
-        setSubclasses();
-        setRaces();
-        setSubraces();
-        setSpells();
-        values_set = true;
-    }
+inline SetupCharacterParserTest::SetupCharacterParserTest() : groups(), filepath("testing") {
+    setClasses();
+    setSubclasses();
+    setRaces();
+    setSubraces();
+    setSpells();
 }
 
 inline TestCharacterFileParser SetupCharacterParserTest::createParser() {
     return TestCharacterFileParser(
-        characters, groups, character_classes, character_subclasses, character_races, character_subraces, spells
+        filepath, characters, groups, character_classes, character_subclasses, character_races, character_subraces,
+        spells
     );
 }
 

@@ -50,10 +50,13 @@ class SpellsFileParser : public ContentFileParser {
 public:
     /**
      * @brief Constructs a SpellsFileParser
+     * @param filepath the file to parse
      * @param spells the already-parsed spells
      * @param groups the already-parsed groups
      */
-    SpellsFileParser(std::unordered_map<std::string, const Spell>& spells, Groups& groups) noexcept;
+    SpellsFileParser(
+        const std::filesystem::path& filepath, std::unordered_map<std::string, const Spell>& spells, Groups& groups
+    ) noexcept;
     /**
      * @brief Parses JSON file containing a collection of spells
      * @throws parsing_error if any error occured while trying to parse the content file
@@ -70,6 +73,11 @@ public:
      * @brief Saves the parsed spells
      */
     virtual void saveResult() override;
+    /**
+     * @brief Returns the type of content that this parser parses - spells
+     * @return the type of content that this parser parses - spells
+     */
+    virtual constexpr ParsingType getType() const override { return type; };
 protected:
     /**
      * @brief Parses a spell and saves its information
@@ -124,9 +132,11 @@ private:
     std::mutex spell_parsing_mutex;
 };
 
-inline SpellsFileParser::SpellsFileParser(std::unordered_map<std::string, const Spell>& spells, Groups& groups) noexcept
-    : ContentFileParser(), spell_components_regex(spell_type_regex_cstr), spell_type_regex(spell_components_regex_cstr),
-      spells(spells), groups(groups) {}
+inline SpellsFileParser::SpellsFileParser(
+    const std::filesystem::path& filepath, std::unordered_map<std::string, const Spell>& spells, Groups& groups
+) noexcept
+    : ContentFileParser(filepath), spell_components_regex(spell_type_regex_cstr),
+      spell_type_regex(spell_components_regex_cstr), spells(spells), groups(groups) {}
 
 inline void SpellsFileParser::configureSubparsers() {} // SpellsFileParser has no subparsers
 

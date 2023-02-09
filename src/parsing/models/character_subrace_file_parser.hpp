@@ -24,13 +24,14 @@ class CharacterSubraceFileParser : public ContentFileParser {
 public:
     /**
      * @brief Constructs a CharacterSubraceFileParser
+     * @param filepath the file to parse
      * @param subraces the already-parsed subraces
      * @param groups the already-parsed groups
      * @param races the already-parsed races
      */
     CharacterSubraceFileParser(
-        std::unordered_map<std::string, const CharacterSubrace>& subraces, const Groups& groups,
-        const std::unordered_map<std::string, const CharacterRace>& races
+        const std::filesystem::path& filepath, std::unordered_map<std::string, const CharacterSubrace>& subraces,
+        const Groups& groups, const std::unordered_map<std::string, const CharacterRace>& races
     ) noexcept;
     /**
      * @brief Parses JSON file containing a subrace
@@ -49,6 +50,11 @@ public:
      * @brief Saves the parsed subrace
      */
     virtual void saveResult() override;
+    /**
+     * @brief Returns the type of content that this parser parses - subraces
+     * @return the type of content that this parser parses - subraces
+     */
+    virtual constexpr ParsingType getType() const override { return type; };
 private:
     /**
      * @brief Configures the subparsers used
@@ -70,10 +76,10 @@ private:
 };
 
 inline CharacterSubraceFileParser::CharacterSubraceFileParser(
-    std::unordered_map<std::string, const CharacterSubrace>& subraces, const Groups& groups,
-    const std::unordered_map<std::string, const CharacterRace>& races
+    const std::filesystem::path& filepath, std::unordered_map<std::string, const CharacterSubrace>& subraces,
+    const Groups& groups, const std::unordered_map<std::string, const CharacterRace>& races
 ) noexcept
-    : ContentFileParser(), subraces(subraces), races(races), features_parser(groups) {}
+    : ContentFileParser(filepath), subraces(subraces), races(races), features_parser(groups) {}
 
 inline void CharacterSubraceFileParser::configureSubparsers() { features_parser.configure(type, filepath); }
 
