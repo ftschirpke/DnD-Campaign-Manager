@@ -172,7 +172,7 @@ void dnd::SpellCardBuilder::writeLatexFile(const std::string& filename) {
         int cards_to_create = cardsToCreate(spell);
         LatexScope* scope = nullptr;
 
-        int open_slots_before;
+        int open_slots_before = -1;
         for (int i = cards_to_create; i <= 9; i++) {
             if (not_full_scopes[i].size() != 0) {
                 scope = not_full_scopes[i].front();
