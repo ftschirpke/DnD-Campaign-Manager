@@ -9,7 +9,7 @@
 namespace dnd {
 
 // the names of the skills (in CAPS_SNAKECASE) paired with their respective abilities (in 3-letter representation)
-constexpr std::array<std::pair<const char*, const char*>, 18> skill_abilities = {
+inline constexpr std::array<std::pair<const char*, const char*>, 18> skill_abilities = {
     std::pair("ACROBATICS", "DEX"),      std::pair("ANIMAL_HANDLING", "WIS"), std::pair("ARCANA", "INT"),
     std::pair("ATHLETICS", "STR"),       std::pair("DECEPTION", "CHA"),       std::pair("HISTORY", "INT"),
     std::pair("INSIGHT", "WIS"),         std::pair("INTIMIDATION", "CHA"),    std::pair("INVESTIGATION", "INT"),

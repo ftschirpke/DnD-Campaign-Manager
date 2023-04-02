@@ -23,7 +23,7 @@ enum ParsingType {
 };
 
 // the parsing types paired with their c-style string names
-constexpr std::array<std::pair<ParsingType, const char*>, 7> parsing_type_names = {
+inline constexpr std::array<std::pair<ParsingType, const char*>, 7> parsing_type_names = {
     std::pair(ParsingType::GROUP, "Group"),         std::pair(ParsingType::SPELL, "Spell"),
     std::pair(ParsingType::RACE, "Race"),           std::pair(ParsingType::CLASS, "Class"),
     std::pair(ParsingType::SUBRACE, "Subrace"),     std::pair(ParsingType::SUBCLASS, "Subclass"),

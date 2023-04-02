@@ -35,7 +35,7 @@ enum MagicSchool {
 };
 
 // the magic schools paired with their names as c-style strings
-constexpr std::array<std::pair<const char*, MagicSchool>, 8> magic_schools = {
+inline constexpr std::array<std::pair<const char*, MagicSchool>, 8> magic_schools = {
     std::pair("abjuration", MagicSchool::ABJURATION), std::pair("conjuration", MagicSchool::CONJURATION),
     std::pair("divination", MagicSchool::DIVINATION), std::pair("enchantment", MagicSchool::ENCHANTMENT),
     std::pair("evocation", MagicSchool::EVOCATION),   std::pair("illusion", MagicSchool::ILLUSION),
