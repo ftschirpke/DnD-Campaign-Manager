@@ -42,6 +42,15 @@ constexpr std::array<std::pair<const char*, MagicSchool>, 8> magic_schools = {
     std::pair("necromancy", MagicSchool::NECROMANCY), std::pair("transmutation", MagicSchool::TRANSMUTATION),
 };
 
+constexpr const char* magicSchoolName(MagicSchool magic_school) {
+    for (const auto& [ms_name, ms_val] : magic_schools) {
+        if (magic_school == ms_val) {
+            return ms_name;
+        }
+    }
+    throw std::out_of_range("The magic school does not exist.");
+}
+
 /**
  * @brief Determines the magic school given its name
  * @param magic_school_name the name of the magic school
@@ -88,6 +97,11 @@ struct SpellType {
      * @return the level of the spell between 1 and 9, and 0 for cantrips
      */
     int levelAsNumber() const;
+    /**
+     * @brief Create the string representation of the SpellType object
+     * @return the string representation
+     */
+    std::string str() const;
 };
 
 inline int SpellType::levelAsNumber() const { return static_cast<int>(level); }
@@ -104,6 +118,17 @@ struct SpellComponents {
     bool material = false;
     // a description of the material components required to cast the spell
     std::string materials_needed = "";
+    /**
+     * @brief Create a short string representation of the SpellComponents object
+     * (without the description of the required materials)
+     * @return the short string representation
+     */
+    std::string shortStr() const;
+    /**
+     * @brief Create the string representation of the SpellComponents object
+     * @return the string representation
+     */
+    std::string str() const;
 };
 
 /**

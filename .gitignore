@@ -1,7 +1,13 @@
+# IDE specific ignores
 .vs/*
 .vscode/*
+
+# output specific ignores
 build/
+out/
 debug/
+
+# content specific ignores
 # users can put their content within the content directory without causing git problems
 content/*
 !content/README.md
