@@ -25,13 +25,13 @@ enum Ability {
 };
 
 // the abilities in order
-constexpr std::array<Ability, 6> abilities_inorder = {
+inline constexpr std::array<Ability, 6> abilities_inorder = {
     Ability::STRENGTH,     Ability::DEXTERITY, Ability::CONSTITUTION,
     Ability::INTELLIGENCE, Ability::WISDOM,    Ability::CHARISMA,
 };
 
 // the 3-letter c-style strings for the abilities in order
-constexpr std::array<const char*, 6> ability_cstrings_inorder = {"STR", "DEX", "CON", "INT", "WIS", "CHA"};
+inline constexpr std::array<const char*, 6> ability_cstrings_inorder = {"STR", "DEX", "CON", "INT", "WIS", "CHA"};
 
 /**
  * @brief Given the 3-letter string representation of an ability, returns the ability value.
