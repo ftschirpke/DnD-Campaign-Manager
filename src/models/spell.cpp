@@ -25,7 +25,8 @@ std::string dnd::SpellType::str() const {
 
     spell_type_string += " - School of ";
     std::string school_name = magicSchoolName(magic_school);
-    school_name[0] = std::toupper(school_name[0]);
+    auto toupper = [](unsigned char c) { return static_cast<unsigned char>(std::toupper(c)); };
+    school_name[0] = toupper(school_name[0]);
     spell_type_string += school_name;
 
     if (is_ritual) {
