@@ -84,7 +84,7 @@ private:
     // the names of the files containing single-file content types
     static const std::array<std::pair<dnd::ParsingType, const char*>, 1> file_names;
     // the names of the directories containing multi-file content types
-    static const std::array<std::pair<dnd::ParsingType, const char*>, 7> subdir_names;
+    static const std::array<std::pair<dnd::ParsingType, const char*>, 8> subdir_names;
     // the variable where the parsed content is accumulated
     Content parsed_content;
     // the content directories that should be parsed
