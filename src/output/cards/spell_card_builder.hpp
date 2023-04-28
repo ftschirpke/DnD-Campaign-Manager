@@ -25,7 +25,6 @@ public:
      * @param filename the name of the file
      */
     void writeLatexFile(const std::string& filename);
-protected:
 private:
     std::vector<const Spell*> spells;
 };

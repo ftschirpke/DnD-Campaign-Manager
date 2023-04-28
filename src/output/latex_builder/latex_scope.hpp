@@ -78,7 +78,6 @@ public:
      * @return the LaTeX string
      */
     std::string str() const override;
-protected:
 private:
     bool enclosing_braces;
     std::vector<std::unique_ptr<LatexObject>> objects;
