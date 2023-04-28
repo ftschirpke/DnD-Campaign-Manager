@@ -115,7 +115,7 @@ static int createItemCards(dnd::LatexScope* scope, const dnd::Item* item) {
 
     int last_description_card = counter;
     bool written_cosmetic_description_yet = false;
-    bool description_swap_card = -1;
+    int description_swap_card = -1;
     bool skip_last_footer = false;
 
     if (!item->cosmetic_desciption.empty()) {
