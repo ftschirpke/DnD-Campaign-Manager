@@ -8,6 +8,8 @@
 
 void dnd::Content::printStatus() const {
     groups.printStatus();
+    std::cout << "=== Items ===\n";
+    std::cout << "items parsed: " << items.size() << '\n';
     std::cout << "=== Spells ===\n";
     std::cout << "spells parsed: " << spells.size() << '\n';
     std::cout << "=== Character Races ===\n";

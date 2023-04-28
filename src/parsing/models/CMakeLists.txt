@@ -5,6 +5,7 @@ target_sources(dndmanager
     character_race_file_parser.cpp
     character_subclass_file_parser.cpp
     character_subrace_file_parser.cpp
+    items_file_parser.cpp
     spells_file_parser.cpp
 )
 
@@ -15,6 +16,7 @@ target_sources(dndmanager_tests
     character_race_file_parser.cpp
     character_subclass_file_parser.cpp
     character_subrace_file_parser.cpp
+    items_file_parser.cpp
     spells_file_parser.cpp
 )
 

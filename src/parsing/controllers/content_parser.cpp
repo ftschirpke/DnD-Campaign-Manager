@@ -24,6 +24,7 @@
 #include "parsing/models/character_race_file_parser.hpp"
 #include "parsing/models/character_subclass_file_parser.hpp"
 #include "parsing/models/character_subrace_file_parser.hpp"
+#include "parsing/models/items_file_parser.hpp"
 #include "parsing/models/spells_file_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 #include "parsing/parsing_types.hpp"
@@ -32,11 +33,11 @@ constexpr std::array<std::pair<dnd::ParsingType, const char*>, 1> dnd::ContentPa
     std::pair(ParsingType::GROUP, "groups"),
 };
 
-constexpr std::array<std::pair<dnd::ParsingType, const char*>, 7> dnd::ContentParser::subdir_names = {
+constexpr std::array<std::pair<dnd::ParsingType, const char*>, 8> dnd::ContentParser::subdir_names = {
     std::pair(ParsingType::GROUP, "groups"),  std::pair(ParsingType::CHARACTER, "characters"),
     std::pair(ParsingType::CLASS, "classes"), std::pair(ParsingType::SUBCLASS, "subclasses"),
     std::pair(ParsingType::RACE, "races"),    std::pair(ParsingType::SUBRACE, "subraces"),
-    std::pair(ParsingType::SPELL, "spells"),
+    std::pair(ParsingType::ITEM, "items"),    std::pair(ParsingType::SPELL, "spells"),
 };
 
 void dnd::ContentParser::reset() noexcept {
@@ -75,6 +76,7 @@ dnd::Content dnd::ContentParser::parse(
     dirs_to_parse.push_back(std::filesystem::directory_entry(content_path / campaign_dir_name));
     try {
         parseAllOfType(ParsingType::GROUP);
+        parseAllOfType(ParsingType::ITEM);
         parseAllOfType(ParsingType::SPELL);
         parseAllOfType(ParsingType::CLASS);
         parseAllOfType(ParsingType::RACE);
@@ -129,6 +131,8 @@ std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createMultiFileParse
                 filepath, parsed_content.character_subclasses, parsed_content.groups, parsed_content.character_classes,
                 parsed_content.spells
             );
+        case ParsingType::ITEM:
+            return std::make_unique<ItemsFileParser>(filepath, parsed_content.items, parsed_content.groups);
         case ParsingType::SPELL:
             return std::make_unique<SpellsFileParser>(filepath, parsed_content.spells, parsed_content.groups);
         case ParsingType::GROUP:

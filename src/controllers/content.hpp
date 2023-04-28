@@ -12,6 +12,7 @@
 #include "models/character_race.hpp"
 #include "models/character_subclass.hpp"
 #include "models/character_subrace.hpp"
+#include "models/item.hpp"
 #include "models/spell.hpp"
 
 namespace dnd {
@@ -38,7 +39,9 @@ public:
     std::unordered_map<std::string, const CharacterRace> character_races;
     // the character subraces mapped to their names
     std::unordered_map<std::string, const CharacterSubrace> character_subraces;
-    // the spells to their names
+    // the items mapped to their names
+    std::unordered_map<std::string, const Item> items;
+    // the spells mapped to their names
     std::unordered_map<std::string, const Spell> spells;
 };
 

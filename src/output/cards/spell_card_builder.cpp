@@ -11,8 +11,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include <iostream>
-
 #include "models/spell.hpp"
 #include "output/latex_builder/latex_command.hpp"
 #include "output/latex_builder/latex_document.hpp"
@@ -30,7 +28,7 @@ void dnd::SpellCardBuilder::writeLatexFile() {
     writeLatexFile(sstr.str());
 }
 
-void createHeader(dnd::LatexDocument& document) {
+static void createHeader(dnd::LatexDocument& document) {
     document.document_class.addBracketArgument("parskip");
     document.usePackage("geometry");
     document.usePackage("tcolorbox")->addBracketArgument("most");
@@ -43,7 +41,7 @@ void createHeader(dnd::LatexDocument& document) {
     document.header.addCommand("makeatother");
 }
 
-dnd::LatexScope* createCardPage(dnd::LatexDocument& document) {
+static dnd::LatexScope* createCardPage(dnd::LatexDocument& document) {
     std::string colour = "white";
     auto begin_end = document.body.addBeginEnd("tcbitemize");
     begin_end.begin_command->addBracketArgument(
@@ -54,7 +52,7 @@ dnd::LatexScope* createCardPage(dnd::LatexDocument& document) {
     return begin_end.scope;
 }
 
-void createMinipage(dnd::LatexScope* scope, const std::string& name, const std::string& value) {
+static void createMinipage(dnd::LatexScope* scope, const std::string& name, const std::string& value) {
     auto minipage = scope->addBeginEnd("minipage");
     minipage.begin_command->addBraceArgument("0.49\\textwidth");
     minipage.scope->addCommand("centering");
@@ -64,7 +62,7 @@ void createMinipage(dnd::LatexScope* scope, const std::string& name, const std::
     minipage.scope->addText(value)->addModifier("scriptsize");
 }
 
-dnd::LatexText* createCardHeader(dnd::LatexScope* scope, const dnd::Spell* spell, int counter) {
+static dnd::LatexText* createCardHeader(dnd::LatexScope* scope, const dnd::Spell* spell, int counter) {
     scope->addCommand("tcbitem");
     scope->addCommand("vspace", "1mm");
     dnd::LatexScope* center_scope = scope->addBeginEnd("center").scope;
@@ -90,12 +88,12 @@ dnd::LatexText* createCardHeader(dnd::LatexScope* scope, const dnd::Spell* spell
     return title;
 }
 
-void createCardFooter(dnd::LatexScope* scope, const dnd::Spell* spell) {
+static void createCardFooter(dnd::LatexScope* scope, const dnd::Spell* spell) {
     scope->addCommand("vfill");
     scope->addText(spell->type.str())->addModifier("scriptsize")->addModifier("centering");
 }
 
-int createSpellCards(dnd::LatexScope* scope, const dnd::Spell* spell) {
+static int createSpellCards(dnd::LatexScope* scope, const dnd::Spell* spell) {
     int counter = 1;
     dnd::LatexText* first_title = createCardHeader(scope, spell, counter);
     size_t start = 0;
@@ -134,7 +132,7 @@ int createSpellCards(dnd::LatexScope* scope, const dnd::Spell* spell) {
     return counter;
 }
 
-int cardsToCreate(const dnd::Spell* spell) {
+static int cardsToCreate(const dnd::Spell* spell) {
     int counter = 1;
     size_t start = 0;
     size_t end = 0;
@@ -161,7 +159,6 @@ int cardsToCreate(const dnd::Spell* spell) {
 }
 
 void dnd::SpellCardBuilder::writeLatexFile(const std::string& filename) {
-    // build the latex document
     LatexDocument document("scrartcl");
     createHeader(document);
 
@@ -188,7 +185,6 @@ void dnd::SpellCardBuilder::writeLatexFile(const std::string& filename) {
 
         int cards_created = createSpellCards(scope, spell);
         if (cards_created != cards_to_create) {
-            std::cout << cards_created << " vs. " << cards_to_create << '\n';
             throw std::logic_error("Not yet implemented.");
         }
 

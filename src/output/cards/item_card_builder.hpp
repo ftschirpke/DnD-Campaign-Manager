@@ -1,21 +1,21 @@
-#ifndef SPELL_CARD_BUILDER_HPP_
-#define SPELL_CARD_BUILDER_HPP_
+#ifndef ITEM_CARD_BUILDER_HPP_
+#define ITEM_CARD_BUILDER_HPP_
 
 #include "dnd_config.hpp"
 
 #include <vector>
 
-#include "models/spell.hpp"
+#include "models/item.hpp"
 
 namespace dnd {
 
-class SpellCardBuilder {
+class ItemCardBuilder {
 public:
     /**
-     * @brief Add to the list of spells we want to create cards for
-     * @param spell a spell to create a card for
+     * @brief Add to the list of items we want to create cards for
+     * @param item an item to create a card for
      */
-    void addSpell(const Spell* spell);
+    void addItem(const Item* item);
     /**
      * @brief Creates a LaTeX file that allows printing the cards with the timestamp as the file name
      */
@@ -26,9 +26,9 @@ public:
      */
     void writeLatexFile(const std::string& filename);
 private:
-    std::vector<const Spell*> spells;
+    std::vector<const Item*> items;
 };
 
 } // namespace dnd
 
-#endif // SPELL_CARD_BUILDER_HPP_
+#endif // ITEM_CARD_BUILDER_HPP_
