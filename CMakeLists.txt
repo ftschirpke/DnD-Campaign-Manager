@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.22)
 
 project(DnD-Campaign-Manager
     DESCRIPTION "A simple tool providing multiple features that are helpful for DMs managing their DnD5e-Campaigns."
@@ -14,48 +14,33 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# CPM
-    set(CPM_DOWNLOAD_VERSION 0.34.0)
+include(FetchContent)
 
-    if(CPM_SOURCE_CACHE)
-    set(CPM_DOWNLOAD_LOCATION "${CPM_SOURCE_CACHE}/cpm/CPM_${CPM_DOWNLOAD_VERSION}.cmake")
-    elseif(DEFINED ENV{CPM_SOURCE_CACHE})
-    set(CPM_DOWNLOAD_LOCATION "$ENV{CPM_SOURCE_CACHE}/cpm/CPM_${CPM_DOWNLOAD_VERSION}.cmake")
-    else()
-    set(CPM_DOWNLOAD_LOCATION "${CMAKE_BINARY_DIR}/cmake/CPM_${CPM_DOWNLOAD_VERSION}.cmake")
-    endif()
-    
-    if(NOT (EXISTS ${CPM_DOWNLOAD_LOCATION}))
-    message(STATUS "Downloading CPM.cmake to ${CPM_DOWNLOAD_LOCATION}")
-    file(DOWNLOAD
-    https://github.com/TheLartians/CPM.cmake/releases/download/v${CPM_DOWNLOAD_VERSION}/CPM.cmake
-    ${CPM_DOWNLOAD_LOCATION}
-    )
-    endif()
-    
-    include(${CPM_DOWNLOAD_LOCATION})
-# end CPM
-
-CPMAddPackage(
-    NAME nlohmann_json
-    GITHUB_REPOSITORY nlohmann/json
-    VERSION 3.11.2
-    OPTIONS
-        "JSON_BuildTests OFF"
+FetchContent_Declare(
+    nlohmann_json
+    GIT_REPOSITORY https://github.com/nlohmann/json
+    GIT_TAG bc889afb4c5bf1c0d8ee29ef35eaaf4c8bef8a5d
 )
 
-CPMAddPackage(
-    NAME catch2
-    VERSION 3.2.0
-    GITHUB_REPOSITORY catchorg/Catch2
+FetchContent_Declare(
+    catch2
+    GIT_REPOSITORY https://github.com/catchorg/Catch2
+    GIT_TAG 3f0283de7a9c43200033da996ff9093be3ac84dc
 )
 
-CPMAddPackage(
-    NAME cxxopts
-    GITHUB_REPOSITORY jarro2783/cxxopts
-    VERSION 3.0.0
-    OPTIONS "CXXOPTS_BUILD_EXAMPLES NO" "CXXOPTS_BUILD_TESTS NO" "CXXOPTS_ENABLE_INSTALL YES"
+FetchContent_Declare(
+    cxxopts
+    GIT_REPOSITORY https://github.com/jarro2783/cxxopts
+    GIT_TAG eb787304d67ec22f7c3a184ee8b4c481d04357fd
 )
+
+FetchContent_Declare(
+    fmt
+    GIT_REPOSITORY https://github.com/fmtlib/fmt
+    GIT_TAG a33701196adfad74917046096bf5a2aa0ab0bb50
+)
+
+FetchContent_MakeAvailable(nlohmann_json catch2 cxxopts fmt)
 
 find_program(CCACHE_PROGRAM ccache)
 if(CCACHE_PROGRAM)
@@ -87,7 +72,7 @@ target_include_directories(${DND_APP_TARGET}
     PRIVATE
     ${CMAKE_SOURCE_DIR}/src/lib
 )
-target_link_libraries(${DND_APP_TARGET} PUBLIC nlohmann_json::nlohmann_json cxxopts::cxxopts)
+target_link_libraries(${DND_APP_TARGET} PUBLIC nlohmann_json::nlohmann_json cxxopts::cxxopts fmt::fmt)
 
 # Unit Tests
 add_executable(${DND_TEST_TARGET})
@@ -100,7 +85,7 @@ target_include_directories(${DND_TEST_TARGET}
     PRIVATE
     ${CMAKE_SOURCE_DIR}/src/lib
 )
-target_link_libraries(${DND_TEST_TARGET} PRIVATE nlohmann_json::nlohmann_json cxxopts::cxxopts Catch2::Catch2WithMain)
+target_link_libraries(${DND_TEST_TARGET} PRIVATE nlohmann_json::nlohmann_json cxxopts::cxxopts fmt::fmt Catch2::Catch2WithMain)
 
 include(CTest)
 enable_testing()
