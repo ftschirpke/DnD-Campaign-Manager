@@ -90,9 +90,10 @@ public:
      */
     bool isPartOfGroup(const std::string& name, const std::string& group_name) const;
     /**
-     * @brief Prints the amounts of groups parsed
+     * @brief Returns a string describing the amounts of groups parsed
+     * @return a string describing the current parsed groups
      */
-    void printStatus() const;
+    std::string printStatus() const;
 private:
     // a map containing all string groups - the members of a string group mapped to the name of the group
     std::unordered_map<std::string, std::unordered_set<std::string>> data;

@@ -261,7 +261,6 @@ void dnd::CharacterFileParser::parseClassAndRace() {
             throw invalid_attribute(type, filepath, "subrace", '\"' + character_subrace_name + "\" does not exist");
         }
     } else if (race_ptr->has_subraces) {
-        std::cout << "JSON:\n" << json_to_parse << std::endl;
         throw attribute_missing(type, filepath, "The race \"" + race_ptr->name + "\" requires a subrace selection.");
     }
 }

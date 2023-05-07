@@ -4,8 +4,6 @@
 #include "dnd_config.hpp"
 
 #include <array>
-#include <iostream>
-#include <map>
 #include <string>
 #include <unordered_map>
 #include <utility>
@@ -156,50 +154,7 @@ inline int Character::getXP() const noexcept { return xp; }
 
 inline void Character::updateLevel() { level = levelForXP(xp); }
 
-// inline void Character::levelUp() {
-//     if (level == 20) {
-//         std::cerr << "Warning: Cannot level up beyond level 20.\n"; // TODO: consider throwing exception instead
-//         return;
-//     }
-//     xp = minxp_for_level.at(++level);
-// }
-
-// inline void Character::setLevel(int new_level) {
-//     if (new_level < 1 || new_level > 20) {
-//         std::cerr << "Warning: Level must be between 1 and 20.\n"; // TODO: consider throwing exception instead
-//         return;
-//     }
-//     level = new_level;
-//     xp = minxp_for_level.at(level);
-// }
-
-// inline void Character::setXP(int new_xp) {
-//     xp = new_xp;
-//     updateLevel();
-// }
-
-// inline void Character::increaseXP(int xp_increase) {
-//     xp += xp_increase;
-//     updateLevel();
-// }
-
-// inline void Character::decreaseXP(int xp_decrease) {
-//     if (xp_decrease > xp) {
-//         std::cerr << "Warning: Cannot decrease XP to less than 0.\n"; // TODO: consider throwing exception instead
-//         return;
-//     }
-//     xp -= xp_decrease;
-//     updateLevel();
-// }
-
 inline const std::vector<int>& Character::getHitDiceRolls() const noexcept { return hit_dice_rolls; }
-
-// inline void Character::addHitDiceRoll(int hit_dice_roll) {
-//     hit_dice_rolls.push_back(hit_dice_roll);
-//     if (hit_dice_rolls.size() > level) {
-//         std::cerr << "Warning: More hit dice rolls than level.\n";
-//     }
-// }
 
 } // namespace dnd
 

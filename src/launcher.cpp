@@ -4,17 +4,22 @@
 
 #include <filesystem>
 #include <iostream>
+#include <memory>
 #include <stdexcept>
 #include <string>
 
 #include <cxxopts.hpp>
+#include <fmt/core.h>
 
 #include "controllers/content.hpp"
+#include "output/command_line_output.hpp"
+#include "output/output.hpp"
 #include "parsing/controllers/content_parser.hpp"
 #include "parsing/parsing_exceptions.hpp"
 
 int dnd::launch(int argc, char** argv) {
     DND_MEASURE_FUNCTION();
+    std::unique_ptr<Output> output = std::make_unique<CommandLineOutput>(CommandLineOutput());
     const std::filesystem::path cur_path = std::filesystem::current_path();
 
     cxxopts::Options options(DND_CAMPAIGN_MANAGER_NAME, DND_CAMPAIGN_MANAGER_DESCRIPTION);
@@ -27,26 +32,28 @@ int dnd::launch(int argc, char** argv) {
     cxxopts::ParseResult args;
     try {
         args = options.parse(argc, argv);
-    } catch (const cxxopts::OptionParseException& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
+    } catch (const cxxopts::exceptions::parsing& e) {
+        output->formatted_error("Error: {}", e.what());
         return 1;
     }
 
     if (args.count("help")) {
-        std::cout << options.help() << '\n';
+        output->error(options.help());
         return 0;
     }
     if (args.count("version")) {
-        std::cout << DND_CAMPAIGN_MANAGER_NAME << " Version " << DND_CAMPAIGN_MANAGER_VERSION_MAJOR << '.'
-                  << DND_CAMPAIGN_MANAGER_VERSION_MINOR << '.' << DND_CAMPAIGN_MANAGER_VERSION_PATCH << '\n';
+        output->formatted_error(
+            "{} Version {}.{}.{}", DND_CAMPAIGN_MANAGER_NAME, DND_CAMPAIGN_MANAGER_VERSION_MAJOR,
+            DND_CAMPAIGN_MANAGER_VERSION_MINOR, DND_CAMPAIGN_MANAGER_VERSION_PATCH
+        );
         return 0;
     }
     if (args.count("campaign") != 1) {
-        std::cerr << "Error: Please provide exactly one campaign directory.\n";
+        output->error("Error: Please provide exactly one campaign directory.");
         return -1;
     }
     if (args.count("directory") > 1) {
-        std::cerr << "Error: Please provide only one directory.\n";
+        output->error("Error: Please provide only one directory.\n");
         return -1;
     }
 
@@ -54,31 +61,31 @@ int dnd::launch(int argc, char** argv) {
         DND_MEASURE_SCOPE("Main execution scope");
         const std::filesystem::path content_path(args["directory"].as<std::string>());
         const std::string campaign_dir_name = args["campaign"].as<std::string>();
-        std::cout << "Content directory:       " << content_path.string() << '\n';
-        std::cout << "Campaign directory name: " << campaign_dir_name << "\n\n";
+        output->formatted_text("Content directory:       {}", content_path.string());
+        output->formatted_text("Campaign directory name: {}", campaign_dir_name);
         if (campaign_dir_name.empty()) {
             throw std::invalid_argument("Campaign directory name cannot be \"\".");
         }
         ContentParser parser;
         Content content = parser.parse(content_path, campaign_dir_name);
-        content.printStatus();
+        output->text(content.printStatus());
 
         DND_MEASURE_SCOPE("Main execution scope without parsing");
 
-        std::cout << "\n=== CHARACTER INITIALISATION ===\n";
+        output->text("\n=== CHARACTER INITIALISATION ===\n");
         for (auto& [name, character] : content.characters) {
-            std::cout << "# " << name << '\n';
+            output->formatted_text("# {}", name);
             character.determineState();
-            std::cout << "#\n\n";
+            output->text("#\n\n");
         }
     } catch (const parsing_error& e) {
-        std::cerr << "Parsing Error: " << e.what() << '\n';
+        output->formatted_error("Parsing Error: {}", e.what());
         return -1;
     } catch (const std::invalid_argument& e) {
-        std::cerr << "Invalid Argument: " << e.what() << '\n';
+        output->formatted_error("Invalid Argument: {}", e.what());
         return -1;
     } catch (const std::exception& e) {
-        std::cerr << "Error: " << e.what() << '\n';
+        output->formatted_error("Error: {}", e.what());
         return -1;
     }
 

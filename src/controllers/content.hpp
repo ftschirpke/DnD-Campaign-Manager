@@ -23,9 +23,10 @@ namespace dnd {
 class Content {
 public:
     /**
-     * @brief Prints how much content this controller holds
+     * @brief Returns a string describing how much content this controller holds
+     * @return a string describing the current status of the controller
      */
-    void printStatus() const;
+    std::string printStatus() const;
 
     // the controller holding all the groups for the campaign
     Groups groups;
