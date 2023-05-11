@@ -1,12 +1,12 @@
 #include "dnd_config.hpp"
 
-#include "content.hpp"
+#include "content_holder.hpp"
 
 #include <sstream>
 #include <string>
 #include <unordered_map>
 
-std::string dnd::Content::printStatus() const {
+std::string dnd::ContentHolder::printStatus() const {
     std::stringstream sstr;
     sstr << groups.printStatus();
     sstr << "=== Items ===\n";

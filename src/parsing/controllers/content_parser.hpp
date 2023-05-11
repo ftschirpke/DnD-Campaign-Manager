@@ -11,14 +11,14 @@
 
 #include <nlohmann/json.hpp>
 
-#include "controllers/content.hpp"
+#include "controllers/content_holder.hpp"
 #include "parsing/content_file_parser.hpp"
 #include "parsing/parsing_types.hpp"
 
 namespace dnd {
 
 /**
- * @brief A class for parsing Content
+ * @brief A class for parsing content
  */
 class ContentParser {
 public:
@@ -29,7 +29,7 @@ public:
      * @return the parsed content
      * @throws parsing_error if any error occured while trying to parse the content
      */
-    Content parse(const std::filesystem::path& content_path, const std::string& campaign_dir_name);
+    ContentHolder parse(const std::filesystem::path& content_path, const std::string& campaign_dir_name);
 private:
     /**
      * @brief Deletes all parsed content and resets to a state as if just initialised
@@ -86,7 +86,7 @@ private:
     // the names of the directories containing multi-file content types
     static const std::array<std::pair<dnd::ParsingType, const char*>, 8> subdir_names;
     // the variable where the parsed content is accumulated
-    Content parsed_content;
+    ContentHolder parsed_content;
     // the content directories that should be parsed
     std::vector<std::filesystem::directory_entry> dirs_to_parse;
     // mutexes used to control the access to each of the content type maps within the parsed_content

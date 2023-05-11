@@ -15,7 +15,7 @@
 
 #include <nlohmann/json.hpp>
 
-#include "controllers/content.hpp"
+#include "controllers/content_holder.hpp"
 #include "parsing/content_file_parser.hpp"
 #include "parsing/controllers/effect_holder_groups_file_parser.hpp"
 #include "parsing/controllers/string_groups_file_parser.hpp"
@@ -41,11 +41,11 @@ constexpr std::array<std::pair<dnd::ParsingType, const char*>, 8> dnd::ContentPa
 };
 
 void dnd::ContentParser::reset() noexcept {
-    parsed_content = Content();
+    parsed_content = ContentHolder();
     dirs_to_parse = std::vector<std::filesystem::directory_entry>();
 }
 
-dnd::Content dnd::ContentParser::parse(
+dnd::ContentHolder dnd::ContentParser::parse(
     const std::filesystem::path& content_path, const std::string& campaign_dir_name
 ) {
     DND_MEASURE_FUNCTION();

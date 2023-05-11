@@ -11,7 +11,7 @@
 #include <cxxopts.hpp>
 #include <fmt/core.h>
 
-#include "controllers/content.hpp"
+#include "controllers/content_holder.hpp"
 #include "output/command_line_output.hpp"
 #include "output/output.hpp"
 #include "parsing/controllers/content_parser.hpp"
@@ -67,7 +67,7 @@ int dnd::launch(int argc, char** argv) {
             throw std::invalid_argument("Campaign directory name cannot be \"\".");
         }
         ContentParser parser;
-        Content content = parser.parse(content_path, campaign_dir_name);
+        ContentHolder content = parser.parse(content_path, campaign_dir_name);
         output->text(content.printStatus());
 
         DND_MEASURE_SCOPE("Main execution scope without parsing");
