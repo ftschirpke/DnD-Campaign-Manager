@@ -7,9 +7,10 @@
 
 #include <fmt/core.h>
 
+#include "models/effect_holder/choosable.hpp"
+#include "models/effect_holder/feature.hpp"
 #include "models/item.hpp"
 #include "models/spell.hpp"
-
 namespace dnd {
 
 /**
@@ -63,6 +64,22 @@ public:
      * @param spell a pointer to the spell
      */
     virtual void display(const Spell* spell) = 0;
+    /**
+     * @brief Display a feature
+     * @param feature a pointer to the feature
+     */
+    virtual void display(const Feature* feature) = 0;
+    /**
+     * @brief Display a choosable
+     * @param choosable a pointer to the choosable
+     */
+    virtual void display(const Choosable* choosable) = 0;
+    /**
+     * @brief Ask user for input
+     * @param prompt_msg the message asking for input
+     * @param out the string to write the users input to
+     */
+    virtual void prompt_input(std::string_view prompt_msg, std::string& out) = 0;
 };
 
 template <typename... T>

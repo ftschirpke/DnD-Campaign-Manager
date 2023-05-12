@@ -8,6 +8,8 @@
 #include <ranges>
 #include <stack>
 #include <string>
+#include <unordered_set>
+#include <vector>
 
 namespace dnd {
 
@@ -21,7 +23,7 @@ public:
     // the children of this node in the trie
     std::map<char, std::unique_ptr<TrieNode<T>>> children;
     // a pointer to the data associated with the end of a word
-    T* end_word;
+    std::vector<T*> end_words;
 };
 
 /**
@@ -46,26 +48,26 @@ public:
      * @param word the string to search for
      * @return a pointer to the associated data if the word exists in the trie, else nullptr
      */
-    T* search(std::string_view word);
+    std::vector<T*> search(std::string_view word) const;
     /**
      * @brief Searches the trie for all words with the given prefix and returns the associated data in order
      * @param prefix the prefix to search for
-     * @return a vector of pointers to the associated data of all words with the given prefix
+     * @return a set of pointers to the associated data of all words with the given prefix
      */
-    std::vector<T*> search_prefix(std::string_view prefix);
+    std::unordered_set<T*> search_prefix(std::string_view prefix) const;
 private:
     /**
      * @brief Finds the trie node representing the given word
      * @param word the word to find the trie node for
      * @return the trie node representing the given word if it exists, else nullptr
      */
-    TrieNode<T>* find_node(std::string_view word);
+    TrieNode<T>* find_node(std::string_view word) const;
     /**
      * @brief Return a list of all successors of a given node (including the node itself)
      * @param root the root node
-     * @return a vector of pointers to all the successor nodes
+     * @return a set of pointers to all the successor nodes
      */
-    std::vector<T*> successors(TrieNode<T>* root);
+    std::unordered_set<T*> successors(TrieNode<T>* root) const;
 
     // the root node of the trie
     std::unique_ptr<TrieNode<T>> root;
@@ -83,20 +85,20 @@ void Trie<T>::insert(std::string_view word, T* data) {
         }
         current_node = current_node->children[c].get();
     }
-    current_node->end_word = data;
+    current_node->end_words.push_back(data);
 }
 
 template <typename T>
-inline T* Trie<T>::search(std::string_view word) {
+inline std::vector<T*> Trie<T>::search(std::string_view word) const {
     TrieNode<T>* word_node = find_node(word);
     if (word_node == nullptr) {
         return nullptr;
     }
-    return word_node->end_word;
+    return word_node->end_words;
 }
 
 template <typename T>
-std::vector<T*> Trie<T>::search_prefix(std::string_view prefix) {
+std::unordered_set<T*> Trie<T>::search_prefix(std::string_view prefix) const {
     TrieNode<T>* prefix_node = find_node(prefix);
     if (prefix_node == nullptr) {
         return {};
@@ -105,7 +107,7 @@ std::vector<T*> Trie<T>::search_prefix(std::string_view prefix) {
 }
 
 template <typename T>
-TrieNode<T>* Trie<T>::find_node(std::string_view word) {
+TrieNode<T>* Trie<T>::find_node(std::string_view word) const {
     TrieNode<T>* current_node = root.get();
     for (char c : word) {
         if (!current_node->children.contains(c)) {
@@ -117,8 +119,8 @@ TrieNode<T>* Trie<T>::find_node(std::string_view word) {
 }
 
 template <typename T>
-std::vector<T*> Trie<T>::successors(TrieNode<T>* root) {
-    std::vector<T*> successors;
+std::unordered_set<T*> Trie<T>::successors(TrieNode<T>* root) const {
+    std::unordered_set<T*> successors;
     std::stack<TrieNode<T>*> node_stack;
     node_stack.push(root);
 
@@ -126,8 +128,8 @@ std::vector<T*> Trie<T>::successors(TrieNode<T>* root) {
         TrieNode<T>* current_node = node_stack.top();
         node_stack.pop();
 
-        if (current_node->end_word != nullptr) {
-            successors.push_back(current_node->end_word);
+        if (!current_node->end_words.empty()) {
+            successors.insert(current_node->end_words.begin(), current_node->end_words.end());
         }
         for (const auto& [_, child] : current_node->children | std::views::reverse) {
             node_stack.push(child.get());

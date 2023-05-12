@@ -212,7 +212,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
     DND_MEASURE_FUNCTION();
     const std::string character_class_name = json_to_parse.at("class").get<std::string>();
     try {
-        class_ptr = &character_classes.at(character_class_name);
+        class_ptr = &character_classes.get(character_class_name);
     } catch (const std::out_of_range& e) {
         DND_UNUSED(e);
         throw invalid_attribute(type, filepath, "class", '\"' + character_class_name + "\" does not exist");
@@ -221,7 +221,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
     if (json_to_parse.contains("subclass")) {
         const std::string character_subclass_name = json_to_parse.at("subclass").get<std::string>();
         try {
-            subclass_ptr = &character_subclasses.at(character_subclass_name);
+            subclass_ptr = &character_subclasses.get(character_subclass_name);
         } catch (const std::out_of_range& e) {
             DND_UNUSED(e);
             throw invalid_attribute(type, filepath, "subclass", '\"' + character_subclass_name + "\" does not exist");
@@ -241,7 +241,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
 
     const std::string character_race_name = json_to_parse.at("race").get<std::string>();
     try {
-        race_ptr = &character_races.at(character_race_name);
+        race_ptr = &character_races.get(character_race_name);
     } catch (const std::out_of_range& e) {
         DND_UNUSED(e);
         throw invalid_attribute(type, filepath, "race", '\"' + character_race_name + "\" does not exist");
@@ -255,7 +255,7 @@ void dnd::CharacterFileParser::parseClassAndRace() {
         }
         const std::string character_subrace_name = json_to_parse.at("subrace").get<std::string>();
         try {
-            subrace_ptr = &character_subraces.at(character_subrace_name);
+            subrace_ptr = &character_subraces.get(character_subrace_name);
         } catch (const std::out_of_range& e) {
             DND_UNUSED(e);
             throw invalid_attribute(type, filepath, "subrace", '\"' + character_subrace_name + "\" does not exist");
@@ -275,14 +275,11 @@ bool dnd::CharacterFileParser::validate() const {
 
 void dnd::CharacterFileParser::saveResult() {
     // TODO: change Character constructor
-    characters.emplace(
-        std::piecewise_construct, std::forward_as_tuple(character_name),
-        std::forward_as_tuple(
-            character_name, std::move(features_parser.retrieveFeatures()), base_ability_scores, level, xp,
-            hit_dice_rolls
-        )
+    characters.create(
+        character_name, character_name, std::move(features_parser.retrieveFeatures()), base_ability_scores, level, xp,
+        hit_dice_rolls
     );
-    Character& character = characters.at(character_name);
+    Character& character = characters.get(character_name);
     character.decisions = std::move(decisions);
     character.race_ptr = race_ptr;
     character.subrace_ptr = subrace_ptr;

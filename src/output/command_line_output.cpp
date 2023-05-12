@@ -5,6 +5,8 @@
 #include <iostream>
 #include <string_view>
 
+#include "models/effect_holder/choosable.hpp"
+#include "models/effect_holder/feature.hpp"
 #include "models/item.hpp"
 #include "models/spell.hpp"
 #include "output/output.hpp"
@@ -23,4 +25,17 @@ void dnd::CommandLineOutput::display(const dnd::Item* item) {
 
 void dnd::CommandLineOutput::display(const dnd::Spell* spell) {
     std::cout << spell->name << '\n' << spell->description << '\n';
+}
+
+void dnd::CommandLineOutput::display(const dnd::Feature* feature) {
+    std::cout << feature->name << '\n' << feature->description << '\n';
+}
+
+void dnd::CommandLineOutput::display(const dnd::Choosable* choosable) {
+    std::cout << choosable->name << '\n' << choosable->description << '\n';
+}
+
+void dnd::CommandLineOutput::prompt_input(std::string_view prompt_msg, std::string& out) {
+    std::cout << prompt_msg << '\n';
+    std::cin >> out;
 }

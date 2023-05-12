@@ -4,8 +4,8 @@
 #include "dnd_config.hpp"
 
 #include <string>
-#include <unordered_map>
 
+#include "controllers/content_library.hpp"
 #include "controllers/groups.hpp"
 #include "models/character_race.hpp"
 #include "parsing/content_file_parser.hpp"
@@ -27,8 +27,7 @@ public:
      * @param groups the already-parsed groups
      */
     CharacterRaceFileParser(
-        const std::filesystem::path& filepath, std::unordered_map<std::string, const CharacterRace>& races,
-        const Groups& groups
+        const std::filesystem::path& filepath, ContentLibrary<const CharacterRace>& races, const Groups& groups
     ) noexcept;
     /**
      * @brief Parses JSON file containing a race
@@ -59,14 +58,13 @@ private:
     // boolean for whether the parsed race has subraces
     bool has_subraces;
     // the already-parsed races to add the parsed race to
-    std::unordered_map<std::string, const CharacterRace>& races;
+    ContentLibrary<const CharacterRace>& races;
     // a subparser used for parsing the race's features
     FeaturesParser features_parser;
 };
 
 inline CharacterRaceFileParser::CharacterRaceFileParser(
-    const std::filesystem::path& filepath, std::unordered_map<std::string, const CharacterRace>& races,
-    const Groups& groups
+    const std::filesystem::path& filepath, ContentLibrary<const CharacterRace>& races, const Groups& groups
 ) noexcept
     : ContentFileParser(filepath), races(races), features_parser(type, filepath, groups) {}
 

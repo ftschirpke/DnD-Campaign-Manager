@@ -168,12 +168,11 @@ void dnd::SpellsFileParser::saveResult() {
                 groups.add(class_name + ' ' + level_group_name, info.name);
             }
 
-            spells.emplace(
-                std::piecewise_construct, std::forward_as_tuple(info.name),
-                std::forward_as_tuple(
-                    info.name, info.type, info.casting_time, info.range, info.components, info.duration,
-                    info.description, info.classes
-                )
+            spells.add(
+                info.name, Spell(
+                               info.name, info.type, info.casting_time, info.range, info.components, info.duration,
+                               info.description, info.classes
+                           )
             );
         }
     }

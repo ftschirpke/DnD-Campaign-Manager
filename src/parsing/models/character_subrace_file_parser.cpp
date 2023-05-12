@@ -36,7 +36,7 @@ bool dnd::CharacterSubraceFileParser::validate() const {
     if (!races.contains(race_name)) {
         throw invalid_attribute(type, filepath, "race", "must exist. \"" + race_name + "\" does not exist.");
     }
-    if (!races.at(race_name).has_subraces) {
+    if (!races.get(race_name).has_subraces) {
         throw invalid_attribute(
             type, filepath, "race", "must have subraces. \"" + race_name + "\" does not have subraces."
         );
@@ -45,8 +45,7 @@ bool dnd::CharacterSubraceFileParser::validate() const {
 }
 
 void dnd::CharacterSubraceFileParser::saveResult() {
-    subraces.emplace(
-        std::piecewise_construct, std::forward_as_tuple(character_subrace_name),
-        std::forward_as_tuple(character_subrace_name, std::move(features_parser.retrieveFeatures()), race_name)
+    subraces.create(
+        character_subrace_name, character_subrace_name, std::move(features_parser.retrieveFeatures()), race_name
     );
 }
