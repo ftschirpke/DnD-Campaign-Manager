@@ -19,6 +19,9 @@ void add_features_of_feature_holder(
 }
 
 void dnd::ContentHolder::finished_parsing() {
+    for (const auto& [_, character] : characters.get_all()) {
+        add_features_of_feature_holder(features, &character);
+    }
     for (const auto& [_, character_class] : character_classes.get_all()) {
         add_features_of_feature_holder(features, &character_class);
     }
