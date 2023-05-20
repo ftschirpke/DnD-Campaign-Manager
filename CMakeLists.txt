@@ -78,6 +78,7 @@ endif()
 # Main Application
 add_executable(${DND_APP_TARGET} src/main.cpp)
 set_target_properties(${DND_APP_TARGET} PROPERTIES EXPORT_COMPILE_COMMANDS ON)
+set_target_properties(${DND_APP_TARGET} PROPERTIES WIN32_EXECUTABLE TRUE)
 
 target_include_directories(${DND_APP_TARGET}
     PUBLIC
