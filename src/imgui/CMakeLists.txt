@@ -1,0 +1,21 @@
+target_sources(dndmanager
+    PRIVATE
+        imgui_demo.cpp
+        imgui_draw.cpp
+        imgui_impl_glfw.cpp
+        imgui_impl_vulkan.cpp
+        imgui_tables.cpp
+        imgui_widgets.cpp
+        imgui.cpp
+)
+
+target_sources(dndmanager_tests
+    PRIVATE
+        imgui_demo.cpp
+        imgui_draw.cpp
+        imgui_impl_glfw.cpp
+        imgui_impl_vulkan.cpp
+        imgui_tables.cpp
+        imgui_widgets.cpp
+        imgui.cpp
+)

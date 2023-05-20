@@ -1,16 +1,19 @@
 target_sources(dndmanager
     PRIVATE
         launcher.cpp
+        imgui_launcher.cpp
 )
 
 target_sources(dndmanager_tests
     PRIVATE
         launcher.cpp
+        imgui_launcher.cpp
 )
 
 configure_file(dnd_config.hpp.in dnd_config.hpp)
 
 add_subdirectory(controllers)
+add_subdirectory(imgui)
 add_subdirectory(models)
 add_subdirectory(output)
 add_subdirectory(parsing)
