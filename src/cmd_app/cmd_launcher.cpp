@@ -13,19 +13,48 @@
 
 #include <cxxopts.hpp>
 
-#include "controllers/content_holder.hpp"
-#include "models/effect_holder/choosable.hpp"
-#include "models/effect_holder/feature.hpp"
-#include "models/item.hpp"
-#include "models/spell.hpp"
-#include "output/command_line_output.hpp"
-#include "output/output.hpp"
-#include "parsing/controllers/content_parser.hpp"
-#include "parsing/parsing_exceptions.hpp"
+#include "core/controllers/content_holder.hpp"
+#include "core/models/effect_holder/choosable.hpp"
+#include "core/models/effect_holder/feature.hpp"
+#include "core/models/item.hpp"
+#include "core/models/spell.hpp"
+#include "core/output/command_line_output.hpp"
+#include "core/output/output.hpp"
+#include "core/parsing/controllers/content_parser.hpp"
+#include "core/parsing/parsing_exceptions.hpp"
 
-int dnd::launchCMD(cxxopts::ParseResult args) {
+int dnd::launch(int argc, char** argv) {
     DND_MEASURE_FUNCTION();
     std::unique_ptr<Output> output = std::make_unique<CommandLineOutput>(CommandLineOutput());
+    const std::filesystem::path cur_path = std::filesystem::current_path();
+
+    cxxopts::Options options(DND_CAMPAIGN_MANAGER_NAME, DND_CAMPAIGN_MANAGER_DESCRIPTION);
+
+    options.add_options()("c,campaign", "Name of campaign directory", cxxopts::value<std::string>())(
+        "d,directory", "Content directory",
+        cxxopts::value<std::string>()->default_value((cur_path / "content").string())
+    )("X,X11app", "Start the app with its X11 graphical user interface"
+    )("t,testrun", "App starts and does not wait for input")("v,version", "Print version")("h,help", "Print usage");
+
+    cxxopts::ParseResult args;
+    try {
+        args = options.parse(argc, argv);
+    } catch (const cxxopts::exceptions::parsing& e) {
+        output->formatted_error("Error: {}", e.what());
+        return 1;
+    }
+
+    if (args.count("help")) {
+        output->error(options.help());
+        return 0;
+    }
+    if (args.count("version")) {
+        output->formatted_error(
+            "{} Version {}.{}.{}", DND_CAMPAIGN_MANAGER_NAME, DND_CAMPAIGN_MANAGER_VERSION_MAJOR,
+            DND_CAMPAIGN_MANAGER_VERSION_MINOR, DND_CAMPAIGN_MANAGER_VERSION_PATCH
+        );
+        return 0;
+    }
 
     if (args.count("campaign") != 1) {
         output->error("Error: Please provide exactly one campaign directory.");

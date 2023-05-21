@@ -31,5 +31,5 @@ endif()
 
 add_subdirectory(imgui)
 
-target_link_libraries(${DND_APP_TARGET} PRIVATE imgui)
-target_include_directories(${DND_APP_TARGET} SYSTEM PRIVATE imgui)
+target_link_libraries(${DND_GUI_APP} PRIVATE imgui)
+target_include_directories(${DND_GUI_APP} SYSTEM PRIVATE imgui)

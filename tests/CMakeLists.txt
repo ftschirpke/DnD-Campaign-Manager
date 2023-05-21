@@ -1,4 +1,4 @@
-target_sources(${DND_TEST_TARGET}
+target_sources(${DND_TESTS}
     PRIVATE
 #    launcher_test.cpp
 )

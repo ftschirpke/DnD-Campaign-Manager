@@ -1,4 +1,5 @@
 target_sources(${DND_CORE}
     PRIVATE
-    measurer.cpp
+    content_holder.cpp
+    groups.cpp
 )

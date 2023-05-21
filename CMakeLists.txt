@@ -6,8 +6,10 @@ project(DnD-Campaign-Manager
     VERSION 0.1.2
 )
 
-set(DND_APP_TARGET dndmanager)
-set(DND_TEST_TARGET dndmanager_tests)
+set(DND_CMD_APP dndmanager_cmd)
+set(DND_GUI_APP dndmanager_gui)
+set(DND_TESTS dndmanager_tests)
+set(DND_CORE dnd_core)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -48,65 +50,132 @@ if(CCACHE_PROGRAM)
     set_property(GLOBAL PROPERTY CMAKE_CXX_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
 endif()
 
-# Main Application
-add_executable(${DND_APP_TARGET} src/main.cpp)
-set_target_properties(${DND_APP_TARGET} PROPERTIES EXPORT_COMPILE_COMMANDS ON)
-set_target_properties(${DND_APP_TARGET} PROPERTIES WIN32_EXECUTABLE TRUE)
+# ------------------------------------------------------------------------------
+# DND core library
+add_library(${DND_CORE} SHARED)
+set_target_properties(${DND_CORE} PROPERTIES EXPORT_COMPILE_COMMANDS ON)
 
-target_include_directories(${DND_APP_TARGET}
+target_include_directories(${DND_CORE}
     PUBLIC
     ${PROJECT_BINARY_DIR}/src
     ${CMAKE_SOURCE_DIR}/src
+    PRIVATE
+    ${CMAKE_SOURCE_DIR}/src/core
 )
-target_link_libraries(${DND_APP_TARGET} PUBLIC nlohmann_json::nlohmann_json cxxopts::cxxopts fmt::fmt)
-
-if (MSVC)
-    # Tell MSVC to use main instead of WinMain
-    set_target_properties(${DND_APP_TARGET} PROPERTIES
-                          LINK_FLAGS "/ENTRY:mainCRTStartup")
-elseif (CMAKE_C_SIMULATE_ID STREQUAL "MSVC")
-    # Tell Clang using MS CRT to use main instead of WinMain
-    set_target_properties(${DND_APP_TARGET} PROPERTIES
-                          LINK_FLAGS "-Wl,/entry:mainCRTStartup")
-endif()
+target_link_libraries(${DND_CORE}
+    PUBLIC
+    nlohmann_json::nlohmann_json
+    fmt::fmt
+)
 
 if(MSVC)
-    target_compile_options(${DND_APP_TARGET} PRIVATE /W4 /WX)
-    target_compile_definitions(${DND_APP_TARGET} PRIVATE -D_CRT_SECURE_NO_WARNINGS)
+    target_compile_options(${DND_CORE} PRIVATE /W4 /WX)
+    target_compile_definitions(${DND_CORE} PRIVATE -D_CRT_SECURE_NO_WARNINGS)
 else()
-    target_compile_options(${DND_APP_TARGET} PRIVATE
+    target_compile_options(${DND_CORE} PRIVATE
         -pedantic -Wall -Wextra -Wpedantic -Werror -Wdisabled-optimization -Wcast-qual -Wold-style-cast
         -Woverloaded-virtual -Wredundant-decls -Wsign-conversion -Wstrict-overflow=5 -Wzero-as-null-pointer-constant
     )
     if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-        target_compile_options(${DND_APP_TARGET} PRIVATE -Wlogical-op -Wnoexcept -Wstrict-null-sentinel -Wuseless-cast)
+        target_compile_options(${DND_CORE} PRIVATE -Wlogical-op -Wnoexcept -Wstrict-null-sentinel -Wuseless-cast)
     endif()
 endif()
 
-# Unit Tests
-add_executable(${DND_TEST_TARGET})
-set_target_properties(${DND_TEST_TARGET} PROPERTIES EXPORT_COMPILE_COMMANDS ON)
+# ------------------------------------------------------------------------------
+# Command Line Application
+add_executable(${DND_CMD_APP} src/cmd_main.cpp)
+set_target_properties(${DND_CMD_APP} PROPERTIES EXPORT_COMPILE_COMMANDS ON)
 
-target_include_directories(${DND_TEST_TARGET}
+target_include_directories(${DND_CMD_APP}
+    PRIVATE
+    ${CMAKE_SOURCE_DIR}/src/core
+)
+target_link_libraries(${DND_CMD_APP}
+    PUBLIC
+    ${DND_CORE}
+    PRIVATE
+    cxxopts::cxxopts
+)
+
+if(MSVC)
+    target_compile_options(${DND_CMD_APP} PRIVATE /W4 /WX)
+    target_compile_definitions(${DND_CMD_APP} PRIVATE -D_CRT_SECURE_NO_WARNINGS)
+else()
+    target_compile_options(${DND_CMD_APP} PRIVATE
+        -pedantic -Wall -Wextra -Wpedantic -Werror -Wdisabled-optimization -Wcast-qual -Wold-style-cast
+        -Woverloaded-virtual -Wredundant-decls -Wsign-conversion -Wstrict-overflow=5 -Wzero-as-null-pointer-constant
+    )
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        target_compile_options(${DND_CMD_APP} PRIVATE -Wlogical-op -Wnoexcept -Wstrict-null-sentinel -Wuseless-cast)
+    endif()
+endif()
+
+# ------------------------------------------------------------------------------
+# Graphical User Interface Application
+add_executable(${DND_GUI_APP} src/gui_main.cpp)
+set_target_properties(${DND_GUI_APP} PROPERTIES EXPORT_COMPILE_COMMANDS ON)
+set_target_properties(${DND_GUI_APP} PROPERTIES WIN32_EXECUTABLE TRUE)
+
+target_include_directories(${DND_GUI_APP}
+    PRIVATE
+    ${CMAKE_SOURCE_DIR}/src/core
+)
+target_link_libraries(${DND_GUI_APP}
+    PUBLIC
+    ${DND_CORE}
+)
+
+if (MSVC)
+    # Tell MSVC to use main instead of WinMain
+    set_target_properties(${DND_GUI_APP} PROPERTIES
+                          LINK_FLAGS "/ENTRY:mainCRTStartup")
+elseif (CMAKE_C_SIMULATE_ID STREQUAL "MSVC")
+    # Tell Clang using MS CRT to use main instead of WinMain
+    set_target_properties(${DND_GUI_APP} PROPERTIES
+                          LINK_FLAGS "-Wl,/entry:mainCRTStartup")
+endif()
+
+if(MSVC)
+    target_compile_options(${DND_GUI_APP} PRIVATE /W4 /WX)
+    target_compile_definitions(${DND_GUI_APP} PRIVATE -D_CRT_SECURE_NO_WARNINGS)
+else()
+    target_compile_options(${DND_GUI_APP} PRIVATE
+        -pedantic -Wall -Wextra -Wpedantic -Werror -Wdisabled-optimization -Wcast-qual -Wold-style-cast
+        -Woverloaded-virtual -Wredundant-decls -Wsign-conversion -Wstrict-overflow=5 -Wzero-as-null-pointer-constant
+    )
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        target_compile_options(${DND_GUI_APP} PRIVATE -Wlogical-op -Wnoexcept -Wstrict-null-sentinel -Wuseless-cast)
+    endif()
+endif()
+
+# ------------------------------------------------------------------------------
+# Unit Tests
+add_executable(${DND_TESTS})
+set_target_properties(${DND_TESTS} PROPERTIES EXPORT_COMPILE_COMMANDS ON)
+
+target_include_directories(${DND_TESTS}
     PUBLIC
     ${PROJECT_BINARY_DIR}/src
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/tests
     PRIVATE
-    ${CMAKE_SOURCE_DIR}/src/lib
+    ${CMAKE_SOURCE_DIR}/src/core
 )
-target_link_libraries(${DND_TEST_TARGET} PRIVATE nlohmann_json::nlohmann_json cxxopts::cxxopts fmt::fmt Catch2::Catch2WithMain)
+target_link_libraries(${DND_TESTS}
+    PRIVATE
+    ${DND_CORE} nlohmann_json::nlohmann_json cxxopts::cxxopts fmt::fmt Catch2::Catch2WithMain
+)
 
 if(MSVC)
-    target_compile_options(${DND_TEST_TARGET} PRIVATE /W4 /WX)
-    target_compile_definitions(${DND_TEST_TARGET} PRIVATE -D_CRT_SECURE_NO_WARNINGS)
+    target_compile_options(${DND_TESTS} PRIVATE /W4 /WX)
+    target_compile_definitions(${DND_TESTS} PRIVATE -D_CRT_SECURE_NO_WARNINGS)
 else()
-    target_compile_options(${DND_TEST_TARGET} PRIVATE
+    target_compile_options(${DND_TESTS} PRIVATE
         -pedantic -Wall -Wextra -Wpedantic -Werror -Wdisabled-optimization -Wcast-qual -Wold-style-cast
         -Woverloaded-virtual -Wredundant-decls -Wsign-conversion -Wstrict-overflow=5 -Wzero-as-null-pointer-constant
     )
     if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-        target_compile_options(${DND_TEST_TARGET} PRIVATE -Wlogical-op -Wnoexcept -Wstrict-null-sentinel -Wuseless-cast)
+        target_compile_options(${DND_TESTS} PRIVATE -Wlogical-op -Wnoexcept -Wstrict-null-sentinel -Wuseless-cast)
     endif()
 endif()
 
@@ -115,11 +184,12 @@ enable_testing()
 
 include(Catch.cmake)
 
-catch_discover_tests(${DND_TEST_TARGET}) # include catch2 tests
-
-add_subdirectory(src)
-add_subdirectory(tests)
+catch_discover_tests(${DND_TESTS}) # include catch2 tests
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
+
+# ------------------------------------------------------------------------------
+add_subdirectory(src)
+add_subdirectory(tests)

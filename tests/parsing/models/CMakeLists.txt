@@ -1,4 +1,4 @@
-target_sources(${DND_TEST_TARGET}
+target_sources(${DND_TESTS}
     PRIVATE
     character_file_parser_test.cpp
     spells_file_parser_test.cpp

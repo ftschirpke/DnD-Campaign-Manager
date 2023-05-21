@@ -6,9 +6,10 @@
 
 #include "imgui_launcher.hpp"
 
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
+
 #include <stdio.h>
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
@@ -34,12 +35,12 @@ static void glfw_error_callback(int error, const char* description) {
 }
 
 // Main code
-int dnd::launchGUI() {
+int dnd::launch() {
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit())
         return 1;
 
-        // Decide GL+GLSL versions
+    // Decide GL+GLSL versions
 #if defined(IMGUI_IMPL_OPENGL_ES2)
     // GL ES 2.0 + GLSL 100
     const char* glsl_version = "#version 100";

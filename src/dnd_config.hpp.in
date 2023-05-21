@@ -27,16 +27,16 @@
 
 #ifdef _MSC_VER
 #define DND_MEASURE_FUNCTION() DND_MEASURE_SCOPE(__FUNCSIG__)
-#else
+#else // _MSC_VER
 #define DND_MEASURE_FUNCTION() DND_MEASURE_SCOPE(__PRETTY_FUNCTION__)
-#endif
+#endif // _MSC_VER
 
 #define DND_MEASURE_SCOPE(name) ::dnd::Timer DND_CONCATENATE(timer,__LINE__(name));
-#else
+#else // DND_DEBUG_MODE
 #define DND_START_MEASURING_SESSION(name, filepath)
 #define DND_END_MEASURING_SESSION()
 #define DND_MEASURE_FUNCTION()
 #define DND_MEASURE_SCOPE(name)
-#endif
+#endif // DND_DEBUG_MODE
 
 #endif // DND_CONFIG_HPP_
