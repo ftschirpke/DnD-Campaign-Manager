@@ -8,8 +8,7 @@
 
 namespace dnd {
 
-int launch(int argc, char**);
-bool content_search(ContentHolder& content, Output* output);
+int launch(int argc, char** argv);
 
 } // namespace dnd
 

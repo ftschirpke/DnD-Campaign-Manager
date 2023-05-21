@@ -1,12 +1,8 @@
 target_sources(${DND_APP_TARGET}
     PRIVATE
     launcher.cpp
+    cmd_launcher.cpp
     imgui_launcher.cpp
-)
-
-target_sources(${DND_TEST_TARGET}
-    PRIVATE
-    launcher.cpp
 )
 
 configure_file(dnd_config.hpp.in dnd_config.hpp)

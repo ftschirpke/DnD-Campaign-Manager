@@ -2,6 +2,9 @@
 // (GLFW is a cross-platform general purpose library for handling windows, inputs, OpenGL/Vulkan/Metal graphics context
 // creation, etc.) If you are new to Dear ImGui, read documentation from the docs/ folder + read the top of imgui.cpp.
 // Read online: https://github.com/ocornut/imgui/tree/master/docs
+#include "dnd_config.hpp"
+
+#include "imgui_launcher.hpp"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -31,7 +34,7 @@ static void glfw_error_callback(int error, const char* description) {
 }
 
 // Main code
-int run(int, char**) {
+int dnd::launchGUI() {
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit())
         return 1;
