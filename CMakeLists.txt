@@ -52,7 +52,7 @@ endif()
 
 # ------------------------------------------------------------------------------
 # DND core library
-add_library(${DND_CORE} SHARED)
+add_library(${DND_CORE} STATIC)
 set_target_properties(${DND_CORE} PROPERTIES EXPORT_COMPILE_COMMANDS ON)
 
 target_include_directories(${DND_CORE}
