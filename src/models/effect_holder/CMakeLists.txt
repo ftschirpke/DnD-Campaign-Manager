@@ -1,4 +1,4 @@
-target_sources(dndmanager
+target_sources(${DND_APP_TARGET}
     PRIVATE
     activation.cpp
     choice.cpp
@@ -7,7 +7,7 @@ target_sources(dndmanager
     feature.cpp
 )
 
-target_sources(dndmanager_tests
+target_sources(${DND_TEST_TARGET}
     PRIVATE
     activation.cpp
     choice.cpp

@@ -1,4 +1,4 @@
-target_sources(dndmanager
+target_sources(${DND_APP_TARGET}
     PRIVATE
     character_file_parser.cpp
     character_class_file_parser.cpp
@@ -9,7 +9,7 @@ target_sources(dndmanager
     spells_file_parser.cpp
 )
 
-target_sources(dndmanager_tests
+target_sources(${DND_TEST_TARGET}
     PRIVATE
     character_file_parser.cpp
     character_class_file_parser.cpp

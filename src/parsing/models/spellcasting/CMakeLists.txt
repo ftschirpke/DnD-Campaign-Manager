@@ -1,9 +1,9 @@
-target_sources(dndmanager
+target_sources(${DND_APP_TARGET}
     PRIVATE
     spellcasting_parser.cpp
 )
 
-target_sources(dndmanager_tests
+target_sources(${DND_TEST_TARGET}
     PRIVATE
     spellcasting_parser.cpp
 )

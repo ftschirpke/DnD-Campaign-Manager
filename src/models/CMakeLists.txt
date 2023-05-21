@@ -1,11 +1,11 @@
-target_sources(dndmanager
+target_sources(${DND_APP_TARGET}
     PRIVATE
     character.cpp
     character_state.cpp
     spell.cpp
 )
 
-target_sources(dndmanager_tests
+target_sources(${DND_TEST_TARGET}
     PRIVATE
     character.cpp
     character_state.cpp

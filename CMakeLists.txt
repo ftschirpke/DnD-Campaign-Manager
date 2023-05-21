@@ -40,39 +40,12 @@ FetchContent_Declare(
     GIT_TAG a33701196adfad74917046096bf5a2aa0ab0bb50
 )
 
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-
-FetchContent_Declare(
-    glfw
-    GIT_REPOSITORY https://github.com/glfw/glfw
-    GIT_TAG 7482de6071d21db77a7236155da44c172a7f6c9e
-)
-
-FetchContent_MakeAvailable(nlohmann_json catch2 cxxopts fmt glfw)
-
-find_package(OpenGL REQUIRED)
-include_directories(${OPENGL_INCLUDE_DIRS})
-link_libraries(${OPENGL_LIBRARIES})
+FetchContent_MakeAvailable(nlohmann_json catch2 cxxopts fmt)
 
 find_program(CCACHE_PROGRAM ccache)
 if(CCACHE_PROGRAM)
     set_property(GLOBAL PROPERTY CMAKE_C_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
     set_property(GLOBAL PROPERTY CMAKE_CXX_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
-endif()
-
-if(MSVC)
-    add_compile_options(/W4 /WX)
-    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-else()
-    add_compile_options(
-        -pedantic -Wall -Wextra -Wpedantic -Wdisabled-optimization
-        -Woverloaded-virtual -Wredundant-decls
-    )
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-        add_compile_options(-Wlogical-op -Wnoexcept -Wstrict-null-sentinel)
-    endif()
 endif()
 
 # Main Application
@@ -84,10 +57,21 @@ target_include_directories(${DND_APP_TARGET}
     PUBLIC
     ${PROJECT_BINARY_DIR}/src
     ${CMAKE_SOURCE_DIR}/src
-    PRIVATE
-    ${CMAKE_SOURCE_DIR}/src/lib
 )
-target_link_libraries(${DND_APP_TARGET} PUBLIC nlohmann_json::nlohmann_json cxxopts::cxxopts fmt::fmt glfw OpenGL::GL)
+target_link_libraries(${DND_APP_TARGET} PUBLIC nlohmann_json::nlohmann_json cxxopts::cxxopts fmt::fmt)
+
+if(MSVC)
+    target_compile_options(${DND_APP_TARGET} PRIVATE /W4 /WX)
+    target_compile_definitions(${DND_APP_TARGET} PRIVATE -D_CRT_SECURE_NO_WARNINGS)
+else()
+    target_compile_options(${DND_APP_TARGET} PRIVATE
+        -pedantic -Wall -Wextra -Wpedantic -Werror -Wdisabled-optimization -Wcast-qual -Wold-style-cast
+        -Woverloaded-virtual -Wredundant-decls -Wsign-conversion -Wstrict-overflow=5 -Wzero-as-null-pointer-constant
+    )
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        target_compile_options(${DND_APP_TARGET} PRIVATE -Wlogical-op -Wnoexcept -Wstrict-null-sentinel -Wuseless-cast)
+    endif()
+endif()
 
 # Unit Tests
 add_executable(${DND_TEST_TARGET})
@@ -97,10 +81,24 @@ target_include_directories(${DND_TEST_TARGET}
     PUBLIC
     ${PROJECT_BINARY_DIR}/src
     ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/tests
     PRIVATE
     ${CMAKE_SOURCE_DIR}/src/lib
 )
 target_link_libraries(${DND_TEST_TARGET} PRIVATE nlohmann_json::nlohmann_json cxxopts::cxxopts fmt::fmt Catch2::Catch2WithMain)
+
+if(MSVC)
+    target_compile_options(${DND_TEST_TARGET} PRIVATE /W4 /WX)
+    target_compile_definitions(${DND_TEST_TARGET} PRIVATE -D_CRT_SECURE_NO_WARNINGS)
+else()
+    target_compile_options(${DND_TEST_TARGET} PRIVATE
+        -pedantic -Wall -Wextra -Wpedantic -Werror -Wdisabled-optimization -Wcast-qual -Wold-style-cast
+        -Woverloaded-virtual -Wredundant-decls -Wsign-conversion -Wstrict-overflow=5 -Wzero-as-null-pointer-constant
+    )
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        target_compile_options(${DND_TEST_TARGET} PRIVATE -Wlogical-op -Wnoexcept -Wstrict-null-sentinel -Wuseless-cast)
+    endif()
+endif()
 
 include(CTest)
 enable_testing()

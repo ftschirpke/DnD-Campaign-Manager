@@ -1,4 +1,4 @@
-target_sources(dndmanager
+target_sources(${DND_APP_TARGET}
     PRIVATE
         latex_command.cpp
         latex_document.cpp
@@ -6,7 +6,7 @@ target_sources(dndmanager
         latex_text.cpp
 )
         
-target_sources(dndmanager_tests
+target_sources(${DND_TEST_TARGET}
     PRIVATE
         latex_command.cpp
         latex_document.cpp
