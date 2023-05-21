@@ -60,6 +60,16 @@ target_include_directories(${DND_APP_TARGET}
 )
 target_link_libraries(${DND_APP_TARGET} PUBLIC nlohmann_json::nlohmann_json cxxopts::cxxopts fmt::fmt)
 
+if (MSVC)
+    # Tell MSVC to use main instead of WinMain
+    set_target_properties(${DND_APP_TARGET} PROPERTIES
+                          LINK_FLAGS "/ENTRY:mainCRTStartup")
+elseif (CMAKE_C_SIMULATE_ID STREQUAL "MSVC")
+    # Tell Clang using MS CRT to use main instead of WinMain
+    set_target_properties(${DND_APP_TARGET} PROPERTIES
+                          LINK_FLAGS "-Wl,/entry:mainCRTStartup")
+endif()
+
 if(MSVC)
     target_compile_options(${DND_APP_TARGET} PRIVATE /W4 /WX)
     target_compile_definitions(${DND_APP_TARGET} PRIVATE -D_CRT_SECURE_NO_WARNINGS)
