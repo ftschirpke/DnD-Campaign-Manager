@@ -115,7 +115,7 @@ int dnd::launch(int argc, char** argv) {
 std::vector<const dnd::Spell*> search_spells(
     const std::string& search, dnd::ContentHolder& content, dnd::Output* output
 ) {
-    int i = 0;
+    size_t i = 0;
     std::unordered_set<const dnd::Spell*> matched_spells = content.spells.prefix_get(search);
     if (matched_spells.empty()) {
         return std::vector<const dnd::Spell*>();
@@ -137,7 +137,7 @@ std::vector<const dnd::Spell*> search_spells(
 std::vector<const dnd::Item*> search_items(
     const std::string& search, dnd::ContentHolder& content, dnd::Output* output
 ) {
-    int i = 0;
+    size_t i = 0;
     std::unordered_set<const dnd::Item*> matched_items = content.items.prefix_get(search);
     if (matched_items.empty()) {
         return std::vector<const dnd::Item*>();
@@ -159,7 +159,7 @@ std::vector<const dnd::Item*> search_items(
 std::vector<const dnd::Feature**> search_features(
     const std::string& search, dnd::ContentHolder& content, dnd::Output* output
 ) {
-    int i = 0;
+    size_t i = 0;
     std::unordered_set<const dnd::Feature**> matched_features = content.features.prefix_get(search);
     if (matched_features.empty()) {
         return std::vector<const dnd::Feature**>();
@@ -181,7 +181,7 @@ std::vector<const dnd::Feature**> search_features(
 std::map<std::string, std::vector<const dnd::Choosable**>> search_choosables(
     const std::string& search, dnd::ContentHolder& content, dnd::Output* output
 ) {
-    int i = 0;
+    size_t i = 0;
     std::map<std::string, std::vector<const dnd::Choosable**>> choosables_in_order;
     for (auto& [name, choosables_content] : content.choosables) {
         std::unordered_set<const dnd::Choosable**> matched_choosables = choosables_content.prefix_get(search);
@@ -278,9 +278,9 @@ bool dnd::content_search(dnd::ContentHolder& content, dnd::Output* output) {
             }
             choosing_phase = false;
         } catch (const std::invalid_argument& e) {
-            continue;
+            DND_UNUSED(e);
         } catch (const std::out_of_range& e) {
-            continue;
+            DND_UNUSED(e);
         }
     }
     return false;
