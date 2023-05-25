@@ -13,9 +13,13 @@ TEST_CASE("Simple Trie with integer data", "[controllers][trie]") {
     trie.insert("help", &data3);
 
     SECTION("Search function") {
-        REQUIRE(trie.search("hello") == &data1);
-        REQUIRE(trie.search("world") == &data2);
-        REQUIRE(trie.search("foo") == nullptr);
+        std::vector<int*> hello_result = trie.search("hello");
+        REQUIRE(hello_result.size() == 1);
+        REQUIRE(hello_result[0] == &data1);
+        std::vector<int*> world_result = trie.search("world");
+        REQUIRE(world_result.size() == 1);
+        REQUIRE(world_result[0] == &data2);
+        REQUIRE(trie.search("foo").size() == 0);
     }
 
     SECTION("Search prefix function") {
@@ -46,10 +50,16 @@ TEST_CASE("Simple Trie with custom struct data", "[controllers][trie]") {
     trie.insert("five", &data5);
 
     SECTION("Search function") {
-        REQUIRE(trie.search("hello") == &data1);
-        REQUIRE(trie.search("world") == &data2);
-        REQUIRE(trie.search("foo") == &data4);
-        REQUIRE(trie.search("nonexistent") == nullptr);
+        std::vector<MyData*> hello_result = trie.search("hello");
+        REQUIRE(hello_result.size() == 1);
+        REQUIRE(hello_result[0] == &data1);
+        std::vector<MyData*> world_result = trie.search("world");
+        REQUIRE(world_result.size() == 1);
+        REQUIRE(world_result[0] == &data2);
+        std::vector<MyData*> foo_result = trie.search("foo");
+        REQUIRE(foo_result.size() == 1);
+        REQUIRE(foo_result[0] == &data4);
+        REQUIRE(trie.search("nonexistent").size() == 0);
     }
 
     SECTION("Search prefix function") {

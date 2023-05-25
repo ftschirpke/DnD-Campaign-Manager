@@ -92,7 +92,7 @@ template <typename T>
 inline std::vector<T*> Trie<T>::search(std::string_view word) const {
     TrieNode<T>* word_node = find_node(word);
     if (word_node == nullptr) {
-        return nullptr;
+        return {};
     }
     return word_node->end_words;
 }
