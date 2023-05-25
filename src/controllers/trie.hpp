@@ -131,8 +131,8 @@ std::unordered_set<T*> Trie<T>::successors(TrieNode<T>* parent) const {
         if (!current_node->end_words.empty()) {
             successors.insert(current_node->end_words.begin(), current_node->end_words.end());
         }
-        for (const auto& [_, child] : current_node->children | std::views::reverse) {
-            node_stack.push(child.get());
+        for (auto it = current_node->children.rbegin(); it != current_node->children.rend(); ++it) {
+            node_stack.push(it->second.get());
         }
     }
     return successors;
