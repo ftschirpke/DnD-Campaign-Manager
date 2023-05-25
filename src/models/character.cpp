@@ -2,8 +2,6 @@
 
 #include "character.hpp"
 
-#include <iostream>
-#include <map>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>

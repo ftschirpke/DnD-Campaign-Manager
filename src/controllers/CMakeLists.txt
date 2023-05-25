@@ -1,11 +1,11 @@
 target_sources(dndmanager
     PRIVATE
-    content.cpp
+    content_holder.cpp
     groups.cpp
 )
 
 target_sources(dndmanager_tests
     PRIVATE
-    content.cpp
+    content_holder.cpp
     groups.cpp
 )

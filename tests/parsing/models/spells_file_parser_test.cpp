@@ -8,6 +8,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
+#include "controllers/content_library.hpp"
 #include "controllers/groups.hpp"
 #include "models/spell.hpp"
 
@@ -16,7 +17,7 @@
  */
 class TestSpellsFileParser : public dnd::SpellsFileParser {
 public:
-    TestSpellsFileParser(std::unordered_map<std::string, const dnd::Spell>& spells, dnd::Groups& groups)
+    TestSpellsFileParser(dnd::ContentLibrary<const dnd::Spell>& spells, dnd::Groups& groups)
         : dnd::SpellsFileParser("", spells, groups) {}
     dnd::SpellType createSpellTypeForTesting(const std::string& spell_type_str) const {
         return dnd::SpellsFileParser::createSpellType(spell_type_str);
@@ -31,7 +32,7 @@ public:
 
 class SetupSpellsParserTest {
 public:
-    std::unordered_map<std::string, const dnd::Spell> spells;
+    dnd::ContentLibrary<const dnd::Spell> spells;
     dnd::Groups groups;
     TestSpellsFileParser createParser();
 };

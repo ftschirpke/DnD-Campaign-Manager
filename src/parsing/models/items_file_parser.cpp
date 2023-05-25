@@ -70,10 +70,7 @@ void dnd::ItemsFileParser::saveResult() {
                 groups.add("items without attunement", info.name);
             }
 
-            items.emplace(
-                std::piecewise_construct, std::forward_as_tuple(info.name),
-                std::forward_as_tuple(info.name, info.requires_attunement, info.description, info.cosmetic_desciption)
-            );
+            items.add(info.name, Item(info.name, info.requires_attunement, info.description, info.cosmetic_desciption));
         }
     }
 }

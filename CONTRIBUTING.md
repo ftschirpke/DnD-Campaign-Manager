@@ -12,7 +12,7 @@
 
 I am excited you are considering contributing to this project.
 
-**Please contact me on GitHub or preferably [via email](mailto:tschirpf@student.hu-berlin.de).**
+**Please contact me on GitHub or preferably [via email](mailto:friedrich.tschirpke@student.hu-berlin.de).**
 
 This is especially important because the project is still in its beginnings and only managed by myself right now. Thus, the documentation is lacking. Although I am trying my best to always document my ideas in markdown files and list all the TODOs, I understand that it might be very hard to understand anything in this project. There are probably many ideas which only exist in my head and I forgot to explain them anywhere. 
 
@@ -51,7 +51,7 @@ For functions, I use the java-style doxygen comments as well:
  * @return the input parameter a
  * @throws std::invalid_argument if a is zero
  */
-int myFunction(int a) {
+int my_function(int a) {
     if (a == 0) {
         throw std::invalid_argument("Argument cannot be zero.");
     }
@@ -78,7 +78,7 @@ Please abide by the style guidelines below.
 Besides that, try to write readable code that abides by the common points listed in popular style guides e.g. [Google's C++ Style Guide](https://google.github.io/styleguide/cppguide.html).
 
 ### File Names
-Source code files should have the extensions `.cpp` and `.hpp`. The names of the files should be descriptive but not too long. For files that only define one class, which is the preferred way of doing things, the file name should be the "snake_case" version of the class name (which should be in "camelCase").
+Source code files should have the extensions `.cpp` and `.hpp`. The names of the files should be descriptive but not too long. For files that only define one class, which is the preferred way of doing things, the file name should be the "snake_case" version of the class name (which should be in "PascalCase").
 
 Tests should be implemented in files that correspond to the file it tests both in name and directory structure.
 The test file for an implementation `src/path/to/implementation_file.cpp` should be `tests/path/to/implementation_file_test.cpp`.
@@ -153,7 +153,7 @@ inline void MyClass::print() const { std::cout << name << '\n'; }
 As explained [above](#includes), implementation files should include everything that they explicitly use, even when the header file already includes the same header.
 
 In Implementation files, there should be no namespace-block.
-Instead, write `dnd::MyClass::MyFunction` when implementing a function "MyFunction" of the class "MyClass" which was defined inside this code base (therefore being in the "dnd" namespace).
+Instead, write `dnd::MyClass::my_function` when implementing a function "my_function" of the class "MyClass" which was defined inside this code base (therefore being in the "dnd" namespace).
 ## Commit types
 
 - feat: The new feature you're adding to a particular application

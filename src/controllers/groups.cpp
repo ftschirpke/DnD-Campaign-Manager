@@ -4,7 +4,7 @@
 
 #include <algorithm>
 #include <cctype>
-#include <iostream>
+#include <sstream>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
@@ -44,8 +44,10 @@ bool dnd::Groups::isPartOfGroup(const std::string& name, const std::string& grou
     return false;
 }
 
-void dnd::Groups::printStatus() const {
-    std::cout << "=== Groups ===\n";
-    std::cout << "string-based groups parsed: " << data.size() << '\n';
-    std::cout << "choosable-based groups parsed: " << choosables.size() << '\n';
+std::string dnd::Groups::printStatus() const {
+    std::stringstream sstr;
+    sstr << "=== Groups ===\n";
+    sstr << "string-based groups parsed: " << data.size() << '\n';
+    sstr << "choosable-based groups parsed: " << choosables.size() << '\n';
+    return sstr.str();
 }

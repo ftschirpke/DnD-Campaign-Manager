@@ -74,12 +74,9 @@ bool dnd::CharacterClassFileParser::validate() const {
 }
 
 void dnd::CharacterClassFileParser::saveResult() {
-    classes.emplace(
-        std::piecewise_construct, std::forward_as_tuple(character_class_name),
-        std::forward_as_tuple(
-            character_class_name, std::move(features_parser.retrieveFeatures()), character_class_hit_dice, asi_levels,
-            subclass_level
-        )
+    classes.create(
+        character_class_name, character_class_name, std::move(features_parser.retrieveFeatures()),
+        character_class_hit_dice, asi_levels, subclass_level
     );
     // TODO: add spellcasting
 }

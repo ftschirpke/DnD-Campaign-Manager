@@ -168,11 +168,11 @@ jobs:
     - name: Run Application with Imperial Data
       working-directory: ${{ github.workspace }}
       shell: bash
-      run: ./build/${{ env.DND_APP_TARGET }} -c example_campaign -d content_imperial
+      run: ./build/${{ env.DND_APP_TARGET }} -c example_campaign -d content_imperial -t
 
     - name: Run Application with Metric Data
       working-directory: ${{ github.workspace }}
       shell: bash
-      run: ./build/${{ env.DND_APP_TARGET }} -c example_campaign -d content_metric
+      run: ./build/${{ env.DND_APP_TARGET }} -c example_campaign -d content_metric -t
 
 

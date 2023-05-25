@@ -39,6 +39,16 @@ public:
      */
     const std::unordered_set<std::string>& getStringGroup(const std::string& group_name) const;
     /**
+     * @brief Get all choosable groups
+     * @return reference to all the choosable groups saved
+     */
+    const std::unordered_map<std::string, std::unordered_map<std::string, Choosable>>& getAllChoosableGroups() const;
+    /**
+     * @brief Get all string groups
+     * @return reference to all the string groups saved
+     */
+    const std::unordered_map<std::string, std::unordered_set<std::string>>& getAllStringGroups() const;
+    /**
      * @brief Add a string value to a group (creates the group if it doesn't exist)
      * @param group_name the name of the group
      * @param value the string value to add to the group
@@ -90,9 +100,10 @@ public:
      */
     bool isPartOfGroup(const std::string& name, const std::string& group_name) const;
     /**
-     * @brief Prints the amounts of groups parsed
+     * @brief Returns a string describing the amounts of groups parsed
+     * @return a string describing the current parsed groups
      */
-    void printStatus() const;
+    std::string printStatus() const;
 private:
     // a map containing all string groups - the members of a string group mapped to the name of the group
     std::unordered_map<std::string, std::unordered_set<std::string>> data;
@@ -107,6 +118,15 @@ inline const std::unordered_map<std::string, Choosable>& Groups::getChoosableGro
 
 inline const std::unordered_set<std::string>& Groups::getStringGroup(const std::string& group_name) const {
     return data.at(group_name);
+}
+
+inline const std::unordered_map<std::string, std::unordered_map<std::string, Choosable>>& Groups::getAllChoosableGroups(
+) const {
+    return choosables;
+}
+
+inline const std::unordered_map<std::string, std::unordered_set<std::string>>& Groups::getAllStringGroups() const {
+    return data;
 }
 
 inline void Groups::add(const std::string& group_name, const std::string& value) { data[group_name].insert(value); }
