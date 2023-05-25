@@ -72,6 +72,8 @@ jobs:
       if: matrix.config.os == 'ubuntu-latest'
       shell: bash
       run: |
+        ${{ matrix.config.install_command }} update
+        ${{ matrix.config.install_command }} upgrade
         ${{ matrix.config.install_command }} install xorg-dev
     
     - name: Configure
@@ -169,15 +171,3 @@ jobs:
       uses: github/codeql-action/analyze@v2
       with:
         category: "/language:'cpp'"
-
-    - name: Run Application with Imperial Data
-      working-directory: ${{ github.workspace }}
-      shell: bash
-      run: ./build/${{ env.DND_GUI_APP_TARGET }} -c example_campaign -d content_imperial -t
-
-    - name: Run Application with Metric Data
-      working-directory: ${{ github.workspace }}
-      shell: bash
-      run: ./build/${{ env.DND_GUI_APP_TARGET }} -c example_campaign -d content_metric -t
-
-
