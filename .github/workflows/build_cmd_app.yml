@@ -1,14 +1,14 @@
-name: Unit Tests
+name: Build Command Line App
 
 on:
   pull_request:
     branches: ["main"]
   push:
-    branches: ["main"]
+    branches: ["main", "gui"]
 
 env:
   BUILD_TYPE: Release
-  DND_TEST_TARGET: dndmanager_tests
+  DND_CMD_APP_TARGET: dndmanager_cmd
 
 jobs:
   build:
@@ -19,23 +19,23 @@ jobs:
       matrix:
         config:
         - {
-            name: "TEST: Windows Latest MSVC",
+            name: "BUILD: CMD - Windows Latest MSVC",
             os: windows-latest,
             cc: "cl", cxx: "cl",
             environment_script: "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvars64.bat",
-            install_cmd: "choco"
+            install_command: "choco"
           }
         - {
-            name: "TEST: Ubuntu Latest GCC",
+            name: "BUILD: CMD - Ubuntu Latest GCC",
             os: ubuntu-latest,
             cc: "gcc", cxx: "g++",
-            install_cmd: "sudo apt-get update && sudo apt-get -y"
+            install_command: "sudo apt-get -y"
           }
         - {
-            name: "TEST: macOS Latest Clang",
+            name: "BUILD: CMD - macOS Latest Clang",
             os: macos-latest,
             cc: "clang", cxx: "clang++",
-            install_cmd: "brew"
+            install_command: "brew"
           }
 
     steps:
@@ -44,7 +44,7 @@ jobs:
     - uses: lukka/get-cmake@latest
 
     - name: Download ccache
-      run: ${{ matrix.config.install_cmd }} install ccache
+      run: ${{ matrix.config.install_command }} install ccache
 
     - name: Prepare ccache timestamp
       id: ccache_cache_timestamp
@@ -57,11 +57,17 @@ jobs:
       uses: actions/cache@v3
       with:
         path: .ccache
-        key: ${{ matrix.config.name }}-ccache-${{ env.DND_TEST_TARGET }}-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
+        key: ${{ matrix.config.name }}-ccache-${{ env.DND_CMD_APP_TARGET }}-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
         restore-keys: |
-          ${{ matrix.config.name }}-ccache-${{ env.DND_TEST_TARGET }}-
+          ${{ matrix.config.name }}-ccache-${{ env.DND_CMD_APP_TARGET }}-
           ${{ matrix.config.name }}-
 
+    - name: Initialize CodeQL (ubuntu only)
+      if: matrix.config.os == 'ubuntu-latest'
+      uses: github/codeql-action/init@v2
+      with:
+        languages: 'cpp'
+    
     - name: Configure
       shell: cmake -P {0}
       run: |
@@ -130,7 +136,7 @@ jobs:
         execute_process(COMMAND ccache -z)
 
         execute_process(
-          COMMAND cmake --build build --target ${{ env.DND_TEST_TARGET }}
+          COMMAND cmake --build build --target ${{ env.DND_CMD_APP_TARGET }}
           RESULT_VARIABLE result
           OUTPUT_VARIABLE output
           ERROR_VARIABLE output
@@ -152,25 +158,20 @@ jobs:
 
         execute_process(COMMAND ccache -s)
 
-    - name: Run tests
-      shell: cmake -P {0}
-      run: |
-        include(ProcessorCount)
-        ProcessorCount(N)
+    - name: Perform CodeQL Analysis (ubuntu only)
+      if: matrix.config.os == 'ubuntu-latest'
+      uses: github/codeql-action/analyze@v2
+      with:
+        category: "/language:'cpp'"
 
-        set(ENV{CTEST_OUTPUT_ON_FAILURE} "ON")
+    - name: Run Application with Imperial Data
+      working-directory: ${{ github.workspace }}
+      shell: bash
+      run: ./build/${{ env.DND_CMD_APP_TARGET }} -c example_campaign -d content_imperial -t
 
-        execute_process(
-          COMMAND ctest -j ${N}
-          WORKING_DIRECTORY build
-          RESULT_VARIABLE result
-          OUTPUT_VARIABLE output
-          ERROR_VARIABLE output
-          ECHO_OUTPUT_VARIABLE ECHO_ERROR_VARIABLE
-        )
-        if (NOT result EQUAL 0)
-          string(REGEX MATCH "[0-9]+% tests.*[0-9.]+ sec.*$" test_results "${output}")
-          string(REPLACE "\n" "%0A" test_results "${test_results}")
-          message("::error::${test_results}")
-          message(FATAL_ERROR "Running tests failed!")
-        endif()
+    - name: Run Application with Metric Data
+      working-directory: ${{ github.workspace }}
+      shell: bash
+      run: ./build/${{ env.DND_CMD_APP_TARGET }} -c example_campaign -d content_metric -t
+
+
