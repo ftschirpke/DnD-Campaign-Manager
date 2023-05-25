@@ -247,7 +247,7 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse logically wrong characte
 
 void testBasicValuesFromJSON(const nlohmann::json& character_json, const dnd::Character* const character_ptr) {
     REQUIRE(character_ptr->name == character_json.at("name").get<std::string>());
-    REQUIRE(character_ptr->class_ptr->name == character_json.at("class"));
+    REQUIRE(character_ptr->class_ptr->name == character_json.at("class").get<std::string>());
     if (character_json.contains("subclass")) {
         REQUIRE(character_ptr->subclass_ptr->name == character_json.at("subclass").get<std::string>());
     }
