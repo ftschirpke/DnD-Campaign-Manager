@@ -18,6 +18,7 @@ namespace dnd {
  */
 class Output {
 public:
+    virtual ~Output() = default;
     /**
      * @brief Display a c-style string
      * @param text the c-style string to display

@@ -64,10 +64,10 @@ private:
     TrieNode<T>* find_node(std::string_view word) const;
     /**
      * @brief Return a list of all successors of a given node (including the node itself)
-     * @param root the root node
+     * @param parent the parent or root node
      * @return a set of pointers to all the successor nodes
      */
-    std::unordered_set<T*> successors(TrieNode<T>* root) const;
+    std::unordered_set<T*> successors(TrieNode<T>* parent) const;
 
     // the root node of the trie
     std::unique_ptr<TrieNode<T>> root;
@@ -119,10 +119,10 @@ TrieNode<T>* Trie<T>::find_node(std::string_view word) const {
 }
 
 template <typename T>
-std::unordered_set<T*> Trie<T>::successors(TrieNode<T>* root) const {
+std::unordered_set<T*> Trie<T>::successors(TrieNode<T>* parent) const {
     std::unordered_set<T*> successors;
     std::stack<TrieNode<T>*> node_stack;
-    node_stack.push(root);
+    node_stack.push(parent);
 
     while (!node_stack.empty()) {
         TrieNode<T>* current_node = node_stack.top();
