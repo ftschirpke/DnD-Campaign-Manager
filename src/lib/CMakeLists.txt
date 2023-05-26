@@ -16,19 +16,6 @@ add_library(imgui STATIC)
 target_include_directories(imgui PUBLIC ${OPENGL_INCLUDE_DIRS})
 target_link_libraries(imgui PUBLIC ${OPENGL_LIBRARIES} glfw)
 
-if(MSVC)
-    target_compile_options(imgui PRIVATE /W4 /WX)
-    target_compile_definitions(imgui PRIVATE -D_CRT_SECURE_NO_WARNINGS)
-else()
-    target_compile_options(imgui PRIVATE
-        -pedantic -Wall -Wextra -Wpedantic -Werror -Wdisabled-optimization
-        -Woverloaded-virtual -Wredundant-decls
-    )
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-        target_compile_options(imgui PRIVATE -Wlogical-op -Wnoexcept -Wstrict-null-sentinel)
-    endif()
-endif()
-
 add_subdirectory(imgui)
 
 target_link_libraries(${DND_GUI_APP} PRIVATE imgui)
