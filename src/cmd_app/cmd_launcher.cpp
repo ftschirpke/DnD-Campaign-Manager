@@ -33,7 +33,6 @@ int dnd::launch(int argc, char** argv) {
     options.add_options()("c,campaign", "Name of campaign directory", cxxopts::value<std::string>())(
         "d,directory", "Content directory",
         cxxopts::value<std::string>()->default_value((cur_path / "content").string())
-    )("X,X11app", "Start the app with its X11 graphical user interface"
     )("t,testrun", "App starts and does not wait for input")("v,version", "Print version")("h,help", "Print usage");
 
     cxxopts::ParseResult args;
