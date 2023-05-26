@@ -1,4 +1,4 @@
-if (TARGET ${DND_GUI_APP})
+if (TARGET_NAME STREQUAL ${DND_GUI_APP})
     add_subdirectory(imgui)
 
     target_link_libraries(${DND_GUI_APP} PRIVATE imgui)
