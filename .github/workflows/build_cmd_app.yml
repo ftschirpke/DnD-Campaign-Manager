@@ -73,7 +73,6 @@ jobs:
       shell: bash
       run: |
         ${{ matrix.config.install_command }} update
-        ${{ matrix.config.install_command }} upgrade
         ${{ matrix.config.install_command }} install libxrandr-dev
         ${{ matrix.config.install_command }} install libgl1-mesa-dev
         ${{ matrix.config.install_command }} install libxinerama-dev
