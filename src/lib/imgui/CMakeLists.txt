@@ -12,8 +12,6 @@ FetchContent_MakeAvailable(glfw)
 
 find_package(OpenGL REQUIRED)
 
-add_library(imgui STATIC)
-
 target_sources(imgui
     PRIVATE
     imgui_demo.cpp

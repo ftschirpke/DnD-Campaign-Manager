@@ -66,10 +66,11 @@ jobs:
       if: matrix.config.os == 'ubuntu-latest'
       shell: bash
       run: |
-        ${{ matrix.config.install_command }} update
-        ${{ matrix.config.install_command }} upgrade
-        ${{ matrix.config.install_command }} install xorg-dev
-    
+        ${{ matrix.config.install_command }} install libxrandr-dev
+        ${{ matrix.config.install_command }} install libxinerama-dev
+        ${{ matrix.config.install_command }} install libxcursor-dev
+        ${{ matrix.config.install_command }} install libxi-dev
+
     - name: Configure
       shell: cmake -P {0}
       run: |

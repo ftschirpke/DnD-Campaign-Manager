@@ -8,3 +8,5 @@ add_subdirectory(lib)
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_subdirectory(runtime_measurement)
 endif()
+
+target_include_directories(${DND_GUI_APP} SYSTEM PRIVATE lib)
