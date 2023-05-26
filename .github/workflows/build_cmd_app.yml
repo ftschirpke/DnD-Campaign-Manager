@@ -74,9 +74,9 @@ jobs:
       run: |
         ${{ matrix.config.install_command }} install libxrandr-dev
         ${{ matrix.config.install_command }} install libgl1-mesa-dev
-# ${{ matrix.config.install_command }} install libxinerama-dev
-# ${{ matrix.config.install_command }} install libxcursor-dev
-# ${{ matrix.config.install_command }} install libxi-dev
+        ${{ matrix.config.install_command }} install libxinerama-dev
+        ${{ matrix.config.install_command }} install libxcursor-dev
+        ${{ matrix.config.install_command }} install libxi-dev
 
     - name: Configure
       shell: cmake -P {0}
