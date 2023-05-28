@@ -37,6 +37,7 @@ private:
     void render_campaign_selection();
     void render_main_window();
     void render_content_window();
+    void render_parsing_error_popup();
 
     bool show_demo_window;
 
@@ -47,7 +48,9 @@ private:
 
     bool is_parsing;
     std::future<ContentHolder> parsed_content;
-    std::vector<std::string> parsing_error_messages;
+    std::vector<std::string> error_messages;
+
+    bool show_error_popup;
 
     ContentParser parser;
     // the object holding all the DnD content relevant for the selected campaign

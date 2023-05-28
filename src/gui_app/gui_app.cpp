@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 
+#include <fmt/format.h>
 #include <imgui/imfilebrowser.h>
 #include <imgui/imgui.h>
 
@@ -37,6 +38,9 @@ void dnd::GUIApp::render() {
     render_content_dir_selection();
     render_campaign_selection();
     render_main_window();
+    if (!error_messages.empty()) {
+        render_parsing_error_popup();
+    }
 
     if (!content.empty()) {
         render_content_window();
@@ -153,37 +157,11 @@ void dnd::GUIApp::render_main_window() {
                 content.finished_parsing();
                 ImGui::Text("Parsing done");
             } catch (const parsing_error& e) {
-                ImGui::OpenPopup("Parsing error");
-                parsing_error_messages.push_back(e.what());
+                error_messages.push_back(e.what());
             } catch (const std::exception& e) {
-                std::cout << "Unknown error while parsing content: " << e.what() << '\n';
+                error_messages.push_back(e.what());
             }
         }
-    }
-
-    if (ImGui::BeginPopupModal("Parsing error", nullptr, error_popup_options)) {
-        ImGui::Text("Error%s while parsing content:", parsing_error_messages.size() > 1 ? "s" : "");
-        for (const std::string& message : parsing_error_messages) {
-            ImGui::Text("%s", message.c_str());
-        }
-        bool close = false;
-        if (ImGui::Button("Select other directory")) {
-            close = true;
-            content_dir_dialog.Open();
-        } else if (ImGui::Button("Select other campaign")) {
-            close = true;
-            select_campaign = true;
-        } else if (ImGui::Button("Retry")) {
-            close = true;
-            start_parsing();
-        } else if (ImGui::Button("Exit")) {
-            close = true;
-        }
-        if (close) {
-            parsing_error_messages.clear();
-            ImGui::CloseCurrentPopup();
-        }
-        ImGui::EndPopup();
     }
 
     ImGui::Separator();
@@ -191,6 +169,40 @@ void dnd::GUIApp::render_main_window() {
 
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
     ImGui::End();
+}
+
+void dnd::GUIApp::render_parsing_error_popup() {
+    ImGui::OpenPopup("Error");
+    if (ImGui::BeginPopupModal("Error", nullptr, error_popup_options)) {
+        for (const std::string& message : error_messages) {
+            ImGui::TextWrapped("%s", message.c_str());
+            ImGui::Separator();
+        }
+        bool close = false;
+        if (ImGui::Button("Select other directory")) {
+            close = true;
+            content_dir_dialog.Open();
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Select other campaign")) {
+            close = true;
+            select_campaign = true;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Retry")) {
+            close = true;
+            start_parsing();
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Exit")) {
+            close = true;
+        }
+        if (close) {
+            error_messages.clear();
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
 }
 
 void dnd::GUIApp::start_parsing() {
@@ -201,8 +213,9 @@ void dnd::GUIApp::start_parsing() {
 void dnd::GUIApp::render_content_window() {
     ImGui::Begin("Content Window - DnD Campaign Manager");
 
-    ImGui::Text("Content directory: %s", content_directory.string().c_str());
-    ImGui::Text("Campaign name: %s", campaign_name.c_str());
+    ImGui::Text("Content directory:\n%s", content_directory.string().c_str());
+    ImGui::Text("Campaign name:\n%s", campaign_name.c_str());
+    ImGui::Separator();
 
     ImGui::Text("Status:\n%s", content.printStatus().c_str());
 
