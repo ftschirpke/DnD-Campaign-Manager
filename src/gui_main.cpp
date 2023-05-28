@@ -1,6 +1,6 @@
 #include "dnd_config.hpp"
 
-#include "gui_app/imgui_launcher.hpp"
+#include "gui_app/gui_launcher.hpp"
 
 int main(int argc, char** argv) {
     DND_START_MEASURING_SESSION("LAUNCH", "debug/gui_app_runtime.json");

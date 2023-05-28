@@ -3,9 +3,16 @@
 
 #include "dnd_config.hpp"
 
+#include <filesystem>
+#include <future>
+#include <string>
+#include <vector>
+
+#include <imgui/imfilebrowser.h>
 #include <imgui/imgui.h>
 
 #include "core/controllers/content_holder.hpp"
+#include "core/parsing/controllers/content_parser.hpp"
 
 namespace dnd {
 
@@ -19,14 +26,35 @@ public:
      * @brief Renders one or multiple DearImGui windows displaying the content of the application.
      */
     void render();
-
-    const ImVec4& get_clear_color() const { return clear_color; }
+    /**
+     * @brief Initializes the GUI elements of the application.
+     */
+    void initialize_gui_elements();
 private:
+    void start_parsing();
+
+    void render_content_dir_selection();
+    void render_campaign_selection();
+    void render_main_window();
+    void render_content_window();
+
     bool show_demo_window;
+
+    bool select_campaign;
+
+    std::filesystem::path content_directory;
+    std::string campaign_name;
+
+    bool is_parsing;
+    std::future<ContentHolder> parsed_content;
+    std::vector<std::string> parsing_error_messages;
+
+    ContentParser parser;
     // the object holding all the DnD content relevant for the selected campaign
     ContentHolder content;
-    // the color used to clear the background of the main window
-    ImVec4 clear_color;
+
+    // the file dialog for selecting the content directory
+    ImGui::FileBrowser content_dir_dialog;
 };
 
 } // namespace dnd

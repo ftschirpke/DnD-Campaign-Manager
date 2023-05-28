@@ -31,6 +31,11 @@ public:
      */
     void finished_parsing();
     /**
+     * @brief Returns whether the content holder is empty
+     * @return true if the content holder is empty, false otherwise
+     */
+    bool empty() const;
+    /**
      * @brief Returns a string describing how much content this controller holds
      * @return a string describing the current status of the controller
      */
@@ -52,6 +57,11 @@ public:
     ContentLibrary<const Feature*> features;
     std::unordered_map<std::string, ContentLibrary<const Choosable*>> choosables;
 };
+
+inline bool ContentHolder::empty() const {
+    return characters.empty() && character_classes.empty() && character_subclasses.empty() && character_races.empty()
+           && character_subraces.empty() && items.empty() && spells.empty();
+}
 
 } // namespace dnd
 

@@ -95,8 +95,6 @@ public:
     static const std::array<int, 20> minxp_for_level;
     // the 6 base values for the character's ability scores
     const std::array<int, 6> base_ability_scores;
-    // the current state of the character
-    CharacterState state;
     // a pointer to the class of the character
     const CharacterClass* class_ptr;
     // a pointer to the subclass of the character, nullptr if he does not have one
@@ -107,6 +105,8 @@ public:
     const CharacterSubrace* subrace_ptr;
     // the character's decisions for certain choices he had to make for features or choosables
     std::vector<CharacterDecision> decisions;
+    // the current state of the character
+    CharacterState state;
 protected:
     /**
      * @brief Get the values for the character that may be used during state calculation but cannot change
@@ -135,8 +135,8 @@ private:
 inline Character::Character(
     const std::string& name, std::vector<Feature>&& features, const std::array<int, 6>& base_ability_scores
 ) noexcept
-    : FeatureHolder(name, std::move(features)), base_ability_scores(base_ability_scores), state(decisions),
-      class_ptr(nullptr), subclass_ptr(nullptr), race_ptr(nullptr), subrace_ptr(nullptr), level(1), xp(0),
+    : FeatureHolder(name, std::move(features)), base_ability_scores(base_ability_scores), class_ptr(nullptr),
+      subclass_ptr(nullptr), race_ptr(nullptr), subrace_ptr(nullptr), decisions(), state(decisions), level(1), xp(0),
       hit_dice_rolls() {}
 
 
@@ -144,9 +144,9 @@ inline Character::Character(
     const std::string& name, std::vector<Feature>&& features, const std::array<int, 6>& base_ability_scores, int level,
     int xp, const std::vector<int>& hit_dice_rolls
 ) noexcept
-    : FeatureHolder(name, std::move(features)), base_ability_scores(base_ability_scores), state(decisions),
-      class_ptr(nullptr), subclass_ptr(nullptr), race_ptr(nullptr), subrace_ptr(nullptr), level(level), xp(xp),
-      hit_dice_rolls(hit_dice_rolls) {}
+    : FeatureHolder(name, std::move(features)), base_ability_scores(base_ability_scores), class_ptr(nullptr),
+      subclass_ptr(nullptr), race_ptr(nullptr), subrace_ptr(nullptr), decisions(), state(decisions), level(level),
+      xp(xp), hit_dice_rolls(hit_dice_rolls) {}
 
 inline int Character::getLevel() const noexcept { return level; }
 
