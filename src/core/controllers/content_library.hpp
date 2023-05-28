@@ -25,6 +25,11 @@ public:
      */
     bool contains(const std::string& name) const;
     /**
+     * @brief Returns whether the content library is empty
+     * @return true if the content library is empty, false otherwise
+     */
+    bool empty() const;
+    /**
      * @brief Get the amount of content pieces stored
      * @return the amount
      */
@@ -88,6 +93,11 @@ protected:
 template <typename T>
 inline bool ContentLibrary<T>::contains(const std::string& name) const {
     return data.contains(name);
+}
+
+template <typename T>
+inline bool ContentLibrary<T>::empty() const {
+    return data.empty();
 }
 
 template <typename T>
