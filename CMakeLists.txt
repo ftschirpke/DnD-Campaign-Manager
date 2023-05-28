@@ -9,7 +9,7 @@ project(DnD-Campaign-Manager
 set(DND_CMD_APP dndmanager_cmd)
 set(DND_GUI_APP dndmanager_gui)
 set(DND_TESTS dndmanager_tests)
-set(DND_CORE dnd_core)
+set(DND_CORE dndmanager_core)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
