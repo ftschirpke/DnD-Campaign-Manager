@@ -6,6 +6,7 @@
 build/
 out/
 debug/
+*.ini
 
 # content specific ignores
 # users can put their content within the content directory without causing git problems

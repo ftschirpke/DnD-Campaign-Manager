@@ -1,31 +1,7 @@
-# TODO: better way of adding test files
-set(TEST_FILES
-    launcher_test.cpp
-    controllers/trie_test.cpp
-    parsing/controllers/content_parser_test.cpp
-    parsing/models/character_file_parser_test.cpp
-    parsing/models/effect_holder/effect_holder_parser_test.cpp
-    parsing/models/effect_holder/features_parser_test.cpp
-    parsing/models/spells_file_parser_test.cpp
-)
-
-set(TEST_SOURCE_FILES
+target_sources(${DND_TESTS}
     PRIVATE
-        ${TEST_FILES}
+#    launcher_test.cpp
 )
 
-# TODO: better way of adding the needed source files
-foreach (TEST_SRC_FILE IN LISTS TEST_FILES)
-    string(REPLACE "_test" "" SRC_FILE ${TEST_SRC_FILE})
-    LIST(APPEND SOURCE_FILES_FOR_TEST "${SRC_FILE}")
-endforeach ()
-
-foreach (SRC_FILE_FOR_TEST IN LISTS SOURCE_FILES_FOR_TEST)
-    LIST(APPEND TEST_SOURCE_FILES ${CMAKE_SOURCE_DIR}/src/${SRC_FILE_FOR_TEST})
-endforeach ()
-
-target_sources(dndmanager_tests
-    PRIVATE
-        ${TEST_SOURCE_FILES}
-)
-
+add_subdirectory(controllers)
+add_subdirectory(parsing)

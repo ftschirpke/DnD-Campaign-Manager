@@ -4,7 +4,7 @@ all_correct=true
 
 cd $(dirname $0)/../..
 
-files=$(find src tests -type f \( -name "*.cpp" -o -name "*.hpp" \))
+files=$(find src tests -type f -not -path "src/lib/*" \( -name "*.cpp" -o -name "*.hpp" \))
 
 for file in $files
 do
