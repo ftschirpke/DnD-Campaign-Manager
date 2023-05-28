@@ -75,7 +75,7 @@ void dnd::GUIApp::render_content_dir_selection() {
         }
     }
 
-    if (ImGui::BeginPopupModal("Invalid content directory", NULL, error_popup_options)) {
+    if (ImGui::BeginPopupModal("Invalid content directory", nullptr, error_popup_options)) {
         ImGui::Text("Selected directory: %s", content_directory.string().c_str());
         if (ImGui::Button("Select other directory")) {
             ImGui::CloseCurrentPopup();
@@ -161,7 +161,7 @@ void dnd::GUIApp::render_main_window() {
         }
     }
 
-    if (ImGui::BeginPopupModal("Parsing error", NULL, error_popup_options)) {
+    if (ImGui::BeginPopupModal("Parsing error", nullptr, error_popup_options)) {
         ImGui::Text("Error%s while parsing content:", parsing_error_messages.size() > 1 ? "s" : "");
         for (const std::string& message : parsing_error_messages) {
             ImGui::Text("%s", message.c_str());
