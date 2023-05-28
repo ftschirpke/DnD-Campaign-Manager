@@ -5,6 +5,8 @@
 #include <filesystem>
 #include <future>
 #include <iostream>
+#include <string>
+#include <vector>
 
 #include <imgui/imfilebrowser.h>
 #include <imgui/imgui.h>
@@ -16,7 +18,9 @@
 static const ImGuiFileBrowserFlags content_dir_dialog_options = ImGuiFileBrowserFlags_SelectDirectory;
 static const ImGuiWindowFlags error_popup_options = ImGuiWindowFlags_AlwaysAutoResize;
 
-dnd::GUIApp::GUIApp() : show_demo_window(false), is_parsing(false), content_dir_dialog(content_dir_dialog_options) {}
+dnd::GUIApp::GUIApp()
+    : show_demo_window(false), select_campaign(false), is_parsing(false),
+      content_dir_dialog(content_dir_dialog_options) {}
 
 void dnd::GUIApp::initialize_gui_elements() {
     content_dir_dialog.SetTitle("Select content directory");
@@ -65,7 +69,7 @@ void dnd::GUIApp::render_content_dir_selection() {
         content_dir_dialog.Close();
         content_directory = content_dir_dialog.GetSelected();
         if (content_directory_valid(content_directory)) {
-            ImGui::OpenPopup("Select campaign");
+            select_campaign = true;
         } else {
             ImGui::OpenPopup("Invalid content directory");
         }
@@ -82,24 +86,31 @@ void dnd::GUIApp::render_content_dir_selection() {
 }
 
 void dnd::GUIApp::render_campaign_selection() {
+    if (select_campaign) {
+        ImGui::OpenPopup("Select campaign");
+    }
     if (ImGui::BeginPopupModal("Select campaign")) {
+        bool close = false;
         for (const auto& entry : std::filesystem::directory_iterator(content_directory)) {
             if (!entry.is_directory() || entry.path().filename() == "general") {
                 continue;
             }
             if (ImGui::Button(entry.path().filename().string().c_str())) {
                 campaign_name = entry.path().filename().string();
-                ImGui::CloseCurrentPopup();
+                close = true;
                 start_parsing();
+                break;
             }
         }
         ImGui::Separator();
         if (ImGui::Button("Select other directory")) {
             ImGui::CloseCurrentPopup();
+            close = true;
             content_dir_dialog.Open();
         }
-        if (ImGui::Button("Cancel")) {
+        if (close || ImGui::Button("Cancel")) {
             ImGui::CloseCurrentPopup();
+            select_campaign = false;
         }
         ImGui::EndPopup();
     }
@@ -129,7 +140,7 @@ void dnd::GUIApp::render_main_window() {
         const char* campaign_button_text = campaign_name.empty() ? "Select campaign" : "Change campaign";
 
         if (ImGui::Button(campaign_button_text)) {
-            ImGui::OpenPopup("Select campaign");
+            select_campaign = true;
         }
     }
 
@@ -143,6 +154,7 @@ void dnd::GUIApp::render_main_window() {
                 ImGui::Text("Parsing done");
             } catch (const parsing_error& e) {
                 ImGui::OpenPopup("Parsing error");
+                parsing_error_messages.push_back(e.what());
             } catch (const std::exception& e) {
                 std::cout << "Unknown error while parsing content: " << e.what() << '\n';
             }
@@ -150,17 +162,25 @@ void dnd::GUIApp::render_main_window() {
     }
 
     if (ImGui::BeginPopupModal("Parsing error", NULL, error_popup_options)) {
-        ImGui::Text("Error while parsing content");
+        ImGui::Text("Error%s while parsing content:", parsing_error_messages.size() > 1 ? "s" : "");
+        for (const std::string& message : parsing_error_messages) {
+            ImGui::Text("%s", message.c_str());
+        }
+        bool close = false;
         if (ImGui::Button("Select other directory")) {
-            ImGui::CloseCurrentPopup();
+            close = true;
             content_dir_dialog.Open();
         } else if (ImGui::Button("Select other campaign")) {
-            ImGui::CloseCurrentPopup();
-            ImGui::OpenPopup("Select campaign");
+            close = true;
+            select_campaign = true;
         } else if (ImGui::Button("Retry")) {
-            ImGui::CloseCurrentPopup();
+            close = true;
             start_parsing();
         } else if (ImGui::Button("Exit")) {
+            close = true;
+        }
+        if (close) {
+            parsing_error_messages.clear();
             ImGui::CloseCurrentPopup();
         }
         ImGui::EndPopup();
@@ -174,7 +194,6 @@ void dnd::GUIApp::render_main_window() {
 }
 
 void dnd::GUIApp::start_parsing() {
-    std::cout << "Would like to start Parsing content" << '\n';
     parsed_content = std::async(std::launch::async, &ContentParser::parse, &parser, content_directory, campaign_name);
     is_parsing = true;
 }

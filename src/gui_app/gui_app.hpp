@@ -6,6 +6,7 @@
 #include <filesystem>
 #include <future>
 #include <string>
+#include <vector>
 
 #include <imgui/imfilebrowser.h>
 #include <imgui/imgui.h>
@@ -39,11 +40,14 @@ private:
 
     bool show_demo_window;
 
+    bool select_campaign;
+
     std::filesystem::path content_directory;
     std::string campaign_name;
 
     bool is_parsing;
     std::future<ContentHolder> parsed_content;
+    std::vector<std::string> parsing_error_messages;
 
     ContentParser parser;
     // the object holding all the DnD content relevant for the selected campaign
