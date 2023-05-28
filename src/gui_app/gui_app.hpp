@@ -19,14 +19,10 @@ public:
      * @brief Renders one or multiple DearImGui windows displaying the content of the application.
      */
     void render();
-
-    const ImVec4& get_clear_color() const { return clear_color; }
 private:
     bool show_demo_window;
     // the object holding all the DnD content relevant for the selected campaign
     ContentHolder content;
-    // the color used to clear the background of the main window
-    ImVec4 clear_color;
 };
 
 } // namespace dnd

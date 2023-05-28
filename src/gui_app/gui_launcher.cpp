@@ -4,7 +4,7 @@
 // Read online: https://github.com/ocornut/imgui/tree/master/docs
 #include "dnd_config.hpp"
 
-#include "imgui_launcher.hpp"
+#include "gui_launcher.hpp"
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_glfw.h>
@@ -69,14 +69,14 @@ void setup_backends(GLFWwindow* window, const char* glsl_version) {
     ImGui_ImplOpenGL3_Init(glsl_version);
 }
 
-void render(GLFWwindow* window, ImVec4 clear_color) {
+void render(GLFWwindow* window) {
     ImGui::Render();
     int display_w, display_h;
     glfwGetFramebufferSize(window, &display_w, &display_h);
     glViewport(0, 0, display_w, display_h);
-    glClearColor(
-        clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w
-    );
+    // glClearColor(
+    //     clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w
+    // );
     glClear(GL_COLOR_BUFFER_BIT);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
@@ -130,7 +130,7 @@ int dnd::launch() {
 
         app.render();
 
-        render(window, app.get_clear_color());
+        render(window);
         render_platform_windows(io.ConfigFlags);
         glfwSwapBuffers(window);
     }
