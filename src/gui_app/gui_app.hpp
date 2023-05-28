@@ -29,29 +29,32 @@ public:
     /**
      * @brief Initializes the GUI elements of the application.
      */
-    void initialize_gui_elements();
+    void initialize();
 private:
     void start_parsing();
 
     void render_content_dir_selection();
     void render_campaign_selection();
-    void render_main_window();
+    void render_overview_window();
     void render_content_window();
+    void render_status_window();
     void render_parsing_error_popup();
 
-    bool show_demo_window;
+    void on_search_input(ImGuiInputTextCallbackData* data);
 
+    bool show_demo_window;
     bool select_campaign;
+    bool is_parsing;
+    bool show_error_popup;
 
     std::filesystem::path content_directory;
     std::string campaign_name;
 
-    bool is_parsing;
-    std::future<ContentHolder> parsed_content;
+    std::string search_query;
+
     std::vector<std::string> error_messages;
 
-    bool show_error_popup;
-
+    std::future<ContentHolder> parsed_content;
     ContentParser parser;
     // the object holding all the DnD content relevant for the selected campaign
     ContentHolder content;

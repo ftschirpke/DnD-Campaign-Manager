@@ -119,7 +119,7 @@ int dnd::launch() {
     setup_style(io.ConfigFlags);
 
     GUIApp app;
-    app.initialize_gui_elements();
+    app.initialize();
 
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();

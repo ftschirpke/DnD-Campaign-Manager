@@ -6,11 +6,13 @@
 #include <future>
 #include <iostream>
 #include <string>
+#include <unordered_set>
 #include <vector>
 
 #include <fmt/format.h>
 #include <imgui/imfilebrowser.h>
 #include <imgui/imgui.h>
+#include <imgui/imgui_stdlib.h>
 
 #include "core/controllers/content_holder.hpp"
 #include "core/parsing/controllers/content_parser.hpp"
@@ -23,9 +25,11 @@ dnd::GUIApp::GUIApp()
     : show_demo_window(false), select_campaign(false), is_parsing(false),
       content_dir_dialog(content_dir_dialog_options) {}
 
-void dnd::GUIApp::initialize_gui_elements() {
+void dnd::GUIApp::initialize() {
     content_dir_dialog.SetTitle("Select content directory");
     content_dir_dialog.Open();
+
+    search_query.reserve(100);
 }
 
 void dnd::GUIApp::render() {
@@ -37,13 +41,14 @@ void dnd::GUIApp::render() {
 
     render_content_dir_selection();
     render_campaign_selection();
-    render_main_window();
+    render_overview_window();
     if (!error_messages.empty()) {
         render_parsing_error_popup();
     }
 
     if (!content.empty()) {
         render_content_window();
+        render_status_window();
     }
 }
 
@@ -120,10 +125,10 @@ void dnd::GUIApp::render_campaign_selection() {
     }
 }
 
-void dnd::GUIApp::render_main_window() {
+void dnd::GUIApp::render_overview_window() {
     ImGuiIO& io = ImGui::GetIO();
 
-    ImGui::Begin("Main Window - DnD Campaign Manager");
+    ImGui::Begin("Overview");
 
     if (!content_directory.empty()) {
         ImGui::Text("Content directory: %s", content_directory.string().c_str());
@@ -211,7 +216,30 @@ void dnd::GUIApp::start_parsing() {
 }
 
 void dnd::GUIApp::render_content_window() {
-    ImGui::Begin("Content Window - DnD Campaign Manager");
+    ImGui::Begin("Main");
+
+    if (ImGui::InputText("Search", &search_query, ImGuiInputTextFlags_EscapeClearsAll, nullptr, nullptr)) {
+        std::unordered_set<const dnd::Spell*> matched_spells = content.spells.prefix_get(search_query);
+        for (const auto spell_ptr : matched_spells) {
+            ImGui::Text("%s", spell_ptr->name.c_str());
+        }
+        std::unordered_set<const dnd::Item*> matched_items = content.items.prefix_get(search_query);
+        for (const auto item_ptr : matched_items) {
+            ImGui::Text("%s", item_ptr->name.c_str());
+        }
+        std::unordered_set<const dnd::Feature**> matched_features = content.features.prefix_get(search_query);
+        for (const auto feature_ptr : matched_features) {
+            ImGui::Text("%s", (*feature_ptr)->name.c_str());
+        }
+    }
+
+    ImGui::End();
+}
+
+void dnd::GUIApp::on_search_input(ImGuiInputTextCallbackData* data) { std::cout << data->EventChar << '\n'; }
+
+void dnd::GUIApp::render_status_window() {
+    ImGui::Begin("Status");
 
     ImGui::Text("Content directory:\n%s", content_directory.string().c_str());
     ImGui::Text("Campaign name:\n%s", campaign_name.c_str());
