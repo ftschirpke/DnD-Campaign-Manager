@@ -25,7 +25,7 @@ struct ItemParsingInfo {
     // a functional description of the item (how it works and what it does)
     std::string description;
     // a description of the item focusing on its purely cosmetic (non-functional) aspects
-    std::string cosmetic_desciption;
+    std::string cosmetic_description;
 };
 
 /**

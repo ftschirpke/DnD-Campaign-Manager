@@ -140,6 +140,9 @@ int dnd::launch() {
         render_platform_windows(io.ConfigFlags);
         glfwSwapBuffers(window);
     }
+
+    app.clean_up();
+
     clean_up(window);
     return 0;
 }

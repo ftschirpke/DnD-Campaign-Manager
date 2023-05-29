@@ -20,9 +20,9 @@ namespace dnd {
  * @brief Struct for storing the result of a search query. (transitional solution - TODO)
  */
 struct SearchResult {
-    std::unordered_set<const dnd::Spell*> spells;
-    std::unordered_set<const dnd::Item*> items;
-    std::unordered_set<const dnd::Feature**> features;
+    std::vector<const dnd::Spell*> spells;
+    std::vector<const dnd::Item*> items;
+    std::vector<const dnd::Feature**> features;
 };
 
 /**
@@ -39,17 +39,27 @@ public:
      * @brief Initializes the GUI elements of the application.
      */
     void initialize();
+    /**
+     * @brief Cleans up the GUI elements of the application.
+     */
+    void clean_up();
 private:
     void start_parsing();
+
+    void save_session_values();
+    void get_last_session_values();
 
     void render_content_dir_selection();
     void render_campaign_selection();
     void render_overview_window();
-    void render_content_window();
+    void render_search_window();
     void render_status_window();
     void render_parsing_error_popup();
+    void render_content_window();
 
-    void on_search_input(ImGuiInputTextCallbackData* data);
+    void render_spell_tab(const Spell* spell_ptr, size_t index);
+    void render_item_tab(const Item* item_ptr, size_t index);
+    void render_feature_tab(const Feature* feature_ptr, size_t index);
 
     ImGuiIO& io;
 
@@ -63,6 +73,8 @@ private:
 
     std::string search_query;
     SearchResult search_result;
+    std::array<bool, 100> selected_search_results;
+    static const int max_search_results = 100;
 
     std::vector<std::string> error_messages;
 

@@ -2,7 +2,10 @@
 
 #include "gui_app.hpp"
 
+#include <algorithm>
+#include <cctype>
 #include <filesystem>
+#include <fstream>
 #include <future>
 #include <iostream>
 #include <string>
@@ -12,24 +15,79 @@
 #include <fmt/format.h>
 #include <imgui/imfilebrowser.h>
 #include <imgui/imgui.h>
+#include <imgui/imgui_internal.h>
 #include <imgui/imgui_stdlib.h>
+#include <nlohmann/json.hpp>
 
 #include "core/controllers/content_holder.hpp"
+#include "core/models/effect_holder/feature.hpp"
+#include "core/models/item.hpp"
+#include "core/models/spell.hpp"
 #include "core/parsing/controllers/content_parser.hpp"
 #include "core/parsing/parsing_exceptions.hpp"
+
+static const char* const imgui_ini_filename = "imgui.ini";
+static const char* const last_session_filename = "last_session.ini";
 
 static const ImGuiFileBrowserFlags content_dir_dialog_options = ImGuiFileBrowserFlags_SelectDirectory;
 static const ImGuiWindowFlags error_popup_options = ImGuiWindowFlags_AlwaysAutoResize;
 
 dnd::GUIApp::GUIApp()
-    : io(ImGui::GetIO()), show_demo_window(false), select_campaign(false), is_parsing(false),
-      content_dir_dialog(content_dir_dialog_options) {}
+    : io(ImGui::GetIO()), show_demo_window(false), select_campaign(false), is_parsing(false), selected_search_results(),
+      content_dir_dialog(content_dir_dialog_options) {
+    for (size_t i = 0; i < max_search_results; ++i) {
+        selected_search_results[i] = false;
+    }
+}
 
 void dnd::GUIApp::initialize() {
     content_dir_dialog.SetTitle("Select content directory");
-    content_dir_dialog.Open();
+    get_last_session_values();
 
+    if (content_directory.empty()) {
+        content_dir_dialog.Open();
+    } else if (campaign_name.empty()) {
+        select_campaign = true;
+    } else {
+        start_parsing();
+    }
     search_query.reserve(100);
+}
+
+void dnd::GUIApp::clean_up() { save_session_values(); }
+
+void dnd::GUIApp::get_last_session_values() {
+    if (!std::filesystem::exists(last_session_filename)) {
+        return;
+    }
+    std::ifstream last_session_file(last_session_filename);
+    if (!last_session_file.is_open()) {
+        return;
+    }
+    nlohmann::json last_session;
+    last_session_file >> last_session;
+    last_session_file.close();
+
+    if (!last_session.contains("content_directory")) {
+        return;
+    }
+    content_directory = std::filesystem::path(last_session["content_directory"].get<std::string>());
+    if (last_session.contains("campaign_name")) {
+        campaign_name = last_session["campaign_name"].get<std::string>();
+    }
+}
+
+void dnd::GUIApp::save_session_values() {
+    nlohmann::json last_session;
+    if (!content_directory.empty()) {
+        last_session["content_directory"] = content_directory.string();
+        if (!campaign_name.empty()) {
+            last_session["campaign_name"] = campaign_name;
+        }
+    }
+    std::ofstream last_session_file(last_session_filename);
+    last_session_file << std::setw(4) << last_session;
+    last_session_file.close();
 }
 
 void dnd::GUIApp::render() {
@@ -47,8 +105,9 @@ void dnd::GUIApp::render() {
     }
 
     if (!content.empty()) {
-        render_content_window();
+        render_search_window();
         render_status_window();
+        render_content_window();
     }
 }
 
@@ -213,40 +272,110 @@ void dnd::GUIApp::start_parsing() {
     is_parsing = true;
 }
 
-void dnd::GUIApp::render_content_window() {
+void dnd::GUIApp::render_search_window() {
     ImGui::Begin("Main");
 
     if (ImGui::InputText("Search", &search_query, ImGuiInputTextFlags_EscapeClearsAll, nullptr, nullptr)) {
         if (search_query.size() > 1) {
-            std::cout << io.DisplaySize.x << " " << io.DisplaySize.y << std::endl;
-            search_result.spells = content.spells.prefix_get(search_query);
-            search_result.items = content.items.prefix_get(search_query);
-            search_result.features = content.features.prefix_get(search_query);
-        } else {
-            search_result.spells.clear();
-            search_result.items.clear();
-            search_result.features.clear();
+            auto tolower = [](unsigned char c) { return static_cast<unsigned char>(std::tolower(c)); };
+            std::transform(search_query.begin(), search_query.end(), search_query.begin(), tolower);
+            std::unordered_set<const Spell*> spell_result = content.spells.prefix_get(search_query);
+            search_result.spells = std::vector<const Spell*>(spell_result.begin(), spell_result.end());
+            std::unordered_set<const Item*> item_result = content.items.prefix_get(search_query);
+            search_result.items = std::vector<const Item*>(item_result.begin(), item_result.end());
+            std::unordered_set<const Feature**> feature_result = content.features.prefix_get(search_query);
+            search_result.features = std::vector<const Feature**>(feature_result.begin(), feature_result.end());
         }
     }
     if (search_query.size() < 2) {
         ImGui::Text("Enter at least 2 characters to search.");
+        search_result.spells.clear();
+        search_result.items.clear();
+        search_result.features.clear();
     }
+
+    if (search_result.spells.size() + search_result.items.size() + search_result.features.size() > max_search_results) {
+        ImGui::Text("Too many results. Please refine your search.");
+        ImGui::End();
+        return;
+    }
+    size_t i = 0;
     ImGui::Text("=== SPELLS ========================");
     for (const auto spell_ptr : search_result.spells) {
-        ImGui::Text("%s", spell_ptr->name.c_str());
+        if (ImGui::Selectable(spell_ptr->name.c_str(), false)) {
+            selected_search_results[i] = true;
+        }
+        ++i;
     }
     ImGui::Text("=== ITEMS =========================");
     for (const auto item_ptr : search_result.items) {
-        ImGui::Text("%s", item_ptr->name.c_str());
+        if (ImGui::Selectable(item_ptr->name.c_str(), false)) {
+            selected_search_results[i] = true;
+        }
+        ++i;
     }
     ImGui::Text("=== FEATURES ======================");
     for (const auto feature_ptr : search_result.features) {
-        ImGui::Text("%s", (*feature_ptr)->name.c_str());
+        if (ImGui::Selectable((*feature_ptr)->name.c_str(), false)) {
+            selected_search_results[i] = true;
+        }
+        ++i;
     }
     ImGui::End();
 }
 
-void dnd::GUIApp::on_search_input(ImGuiInputTextCallbackData* data) { std::cout << data->EventChar << '\n'; }
+void dnd::GUIApp::render_content_window() {
+    ImGui::Begin("Content");
+    ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_AutoSelectNewTabs | ImGuiTabBarFlags_Reorderable;
+    if (ImGui::BeginTabBar("Content Tabs", tab_bar_flags)) {
+        for (size_t i = 0; i < selected_search_results.size(); ++i) {
+            if (selected_search_results[i]) {
+                if (i < search_result.spells.size()) {
+                    render_spell_tab(search_result.spells.at(i), i);
+                } else if (i < search_result.spells.size() + search_result.items.size()) {
+                    render_item_tab(search_result.items.at(i - search_result.spells.size()), i);
+                } else {
+                    render_feature_tab(
+                        *search_result.features.at(i - search_result.spells.size() - search_result.items.size()), i
+                    );
+                }
+            }
+        }
+        ImGui::EndTabBar();
+    }
+    ImGui::End();
+}
+
+void dnd::GUIApp::render_spell_tab(const dnd::Spell* spell_ptr, size_t index) {
+    if (ImGui::BeginTabItem(spell_ptr->name.c_str(), &selected_search_results[index])) {
+        ImGui::Text("Spell - %s", spell_ptr->name.c_str());
+        ImGui::Text("Type: %s", spell_ptr->type.str().c_str());
+        ImGui::Text("Casting time: %s", spell_ptr->casting_time.c_str());
+        ImGui::Text("Range: %s", spell_ptr->range.c_str());
+        ImGui::TextWrapped("Components: %s", spell_ptr->components.str().c_str());
+        ImGui::Text("Duration: %s", spell_ptr->duration.c_str());
+        ImGui::TextWrapped("Description: %s", spell_ptr->description.c_str());
+        ImGui::EndTabItem();
+    }
+}
+
+void dnd::GUIApp::render_item_tab(const dnd::Item* item_ptr, size_t index) {
+    if (ImGui::BeginTabItem(item_ptr->name.c_str(), &selected_search_results[index])) {
+        ImGui::Text("Item - %s", item_ptr->name.c_str());
+        ImGui::Text("Requires attunement: %s", item_ptr->requires_attunement ? "yes" : "no");
+        ImGui::TextWrapped("Description: %s", item_ptr->description.c_str());
+        ImGui::TextWrapped("Cosmetic Description: %s", item_ptr->cosmetic_description.c_str());
+        ImGui::EndTabItem();
+    }
+}
+
+void dnd::GUIApp::render_feature_tab(const dnd::Feature* feature_ptr, size_t index) {
+    if (ImGui::BeginTabItem(feature_ptr->name.c_str(), &selected_search_results[index])) {
+        ImGui::Text("Feature - %s", feature_ptr->name.c_str());
+        ImGui::TextWrapped("Description: %s", feature_ptr->description.c_str());
+        ImGui::EndTabItem();
+    }
+}
 
 void dnd::GUIApp::render_status_window() {
     ImGui::Begin("Status");

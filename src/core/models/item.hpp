@@ -24,11 +24,11 @@ public:
      * @param name the name of the item
      * @param requires_attunement whether the item requires attunement
      * @param description a description of how the item works and/or what is does
-     * @param cosmetic_desciption a description of the purely cosmetic (non-functional) aspects of the item
+     * @param cosmetic_description a description of the purely cosmetic (non-functional) aspects of the item
      */
     Item(
         const std::string& name, bool requires_attunement, const std::string description,
-        const std::string cosmetic_desciption
+        const std::string cosmetic_description
     ) noexcept;
 
     const std::string name;
@@ -36,18 +36,18 @@ public:
     // a functional description of the item (how it works and what it does)
     const std::string description;
     // a description of the item focusing on its purely cosmetic (non-functional) aspects
-    const std::string cosmetic_desciption;
+    const std::string cosmetic_description;
 };
 
 inline Item::Item(const std::string& name, bool requires_attunement, const std::string description) noexcept
-    : name(name), requires_attunement(requires_attunement), description(description), cosmetic_desciption() {}
+    : name(name), requires_attunement(requires_attunement), description(description), cosmetic_description() {}
 
 inline Item::Item(
     const std::string& name, bool requires_attunement, const std::string description,
-    const std::string cosmetic_desciption
+    const std::string cosmetic_description
 ) noexcept
     : name(name), requires_attunement(requires_attunement), description(description),
-      cosmetic_desciption(cosmetic_desciption) {}
+      cosmetic_description(cosmetic_description) {}
 
 } // namespace dnd
 
