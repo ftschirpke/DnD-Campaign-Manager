@@ -17,6 +17,15 @@
 namespace dnd {
 
 /**
+ * @brief Struct for storing the result of a search query. (transitional solution - TODO)
+ */
+struct SearchResult {
+    std::unordered_set<const dnd::Spell*> spells;
+    std::unordered_set<const dnd::Item*> items;
+    std::unordered_set<const dnd::Feature**> features;
+};
+
+/**
  * @brief Class for the main GUI application allowing content management and rendering.
  */
 class GUIApp {
@@ -42,6 +51,8 @@ private:
 
     void on_search_input(ImGuiInputTextCallbackData* data);
 
+    ImGuiIO& io;
+
     bool show_demo_window;
     bool select_campaign;
     bool is_parsing;
@@ -51,6 +62,7 @@ private:
     std::string campaign_name;
 
     std::string search_query;
+    SearchResult search_result;
 
     std::vector<std::string> error_messages;
 

@@ -107,7 +107,12 @@ int dnd::launch() {
     }
     const char* glsl_version = setup_glfw();
 
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "DnD Campaign Manager", nullptr, nullptr);
+    GLFWmonitor* primary_monitor = glfwGetPrimaryMonitor();
+    const GLFWvidmode* video_mode = glfwGetVideoMode(primary_monitor);
+    int screen_width = video_mode->width * 9 / 10;
+    int screen_height = video_mode->height * 9 / 10;
+
+    GLFWwindow* window = glfwCreateWindow(screen_width, screen_height, "DnD Campaign Manager", nullptr, nullptr);
     if (window == nullptr)
         return 1;
     glfwMakeContextCurrent(window);

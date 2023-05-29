@@ -22,7 +22,7 @@ static const ImGuiFileBrowserFlags content_dir_dialog_options = ImGuiFileBrowser
 static const ImGuiWindowFlags error_popup_options = ImGuiWindowFlags_AlwaysAutoResize;
 
 dnd::GUIApp::GUIApp()
-    : show_demo_window(false), select_campaign(false), is_parsing(false),
+    : io(ImGui::GetIO()), show_demo_window(false), select_campaign(false), is_parsing(false),
       content_dir_dialog(content_dir_dialog_options) {}
 
 void dnd::GUIApp::initialize() {
@@ -126,8 +126,6 @@ void dnd::GUIApp::render_campaign_selection() {
 }
 
 void dnd::GUIApp::render_overview_window() {
-    ImGuiIO& io = ImGui::GetIO();
-
     ImGui::Begin("Overview");
 
     if (!content_directory.empty()) {
@@ -219,20 +217,32 @@ void dnd::GUIApp::render_content_window() {
     ImGui::Begin("Main");
 
     if (ImGui::InputText("Search", &search_query, ImGuiInputTextFlags_EscapeClearsAll, nullptr, nullptr)) {
-        std::unordered_set<const dnd::Spell*> matched_spells = content.spells.prefix_get(search_query);
-        for (const auto spell_ptr : matched_spells) {
-            ImGui::Text("%s", spell_ptr->name.c_str());
-        }
-        std::unordered_set<const dnd::Item*> matched_items = content.items.prefix_get(search_query);
-        for (const auto item_ptr : matched_items) {
-            ImGui::Text("%s", item_ptr->name.c_str());
-        }
-        std::unordered_set<const dnd::Feature**> matched_features = content.features.prefix_get(search_query);
-        for (const auto feature_ptr : matched_features) {
-            ImGui::Text("%s", (*feature_ptr)->name.c_str());
+        if (search_query.size() > 1) {
+            std::cout << io.DisplaySize.x << " " << io.DisplaySize.y << std::endl;
+            search_result.spells = content.spells.prefix_get(search_query);
+            search_result.items = content.items.prefix_get(search_query);
+            search_result.features = content.features.prefix_get(search_query);
+        } else {
+            search_result.spells.clear();
+            search_result.items.clear();
+            search_result.features.clear();
         }
     }
-
+    if (search_query.size() < 2) {
+        ImGui::Text("Enter at least 2 characters to search.");
+    }
+    ImGui::Text("=== SPELLS ========================");
+    for (const auto spell_ptr : search_result.spells) {
+        ImGui::Text("%s", spell_ptr->name.c_str());
+    }
+    ImGui::Text("=== ITEMS =========================");
+    for (const auto item_ptr : search_result.items) {
+        ImGui::Text("%s", item_ptr->name.c_str());
+    }
+    ImGui::Text("=== FEATURES ======================");
+    for (const auto feature_ptr : search_result.features) {
+        ImGui::Text("%s", (*feature_ptr)->name.c_str());
+    }
     ImGui::End();
 }
 
