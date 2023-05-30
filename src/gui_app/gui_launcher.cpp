@@ -41,14 +41,14 @@ const char* setup_glfw() {
     return glsl_version;
 }
 
-void setup_style(ImGuiConfigFlags ConfigFlags) {
+void setup_style() {
     ImGui::StyleColorsDark();
     // ImGui::StyleColorsLight();
 
     // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular
     // ones.
     ImGuiStyle& style = ImGui::GetStyle();
-    if (ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+    if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
         style.WindowRounding = 0.0f;
         style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
@@ -89,8 +89,8 @@ void render(GLFWwindow* window) {
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void render_platform_windows(ImGuiConfigFlags ConfigFlags) {
-    if (ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+void render_platform_windows() {
+    if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
         GLFWwindow* backup_current_context = glfwGetCurrentContext();
         ImGui::UpdatePlatformWindows();
         ImGui::RenderPlatformWindowsDefault();
@@ -129,7 +129,7 @@ int dnd::launch() {
     setup_imgui_context();
     ImGuiIO& io = ImGui::GetIO();
     setup_backends(window, glsl_version);
-    setup_style(io.ConfigFlags);
+    setup_style();
     setup_font();
 
     GUIApp app;
@@ -146,7 +146,7 @@ int dnd::launch() {
         app.render();
 
         render(window);
-        render_platform_windows(io.ConfigFlags);
+        render_platform_windows();
         glfwSwapBuffers(window);
     }
 
