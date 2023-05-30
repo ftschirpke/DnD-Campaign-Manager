@@ -31,9 +31,9 @@ public:
      * @param spells the already-parsed spells
      */
     CharacterSubclassFileParser(
-        const std::filesystem::path& filepath, ContentLibrary<const CharacterSubclass>& subclasses,
-        const Groups& groups, const ContentLibrary<const CharacterClass>& classes,
-        const ContentLibrary<const Spell>& spells
+        const std::filesystem::path& filepath, StoringContentLibrary<const CharacterSubclass>& subclasses,
+        const Groups& groups, const StoringContentLibrary<const CharacterClass>& classes,
+        const StoringContentLibrary<const Spell>& spells
     ) noexcept;
     /**
      * @brief Parses JSON file containing a subclass
@@ -65,9 +65,9 @@ private:
     // the name of the class for the parsed subclass
     std::string class_name;
     // the already-parsed subclasses to add the parsed subclass to
-    ContentLibrary<const CharacterSubclass>& subclasses;
+    StoringContentLibrary<const CharacterSubclass>& subclasses;
     // the already-parsed classes to check whether such a class exists
-    const ContentLibrary<const CharacterClass>& classes;
+    const StoringContentLibrary<const CharacterClass>& classes;
     // a subparser used for parsing the subclass' features
     FeaturesParser features_parser;
     // a subparser used for parsing the subclass' spellcasting feature if it exists
@@ -75,8 +75,9 @@ private:
 };
 
 inline CharacterSubclassFileParser::CharacterSubclassFileParser(
-    const std::filesystem::path& filepath, ContentLibrary<const CharacterSubclass>& subclasses, const Groups& groups,
-    const ContentLibrary<const CharacterClass>& classes, const ContentLibrary<const Spell>& spells
+    const std::filesystem::path& filepath, StoringContentLibrary<const CharacterSubclass>& subclasses,
+    const Groups& groups, const StoringContentLibrary<const CharacterClass>& classes,
+    const StoringContentLibrary<const Spell>& spells
 ) noexcept
     : ContentFileParser(filepath), subclasses(subclasses), classes(classes), features_parser(type, filepath, groups),
       spellcasting_parser(type, filepath, spells) {}

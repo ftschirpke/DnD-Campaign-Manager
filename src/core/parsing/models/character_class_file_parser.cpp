@@ -2,6 +2,7 @@
 
 #include "character_class_file_parser.hpp"
 
+#include <filesystem>
 #include <iostream>
 #include <string>
 #include <tuple>
@@ -75,8 +76,8 @@ bool dnd::CharacterClassFileParser::validate() const {
 
 void dnd::CharacterClassFileParser::saveResult() {
     classes.create(
-        character_class_name, character_class_name, std::move(features_parser.retrieveFeatures()),
-        character_class_hit_dice, asi_levels, subclass_level
+        character_class_name, filepath, std::move(features_parser.retrieveFeatures()), character_class_hit_dice,
+        asi_levels, subclass_level
     );
     // TODO: add spellcasting
 }

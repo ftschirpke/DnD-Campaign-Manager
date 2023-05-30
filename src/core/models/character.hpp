@@ -32,7 +32,8 @@ public:
      * @param base_ability_scores the 6 base values for the character's ability scores
      */
     Character(
-        const std::string& name, std::vector<Feature>&& features, const std::array<int, 6>& base_ability_scores
+        const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
+        const std::array<int, 6>& base_ability_scores
     ) noexcept;
     /**
      * @brief Constructs a character with a given level and XP value
@@ -44,8 +45,8 @@ public:
      * @param hit_dice_rolls the values rolled for maxHP at each level-up using your hit dice (including level 1)
      */
     Character(
-        const std::string& name, std::vector<Feature>&& features, const std::array<int, 6>& base_ability_scores,
-        int level, int xp, const std::vector<int>& hit_dice_rolls
+        const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
+        const std::array<int, 6>& base_ability_scores, int level, int xp, const std::vector<int>& hit_dice_rolls
     ) noexcept;
     /**
      * @brief Returns the level of the character
@@ -133,20 +134,21 @@ private:
 };
 
 inline Character::Character(
-    const std::string& name, std::vector<Feature>&& features, const std::array<int, 6>& base_ability_scores
+    const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
+    const std::array<int, 6>& base_ability_scores
 ) noexcept
-    : FeatureHolder(name, std::move(features)), base_ability_scores(base_ability_scores), class_ptr(nullptr),
-      subclass_ptr(nullptr), race_ptr(nullptr), subrace_ptr(nullptr), decisions(), state(decisions), level(1), xp(0),
-      hit_dice_rolls() {}
+    : FeatureHolder(name, source_file_path, std::move(features)), base_ability_scores(base_ability_scores),
+      class_ptr(nullptr), subclass_ptr(nullptr), race_ptr(nullptr), subrace_ptr(nullptr), decisions(), state(decisions),
+      level(1), xp(0), hit_dice_rolls() {}
 
 
 inline Character::Character(
-    const std::string& name, std::vector<Feature>&& features, const std::array<int, 6>& base_ability_scores, int level,
-    int xp, const std::vector<int>& hit_dice_rolls
+    const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
+    const std::array<int, 6>& base_ability_scores, int level, int xp, const std::vector<int>& hit_dice_rolls
 ) noexcept
-    : FeatureHolder(name, std::move(features)), base_ability_scores(base_ability_scores), class_ptr(nullptr),
-      subclass_ptr(nullptr), race_ptr(nullptr), subrace_ptr(nullptr), decisions(), state(decisions), level(level),
-      xp(xp), hit_dice_rolls(hit_dice_rolls) {}
+    : FeatureHolder(name, source_file_path, std::move(features)), base_ability_scores(base_ability_scores),
+      class_ptr(nullptr), subclass_ptr(nullptr), race_ptr(nullptr), subrace_ptr(nullptr), decisions(), state(decisions),
+      level(level), xp(xp), hit_dice_rolls(hit_dice_rolls) {}
 
 inline int Character::getLevel() const noexcept { return level; }
 

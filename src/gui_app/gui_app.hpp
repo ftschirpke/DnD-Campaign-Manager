@@ -22,7 +22,7 @@ namespace dnd {
 struct SearchResult {
     std::vector<const dnd::Spell*> spells;
     std::vector<const dnd::Item*> items;
-    std::vector<const dnd::Feature**> features;
+    std::vector<const dnd::Feature*> features;
 };
 
 /**

@@ -27,8 +27,8 @@ public:
      * @param subclass_level the level at which a character of this class gains access to subclasses
      */
     CharacterClass(
-        const std::string& name, std::vector<Feature>&& features, const Dice hit_dice,
-        const std::vector<int>& asi_levels, int subclass_level
+        const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
+        const Dice hit_dice, const std::vector<int>& asi_levels, int subclass_level
     ) noexcept;
 
     // the type of hit dice for this class
@@ -40,10 +40,10 @@ public:
 };
 
 inline CharacterClass::CharacterClass(
-    const std::string& name, std::vector<Feature>&& features, const Dice hit_dice, const std::vector<int>& asi_levels,
-    int subclass_level
+    const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
+    const Dice hit_dice, const std::vector<int>& asi_levels, int subclass_level
 ) noexcept
-    : FeatureHolder(name, std::move(features)), hit_dice(hit_dice), asi_levels(asi_levels),
+    : FeatureHolder(name, source_file_path, std::move(features)), hit_dice(hit_dice), asi_levels(asi_levels),
       subclass_level(subclass_level) {}
 
 } // namespace dnd

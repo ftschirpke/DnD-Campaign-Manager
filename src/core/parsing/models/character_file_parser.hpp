@@ -42,11 +42,12 @@ public:
      * @param spells the already-parsed spells
      */
     CharacterFileParser(
-        const std::filesystem::path& filepath, ContentLibrary<Character>& characters, const Groups& groups,
-        const ContentLibrary<const CharacterClass>& character_classes,
-        const ContentLibrary<const CharacterSubclass>& character_subclasses,
-        const ContentLibrary<const CharacterRace>& character_races,
-        const ContentLibrary<const CharacterSubrace>& character_subraces, const ContentLibrary<const Spell>& spells
+        const std::filesystem::path& filepath, StoringContentLibrary<Character>& characters, const Groups& groups,
+        const StoringContentLibrary<const CharacterClass>& character_classes,
+        const StoringContentLibrary<const CharacterSubclass>& character_subclasses,
+        const StoringContentLibrary<const CharacterRace>& character_races,
+        const StoringContentLibrary<const CharacterSubrace>& character_subraces,
+        const StoringContentLibrary<const Spell>& spells
     ) noexcept;
     /**
      * @brief Parses JSON file containing a character
@@ -119,17 +120,17 @@ private:
     // the XP value of the parsed character
     int xp;
     // the already-parsed characters to add the parsed character to
-    ContentLibrary<Character>& characters;
+    StoringContentLibrary<Character>& characters;
     // the already-parsed classes to find the parsed character's class
-    const ContentLibrary<const CharacterClass>& character_classes;
+    const StoringContentLibrary<const CharacterClass>& character_classes;
     // the already-parsed classes to find the parsed character's subclass
-    const ContentLibrary<const CharacterSubclass>& character_subclasses;
+    const StoringContentLibrary<const CharacterSubclass>& character_subclasses;
     // the already-parsed classes to find the parsed character's race
-    const ContentLibrary<const CharacterRace>& character_races;
+    const StoringContentLibrary<const CharacterRace>& character_races;
     // the already-parsed classes to find the parsed character's subrace
-    const ContentLibrary<const CharacterSubrace>& character_subraces;
+    const StoringContentLibrary<const CharacterSubrace>& character_subraces;
     // the already-parsed spells
-    const ContentLibrary<const Spell>& spells;
+    const StoringContentLibrary<const Spell>& spells;
     // a subparser for effect holders used for parsing the effect holders for the character decisions
     EffectHolderParser effect_holder_parser;
     // a subparser used for parsing the character's features
@@ -137,11 +138,12 @@ private:
 };
 
 inline CharacterFileParser::CharacterFileParser(
-    const std::filesystem::path& filepath, ContentLibrary<Character>& characters, const Groups& groups,
-    const ContentLibrary<const CharacterClass>& character_classes,
-    const ContentLibrary<const CharacterSubclass>& character_subclasses,
-    const ContentLibrary<const CharacterRace>& character_races,
-    const ContentLibrary<const CharacterSubrace>& character_subraces, const ContentLibrary<const Spell>& spells
+    const std::filesystem::path& filepath, StoringContentLibrary<Character>& characters, const Groups& groups,
+    const StoringContentLibrary<const CharacterClass>& character_classes,
+    const StoringContentLibrary<const CharacterSubclass>& character_subclasses,
+    const StoringContentLibrary<const CharacterRace>& character_races,
+    const StoringContentLibrary<const CharacterSubrace>& character_subraces,
+    const StoringContentLibrary<const Spell>& spells
 ) noexcept
     : ContentFileParser(filepath), class_ptr(nullptr), subclass_ptr(nullptr), race_ptr(nullptr), subrace_ptr(nullptr),
       characters(characters), character_classes(character_classes), character_subclasses(character_subclasses),

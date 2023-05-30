@@ -10,6 +10,8 @@
 #include <unordered_set>
 #include <utility>
 
+#include "models/content_piece.hpp"
+
 namespace dnd {
 
 /**
@@ -134,7 +136,7 @@ struct SpellComponents {
 /**
  * @brief A class representing a spell
  */
-class Spell {
+class Spell : public ContentPiece {
 public:
     /**
      * @brief Constructs a spell
@@ -148,13 +150,11 @@ public:
      * @param classes the names of classes (and subclasses) that can cast this spell
      */
     Spell(
-        const std::string& name, const SpellType& type, const std::string& casting_time, const std::string& range,
-        const SpellComponents& components, const std::string& duration, const std::string& description,
-        const std::unordered_set<std::string>& classes
+        const std::string& name, const std::filesystem::path& source_file_path, const SpellType& type,
+        const std::string& casting_time, const std::string& range, const SpellComponents& components,
+        const std::string& duration, const std::string& description, const std::unordered_set<std::string>& classes
     ) noexcept;
 
-    // the name of the spell
-    const std::string name;
     // a description of how long the spell takes to cast
     const std::string casting_time;
     // a description of the range of the spell
@@ -172,12 +172,12 @@ public:
 };
 
 inline Spell::Spell(
-    const std::string& name, const SpellType& type, const std::string& casting_time, const std::string& range,
-    const SpellComponents& components, const std::string& duration, const std::string& description,
-    const std::unordered_set<std::string>& classes
+    const std::string& name, const std::filesystem::path& source_file_path, const SpellType& type,
+    const std::string& casting_time, const std::string& range, const SpellComponents& components,
+    const std::string& duration, const std::string& description, const std::unordered_set<std::string>& classes
 ) noexcept
-    : name(name), casting_time(casting_time), range(range), duration(duration), description(description),
-      classes(classes), type(type), components(components) {}
+    : ContentPiece(name, source_file_path), casting_time(casting_time), range(range), duration(duration),
+      description(description), classes(classes), type(type), components(components) {}
 
 } // namespace dnd
 

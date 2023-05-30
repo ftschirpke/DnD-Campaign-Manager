@@ -33,7 +33,9 @@ struct ItemParsingInfo {
  */
 class ItemsFileParser : public ContentFileParser {
 public:
-    ItemsFileParser(const std::filesystem::path& filepath, ContentLibrary<const Item>& items, Groups& groups) noexcept;
+    ItemsFileParser(
+        const std::filesystem::path& filepath, StoringContentLibrary<const Item>& items, Groups& groups
+    ) noexcept;
     /**
      * @brief Parses JSON file containing a collection of spells
      * @throws parsing_error if any error occured while trying to parse the content file
@@ -61,7 +63,7 @@ private:
     // the type of content that this parser parses - items
     static constexpr ParsingType type = ParsingType::ITEM;
     // the already-parsed items to add the parsed items to
-    ContentLibrary<const Item>& items;
+    StoringContentLibrary<const Item>& items;
     // the already-parsed groups to add item-groups to
     Groups& groups;
     // the amount of items to be parsed in the current file
@@ -73,7 +75,7 @@ private:
 };
 
 inline ItemsFileParser::ItemsFileParser(
-    const std::filesystem::path& filepath, ContentLibrary<const Item>& items, Groups& groups
+    const std::filesystem::path& filepath, StoringContentLibrary<const Item>& items, Groups& groups
 ) noexcept
     : ContentFileParser(filepath), items(items), groups(groups) {}
 
