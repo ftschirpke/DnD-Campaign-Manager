@@ -65,23 +65,21 @@ private:
 
 inline void SetupCharacterParserTest::setClasses() {
     character_classes.create(
-        "Barbarian", "Barbarian", std::vector<dnd::Feature>(), dnd::diceFromInt(12),
+        "Barbarian", "dummy_path", std::vector<dnd::Feature>(), dnd::diceFromInt(12),
         std::vector<int>({4, 8, 12, 16, 19}), 3
     );
 }
 
 inline void SetupCharacterParserTest::setSubclasses() {
-    character_subclasses.create(
-        "Path of the Berserker", "Path of the Berserker", std::vector<dnd::Feature>(), "Barbarian"
-    );
+    character_subclasses.create("Path of the Berserker", "dummy_path", std::vector<dnd::Feature>(), "Barbarian");
 }
 
 inline void SetupCharacterParserTest::setRaces() {
-    character_races.create("Dwarf", "Dwarf", std::vector<dnd::Feature>(), true);
+    character_races.create("Dwarf", "dummy_path", std::vector<dnd::Feature>(), true);
 }
 
 inline void SetupCharacterParserTest::setSubraces() {
-    character_subraces.create("Hill Dwarf", "Hill Dwarf", std::vector<dnd::Feature>(), "Dwarf");
+    character_subraces.create("Hill Dwarf", "dummy_path", std::vector<dnd::Feature>(), "Dwarf");
 }
 
 inline void SetupCharacterParserTest::setSpells() {}

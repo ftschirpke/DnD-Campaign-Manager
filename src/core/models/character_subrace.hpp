@@ -23,16 +23,20 @@ public:
      * @param features a collection of features this subrace provides to a character
      * @param race_name the name of the race this is a subrace of
      */
-    CharacterSubrace(const std::string& name, std::vector<Feature>&& features, const std::string& race_name) noexcept;
+    CharacterSubrace(
+        const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
+        const std::string& race_name
+    ) noexcept;
 
     // the name of the race this is a subrace of
     const std::string race_name;
 };
 
 inline CharacterSubrace::CharacterSubrace(
-    const std::string& name, std::vector<Feature>&& features, const std::string& race_name
+    const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
+    const std::string& race_name
 ) noexcept
-    : FeatureHolder(name, std::move(features)), race_name(race_name) {}
+    : FeatureHolder(name, source_file_path, std::move(features)), race_name(race_name) {}
 
 } // namespace dnd
 

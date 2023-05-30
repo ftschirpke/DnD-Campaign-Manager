@@ -33,7 +33,7 @@ dnd::Feature dnd::FeaturesParser::createFeature(const std::string& feature_name,
     const std::string description = feature_json.at("description").get<std::string>();
 
     // TODO: change feature constructor?
-    Feature feature(feature_name, description);
+    Feature feature(feature_name, filepath, description);
 
     feature.main_part = effect_holder_parser.createEffectHolder(feature_json);
     if (feature_json.contains("choose")) {

@@ -2,6 +2,7 @@
 
 #include "character_subclass_file_parser.hpp"
 
+#include <filesystem>
 #include <iostream>
 #include <string>
 #include <tuple>
@@ -47,8 +48,6 @@ bool dnd::CharacterSubclassFileParser::validate() const {
 }
 
 void dnd::CharacterSubclassFileParser::saveResult() {
-    subclasses.create(
-        character_subclass_name, character_subclass_name, std::move(features_parser.retrieveFeatures()), class_name
-    );
+    subclasses.create(character_subclass_name, filepath, std::move(features_parser.retrieveFeatures()), class_name);
     // TODO: add spellcasting
 }

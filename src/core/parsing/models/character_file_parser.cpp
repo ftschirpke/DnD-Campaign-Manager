@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include <array>
+#include <filesystem>
 #include <iostream>
 #include <map>
 #include <memory>
@@ -276,7 +277,7 @@ bool dnd::CharacterFileParser::validate() const {
 void dnd::CharacterFileParser::saveResult() {
     // TODO: change Character constructor
     characters.create(
-        character_name, character_name, std::move(features_parser.retrieveFeatures()), base_ability_scores, level, xp,
+        character_name, filepath, std::move(features_parser.retrieveFeatures()), base_ability_scores, level, xp,
         hit_dice_rolls
     );
     Character& character = characters.get(character_name);

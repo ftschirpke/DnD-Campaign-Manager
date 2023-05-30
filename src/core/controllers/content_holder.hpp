@@ -46,16 +46,16 @@ public:
 
     // content libraries for all the types of content
 
-    ContentLibrary<Character> characters;
-    ContentLibrary<const CharacterClass> character_classes;
-    ContentLibrary<const CharacterSubclass> character_subclasses;
-    ContentLibrary<const CharacterRace> character_races;
-    ContentLibrary<const CharacterSubrace> character_subraces;
-    ContentLibrary<const Item> items;
-    ContentLibrary<const Spell> spells;
+    StoringContentLibrary<Character> characters;
+    StoringContentLibrary<const CharacterClass> character_classes;
+    StoringContentLibrary<const CharacterSubclass> character_subclasses;
+    StoringContentLibrary<const CharacterRace> character_races;
+    StoringContentLibrary<const CharacterSubrace> character_subraces;
+    StoringContentLibrary<const Item> items;
+    StoringContentLibrary<const Spell> spells;
 
-    ContentLibrary<const Feature*> features;
-    std::unordered_map<std::string, ContentLibrary<const Choosable*>> choosables;
+    ReferencingContentLibrary<const Feature> features;
+    std::unordered_map<std::string, ReferencingContentLibrary<const Choosable>> choosables;
 };
 
 inline bool ContentHolder::empty() const {
