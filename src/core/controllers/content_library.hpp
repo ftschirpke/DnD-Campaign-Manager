@@ -159,6 +159,15 @@ inline std::unordered_set<TrieT*> ContentLibrary<TrieT, DataT>::prefix_get(const
 
 template <typename TrieT, typename DataT>
     requires validContentLibraryTypes<TrieT, DataT>
+inline std::vector<TrieT*> ContentLibrary<TrieT, DataT>::sorted_prefix_get(const std::string& prefix) {
+    std::unordered_set<TrieT*> unsorted_result = prefix_get(prefix);
+    std::vector<TrieT*> result(unsorted_result.begin(), unsorted_result.end());
+    std::sort(result.begin(), result.end(), [](TrieT* a, TrieT* b) { return a->name < b->name; });
+    return result;
+}
+
+template <typename TrieT, typename DataT>
+    requires validContentLibraryTypes<TrieT, DataT>
 inline const std::unordered_map<std::string, DataT>& ContentLibrary<TrieT, DataT>::get_all() const {
     return data;
 }

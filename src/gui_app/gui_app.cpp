@@ -279,12 +279,9 @@ void dnd::GUIApp::render_search_window() {
         if (search_query.size() > 1) {
             auto tolower = [](unsigned char c) { return static_cast<unsigned char>(std::tolower(c)); };
             std::transform(search_query.begin(), search_query.end(), search_query.begin(), tolower);
-            std::unordered_set<const Spell*> spell_result = content.spells.prefix_get(search_query);
-            search_result.spells = std::vector<const Spell*>(spell_result.begin(), spell_result.end());
-            std::unordered_set<const Item*> item_result = content.items.prefix_get(search_query);
-            search_result.items = std::vector<const Item*>(item_result.begin(), item_result.end());
-            std::unordered_set<const Feature*> feature_result = content.features.prefix_get(search_query);
-            search_result.features = std::vector<const Feature*>(feature_result.begin(), feature_result.end());
+            search_result.spells = content.spells.sorted_prefix_get(search_query);
+            search_result.items = content.items.sorted_prefix_get(search_query);
+            search_result.features = content.features.sorted_prefix_get(search_query);
         }
     }
     if (search_query.size() < 2) {
