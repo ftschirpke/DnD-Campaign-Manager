@@ -302,6 +302,10 @@ void dnd::GUIApp::render_search_window() {
     size_t i = 0;
     ImGui::Text("=== SPELLS ========================");
     for (const auto spell_ptr : search_result.spells) {
+        if (spell_ptr->name.empty()) {
+            ImGui::Text("empty spell %s", std::to_string(reinterpret_cast<std::uintptr_t>(spell_ptr)).c_str());
+            continue;
+        }
         if (ImGui::Selectable(spell_ptr->name.c_str(), false)) {
             selected_search_results[i] = true;
         }
@@ -309,6 +313,10 @@ void dnd::GUIApp::render_search_window() {
     }
     ImGui::Text("=== ITEMS =========================");
     for (const auto item_ptr : search_result.items) {
+        if (item_ptr->name.empty()) {
+            ImGui::Text("empty item %s", std::to_string(reinterpret_cast<std::uintptr_t>(item_ptr)).c_str());
+            continue;
+        }
         if (ImGui::Selectable(item_ptr->name.c_str(), false)) {
             selected_search_results[i] = true;
         }
@@ -316,6 +324,10 @@ void dnd::GUIApp::render_search_window() {
     }
     ImGui::Text("=== FEATURES ======================");
     for (const auto feature_ptr : search_result.features) {
+        if (feature_ptr->name.empty()) {
+            ImGui::Text("empty feature %s", std::to_string(reinterpret_cast<std::uintptr_t>(feature_ptr)).c_str());
+            continue;
+        }
         if (ImGui::Selectable(feature_ptr->name.c_str(), false)) {
             selected_search_results[i] = true;
         }

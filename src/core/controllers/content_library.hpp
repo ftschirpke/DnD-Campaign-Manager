@@ -13,6 +13,8 @@
 #include <unordered_set>
 #include <vector>
 
+#include <iostream>
+
 #include "controllers/searching/trie.hpp"
 #include "models/content_piece.hpp"
 
@@ -183,6 +185,7 @@ bool ContentLibrary<TrieT, DataT>::create(
     if (contains(name)) {
         return false;
     }
+    // const std::string name_copy = name;
     data.emplace(
         std::piecewise_construct, std::forward_as_tuple(name),
         std::forward_as_tuple(name, source_file_path, std::move(constructor_args)...)

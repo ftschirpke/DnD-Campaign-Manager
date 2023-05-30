@@ -155,8 +155,6 @@ public:
         const std::string& duration, const std::string& description, const std::unordered_set<std::string>& classes
     ) noexcept;
 
-    // the name of the spell
-    const std::string name;
     // a description of how long the spell takes to cast
     const std::string casting_time;
     // a description of the range of the spell

@@ -35,8 +35,6 @@ public:
      */
     bool isActiveForLevel(int level) const;
 
-    // the name of the feature
-    const std::string name;
     // a human-readable description of what the feature provides
     const std::string description;
     // set to true, if this is a class feature providing you access to subclasses

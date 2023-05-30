@@ -168,11 +168,9 @@ void dnd::SpellsFileParser::saveResult() {
                 groups.add(class_name + ' ' + level_group_name, info.name);
             }
 
-            spells.add(
-                info.name, Spell(
-                               info.name, filepath, info.type, info.casting_time, info.range, info.components,
-                               info.duration, info.description, info.classes
-                           )
+            spells.create(
+                info.name, filepath, info.type, info.casting_time, info.range, info.components, info.duration,
+                info.description, info.classes
             );
         }
     }

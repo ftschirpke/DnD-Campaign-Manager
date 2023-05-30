@@ -36,7 +36,6 @@ public:
         const std::string description, const std::string cosmetic_description
     ) noexcept;
 
-    const std::string name;
     const bool requires_attunement;
     // a functional description of the item (how it works and what it does)
     const std::string description;

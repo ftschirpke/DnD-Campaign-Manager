@@ -27,8 +27,6 @@ public:
     ) noexcept;
     virtual ~FeatureHolder() noexcept = default;
 
-    // the name of the feature holder
-    const std::string name;
     // a collection of features this holder provides to a character of its type
     const std::vector<Feature> features;
 };

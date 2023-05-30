@@ -82,7 +82,7 @@ dnd::ContentHolder dnd::ContentParser::parse(
         parseAllOfType(ParsingType::RACE);
         parseAllOfType(ParsingType::SUBCLASS);
         parseAllOfType(ParsingType::SUBRACE);
-        // parseAllOfType(ParsingType::CHARACTER);
+        parseAllOfType(ParsingType::CHARACTER);
     } catch (parsing_error& e) {
         e.relativiseFileName(content_path);
         throw e;
