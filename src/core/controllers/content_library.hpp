@@ -11,7 +11,7 @@
 #include <unordered_set>
 #include <vector>
 
-#include "controllers/trie.hpp"
+#include "controllers/searching/trie.hpp"
 
 namespace dnd {
 

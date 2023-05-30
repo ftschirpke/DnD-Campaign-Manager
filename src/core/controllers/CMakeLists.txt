@@ -3,3 +3,5 @@ target_sources(${DND_CORE}
     content_holder.cpp
     groups.cpp
 )
+
+add_subdirectory(searching)

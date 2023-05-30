@@ -127,7 +127,6 @@ int dnd::launch() {
     glfwSwapInterval(1); // Enable vsync
 
     setup_imgui_context();
-    ImGuiIO& io = ImGui::GetIO();
     setup_backends(window, glsl_version);
     setup_style();
     setup_font();
