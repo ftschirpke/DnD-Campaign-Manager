@@ -6,6 +6,8 @@
 
 #include "gui_launcher.hpp"
 
+#include <filesystem>
+
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
@@ -52,6 +54,15 @@ void setup_style(ImGuiConfigFlags ConfigFlags) {
     }
 }
 
+void setup_font() {
+    ImGuiIO& io = ImGui::GetIO();
+    io.Fonts->AddFontDefault();
+    std::filesystem::path aileron_regular_path = std::filesystem::path(DND_ASSET_DIRECTORY) / "Aileron-Regular.ttf";
+    ImFont* main_font = io.Fonts->AddFontFromFileTTF(aileron_regular_path.c_str(), 24.0f);
+    IM_ASSERT(main_font != nullptr);
+    io.FontDefault = main_font;
+}
+
 void setup_imgui_context() {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -74,9 +85,6 @@ void render(GLFWwindow* window) {
     int display_w, display_h;
     glfwGetFramebufferSize(window, &display_w, &display_h);
     glViewport(0, 0, display_w, display_h);
-    // glClearColor(
-    //     clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w
-    // );
     glClear(GL_COLOR_BUFFER_BIT);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
@@ -122,6 +130,7 @@ int dnd::launch() {
     ImGuiIO& io = ImGui::GetIO();
     setup_backends(window, glsl_version);
     setup_style(io.ConfigFlags);
+    setup_font();
 
     GUIApp app;
     app.initialize();

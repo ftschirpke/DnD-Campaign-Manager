@@ -50,6 +50,8 @@ if(CCACHE_PROGRAM)
     set_property(GLOBAL PROPERTY CMAKE_CXX_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
 endif()
 
+set (DND_ASSET_DIRECTORY ${CMAKE_SOURCE_DIR}/assets)
+
 # ------------------------------------------------------------------------------
 # DND core library
 add_library(${DND_CORE} STATIC)
