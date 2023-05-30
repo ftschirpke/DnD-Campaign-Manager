@@ -58,7 +58,7 @@ void setup_font() {
     ImGuiIO& io = ImGui::GetIO();
     io.Fonts->AddFontDefault();
     std::filesystem::path aileron_regular_path = std::filesystem::path(DND_ASSET_DIRECTORY) / "Aileron-Regular.ttf";
-    ImFont* main_font = io.Fonts->AddFontFromFileTTF(aileron_regular_path.c_str(), 24.0f);
+    ImFont* main_font = io.Fonts->AddFontFromFileTTF(aileron_regular_path.string().c_str(), 24.0f);
     IM_ASSERT(main_font != nullptr);
     io.FontDefault = main_font;
 }
