@@ -23,16 +23,20 @@ public:
      * @param features the collection of features this subclass provides to a character
      * @param class_name the name of the class this is a subclass of
      */
-    CharacterSubclass(const std::string& name, std::vector<Feature>&& features, const std::string& class_name) noexcept;
+    CharacterSubclass(
+        const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
+        const std::string& class_name
+    ) noexcept;
 
     // the name of the class this is a subclass of
     const std::string class_name;
 };
 
 inline CharacterSubclass::CharacterSubclass(
-    const std::string& name, std::vector<Feature>&& features, const std::string& class_name
+    const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
+    const std::string& class_name
 ) noexcept
-    : FeatureHolder(name, std::move(features)), class_name(class_name) {}
+    : FeatureHolder(name, source_file_path, std::move(features)), class_name(class_name) {}
 
 } // namespace dnd
 

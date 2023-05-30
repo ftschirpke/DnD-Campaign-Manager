@@ -283,8 +283,8 @@ void dnd::GUIApp::render_search_window() {
             search_result.spells = std::vector<const Spell*>(spell_result.begin(), spell_result.end());
             std::unordered_set<const Item*> item_result = content.items.prefix_get(search_query);
             search_result.items = std::vector<const Item*>(item_result.begin(), item_result.end());
-            std::unordered_set<const Feature**> feature_result = content.features.prefix_get(search_query);
-            search_result.features = std::vector<const Feature**>(feature_result.begin(), feature_result.end());
+            std::unordered_set<const Feature*> feature_result = content.features.prefix_get(search_query);
+            search_result.features = std::vector<const Feature*>(feature_result.begin(), feature_result.end());
         }
     }
     if (search_query.size() < 2) {
@@ -316,7 +316,7 @@ void dnd::GUIApp::render_search_window() {
     }
     ImGui::Text("=== FEATURES ======================");
     for (const auto feature_ptr : search_result.features) {
-        if (ImGui::Selectable((*feature_ptr)->name.c_str(), false)) {
+        if (ImGui::Selectable(feature_ptr->name.c_str(), false)) {
             selected_search_results[i] = true;
         }
         ++i;
@@ -331,12 +331,12 @@ void dnd::GUIApp::render_content_window() {
         for (size_t i = 0; i < selected_search_results.size(); ++i) {
             if (selected_search_results[i]) {
                 if (i < search_result.spells.size()) {
-                    render_spell_tab(search_result.spells.at(i), i);
+                    render_spell_tab(search_result.spells[i], i);
                 } else if (i < search_result.spells.size() + search_result.items.size()) {
-                    render_item_tab(search_result.items.at(i - search_result.spells.size()), i);
+                    render_item_tab(search_result.items[i - search_result.spells.size()], i);
                 } else {
                     render_feature_tab(
-                        *search_result.features.at(i - search_result.spells.size() - search_result.items.size()), i
+                        search_result.features[i - search_result.spells.size() - search_result.items.size()], i
                     );
                 }
             }

@@ -3,9 +3,11 @@
 
 #include "dnd_config.hpp"
 
+#include <filesystem>
 #include <string>
 #include <vector>
 
+#include "models/content_piece.hpp"
 #include "models/effect_holder/effect_holder.hpp"
 #include "models/effect_holder/effect_holder_with_choices.hpp"
 
@@ -14,14 +16,16 @@ namespace dnd {
 /**
  * @brief A class representing a feature provided by classes, races, subclasses and subraces
  */
-class Feature {
+class Feature : public ContentPiece {
 public:
     /**
      * @brief Constructs a feature with its name and description
      * @param name the name of the feature
      * @param description a human-readable description of what the feature provides
      */
-    Feature(const std::string& name, const std::string& description) noexcept;
+    Feature(
+        const std::string& name, const std::filesystem::path& source_file_path, const std::string& description
+    ) noexcept;
     Feature(Feature&& other) noexcept = default;
     /**
      * @brief Checks whether the feature is active (provides its effects) for a character of a certain level
@@ -45,8 +49,10 @@ public:
     std::vector<EffectHolderWithChoices> parts_with_choices;
 };
 
-inline Feature::Feature(const std::string& name, const std::string& description) noexcept
-    : name(name), description(description), subclass(false) {}
+inline Feature::Feature(
+    const std::string& name, const std::filesystem::path& source_file_path, const std::string& description
+) noexcept
+    : ContentPiece(name, source_file_path), description(description), subclass(false) {}
 
 } // namespace dnd
 

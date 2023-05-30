@@ -2,6 +2,7 @@
 
 #include "character_race_file_parser.hpp"
 
+#include <filesystem>
 #include <iostream>
 #include <string>
 #include <tuple>
@@ -38,5 +39,5 @@ bool dnd::CharacterRaceFileParser::validate() const {
 }
 
 void dnd::CharacterRaceFileParser::saveResult() {
-    races.create(character_race_name, character_race_name, std::move(features_parser.retrieveFeatures()), has_subraces);
+    races.create(character_race_name, filepath, std::move(features_parser.retrieveFeatures()), has_subraces);
 }

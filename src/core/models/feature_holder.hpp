@@ -7,6 +7,7 @@
 #include <utility>
 #include <vector>
 
+#include "models/content_piece.hpp"
 #include "models/effect_holder/feature.hpp"
 
 namespace dnd {
@@ -14,14 +15,16 @@ namespace dnd {
 /**
  * @brief A class representing all types of bodies that provide features to characters i.e. (sub)classes and (sub)races
  */
-class FeatureHolder {
+class FeatureHolder : public ContentPiece {
 public:
     /**
      * @brief Constructs a feature holder with a name and with features
      * @param name the name of the feature holder
      * @param features a collection of features this holder provides to a character of its type
      */
-    FeatureHolder(const std::string& name, std::vector<Feature>&& features) noexcept;
+    FeatureHolder(
+        const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features
+    ) noexcept;
     virtual ~FeatureHolder() noexcept = default;
 
     // the name of the feature holder
@@ -30,8 +33,10 @@ public:
     const std::vector<Feature> features;
 };
 
-inline FeatureHolder::FeatureHolder(const std::string& name, std::vector<Feature>&& features) noexcept
-    : name(name), features(std::move(features)) {}
+inline FeatureHolder::FeatureHolder(
+    const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features
+) noexcept
+    : ContentPiece(name, source_file_path), features(std::move(features)) {}
 
 } // namespace dnd
 

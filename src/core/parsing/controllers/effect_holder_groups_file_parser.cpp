@@ -39,7 +39,7 @@ dnd::Choosable dnd::EffectHolderGroupsFileParser::createChoosable(
     const std::string description = choosable_json.at("description").get<std::string>();
 
     // TODO: change choosable constructor?
-    Choosable choosable(choosable_name, description);
+    Choosable choosable(choosable_name, filepath, description);
 
     choosable.main_part = effect_holder_parser.createEffectHolder(choosable_json);
     if (choosable_json.contains("multi")) {

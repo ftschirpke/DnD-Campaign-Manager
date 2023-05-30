@@ -55,7 +55,7 @@ public:
      * @param groups the already-parsed groups
      */
     SpellsFileParser(
-        const std::filesystem::path& filepath, ContentLibrary<const Spell>& spells, Groups& groups
+        const std::filesystem::path& filepath, StoringContentLibrary<const Spell>& spells, Groups& groups
     ) noexcept;
     /**
      * @brief Parses JSON file containing a collection of spells
@@ -114,7 +114,7 @@ private:
     // the regular expression to check the validity of a spell type
     const std::regex spell_type_regex;
     // the already-parsed spells to add the parsed spells to
-    ContentLibrary<const Spell>& spells;
+    StoringContentLibrary<const Spell>& spells;
     // the already-parsed groups to add spell-groups to
     Groups& groups;
     // the amount of spells to be parsed in the current file
@@ -128,7 +128,7 @@ private:
 };
 
 inline SpellsFileParser::SpellsFileParser(
-    const std::filesystem::path& filepath, ContentLibrary<const Spell>& spells, Groups& groups
+    const std::filesystem::path& filepath, StoringContentLibrary<const Spell>& spells, Groups& groups
 ) noexcept
     : ContentFileParser(filepath), spell_components_regex(spell_type_regex_cstr),
       spell_type_regex(spell_components_regex_cstr), spells(spells), groups(groups) {}

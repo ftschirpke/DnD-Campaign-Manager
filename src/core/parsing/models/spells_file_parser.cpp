@@ -170,8 +170,8 @@ void dnd::SpellsFileParser::saveResult() {
 
             spells.add(
                 info.name, Spell(
-                               info.name, info.type, info.casting_time, info.range, info.components, info.duration,
-                               info.description, info.classes
+                               info.name, filepath, info.type, info.casting_time, info.range, info.components,
+                               info.duration, info.description, info.classes
                            )
             );
         }
