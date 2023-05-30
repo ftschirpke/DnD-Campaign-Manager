@@ -70,10 +70,7 @@ void dnd::ItemsFileParser::saveResult() {
                 groups.add("items without attunement", info.name);
             }
 
-            items.add(
-                info.name,
-                Item(info.name, filepath, info.requires_attunement, info.description, info.cosmetic_description)
-            );
+            items.create(info.name, filepath, info.requires_attunement, info.description, info.cosmetic_description);
         }
     }
 }
