@@ -198,7 +198,7 @@ std::unordered_set<T*> Trie<T>::search_prefix(std::string_view prefix) const {
     if (prefix_node == nullptr) {
         return {};
     }
-    return successors(prefix_node);
+    return prefix_node->successors();
 }
 
 template <typename T>
