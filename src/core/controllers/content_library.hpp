@@ -21,7 +21,7 @@
 namespace dnd {
 
 template <typename TrieT, typename DataT>
-concept validContentLibraryTypes = std::is_base_of_v<ContentPiece, TrieT>
+concept validContentLibraryTypes = ContentPieceType<TrieT>
                                    && std::is_same_v<TrieT, typename std::remove_pointer<DataT>::type>;
 /**
  * @brief A library of content pieces
@@ -95,6 +95,11 @@ public:
         typename... Args,
         std::enable_if_t<std::is_constructible<DataT, std::string&, std::filesystem::path&, Args&&...>::value, int> = 0>
     bool create(const std::string& name, const std::filesystem::path& source_file_path, Args&&... constructor_args);
+    /**
+     * @brief Get the root of the search trie
+     * @return a pointer the root node
+     */
+    const TrieNode<TrieT>* get_trie_root() const;
 protected:
     /**
      * @brief Saves a piece of content that already exists in the data-map into the trie under multiple names
@@ -219,6 +224,12 @@ void ContentLibrary<TrieT, DataT>::save_in_trie(const std::string& name) {
             trie.insert(after_space, content_piece_ptr);
         }
     }
+}
+
+template <typename TrieT, typename DataT>
+    requires validContentLibraryTypes<TrieT, DataT>
+const TrieNode<TrieT>* ContentLibrary<TrieT, DataT>::get_trie_root() const {
+    return trie.get_root();
 }
 
 } // namespace dnd

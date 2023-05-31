@@ -15,6 +15,10 @@ public:
     const std::filesystem::path source_file_path;
 };
 
+template <typename T>
+concept ContentPieceType = std::is_base_of_v<ContentPiece, T>;
+
+
 inline ContentPiece::ContentPiece(const std::string& name, const std::filesystem::path& source_file_path)
     : name(name), source_file_path(source_file_path) {}
 
