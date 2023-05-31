@@ -27,6 +27,11 @@ public:
         const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
         const std::string& race_name
     ) noexcept;
+    /**
+     * @brief Accepts a visitor
+     * @param visitor pointer to the visitor
+     */
+    virtual void accept(Visitor* visitor) override final;
 
     // the name of the race this is a subrace of
     const std::string race_name;
@@ -37,6 +42,8 @@ inline CharacterSubrace::CharacterSubrace(
     const std::string& race_name
 ) noexcept
     : FeatureHolder(name, source_file_path, std::move(features)), race_name(race_name) {}
+
+inline void CharacterSubrace::accept(Visitor* visitor) { visitor->visit(this); }
 
 } // namespace dnd
 

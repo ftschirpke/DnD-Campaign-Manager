@@ -30,6 +30,11 @@ public:
         const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
         const Dice hit_dice, const std::vector<int>& asi_levels, int subclass_level
     ) noexcept;
+    /**
+     * @brief Accepts a visitor
+     * @param visitor pointer to the visitor
+     */
+    virtual void accept(Visitor* visitor) override final;
 
     // the type of hit dice for this class
     const Dice hit_dice;
@@ -45,6 +50,8 @@ inline CharacterClass::CharacterClass(
 ) noexcept
     : FeatureHolder(name, source_file_path, std::move(features)), hit_dice(hit_dice), asi_levels(asi_levels),
       subclass_level(subclass_level) {}
+
+inline void CharacterClass::accept(Visitor* visitor) { visitor->visit(this); }
 
 } // namespace dnd
 

@@ -154,6 +154,11 @@ public:
         const std::string& casting_time, const std::string& range, const SpellComponents& components,
         const std::string& duration, const std::string& description, const std::unordered_set<std::string>& classes
     ) noexcept;
+    /**
+     * @brief Accepts a visitor
+     * @param visitor pointer to the visitor
+     */
+    virtual void accept(Visitor* visitor) override final;
 
     // a description of how long the spell takes to cast
     const std::string casting_time;
@@ -178,6 +183,8 @@ inline Spell::Spell(
 ) noexcept
     : ContentPiece(name, source_file_path), casting_time(casting_time), range(range), duration(duration),
       description(description), classes(classes), type(type), components(components) {}
+
+inline void Spell::accept(Visitor* visitor) { visitor->visit(this); }
 
 } // namespace dnd
 

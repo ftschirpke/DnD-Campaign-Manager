@@ -27,6 +27,11 @@ public:
         const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
         const std::string& class_name
     ) noexcept;
+    /**
+     * @brief Accepts a visitor
+     * @param visitor pointer to the visitor
+     */
+    virtual void accept(Visitor* visitor) override final;
 
     // the name of the class this is a subclass of
     const std::string class_name;
@@ -37,6 +42,8 @@ inline CharacterSubclass::CharacterSubclass(
     const std::string& class_name
 ) noexcept
     : FeatureHolder(name, source_file_path, std::move(features)), class_name(class_name) {}
+
+inline void CharacterSubclass::accept(Visitor* visitor) { visitor->visit(this); }
 
 } // namespace dnd
 

@@ -58,13 +58,6 @@ public:
      * @return the XP value of the character
      */
     int getXP() const noexcept;
-
-    // void levelUp();
-    // void setLevel(int new_level);
-    // void setXP(int new_xp);
-    // void increaseXP(int xp_increase);
-    // void decreaseXP(int xp_decrease);
-
     /**
      * @brief Returns the hit dice rolls of the character
      * @return the hit dice rolls of the character
@@ -77,9 +70,6 @@ public:
      * @throws std::invalid_argument if the XP value is smaller than zero
      */
     static int levelForXP(int xp);
-
-    // void addHitDiceRoll(int hit_dice_roll);
-
     /**
      * @brief Determine the current state of the character (stats, equipment, spells, etc.)
      */
@@ -89,6 +79,11 @@ public:
      * @return all the character-specific features as well as all the features of each of its feature holders
      */
     std::vector<const Feature*> allFeatures() const;
+    /**
+     * @brief Accepts a visitor
+     * @param visitor pointer to the visitor
+     */
+    virtual void accept(Visitor* visitor) override final;
 
     // TODO: should these pointers be non-const?
 
@@ -157,6 +152,8 @@ inline int Character::getXP() const noexcept { return xp; }
 inline void Character::updateLevel() { level = levelForXP(xp); }
 
 inline const std::vector<int>& Character::getHitDiceRolls() const noexcept { return hit_dice_rolls; }
+
+inline void Character::accept(Visitor* visitor) { visitor->visit(this); }
 
 } // namespace dnd
 

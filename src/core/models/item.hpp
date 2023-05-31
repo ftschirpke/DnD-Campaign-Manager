@@ -35,6 +35,11 @@ public:
         const std::string& name, const std::filesystem::path& source_file_path, bool requires_attunement,
         const std::string description, const std::string cosmetic_description
     ) noexcept;
+    /**
+     * @brief Accepts a visitor
+     * @param visitor pointer to the visitor
+     */
+    virtual void accept(Visitor* visitor) override final;
 
     const bool requires_attunement;
     // a functional description of the item (how it works and what it does)
@@ -56,6 +61,8 @@ inline Item::Item(
 ) noexcept
     : ContentPiece(name, source_file_path), requires_attunement(requires_attunement), description(description),
       cosmetic_description(cosmetic_description) {}
+
+inline void Item::accept(Visitor* visitor) { visitor->visit(this); }
 
 } // namespace dnd
 

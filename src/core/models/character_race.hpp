@@ -27,6 +27,11 @@ public:
         const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
         const bool has_subraces
     ) noexcept;
+    /**
+     * @brief Accepts a visitor
+     * @param visitor pointer to the visitor
+     */
+    virtual void accept(Visitor* visitor) override final;
 
     // "true" if this race has subraces, "false" otherwise
     const bool has_subraces;
@@ -37,6 +42,8 @@ inline CharacterRace::CharacterRace(
     const bool has_subraces
 ) noexcept
     : FeatureHolder(name, source_file_path, std::move(features)), has_subraces(has_subraces) {}
+
+inline void CharacterRace::accept(Visitor* visitor) { visitor->visit(this); }
 
 } // namespace dnd
 
