@@ -9,6 +9,7 @@
 #include <future>
 #include <memory>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #include <imgui/imfilebrowser.h>
@@ -40,9 +41,11 @@ public:
     void clean_up();
 private:
     void start_parsing();
+    void finish_parsing();
 
     void save_session_values();
     void get_last_session_values();
+    void open_last_session_tabs();
 
     void render_content_dir_selection();
     void render_campaign_selection();
@@ -61,6 +64,8 @@ private:
 
     std::filesystem::path content_directory;
     std::string campaign_name;
+
+    std::unordered_map<std::string, std::vector<std::string>> last_session_open_tabs;
 
     std::string search_query;
 

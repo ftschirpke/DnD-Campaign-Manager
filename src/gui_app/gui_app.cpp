@@ -10,6 +10,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
@@ -27,7 +28,9 @@
 #include "core/models/spell.hpp"
 #include "core/parsing/controllers/content_parser.hpp"
 #include "core/parsing/parsing_exceptions.hpp"
-#include "core/visitors/list_visitor.hpp"
+
+#include "visitors/list_visitor.hpp"
+#include "visitors/session_visitor.hpp"
 
 static const char* const imgui_ini_filename = "imgui.ini";
 static const char* const last_session_filename = "last_session.ini";
@@ -74,6 +77,14 @@ void dnd::GUIApp::get_last_session_values() {
     if (last_session.contains("campaign_name")) {
         campaign_name = last_session["campaign_name"].get<std::string>();
     }
+
+    if (!last_session.contains("open_tabs")) {
+        return;
+    }
+    if (!last_session["open_tabs"].is_object()) {
+        return;
+    }
+    last_session_open_tabs = last_session["open_tabs"].get<std::unordered_map<std::string, std::vector<std::string>>>();
 }
 
 void dnd::GUIApp::save_session_values() {
@@ -84,6 +95,13 @@ void dnd::GUIApp::save_session_values() {
             last_session["campaign_name"] = campaign_name;
         }
     }
+
+    SessionVisitor session_visitor;
+    for (const auto open_content_piece : open_content_pieces) {
+        open_content_piece->accept(&session_visitor);
+    }
+    last_session["open_tabs"] = session_visitor.get_open_tabs();
+
     std::ofstream last_session_file(last_session_filename);
     last_session_file << std::setw(4) << last_session;
     last_session_file.close();
@@ -212,17 +230,7 @@ void dnd::GUIApp::render_overview_window() {
     if (is_parsing) {
         ImGui::Text("Parsing...");
         if (parsed_content.valid()) {
-            is_parsing = false;
-            try {
-                content = parsed_content.get();
-                content.finished_parsing();
-                search = std::make_unique<ContentSearch>(content);
-                ImGui::Text("Parsing done");
-            } catch (const parsing_error& e) {
-                error_messages.push_back(e.what());
-            } catch (const std::exception& e) {
-                error_messages.push_back(e.what());
-            }
+            finish_parsing();
         }
     }
 
@@ -271,6 +279,57 @@ void dnd::GUIApp::render_parsing_error_popup() {
 void dnd::GUIApp::start_parsing() {
     parsed_content = std::async(std::launch::async, &ContentParser::parse, &parser, content_directory, campaign_name);
     is_parsing = true;
+}
+
+void dnd::GUIApp::finish_parsing() {
+    try {
+        content = parsed_content.get();
+        content.finished_parsing();
+        search = std::make_unique<ContentSearch>(content);
+    } catch (const parsing_error& e) {
+        error_messages.push_back(e.what());
+    } catch (const std::exception& e) {
+        error_messages.push_back(e.what());
+    }
+
+    open_last_session_tabs();
+
+    is_parsing = false;
+}
+
+void dnd::GUIApp::open_last_session_tabs() {
+    for (const std::string& character_to_open : last_session_open_tabs["character"]) {
+        open_content_pieces.push_back(&content.characters.get(character_to_open));
+    }
+    for (const std::string& character_class_to_open : last_session_open_tabs["character_class"]) {
+        open_content_pieces.push_back(&content.character_classes.get(character_class_to_open));
+    }
+    for (const std::string& character_subclass_to_open : last_session_open_tabs["character_subclass"]) {
+        open_content_pieces.push_back(&content.character_subclasses.get(character_subclass_to_open));
+    }
+    for (const std::string& character_race_to_open : last_session_open_tabs["character_race"]) {
+        open_content_pieces.push_back(&content.character_races.get(character_race_to_open));
+    }
+    for (const std::string& character_subrace_to_open : last_session_open_tabs["character_subrace"]) {
+        open_content_pieces.push_back(&content.character_subraces.get(character_subrace_to_open));
+    }
+    for (const std::string& item_to_open : last_session_open_tabs["item"]) {
+        open_content_pieces.push_back(&content.items.get(item_to_open));
+    }
+    for (const std::string& spell_to_open : last_session_open_tabs["spell"]) {
+        open_content_pieces.push_back(&content.spells.get(spell_to_open));
+    }
+    for (const std::string& feature_to_open : last_session_open_tabs["feature"]) {
+        open_content_pieces.push_back(content.features.get(feature_to_open));
+    }
+    for (const std::string& choosable_to_open : last_session_open_tabs["choosable"]) {
+        for (const auto& [choosable_group, choosable_library] : content.choosables) {
+            if (choosable_library.contains(choosable_to_open)) {
+                open_content_pieces.push_back(choosable_library.get(choosable_to_open));
+                break;
+            }
+        }
+    }
 }
 
 void dnd::GUIApp::render_search_window() {
