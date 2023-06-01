@@ -4,6 +4,7 @@
 #include "dnd_config.hpp"
 
 #include <array>
+#include <deque>
 #include <filesystem>
 #include <future>
 #include <memory>
@@ -18,15 +19,6 @@
 #include "core/parsing/controllers/content_parser.hpp"
 
 namespace dnd {
-
-/**
- * @brief Struct for storing the result of a search query. (transitional solution - TODO)
- */
-struct SearchResult {
-    std::vector<const dnd::Spell*> spells;
-    std::vector<const dnd::Item*> items;
-    std::vector<const dnd::Feature*> features;
-};
 
 /**
  * @brief Class for the main GUI application allowing content management and rendering.
@@ -60,11 +52,7 @@ private:
     void render_parsing_error_popup();
     void render_content_window();
 
-    void render_spell_tab(const Spell* spell_ptr, size_t index);
-    void render_item_tab(const Item* item_ptr, size_t index);
-    void render_feature_tab(const Feature* feature_ptr, size_t index);
-
-    ImGuiIO& io;
+    static constexpr int max_search_results = 100;
 
     bool show_demo_window;
     bool select_campaign;
@@ -75,14 +63,11 @@ private:
     std::string campaign_name;
 
     std::string search_query;
-    // SearchResult search_result;
-    std::array<bool, 100> old_selected_search_results;
-    static const int max_search_results = 100;
 
     std::unique_ptr<ContentSearch> search;
     std::array<const ContentPiece*, 100> search_results;
     size_t search_result_count;
-    std::array<bool, 100> selected_search_results;
+    std::deque<const ContentPiece*> open_content_pieces;
     std::array<std::string, 100> search_result_strings;
 
     std::vector<std::string> error_messages;
