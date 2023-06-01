@@ -9,10 +9,10 @@
 
 #include <nlohmann/json.hpp>
 
-#include "models/effect_holder/feature.hpp"
-#include "parsing/content_file_parser.hpp"
-#include "parsing/parse_optionals.hpp"
-#include "parsing/parsing_exceptions.hpp"
+#include "core/models/effect_holder/feature.hpp"
+#include "core/parsing/content_file_parser.hpp"
+#include "core/parsing/parse_optionals.hpp"
+#include "core/parsing/parsing_exceptions.hpp"
 
 void dnd::FeaturesParser::parseFeatures(const nlohmann::json& features_json) {
     DND_MEASURE_FUNCTION();
@@ -33,7 +33,7 @@ dnd::Feature dnd::FeaturesParser::createFeature(const std::string& feature_name,
     const std::string description = feature_json.at("description").get<std::string>();
 
     // TODO: change feature constructor?
-    Feature feature(feature_name, description);
+    Feature feature(feature_name, filepath, description);
 
     feature.main_part = effect_holder_parser.createEffectHolder(feature_json);
     if (feature_json.contains("choose")) {

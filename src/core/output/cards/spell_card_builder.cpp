@@ -11,11 +11,11 @@
 #include <unordered_map>
 #include <vector>
 
-#include "models/spell.hpp"
-#include "output/latex_builder/latex_command.hpp"
-#include "output/latex_builder/latex_document.hpp"
-#include "output/latex_builder/latex_scope.hpp"
-#include "output/latex_builder/latex_text.hpp"
+#include "core/models/spell.hpp"
+#include "core/output/latex_builder/latex_command.hpp"
+#include "core/output/latex_builder/latex_document.hpp"
+#include "core/output/latex_builder/latex_scope.hpp"
+#include "core/output/latex_builder/latex_text.hpp"
 
 constexpr int card_character_cutoff = 750;
 
@@ -74,7 +74,7 @@ static dnd::LatexText* createCardHeader(dnd::LatexScope* scope, const dnd::Spell
     createMinipage(scope, "Casting Time", spell->casting_time);
     createMinipage(scope, "Range", spell->range);
     scope->addLineBreak("4pt");
-    createMinipage(scope, "Components", spell->components.shortStr());
+    createMinipage(scope, "Components", spell->components.short_str());
     createMinipage(scope, "Duration", spell->duration);
     scope->addLineBreak("8pt");
     if (spell->components.material && !spell->components.materials_needed.empty()) {

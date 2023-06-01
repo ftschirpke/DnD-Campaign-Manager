@@ -2,6 +2,7 @@
 
 #include "character_subclass_file_parser.hpp"
 
+#include <filesystem>
 #include <iostream>
 #include <string>
 #include <tuple>
@@ -10,12 +11,12 @@
 
 #include <nlohmann/json.hpp>
 
-#include "models/character_class.hpp"
-#include "models/character_subclass.hpp"
-#include "parsing/models/effect_holder/features_parser.hpp"
-#include "parsing/models/spellcasting/spellcasting_parser.hpp"
-#include "parsing/parsing_exceptions.hpp"
-#include "parsing/parsing_types.hpp"
+#include "core/models/character_class.hpp"
+#include "core/models/character_subclass.hpp"
+#include "core/parsing/models/effect_holder/features_parser.hpp"
+#include "core/parsing/models/spellcasting/spellcasting_parser.hpp"
+#include "core/parsing/parsing_exceptions.hpp"
+#include "core/parsing/parsing_types.hpp"
 
 void dnd::CharacterSubclassFileParser::parse() {
     DND_MEASURE_FUNCTION();
@@ -47,8 +48,6 @@ bool dnd::CharacterSubclassFileParser::validate() const {
 }
 
 void dnd::CharacterSubclassFileParser::saveResult() {
-    subclasses.create(
-        character_subclass_name, character_subclass_name, std::move(features_parser.retrieveFeatures()), class_name
-    );
+    subclasses.create(character_subclass_name, filepath, std::move(features_parser.retrieveFeatures()), class_name);
     // TODO: add spellcasting
 }

@@ -15,19 +15,19 @@
 
 #include <nlohmann/json.hpp>
 
-#include "controllers/content_holder.hpp"
-#include "parsing/content_file_parser.hpp"
-#include "parsing/controllers/effect_holder_groups_file_parser.hpp"
-#include "parsing/controllers/string_groups_file_parser.hpp"
-#include "parsing/models/character_class_file_parser.hpp"
-#include "parsing/models/character_file_parser.hpp"
-#include "parsing/models/character_race_file_parser.hpp"
-#include "parsing/models/character_subclass_file_parser.hpp"
-#include "parsing/models/character_subrace_file_parser.hpp"
-#include "parsing/models/items_file_parser.hpp"
-#include "parsing/models/spells_file_parser.hpp"
-#include "parsing/parsing_exceptions.hpp"
-#include "parsing/parsing_types.hpp"
+#include "core/controllers/content_holder.hpp"
+#include "core/parsing/content_file_parser.hpp"
+#include "core/parsing/controllers/effect_holder_groups_file_parser.hpp"
+#include "core/parsing/controllers/string_groups_file_parser.hpp"
+#include "core/parsing/models/character_class_file_parser.hpp"
+#include "core/parsing/models/character_file_parser.hpp"
+#include "core/parsing/models/character_race_file_parser.hpp"
+#include "core/parsing/models/character_subclass_file_parser.hpp"
+#include "core/parsing/models/character_subrace_file_parser.hpp"
+#include "core/parsing/models/items_file_parser.hpp"
+#include "core/parsing/models/spells_file_parser.hpp"
+#include "core/parsing/parsing_exceptions.hpp"
+#include "core/parsing/parsing_types.hpp"
 
 constexpr std::array<std::pair<dnd::ParsingType, const char*>, 1> dnd::ContentParser::file_names = {
     std::pair(ParsingType::GROUP, "groups"),

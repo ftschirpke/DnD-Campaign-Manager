@@ -6,7 +6,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "models/effect_holder/effect_holder.hpp"
+#include "core/models/effect_holder/effect_holder.hpp"
 
 bool dnd::Feature::isActiveForLevel(int level) const {
     std::unordered_map<std::string, int> empty_attributes;

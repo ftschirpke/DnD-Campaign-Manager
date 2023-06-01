@@ -1,4 +1,4 @@
-#include "controllers/trie.hpp"
+#include "controllers/searching/trie.hpp"
 
 #include <catch2/catch_test_macros.hpp>
 

@@ -10,6 +10,8 @@
 #include <unordered_set>
 #include <utility>
 
+#include "core/models/content_piece.hpp"
+
 namespace dnd {
 
 /**
@@ -42,7 +44,7 @@ inline constexpr std::array<std::pair<const char*, MagicSchool>, 8> magic_school
     std::pair("necromancy", MagicSchool::NECROMANCY), std::pair("transmutation", MagicSchool::TRANSMUTATION),
 };
 
-constexpr const char* magicSchoolName(MagicSchool magic_school) {
+constexpr const char* magic_school_name(MagicSchool magic_school) {
     for (const auto& [ms_name, ms_val] : magic_schools) {
         if (magic_school == ms_val) {
             return ms_name;
@@ -57,7 +59,7 @@ constexpr const char* magicSchoolName(MagicSchool magic_school) {
  * @return the name of the magic school with the given name
  * @throws std::out_of_range if no magic school with that name exists
  */
-constexpr MagicSchool magicSchoolFromName(const std::string& magic_school_name) {
+constexpr MagicSchool magic_school_from_name(const std::string& magic_school_name) {
     for (const auto& [ms_name, ms_val] : magic_schools) {
         if (magic_school_name == ms_name) {
             return ms_val;
@@ -96,15 +98,20 @@ struct SpellType {
      * @brief Returns the level of the spell as a numeric value between 0 and 9
      * @return the level of the spell between 1 and 9, and 0 for cantrips
      */
-    int levelAsNumber() const;
+    int level_number() const;
     /**
-     * @brief Create the string representation of the SpellType object
+     * @brief Create a short string representation of the SpellType object
+     * @return the short string representation
+     */
+    std::string short_str() const;
+    /**
+     * @brief Create a string representation of the SpellType object
      * @return the string representation
      */
     std::string str() const;
 };
 
-inline int SpellType::levelAsNumber() const { return static_cast<int>(level); }
+inline int SpellType::level_number() const { return static_cast<int>(level); }
 
 /**
  * @brief A struct representing the components required to cast a spell
@@ -123,7 +130,7 @@ struct SpellComponents {
      * (without the description of the required materials)
      * @return the short string representation
      */
-    std::string shortStr() const;
+    std::string short_str() const;
     /**
      * @brief Create the string representation of the SpellComponents object
      * @return the string representation
@@ -134,7 +141,7 @@ struct SpellComponents {
 /**
  * @brief A class representing a spell
  */
-class Spell {
+class Spell : public ContentPiece {
 public:
     /**
      * @brief Constructs a spell
@@ -148,13 +155,16 @@ public:
      * @param classes the names of classes (and subclasses) that can cast this spell
      */
     Spell(
-        const std::string& name, const SpellType& type, const std::string& casting_time, const std::string& range,
-        const SpellComponents& components, const std::string& duration, const std::string& description,
-        const std::unordered_set<std::string>& classes
+        const std::string& name, const std::filesystem::path& source_file_path, const SpellType& type,
+        const std::string& casting_time, const std::string& range, const SpellComponents& components,
+        const std::string& duration, const std::string& description, const std::unordered_set<std::string>& classes
     ) noexcept;
+    /**
+     * @brief Accepts a visitor
+     * @param visitor pointer to the visitor
+     */
+    virtual void accept(Visitor* visitor) const override final;
 
-    // the name of the spell
-    const std::string name;
     // a description of how long the spell takes to cast
     const std::string casting_time;
     // a description of the range of the spell
@@ -172,12 +182,14 @@ public:
 };
 
 inline Spell::Spell(
-    const std::string& name, const SpellType& type, const std::string& casting_time, const std::string& range,
-    const SpellComponents& components, const std::string& duration, const std::string& description,
-    const std::unordered_set<std::string>& classes
+    const std::string& name, const std::filesystem::path& source_file_path, const SpellType& type,
+    const std::string& casting_time, const std::string& range, const SpellComponents& components,
+    const std::string& duration, const std::string& description, const std::unordered_set<std::string>& classes
 ) noexcept
-    : name(name), casting_time(casting_time), range(range), duration(duration), description(description),
-      classes(classes), type(type), components(components) {}
+    : ContentPiece(name, source_file_path), casting_time(casting_time), range(range), duration(duration),
+      description(description), classes(classes), type(type), components(components) {}
+
+inline void Spell::accept(Visitor* visitor) const { visitor->visit(this); }
 
 } // namespace dnd
 

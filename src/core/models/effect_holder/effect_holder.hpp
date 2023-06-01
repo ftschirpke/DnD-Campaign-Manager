@@ -8,12 +8,12 @@
 #include <unordered_map>
 #include <vector>
 
-#include "models/effect_holder/action_holder.hpp"
-#include "models/effect_holder/activation.hpp"
-#include "models/effect_holder/effect.hpp"
-#include "models/effect_holder/extra_spells_holder.hpp"
-#include "models/effect_holder/proficiency_holder.hpp"
-#include "models/effect_holder/riv_holder.hpp"
+#include "core/models/effect_holder/action_holder.hpp"
+#include "core/models/effect_holder/activation.hpp"
+#include "core/models/effect_holder/effect.hpp"
+#include "core/models/effect_holder/extra_spells_holder.hpp"
+#include "core/models/effect_holder/proficiency_holder.hpp"
+#include "core/models/effect_holder/riv_holder.hpp"
 
 namespace dnd {
 

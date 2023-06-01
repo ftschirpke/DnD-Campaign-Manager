@@ -2,17 +2,18 @@
 
 #include "character_subrace_file_parser.hpp"
 
+#include <filesystem>
 #include <iostream>
 #include <string>
 #include <tuple>
 #include <unordered_map>
 #include <utility>
 
-#include "models/character_race.hpp"
-#include "models/character_subrace.hpp"
-#include "parsing/models/effect_holder/features_parser.hpp"
-#include "parsing/parsing_exceptions.hpp"
-#include "parsing/parsing_types.hpp"
+#include "core/models/character_race.hpp"
+#include "core/models/character_subrace.hpp"
+#include "core/parsing/models/effect_holder/features_parser.hpp"
+#include "core/parsing/parsing_exceptions.hpp"
+#include "core/parsing/parsing_types.hpp"
 
 void dnd::CharacterSubraceFileParser::parse() {
     DND_MEASURE_FUNCTION();
@@ -45,7 +46,5 @@ bool dnd::CharacterSubraceFileParser::validate() const {
 }
 
 void dnd::CharacterSubraceFileParser::saveResult() {
-    subraces.create(
-        character_subrace_name, character_subrace_name, std::move(features_parser.retrieveFeatures()), race_name
-    );
+    subraces.create(character_subrace_name, filepath, std::move(features_parser.retrieveFeatures()), race_name);
 }

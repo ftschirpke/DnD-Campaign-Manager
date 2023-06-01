@@ -9,7 +9,7 @@
 #include <unordered_set>
 #include <utility>
 
-#include "models/effect_holder/choosable.hpp"
+#include "core/models/effect_holder/choosable.hpp"
 
 namespace dnd {
 

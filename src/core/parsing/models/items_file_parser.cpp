@@ -11,12 +11,12 @@
 
 #include <nlohmann/json.hpp>
 
-#include "controllers/groups.hpp"
-#include "models/item.hpp"
-#include "parsing/content_file_parser.hpp"
-#include "parsing/parse_optionals.hpp"
-#include "parsing/parsing_exceptions.hpp"
-#include "parsing/parsing_types.hpp"
+#include "core/controllers/groups.hpp"
+#include "core/models/item.hpp"
+#include "core/parsing/content_file_parser.hpp"
+#include "core/parsing/parse_optionals.hpp"
+#include "core/parsing/parsing_exceptions.hpp"
+#include "core/parsing/parsing_types.hpp"
 
 void dnd::ItemsFileParser::createItem(std::string_view item_name, const nlohmann::json& item_json) {
     ItemParsingInfo info;
@@ -24,9 +24,9 @@ void dnd::ItemsFileParser::createItem(std::string_view item_name, const nlohmann
     info.requires_attunement = item_json.at("requires_attunement").get<bool>();
     info.description = item_json.at("description").get<std::string>();
     if (item_json.contains("cosmetic_description")) {
-        info.cosmetic_desciption = item_json.at("cosmetic_description").get<std::string>();
+        info.cosmetic_description = item_json.at("cosmetic_description").get<std::string>();
     } else {
-        info.cosmetic_desciption = "";
+        info.cosmetic_description = "";
     }
     item_parsing_info.emplace_back(std::move(info));
 }
@@ -70,7 +70,7 @@ void dnd::ItemsFileParser::saveResult() {
                 groups.add("items without attunement", info.name);
             }
 
-            items.add(info.name, Item(info.name, info.requires_attunement, info.description, info.cosmetic_desciption));
+            items.create(info.name, filepath, info.requires_attunement, info.description, info.cosmetic_description);
         }
     }
 }

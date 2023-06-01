@@ -9,10 +9,10 @@
 
 #include <nlohmann/json.hpp>
 
-#include "controllers/groups.hpp"
-#include "models/effect_holder/choosable.hpp"
-#include "parsing/content_file_parser.hpp"
-#include "parsing/models/effect_holder/effect_holder_parser.hpp"
+#include "core/controllers/groups.hpp"
+#include "core/models/effect_holder/choosable.hpp"
+#include "core/parsing/content_file_parser.hpp"
+#include "core/parsing/models/effect_holder/effect_holder_parser.hpp"
 
 namespace dnd {
 

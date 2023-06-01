@@ -2,6 +2,7 @@
 
 #include "character_race_file_parser.hpp"
 
+#include <filesystem>
 #include <iostream>
 #include <string>
 #include <tuple>
@@ -10,10 +11,10 @@
 
 #include <nlohmann/json.hpp>
 
-#include "models/character_race.hpp"
-#include "parsing/models/effect_holder/features_parser.hpp"
-#include "parsing/parsing_exceptions.hpp"
-#include "parsing/parsing_types.hpp"
+#include "core/models/character_race.hpp"
+#include "core/parsing/models/effect_holder/features_parser.hpp"
+#include "core/parsing/parsing_exceptions.hpp"
+#include "core/parsing/parsing_types.hpp"
 
 void dnd::CharacterRaceFileParser::parse() {
     DND_MEASURE_FUNCTION();
@@ -38,5 +39,5 @@ bool dnd::CharacterRaceFileParser::validate() const {
 }
 
 void dnd::CharacterRaceFileParser::saveResult() {
-    races.create(character_race_name, character_race_name, std::move(features_parser.retrieveFeatures()), has_subraces);
+    races.create(character_race_name, filepath, std::move(features_parser.retrieveFeatures()), has_subraces);
 }

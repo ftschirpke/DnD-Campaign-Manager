@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include <array>
+#include <filesystem>
 #include <iostream>
 #include <map>
 #include <memory>
@@ -15,19 +16,19 @@
 
 #include <nlohmann/json.hpp>
 
-#include "models/character.hpp"
-#include "models/character_class.hpp"
-#include "models/character_race.hpp"
-#include "models/effect_holder/character_decision.hpp"
-#include "models/effect_holder/choice.hpp"
-#include "models/effect_holder/effect_holder_with_choices.hpp"
-#include "models/effect_holder/feature.hpp"
-#include "models/feature_holder.hpp"
-#include "parsing/content_file_parser.hpp"
-#include "parsing/models/effect_holder/effect_holder_parser.hpp"
-#include "parsing/models/effect_holder/features_parser.hpp"
-#include "parsing/parsing_exceptions.hpp"
-#include "parsing/parsing_types.hpp"
+#include "core/models/character.hpp"
+#include "core/models/character_class.hpp"
+#include "core/models/character_race.hpp"
+#include "core/models/effect_holder/character_decision.hpp"
+#include "core/models/effect_holder/choice.hpp"
+#include "core/models/effect_holder/effect_holder_with_choices.hpp"
+#include "core/models/effect_holder/feature.hpp"
+#include "core/models/feature_holder.hpp"
+#include "core/parsing/content_file_parser.hpp"
+#include "core/parsing/models/effect_holder/effect_holder_parser.hpp"
+#include "core/parsing/models/effect_holder/features_parser.hpp"
+#include "core/parsing/parsing_exceptions.hpp"
+#include "core/parsing/parsing_types.hpp"
 
 void dnd::CharacterFileParser::parse() {
     DND_MEASURE_FUNCTION();
@@ -276,7 +277,7 @@ bool dnd::CharacterFileParser::validate() const {
 void dnd::CharacterFileParser::saveResult() {
     // TODO: change Character constructor
     characters.create(
-        character_name, character_name, std::move(features_parser.retrieveFeatures()), base_ability_scores, level, xp,
+        character_name, filepath, std::move(features_parser.retrieveFeatures()), base_ability_scores, level, xp,
         hit_dice_rolls
     );
     Character& character = characters.get(character_name);

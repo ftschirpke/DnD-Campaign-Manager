@@ -17,7 +17,7 @@
  */
 class TestSpellsFileParser : public dnd::SpellsFileParser {
 public:
-    TestSpellsFileParser(dnd::ContentLibrary<const dnd::Spell>& spells, dnd::Groups& groups)
+    TestSpellsFileParser(dnd::StoringContentLibrary<const dnd::Spell>& spells, dnd::Groups& groups)
         : dnd::SpellsFileParser("", spells, groups) {}
     dnd::SpellType createSpellTypeForTesting(const std::string& spell_type_str) const {
         return dnd::SpellsFileParser::createSpellType(spell_type_str);
@@ -32,7 +32,7 @@ public:
 
 class SetupSpellsParserTest {
 public:
-    dnd::ContentLibrary<const dnd::Spell> spells;
+    dnd::StoringContentLibrary<const dnd::Spell> spells;
     dnd::Groups groups;
     TestSpellsFileParser createParser();
 };
@@ -211,10 +211,10 @@ TEST_CASE("dnd::SpellsFileParser::createSpellType: parse valid types") {
         for (const auto& spelling : allowed_magic_school_spellings) {
             s = spelling + " cantrip";
             REQUIRE_NOTHROW(type = parser.createSpellTypeForTesting(s));
-            REQUIRE(type.levelAsNumber() == 0);
+            REQUIRE(type.level_number() == 0);
             std::string lowercase_spelling = spelling;
             lowercase_spelling[0] = my_tolower(lowercase_spelling[0]);
-            REQUIRE(type.magic_school == dnd::magicSchoolFromName(lowercase_spelling));
+            REQUIRE(type.magic_school == dnd::magic_school_from_name(lowercase_spelling));
             REQUIRE(type.is_ritual == false);
         }
     }
@@ -225,15 +225,15 @@ TEST_CASE("dnd::SpellsFileParser::createSpellType: parse valid types") {
             for (int level = 1; level <= 9; ++level) {
                 s = *(++spell_level_it) + "-level " + spelling;
                 REQUIRE_NOTHROW(type = parser.createSpellTypeForTesting(s));
-                REQUIRE(type.levelAsNumber() == level);
+                REQUIRE(type.level_number() == level);
                 std::string lowercase_spelling = spelling;
                 lowercase_spelling[0] = my_tolower(lowercase_spelling[0]);
-                REQUIRE(type.magic_school == dnd::magicSchoolFromName(lowercase_spelling));
+                REQUIRE(type.magic_school == dnd::magic_school_from_name(lowercase_spelling));
                 REQUIRE(type.is_ritual == false);
                 s += " (ritual)";
                 REQUIRE_NOTHROW(type = parser.createSpellTypeForTesting(s));
-                REQUIRE(type.levelAsNumber() == level);
-                REQUIRE(type.magic_school == dnd::magicSchoolFromName(lowercase_spelling));
+                REQUIRE(type.level_number() == level);
+                REQUIRE(type.magic_school == dnd::magic_school_from_name(lowercase_spelling));
                 REQUIRE(type.is_ritual == true);
             }
         }

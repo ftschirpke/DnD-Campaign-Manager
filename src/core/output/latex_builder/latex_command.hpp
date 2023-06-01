@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-#include "output/latex_builder/latex_object.hpp"
+#include "core/output/latex_builder/latex_object.hpp"
 
 namespace dnd {
 

@@ -7,16 +7,16 @@
 #include <unordered_map>
 #include <vector>
 
-#include "basic_mechanics/dice.hpp"
-#include "controllers/groups.hpp"
-#include "models/character_class.hpp"
-#include "models/effect_holder/feature.hpp"
-#include "models/spell.hpp"
-#include "parsing/content_file_parser.hpp"
-#include "parsing/models/effect_holder/features_parser.hpp"
-#include "parsing/models/spellcasting/spellcasting_parser.hpp"
-#include "parsing/parsing_types.hpp"
-#include "parsing/subparser.hpp"
+#include "core/basic_mechanics/dice.hpp"
+#include "core/controllers/groups.hpp"
+#include "core/models/character_class.hpp"
+#include "core/models/effect_holder/feature.hpp"
+#include "core/models/spell.hpp"
+#include "core/parsing/content_file_parser.hpp"
+#include "core/parsing/models/effect_holder/features_parser.hpp"
+#include "core/parsing/models/spellcasting/spellcasting_parser.hpp"
+#include "core/parsing/parsing_types.hpp"
+#include "core/parsing/subparser.hpp"
 
 namespace dnd {
 
@@ -33,8 +33,8 @@ public:
      * @param spells the already-parsed spells
      */
     CharacterClassFileParser(
-        const std::filesystem::path& filepath, ContentLibrary<const CharacterClass>& classes, const Groups& groups,
-        const ContentLibrary<const Spell>& spells
+        const std::filesystem::path& filepath, StoringContentLibrary<const CharacterClass>& classes,
+        const Groups& groups, const StoringContentLibrary<const Spell>& spells
     ) noexcept;
     /**
      * @brief Parses JSON file containing a class
@@ -76,7 +76,7 @@ private:
     // the subclass level of the parsed class
     int subclass_level;
     // the already-parsed classes to add the parsed class to
-    ContentLibrary<const CharacterClass>& classes;
+    StoringContentLibrary<const CharacterClass>& classes;
     // a subparser used for parsing the class' features
     FeaturesParser features_parser;
     // a subparser used for parsing the subclass' spellcasting feature if it exists
@@ -84,8 +84,8 @@ private:
 };
 
 inline CharacterClassFileParser::CharacterClassFileParser(
-    const std::filesystem::path& filepath, ContentLibrary<const CharacterClass>& classes, const Groups& groups,
-    const ContentLibrary<const Spell>& spells
+    const std::filesystem::path& filepath, StoringContentLibrary<const CharacterClass>& classes, const Groups& groups,
+    const StoringContentLibrary<const Spell>& spells
 ) noexcept
     : ContentFileParser(filepath), classes(classes), features_parser(type, filepath, groups),
       spellcasting_parser(type, filepath, spells) {}

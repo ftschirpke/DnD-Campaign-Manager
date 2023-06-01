@@ -50,6 +50,8 @@ if(CCACHE_PROGRAM)
     set_property(GLOBAL PROPERTY CMAKE_CXX_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
 endif()
 
+set (DND_ASSET_DIRECTORY ${CMAKE_SOURCE_DIR}/assets)
+
 # ------------------------------------------------------------------------------
 # DND core library
 add_library(${DND_CORE} STATIC)
@@ -59,8 +61,8 @@ target_include_directories(${DND_CORE}
     PUBLIC
     ${PROJECT_BINARY_DIR}/src
     ${CMAKE_SOURCE_DIR}/src
-    PRIVATE
-    ${CMAKE_SOURCE_DIR}/src/core
+    SYSTEM PRIVATE
+    ${CMAKE_SOURCE_DIR}/src/lib
 )
 target_link_libraries(${DND_CORE}
     PUBLIC
@@ -87,8 +89,8 @@ add_executable(${DND_CMD_APP} src/cmd_main.cpp)
 set_target_properties(${DND_CMD_APP} PROPERTIES EXPORT_COMPILE_COMMANDS ON)
 
 target_include_directories(${DND_CMD_APP}
-    PRIVATE
-    ${CMAKE_SOURCE_DIR}/src/core
+    SYSTEM PRIVATE
+    ${CMAKE_SOURCE_DIR}/src/lib
 )
 target_link_libraries(${DND_CMD_APP}
     PUBLIC
@@ -117,8 +119,8 @@ set_target_properties(${DND_GUI_APP} PROPERTIES EXPORT_COMPILE_COMMANDS ON)
 set_target_properties(${DND_GUI_APP} PROPERTIES WIN32_EXECUTABLE TRUE)
 
 target_include_directories(${DND_GUI_APP}
-    PRIVATE
-    ${CMAKE_SOURCE_DIR}/src/core
+    SYSTEM PRIVATE
+    ${CMAKE_SOURCE_DIR}/src/lib
 )
 target_link_libraries(${DND_GUI_APP}
     PUBLIC
@@ -154,12 +156,13 @@ add_executable(${DND_TESTS})
 set_target_properties(${DND_TESTS} PROPERTIES EXPORT_COMPILE_COMMANDS ON)
 
 target_include_directories(${DND_TESTS}
-    PUBLIC
+    PRIVATE
     ${PROJECT_BINARY_DIR}/src
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/tests
-    PRIVATE
     ${CMAKE_SOURCE_DIR}/src/core
+    SYSTEM PRIVATE
+    ${CMAKE_SOURCE_DIR}/src/lib
 )
 target_link_libraries(${DND_TESTS}
     PRIVATE

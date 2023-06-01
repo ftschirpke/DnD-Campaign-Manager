@@ -7,9 +7,9 @@
 #include <utility>
 #include <vector>
 
-#include "basic_mechanics/dice.hpp"
-#include "models/effect_holder/feature.hpp"
-#include "models/feature_holder.hpp"
+#include "core/basic_mechanics/dice.hpp"
+#include "core/models/effect_holder/feature.hpp"
+#include "core/models/feature_holder.hpp"
 
 namespace dnd {
 
@@ -27,9 +27,14 @@ public:
      * @param subclass_level the level at which a character of this class gains access to subclasses
      */
     CharacterClass(
-        const std::string& name, std::vector<Feature>&& features, const Dice hit_dice,
-        const std::vector<int>& asi_levels, int subclass_level
+        const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
+        const Dice hit_dice, const std::vector<int>& asi_levels, int subclass_level
     ) noexcept;
+    /**
+     * @brief Accepts a visitor
+     * @param visitor pointer to the visitor
+     */
+    virtual void accept(Visitor* visitor) const override final;
 
     // the type of hit dice for this class
     const Dice hit_dice;
@@ -40,11 +45,13 @@ public:
 };
 
 inline CharacterClass::CharacterClass(
-    const std::string& name, std::vector<Feature>&& features, const Dice hit_dice, const std::vector<int>& asi_levels,
-    int subclass_level
+    const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
+    const Dice hit_dice, const std::vector<int>& asi_levels, int subclass_level
 ) noexcept
-    : FeatureHolder(name, std::move(features)), hit_dice(hit_dice), asi_levels(asi_levels),
+    : FeatureHolder(name, source_file_path, std::move(features)), hit_dice(hit_dice), asi_levels(asi_levels),
       subclass_level(subclass_level) {}
+
+inline void CharacterClass::accept(Visitor* visitor) const { visitor->visit(this); }
 
 } // namespace dnd
 

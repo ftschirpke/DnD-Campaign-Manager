@@ -7,8 +7,8 @@
 #include <utility>
 #include <vector>
 
-#include "models/effect_holder/feature.hpp"
-#include "models/feature_holder.hpp"
+#include "core/models/effect_holder/feature.hpp"
+#include "core/models/feature_holder.hpp"
 
 namespace dnd {
 
@@ -23,16 +23,27 @@ public:
      * @param features the collection of features this subclass provides to a character
      * @param class_name the name of the class this is a subclass of
      */
-    CharacterSubclass(const std::string& name, std::vector<Feature>&& features, const std::string& class_name) noexcept;
+    CharacterSubclass(
+        const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
+        const std::string& class_name
+    ) noexcept;
+    /**
+     * @brief Accepts a visitor
+     * @param visitor pointer to the visitor
+     */
+    virtual void accept(Visitor* visitor) const override final;
 
     // the name of the class this is a subclass of
     const std::string class_name;
 };
 
 inline CharacterSubclass::CharacterSubclass(
-    const std::string& name, std::vector<Feature>&& features, const std::string& class_name
+    const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
+    const std::string& class_name
 ) noexcept
-    : FeatureHolder(name, std::move(features)), class_name(class_name) {}
+    : FeatureHolder(name, source_file_path, std::move(features)), class_name(class_name) {}
+
+inline void CharacterSubclass::accept(Visitor* visitor) const { visitor->visit(this); }
 
 } // namespace dnd
 

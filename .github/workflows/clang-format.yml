@@ -14,11 +14,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Check clang-format existence
-      run: which clang-format
-
-    - name: Check clang-format version
-      run: clang-format --version
+    - name: Install clang-format-15
+      run: sudo apt install -y clang-format-15
 
     - name: Check format of C++ files
       working-directory: ${{ github.workspace }}

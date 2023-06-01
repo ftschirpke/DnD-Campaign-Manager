@@ -5,7 +5,7 @@
 
 #include <vector>
 
-#include "models/spell.hpp"
+#include "core/models/spell.hpp"
 
 namespace dnd {
 

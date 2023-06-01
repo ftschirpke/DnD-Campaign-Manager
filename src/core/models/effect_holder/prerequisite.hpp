@@ -3,7 +3,7 @@
 
 #include "dnd_config.hpp"
 
-#include "models/effect_holder/activation.hpp"
+#include "core/models/effect_holder/activation.hpp"
 
 namespace dnd {
 

@@ -6,17 +6,17 @@
 #include <string>
 #include <unordered_map>
 
-#include "controllers/content_library.hpp"
-#include "controllers/groups.hpp"
-#include "models/character.hpp"
-#include "models/character_class.hpp"
-#include "models/character_race.hpp"
-#include "models/character_subclass.hpp"
-#include "models/character_subrace.hpp"
-#include "models/effect_holder/choosable.hpp"
-#include "models/effect_holder/feature.hpp"
-#include "models/item.hpp"
-#include "models/spell.hpp"
+#include "core/controllers/content_library.hpp"
+#include "core/controllers/groups.hpp"
+#include "core/models/character.hpp"
+#include "core/models/character_class.hpp"
+#include "core/models/character_race.hpp"
+#include "core/models/character_subclass.hpp"
+#include "core/models/character_subrace.hpp"
+#include "core/models/effect_holder/choosable.hpp"
+#include "core/models/effect_holder/feature.hpp"
+#include "core/models/item.hpp"
+#include "core/models/spell.hpp"
 
 namespace dnd {
 
@@ -46,16 +46,16 @@ public:
 
     // content libraries for all the types of content
 
-    ContentLibrary<Character> characters;
-    ContentLibrary<const CharacterClass> character_classes;
-    ContentLibrary<const CharacterSubclass> character_subclasses;
-    ContentLibrary<const CharacterRace> character_races;
-    ContentLibrary<const CharacterSubrace> character_subraces;
-    ContentLibrary<const Item> items;
-    ContentLibrary<const Spell> spells;
+    StoringContentLibrary<Character> characters;
+    StoringContentLibrary<const CharacterClass> character_classes;
+    StoringContentLibrary<const CharacterSubclass> character_subclasses;
+    StoringContentLibrary<const CharacterRace> character_races;
+    StoringContentLibrary<const CharacterSubrace> character_subraces;
+    StoringContentLibrary<const Item> items;
+    StoringContentLibrary<const Spell> spells;
 
-    ContentLibrary<const Feature*> features;
-    std::unordered_map<std::string, ContentLibrary<const Choosable*>> choosables;
+    ReferencingContentLibrary<const Feature> features;
+    std::unordered_map<std::string, ReferencingContentLibrary<const Choosable>> choosables;
 };
 
 inline bool ContentHolder::empty() const {

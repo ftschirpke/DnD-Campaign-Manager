@@ -8,11 +8,11 @@
 
 #include <nlohmann/json.hpp>
 
-#include "controllers/content_library.hpp"
-#include "controllers/groups.hpp"
-#include "models/item.hpp"
-#include "parsing/content_file_parser.hpp"
-#include "parsing/parsing_types.hpp"
+#include "core/controllers/content_library.hpp"
+#include "core/controllers/groups.hpp"
+#include "core/models/item.hpp"
+#include "core/parsing/content_file_parser.hpp"
+#include "core/parsing/parsing_types.hpp"
 
 namespace dnd {
 
@@ -25,7 +25,7 @@ struct ItemParsingInfo {
     // a functional description of the item (how it works and what it does)
     std::string description;
     // a description of the item focusing on its purely cosmetic (non-functional) aspects
-    std::string cosmetic_desciption;
+    std::string cosmetic_description;
 };
 
 /**
@@ -33,7 +33,9 @@ struct ItemParsingInfo {
  */
 class ItemsFileParser : public ContentFileParser {
 public:
-    ItemsFileParser(const std::filesystem::path& filepath, ContentLibrary<const Item>& items, Groups& groups) noexcept;
+    ItemsFileParser(
+        const std::filesystem::path& filepath, StoringContentLibrary<const Item>& items, Groups& groups
+    ) noexcept;
     /**
      * @brief Parses JSON file containing a collection of spells
      * @throws parsing_error if any error occured while trying to parse the content file
@@ -61,7 +63,7 @@ private:
     // the type of content that this parser parses - items
     static constexpr ParsingType type = ParsingType::ITEM;
     // the already-parsed items to add the parsed items to
-    ContentLibrary<const Item>& items;
+    StoringContentLibrary<const Item>& items;
     // the already-parsed groups to add item-groups to
     Groups& groups;
     // the amount of items to be parsed in the current file
@@ -73,7 +75,7 @@ private:
 };
 
 inline ItemsFileParser::ItemsFileParser(
-    const std::filesystem::path& filepath, ContentLibrary<const Item>& items, Groups& groups
+    const std::filesystem::path& filepath, StoringContentLibrary<const Item>& items, Groups& groups
 ) noexcept
     : ContentFileParser(filepath), items(items), groups(groups) {}
 

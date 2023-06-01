@@ -9,14 +9,14 @@
 #include <utility>
 #include <vector>
 
-#include "models/character_class.hpp"
-#include "models/character_race.hpp"
-#include "models/character_state.hpp"
-#include "models/character_subclass.hpp"
-#include "models/character_subrace.hpp"
-#include "models/effect_holder/character_decision.hpp"
-#include "models/effect_holder/feature.hpp"
-#include "models/feature_holder.hpp"
+#include "core/models/character_class.hpp"
+#include "core/models/character_race.hpp"
+#include "core/models/character_state.hpp"
+#include "core/models/character_subclass.hpp"
+#include "core/models/character_subrace.hpp"
+#include "core/models/effect_holder/character_decision.hpp"
+#include "core/models/effect_holder/feature.hpp"
+#include "core/models/feature_holder.hpp"
 
 namespace dnd {
 
@@ -32,7 +32,8 @@ public:
      * @param base_ability_scores the 6 base values for the character's ability scores
      */
     Character(
-        const std::string& name, std::vector<Feature>&& features, const std::array<int, 6>& base_ability_scores
+        const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
+        const std::array<int, 6>& base_ability_scores
     ) noexcept;
     /**
      * @brief Constructs a character with a given level and XP value
@@ -44,8 +45,8 @@ public:
      * @param hit_dice_rolls the values rolled for maxHP at each level-up using your hit dice (including level 1)
      */
     Character(
-        const std::string& name, std::vector<Feature>&& features, const std::array<int, 6>& base_ability_scores,
-        int level, int xp, const std::vector<int>& hit_dice_rolls
+        const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
+        const std::array<int, 6>& base_ability_scores, int level, int xp, const std::vector<int>& hit_dice_rolls
     ) noexcept;
     /**
      * @brief Returns the level of the character
@@ -57,13 +58,6 @@ public:
      * @return the XP value of the character
      */
     int getXP() const noexcept;
-
-    // void levelUp();
-    // void setLevel(int new_level);
-    // void setXP(int new_xp);
-    // void increaseXP(int xp_increase);
-    // void decreaseXP(int xp_decrease);
-
     /**
      * @brief Returns the hit dice rolls of the character
      * @return the hit dice rolls of the character
@@ -76,9 +70,6 @@ public:
      * @throws std::invalid_argument if the XP value is smaller than zero
      */
     static int levelForXP(int xp);
-
-    // void addHitDiceRoll(int hit_dice_roll);
-
     /**
      * @brief Determine the current state of the character (stats, equipment, spells, etc.)
      */
@@ -88,6 +79,11 @@ public:
      * @return all the character-specific features as well as all the features of each of its feature holders
      */
     std::vector<const Feature*> allFeatures() const;
+    /**
+     * @brief Accepts a visitor
+     * @param visitor pointer to the visitor
+     */
+    virtual void accept(Visitor* visitor) const override final;
 
     // TODO: should these pointers be non-const?
 
@@ -133,20 +129,21 @@ private:
 };
 
 inline Character::Character(
-    const std::string& name, std::vector<Feature>&& features, const std::array<int, 6>& base_ability_scores
+    const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
+    const std::array<int, 6>& base_ability_scores
 ) noexcept
-    : FeatureHolder(name, std::move(features)), base_ability_scores(base_ability_scores), class_ptr(nullptr),
-      subclass_ptr(nullptr), race_ptr(nullptr), subrace_ptr(nullptr), decisions(), state(decisions), level(1), xp(0),
-      hit_dice_rolls() {}
+    : FeatureHolder(name, source_file_path, std::move(features)), base_ability_scores(base_ability_scores),
+      class_ptr(nullptr), subclass_ptr(nullptr), race_ptr(nullptr), subrace_ptr(nullptr), decisions(), state(decisions),
+      level(1), xp(0), hit_dice_rolls() {}
 
 
 inline Character::Character(
-    const std::string& name, std::vector<Feature>&& features, const std::array<int, 6>& base_ability_scores, int level,
-    int xp, const std::vector<int>& hit_dice_rolls
+    const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
+    const std::array<int, 6>& base_ability_scores, int level, int xp, const std::vector<int>& hit_dice_rolls
 ) noexcept
-    : FeatureHolder(name, std::move(features)), base_ability_scores(base_ability_scores), class_ptr(nullptr),
-      subclass_ptr(nullptr), race_ptr(nullptr), subrace_ptr(nullptr), decisions(), state(decisions), level(level),
-      xp(xp), hit_dice_rolls(hit_dice_rolls) {}
+    : FeatureHolder(name, source_file_path, std::move(features)), base_ability_scores(base_ability_scores),
+      class_ptr(nullptr), subclass_ptr(nullptr), race_ptr(nullptr), subrace_ptr(nullptr), decisions(), state(decisions),
+      level(level), xp(xp), hit_dice_rolls(hit_dice_rolls) {}
 
 inline int Character::getLevel() const noexcept { return level; }
 
@@ -155,6 +152,8 @@ inline int Character::getXP() const noexcept { return xp; }
 inline void Character::updateLevel() { level = levelForXP(xp); }
 
 inline const std::vector<int>& Character::getHitDiceRolls() const noexcept { return hit_dice_rolls; }
+
+inline void Character::accept(Visitor* visitor) const { visitor->visit(this); }
 
 } // namespace dnd
 

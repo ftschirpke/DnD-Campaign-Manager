@@ -11,12 +11,12 @@
 
 #include <nlohmann/json.hpp>
 
-#include "controllers/groups.hpp"
-#include "models/effect_holder/choosable.hpp"
-#include "parsing/models/effect_holder/effect_holder_parser.hpp"
-#include "parsing/parsing_exceptions.hpp"
-#include "parsing/parsing_types.hpp"
-#include "parsing/subparser.hpp"
+#include "core/controllers/groups.hpp"
+#include "core/models/effect_holder/choosable.hpp"
+#include "core/parsing/models/effect_holder/effect_holder_parser.hpp"
+#include "core/parsing/parsing_exceptions.hpp"
+#include "core/parsing/parsing_types.hpp"
+#include "core/parsing/subparser.hpp"
 
 void dnd::EffectHolderGroupsFileParser::parse() {
     DND_MEASURE_FUNCTION();
@@ -39,7 +39,7 @@ dnd::Choosable dnd::EffectHolderGroupsFileParser::createChoosable(
     const std::string description = choosable_json.at("description").get<std::string>();
 
     // TODO: change choosable constructor?
-    Choosable choosable(choosable_name, description);
+    Choosable choosable(choosable_name, filepath, description);
 
     choosable.main_part = effect_holder_parser.createEffectHolder(choosable_json);
     if (choosable_json.contains("multi")) {

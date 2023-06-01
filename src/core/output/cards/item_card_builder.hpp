@@ -5,7 +5,7 @@
 
 #include <vector>
 
-#include "models/item.hpp"
+#include "core/models/item.hpp"
 
 namespace dnd {
 
