@@ -303,13 +303,11 @@ void dnd::GUIApp::render_search_window() {
     }
     if (search_query.size() < 2) {
         ImGui::Text("Enter at least 2 characters to search.");
-        std::for_each(search_results.begin(), search_results.end(), [](ContentPiece** cp_ptr) { *cp_ptr = nullptr; });
-        std::for_each(selected_search_results.begin(), selected_search_results.end(), [](bool* cp_ptr) {
-            *cp_ptr = false;
+        std::for_each(search_results.begin(), search_results.end(), [](const ContentPiece*& cp_ptr) {
+            cp_ptr = nullptr;
         });
-        std::for_each(search_result_strings.begin(), search_result_strings.end(), [](std::string* cp_ptr) {
-            cp_ptr->clear();
-        });
+        std::for_each(selected_search_results.begin(), selected_search_results.end(), [](bool& b) { b = false; });
+        std::for_each(search_result_strings.begin(), search_result_strings.end(), [](std::string& s) { s.clear(); });
     }
 
     if (search_results.size()) {

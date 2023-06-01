@@ -115,25 +115,43 @@ std::vector<const dnd::ContentPiece*> dnd::ContentSearch::get_results() const {
     std::vector<const ContentPiece*> results;
     results.reserve(100);
 
-    auto character_results = character_search_path.top()->successors();
-    results.insert(results.end(), character_results.begin(), character_results.end());
-    auto character_class_results = character_class_search_path.top()->successors();
-    results.insert(results.end(), character_class_results.begin(), character_class_results.end());
-    auto character_subclass_results = character_subclass_search_path.top()->successors();
-    results.insert(results.end(), character_subclass_results.begin(), character_subclass_results.end());
-    auto character_race_results = character_race_search_path.top()->successors();
-    results.insert(results.end(), character_race_results.begin(), character_race_results.end());
-    auto character_subrace_results = character_subrace_search_path.top()->successors();
-    results.insert(results.end(), character_subrace_results.begin(), character_subrace_results.end());
-    auto item_results = item_search_path.top()->successors();
-    results.insert(results.end(), item_results.begin(), item_results.end());
-    auto spell_results = spell_search_path.top()->successors();
-    results.insert(results.end(), spell_results.begin(), spell_results.end());
-    auto feature_results = feature_search_path.top()->successors();
-    results.insert(results.end(), feature_results.begin(), feature_results.end());
+    if (character_search_path.top() != nullptr) {
+        auto character_results = character_search_path.top()->successors();
+        results.insert(results.end(), character_results.begin(), character_results.end());
+    }
+    if (character_class_search_path.top() != nullptr) {
+        auto character_class_results = character_class_search_path.top()->successors();
+        results.insert(results.end(), character_class_results.begin(), character_class_results.end());
+    }
+    if (character_subclass_search_path.top() != nullptr) {
+        auto character_subclass_results = character_subclass_search_path.top()->successors();
+        results.insert(results.end(), character_subclass_results.begin(), character_subclass_results.end());
+    }
+    if (character_race_search_path.top() != nullptr) {
+        auto character_race_results = character_race_search_path.top()->successors();
+        results.insert(results.end(), character_race_results.begin(), character_race_results.end());
+    }
+    if (character_subrace_search_path.top() != nullptr) {
+        auto character_subrace_results = character_subrace_search_path.top()->successors();
+        results.insert(results.end(), character_subrace_results.begin(), character_subrace_results.end());
+    }
+    if (item_search_path.top() != nullptr) {
+        auto item_results = item_search_path.top()->successors();
+        results.insert(results.end(), item_results.begin(), item_results.end());
+    }
+    if (spell_search_path.top() != nullptr) {
+        auto spell_results = spell_search_path.top()->successors();
+        results.insert(results.end(), spell_results.begin(), spell_results.end());
+    }
+    if (feature_search_path.top() != nullptr) {
+        auto feature_results = feature_search_path.top()->successors();
+        results.insert(results.end(), feature_results.begin(), feature_results.end());
+    }
     for (auto& [choosable_group_name, choosable_search_path] : choosable_search_paths) {
-        auto choosable_results = choosable_search_path.top()->successors();
-        results.insert(results.end(), choosable_results.begin(), choosable_results.end());
+        if (choosable_search_path.top() != nullptr) {
+            auto choosable_results = choosable_search_path.top()->successors();
+            results.insert(results.end(), choosable_results.begin(), choosable_results.end());
+        }
     }
 
     return results;
