@@ -81,6 +81,7 @@ private:
 
     std::unique_ptr<ContentSearch> search;
     std::array<const ContentPiece*, 100> search_results;
+    size_t search_result_count;
     std::array<bool, 100> selected_search_results;
     std::array<std::string, 100> search_result_strings;
 

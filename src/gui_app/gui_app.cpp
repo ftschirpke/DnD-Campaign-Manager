@@ -37,7 +37,7 @@ static const ImGuiWindowFlags error_popup_options = ImGuiWindowFlags_AlwaysAutoR
 
 dnd::GUIApp::GUIApp()
     : io(ImGui::GetIO()), show_demo_window(false), select_campaign(false), is_parsing(false), search(nullptr),
-      content_dir_dialog(content_dir_dialog_options) {
+      search_result_count(0), content_dir_dialog(content_dir_dialog_options) {
     for (size_t i = 0; i < max_search_results; ++i) {
         old_selected_search_results[i] = false;
     }
@@ -284,18 +284,20 @@ void dnd::GUIApp::render_search_window() {
         if (search_query.size() > 1) {
             auto tolower = [](unsigned char c) { return static_cast<unsigned char>(std::tolower(c)); };
             std::transform(search_query.begin(), search_query.end(), search_query.begin(), tolower);
-            auto vec_search_results = search->get_sorted_results();
-            if (vec_search_results.size() <= 100) {
-                for (size_t i = 0; i < vec_search_results.size(); ++i) {
+            std::vector<const ContentPiece*> vec_search_results = search->get_sorted_results();
+            search_result_count = vec_search_results.size();
+            if (search_result_count <= 100) {
+                for (size_t i = 0; i < search_result_count; ++i) {
                     search_results[i] = vec_search_results[i];
                     selected_search_results[i] = false;
                 }
                 ListVisitor list_visitor;
-                for (const auto search_result : search_results) {
-                    search_result->accept(&list_visitor);
+                for (size_t i = 0; i < search_result_count; ++i) {
+                    search_results[i]->accept(&list_visitor);
                 }
-                auto vec_list_strings = list_visitor.get_list();
-                for (size_t i = 0; i < vec_list_strings.size(); ++i) {
+                std::vector<std::string> vec_list_strings = list_visitor.get_list();
+                assert(vec_list_strings.size() == search_result_count);
+                for (size_t i = 0; i < search_result_count; ++i) {
                     search_result_strings[i] = vec_list_strings[i];
                 }
             }
@@ -310,13 +312,13 @@ void dnd::GUIApp::render_search_window() {
         std::for_each(search_result_strings.begin(), search_result_strings.end(), [](std::string& s) { s.clear(); });
     }
 
-    if (search_results.size()) {
+    if (search_result_count > 100) {
         ImGui::Text("Too many results. Please refine your search.");
         ImGui::End();
         return;
     }
 
-    for (size_t i = 0; i < search_results.size(); ++i) {
+    for (size_t i = 0; i < search_result_count; ++i) {
         if (ImGui::Selectable(search_result_strings[i].c_str(), false)) {
             selected_search_results[i] = true;
         }
@@ -328,7 +330,7 @@ void dnd::GUIApp::render_content_window() {
     ImGui::Begin("Content");
     ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_AutoSelectNewTabs | ImGuiTabBarFlags_Reorderable;
     if (ImGui::BeginTabBar("Content Tabs", tab_bar_flags)) {
-        for (size_t i = 0; i < selected_search_results.size(); ++i) {
+        for (size_t i = 0; i < search_result_count; ++i) {
             if (selected_search_results[i]) {
                 if (ImGui::BeginTabItem(search_results[i]->name.c_str(), &(selected_search_results[i]))) {
                     ImGui::Text("TESTING - %s", search_results[i]->name.c_str());
