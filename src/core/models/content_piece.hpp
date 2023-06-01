@@ -6,7 +6,7 @@
 #include <filesystem>
 #include <string>
 
-#include "visitors/visitor.hpp"
+#include "core/visitors/visitor.hpp"
 
 namespace dnd {
 

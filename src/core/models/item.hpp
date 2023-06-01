@@ -5,7 +5,7 @@
 
 #include <string>
 
-#include "models/content_piece.hpp"
+#include "core/models/content_piece.hpp"
 
 namespace dnd {
 

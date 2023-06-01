@@ -9,14 +9,14 @@
 #include <utility>
 #include <vector>
 
-#include "models/character_class.hpp"
-#include "models/character_race.hpp"
-#include "models/character_state.hpp"
-#include "models/character_subclass.hpp"
-#include "models/character_subrace.hpp"
-#include "models/effect_holder/character_decision.hpp"
-#include "models/effect_holder/feature.hpp"
-#include "models/feature_holder.hpp"
+#include "core/models/character_class.hpp"
+#include "core/models/character_race.hpp"
+#include "core/models/character_state.hpp"
+#include "core/models/character_subclass.hpp"
+#include "core/models/character_subrace.hpp"
+#include "core/models/effect_holder/character_decision.hpp"
+#include "core/models/effect_holder/feature.hpp"
+#include "core/models/feature_holder.hpp"
 
 namespace dnd {
 

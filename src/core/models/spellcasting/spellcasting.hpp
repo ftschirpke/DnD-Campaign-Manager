@@ -7,7 +7,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "models/spell.hpp"
+#include "core/models/spell.hpp"
 
 namespace dnd {
 

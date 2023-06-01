@@ -7,16 +7,16 @@
 #include <unordered_map>
 #include <vector>
 
-#include "basic_mechanics/dice.hpp"
-#include "controllers/groups.hpp"
-#include "models/character_class.hpp"
-#include "models/effect_holder/feature.hpp"
-#include "models/spell.hpp"
-#include "parsing/content_file_parser.hpp"
-#include "parsing/models/effect_holder/features_parser.hpp"
-#include "parsing/models/spellcasting/spellcasting_parser.hpp"
-#include "parsing/parsing_types.hpp"
-#include "parsing/subparser.hpp"
+#include "core/basic_mechanics/dice.hpp"
+#include "core/controllers/groups.hpp"
+#include "core/models/character_class.hpp"
+#include "core/models/effect_holder/feature.hpp"
+#include "core/models/spell.hpp"
+#include "core/parsing/content_file_parser.hpp"
+#include "core/parsing/models/effect_holder/features_parser.hpp"
+#include "core/parsing/models/spellcasting/spellcasting_parser.hpp"
+#include "core/parsing/parsing_types.hpp"
+#include "core/parsing/subparser.hpp"
 
 namespace dnd {
 

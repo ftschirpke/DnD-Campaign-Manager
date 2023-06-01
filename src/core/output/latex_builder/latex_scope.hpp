@@ -8,9 +8,9 @@
 #include <utility>
 #include <vector>
 
-#include "output/latex_builder/latex_command.hpp"
-#include "output/latex_builder/latex_object.hpp"
-#include "output/latex_builder/latex_text.hpp"
+#include "core/output/latex_builder/latex_command.hpp"
+#include "core/output/latex_builder/latex_object.hpp"
+#include "core/output/latex_builder/latex_text.hpp"
 
 namespace dnd {
 

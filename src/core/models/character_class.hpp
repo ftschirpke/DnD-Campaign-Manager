@@ -7,9 +7,9 @@
 #include <utility>
 #include <vector>
 
-#include "basic_mechanics/dice.hpp"
-#include "models/effect_holder/feature.hpp"
-#include "models/feature_holder.hpp"
+#include "core/basic_mechanics/dice.hpp"
+#include "core/models/effect_holder/feature.hpp"
+#include "core/models/feature_holder.hpp"
 
 namespace dnd {
 

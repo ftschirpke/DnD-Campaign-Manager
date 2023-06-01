@@ -6,14 +6,14 @@
 #include <string>
 #include <vector>
 
-#include "controllers/content_library.hpp"
-#include "controllers/groups.hpp"
-#include "models/character_race.hpp"
-#include "models/character_subrace.hpp"
-#include "parsing/content_file_parser.hpp"
-#include "parsing/models/effect_holder/features_parser.hpp"
-#include "parsing/parsing_types.hpp"
-#include "parsing/subparser.hpp"
+#include "core/controllers/content_library.hpp"
+#include "core/controllers/groups.hpp"
+#include "core/models/character_race.hpp"
+#include "core/models/character_subrace.hpp"
+#include "core/parsing/content_file_parser.hpp"
+#include "core/parsing/models/effect_holder/features_parser.hpp"
+#include "core/parsing/parsing_types.hpp"
+#include "core/parsing/subparser.hpp"
 
 namespace dnd {
 

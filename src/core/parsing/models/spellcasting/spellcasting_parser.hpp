@@ -9,12 +9,12 @@
 
 #include <nlohmann/json.hpp>
 
-#include "controllers/content_library.hpp"
-#include "models/spell.hpp"
-#include "models/spellcasting/preparation_spellcasting.hpp"
-#include "models/spellcasting/spellcasting.hpp"
-#include "models/spellcasting/spells_known_spellcasting.hpp"
-#include "parsing/subparser.hpp"
+#include "core/controllers/content_library.hpp"
+#include "core/models/spell.hpp"
+#include "core/models/spellcasting/preparation_spellcasting.hpp"
+#include "core/models/spellcasting/spellcasting.hpp"
+#include "core/models/spellcasting/spells_known_spellcasting.hpp"
+#include "core/parsing/subparser.hpp"
 
 namespace dnd {
 

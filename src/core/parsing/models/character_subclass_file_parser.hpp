@@ -5,15 +5,15 @@
 
 #include <string>
 
-#include "controllers/content_library.hpp"
-#include "controllers/groups.hpp"
-#include "models/character_class.hpp"
-#include "models/character_subclass.hpp"
-#include "models/spell.hpp"
-#include "parsing/content_file_parser.hpp"
-#include "parsing/models/effect_holder/features_parser.hpp"
-#include "parsing/models/spellcasting/spellcasting_parser.hpp"
-#include "parsing/subparser.hpp"
+#include "core/controllers/content_library.hpp"
+#include "core/controllers/groups.hpp"
+#include "core/models/character_class.hpp"
+#include "core/models/character_subclass.hpp"
+#include "core/models/spell.hpp"
+#include "core/parsing/content_file_parser.hpp"
+#include "core/parsing/models/effect_holder/features_parser.hpp"
+#include "core/parsing/models/spellcasting/spellcasting_parser.hpp"
+#include "core/parsing/subparser.hpp"
 
 namespace dnd {
 

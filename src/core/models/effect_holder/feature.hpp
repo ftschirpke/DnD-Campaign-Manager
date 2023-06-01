@@ -7,9 +7,9 @@
 #include <string>
 #include <vector>
 
-#include "models/content_piece.hpp"
-#include "models/effect_holder/effect_holder.hpp"
-#include "models/effect_holder/effect_holder_with_choices.hpp"
+#include "core/models/content_piece.hpp"
+#include "core/models/effect_holder/effect_holder.hpp"
+#include "core/models/effect_holder/effect_holder_with_choices.hpp"
 
 namespace dnd {
 

@@ -7,16 +7,16 @@
 #include <utility>
 #include <vector>
 
-#include "models/character.hpp"
-#include "models/character_class.hpp"
-#include "models/character_race.hpp"
-#include "models/character_subclass.hpp"
-#include "models/character_subrace.hpp"
-#include "models/effect_holder/choosable.hpp"
-#include "models/effect_holder/feature.hpp"
-#include "models/item.hpp"
-#include "models/spell.hpp"
-#include "visitors/visitor.hpp"
+#include "core/models/character.hpp"
+#include "core/models/character_class.hpp"
+#include "core/models/character_race.hpp"
+#include "core/models/character_subclass.hpp"
+#include "core/models/character_subrace.hpp"
+#include "core/models/effect_holder/choosable.hpp"
+#include "core/models/effect_holder/feature.hpp"
+#include "core/models/item.hpp"
+#include "core/models/spell.hpp"
+#include "core/visitors/visitor.hpp"
 
 namespace dnd {
 

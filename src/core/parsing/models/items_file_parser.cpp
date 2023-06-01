@@ -11,12 +11,12 @@
 
 #include <nlohmann/json.hpp>
 
-#include "controllers/groups.hpp"
-#include "models/item.hpp"
-#include "parsing/content_file_parser.hpp"
-#include "parsing/parse_optionals.hpp"
-#include "parsing/parsing_exceptions.hpp"
-#include "parsing/parsing_types.hpp"
+#include "core/controllers/groups.hpp"
+#include "core/models/item.hpp"
+#include "core/parsing/content_file_parser.hpp"
+#include "core/parsing/parse_optionals.hpp"
+#include "core/parsing/parsing_exceptions.hpp"
+#include "core/parsing/parsing_types.hpp"
 
 void dnd::ItemsFileParser::createItem(std::string_view item_name, const nlohmann::json& item_json) {
     ItemParsingInfo info;

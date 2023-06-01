@@ -10,7 +10,7 @@
 #include <unordered_set>
 #include <utility>
 
-#include "models/content_piece.hpp"
+#include "core/models/content_piece.hpp"
 
 namespace dnd {
 

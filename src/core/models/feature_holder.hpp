@@ -7,8 +7,8 @@
 #include <utility>
 #include <vector>
 
-#include "models/content_piece.hpp"
-#include "models/effect_holder/feature.hpp"
+#include "core/models/content_piece.hpp"
+#include "core/models/effect_holder/feature.hpp"
 
 namespace dnd {
 

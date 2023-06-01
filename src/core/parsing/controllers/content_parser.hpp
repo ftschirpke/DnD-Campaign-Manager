@@ -11,9 +11,9 @@
 
 #include <nlohmann/json.hpp>
 
-#include "controllers/content_holder.hpp"
-#include "parsing/content_file_parser.hpp"
-#include "parsing/parsing_types.hpp"
+#include "core/controllers/content_holder.hpp"
+#include "core/parsing/content_file_parser.hpp"
+#include "core/parsing/parsing_types.hpp"
 
 namespace dnd {
 

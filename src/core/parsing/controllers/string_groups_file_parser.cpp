@@ -11,9 +11,9 @@
 
 #include <nlohmann/json.hpp>
 
-#include "controllers/groups.hpp"
-#include "parsing/parsing_exceptions.hpp"
-#include "parsing/parsing_types.hpp"
+#include "core/controllers/groups.hpp"
+#include "core/parsing/parsing_exceptions.hpp"
+#include "core/parsing/parsing_types.hpp"
 
 std::unordered_set<std::string> dnd::StringGroupsFileParser::parseMap(const nlohmann::json& json_map) {
     std::unordered_set<std::string> no_subgroup_values;

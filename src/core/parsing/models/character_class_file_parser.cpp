@@ -12,12 +12,12 @@
 
 #include <nlohmann/json.hpp>
 
-#include "models/character_class.hpp"
-#include "models/effect_holder/feature.hpp"
-#include "parsing/models/effect_holder/features_parser.hpp"
-#include "parsing/models/spellcasting/spellcasting_parser.hpp"
-#include "parsing/parsing_exceptions.hpp"
-#include "parsing/parsing_types.hpp"
+#include "core/models/character_class.hpp"
+#include "core/models/effect_holder/feature.hpp"
+#include "core/parsing/models/effect_holder/features_parser.hpp"
+#include "core/parsing/models/spellcasting/spellcasting_parser.hpp"
+#include "core/parsing/parsing_exceptions.hpp"
+#include "core/parsing/parsing_types.hpp"
 
 void dnd::CharacterClassFileParser::parse() {
     DND_MEASURE_FUNCTION();

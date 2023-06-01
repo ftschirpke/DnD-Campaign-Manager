@@ -13,11 +13,11 @@
 
 #include <nlohmann/json.hpp>
 
-#include "controllers/content_library.hpp"
-#include "controllers/groups.hpp"
-#include "models/spell.hpp"
-#include "parsing/content_file_parser.hpp"
-#include "parsing/parsing_types.hpp"
+#include "core/controllers/content_library.hpp"
+#include "core/controllers/groups.hpp"
+#include "core/models/spell.hpp"
+#include "core/parsing/content_file_parser.hpp"
+#include "core/parsing/parsing_types.hpp"
 
 namespace dnd {
 

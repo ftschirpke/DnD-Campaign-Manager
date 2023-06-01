@@ -9,10 +9,10 @@
 
 #include <nlohmann/json.hpp>
 
-#include "models/effect_holder/feature.hpp"
-#include "parsing/content_file_parser.hpp"
-#include "parsing/parse_optionals.hpp"
-#include "parsing/parsing_exceptions.hpp"
+#include "core/models/effect_holder/feature.hpp"
+#include "core/parsing/content_file_parser.hpp"
+#include "core/parsing/parse_optionals.hpp"
+#include "core/parsing/parsing_exceptions.hpp"
 
 void dnd::FeaturesParser::parseFeatures(const nlohmann::json& features_json) {
     DND_MEASURE_FUNCTION();

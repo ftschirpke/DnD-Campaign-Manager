@@ -9,7 +9,7 @@
 #include <utility>
 #include <vector>
 
-#include "models/effect_holder/choosable.hpp"
+#include "core/models/effect_holder/choosable.hpp"
 
 namespace dnd {
 

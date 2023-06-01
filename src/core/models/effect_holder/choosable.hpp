@@ -8,9 +8,9 @@
 #include <string>
 #include <vector>
 
-#include "models/content_piece.hpp"
-#include "models/effect_holder/effect_holder.hpp"
-#include "models/effect_holder/prerequisite.hpp"
+#include "core/models/content_piece.hpp"
+#include "core/models/effect_holder/effect_holder.hpp"
+#include "core/models/effect_holder/prerequisite.hpp"
 
 namespace dnd {
 

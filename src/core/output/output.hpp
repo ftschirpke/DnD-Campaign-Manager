@@ -7,10 +7,10 @@
 
 #include <fmt/core.h>
 
-#include "models/effect_holder/choosable.hpp"
-#include "models/effect_holder/feature.hpp"
-#include "models/item.hpp"
-#include "models/spell.hpp"
+#include "core/models/effect_holder/choosable.hpp"
+#include "core/models/effect_holder/feature.hpp"
+#include "core/models/item.hpp"
+#include "core/models/spell.hpp"
 namespace dnd {
 
 /**

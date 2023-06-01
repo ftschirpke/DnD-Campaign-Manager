@@ -5,8 +5,8 @@
 
 #include <string>
 
-#include "output/latex_builder/latex_command.hpp"
-#include "output/latex_builder/latex_scope.hpp"
+#include "core/output/latex_builder/latex_command.hpp"
+#include "core/output/latex_builder/latex_scope.hpp"
 
 namespace dnd {
 
