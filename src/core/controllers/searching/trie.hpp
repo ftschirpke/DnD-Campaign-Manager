@@ -88,7 +88,6 @@ void TrieNode<T>::add_end_word(T* end_word) {
     end_words.push_back(end_word);
 }
 
-
 template <typename T>
 std::unordered_set<T*> TrieNode<T>::successors() const {
     std::unordered_set<T*> successors;
@@ -99,9 +98,9 @@ std::unordered_set<T*> TrieNode<T>::successors() const {
         const TrieNode<T>* current_node = node_stack.top();
         node_stack.pop();
 
-        const std::vector<T*>& end_words = current_node->get_end_words();
-        if (!end_words.empty()) {
-            successors.insert(current_node->end_words.begin(), current_node->end_words.end());
+        const std::vector<T*>& current_end_words = current_node->get_end_words();
+        if (!current_end_words.empty()) {
+            successors.insert(current_end_words.begin(), current_end_words.end());
         }
         for (auto it = current_node->get_children().crbegin(); it != current_node->get_children().crend(); ++it) {
             node_stack.push(it->second.get());
