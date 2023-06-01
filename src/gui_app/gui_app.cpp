@@ -39,7 +39,9 @@ static const ImGuiWindowFlags error_popup_options = ImGuiWindowFlags_AlwaysAutoR
 
 dnd::GUIApp::GUIApp()
     : show_demo_window(false), select_campaign(false), is_parsing(false), search(nullptr), search_result_count(0),
-      content_dir_dialog(content_dir_dialog_options) {}
+      content_dir_dialog(content_dir_dialog_options) {
+    ImGui::GetIO().IniFilename = imgui_ini_filename;
+}
 
 void dnd::GUIApp::initialize() {
     content_dir_dialog.SetTitle("Select content directory");

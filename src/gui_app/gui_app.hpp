@@ -60,7 +60,6 @@ private:
     bool show_demo_window;
     bool select_campaign;
     bool is_parsing;
-    bool show_error_popup;
 
     std::filesystem::path content_directory;
     std::string campaign_name;
