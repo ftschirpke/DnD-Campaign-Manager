@@ -29,7 +29,7 @@ concept validContentLibraryTypes = ContentPieceType<TrieT>
  * @tparam DataT the data type to use for retrieving content pieces
  */
 template <typename TrieT, typename DataT>
-    requires validContentLibraryTypes<TrieT, DataT>
+requires validContentLibraryTypes<TrieT, DataT>
 class ContentLibrary {
 public:
     /**
@@ -127,43 +127,43 @@ using ReferencingContentLibrary = ContentLibrary<T, T*>;
 
 
 template <typename TrieT, typename DataT>
-    requires validContentLibraryTypes<TrieT, DataT>
+requires validContentLibraryTypes<TrieT, DataT>
 inline bool ContentLibrary<TrieT, DataT>::contains(const std::string& name) const {
     return data.contains(name);
 }
 
 template <typename TrieT, typename DataT>
-    requires validContentLibraryTypes<TrieT, DataT>
+requires validContentLibraryTypes<TrieT, DataT>
 inline bool ContentLibrary<TrieT, DataT>::empty() const {
     return data.empty();
 }
 
 template <typename TrieT, typename DataT>
-    requires validContentLibraryTypes<TrieT, DataT>
+requires validContentLibraryTypes<TrieT, DataT>
 inline size_t ContentLibrary<TrieT, DataT>::size() const {
     return data.size();
 }
 
 template <typename TrieT, typename DataT>
-    requires validContentLibraryTypes<TrieT, DataT>
+requires validContentLibraryTypes<TrieT, DataT>
 inline DataT& ContentLibrary<TrieT, DataT>::get(const std::string& name) {
     return data.at(name);
 }
 
 template <typename TrieT, typename DataT>
-    requires validContentLibraryTypes<TrieT, DataT>
+requires validContentLibraryTypes<TrieT, DataT>
 inline const DataT& ContentLibrary<TrieT, DataT>::get(const std::string& name) const {
     return data.at(name);
 }
 
 template <typename TrieT, typename DataT>
-    requires validContentLibraryTypes<TrieT, DataT>
+requires validContentLibraryTypes<TrieT, DataT>
 inline std::unordered_set<TrieT*> ContentLibrary<TrieT, DataT>::prefix_get(const std::string& prefix) {
     return trie.search_prefix(prefix);
 }
 
 template <typename TrieT, typename DataT>
-    requires validContentLibraryTypes<TrieT, DataT>
+requires validContentLibraryTypes<TrieT, DataT>
 inline std::vector<TrieT*> ContentLibrary<TrieT, DataT>::sorted_prefix_get(const std::string& prefix) {
     std::unordered_set<TrieT*> unsorted_result = prefix_get(prefix);
     std::vector<TrieT*> result(unsorted_result.begin(), unsorted_result.end());
@@ -172,13 +172,13 @@ inline std::vector<TrieT*> ContentLibrary<TrieT, DataT>::sorted_prefix_get(const
 }
 
 template <typename TrieT, typename DataT>
-    requires validContentLibraryTypes<TrieT, DataT>
+requires validContentLibraryTypes<TrieT, DataT>
 inline const std::unordered_map<std::string, DataT>& ContentLibrary<TrieT, DataT>::get_all() const {
     return data;
 }
 
 template <typename TrieT, typename DataT>
-    requires validContentLibraryTypes<TrieT, DataT>
+requires validContentLibraryTypes<TrieT, DataT>
 bool ContentLibrary<TrieT, DataT>::add(const std::string& name, DataT&& new_content_piece) {
     if (contains(name)) {
         return false;
@@ -189,7 +189,7 @@ bool ContentLibrary<TrieT, DataT>::add(const std::string& name, DataT&& new_cont
 }
 
 template <typename TrieT, typename DataT>
-    requires validContentLibraryTypes<TrieT, DataT>
+requires validContentLibraryTypes<TrieT, DataT>
 template <
     typename... Args,
     std::enable_if_t<std::is_constructible<DataT, std::string&, std::filesystem::path&, Args&&...>::value, int>>
@@ -209,7 +209,7 @@ bool ContentLibrary<TrieT, DataT>::create(
 }
 
 template <typename TrieT, typename DataT>
-    requires validContentLibraryTypes<TrieT, DataT>
+requires validContentLibraryTypes<TrieT, DataT>
 void ContentLibrary<TrieT, DataT>::save_in_trie(const std::string& name) {
     DataT& content_piece_ptr = data.at(name);
 
@@ -227,7 +227,7 @@ void ContentLibrary<TrieT, DataT>::save_in_trie(const std::string& name) {
 }
 
 template <typename TrieT, typename DataT>
-    requires validContentLibraryTypes<TrieT, DataT>
+requires validContentLibraryTypes<TrieT, DataT>
 const TrieNode<TrieT>* ContentLibrary<TrieT, DataT>::get_trie_root() const {
     return trie.get_root();
 }

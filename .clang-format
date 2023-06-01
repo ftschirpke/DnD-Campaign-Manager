@@ -12,6 +12,7 @@ BreakBeforeTernaryOperators: true
 ColumnLimit: 120
 EmptyLineBeforeAccessModifier: Never
 IndentCaseLabels: true
+IndentRequiresClause: false
 KeepEmptyLinesAtTheStartOfBlocks: false
 MaxEmptyLinesToKeep: 2
 PenaltyReturnTypeOnItsOwnLine: 10000

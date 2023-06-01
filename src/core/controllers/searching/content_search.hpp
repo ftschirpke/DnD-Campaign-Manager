@@ -37,7 +37,7 @@ public:
      * @return true if successors were inserted, false otherwise (nothing inserted)
      */
     template <typename S>
-        requires std::derived_from<T, S>
+    requires std::derived_from<T, S>
     bool insert_top_successors_into(std::vector<S*>& vec) const;
 };
 
@@ -52,7 +52,7 @@ void SearchPath<T>::push_top_child(char c) {
 
 template <typename T>
 template <typename S>
-    requires std::derived_from<T, S>
+requires std::derived_from<T, S>
 bool SearchPath<T>::insert_top_successors_into(std::vector<S*>& vec) const {
     if (this->top() == nullptr) {
         return false;
