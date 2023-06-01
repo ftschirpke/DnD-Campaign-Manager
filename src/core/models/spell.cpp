@@ -5,9 +5,30 @@
 #include <cctype>
 #include <string>
 
+#include <fmt/format.h>
+
+std::string dnd::SpellType::short_str() const {
+    int lv = level_number();
+    std::string school_name = magic_school_name(magic_school);
+    if (lv == 0) {
+        return fmt::format("{} cantrip", school_name);
+    }
+    std::string spell_level_string;
+    if (lv == 1) {
+        spell_level_string = "1st";
+    } else if (lv == 2) {
+        spell_level_string = "2nd";
+    } else if (lv == 3) {
+        spell_level_string = "3rd";
+    } else {
+        spell_level_string = std::to_string(lv) + "th";
+    }
+    return fmt::format("{} level {}", spell_level_string, school_name);
+}
+
 std::string dnd::SpellType::str() const {
     std::string spell_type_string;
-    int lv = levelAsNumber();
+    int lv = level_number();
     if (lv == 0) {
         spell_type_string += "Cantrip";
     } else {
@@ -24,7 +45,7 @@ std::string dnd::SpellType::str() const {
     }
 
     spell_type_string += " - School of ";
-    std::string school_name = magicSchoolName(magic_school);
+    std::string school_name = magic_school_name(magic_school);
     auto toupper = [](char c) { return static_cast<char>(std::toupper(c)); };
     school_name[0] = toupper(school_name[0]);
     spell_type_string += school_name;
@@ -36,7 +57,7 @@ std::string dnd::SpellType::str() const {
     return spell_type_string;
 }
 
-std::string dnd::SpellComponents::shortStr() const {
+std::string dnd::SpellComponents::short_str() const {
     std::string components_string;
     int i = 0;
     if (verbal) {
@@ -60,7 +81,7 @@ std::string dnd::SpellComponents::shortStr() const {
 }
 
 std::string dnd::SpellComponents::str() const {
-    std::string components_string = shortStr();
+    std::string components_string = short_str();
     if (material) {
         components_string += " (";
         components_string += materials_needed;

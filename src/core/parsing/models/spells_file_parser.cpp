@@ -101,7 +101,7 @@ dnd::SpellType dnd::SpellsFileParser::createSpellType(const std::string& spell_t
     }
     auto tolower = [](unsigned char c) { return static_cast<unsigned char>(std::tolower(c)); };
     std::transform(magic_school_str.begin(), magic_school_str.end(), magic_school_str.begin(), tolower);
-    spell_type.magic_school = magicSchoolFromName(magic_school_str);
+    spell_type.magic_school = magic_school_from_name(magic_school_str);
     return spell_type;
 }
 
@@ -161,7 +161,7 @@ void dnd::SpellsFileParser::saveResult() {
             SpellParsingInfo& info = spell_parsing_info[i];
 
             groups.add("spells", info.name);
-            const std::string& level_group_name = level_group_names.at(static_cast<size_t>(info.type.levelAsNumber()));
+            const std::string& level_group_name = level_group_names.at(static_cast<size_t>(info.type.level_number()));
             groups.add(level_group_name, info.name);
             for (const std::string& class_name : info.classes) {
                 groups.add(class_name + " spells", info.name);

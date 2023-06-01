@@ -74,7 +74,7 @@ static dnd::LatexText* createCardHeader(dnd::LatexScope* scope, const dnd::Spell
     createMinipage(scope, "Casting Time", spell->casting_time);
     createMinipage(scope, "Range", spell->range);
     scope->addLineBreak("4pt");
-    createMinipage(scope, "Components", spell->components.shortStr());
+    createMinipage(scope, "Components", spell->components.short_str());
     createMinipage(scope, "Duration", spell->duration);
     scope->addLineBreak("8pt");
     if (spell->components.material && !spell->components.materials_needed.empty()) {
