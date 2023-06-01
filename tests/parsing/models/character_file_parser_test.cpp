@@ -29,12 +29,12 @@
 class TestCharacterFileParser : public dnd::CharacterFileParser {
 public:
     TestCharacterFileParser(
-        const std::filesystem::path& filepath, dnd::ContentLibrary<dnd::Character>& characters,
-        const dnd::Groups& groups, const dnd::ContentLibrary<const dnd::CharacterClass>& character_classes,
-        const dnd::ContentLibrary<const dnd::CharacterSubclass>& character_subclasses,
-        const dnd::ContentLibrary<const dnd::CharacterRace>& character_races,
-        const dnd::ContentLibrary<const dnd::CharacterSubrace>& character_subraces,
-        const dnd::ContentLibrary<const dnd::Spell>& spells
+        const std::filesystem::path& filepath, dnd::StoringContentLibrary<dnd::Character>& characters,
+        const dnd::Groups& groups, const dnd::StoringContentLibrary<const dnd::CharacterClass>& character_classes,
+        const dnd::StoringContentLibrary<const dnd::CharacterSubclass>& character_subclasses,
+        const dnd::StoringContentLibrary<const dnd::CharacterRace>& character_races,
+        const dnd::StoringContentLibrary<const dnd::CharacterSubrace>& character_subraces,
+        const dnd::StoringContentLibrary<const dnd::Spell>& spells
     )
         : dnd::CharacterFileParser(
             filepath, characters, groups, character_classes, character_subclasses, character_races, character_subraces,
@@ -45,17 +45,17 @@ public:
 
 class SetupCharacterParserTest {
 public:
-    dnd::ContentLibrary<dnd::Character> characters;
+    dnd::StoringContentLibrary<dnd::Character> characters;
     SetupCharacterParserTest();
     TestCharacterFileParser createParser();
 private:
     dnd::Groups groups;
     const std::filesystem::path filepath;
-    dnd::ContentLibrary<const dnd::CharacterClass> character_classes;
-    dnd::ContentLibrary<const dnd::CharacterSubclass> character_subclasses;
-    dnd::ContentLibrary<const dnd::CharacterRace> character_races;
-    dnd::ContentLibrary<const dnd::CharacterSubrace> character_subraces;
-    dnd::ContentLibrary<const dnd::Spell> spells;
+    dnd::StoringContentLibrary<const dnd::CharacterClass> character_classes;
+    dnd::StoringContentLibrary<const dnd::CharacterSubclass> character_subclasses;
+    dnd::StoringContentLibrary<const dnd::CharacterRace> character_races;
+    dnd::StoringContentLibrary<const dnd::CharacterSubrace> character_subraces;
+    dnd::StoringContentLibrary<const dnd::Spell> spells;
     void setClasses();
     void setSubclasses();
     void setRaces();

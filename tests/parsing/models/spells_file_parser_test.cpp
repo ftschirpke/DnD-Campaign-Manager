@@ -17,7 +17,7 @@
  */
 class TestSpellsFileParser : public dnd::SpellsFileParser {
 public:
-    TestSpellsFileParser(dnd::ContentLibrary<const dnd::Spell>& spells, dnd::Groups& groups)
+    TestSpellsFileParser(dnd::StoringContentLibrary<const dnd::Spell>& spells, dnd::Groups& groups)
         : dnd::SpellsFileParser("", spells, groups) {}
     dnd::SpellType createSpellTypeForTesting(const std::string& spell_type_str) const {
         return dnd::SpellsFileParser::createSpellType(spell_type_str);
@@ -32,7 +32,7 @@ public:
 
 class SetupSpellsParserTest {
 public:
-    dnd::ContentLibrary<const dnd::Spell> spells;
+    dnd::StoringContentLibrary<const dnd::Spell> spells;
     dnd::Groups groups;
     TestSpellsFileParser createParser();
 };
