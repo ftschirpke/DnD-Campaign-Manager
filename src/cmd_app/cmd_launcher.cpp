@@ -155,21 +155,21 @@ std::vector<const dnd::Item*> search_items(
     return items_in_order;
 }
 
-std::vector<const dnd::Feature**> search_features(
+std::vector<const dnd::Feature*> search_features(
     const std::string& search, dnd::ContentHolder& content, dnd::Output* output
 ) {
     size_t i = 0;
-    std::unordered_set<const dnd::Feature**> matched_features = content.features.prefix_get(search);
+    std::unordered_set<const dnd::Feature*> matched_features = content.features.prefix_get(search);
     if (matched_features.empty()) {
-        return std::vector<const dnd::Feature**>();
+        return std::vector<const dnd::Feature*>();
     }
-    std::vector<const dnd::Feature**> features_in_order(matched_features.begin(), matched_features.end());
-    std::sort(features_in_order.begin(), features_in_order.end(), [](const dnd::Feature** a, const dnd::Feature** b) {
-        return (*a)->name < (*b)->name;
+    std::vector<const dnd::Feature*> features_in_order(matched_features.begin(), matched_features.end());
+    std::sort(features_in_order.begin(), features_in_order.end(), [](const dnd::Feature* a, const dnd::Feature* b) {
+        return a->name < b->name;
     });
     output->text("-- C -- Features");
-    for (const dnd::Feature** feature : features_in_order) {
-        output->formatted_text("- [{:>2d}] {:<30s}", i, (*feature)->name);
+    for (const dnd::Feature* feature : features_in_order) {
+        output->formatted_text("- [{:>2d}] {:<30s}", i, feature->name);
         if (++i >= 100) {
             break;
         }
@@ -177,22 +177,22 @@ std::vector<const dnd::Feature**> search_features(
     return features_in_order;
 }
 
-std::map<std::string, std::vector<const dnd::Choosable**>> search_choosables(
+std::map<std::string, std::vector<const dnd::Choosable*>> search_choosables(
     const std::string& search, dnd::ContentHolder& content, dnd::Output* output
 ) {
     size_t i = 0;
-    std::map<std::string, std::vector<const dnd::Choosable**>> choosables_in_order;
+    std::map<std::string, std::vector<const dnd::Choosable*>> choosables_in_order;
     for (auto& [name, choosables_content] : content.choosables) {
-        std::unordered_set<const dnd::Choosable**> matched_choosables = choosables_content.prefix_get(search);
+        std::unordered_set<const dnd::Choosable*> matched_choosables = choosables_content.prefix_get(search);
         if (matched_choosables.empty()) {
             continue;
         }
-        choosables_in_order[name] = std::vector<const dnd::Choosable**>(
+        choosables_in_order[name] = std::vector<const dnd::Choosable*>(
             matched_choosables.begin(), matched_choosables.end()
         );
         std::sort(
             choosables_in_order[name].begin(), choosables_in_order[name].end(),
-            [](const dnd::Choosable** a, const dnd::Choosable** b) { return (*a)->name < (*b)->name; }
+            [](const dnd::Choosable* a, const dnd::Choosable* b) { return a->name < b->name; }
         );
     }
     if (choosables_in_order.empty()) {
@@ -203,8 +203,8 @@ std::map<std::string, std::vector<const dnd::Choosable**>> search_choosables(
         if (!ordered_choosables.empty()) {
             output->formatted_text("-- {} -- {:s}", letter++, category);
         }
-        for (const dnd::Choosable** choosable : ordered_choosables) {
-            output->formatted_text("- [{:>2d}] {:<30s}", i, (*choosable)->name);
+        for (const dnd::Choosable* choosable : ordered_choosables) {
+            output->formatted_text("- [{:>2d}] {:<30s}", i, choosable->name);
             if (++i >= 100) {
                 break;
             }
@@ -228,8 +228,8 @@ bool dnd::content_search(dnd::ContentHolder& content, dnd::Output* output) {
 
     const std::vector<const dnd::Spell*> spells_found = search_spells(search, content, output);
     const std::vector<const dnd::Item*> items_found = search_items(search, content, output);
-    const std::vector<const dnd::Feature**> features_found = search_features(search, content, output);
-    const std::map<std::string, std::vector<const dnd::Choosable**>> choosables_found = search_choosables(
+    const std::vector<const dnd::Feature*> features_found = search_features(search, content, output);
+    const std::map<std::string, std::vector<const dnd::Choosable*>> choosables_found = search_choosables(
         search, content, output
     );
     std::string display;
@@ -263,13 +263,13 @@ bool dnd::content_search(dnd::ContentHolder& content, dnd::Output* output) {
             } else if (c == 'B') {
                 output->display(items_found.at(idx));
             } else if (c == 'C') {
-                output->display(*features_found.at(idx));
+                output->display(features_found.at(idx));
             } else {
                 int i = c - 'D';
                 int j = 0;
                 for (const auto& [choosable_group, choosables] : choosables_found) {
                     if (i == j) {
-                        output->display(*choosables.at(idx));
+                        output->display(choosables.at(idx));
                         break;
                     }
                     ++j;
