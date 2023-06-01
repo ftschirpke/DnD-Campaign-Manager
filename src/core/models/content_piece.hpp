@@ -13,6 +13,7 @@ namespace dnd {
 class ContentPiece {
 public:
     ContentPiece(const std::string& name, const std::filesystem::path& source_file_path);
+    virtual ~ContentPiece() = default;
     /**
      * @brief Accepts a visitor
      * @param visitor pointer to the visitor
