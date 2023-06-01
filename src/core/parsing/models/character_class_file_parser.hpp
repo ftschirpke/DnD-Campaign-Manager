@@ -33,8 +33,8 @@ public:
      * @param spells the already-parsed spells
      */
     CharacterClassFileParser(
-        const std::filesystem::path& filepath, StoringContentLibrary<const CharacterClass>& classes, const Groups& groups,
-        const StoringContentLibrary<const Spell>& spells
+        const std::filesystem::path& filepath, StoringContentLibrary<const CharacterClass>& classes,
+        const Groups& groups, const StoringContentLibrary<const Spell>& spells
     ) noexcept;
     /**
      * @brief Parses JSON file containing a class
