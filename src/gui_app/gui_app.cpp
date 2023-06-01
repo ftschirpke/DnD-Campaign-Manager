@@ -277,7 +277,7 @@ void dnd::GUIApp::start_parsing() {
 }
 
 void dnd::GUIApp::render_search_window() {
-    ImGui::Begin("Main");
+    ImGui::Begin("Search");
 
     if (ImGui::InputText("Search", &search_query, ImGuiInputTextFlags_EscapeClearsAll, nullptr, nullptr)) {
         search->set_search_query(search_query);
@@ -305,6 +305,7 @@ void dnd::GUIApp::render_search_window() {
             search_result_count = 0;
         }
     }
+    ImGui::Separator();
     if (search_query.size() < 2) {
         ImGui::Text("Enter at least 2 characters to search.");
         ImGui::End();
@@ -321,10 +322,13 @@ void dnd::GUIApp::render_search_window() {
         return;
     }
 
-    for (size_t i = 0; i < search_result_count; ++i) {
-        if (ImGui::Selectable(search_result_strings[i].c_str(), false)) {
-            selected_search_results[i] = true;
+    if (ImGui::BeginChild("Search Results", ImVec2(-FLT_MIN, -FLT_MIN))) {
+        for (size_t i = 0; i < search_result_count; ++i) {
+            if (ImGui::Selectable(search_result_strings[i].c_str(), false)) {
+                selected_search_results[i] = true;
+            }
         }
+        ImGui::EndChild();
     }
     ImGui::End();
 }
@@ -333,6 +337,7 @@ void dnd::GUIApp::render_content_window() {
     ImGui::Begin("Content");
     ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_AutoSelectNewTabs | ImGuiTabBarFlags_Reorderable;
     if (ImGui::BeginTabBar("Content Tabs", tab_bar_flags)) {
+        int show_count = 0;
         for (size_t i = 0; i < search_result_count; ++i) {
             if (selected_search_results[i]) {
                 if (ImGui::BeginTabItem(search_results[i]->name.c_str(), &(selected_search_results[i]))) {
@@ -340,6 +345,17 @@ void dnd::GUIApp::render_content_window() {
                     ImGui::Text("%s", search_result_strings[i].c_str());
                     ImGui::EndTabItem();
                 }
+                ++show_count;
+            }
+        }
+        if (show_count > 0) {
+            if (ImGui::TabItemButton(" X ", ImGuiTabItemFlags_Trailing)) {
+                for (size_t i = 0; i < search_result_count; ++i) {
+                    selected_search_results[i] = false;
+                }
+            }
+            if (ImGui::IsItemHovered()) {
+                ImGui::SetTooltip("Close all tabs");
             }
         }
         ImGui::EndTabBar();
