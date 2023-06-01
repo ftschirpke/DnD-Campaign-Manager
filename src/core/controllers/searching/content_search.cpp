@@ -51,22 +51,18 @@ void dnd::ContentSearch::set_search_query(const std::string& new_query) {
     while (query.size() > new_query.size()) {
         remove_character_from_query();
     }
+
     size_t common_length = 0;
     while (common_length < query.size() && query[common_length] == new_query[common_length]) {
         ++common_length;
     }
 
-    if (common_length < query.size() - common_length) {
-        clear_query();
-    }
-
-
-    size_t diff = new_query.size() - common_length;
-    for (size_t i = 0; i < diff; ++i) {
+    while (query.size() > common_length) {
         remove_character_from_query();
     }
-    for (size_t i = 0; i < diff; ++i) {
-        add_character_to_query(new_query[common_length + i]);
+
+    for (size_t i = common_length; i < new_query.size(); ++i) {
+        add_character_to_query(new_query[i]);
     }
 }
 
@@ -79,16 +75,16 @@ void dnd::ContentSearch::clear_query() {
 void dnd::ContentSearch::add_character_to_query(char c) {
     query.push_back(c);
 
-    character_search_path.push(character_search_path.top()->get_child(c));
-    character_class_search_path.push(character_class_search_path.top()->get_child(c));
-    character_subclass_search_path.push(character_subclass_search_path.top()->get_child(c));
-    character_race_search_path.push(character_race_search_path.top()->get_child(c));
-    character_subrace_search_path.push(character_subrace_search_path.top()->get_child(c));
-    item_search_path.push(item_search_path.top()->get_child(c));
-    spell_search_path.push(spell_search_path.top()->get_child(c));
-    feature_search_path.push(feature_search_path.top()->get_child(c));
-    for (auto& [choosable_group_name, choosable_search_path] : choosable_search_paths) {
-        choosable_search_path.push(choosable_search_path.top()->get_child(c));
+    character_search_path.push_top_child(c);
+    character_class_search_path.push_top_child(c);
+    character_subclass_search_path.push_top_child(c);
+    character_race_search_path.push_top_child(c);
+    character_subrace_search_path.push_top_child(c);
+    item_search_path.push_top_child(c);
+    spell_search_path.push_top_child(c);
+    feature_search_path.push_top_child(c);
+    for (auto& [_, choosable_search_path] : choosable_search_paths) {
+        choosable_search_path.push_top_child(c);
     }
 }
 
@@ -115,43 +111,16 @@ std::vector<const dnd::ContentPiece*> dnd::ContentSearch::get_results() const {
     std::vector<const ContentPiece*> results;
     results.reserve(100);
 
-    if (character_search_path.top() != nullptr) {
-        auto character_results = character_search_path.top()->successors();
-        results.insert(results.end(), character_results.begin(), character_results.end());
-    }
-    if (character_class_search_path.top() != nullptr) {
-        auto character_class_results = character_class_search_path.top()->successors();
-        results.insert(results.end(), character_class_results.begin(), character_class_results.end());
-    }
-    if (character_subclass_search_path.top() != nullptr) {
-        auto character_subclass_results = character_subclass_search_path.top()->successors();
-        results.insert(results.end(), character_subclass_results.begin(), character_subclass_results.end());
-    }
-    if (character_race_search_path.top() != nullptr) {
-        auto character_race_results = character_race_search_path.top()->successors();
-        results.insert(results.end(), character_race_results.begin(), character_race_results.end());
-    }
-    if (character_subrace_search_path.top() != nullptr) {
-        auto character_subrace_results = character_subrace_search_path.top()->successors();
-        results.insert(results.end(), character_subrace_results.begin(), character_subrace_results.end());
-    }
-    if (item_search_path.top() != nullptr) {
-        auto item_results = item_search_path.top()->successors();
-        results.insert(results.end(), item_results.begin(), item_results.end());
-    }
-    if (spell_search_path.top() != nullptr) {
-        auto spell_results = spell_search_path.top()->successors();
-        results.insert(results.end(), spell_results.begin(), spell_results.end());
-    }
-    if (feature_search_path.top() != nullptr) {
-        auto feature_results = feature_search_path.top()->successors();
-        results.insert(results.end(), feature_results.begin(), feature_results.end());
-    }
-    for (auto& [choosable_group_name, choosable_search_path] : choosable_search_paths) {
-        if (choosable_search_path.top() != nullptr) {
-            auto choosable_results = choosable_search_path.top()->successors();
-            results.insert(results.end(), choosable_results.begin(), choosable_results.end());
-        }
+    character_search_path.insert_top_successors_into(results);
+    character_class_search_path.insert_top_successors_into(results);
+    character_subclass_search_path.insert_top_successors_into(results);
+    character_race_search_path.insert_top_successors_into(results);
+    character_subrace_search_path.insert_top_successors_into(results);
+    item_search_path.insert_top_successors_into(results);
+    spell_search_path.insert_top_successors_into(results);
+    feature_search_path.insert_top_successors_into(results);
+    for (const auto& [_, choosable_search_path] : choosable_search_paths) {
+        choosable_search_path.insert_top_successors_into(results);
     }
 
     return results;
