@@ -3,8 +3,10 @@
 
 #include "dnd_config.hpp"
 
+#include <array>
 #include <filesystem>
 #include <future>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -12,6 +14,7 @@
 #include <imgui/imgui.h>
 
 #include "core/controllers/content_holder.hpp"
+#include "core/controllers/searching/content_search.hpp"
 #include "core/parsing/controllers/content_parser.hpp"
 
 namespace dnd {
@@ -72,9 +75,14 @@ private:
     std::string campaign_name;
 
     std::string search_query;
-    SearchResult search_result;
-    std::array<bool, 100> selected_search_results;
+    // SearchResult search_result;
+    std::array<bool, 100> old_selected_search_results;
     static const int max_search_results = 100;
+
+    std::unique_ptr<ContentSearch> search;
+    std::array<const ContentPiece*, 100> search_results;
+    std::array<bool, 100> selected_search_results;
+    std::array<std::string, 100> search_result_strings;
 
     std::vector<std::string> error_messages;
 

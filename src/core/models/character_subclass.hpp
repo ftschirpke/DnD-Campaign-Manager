@@ -31,7 +31,7 @@ public:
      * @brief Accepts a visitor
      * @param visitor pointer to the visitor
      */
-    virtual void accept(Visitor* visitor) override final;
+    virtual void accept(Visitor* visitor) const override final;
 
     // the name of the class this is a subclass of
     const std::string class_name;
@@ -43,7 +43,7 @@ inline CharacterSubclass::CharacterSubclass(
 ) noexcept
     : FeatureHolder(name, source_file_path, std::move(features)), class_name(class_name) {}
 
-inline void CharacterSubclass::accept(Visitor* visitor) { visitor->visit(this); }
+inline void CharacterSubclass::accept(Visitor* visitor) const { visitor->visit(this); }
 
 } // namespace dnd
 

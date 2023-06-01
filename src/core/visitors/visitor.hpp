@@ -17,7 +17,7 @@ class Choosable;
 
 class Visitor {
 public:
-    virtual void visit(Character* character_ptr) = 0;
+    virtual void visit(const Character* character_ptr) = 0;
     virtual void visit(const CharacterClass* character_class_ptr) = 0;
     virtual void visit(const CharacterSubclass* character_subclass_ptr) = 0;
     virtual void visit(const CharacterRace* character_race_ptr) = 0;

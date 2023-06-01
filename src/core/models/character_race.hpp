@@ -31,7 +31,7 @@ public:
      * @brief Accepts a visitor
      * @param visitor pointer to the visitor
      */
-    virtual void accept(Visitor* visitor) override final;
+    virtual void accept(Visitor* visitor) const override final;
 
     // "true" if this race has subraces, "false" otherwise
     const bool has_subraces;
@@ -43,7 +43,7 @@ inline CharacterRace::CharacterRace(
 ) noexcept
     : FeatureHolder(name, source_file_path, std::move(features)), has_subraces(has_subraces) {}
 
-inline void CharacterRace::accept(Visitor* visitor) { visitor->visit(this); }
+inline void CharacterRace::accept(Visitor* visitor) const { visitor->visit(this); }
 
 } // namespace dnd
 

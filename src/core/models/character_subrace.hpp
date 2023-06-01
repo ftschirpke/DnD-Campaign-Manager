@@ -31,7 +31,7 @@ public:
      * @brief Accepts a visitor
      * @param visitor pointer to the visitor
      */
-    virtual void accept(Visitor* visitor) override final;
+    virtual void accept(Visitor* visitor) const override final;
 
     // the name of the race this is a subrace of
     const std::string race_name;
@@ -43,7 +43,7 @@ inline CharacterSubrace::CharacterSubrace(
 ) noexcept
     : FeatureHolder(name, source_file_path, std::move(features)), race_name(race_name) {}
 
-inline void CharacterSubrace::accept(Visitor* visitor) { visitor->visit(this); }
+inline void CharacterSubrace::accept(Visitor* visitor) const { visitor->visit(this); }
 
 } // namespace dnd
 

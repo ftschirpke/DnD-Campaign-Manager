@@ -38,7 +38,7 @@ public:
      * @brief Accepts a visitor
      * @param visitor pointer to the visitor
      */
-    virtual void accept(Visitor* visitor) override final;
+    virtual void accept(Visitor* visitor) const override final;
 
     // a human-readable description of what the feature provides
     const std::string description;
@@ -57,7 +57,7 @@ inline Feature::Feature(
 ) noexcept
     : ContentPiece(name, source_file_path), description(description), subclass(false) {}
 
-inline void Feature::accept(Visitor* visitor) { visitor->visit(this); }
+inline void Feature::accept(Visitor* visitor) const { visitor->visit(this); }
 
 } // namespace dnd
 

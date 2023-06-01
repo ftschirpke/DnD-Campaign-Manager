@@ -39,7 +39,7 @@ public:
      * @brief Accepts a visitor
      * @param visitor pointer to the visitor
      */
-    virtual void accept(Visitor* visitor) override final;
+    virtual void accept(Visitor* visitor) const override final;
 
     const bool requires_attunement;
     // a functional description of the item (how it works and what it does)
@@ -62,7 +62,7 @@ inline Item::Item(
     : ContentPiece(name, source_file_path), requires_attunement(requires_attunement), description(description),
       cosmetic_description(cosmetic_description) {}
 
-inline void Item::accept(Visitor* visitor) { visitor->visit(this); }
+inline void Item::accept(Visitor* visitor) const { visitor->visit(this); }
 
 } // namespace dnd
 

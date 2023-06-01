@@ -34,7 +34,7 @@ public:
      * @brief Accepts a visitor
      * @param visitor pointer to the visitor
      */
-    virtual void accept(Visitor* visitor) override final;
+    virtual void accept(Visitor* visitor) const override final;
 
     // the type of hit dice for this class
     const Dice hit_dice;
@@ -51,7 +51,7 @@ inline CharacterClass::CharacterClass(
     : FeatureHolder(name, source_file_path, std::move(features)), hit_dice(hit_dice), asi_levels(asi_levels),
       subclass_level(subclass_level) {}
 
-inline void CharacterClass::accept(Visitor* visitor) { visitor->visit(this); }
+inline void CharacterClass::accept(Visitor* visitor) const { visitor->visit(this); }
 
 } // namespace dnd
 

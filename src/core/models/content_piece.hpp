@@ -17,7 +17,7 @@ public:
      * @brief Accepts a visitor
      * @param visitor pointer to the visitor
      */
-    virtual void accept(Visitor* visitor) = 0;
+    virtual void accept(Visitor* visitor) const = 0;
 
     const std::string name;
     const std::filesystem::path source_file_path;
