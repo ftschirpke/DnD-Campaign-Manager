@@ -9,6 +9,7 @@
 #include <fmt/format.h>
 #include <imgui/imgui.h>
 
+#include "core/basic_mechanics/dice.hpp"
 #include "core/content_visitors/content_visitor.hpp"
 #include "core/models/character.hpp"
 #include "core/models/character_class.hpp"
@@ -64,23 +65,64 @@ void dnd::DisplayVisitor::visit(const Character* character_ptr) {
 }
 
 void dnd::DisplayVisitor::visit(const CharacterClass* character_class_ptr) {
-    DND_UNUSED(character_class_ptr);
-    // TODO
+    begin_content_table(character_class_ptr);
+
+    label("Type:");
+    ImGui::Text("Class");
+    source(character_class_ptr);
+    label("Hit Die:");
+    ImGui::Text("%s", diceToString(character_class_ptr->hit_dice).c_str());
+    label("ASI Levels:");
+    ImGui::Text("%s", fmt::format("{}", fmt::join(character_class_ptr->asi_levels, ", ")).c_str());
+    label("Subclass Level:");
+    ImGui::Text("%d", character_class_ptr->subclass_level);
+    label("Features:");
+    list_features(character_class_ptr);
+
+    end_content_table();
 }
 
 void dnd::DisplayVisitor::visit(const CharacterSubclass* character_subclass_ptr) {
-    DND_UNUSED(character_subclass_ptr);
-    // TODO
+    begin_content_table(character_subclass_ptr);
+
+    label("Type:");
+    ImGui::Text("Subclass");
+    source(character_subclass_ptr);
+    label("Class name:");
+    ImGui::Text("%s", character_subclass_ptr->class_name.c_str());
+    label("Features:");
+    list_features(character_subclass_ptr);
+
+    end_content_table();
 }
 
 void dnd::DisplayVisitor::visit(const CharacterRace* character_race_ptr) {
-    DND_UNUSED(character_race_ptr);
-    // TODO
+    begin_content_table(character_race_ptr);
+
+    label("Type:");
+    ImGui::Text("Race");
+    source(character_race_ptr);
+    const char* has_subraces_cstr = character_race_ptr->has_subraces ? "yes" : "no";
+    label("Has Subraces:");
+    ImGui::Text("%s", has_subraces_cstr);
+    label("Features:");
+    list_features(character_race_ptr);
+
+    end_content_table();
 }
 
 void dnd::DisplayVisitor::visit(const CharacterSubrace* character_subrace_ptr) {
-    DND_UNUSED(character_subrace_ptr);
-    // TODO
+    begin_content_table(character_subrace_ptr);
+
+    label("Type:");
+    ImGui::Text("Subrace");
+    source(character_subrace_ptr);
+    label("Race name:");
+    ImGui::Text("%s", character_subrace_ptr->race_name.c_str());
+    label("Features:");
+    list_features(character_subrace_ptr);
+
+    end_content_table();
 }
 
 void dnd::DisplayVisitor::visit(const Item* item_ptr) {
@@ -152,4 +194,19 @@ void dnd::DisplayVisitor::display_formatted_text(const std::string& formatted_te
     for (auto it = text_formats.begin(); it != text_formats.end(); ++it) {
         (*it)->accept(&display_format_visitor);
     }
+}
+
+void dnd::DisplayVisitor::list_features(const dnd::FeatureHolder* feature_holder_ptr) {
+    if (feature_holder_ptr->features.empty()) {
+        return;
+    }
+    for (const dnd::Feature& feature : feature_holder_ptr->features) {
+        ImGui::Separator();
+        if (ImGui::TreeNode(feature.name.c_str())) {
+            ImGui::Separator();
+            visit(&feature);
+            ImGui::TreePop();
+        }
+    }
+    ImGui::Separator();
 }

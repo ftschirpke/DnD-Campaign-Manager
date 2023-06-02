@@ -35,6 +35,7 @@ public:
     virtual void visit(const Choosable* choosable_ptr) override;
 private:
     void display_formatted_text(const std::string& formatted_text);
+    void list_features(const FeatureHolder* feature_holder_ptr);
 
     DisplayFormatVisitor display_format_visitor;
     StringFormatter string_formatter;

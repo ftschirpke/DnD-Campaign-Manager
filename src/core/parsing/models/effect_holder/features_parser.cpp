@@ -14,7 +14,7 @@
 #include "core/parsing/parse_optionals.hpp"
 #include "core/parsing/parsing_exceptions.hpp"
 
-void dnd::FeaturesParser::parseFeatures(const nlohmann::json& features_json) {
+void dnd::FeaturesParser::parseFeatures(const nlohmann::ordered_json& features_json) {
     DND_MEASURE_FUNCTION();
 
     if (!features_json.is_object()) {

@@ -34,7 +34,7 @@ public:
      * @param features_json the JSON that need s ot be parsed
      * @throws attribute_format_error if features_json has wrong format
      */
-    void parseFeatures(const nlohmann::json& features_json);
+    void parseFeatures(const nlohmann::ordered_json& features_json);
     /**
      * @brief Returns the parsed features while maintaining ownership
      * @return the parsed features as l-value-reference
