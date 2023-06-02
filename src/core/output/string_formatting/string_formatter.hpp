@@ -40,7 +40,8 @@ private:
     bool ignore_double_newline;
 };
 
-StringFormatter::StringFormatter(bool ignore_double_newline) noexcept : ignore_double_newline(ignore_double_newline) {}
+inline StringFormatter::StringFormatter(bool ignore_double_newline) noexcept
+    : ignore_double_newline(ignore_double_newline) {}
 
 } // namespace dnd
 
