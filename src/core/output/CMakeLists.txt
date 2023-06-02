@@ -5,3 +5,4 @@ target_sources(${DND_CORE}
 
 add_subdirectory(cards)
 add_subdirectory(latex_builder)
+add_subdirectory(string_formatting)

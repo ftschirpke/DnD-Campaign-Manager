@@ -17,7 +17,7 @@ public:
      * @brief Accept a format visitor
      * @param visitor a pointer to the format visitor
      */
-    virtual void accept(FormatVisitor* visitor) const;
+    virtual void accept(FormatVisitor* visitor);
     /**
      * @brief Add an element to the current row
      * @param element the element to add
@@ -35,7 +35,7 @@ private:
 
 inline Table::Table() noexcept : num_columns(0), current_row(0), rows({{}}) {}
 
-inline void Table::accept(FormatVisitor* visitor) const { visitor->visit(this); }
+inline void Table::accept(FormatVisitor* visitor) { visitor->visit(this); }
 
 } // namespace dnd
 
