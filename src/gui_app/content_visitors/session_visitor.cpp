@@ -13,7 +13,7 @@
 #include "core/models/effect_holder/feature.hpp"
 #include "core/models/item.hpp"
 #include "core/models/spell.hpp"
-#include "core/visitors/visitor.hpp"
+#include "core/content_visitors/content_visitor.hpp"
 
 void dnd::SessionVisitor::visit(const Character* character_ptr) {
     if (!open_tabs_json.contains("character")) {

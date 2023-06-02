@@ -5,6 +5,7 @@
 
 #include <string>
 
+#include "core/content_visitors/content_visitor.hpp"
 #include "core/models/content_piece.hpp"
 
 namespace dnd {
@@ -39,7 +40,7 @@ public:
      * @brief Accepts a visitor
      * @param visitor pointer to the visitor
      */
-    virtual void accept(Visitor* visitor) const override final;
+    virtual void accept(ContentVisitor* visitor) const override final;
 
     const bool requires_attunement;
     // a functional description of the item (how it works and what it does)
@@ -62,7 +63,7 @@ inline Item::Item(
     : ContentPiece(name, source_file_path), requires_attunement(requires_attunement), description(description),
       cosmetic_description(cosmetic_description) {}
 
-inline void Item::accept(Visitor* visitor) const { visitor->visit(this); }
+inline void Item::accept(ContentVisitor* visitor) const { visitor->visit(this); }
 
 } // namespace dnd
 

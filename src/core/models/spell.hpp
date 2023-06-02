@@ -10,6 +10,7 @@
 #include <unordered_set>
 #include <utility>
 
+#include "core/content_visitors/content_visitor.hpp"
 #include "core/models/content_piece.hpp"
 
 namespace dnd {
@@ -163,7 +164,7 @@ public:
      * @brief Accepts a visitor
      * @param visitor pointer to the visitor
      */
-    virtual void accept(Visitor* visitor) const override final;
+    virtual void accept(ContentVisitor* visitor) const override final;
 
     // a description of how long the spell takes to cast
     const std::string casting_time;
@@ -189,7 +190,7 @@ inline Spell::Spell(
     : ContentPiece(name, source_file_path), casting_time(casting_time), range(range), duration(duration),
       description(description), classes(classes), type(type), components(components) {}
 
-inline void Spell::accept(Visitor* visitor) const { visitor->visit(this); }
+inline void Spell::accept(ContentVisitor* visitor) const { visitor->visit(this); }
 
 } // namespace dnd
 

@@ -5,6 +5,7 @@
 
 #include <nlohmann/json.hpp>
 
+#include "core/content_visitors/content_visitor.hpp"
 #include "core/models/character.hpp"
 #include "core/models/character_class.hpp"
 #include "core/models/character_race.hpp"
@@ -14,11 +15,10 @@
 #include "core/models/effect_holder/feature.hpp"
 #include "core/models/item.hpp"
 #include "core/models/spell.hpp"
-#include "core/visitors/visitor.hpp"
 
 namespace dnd {
 
-class SessionVisitor : public Visitor {
+class SessionVisitor : public ContentVisitor {
 public:
     /**
      * @brief Return a json object of open tabs

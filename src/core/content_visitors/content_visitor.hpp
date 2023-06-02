@@ -1,5 +1,5 @@
-#ifndef VISITOR_HPP_
-#define VISITOR_HPP_
+#ifndef CONTENT_VISITOR_HPP_
+#define CONTENT_VISITOR_HPP_
 
 #include "dnd_config.hpp"
 
@@ -15,7 +15,7 @@ class Spell;
 class Feature;
 class Choosable;
 
-class Visitor {
+class ContentVisitor {
 public:
     virtual void visit(const Character* character_ptr) = 0;
     virtual void visit(const CharacterClass* character_class_ptr) = 0;
@@ -30,4 +30,4 @@ public:
 
 } // namespace dnd
 
-#endif // VISITOR_HPP_
+#endif // CONTENT_VISITOR_HPP_

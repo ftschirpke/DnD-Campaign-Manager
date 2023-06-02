@@ -28,8 +28,8 @@
 #include "core/models/spell.hpp"
 #include "core/parsing/controllers/content_parser.hpp"
 #include "core/parsing/parsing_exceptions.hpp"
-#include "gui_app/visitors/list_visitor.hpp"
-#include "gui_app/visitors/session_visitor.hpp"
+#include "gui_app/content_visitors/list_visitor.hpp"
+#include "gui_app/content_visitors/session_visitor.hpp"
 
 static const char* const imgui_ini_filename = "imgui.ini";
 static const char* const last_session_filename = "last_session.ini";

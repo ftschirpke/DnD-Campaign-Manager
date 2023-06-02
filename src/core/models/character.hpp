@@ -9,6 +9,7 @@
 #include <utility>
 #include <vector>
 
+#include "core/content_visitors/content_visitor.hpp"
 #include "core/models/character_class.hpp"
 #include "core/models/character_race.hpp"
 #include "core/models/character_state.hpp"
@@ -83,7 +84,7 @@ public:
      * @brief Accepts a visitor
      * @param visitor pointer to the visitor
      */
-    virtual void accept(Visitor* visitor) const override final;
+    virtual void accept(ContentVisitor* visitor) const override final;
 
     // TODO: should these pointers be non-const?
 
@@ -153,7 +154,7 @@ inline void Character::updateLevel() { level = levelForXP(xp); }
 
 inline const std::vector<int>& Character::getHitDiceRolls() const noexcept { return hit_dice_rolls; }
 
-inline void Character::accept(Visitor* visitor) const { visitor->visit(this); }
+inline void Character::accept(ContentVisitor* visitor) const { visitor->visit(this); }
 
 } // namespace dnd
 
