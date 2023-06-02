@@ -13,6 +13,7 @@
 #include "core/models/effect_holder/feature.hpp"
 #include "core/models/item.hpp"
 #include "core/models/spell.hpp"
+#include "core/output/string_formatting/string_formatter.hpp"
 #include "gui_app/string_formatting/display_format_visitor.hpp"
 
 namespace dnd {
@@ -32,7 +33,10 @@ public:
     virtual void visit(const Feature* feature_ptr) override;
     virtual void visit(const Choosable* choosable_ptr) override;
 private:
+    void display_formatted_text(const std::string& formatted_text);
+
     DisplayFormatVisitor display_format_visitor;
+    StringFormatter string_formatter;
 };
 
 } // namespace dnd
