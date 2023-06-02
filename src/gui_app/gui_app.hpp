@@ -18,6 +18,7 @@
 #include "core/controllers/content_holder.hpp"
 #include "core/controllers/searching/content_search.hpp"
 #include "core/parsing/controllers/content_parser.hpp"
+#include "gui_app/content_visitors/display_visitor.hpp"
 
 namespace dnd {
 
@@ -62,6 +63,9 @@ private:
     bool select_campaign;
     bool is_parsing;
 
+    // the file dialog for selecting the content directory
+    ImGui::FileBrowser content_dir_dialog;
+
     std::filesystem::path content_directory;
     std::string campaign_name;
 
@@ -82,8 +86,7 @@ private:
     // the object holding all the DnD content relevant for the selected campaign
     ContentHolder content;
 
-    // the file dialog for selecting the content directory
-    ImGui::FileBrowser content_dir_dialog;
+    DisplayVisitor display_visitor;
 };
 
 } // namespace dnd

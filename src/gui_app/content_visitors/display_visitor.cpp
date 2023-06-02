@@ -14,37 +14,46 @@
 #include "core/models/spell.hpp"
 
 void dnd::DisplayVisitor::visit(const Character* character_ptr) {
+    DND_UNUSED(character_ptr);
     // TODO
 }
 
 void dnd::DisplayVisitor::visit(const CharacterClass* character_class_ptr) {
+    DND_UNUSED(character_class_ptr);
     // TODO
 }
 
 void dnd::DisplayVisitor::visit(const CharacterSubclass* character_subclass_ptr) {
+    DND_UNUSED(character_subclass_ptr);
     // TODO
 }
 
 void dnd::DisplayVisitor::visit(const CharacterRace* character_race_ptr) {
+    DND_UNUSED(character_race_ptr);
     // TODO
 }
 
 void dnd::DisplayVisitor::visit(const CharacterSubrace* character_subrace_ptr) {
+    DND_UNUSED(character_subrace_ptr);
     // TODO
 }
 
 void dnd::DisplayVisitor::visit(const Item* item_ptr) {
+    DND_UNUSED(item_ptr);
     // TODO
 }
 
 void dnd::DisplayVisitor::visit(const Spell* spell_ptr) {
+    DND_UNUSED(spell_ptr);
     // TODO
 }
 
 void dnd::DisplayVisitor::visit(const Feature* feature_ptr) {
+    DND_UNUSED(feature_ptr);
     // TODO
 }
 
 void dnd::DisplayVisitor::visit(const Choosable* choosable_ptr) {
+    DND_UNUSED(choosable_ptr);
     // TODO
 }

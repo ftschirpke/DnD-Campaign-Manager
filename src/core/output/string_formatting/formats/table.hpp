@@ -28,7 +28,7 @@ public:
      */
     void next_row();
     std::vector<std::vector<std::string_view>> get_rows() const noexcept;
-    size_t get_num_columns() const noexcept { return num_columns; }
+    size_t get_num_columns() const noexcept;
 private:
     size_t num_columns;
     size_t current_row;

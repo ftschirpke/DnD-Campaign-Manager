@@ -28,6 +28,7 @@
 #include "core/models/spell.hpp"
 #include "core/parsing/controllers/content_parser.hpp"
 #include "core/parsing/parsing_exceptions.hpp"
+#include "gui_app/content_visitors/display_visitor.hpp"
 #include "gui_app/content_visitors/list_visitor.hpp"
 #include "gui_app/content_visitors/session_visitor.hpp"
 
@@ -38,8 +39,8 @@ static const ImGuiFileBrowserFlags content_dir_dialog_options = ImGuiFileBrowser
 static const ImGuiWindowFlags error_popup_options = ImGuiWindowFlags_AlwaysAutoResize;
 
 dnd::GUIApp::GUIApp()
-    : show_demo_window(false), select_campaign(false), is_parsing(false), search(nullptr), search_result_count(0),
-      content_dir_dialog(content_dir_dialog_options) {
+    : show_demo_window(false), select_campaign(false), is_parsing(false),
+      content_dir_dialog(content_dir_dialog_options), search(nullptr), search_result_count(0), display_visitor() {
     ImGui::GetIO().IniFilename = imgui_ini_filename;
 }
 
@@ -398,7 +399,8 @@ void dnd::GUIApp::render_content_window() {
         for (auto it = open_content_pieces.begin(); it != open_content_pieces.end();) {
             bool open = true;
             if (ImGui::BeginTabItem((*it)->name.c_str(), &open)) {
-                ImGui::Text("TESTING - %s", (*it)->name.c_str());
+                ImGui::SeparatorText((*it)->name.c_str());
+                (*it)->accept(&display_visitor);
                 ImGui::EndTabItem();
             }
             if (!open) {
