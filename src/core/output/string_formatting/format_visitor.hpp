@@ -5,8 +5,15 @@
 
 namespace dnd {
 
+class BulletedList;
+class Paragraph;
+class Table;
+
 class FormatVisitor {
 public:
+    virtual void visit(BulletedList* bulleted_list) = 0;
+    virtual void visit(Paragraph* paragraph) = 0;
+    virtual void visit(Table* table) = 0;
 };
 
 } // namespace dnd
