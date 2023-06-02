@@ -43,6 +43,8 @@ dnd::GUIApp::GUIApp()
     ImGui::GetIO().IniFilename = imgui_ini_filename;
 }
 
+dnd::GUIApp::~GUIApp() { clean_up(); }
+
 void dnd::GUIApp::initialize() {
     content_dir_dialog.SetTitle("Select content directory");
     get_last_session_values();

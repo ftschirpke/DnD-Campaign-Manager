@@ -27,6 +27,7 @@ namespace dnd {
 class GUIApp {
 public:
     GUIApp();
+    ~GUIApp();
     /**
      * @brief Renders one or multiple DearImGui windows displaying the content of the application.
      */
