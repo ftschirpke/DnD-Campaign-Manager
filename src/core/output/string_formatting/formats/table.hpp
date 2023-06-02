@@ -27,6 +27,7 @@ public:
      * @brief End the current row and start a new one
      */
     void next_row();
+    std::vector<std::vector<std::string_view>> get_rows() const noexcept;
 private:
     size_t num_columns;
     size_t current_row;
@@ -36,6 +37,8 @@ private:
 inline Table::Table() noexcept : num_columns(0), current_row(0), rows({{}}) {}
 
 inline void Table::accept(FormatVisitor* visitor) { visitor->visit(this); }
+
+inline std::vector<std::vector<std::string_view>> Table::get_rows() const noexcept { return rows; }
 
 } // namespace dnd
 
