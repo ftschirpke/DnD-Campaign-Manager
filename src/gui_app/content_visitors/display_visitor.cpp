@@ -18,6 +18,7 @@
 #include "core/models/content_piece.hpp"
 #include "core/models/effect_holder/choosable.hpp"
 #include "core/models/effect_holder/feature.hpp"
+#include "core/models/feature_holder.hpp"
 #include "core/models/item.hpp"
 #include "core/models/spell.hpp"
 #include "core/output/string_formatting/formats/format.hpp"
@@ -83,8 +84,20 @@ void dnd::DisplayVisitor::visit(const CharacterSubrace* character_subrace_ptr) {
 }
 
 void dnd::DisplayVisitor::visit(const Item* item_ptr) {
-    DND_UNUSED(item_ptr);
-    // TODO
+    begin_content_table(item_ptr);
+
+    label("Type:");
+    ImGui::Text("Item");
+    source(item_ptr);
+    label("Attunement");
+    const char* attunement = item_ptr->requires_attunement ? "required" : "not required";
+    ImGui::Text("%s", attunement);
+    label("Description:");
+    display_formatted_text(item_ptr->description);
+    label("Cosmetic Description:");
+    display_formatted_text(item_ptr->cosmetic_description);
+
+    end_content_table();
 }
 
 void dnd::DisplayVisitor::visit(const Spell* spell_ptr) {
@@ -103,7 +116,6 @@ void dnd::DisplayVisitor::visit(const Spell* spell_ptr) {
     ImGui::TextWrapped("%s", spell_ptr->components.str().c_str());
     label("Duration:");
     ImGui::Text("%s", spell_ptr->duration.c_str());
-
 
     label("Description:");
     display_formatted_text(spell_ptr->description);
