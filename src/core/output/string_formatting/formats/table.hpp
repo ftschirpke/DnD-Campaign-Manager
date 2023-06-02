@@ -28,6 +28,7 @@ public:
      */
     void next_row();
     std::vector<std::vector<std::string_view>> get_rows() const noexcept;
+    size_t get_num_columns() const noexcept { return num_columns; }
 private:
     size_t num_columns;
     size_t current_row;
@@ -39,6 +40,8 @@ inline Table::Table() noexcept : num_columns(0), current_row(0), rows({{}}) {}
 inline void Table::accept(FormatVisitor* visitor) { visitor->visit(this); }
 
 inline std::vector<std::vector<std::string_view>> Table::get_rows() const noexcept { return rows; }
+
+inline size_t Table::get_num_columns() const noexcept { return num_columns; }
 
 } // namespace dnd
 
