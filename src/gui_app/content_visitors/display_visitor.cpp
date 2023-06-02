@@ -22,7 +22,8 @@
 #include "core/output/string_formatting/formats/format.hpp"
 #include "core/output/string_formatting/string_formatter.hpp"
 
-static const ImGuiTableFlags table_flags = ImGuiTableFlags_NoBordersInBodyUntilResize;
+static const ImVec2 cell_padding = ImVec2(5, 5);
+static const ImGuiTableFlags content_table_flags = ImGuiTableFlags_NoBordersInBodyUntilResize;
 static const float first_column_width = 150;
 
 void dnd::DisplayVisitor::visit(const Character* character_ptr) {
@@ -61,13 +62,63 @@ void dnd::DisplayVisitor::visit(const Spell* spell_ptr) {
 }
 
 void dnd::DisplayVisitor::visit(const Feature* feature_ptr) {
-    DND_UNUSED(feature_ptr);
-    // TODO
+    std::string table_id = fmt::format("{}_table", feature_ptr->name);
+    ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, cell_padding);
+    if (ImGui::BeginTable(table_id.c_str(), 2, content_table_flags)) {
+        ImGui::TableSetupColumn("Labels", ImGuiTableColumnFlags_WidthFixed, first_column_width);
+        ImGui::TableSetupColumn("Values");
+
+        ImGui::TableNextRow();
+        ImGui::TableSetColumnIndex(0);
+        ImGui::Text("Type:");
+        ImGui::TableSetColumnIndex(1);
+        ImGui::Text("Feature");
+
+        ImGui::TableNextRow();
+        ImGui::TableSetColumnIndex(0);
+        ImGui::Text("Source:");
+        ImGui::TableSetColumnIndex(1);
+        display_formatted_text(feature_ptr->source_file_path.string());
+
+        ImGui::TableNextRow();
+        ImGui::TableSetColumnIndex(0);
+        ImGui::Text("Description:");
+        ImGui::TableSetColumnIndex(1);
+        display_formatted_text(feature_ptr->description);
+
+        ImGui::EndTable();
+    }
+    ImGui::PopStyleVar();
 }
 
 void dnd::DisplayVisitor::visit(const Choosable* choosable_ptr) {
-    DND_UNUSED(choosable_ptr);
-    // TODO
+    std::string table_id = fmt::format("{}_table", choosable_ptr->name);
+    ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, cell_padding);
+    if (ImGui::BeginTable(table_id.c_str(), 2, content_table_flags)) {
+        ImGui::TableSetupColumn("Labels", ImGuiTableColumnFlags_WidthFixed, first_column_width);
+        ImGui::TableSetupColumn("Values");
+
+        ImGui::TableNextRow();
+        ImGui::TableSetColumnIndex(0);
+        ImGui::Text("Type:");
+        ImGui::TableSetColumnIndex(1);
+        ImGui::Text("Choosable");
+
+        ImGui::TableNextRow();
+        ImGui::TableSetColumnIndex(0);
+        ImGui::Text("Source:");
+        ImGui::TableSetColumnIndex(1);
+        display_formatted_text(choosable_ptr->source_file_path.string());
+
+        ImGui::TableNextRow();
+        ImGui::TableSetColumnIndex(0);
+        ImGui::Text("Description:");
+        ImGui::TableSetColumnIndex(1);
+        display_formatted_text(choosable_ptr->description);
+
+        ImGui::EndTable();
+    }
+    ImGui::PopStyleVar();
 }
 
 void dnd::DisplayVisitor::display_formatted_text(const std::string& formatted_text) {

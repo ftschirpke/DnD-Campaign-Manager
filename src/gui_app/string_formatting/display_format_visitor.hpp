@@ -3,6 +3,8 @@
 
 #include "dnd_config.hpp"
 
+#include <imgui/imgui.h>
+
 #include "core/output/string_formatting/format_visitor.hpp"
 #include "core/output/string_formatting/formats/bulleted_list.hpp"
 #include "core/output/string_formatting/formats/paragraph.hpp"
@@ -15,10 +17,15 @@ namespace dnd {
  */
 class DisplayFormatVisitor : public FormatVisitor {
 public:
+    DisplayFormatVisitor(ImGuiTableFlags table_flags = 0);
     virtual void visit(BulletedList* bulleted_list) override;
     virtual void visit(Paragraph* paragraph) override;
     virtual void visit(Table* table) override;
+private:
+    ImGuiTableFlags table_flags;
 };
+
+inline DisplayFormatVisitor::DisplayFormatVisitor(ImGuiTableFlags table_flags) : table_flags(table_flags) {}
 
 } // namespace dnd
 

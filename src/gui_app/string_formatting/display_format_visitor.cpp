@@ -2,7 +2,9 @@
 
 #include "display_format_visitor.hpp"
 
+#include <string>
 #include <string_view>
+#include <vector>
 
 #include <fmt/format.h>
 #include <imgui/imgui.h>
@@ -14,16 +16,14 @@
 
 void dnd::DisplayFormatVisitor::visit(BulletedList* bulleted_list) {
     for (const auto& element : bulleted_list->get_items()) {
-        ImGui::BulletText("%s", element.data());
+        ImGui::Bullet();
+        ImGui::TextWrapped("%s", std::string(element).c_str());
     }
 }
 
 void dnd::DisplayFormatVisitor::visit(Paragraph* paragraph) {
     std::string_view text = paragraph->get_text();
-    if (text.empty()) {
-        return;
-    }
-    ImGui::Text("%s", text.data());
+    ImGui::TextWrapped("%s", std::string(text).c_str());
     if (paragraph->get_empty_line_after()) {
         ImGui::Spacing();
     }
@@ -37,12 +37,23 @@ void dnd::DisplayFormatVisitor::visit(Table* table) {
     std::string table_id = fmt::format(
         "r{}_c{}_{}_{}", rows.size(), table->get_num_columns(), rows[0][0], rows.back().back()
     );
-    if (ImGui::BeginTable(table_id.c_str(), table->get_num_columns())) {
+    if (ImGui::BeginTable(table_id.c_str(), static_cast<int>(table->get_num_columns()), table_flags)) {
+        bool is_first = true;
         for (const auto& row : rows) {
-            ImGui::TableNextRow();
+            if (!is_first) {
+                ImGui::TableNextRow();
+            }
             for (const std::string_view& cell : row) {
-                ImGui::TableNextColumn();
-                ImGui::Text("%s", cell.data());
+                if (is_first) {
+                    ImGui::TableSetupColumn(std::string(cell).c_str());
+                } else {
+                    ImGui::TableNextColumn();
+                    ImGui::Text("%s", std::string(cell).c_str());
+                }
+            }
+            if (is_first) {
+                ImGui::TableHeadersRow();
+                is_first = false;
             }
         }
         ImGui::EndTable();

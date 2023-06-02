@@ -23,6 +23,7 @@ namespace dnd {
  */
 class DisplayVisitor : public ContentVisitor {
 public:
+    DisplayVisitor() noexcept;
     virtual void visit(const Character* character_ptr) override;
     virtual void visit(const CharacterClass* character_class_ptr) override;
     virtual void visit(const CharacterSubclass* character_subclass_ptr) override;
@@ -37,7 +38,12 @@ private:
 
     DisplayFormatVisitor display_format_visitor;
     StringFormatter string_formatter;
+
+    static constexpr ImGuiTableFlags table_flags = ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg
+                                                   | ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_NoHostExtendX;
 };
+
+inline DisplayVisitor::DisplayVisitor() noexcept : display_format_visitor(table_flags), string_formatter(false) {}
 
 } // namespace dnd
 
