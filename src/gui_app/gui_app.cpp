@@ -215,7 +215,8 @@ static void display_size(const char* const name, size_t s, float w) {
 
 static const float min_w = 240.0f;
 static void render_content_count_table(const dnd::ContentHolder& content) {
-    float w = std::max(min_w, ImGui::GetWindowWidth());
+    float window_width = ImGui::GetWindowWidth();
+    float w = std::max(min_w, window_width);
     display_size("Characters", content.characters.size(), w);
     display_size("Classes", content.character_classes.size(), w);
     display_size("Subclasses", content.character_subclasses.size(), w);
@@ -229,7 +230,9 @@ static void render_content_count_table(const dnd::ContentHolder& content) {
         "Choosables",
         static_cast<size_t>(std::accumulate(
             content.groups.getAllChoosableGroups().begin(), content.groups.getAllChoosableGroups().end(), 0,
-            [](size_t sum, const auto& choosable_group) { return sum + choosable_group.second.size(); }
+            [](size_t sum, const auto& choosable_group) {
+                return static_cast<int>(sum + choosable_group.second.size());
+            }
         )),
         w
     );
@@ -446,7 +449,7 @@ void dnd::GUIApp::render_content_window() {
                 ImGui::EndTabItem();
             }
             if (!open) {
-                open_content_pieces.erase(it);
+                it = open_content_pieces.erase(it);
             } else {
                 ++it;
             }

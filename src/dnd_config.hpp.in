@@ -28,6 +28,7 @@
 #define DND_END_MEASURING_SESSION() ::dnd::Measurer::get().endSession()
 
 #ifdef _MSC_VER
+#define NOMINMAX
 #define DND_MEASURE_FUNCTION() DND_MEASURE_SCOPE(__FUNCSIG__)
 #else // _MSC_VER
 #define DND_MEASURE_FUNCTION() DND_MEASURE_SCOPE(__PRETTY_FUNCTION__)
