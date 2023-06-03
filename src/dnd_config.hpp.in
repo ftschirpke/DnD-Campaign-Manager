@@ -17,6 +17,10 @@
 
 #define DND_DEBUG_MODE DND_@CMAKE_BUILD_TYPE@
 
+#ifdef _MSC_VER
+#define NOMINMAX 1
+#endif // _MSC_VER
+
 // runtime measurement if in debug mode
 #if DND_DEBUG_MODE
 #include "runtime_measurement/measurer.hpp"
@@ -28,7 +32,6 @@
 #define DND_END_MEASURING_SESSION() ::dnd::Measurer::get().endSession()
 
 #ifdef _MSC_VER
-#define NOMINMAX
 #define DND_MEASURE_FUNCTION() DND_MEASURE_SCOPE(__FUNCSIG__)
 #else // _MSC_VER
 #define DND_MEASURE_FUNCTION() DND_MEASURE_SCOPE(__PRETTY_FUNCTION__)

@@ -69,13 +69,13 @@ void dnd::DisplayVisitor::visit(const Character* character_ptr) {
     ImGui::Text("%d", character_ptr->getLevel());
     label("XP:");
     ImGui::Text("%d", character_ptr->getXP());
-    label("Stats:");
-    const std::string stats_str = fmt::format(
-        "STR {}, DEX {}, CON {}, INT {}, WIS {}, CHA {}", character_ptr->state.attributes.at("STR") / 100,
-        character_ptr->state.attributes.at("DEX") / 100, character_ptr->state.attributes.at("CON") / 100,
-        character_ptr->state.attributes.at("INT") / 100, character_ptr->state.attributes.at("WIS") / 100,
-        character_ptr->state.attributes.at("CHA") / 100
-    ); // TODO - this is a hack, fix it
+    // label("Stats:");
+    // const std::string stats_str = fmt::format(
+    //     "STR {}, DEX {}, CON {}, INT {}, WIS {}, CHA {}", character_ptr->state.attributes.at("STR") / 100,
+    //     character_ptr->state.attributes.at("DEX") / 100, character_ptr->state.attributes.at("CON") / 100,
+    //     character_ptr->state.attributes.at("INT") / 100, character_ptr->state.attributes.at("WIS") / 100,
+    //     character_ptr->state.attributes.at("CHA") / 100
+    // ); // TODO - this is a hack, fix it
     ImGui::Text("%s", stats_str.c_str());
 
     label("Race:");
@@ -113,8 +113,8 @@ void dnd::DisplayVisitor::visit(const CharacterClass* character_class_ptr) {
     source(character_class_ptr);
     label("Hit Die:");
     ImGui::Text("%s", diceToString(character_class_ptr->hit_dice).c_str());
-    label("ASI Levels:");
-    ImGui::Text("%s", fmt::format("{}", fmt::join(character_class_ptr->asi_levels, ", ")).c_str());
+    // label("ASI Levels:");
+    // ImGui::Text("%s", fmt::format("{}", fmt::join(character_class_ptr->asi_levels, ", ")).c_str());
     label("Subclass Level:");
     ImGui::Text("%d", character_class_ptr->subclass_level);
     label("Features:");

@@ -18,7 +18,7 @@ namespace dnd {
 inline std::string_view str_view(const std::string::const_iterator& first, const std::string::const_iterator& last) {
 #ifdef __APPLE__
     auto it = first;
-    size_t = 0;
+    size_t size = 0;
     while (it != last) {
         ++it;
         ++size;
