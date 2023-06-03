@@ -77,7 +77,7 @@ void dnd::GUIApp::get_last_session_values() {
     if (!last_session.contains("content_directory")) {
         return;
     }
-    content_directory = std::filesystem::path(last_session["content_directory"].get<std::string>());
+    content_directory = last_session["content_directory"].get<std::filesystem::path>();
     if (last_session.contains("campaign_name")) {
         campaign_name = last_session["campaign_name"].get<std::string>();
     }
@@ -127,26 +127,25 @@ void dnd::GUIApp::render() {
 
     if (!content.empty()) {
         render_search_window();
-        render_status_window();
         render_content_window();
     }
 }
 
-bool content_directory_valid(const std::filesystem::path& content_directory) {
+static bool content_directory_valid(const std::filesystem::path& content_directory) {
     if (!std::filesystem::exists(content_directory)) {
-        std::cout << "Content directory does not exist" << '\n';
+        std::cerr << "Content directory does not exist" << '\n';
         return false;
     }
     if (!std::filesystem::is_directory(content_directory)) {
-        std::cout << "Content directory is not a directory" << '\n';
+        std::cerr << "Content directory is not a directory" << '\n';
         return false;
     }
     if (!std::filesystem::exists(content_directory / "general")) {
-        std::cout << "Content directory does not contain a general directory" << '\n';
+        std::cerr << "Content directory does not contain a general directory" << '\n';
         return false;
     }
     if (!std::filesystem::is_directory(content_directory / "general")) {
-        std::cout << "Content directory does not contain a general directory (it is a file)" << '\n';
+        std::cerr << "Content directory does not contain a general directory (it is a file)" << '\n';
         return false;
     }
     return true;
@@ -205,11 +204,45 @@ void dnd::GUIApp::render_campaign_selection() {
     }
 }
 
+static const int r_offset = 25;
+static void display_size(const char* const name, size_t s, float w) {
+    ImGui::Text("%s", name);
+    std::string count_string = std::to_string(s);
+    float offset = w - r_offset - ImGui::CalcTextSize(count_string.c_str()).x;
+    ImGui::SameLine(offset);
+    ImGui::Text("%zu", s);
+}
+
+static const float min_w = 240.0f;
+static void render_content_count_table(const dnd::ContentHolder& content) {
+    float w = std::max(min_w, ImGui::GetWindowWidth());
+    display_size("Characters", content.characters.size(), w);
+    display_size("Classes", content.character_classes.size(), w);
+    display_size("Subclasses", content.character_subclasses.size(), w);
+    display_size("Races", content.character_races.size(), w);
+    display_size("Subraces", content.character_subraces.size(), w);
+    display_size("Items", content.items.size(), w);
+    display_size("Spells", content.spells.size(), w);
+    display_size("Features", content.features.size(), w);
+    display_size("Choosable groups", content.choosables.size(), w);
+    display_size(
+        "Choosables",
+        static_cast<size_t>(std::accumulate(
+            content.groups.getAllChoosableGroups().begin(), content.groups.getAllChoosableGroups().end(), 0,
+            [](size_t sum, const auto& choosable_group) { return sum + choosable_group.second.size(); }
+        )),
+        w
+    );
+}
+
 void dnd::GUIApp::render_overview_window() {
     ImGui::Begin("Overview");
 
+    ImGui::SeparatorText("Content selection");
+
     if (!content_directory.empty()) {
-        ImGui::Text("Content directory: %s", content_directory.string().c_str());
+        ImGui::Text("Content directory:");
+        ImGui::TextWrapped("%s", content_directory.string().c_str());
     }
 
     const char* content_dir_button_text = content_directory.empty() ? "Select content directory"
@@ -238,11 +271,19 @@ void dnd::GUIApp::render_overview_window() {
         }
     }
 
-    ImGui::Separator();
+    ImGui::SeparatorText("Dev-Info");
     ImGui::Checkbox("Show Demo Window", &show_demo_window);
 
     ImGuiIO& io = ImGui::GetIO();
-    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+    ImGui::Text("Application average\n%.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+
+    ImGui::SeparatorText("Status");
+    if (content.empty()) {
+        ImGui::Text("No content loaded");
+    } else {
+        render_content_count_table(content);
+    }
+
     ImGui::End();
 }
 
@@ -281,6 +322,7 @@ void dnd::GUIApp::render_parsing_error_popup() {
 }
 
 void dnd::GUIApp::start_parsing() {
+    open_content_pieces.clear();
     parsed_content = std::async(std::launch::async, &ContentParser::parse, &parser, content_directory, campaign_name);
     is_parsing = true;
 }
@@ -419,17 +461,5 @@ void dnd::GUIApp::render_content_window() {
         }
         ImGui::EndTabBar();
     }
-    ImGui::End();
-}
-
-void dnd::GUIApp::render_status_window() {
-    ImGui::Begin("Status");
-
-    ImGui::Text("Content directory:\n%s", content_directory.string().c_str());
-    ImGui::Text("Campaign name:\n%s", campaign_name.c_str());
-    ImGui::Separator();
-
-    ImGui::Text("Status:\n%s", content.printStatus().c_str());
-
     ImGui::End();
 }

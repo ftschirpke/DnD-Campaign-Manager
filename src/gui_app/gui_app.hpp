@@ -53,7 +53,6 @@ private:
     void render_campaign_selection();
     void render_overview_window();
     void render_search_window();
-    void render_status_window();
     void render_parsing_error_popup();
     void render_content_window();
 
