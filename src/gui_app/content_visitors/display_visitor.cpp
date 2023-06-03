@@ -3,10 +3,10 @@
 #include "display_visitor.hpp"
 
 #include <memory>
+#include <sstream>
 #include <string>
 #include <vector>
 
-#include <fmt/format.h>
 #include <imgui/imgui.h>
 
 #include "core/basic_mechanics/dice.hpp"
@@ -47,7 +47,7 @@ static void source(const dnd::ContentPiece* content_piece_ptr) {
 }
 
 static void begin_content_table(const dnd::ContentPiece* content_piece_ptr) {
-    std::string table_id = fmt::format("{}_table", content_piece_ptr->name);
+    std::string table_id = content_piece_ptr->name + "_table";
     ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, cell_padding);
     ImGui::BeginTable(table_id.c_str(), 2, content_table_flags);
     ImGui::TableSetupColumn("Labels", ImGuiTableColumnFlags_WidthFixed, first_column_width);
@@ -69,14 +69,13 @@ void dnd::DisplayVisitor::visit(const Character* character_ptr) {
     ImGui::Text("%d", character_ptr->getLevel());
     label("XP:");
     ImGui::Text("%d", character_ptr->getXP());
-    // label("Stats:");
-    // const std::string stats_str = fmt::format(
-    //     "STR {}, DEX {}, CON {}, INT {}, WIS {}, CHA {}", character_ptr->state.attributes.at("STR") / 100,
-    //     character_ptr->state.attributes.at("DEX") / 100, character_ptr->state.attributes.at("CON") / 100,
-    //     character_ptr->state.attributes.at("INT") / 100, character_ptr->state.attributes.at("WIS") / 100,
-    //     character_ptr->state.attributes.at("CHA") / 100
-    // ); // TODO - this is a hack, fix it
-    ImGui::Text("%s", stats_str.c_str());
+    label("Stats:");
+    ImGui::Text(
+        "STR %d, DEX %d, CON %d, INT %d, WIS %d, CHA %d", character_ptr->state.attributes.at("STR") / 100,
+        character_ptr->state.attributes.at("DEX") / 100, character_ptr->state.attributes.at("CON") / 100,
+        character_ptr->state.attributes.at("INT") / 100, character_ptr->state.attributes.at("WIS") / 100,
+        character_ptr->state.attributes.at("CHA") / 100
+    ); // TODO - this is a hack, fix it
 
     label("Race:");
     if (ImGui::CollapsingHeader(character_ptr->race_ptr->name.c_str())) {
@@ -113,8 +112,18 @@ void dnd::DisplayVisitor::visit(const CharacterClass* character_class_ptr) {
     source(character_class_ptr);
     label("Hit Die:");
     ImGui::Text("%s", diceToString(character_class_ptr->hit_dice).c_str());
-    // label("ASI Levels:");
-    // ImGui::Text("%s", fmt::format("{}", fmt::join(character_class_ptr->asi_levels, ", ")).c_str());
+    label("ASI Levels:");
+    std::stringstream asi_sstr;
+    bool first = true;
+    for (auto asi_level : character_class_ptr->asi_levels) {
+        if (first) {
+            first = false;
+        } else {
+            asi_sstr << ", ";
+        }
+        asi_sstr << asi_level;
+    }
+    ImGui::Text("%s", asi_sstr.str().c_str());
     label("Subclass Level:");
     ImGui::Text("%d", character_class_ptr->subclass_level);
     label("Features:");
