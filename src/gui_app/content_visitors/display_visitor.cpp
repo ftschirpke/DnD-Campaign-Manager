@@ -101,6 +101,9 @@ void dnd::DisplayVisitor::visit(const Character* character_ptr) {
         }
     }
 
+    label("Features:");
+    list_features(character_ptr);
+
     end_content_table();
 }
 
@@ -248,6 +251,7 @@ void dnd::DisplayVisitor::display_formatted_text(const std::string& formatted_te
 
 void dnd::DisplayVisitor::list_features(const dnd::FeatureHolder* feature_holder_ptr) {
     if (feature_holder_ptr->features.empty()) {
+        ImGui::Text("None");
         return;
     }
     for (const dnd::Feature& feature : feature_holder_ptr->features) {
