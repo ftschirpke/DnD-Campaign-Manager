@@ -60,8 +60,49 @@ static void end_content_table() {
 }
 
 void dnd::DisplayVisitor::visit(const Character* character_ptr) {
-    DND_UNUSED(character_ptr);
-    // TODO
+    begin_content_table(character_ptr);
+
+    label("Type:");
+    ImGui::Text("Character");
+    source(character_ptr);
+    label("Level:");
+    ImGui::Text("%d", character_ptr->getLevel());
+    label("XP:");
+    ImGui::Text("%d", character_ptr->getXP());
+    label("Stats:");
+    const std::string stats_str = fmt::format(
+        "STR {}, DEX {}, CON {}, INT {}, WIS {}, CHA {}", character_ptr->state.attributes.at("STR") / 100,
+        character_ptr->state.attributes.at("DEX") / 100, character_ptr->state.attributes.at("CON") / 100,
+        character_ptr->state.attributes.at("INT") / 100, character_ptr->state.attributes.at("WIS") / 100,
+        character_ptr->state.attributes.at("CHA") / 100
+    ); // TODO - this is a hack, fix it
+    ImGui::Text("%s", stats_str.c_str());
+
+    label("Race:");
+    if (ImGui::CollapsingHeader(character_ptr->race_ptr->name.c_str())) {
+        visit(character_ptr->race_ptr);
+    }
+
+    if (character_ptr->subrace_ptr != nullptr) {
+        label("Subrace:");
+        if (ImGui::CollapsingHeader(character_ptr->subrace_ptr->name.c_str())) {
+            visit(character_ptr->subrace_ptr);
+        }
+    }
+
+    label("Class:");
+    if (ImGui::CollapsingHeader(character_ptr->class_ptr->name.c_str())) {
+        visit(character_ptr->class_ptr);
+    }
+
+    if (character_ptr->subclass_ptr != nullptr) {
+        label("Subclass:");
+        if (ImGui::CollapsingHeader(character_ptr->subclass_ptr->name.c_str())) {
+            visit(character_ptr->subclass_ptr);
+        }
+    }
+
+    end_content_table();
 }
 
 void dnd::DisplayVisitor::visit(const CharacterClass* character_class_ptr) {
