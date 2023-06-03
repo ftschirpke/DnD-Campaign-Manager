@@ -1,12 +1,9 @@
-#ifndef LIST_VISITOR_HPP_
-#define LIST_VISITOR_HPP_
+#ifndef DISPLAY_VISITOR_HPP_
+#define DISPLAY_VISITOR_HPP_
 
 #include "dnd_config.hpp"
 
-#include <string>
-#include <utility>
-#include <vector>
-
+#include "core/content_visitors/content_visitor.hpp"
 #include "core/models/character.hpp"
 #include "core/models/character_class.hpp"
 #include "core/models/character_race.hpp"
@@ -16,20 +13,17 @@
 #include "core/models/effect_holder/feature.hpp"
 #include "core/models/item.hpp"
 #include "core/models/spell.hpp"
-#include "core/visitors/visitor.hpp"
+#include "core/output/string_formatting/string_formatter.hpp"
+#include "gui_app/string_formatting/display_format_visitor.hpp"
 
 namespace dnd {
 
 /**
- * @brief A visitor for creating a list of content pieces (name and type for each)
+ * @brief A visitor that displays the content using ImGui widgets
  */
-class ListVisitor : public Visitor {
+class DisplayVisitor : public ContentVisitor {
 public:
-    /**
-     * @brief Return a vector of list-suitable strings
-     * @return the vector of strings
-     */
-    std::vector<std::string> get_list();
+    DisplayVisitor() noexcept;
     virtual void visit(const Character* character_ptr) override;
     virtual void visit(const CharacterClass* character_class_ptr) override;
     virtual void visit(const CharacterSubclass* character_subclass_ptr) override;
@@ -40,11 +34,18 @@ public:
     virtual void visit(const Feature* feature_ptr) override;
     virtual void visit(const Choosable* choosable_ptr) override;
 private:
-    std::vector<std::string> string_list;
+    void display_formatted_text(const std::string& formatted_text);
+    void list_features(const FeatureHolder* feature_holder_ptr);
+
+    DisplayFormatVisitor display_format_visitor;
+    StringFormatter string_formatter;
+
+    static constexpr ImGuiTableFlags table_flags = ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg
+                                                   | ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_NoHostExtendX;
 };
 
-inline std::vector<std::string> ListVisitor::get_list() { return std::move(string_list); }
+inline DisplayVisitor::DisplayVisitor() noexcept : display_format_visitor(table_flags), string_formatter(false) {}
 
 } // namespace dnd
 
-#endif // LIST_VISITOR_HPP_
+#endif // DISPLAY_VISITOR_HPP_

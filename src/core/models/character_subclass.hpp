@@ -7,6 +7,7 @@
 #include <utility>
 #include <vector>
 
+#include "core/content_visitors/content_visitor.hpp"
 #include "core/models/effect_holder/feature.hpp"
 #include "core/models/feature_holder.hpp"
 
@@ -31,7 +32,7 @@ public:
      * @brief Accepts a visitor
      * @param visitor pointer to the visitor
      */
-    virtual void accept(Visitor* visitor) const override final;
+    virtual void accept(ContentVisitor* visitor) const override final;
 
     // the name of the class this is a subclass of
     const std::string class_name;
@@ -43,7 +44,7 @@ inline CharacterSubclass::CharacterSubclass(
 ) noexcept
     : FeatureHolder(name, source_file_path, std::move(features)), class_name(class_name) {}
 
-inline void CharacterSubclass::accept(Visitor* visitor) const { visitor->visit(this); }
+inline void CharacterSubclass::accept(ContentVisitor* visitor) const { visitor->visit(this); }
 
 } // namespace dnd
 

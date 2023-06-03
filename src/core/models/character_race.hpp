@@ -7,6 +7,7 @@
 #include <utility>
 #include <vector>
 
+#include "core/content_visitors/content_visitor.hpp"
 #include "core/models/effect_holder/feature.hpp"
 #include "core/models/feature_holder.hpp"
 
@@ -31,7 +32,7 @@ public:
      * @brief Accepts a visitor
      * @param visitor pointer to the visitor
      */
-    virtual void accept(Visitor* visitor) const override final;
+    virtual void accept(ContentVisitor* visitor) const override final;
 
     // "true" if this race has subraces, "false" otherwise
     const bool has_subraces;
@@ -43,7 +44,7 @@ inline CharacterRace::CharacterRace(
 ) noexcept
     : FeatureHolder(name, source_file_path, std::move(features)), has_subraces(has_subraces) {}
 
-inline void CharacterRace::accept(Visitor* visitor) const { visitor->visit(this); }
+inline void CharacterRace::accept(ContentVisitor* visitor) const { visitor->visit(this); }
 
 } // namespace dnd
 

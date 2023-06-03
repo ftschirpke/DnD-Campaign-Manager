@@ -59,9 +59,9 @@ set_target_properties(${DND_CORE} PROPERTIES EXPORT_COMPILE_COMMANDS ON)
 
 target_include_directories(${DND_CORE}
     PUBLIC
-    ${PROJECT_BINARY_DIR}/src
     ${CMAKE_SOURCE_DIR}/src
     SYSTEM PRIVATE
+    ${PROJECT_BINARY_DIR}/src
     ${CMAKE_SOURCE_DIR}/src/lib
 )
 target_link_libraries(${DND_CORE}
@@ -90,6 +90,7 @@ set_target_properties(${DND_CMD_APP} PROPERTIES EXPORT_COMPILE_COMMANDS ON)
 
 target_include_directories(${DND_CMD_APP}
     SYSTEM PRIVATE
+    ${PROJECT_BINARY_DIR}/src
     ${CMAKE_SOURCE_DIR}/src/lib
 )
 target_link_libraries(${DND_CMD_APP}
@@ -120,6 +121,7 @@ set_target_properties(${DND_GUI_APP} PROPERTIES WIN32_EXECUTABLE TRUE)
 
 target_include_directories(${DND_GUI_APP}
     SYSTEM PRIVATE
+    ${PROJECT_BINARY_DIR}/src
     ${CMAKE_SOURCE_DIR}/src/lib
 )
 target_link_libraries(${DND_GUI_APP}
@@ -157,11 +159,11 @@ set_target_properties(${DND_TESTS} PROPERTIES EXPORT_COMPILE_COMMANDS ON)
 
 target_include_directories(${DND_TESTS}
     PRIVATE
-    ${PROJECT_BINARY_DIR}/src
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/tests
     ${CMAKE_SOURCE_DIR}/src/core
     SYSTEM PRIVATE
+    ${PROJECT_BINARY_DIR}/src
     ${CMAKE_SOURCE_DIR}/src/lib
 )
 target_link_libraries(${DND_TESTS}

@@ -131,25 +131,25 @@ int dnd::launch() {
     setup_style();
     setup_font();
 
-    GUIApp app;
-    app.initialize();
+    {
+        GUIApp app;
+        app.initialize();
 
-    while (!glfwWindowShouldClose(window)) {
-        glfwPollEvents();
+        while (!glfwWindowShouldClose(window)) {
+            glfwPollEvents();
 
-        // Start the Dear ImGui frame
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
+            // Start the Dear ImGui frame
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
 
-        app.render();
+            app.render();
 
-        render(window);
-        render_platform_windows();
-        glfwSwapBuffers(window);
+            render(window);
+            render_platform_windows();
+            glfwSwapBuffers(window);
+        }
     }
-
-    app.clean_up();
 
     clean_up(window);
     return 0;

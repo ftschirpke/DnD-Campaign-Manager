@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 
+#include "core/content_visitors/content_visitor.hpp"
 #include "core/models/content_piece.hpp"
 #include "core/models/effect_holder/effect_holder.hpp"
 #include "core/models/effect_holder/effect_holder_with_choices.hpp"
@@ -38,7 +39,7 @@ public:
      * @brief Accepts a visitor
      * @param visitor pointer to the visitor
      */
-    virtual void accept(Visitor* visitor) const override final;
+    virtual void accept(ContentVisitor* visitor) const override final;
 
     // a human-readable description of what the feature provides
     const std::string description;
@@ -57,7 +58,7 @@ inline Feature::Feature(
 ) noexcept
     : ContentPiece(name, source_file_path), description(description), subclass(false) {}
 
-inline void Feature::accept(Visitor* visitor) const { visitor->visit(this); }
+inline void Feature::accept(ContentVisitor* visitor) const { visitor->visit(this); }
 
 } // namespace dnd
 

@@ -18,6 +18,7 @@
 #include "core/controllers/content_holder.hpp"
 #include "core/controllers/searching/content_search.hpp"
 #include "core/parsing/controllers/content_parser.hpp"
+#include "gui_app/content_visitors/display_visitor.hpp"
 
 namespace dnd {
 
@@ -27,6 +28,7 @@ namespace dnd {
 class GUIApp {
 public:
     GUIApp();
+    ~GUIApp();
     /**
      * @brief Renders one or multiple DearImGui windows displaying the content of the application.
      */
@@ -51,7 +53,6 @@ private:
     void render_campaign_selection();
     void render_overview_window();
     void render_search_window();
-    void render_status_window();
     void render_parsing_error_popup();
     void render_content_window();
 
@@ -60,6 +61,9 @@ private:
     bool show_demo_window;
     bool select_campaign;
     bool is_parsing;
+
+    // the file dialog for selecting the content directory
+    ImGui::FileBrowser content_dir_dialog;
 
     std::filesystem::path content_directory;
     std::string campaign_name;
@@ -81,8 +85,7 @@ private:
     // the object holding all the DnD content relevant for the selected campaign
     ContentHolder content;
 
-    // the file dialog for selecting the content directory
-    ImGui::FileBrowser content_dir_dialog;
+    DisplayVisitor display_visitor;
 };
 
 } // namespace dnd

@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 
+#include "core/content_visitors/content_visitor.hpp"
 #include "core/models/content_piece.hpp"
 #include "core/models/effect_holder/effect_holder.hpp"
 #include "core/models/effect_holder/prerequisite.hpp"
@@ -32,7 +33,7 @@ public:
      * @brief Accepts a visitor
      * @param visitor pointer to the visitor
      */
-    virtual void accept(Visitor* visitor) const override final;
+    virtual void accept(ContentVisitor* visitor) const override final;
 
     // a human-readable description of what the choosable provides
     const std::string description;
@@ -49,7 +50,7 @@ inline Choosable::Choosable(
 ) noexcept
     : ContentPiece(name, source_file_path), description(description) {}
 
-inline void Choosable::accept(Visitor* visitor) const { visitor->visit(this); }
+inline void Choosable::accept(ContentVisitor* visitor) const { visitor->visit(this); }
 
 } // namespace dnd
 

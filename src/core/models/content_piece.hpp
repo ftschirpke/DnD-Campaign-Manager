@@ -6,7 +6,7 @@
 #include <filesystem>
 #include <string>
 
-#include "core/visitors/visitor.hpp"
+#include "core/content_visitors/content_visitor.hpp"
 
 namespace dnd {
 
@@ -18,7 +18,7 @@ public:
      * @brief Accepts a visitor
      * @param visitor pointer to the visitor
      */
-    virtual void accept(Visitor* visitor) const = 0;
+    virtual void accept(ContentVisitor* visitor) const = 0;
 
     const std::string name;
     const std::filesystem::path source_file_path;

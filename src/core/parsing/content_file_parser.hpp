@@ -55,7 +55,7 @@ public:
     const std::filesystem::path filepath;
 protected:
     // the json content that is being parsed
-    nlohmann::json json_to_parse;
+    nlohmann::ordered_json json_to_parse;
 };
 
 inline ContentFileParser::ContentFileParser(const std::filesystem::path& filepath) noexcept : filepath(filepath) {}
