@@ -191,10 +191,13 @@ include(Catch.cmake)
 
 catch_discover_tests(${DND_TESTS}) # include catch2 tests
 
+# ------------------------------------------------------------------------------
+# Subdirectories
+add_subdirectory(src)
+add_subdirectory(tests)
+
+# ------------------------------------------------------------------------------
+# CPack
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
-
-# ------------------------------------------------------------------------------
-add_subdirectory(src)
-add_subdirectory(tests)
