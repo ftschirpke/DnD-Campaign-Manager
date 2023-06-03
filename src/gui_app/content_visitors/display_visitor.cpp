@@ -40,9 +40,12 @@ static void source(const dnd::ContentPiece* content_piece_ptr) {
     ImGui::TableNextRow();
     ImGui::TableSetColumnIndex(0);
     ImGui::Text("Source:");
-    ImGui::Separator();
     ImGui::TableSetColumnIndex(1);
     ImGui::TextWrapped("%s", content_piece_ptr->source_file_path.string().c_str());
+    ImGui::TableNextRow();
+    ImGui::TableSetColumnIndex(0);
+    ImGui::Separator();
+    ImGui::TableSetColumnIndex(1);
     ImGui::Separator();
 }
 
