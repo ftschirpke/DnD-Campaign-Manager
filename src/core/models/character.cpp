@@ -35,6 +35,8 @@ const std::unordered_map<std::string, int> dnd::Character::getConstants() const 
         {"LEVEL", getLevel() * 100},
         {"CLASS_LEVEL", getLevel() * 100},
         {"XP", getXP() * 100},
+        {"ARMOR_ON", false},        // TODO
+        {"HAS_SPELLCASTING", false} // TODO
     };
     return character_constants;
 }
@@ -42,7 +44,6 @@ const std::unordered_map<std::string, int> dnd::Character::getConstants() const 
 const std::unordered_map<std::string, int> dnd::Character::getInitialAttributeValues() const {
     std::unordered_map<std::string, int> character_initial_values = {
         {"MAXHP", 0},
-        {"ARMOR_ON", false},
     };
     for (size_t i = 0; i < 6; ++i) {
         const std::string ability_str(ability_cstrings_inorder[i]);
