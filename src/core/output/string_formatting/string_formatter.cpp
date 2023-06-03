@@ -53,13 +53,13 @@ std::unique_ptr<dnd::Paragraph> dnd::StringFormatter::parse_paragraph(
         ++it;
     }
     if (it == end_it) {
-        return std::make_unique<Paragraph>(std::string_view(start_it, it), false);
+        return std::make_unique<Paragraph>(str_view(start_it, it), false);
     }
 
     bool empty_line_after = it + 1 == end_it ? false : *(it + 1) == '\n';
 
     std::unique_ptr<Paragraph> paragraph(
-        new Paragraph(std::string_view(start_it, it), empty_line_after && !ignore_double_newline)
+        new Paragraph(str_view(start_it, it), empty_line_after && !ignore_double_newline)
     );
 
     if (empty_line_after) {
@@ -82,7 +82,7 @@ std::unique_ptr<dnd::BulletedList> dnd::StringFormatter::parse_bulleted_list(
             }
             last_it = it;
         } else if (*it == '\n') {
-            bulleted_list->add_item(std::string_view(last_it, it));
+            bulleted_list->add_item(str_view(last_it, it));
             ++it;
             if (it == end_it || *it != '-') {
                 return bulleted_list;
@@ -92,7 +92,7 @@ std::unique_ptr<dnd::BulletedList> dnd::StringFormatter::parse_bulleted_list(
         }
     }
     if (last_it != it) {
-        bulleted_list->add_item(std::string_view(last_it, it));
+        bulleted_list->add_item(str_view(last_it, it));
     }
     return bulleted_list;
 }
@@ -105,10 +105,10 @@ std::unique_ptr<dnd::Table> dnd::StringFormatter::parse_table(
     std::string::const_iterator last_it = it;
     while (it != end_it) {
         if (*it == '|') {
-            table->add_element(std::string_view(last_it, it));
+            table->add_element(str_view(last_it, it));
             last_it = ++it;
         } else if (*it == '\n') {
-            table->add_element(std::string_view(last_it, it));
+            table->add_element(str_view(last_it, it));
             last_it = ++it;
             if (it == end_it || *it == '\n') {
                 return table;
@@ -119,7 +119,7 @@ std::unique_ptr<dnd::Table> dnd::StringFormatter::parse_table(
         }
     }
     if (last_it != it) {
-        table->add_element(std::string_view(last_it, it));
+        table->add_element(str_view(last_it, it));
     }
     return table;
 }

@@ -5,6 +5,7 @@
 
 #include <memory>
 #include <string>
+#include <string_view>
 #include <vector>
 
 #include "core/output/string_formatting/formats/bulleted_list.hpp"
@@ -13,6 +14,20 @@
 #include "core/output/string_formatting/formats/table.hpp"
 
 namespace dnd {
+
+inline std::string_view str_view(const std::string::const_iterator& first, const std::string::const_iterator& last) {
+#ifdef __APPLE__
+    auto it = first;
+    size_t = 0;
+    while (it != last) {
+        ++it;
+        ++size;
+    }
+    return std::string_view(&*first, size);
+#else
+    return std::string_view(first, last);
+#endif
+}
 
 class StringFormatter {
 public:
