@@ -1,7 +1,7 @@
 #ifndef PARSING_TYPES_HPP_
 #define PARSING_TYPES_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <array>
 #include <stdexcept>

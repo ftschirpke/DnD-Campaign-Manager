@@ -1,7 +1,7 @@
 #ifndef EFFECT_HPP_
 #define EFFECT_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <algorithm>
 #include <array>

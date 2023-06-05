@@ -1,13 +1,13 @@
 #ifndef CONTENT_FILE_PARSER_HPP_
 #define CONTENT_FILE_PARSER_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <filesystem>
 
 #include <nlohmann/json.hpp>
 
-#include "core/parsing/parsing_types.hpp"
+#include <core/parsing/parsing_types.hpp>
 
 namespace dnd {
 

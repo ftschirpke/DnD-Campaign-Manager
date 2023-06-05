@@ -1,4 +1,4 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "character_state.hpp"
 
@@ -8,13 +8,13 @@
 #include <unordered_map>
 #include <vector>
 
-#include "core/basic_mechanics/abilities.hpp"
-#include "core/basic_mechanics/skills.hpp"
-#include "core/models/effect_holder/effect.hpp"
-#include "core/models/effect_holder/effect_holder.hpp"
-#include "core/models/effect_holder/effect_holder_with_choices.hpp"
-#include "core/models/effect_holder/feature.hpp"
-#include "core/models/feature_holder.hpp"
+#include <core/basic_mechanics/abilities.hpp>
+#include <core/basic_mechanics/skills.hpp>
+#include <core/models/effect_holder/effect.hpp>
+#include <core/models/effect_holder/effect_holder.hpp>
+#include <core/models/effect_holder/effect_holder_with_choices.hpp>
+#include <core/models/effect_holder/feature.hpp>
+#include <core/models/feature_holder.hpp>
 
 void dnd::CharacterState::applyAbilityScoreEffects() {
     for (const auto& [_, effect_time] : effect_times_in_order) {

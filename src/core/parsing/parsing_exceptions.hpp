@@ -1,13 +1,13 @@
 #ifndef PARSING_EXCEPTIONS_HPP_
 #define PARSING_EXCEPTIONS_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <filesystem>
 #include <stdexcept>
 #include <string>
 
-#include "core/parsing/parsing_types.hpp"
+#include <core/parsing/parsing_types.hpp>
 
 namespace dnd {
 

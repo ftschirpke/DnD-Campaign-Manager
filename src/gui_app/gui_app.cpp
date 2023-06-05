@@ -1,4 +1,4 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "gui_app.hpp"
 
@@ -21,16 +21,16 @@
 #include <imgui/imgui_stdlib.h>
 #include <nlohmann/json.hpp>
 
-#include "core/controllers/content_holder.hpp"
-#include "core/controllers/searching/content_search.hpp"
-#include "core/models/effect_holder/feature.hpp"
-#include "core/models/item.hpp"
-#include "core/models/spell.hpp"
-#include "core/parsing/controllers/content_parser.hpp"
-#include "core/parsing/parsing_exceptions.hpp"
-#include "gui_app/content_visitors/display_visitor.hpp"
-#include "gui_app/content_visitors/list_visitor.hpp"
-#include "gui_app/content_visitors/session_visitor.hpp"
+#include <core/controllers/content_holder.hpp>
+#include <core/controllers/searching/content_search.hpp>
+#include <core/models/effect_holder/feature.hpp>
+#include <core/models/item.hpp>
+#include <core/models/spell.hpp>
+#include <core/parsing/controllers/content_parser.hpp>
+#include <core/parsing/parsing_exceptions.hpp>
+#include <gui_app/content_visitors/display_visitor.hpp>
+#include <gui_app/content_visitors/list_visitor.hpp>
+#include <gui_app/content_visitors/session_visitor.hpp>
 
 static const char* const imgui_ini_filename = "imgui.ini";
 static const char* const last_session_filename = "last_session.ini";

@@ -1,16 +1,16 @@
 #ifndef LATEX_SCOPE_HPP_
 #define LATEX_SCOPE_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <memory>
 #include <string>
 #include <utility>
 #include <vector>
 
-#include "core/output/latex_builder/latex_command.hpp"
-#include "core/output/latex_builder/latex_object.hpp"
-#include "core/output/latex_builder/latex_text.hpp"
+#include <core/output/latex_builder/latex_command.hpp>
+#include <core/output/latex_builder/latex_object.hpp>
+#include <core/output/latex_builder/latex_text.hpp>
 
 namespace dnd {
 

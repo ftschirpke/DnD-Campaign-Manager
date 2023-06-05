@@ -1,4 +1,4 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "string_formatter.hpp"
 
@@ -7,10 +7,10 @@
 #include <string_view>
 #include <vector>
 
-#include "core/output/string_formatting/formats/bulleted_list.hpp"
-#include "core/output/string_formatting/formats/format.hpp"
-#include "core/output/string_formatting/formats/paragraph.hpp"
-#include "core/output/string_formatting/formats/table.hpp"
+#include <core/output/string_formatting/formats/bulleted_list.hpp>
+#include <core/output/string_formatting/formats/format.hpp>
+#include <core/output/string_formatting/formats/paragraph.hpp>
+#include <core/output/string_formatting/formats/table.hpp>
 
 std::vector<std::unique_ptr<dnd::Format>> dnd::StringFormatter::parse_formats(const std::string& text) const {
     std::vector<std::unique_ptr<dnd::Format>> formats;

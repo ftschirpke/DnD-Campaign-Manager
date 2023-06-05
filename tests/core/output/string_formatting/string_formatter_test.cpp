@@ -1,4 +1,4 @@
-#include "output/string_formatting/string_formatter.hpp"
+#include <core/output/string_formatting/string_formatter.hpp>
 
 #include <memory>
 #include <string>
@@ -7,10 +7,10 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-#include "core/output/string_formatting/formats/bulleted_list.hpp"
-#include "core/output/string_formatting/formats/format.hpp"
-#include "core/output/string_formatting/formats/paragraph.hpp"
-#include "core/output/string_formatting/formats/table.hpp"
+#include <core/output/string_formatting/formats/bulleted_list.hpp>
+#include <core/output/string_formatting/formats/format.hpp>
+#include <core/output/string_formatting/formats/paragraph.hpp>
+#include <core/output/string_formatting/formats/table.hpp>
 
 TEST_CASE("dnd::StringFormatter::parse_formats: empty text") {
     dnd::StringFormatter formatter;

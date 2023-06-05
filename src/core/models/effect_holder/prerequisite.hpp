@@ -1,9 +1,9 @@
 #ifndef PREREQUISITE_HPP_
 #define PREREQUISITE_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
-#include "core/models/effect_holder/activation.hpp"
+#include <core/models/effect_holder/activation.hpp>
 
 namespace dnd {
 

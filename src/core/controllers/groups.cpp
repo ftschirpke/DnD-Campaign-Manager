@@ -1,4 +1,4 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "groups.hpp"
 
@@ -9,8 +9,8 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "core/basic_mechanics/abilities.hpp"
-#include "core/basic_mechanics/skills.hpp"
+#include <core/basic_mechanics/abilities.hpp>
+#include <core/basic_mechanics/skills.hpp>
 
 dnd::Groups::Groups() {
     data["abilities"] = std::unordered_set<std::string>(

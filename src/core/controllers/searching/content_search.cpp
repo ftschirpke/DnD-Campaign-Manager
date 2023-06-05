@@ -1,4 +1,4 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "content_search.hpp"
 
@@ -7,18 +7,18 @@
 #include <string>
 #include <unordered_map>
 
-#include "core/controllers/content_holder.hpp"
-#include "core/controllers/searching/trie.hpp"
-#include "core/models/character.hpp"
-#include "core/models/character_class.hpp"
-#include "core/models/character_race.hpp"
-#include "core/models/character_subclass.hpp"
-#include "core/models/character_subrace.hpp"
-#include "core/models/content_piece.hpp"
-#include "core/models/effect_holder/choosable.hpp"
-#include "core/models/effect_holder/feature.hpp"
-#include "core/models/item.hpp"
-#include "core/models/spell.hpp"
+#include <core/controllers/content_holder.hpp>
+#include <core/controllers/searching/trie.hpp>
+#include <core/models/character.hpp>
+#include <core/models/character_class.hpp>
+#include <core/models/character_race.hpp>
+#include <core/models/character_subclass.hpp>
+#include <core/models/character_subrace.hpp>
+#include <core/models/content_piece.hpp>
+#include <core/models/effect_holder/choosable.hpp>
+#include <core/models/effect_holder/feature.hpp>
+#include <core/models/item.hpp>
+#include <core/models/spell.hpp>
 
 dnd::ContentSearch::ContentSearch(const ContentHolder& content_holder) {
     query.reserve(40);

@@ -1,7 +1,7 @@
 #ifndef CONTENT_VISITOR_HPP_
 #define CONTENT_VISITOR_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 namespace dnd {
 

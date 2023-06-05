@@ -1,4 +1,4 @@
-#include "parsing/models/effect_holder/features_parser.hpp"
+#include <core/parsing/models/effect_holder/features_parser.hpp>
 
 #include <string>
 #include <unordered_map>
@@ -6,9 +6,9 @@
 #include <catch2/catch_test_macros.hpp>
 #include <nlohmann/json.hpp>
 
-#include "controllers/groups.hpp"
-#include "models/effect_holder/feature.hpp"
-#include "parsing/parsing_types.hpp"
+#include <core/controllers/groups.hpp>
+#include <core/models/effect_holder/feature.hpp>
+#include <core/parsing/parsing_types.hpp>
 
 /**
  * @brief A class that allows us to test the dnd::FeaturesParser class

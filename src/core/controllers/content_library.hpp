@@ -1,7 +1,7 @@
 #ifndef CONTENT_LIBRARY_HPP_
 #define CONTENT_LIBRARY_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <algorithm>
 #include <cctype>
@@ -15,8 +15,8 @@
 
 #include <iostream>
 
-#include "core/controllers/searching/trie.hpp"
-#include "core/models/content_piece.hpp"
+#include <core/controllers/searching/trie.hpp>
+#include <core/models/content_piece.hpp>
 
 namespace dnd {
 

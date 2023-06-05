@@ -1,13 +1,13 @@
 #ifndef EFFECT_HOLDER_WITH_CHOICES_HPP_
 #define EFFECT_HOLDER_WITH_CHOICES_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <memory>
 #include <vector>
 
-#include "core/models/effect_holder/choice.hpp"
-#include "core/models/effect_holder/effect_holder.hpp"
+#include <core/models/effect_holder/choice.hpp>
+#include <core/models/effect_holder/effect_holder.hpp>
 
 namespace dnd {
 

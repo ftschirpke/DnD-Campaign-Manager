@@ -161,7 +161,7 @@ target_include_directories(${DND_TESTS}
     PRIVATE
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/tests
-    ${CMAKE_SOURCE_DIR}/src/core
+    # ${CMAKE_SOURCE_DIR}/src/core
     SYSTEM PRIVATE
     ${PROJECT_BINARY_DIR}/src
     ${CMAKE_SOURCE_DIR}/src/lib

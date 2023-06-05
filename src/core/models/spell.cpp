@@ -1,4 +1,4 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "spell.hpp"
 
@@ -6,6 +6,9 @@
 #include <string>
 
 #include <fmt/format.h>
+
+#include <core/content_visitors/content_visitor.hpp>
+#include <core/models/content_piece.hpp>
 
 std::string dnd::SpellType::short_str() const {
     int lv = level_number();

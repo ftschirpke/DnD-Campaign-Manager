@@ -1,19 +1,19 @@
 #ifndef CHARACTER_SUBRACE_FILE_PARSER_HPP_
 #define CHARACTER_SUBRACE_FILE_PARSER_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <string>
 #include <vector>
 
-#include "core/controllers/content_library.hpp"
-#include "core/controllers/groups.hpp"
-#include "core/models/character_race.hpp"
-#include "core/models/character_subrace.hpp"
-#include "core/parsing/content_file_parser.hpp"
-#include "core/parsing/models/effect_holder/features_parser.hpp"
-#include "core/parsing/parsing_types.hpp"
-#include "core/parsing/subparser.hpp"
+#include <core/controllers/content_library.hpp>
+#include <core/controllers/groups.hpp>
+#include <core/models/character_race.hpp>
+#include <core/models/character_subrace.hpp>
+#include <core/parsing/content_file_parser.hpp>
+#include <core/parsing/models/effect_holder/features_parser.hpp>
+#include <core/parsing/parsing_types.hpp>
+#include <core/parsing/subparser.hpp>
 
 namespace dnd {
 

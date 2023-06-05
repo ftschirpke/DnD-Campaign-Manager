@@ -1,9 +1,9 @@
 #ifndef FORMAT_HPP_
 #define FORMAT_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
-#include "core/output/string_formatting/format_visitor.hpp"
+#include <core/output/string_formatting/format_visitor.hpp>
 
 namespace dnd {
 

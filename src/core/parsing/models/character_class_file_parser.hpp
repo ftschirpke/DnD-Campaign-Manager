@@ -1,22 +1,22 @@
 #ifndef CHARACTER_CLASS_FILE_PARSER_HPP_
 #define CHARACTER_CLASS_FILE_PARSER_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <string>
 #include <unordered_map>
 #include <vector>
 
-#include "core/basic_mechanics/dice.hpp"
-#include "core/controllers/groups.hpp"
-#include "core/models/character_class.hpp"
-#include "core/models/effect_holder/feature.hpp"
-#include "core/models/spell.hpp"
-#include "core/parsing/content_file_parser.hpp"
-#include "core/parsing/models/effect_holder/features_parser.hpp"
-#include "core/parsing/models/spellcasting/spellcasting_parser.hpp"
-#include "core/parsing/parsing_types.hpp"
-#include "core/parsing/subparser.hpp"
+#include <core/basic_mechanics/dice.hpp>
+#include <core/controllers/groups.hpp>
+#include <core/models/character_class.hpp>
+#include <core/models/effect_holder/feature.hpp>
+#include <core/models/spell.hpp>
+#include <core/parsing/content_file_parser.hpp>
+#include <core/parsing/models/effect_holder/features_parser.hpp>
+#include <core/parsing/models/spellcasting/spellcasting_parser.hpp>
+#include <core/parsing/parsing_types.hpp>
+#include <core/parsing/subparser.hpp>
 
 namespace dnd {
 

@@ -1,6 +1,6 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
-#include "cmd_app/cmd_launcher.hpp"
+#include <cmd_app/cmd_launcher.hpp>
 
 int main(int argc, char** argv) {
     DND_START_MEASURING_SESSION("LAUNCH", "debug/cmd_app_runtime.json");

@@ -1,4 +1,4 @@
-#include "parsing/models/character_file_parser.hpp"
+#include <core/parsing/models/character_file_parser.hpp>
 
 #include <array>
 #include <filesystem>
@@ -11,17 +11,17 @@
 #include <catch2/catch_test_macros.hpp>
 #include <nlohmann/json.hpp>
 
-#include "basic_mechanics/dice.hpp"
-#include "controllers/content_holder.hpp"
-#include "controllers/content_library.hpp"
-#include "controllers/groups.hpp"
-#include "models/character.hpp"
-#include "models/character_class.hpp"
-#include "models/character_race.hpp"
-#include "models/character_subclass.hpp"
-#include "models/character_subrace.hpp"
-#include "models/effect_holder/feature.hpp"
-#include "models/spell.hpp"
+#include <core/basic_mechanics/dice.hpp>
+#include <core/controllers/content_holder.hpp>
+#include <core/controllers/content_library.hpp>
+#include <core/controllers/groups.hpp>
+#include <core/models/character.hpp>
+#include <core/models/character_class.hpp>
+#include <core/models/character_race.hpp>
+#include <core/models/character_subclass.hpp>
+#include <core/models/character_subrace.hpp>
+#include <core/models/effect_holder/feature.hpp>
+#include <core/models/spell.hpp>
 
 /**
  * @brief A class that allows us to test the dnd::CharacterFileParser class

@@ -1,7 +1,7 @@
 #ifndef SPELL_HPP_
 #define SPELL_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <array>
 #include <stdexcept>
@@ -10,8 +10,8 @@
 #include <unordered_set>
 #include <utility>
 
-#include "core/content_visitors/content_visitor.hpp"
-#include "core/models/content_piece.hpp"
+#include <core/content_visitors/content_visitor.hpp>
+#include <core/models/content_piece.hpp>
 
 namespace dnd {
 

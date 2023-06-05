@@ -1,7 +1,7 @@
 #ifndef SPELLS_FILE_PARSER_HPP_
 #define SPELLS_FILE_PARSER_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <memory>
 #include <mutex>
@@ -13,11 +13,11 @@
 
 #include <nlohmann/json.hpp>
 
-#include "core/controllers/content_library.hpp"
-#include "core/controllers/groups.hpp"
-#include "core/models/spell.hpp"
-#include "core/parsing/content_file_parser.hpp"
-#include "core/parsing/parsing_types.hpp"
+#include <core/controllers/content_library.hpp>
+#include <core/controllers/groups.hpp>
+#include <core/models/spell.hpp>
+#include <core/parsing/content_file_parser.hpp>
+#include <core/parsing/parsing_types.hpp>
 
 namespace dnd {
 

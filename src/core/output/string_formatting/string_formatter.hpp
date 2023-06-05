@@ -1,17 +1,17 @@
 #ifndef STRING_FORMATTER_HPP_
 #define STRING_FORMATTER_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <memory>
 #include <string>
 #include <string_view>
 #include <vector>
 
-#include "core/output/string_formatting/formats/bulleted_list.hpp"
-#include "core/output/string_formatting/formats/format.hpp"
-#include "core/output/string_formatting/formats/paragraph.hpp"
-#include "core/output/string_formatting/formats/table.hpp"
+#include <core/output/string_formatting/formats/bulleted_list.hpp>
+#include <core/output/string_formatting/formats/format.hpp>
+#include <core/output/string_formatting/formats/paragraph.hpp>
+#include <core/output/string_formatting/formats/table.hpp>
 
 namespace dnd {
 

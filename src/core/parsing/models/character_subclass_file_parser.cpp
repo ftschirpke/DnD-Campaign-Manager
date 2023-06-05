@@ -1,4 +1,4 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "character_subclass_file_parser.hpp"
 
@@ -11,12 +11,12 @@
 
 #include <nlohmann/json.hpp>
 
-#include "core/models/character_class.hpp"
-#include "core/models/character_subclass.hpp"
-#include "core/parsing/models/effect_holder/features_parser.hpp"
-#include "core/parsing/models/spellcasting/spellcasting_parser.hpp"
-#include "core/parsing/parsing_exceptions.hpp"
-#include "core/parsing/parsing_types.hpp"
+#include <core/models/character_class.hpp>
+#include <core/models/character_subclass.hpp>
+#include <core/parsing/models/effect_holder/features_parser.hpp>
+#include <core/parsing/models/spellcasting/spellcasting_parser.hpp>
+#include <core/parsing/parsing_exceptions.hpp>
+#include <core/parsing/parsing_types.hpp>
 
 void dnd::CharacterSubclassFileParser::parse() {
     DND_MEASURE_FUNCTION();

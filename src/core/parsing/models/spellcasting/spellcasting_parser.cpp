@@ -1,4 +1,4 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "spellcasting_parser.hpp"
 
@@ -11,13 +11,13 @@
 
 #include <nlohmann/json.hpp>
 
-#include "core/basic_mechanics/abilities.hpp"
-#include "core/models/spellcasting/preparation_spellcasting.hpp"
-#include "core/models/spellcasting/spellcasting.hpp"
-#include "core/models/spellcasting/spells_known_spellcasting.hpp"
-#include "core/parsing/parsing_exceptions.hpp"
-#include "core/parsing/parsing_types.hpp"
-#include "core/parsing/subparser.hpp"
+#include <core/basic_mechanics/abilities.hpp>
+#include <core/models/spellcasting/preparation_spellcasting.hpp>
+#include <core/models/spellcasting/spellcasting.hpp>
+#include <core/models/spellcasting/spells_known_spellcasting.hpp>
+#include <core/parsing/parsing_exceptions.hpp>
+#include <core/parsing/parsing_types.hpp>
+#include <core/parsing/subparser.hpp>
 
 void dnd::SpellcastingParser::parseSize20Array(
     const nlohmann::json& json_to_parse, const char* attribute_name, std::array<int, 20>& output

@@ -1,13 +1,13 @@
 #ifndef COMMAND_LINE_OUTPUT_HPP_
 #define COMMAND_LINE_OUTPUT_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
-#include "core/models/effect_holder/choosable.hpp"
-#include "core/models/effect_holder/feature.hpp"
-#include "core/models/item.hpp"
-#include "core/models/spell.hpp"
-#include "core/output/output.hpp"
+#include <core/models/effect_holder/choosable.hpp>
+#include <core/models/effect_holder/feature.hpp>
+#include <core/models/item.hpp>
+#include <core/models/spell.hpp>
+#include <core/output/output.hpp>
 
 namespace dnd {
 

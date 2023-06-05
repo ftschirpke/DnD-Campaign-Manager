@@ -1,16 +1,16 @@
 #ifndef CHARACTER_CLASS_HPP_
 #define CHARACTER_CLASS_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <string>
 #include <utility>
 #include <vector>
 
-#include "core/basic_mechanics/dice.hpp"
-#include "core/content_visitors/content_visitor.hpp"
-#include "core/models/effect_holder/feature.hpp"
-#include "core/models/feature_holder.hpp"
+#include <core/basic_mechanics/dice.hpp>
+#include <core/content_visitors/content_visitor.hpp>
+#include <core/models/effect_holder/feature.hpp>
+#include <core/models/feature_holder.hpp>
 
 namespace dnd {
 

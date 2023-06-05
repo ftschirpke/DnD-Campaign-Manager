@@ -1,4 +1,4 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "display_format_visitor.hpp"
 
@@ -9,10 +9,10 @@
 #include <fmt/format.h>
 #include <imgui/imgui.h>
 
-#include "core/output/string_formatting/format_visitor.hpp"
-#include "core/output/string_formatting/formats/bulleted_list.hpp"
-#include "core/output/string_formatting/formats/paragraph.hpp"
-#include "core/output/string_formatting/formats/table.hpp"
+#include <core/output/string_formatting/format_visitor.hpp>
+#include <core/output/string_formatting/formats/bulleted_list.hpp>
+#include <core/output/string_formatting/formats/paragraph.hpp>
+#include <core/output/string_formatting/formats/table.hpp>
 
 void dnd::DisplayFormatVisitor::visit(BulletedList* bulleted_list) {
     for (const auto& element : bulleted_list->get_items()) {

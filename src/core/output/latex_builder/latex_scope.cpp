@@ -1,4 +1,4 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "latex_scope.hpp"
 
@@ -7,9 +7,9 @@
 #include <utility>
 #include <vector>
 
-#include "core/output/latex_builder/latex_command.hpp"
-#include "core/output/latex_builder/latex_object.hpp"
-#include "core/output/latex_builder/latex_text.hpp"
+#include <core/output/latex_builder/latex_command.hpp>
+#include <core/output/latex_builder/latex_object.hpp>
+#include <core/output/latex_builder/latex_text.hpp>
 
 dnd::LatexScope* dnd::LatexScope::noEnclosingBraces() {
     enclosing_braces = false;

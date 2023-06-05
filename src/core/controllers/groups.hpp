@@ -1,7 +1,7 @@
 #ifndef GROUPS_HPP_
 #define GROUPS_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <iterator>
 #include <string>
@@ -9,7 +9,7 @@
 #include <unordered_set>
 #include <utility>
 
-#include "core/models/effect_holder/choosable.hpp"
+#include <core/models/effect_holder/choosable.hpp>
 
 namespace dnd {
 

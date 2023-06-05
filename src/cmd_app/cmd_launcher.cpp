@@ -1,4 +1,4 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "cmd_launcher.hpp"
 
@@ -13,15 +13,15 @@
 
 #include <cxxopts.hpp>
 
-#include "core/controllers/content_holder.hpp"
-#include "core/models/effect_holder/choosable.hpp"
-#include "core/models/effect_holder/feature.hpp"
-#include "core/models/item.hpp"
-#include "core/models/spell.hpp"
-#include "core/output/command_line_output.hpp"
-#include "core/output/output.hpp"
-#include "core/parsing/controllers/content_parser.hpp"
-#include "core/parsing/parsing_exceptions.hpp"
+#include <core/controllers/content_holder.hpp>
+#include <core/models/effect_holder/choosable.hpp>
+#include <core/models/effect_holder/feature.hpp>
+#include <core/models/item.hpp>
+#include <core/models/spell.hpp>
+#include <core/output/command_line_output.hpp>
+#include <core/output/output.hpp>
+#include <core/parsing/controllers/content_parser.hpp>
+#include <core/parsing/parsing_exceptions.hpp>
 
 int dnd::launch(int argc, char** argv) {
     DND_MEASURE_FUNCTION();

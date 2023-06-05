@@ -1,15 +1,15 @@
 #ifndef RACE_HPP_
 #define RACE_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <string>
 #include <utility>
 #include <vector>
 
-#include "core/content_visitors/content_visitor.hpp"
-#include "core/models/effect_holder/feature.hpp"
-#include "core/models/feature_holder.hpp"
+#include <core/content_visitors/content_visitor.hpp>
+#include <core/models/effect_holder/feature.hpp>
+#include <core/models/feature_holder.hpp>
 
 namespace dnd {
 

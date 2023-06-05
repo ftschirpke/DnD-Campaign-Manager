@@ -1,18 +1,18 @@
 #ifndef ITEMS_FILE_PARSER_HPP_
 #define ITEMS_FILE_PARSER_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <string>
 #include <vector>
 
 #include <nlohmann/json.hpp>
 
-#include "core/controllers/content_library.hpp"
-#include "core/controllers/groups.hpp"
-#include "core/models/item.hpp"
-#include "core/parsing/content_file_parser.hpp"
-#include "core/parsing/parsing_types.hpp"
+#include <core/controllers/content_library.hpp>
+#include <core/controllers/groups.hpp>
+#include <core/models/item.hpp>
+#include <core/parsing/content_file_parser.hpp>
+#include <core/parsing/parsing_types.hpp>
 
 namespace dnd {
 

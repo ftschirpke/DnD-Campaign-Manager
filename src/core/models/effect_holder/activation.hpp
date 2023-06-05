@@ -1,7 +1,7 @@
 #ifndef ACTIVATION_HPP_
 #define ACTIVATION_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <array>
 #include <stdexcept>

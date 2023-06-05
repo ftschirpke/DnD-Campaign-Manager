@@ -1,4 +1,4 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "item_card_builder.hpp"
 
@@ -11,11 +11,11 @@
 #include <unordered_map>
 #include <vector>
 
-#include "core/models/item.hpp"
-#include "core/output/latex_builder/latex_command.hpp"
-#include "core/output/latex_builder/latex_document.hpp"
-#include "core/output/latex_builder/latex_scope.hpp"
-#include "core/output/latex_builder/latex_text.hpp"
+#include <core/models/item.hpp>
+#include <core/output/latex_builder/latex_command.hpp>
+#include <core/output/latex_builder/latex_document.hpp>
+#include <core/output/latex_builder/latex_scope.hpp>
+#include <core/output/latex_builder/latex_text.hpp>
 
 constexpr int card_character_cutoff = 900;
 

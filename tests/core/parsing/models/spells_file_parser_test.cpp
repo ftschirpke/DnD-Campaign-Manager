@@ -1,4 +1,4 @@
-#include "parsing/models/spells_file_parser.hpp"
+#include <core/parsing/models/spells_file_parser.hpp>
 
 #include <cctype>
 #include <random>
@@ -8,9 +8,9 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-#include "controllers/content_library.hpp"
-#include "controllers/groups.hpp"
-#include "models/spell.hpp"
+#include <core/controllers/content_library.hpp>
+#include <core/controllers/groups.hpp>
+#include <core/models/spell.hpp>
 
 /**
  * @brief A class that allows us to test the dnd::SpellsFileParser class

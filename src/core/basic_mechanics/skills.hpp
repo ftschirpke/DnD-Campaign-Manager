@@ -1,7 +1,7 @@
 #ifndef SKILLS_HPP_
 #define SKILLS_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <array>
 #include <utility>

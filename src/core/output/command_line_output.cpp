@@ -1,15 +1,15 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "command_line_output.hpp"
 
 #include <iostream>
 #include <string_view>
 
-#include "core/models/effect_holder/choosable.hpp"
-#include "core/models/effect_holder/feature.hpp"
-#include "core/models/item.hpp"
-#include "core/models/spell.hpp"
-#include "core/output/output.hpp"
+#include <core/models/effect_holder/choosable.hpp>
+#include <core/models/effect_holder/feature.hpp>
+#include <core/models/item.hpp>
+#include <core/models/spell.hpp>
+#include <core/output/output.hpp>
 
 void dnd::CommandLineOutput::text(const char* text) { std::cout << text << '\n'; }
 

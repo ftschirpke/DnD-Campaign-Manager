@@ -1,4 +1,4 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "character.hpp"
 
@@ -7,11 +7,11 @@
 #include <unordered_map>
 #include <vector>
 
-#include "core/basic_mechanics/abilities.hpp"
-#include "core/models/character_class.hpp"
-#include "core/models/character_race.hpp"
-#include "core/models/character_state.hpp"
-#include "core/models/effect_holder/feature.hpp"
+#include <core/basic_mechanics/abilities.hpp>
+#include <core/models/character_class.hpp>
+#include <core/models/character_race.hpp>
+#include <core/models/character_state.hpp>
+#include <core/models/effect_holder/feature.hpp>
 
 constexpr std::array<int, 20> dnd::Character::minxp_for_level = {
     0,     300,    900,    2700,   6500,   14000,  23000,  34000,  48000,  64000,

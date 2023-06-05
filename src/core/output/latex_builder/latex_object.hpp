@@ -1,7 +1,7 @@
 #ifndef LATEX_OBJECT_HPP_
 #define LATEX_OBJECT_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <string>
 

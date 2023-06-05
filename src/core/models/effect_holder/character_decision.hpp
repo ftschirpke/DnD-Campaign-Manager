@@ -1,10 +1,10 @@
 #ifndef CHARACTER_DECISION_HPP_
 #define CHARACTER_DECISION_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
-#include "core/models/effect_holder/choice.hpp"
-#include "core/models/effect_holder/effect_holder.hpp"
+#include <core/models/effect_holder/choice.hpp>
+#include <core/models/effect_holder/effect_holder.hpp>
 
 namespace dnd {
 

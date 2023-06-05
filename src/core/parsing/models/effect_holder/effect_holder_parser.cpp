@@ -1,4 +1,4 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "effect_holder_parser.hpp"
 
@@ -13,21 +13,21 @@
 
 #include <nlohmann/json.hpp>
 
-#include "core/basic_mechanics/abilities.hpp"
-#include "core/controllers/groups.hpp"
-#include "core/models/effect_holder/action_holder.hpp"
-#include "core/models/effect_holder/activation.hpp"
-#include "core/models/effect_holder/choice.hpp"
-#include "core/models/effect_holder/effect.hpp"
-#include "core/models/effect_holder/effect_holder.hpp"
-#include "core/models/effect_holder/effect_holder_with_choices.hpp"
-#include "core/models/effect_holder/extra_spells_holder.hpp"
-#include "core/models/effect_holder/proficiency_holder.hpp"
-#include "core/models/effect_holder/riv_holder.hpp"
-#include "core/parsing/parse_optionals.hpp"
-#include "core/parsing/parsing_exceptions.hpp"
-#include "core/parsing/parsing_types.hpp"
-#include "core/parsing/subparser.hpp"
+#include <core/basic_mechanics/abilities.hpp>
+#include <core/controllers/groups.hpp>
+#include <core/models/effect_holder/action_holder.hpp>
+#include <core/models/effect_holder/activation.hpp>
+#include <core/models/effect_holder/choice.hpp>
+#include <core/models/effect_holder/effect.hpp>
+#include <core/models/effect_holder/effect_holder.hpp>
+#include <core/models/effect_holder/effect_holder_with_choices.hpp>
+#include <core/models/effect_holder/extra_spells_holder.hpp>
+#include <core/models/effect_holder/proficiency_holder.hpp>
+#include <core/models/effect_holder/riv_holder.hpp>
+#include <core/parsing/parse_optionals.hpp>
+#include <core/parsing/parsing_exceptions.hpp>
+#include <core/parsing/parsing_types.hpp>
+#include <core/parsing/subparser.hpp>
 
 constexpr const char* dnd::EffectHolderParser::
     activation_regex_cstr = "[A-Z][_A-Z0-9]+ (==|!=|>=|<=|>|<) ([A-Z][_A-Z0-9]+|-?\\d+(\\.\\d\\d?)?|true|false)";

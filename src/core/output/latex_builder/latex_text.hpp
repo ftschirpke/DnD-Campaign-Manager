@@ -1,12 +1,12 @@
 #ifndef LATEX_TEXT_HPP_
 #define LATEX_TEXT_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <string>
 #include <vector>
 
-#include "core/output/latex_builder/latex_object.hpp"
+#include <core/output/latex_builder/latex_object.hpp>
 
 namespace dnd {
 

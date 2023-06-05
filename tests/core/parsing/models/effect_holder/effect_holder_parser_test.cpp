@@ -1,4 +1,4 @@
-#include "parsing/models/effect_holder/effect_holder_parser.hpp"
+#include <core/parsing/models/effect_holder/effect_holder_parser.hpp>
 
 #include <string>
 #include <unordered_map>
@@ -7,11 +7,11 @@
 #include <catch2/catch_test_macros.hpp>
 #include <nlohmann/json.hpp>
 
-#include "controllers/groups.hpp"
-#include "models/effect_holder/activation.hpp"
-#include "models/effect_holder/effect.hpp"
-#include "models/effect_holder/effect_holder.hpp"
-#include "parsing/parsing_types.hpp"
+#include <core/controllers/groups.hpp>
+#include <core/models/effect_holder/activation.hpp>
+#include <core/models/effect_holder/effect.hpp>
+#include <core/models/effect_holder/effect_holder.hpp>
+#include <core/parsing/parsing_types.hpp>
 
 /**
  * @brief A class that allows us to test the dnd::EffectHolderParser class

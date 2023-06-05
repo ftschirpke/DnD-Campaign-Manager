@@ -1,7 +1,7 @@
 #ifndef GUI_APP_HPP_
 #define GUI_APP_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <array>
 #include <deque>
@@ -15,10 +15,10 @@
 #include <imgui/imfilebrowser.h>
 #include <imgui/imgui.h>
 
-#include "core/controllers/content_holder.hpp"
-#include "core/controllers/searching/content_search.hpp"
-#include "core/parsing/controllers/content_parser.hpp"
-#include "gui_app/content_visitors/display_visitor.hpp"
+#include <core/controllers/content_holder.hpp>
+#include <core/controllers/searching/content_search.hpp>
+#include <core/parsing/controllers/content_parser.hpp>
+#include <gui_app/content_visitors/display_visitor.hpp>
 
 namespace dnd {
 

@@ -1,7 +1,7 @@
 #ifndef SPELLCASTING_PARSER_HPP_
 #define SPELLCASTING_PARSER_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <array>
 #include <memory>
@@ -9,12 +9,12 @@
 
 #include <nlohmann/json.hpp>
 
-#include "core/controllers/content_library.hpp"
-#include "core/models/spell.hpp"
-#include "core/models/spellcasting/preparation_spellcasting.hpp"
-#include "core/models/spellcasting/spellcasting.hpp"
-#include "core/models/spellcasting/spells_known_spellcasting.hpp"
-#include "core/parsing/subparser.hpp"
+#include <core/controllers/content_library.hpp>
+#include <core/models/spell.hpp>
+#include <core/models/spellcasting/preparation_spellcasting.hpp>
+#include <core/models/spellcasting/spellcasting.hpp>
+#include <core/models/spellcasting/spells_known_spellcasting.hpp>
+#include <core/parsing/subparser.hpp>
 
 namespace dnd {
 

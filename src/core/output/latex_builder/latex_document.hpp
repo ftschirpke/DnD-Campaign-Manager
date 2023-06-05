@@ -1,12 +1,12 @@
 #ifndef LATEX_DOCUMENT_HPP_
 #define LATEX_DOCUMENT_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <string>
 
-#include "core/output/latex_builder/latex_command.hpp"
-#include "core/output/latex_builder/latex_scope.hpp"
+#include <core/output/latex_builder/latex_command.hpp>
+#include <core/output/latex_builder/latex_scope.hpp>
 
 namespace dnd {
 

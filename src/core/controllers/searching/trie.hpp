@@ -1,7 +1,7 @@
 #ifndef TRIE_HPP_
 #define TRIE_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <map>
 #include <memory>

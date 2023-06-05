@@ -1,7 +1,7 @@
 #ifndef PARSE_OPTIONALS_HPP_
 #define PARSE_OPTIONALS_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <nlohmann/json.hpp>
 

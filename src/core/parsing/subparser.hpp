@@ -1,11 +1,11 @@
 #ifndef SUBPARSER_HPP_
 #define SUBPARSER_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <filesystem>
 
-#include "core/parsing/parsing_types.hpp"
+#include <core/parsing/parsing_types.hpp>
 
 namespace dnd {
 

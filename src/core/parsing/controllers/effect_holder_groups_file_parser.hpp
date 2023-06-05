@@ -1,7 +1,7 @@
 #ifndef EFFECT_HOLDER_GROUPS_FILE_PARSER_HPP_
 #define EFFECT_HOLDER_GROUPS_FILE_PARSER_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <filesystem>
 #include <string>
@@ -9,10 +9,10 @@
 
 #include <nlohmann/json.hpp>
 
-#include "core/controllers/groups.hpp"
-#include "core/models/effect_holder/choosable.hpp"
-#include "core/parsing/content_file_parser.hpp"
-#include "core/parsing/models/effect_holder/effect_holder_parser.hpp"
+#include <core/controllers/groups.hpp>
+#include <core/models/effect_holder/choosable.hpp>
+#include <core/parsing/content_file_parser.hpp>
+#include <core/parsing/models/effect_holder/effect_holder_parser.hpp>
 
 namespace dnd {
 

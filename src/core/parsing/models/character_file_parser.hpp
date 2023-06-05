@@ -1,7 +1,7 @@
 #ifndef CHARACTER_FILE_PARSER_HPP_
 #define CHARACTER_FILE_PARSER_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <array>
 #include <string>
@@ -9,19 +9,19 @@
 
 #include <nlohmann/json.hpp>
 
-#include "core/controllers/content_library.hpp"
-#include "core/controllers/groups.hpp"
-#include "core/models/character.hpp"
-#include "core/models/character_class.hpp"
-#include "core/models/character_race.hpp"
-#include "core/models/character_subclass.hpp"
-#include "core/models/character_subrace.hpp"
-#include "core/models/effect_holder/character_decision.hpp"
-#include "core/models/spell.hpp"
-#include "core/parsing/content_file_parser.hpp"
-#include "core/parsing/models/effect_holder/effect_holder_parser.hpp"
-#include "core/parsing/models/effect_holder/features_parser.hpp"
-#include "core/parsing/subparser.hpp"
+#include <core/controllers/content_library.hpp>
+#include <core/controllers/groups.hpp>
+#include <core/models/character.hpp>
+#include <core/models/character_class.hpp>
+#include <core/models/character_race.hpp>
+#include <core/models/character_subclass.hpp>
+#include <core/models/character_subrace.hpp>
+#include <core/models/effect_holder/character_decision.hpp>
+#include <core/models/spell.hpp>
+#include <core/parsing/content_file_parser.hpp>
+#include <core/parsing/models/effect_holder/effect_holder_parser.hpp>
+#include <core/parsing/models/effect_holder/features_parser.hpp>
+#include <core/parsing/subparser.hpp>
 
 namespace dnd {
 

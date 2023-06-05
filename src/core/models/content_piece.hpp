@@ -1,12 +1,12 @@
 #ifndef CONTENT_PIECE_HPP_
 #define CONTENT_PIECE_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <filesystem>
 #include <string>
 
-#include "core/content_visitors/content_visitor.hpp"
+#include <core/content_visitors/content_visitor.hpp>
 
 namespace dnd {
 

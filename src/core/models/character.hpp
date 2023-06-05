@@ -1,7 +1,7 @@
 #ifndef CHARACTER_HPP_
 #define CHARACTER_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <array>
 #include <string>
@@ -9,15 +9,15 @@
 #include <utility>
 #include <vector>
 
-#include "core/content_visitors/content_visitor.hpp"
-#include "core/models/character_class.hpp"
-#include "core/models/character_race.hpp"
-#include "core/models/character_state.hpp"
-#include "core/models/character_subclass.hpp"
-#include "core/models/character_subrace.hpp"
-#include "core/models/effect_holder/character_decision.hpp"
-#include "core/models/effect_holder/feature.hpp"
-#include "core/models/feature_holder.hpp"
+#include <core/content_visitors/content_visitor.hpp>
+#include <core/models/character_class.hpp>
+#include <core/models/character_race.hpp>
+#include <core/models/character_state.hpp>
+#include <core/models/character_subclass.hpp>
+#include <core/models/character_subrace.hpp>
+#include <core/models/effect_holder/character_decision.hpp>
+#include <core/models/effect_holder/feature.hpp>
+#include <core/models/feature_holder.hpp>
 
 namespace dnd {
 

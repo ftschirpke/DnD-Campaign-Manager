@@ -1,4 +1,4 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "features_parser.hpp"
 
@@ -9,10 +9,10 @@
 
 #include <nlohmann/json.hpp>
 
-#include "core/models/effect_holder/feature.hpp"
-#include "core/parsing/content_file_parser.hpp"
-#include "core/parsing/parse_optionals.hpp"
-#include "core/parsing/parsing_exceptions.hpp"
+#include <core/models/effect_holder/feature.hpp>
+#include <core/parsing/content_file_parser.hpp>
+#include <core/parsing/parse_optionals.hpp>
+#include <core/parsing/parsing_exceptions.hpp>
 
 void dnd::FeaturesParser::parseFeatures(const nlohmann::ordered_json& features_json) {
     DND_MEASURE_FUNCTION();

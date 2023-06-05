@@ -23,7 +23,7 @@
 
 // runtime measurement if in debug mode
 #if DND_DEBUG_MODE
-#include "runtime_measurement/measurer.hpp"
+#include <runtime_measurement/measurer.hpp>
 
 #define DND_DUMMY_CONCATENATE(x,y) x##y
 #define DND_CONCATENATE(x,y) DND_DUMMY_CONCATENATE(x,y)

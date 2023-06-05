@@ -1,7 +1,7 @@
 #ifndef EFFECT_HOLDER_PARSER_HPP_
 #define EFFECT_HOLDER_PARSER_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <memory>
 #include <regex>
@@ -9,11 +9,11 @@
 
 #include <nlohmann/json.hpp>
 
-#include "core/controllers/groups.hpp"
-#include "core/models/effect_holder/effect.hpp"
-#include "core/models/effect_holder/effect_holder.hpp"
-#include "core/models/effect_holder/effect_holder_with_choices.hpp"
-#include "core/parsing/subparser.hpp"
+#include <core/controllers/groups.hpp>
+#include <core/models/effect_holder/effect.hpp>
+#include <core/models/effect_holder/effect_holder.hpp>
+#include <core/models/effect_holder/effect_holder_with_choices.hpp>
+#include <core/parsing/subparser.hpp>
 
 namespace dnd {
 

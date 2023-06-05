@@ -1,17 +1,17 @@
 #ifndef CHOOSABLE_HPP_
 #define CHOOSABLE_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <filesystem>
 #include <memory>
 #include <string>
 #include <vector>
 
-#include "core/content_visitors/content_visitor.hpp"
-#include "core/models/content_piece.hpp"
-#include "core/models/effect_holder/effect_holder.hpp"
-#include "core/models/effect_holder/prerequisite.hpp"
+#include <core/content_visitors/content_visitor.hpp>
+#include <core/models/content_piece.hpp>
+#include <core/models/effect_holder/effect_holder.hpp>
+#include <core/models/effect_holder/prerequisite.hpp>
 
 namespace dnd {
 

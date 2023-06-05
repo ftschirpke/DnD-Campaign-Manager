@@ -1,4 +1,4 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "content_holder.hpp"
 
@@ -6,9 +6,9 @@
 #include <string>
 #include <unordered_map>
 
-#include "core/controllers/content_library.hpp"
-#include "core/models/effect_holder/feature.hpp"
-#include "core/models/feature_holder.hpp"
+#include <core/controllers/content_library.hpp>
+#include <core/models/effect_holder/feature.hpp>
+#include <core/models/feature_holder.hpp>
 
 void add_features_of_feature_holder(
     dnd::ReferencingContentLibrary<const dnd::Feature>& features_library, const dnd::FeatureHolder* feature_holder

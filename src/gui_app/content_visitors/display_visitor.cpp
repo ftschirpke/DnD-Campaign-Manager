@@ -1,4 +1,4 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "display_visitor.hpp"
 
@@ -9,21 +9,21 @@
 
 #include <imgui/imgui.h>
 
-#include "core/basic_mechanics/dice.hpp"
-#include "core/content_visitors/content_visitor.hpp"
-#include "core/models/character.hpp"
-#include "core/models/character_class.hpp"
-#include "core/models/character_race.hpp"
-#include "core/models/character_subclass.hpp"
-#include "core/models/character_subrace.hpp"
-#include "core/models/content_piece.hpp"
-#include "core/models/effect_holder/choosable.hpp"
-#include "core/models/effect_holder/feature.hpp"
-#include "core/models/feature_holder.hpp"
-#include "core/models/item.hpp"
-#include "core/models/spell.hpp"
-#include "core/output/string_formatting/formats/format.hpp"
-#include "core/output/string_formatting/string_formatter.hpp"
+#include <core/basic_mechanics/dice.hpp>
+#include <core/content_visitors/content_visitor.hpp>
+#include <core/models/character.hpp>
+#include <core/models/character_class.hpp>
+#include <core/models/character_race.hpp>
+#include <core/models/character_subclass.hpp>
+#include <core/models/character_subrace.hpp>
+#include <core/models/content_piece.hpp>
+#include <core/models/effect_holder/choosable.hpp>
+#include <core/models/effect_holder/feature.hpp>
+#include <core/models/feature_holder.hpp>
+#include <core/models/item.hpp>
+#include <core/models/spell.hpp>
+#include <core/output/string_formatting/formats/format.hpp>
+#include <core/output/string_formatting/string_formatter.hpp>
 
 static const ImVec2 cell_padding = ImVec2(5, 5);
 static const ImGuiTableFlags content_table_flags = ImGuiTableFlags_NoBordersInBodyUntilResize;

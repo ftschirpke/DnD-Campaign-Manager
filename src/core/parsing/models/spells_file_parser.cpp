@@ -1,4 +1,4 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "spells_file_parser.hpp"
 
@@ -18,10 +18,10 @@
 
 #include <nlohmann/json.hpp>
 
-#include "core/controllers/groups.hpp"
-#include "core/models/spell.hpp"
-#include "core/parsing/parsing_exceptions.hpp"
-#include "core/parsing/parsing_types.hpp"
+#include <core/controllers/groups.hpp>
+#include <core/models/spell.hpp>
+#include <core/parsing/parsing_exceptions.hpp>
+#include <core/parsing/parsing_types.hpp>
 
 constexpr const char*
     dnd::SpellsFileParser::spell_components_regex_cstr = "((1st|2nd|3rd|[4-9]th)-level "

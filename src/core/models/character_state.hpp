@@ -1,7 +1,7 @@
 #ifndef CHARACTER_STATE_HPP_
 #define CHARACTER_STATE_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <algorithm>
 #include <map>
@@ -9,12 +9,12 @@
 #include <unordered_map>
 #include <vector>
 
-#include "core/models/effect_holder/action_holder.hpp"
-#include "core/models/effect_holder/character_decision.hpp"
-#include "core/models/effect_holder/effect_holder.hpp"
-#include "core/models/effect_holder/proficiency_holder.hpp"
-#include "core/models/effect_holder/riv_holder.hpp"
-#include "core/models/feature_holder.hpp"
+#include <core/models/effect_holder/action_holder.hpp>
+#include <core/models/effect_holder/character_decision.hpp>
+#include <core/models/effect_holder/effect_holder.hpp>
+#include <core/models/effect_holder/proficiency_holder.hpp>
+#include <core/models/effect_holder/riv_holder.hpp>
+#include <core/models/feature_holder.hpp>
 
 namespace dnd {
 
