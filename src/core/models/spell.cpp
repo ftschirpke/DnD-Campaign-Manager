@@ -2,13 +2,13 @@
 
 #include "spell.hpp"
 
-#include <cctype>
 #include <string>
 
 #include <fmt/format.h>
 
 #include <core/content_visitors/content_visitor.hpp>
 #include <core/models/content_piece.hpp>
+#include <core/utils/char_manipulation.hpp>
 
 std::string dnd::SpellType::short_str() const {
     int lv = level_number();
@@ -49,8 +49,7 @@ std::string dnd::SpellType::str() const {
 
     spell_type_string += " - School of ";
     std::string school_name = magic_school_name(magic_school);
-    auto toupper = [](char c) { return static_cast<char>(std::toupper(c)); };
-    school_name[0] = toupper(school_name[0]);
+    school_name[0] = char_to_uppercase(school_name[0]);
     spell_type_string += school_name;
 
     if (is_ritual) {

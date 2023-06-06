@@ -69,7 +69,7 @@ void dnd::ContentSearch::set_search_query(const std::string& new_query) {
     }
 
     assert(query.size() == new_query.size());
-    for (int i = 0; i < query.size(); ++i) {
+    for (size_t i = 0; i < query.size(); ++i) {
         assert(query[i] == new_query[i]);
     }
 }

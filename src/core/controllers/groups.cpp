@@ -2,8 +2,6 @@
 
 #include "groups.hpp"
 
-#include <algorithm>
-#include <cctype>
 #include <sstream>
 #include <string>
 #include <unordered_map>
@@ -11,6 +9,7 @@
 
 #include <core/basic_mechanics/abilities.hpp>
 #include <core/basic_mechanics/skills.hpp>
+#include <core/utils/string_manipulation.hpp>
 
 dnd::Groups::Groups() {
     data["abilities"] = std::unordered_set<std::string>(
@@ -19,9 +18,8 @@ dnd::Groups::Groups() {
 
     std::string lowercase_skill;
     for (const auto& [skill, _] : skill_abilities) {
-        lowercase_skill = skill;
-        auto tolower = [](unsigned char c) { return static_cast<unsigned char>(std::tolower(c)); };
-        std::transform(lowercase_skill.cbegin(), lowercase_skill.cend(), lowercase_skill.begin(), tolower);
+        lowercase_skill = string_lowercase_copy(skill);
+
         size_t idx = lowercase_skill.find('_');
         while (idx != std::string::npos) {
             lowercase_skill[idx] = ' ';
@@ -44,7 +42,7 @@ bool dnd::Groups::isPartOfGroup(const std::string& name, const std::string& grou
     return false;
 }
 
-std::string dnd::Groups::printStatus() const {
+std::string dnd::Groups::status() const {
     std::stringstream sstr;
     sstr << "=== Groups ===\n";
     sstr << "string-based groups parsed: " << data.size() << '\n';

@@ -2,8 +2,6 @@
 
 #include "spells_file_parser.hpp"
 
-#include <algorithm>
-#include <cctype>
 #include <future>
 #include <iostream>
 #include <mutex>
@@ -22,6 +20,7 @@
 #include <core/models/spell.hpp>
 #include <core/parsing/parsing_exceptions.hpp>
 #include <core/parsing/parsing_types.hpp>
+#include <core/utils/string_manipulation.hpp>
 
 constexpr const char*
     dnd::SpellsFileParser::spell_components_regex_cstr = "((1st|2nd|3rd|[4-9]th)-level "
@@ -99,8 +98,7 @@ dnd::SpellType dnd::SpellsFileParser::createSpellType(const std::string& spell_t
             magic_school_str = spell_type_str.substr(i, spell_type_str.size() - i);
         }
     }
-    auto tolower = [](unsigned char c) { return static_cast<unsigned char>(std::tolower(c)); };
-    std::transform(magic_school_str.begin(), magic_school_str.end(), magic_school_str.begin(), tolower);
+    string_to_lowercase(magic_school_str);
     spell_type.magic_school = magic_school_from_name(magic_school_str);
     return spell_type;
 }

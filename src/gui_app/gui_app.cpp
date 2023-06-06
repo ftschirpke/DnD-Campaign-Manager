@@ -2,8 +2,6 @@
 
 #include "gui_app.hpp"
 
-#include <algorithm>
-#include <cctype>
 #include <filesystem>
 #include <fstream>
 #include <future>
@@ -28,6 +26,7 @@
 #include <core/models/spell.hpp>
 #include <core/parsing/controllers/content_parser.hpp>
 #include <core/parsing/parsing_exceptions.hpp>
+#include <core/utils/string_manipulation.hpp>
 #include <gui_app/content_visitors/display_visitor.hpp>
 #include <gui_app/content_visitors/list_visitor.hpp>
 #include <gui_app/content_visitors/session_visitor.hpp>
@@ -387,8 +386,7 @@ void dnd::GUIApp::render_search_window() {
     if (ImGui::InputText("Search", &search_query, ImGuiInputTextFlags_EscapeClearsAll, nullptr, nullptr)) {
         search->set_search_query(search_query);
         if (search_query.size() > 1) {
-            auto tolower = [](unsigned char c) { return static_cast<unsigned char>(std::tolower(c)); };
-            std::transform(search_query.begin(), search_query.end(), search_query.begin(), tolower);
+            string_to_lowercase(search_query);
             std::vector<const ContentPiece*> vec_search_results = search->get_sorted_results();
             search_result_count = vec_search_results.size();
             if (search_result_count <= 100) {

@@ -212,7 +212,7 @@ template <typename TrieT, typename DataT>
 requires ContentLibraryTypes<TrieT, DataT>
 void ContentLibrary<TrieT, DataT>::save_in_trie(const std::string& name) {
     DataT& content_piece_ptr = data.at(name);
-    std::string lower_name = lower_string_copy(name);
+    std::string lower_name = string_lowercase_copy(name);
 
     trie.insert(lower_name, content_piece_ptr);
     for (size_t i = 0; i < lower_name.size(); ++i) {

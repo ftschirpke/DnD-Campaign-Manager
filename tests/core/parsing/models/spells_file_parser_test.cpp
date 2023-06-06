@@ -11,13 +11,14 @@
 #include <core/controllers/content_library.hpp>
 #include <core/controllers/groups.hpp>
 #include <core/models/spell.hpp>
+#include <core/utils/char_manipulation.hpp>
 
 /**
  * @brief A class that allows us to test the dnd::SpellsFileParser class
  */
 class TestSpellsFileParser : public dnd::SpellsFileParser {
 public:
-    TestSpellsFileParser(dnd::StoringContentLibrary<const dnd::Spell>& spells, dnd::Groups& groups)
+    TestSpellsFileParser(dnd::StorageContentLibrary<const dnd::Spell>& spells, dnd::Groups& groups)
         : dnd::SpellsFileParser("", spells, groups) {}
     dnd::SpellType createSpellTypeForTesting(const std::string& spell_type_str) const {
         return dnd::SpellsFileParser::createSpellType(spell_type_str);
@@ -32,7 +33,7 @@ public:
 
 class SetupSpellsParserTest {
 public:
-    dnd::StoringContentLibrary<const dnd::Spell> spells;
+    dnd::StorageContentLibrary<const dnd::Spell> spells;
     dnd::Groups groups;
     TestSpellsFileParser createParser();
 };
@@ -193,8 +194,6 @@ TEST_CASE("dnd::SpellsFileParser::createSpellType: parse invalid types") {
     }
 }
 
-char my_tolower(char ch) { return static_cast<char>(std::tolower(static_cast<unsigned char>(ch))); }
-
 TEST_CASE("dnd::SpellsFileParser::createSpellType: parse valid types") {
     SetupSpellsParserTest setup;
     auto parser = setup.createParser();
@@ -213,7 +212,7 @@ TEST_CASE("dnd::SpellsFileParser::createSpellType: parse valid types") {
             REQUIRE_NOTHROW(type = parser.createSpellTypeForTesting(s));
             REQUIRE(type.level_number() == 0);
             std::string lowercase_spelling = spelling;
-            lowercase_spelling[0] = my_tolower(lowercase_spelling[0]);
+            lowercase_spelling[0] = dnd::char_to_lowercase(lowercase_spelling[0]);
             REQUIRE(type.magic_school == dnd::magic_school_from_name(lowercase_spelling));
             REQUIRE(type.is_ritual == false);
         }
@@ -227,7 +226,7 @@ TEST_CASE("dnd::SpellsFileParser::createSpellType: parse valid types") {
                 REQUIRE_NOTHROW(type = parser.createSpellTypeForTesting(s));
                 REQUIRE(type.level_number() == level);
                 std::string lowercase_spelling = spelling;
-                lowercase_spelling[0] = my_tolower(lowercase_spelling[0]);
+                lowercase_spelling[0] = dnd::char_to_lowercase(lowercase_spelling[0]);
                 REQUIRE(type.magic_school == dnd::magic_school_from_name(lowercase_spelling));
                 REQUIRE(type.is_ritual == false);
                 s += " (ritual)";
