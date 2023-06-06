@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <cassert>
 #include <map>
 #include <memory>
 #include <ranges>
@@ -96,6 +97,7 @@ std::unordered_set<T*> TrieNode<T>::successors() const {
 
     while (!node_stack.empty()) {
         const TrieNode<T>* current_node = node_stack.top();
+        assert(current_node != nullptr);
         node_stack.pop();
 
         const std::vector<T*>& current_end_words = current_node->get_end_words();
@@ -177,6 +179,8 @@ void Trie<T>::insert(std::string_view word, T* data) {
         if (child == nullptr) {
             child = current_node->create_child(c);
         }
+        assert(child != nullptr);
+        assert(current_node->get_child(c) == child);
         current_node = child;
     }
     current_node->add_end_word(data);
