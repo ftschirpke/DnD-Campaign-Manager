@@ -1,11 +1,11 @@
 #ifndef ITEM_CARD_BUILDER_HPP_
 #define ITEM_CARD_BUILDER_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <vector>
 
-#include "core/models/item.hpp"
+#include <core/models/item.hpp>
 
 namespace dnd {
 

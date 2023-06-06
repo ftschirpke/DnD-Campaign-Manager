@@ -1,7 +1,7 @@
 #ifndef FORMAT_VISITOR_HPP_
 #define FORMAT_VISITOR_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 namespace dnd {
 

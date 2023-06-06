@@ -1,12 +1,12 @@
 #ifndef LATEX_COMMAND_HPP_
 #define LATEX_COMMAND_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <string>
 #include <vector>
 
-#include "core/output/latex_builder/latex_object.hpp"
+#include <core/output/latex_builder/latex_object.hpp>
 
 namespace dnd {
 
@@ -19,13 +19,13 @@ public:
      * @param argument the argument
      * @return the command
      */
-    LatexCommand* addBraceArgument(const std::string& argument);
+    LatexCommand* add_brace_argument(const std::string& argument);
     /**
      * @brief Adds and argument enclosed by brackets to the command
      * @param argument the argument
      * @return the command
      */
-    LatexCommand* addBracketArgument(const std::string& argument);
+    LatexCommand* add_bracket_argument(const std::string& argument);
     /**
      * @brief Creates the LaTeX string for this command
      * @return the LaTeX string

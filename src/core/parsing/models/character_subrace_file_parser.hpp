@@ -1,19 +1,19 @@
 #ifndef CHARACTER_SUBRACE_FILE_PARSER_HPP_
 #define CHARACTER_SUBRACE_FILE_PARSER_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <string>
 #include <vector>
 
-#include "core/controllers/content_library.hpp"
-#include "core/controllers/groups.hpp"
-#include "core/models/character_race.hpp"
-#include "core/models/character_subrace.hpp"
-#include "core/parsing/content_file_parser.hpp"
-#include "core/parsing/models/effect_holder/features_parser.hpp"
-#include "core/parsing/parsing_types.hpp"
-#include "core/parsing/subparser.hpp"
+#include <core/controllers/content_library.hpp>
+#include <core/controllers/groups.hpp>
+#include <core/models/character_race.hpp>
+#include <core/models/character_subrace.hpp>
+#include <core/parsing/content_file_parser.hpp>
+#include <core/parsing/models/effect_holder/features_parser.hpp>
+#include <core/parsing/parsing_types.hpp>
+#include <core/parsing/subparser.hpp>
 
 namespace dnd {
 
@@ -30,8 +30,8 @@ public:
      * @param races the already-parsed races
      */
     CharacterSubraceFileParser(
-        const std::filesystem::path& filepath, StoringContentLibrary<const CharacterSubrace>& subraces,
-        const Groups& groups, const StoringContentLibrary<const CharacterRace>& races
+        const std::filesystem::path& filepath, StorageContentLibrary<const CharacterSubrace>& subraces,
+        const Groups& groups, const StorageContentLibrary<const CharacterRace>& races
     ) noexcept;
     /**
      * @brief Parses JSON file containing a subrace
@@ -49,12 +49,12 @@ public:
     /**
      * @brief Saves the parsed subrace
      */
-    virtual void saveResult() override;
+    virtual void save_result() override;
     /**
      * @brief Returns the type of content that this parser parses - subraces
      * @return the type of content that this parser parses - subraces
      */
-    virtual constexpr ParsingType getType() const override { return type; };
+    virtual constexpr ParsingType get_type() const override { return type; };
 private:
     // the type of content that this parser parses - subraces
     static constexpr ParsingType type = ParsingType::SUBRACE;
@@ -63,16 +63,16 @@ private:
     // the name of the race for the parsed subrace
     std::string race_name;
     // the already-parsed subraces to add the parsed subrace to
-    StoringContentLibrary<const CharacterSubrace>& subraces;
+    StorageContentLibrary<const CharacterSubrace>& subraces;
     // the already-parsed races to check whether such a race exists and has subraces
-    const StoringContentLibrary<const CharacterRace>& races;
+    const StorageContentLibrary<const CharacterRace>& races;
     // a subparser used for parsing the subrace's features
     FeaturesParser features_parser;
 };
 
 inline CharacterSubraceFileParser::CharacterSubraceFileParser(
-    const std::filesystem::path& filepath, StoringContentLibrary<const CharacterSubrace>& subraces,
-    const Groups& groups, const StoringContentLibrary<const CharacterRace>& races
+    const std::filesystem::path& filepath, StorageContentLibrary<const CharacterSubrace>& subraces,
+    const Groups& groups, const StorageContentLibrary<const CharacterRace>& races
 ) noexcept
     : ContentFileParser(filepath), subraces(subraces), races(races), features_parser(type, filepath, groups) {}
 

@@ -2,7 +2,7 @@
 // (GLFW is a cross-platform general purpose library for handling windows, inputs, OpenGL/Vulkan/Metal graphics context
 // creation, etc.) If you are new to Dear ImGui, read documentation from the docs/ folder + read the top of imgui.cpp.
 // Read online: https://github.com/ocornut/imgui/tree/master/docs
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "gui_launcher.hpp"
 
@@ -12,7 +12,7 @@
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
 
-#include "gui_app.hpp"
+#include <gui_app/gui_app.hpp>
 
 #include <stdio.h>
 #define GL_SILENCE_DEPRECATION

@@ -1,4 +1,4 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "string_groups_file_parser.hpp"
 
@@ -11,9 +11,9 @@
 
 #include <nlohmann/json.hpp>
 
-#include "core/controllers/groups.hpp"
-#include "core/parsing/parsing_exceptions.hpp"
-#include "core/parsing/parsing_types.hpp"
+#include <core/controllers/groups.hpp>
+#include <core/parsing/parsing_exceptions.hpp>
+#include <core/parsing/parsing_types.hpp>
 
 std::unordered_set<std::string> dnd::StringGroupsFileParser::parseMap(const nlohmann::json& json_map) {
     std::unordered_set<std::string> no_subgroup_values;
@@ -73,7 +73,7 @@ bool dnd::StringGroupsFileParser::validate() const {
     return valid;
 }
 
-void dnd::StringGroupsFileParser::saveResult() {
+void dnd::StringGroupsFileParser::save_result() {
     for (auto& [group_name, group_members] : parsed_data) {
         groups.add(std::move(group_name), std::move(group_members));
     }

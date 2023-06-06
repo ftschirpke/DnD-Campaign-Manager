@@ -1,7 +1,7 @@
 #ifndef CONTENT_PARSER_HPP_
 #define CONTENT_PARSER_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <filesystem>
 #include <memory>
@@ -11,9 +11,9 @@
 
 #include <nlohmann/json.hpp>
 
-#include "core/controllers/content_holder.hpp"
-#include "core/parsing/content_file_parser.hpp"
-#include "core/parsing/parsing_types.hpp"
+#include <core/controllers/content_holder.hpp>
+#include <core/parsing/content_file_parser.hpp>
+#include <core/parsing/parsing_types.hpp>
 
 namespace dnd {
 

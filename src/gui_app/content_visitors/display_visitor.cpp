@@ -1,4 +1,4 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "display_visitor.hpp"
 
@@ -9,21 +9,21 @@
 
 #include <imgui/imgui.h>
 
-#include "core/basic_mechanics/dice.hpp"
-#include "core/content_visitors/content_visitor.hpp"
-#include "core/models/character.hpp"
-#include "core/models/character_class.hpp"
-#include "core/models/character_race.hpp"
-#include "core/models/character_subclass.hpp"
-#include "core/models/character_subrace.hpp"
-#include "core/models/content_piece.hpp"
-#include "core/models/effect_holder/choosable.hpp"
-#include "core/models/effect_holder/feature.hpp"
-#include "core/models/feature_holder.hpp"
-#include "core/models/item.hpp"
-#include "core/models/spell.hpp"
-#include "core/output/string_formatting/formats/format.hpp"
-#include "core/output/string_formatting/string_formatter.hpp"
+#include <core/basic_mechanics/dice.hpp>
+#include <core/content_visitors/content_visitor.hpp>
+#include <core/models/character.hpp>
+#include <core/models/character_class.hpp>
+#include <core/models/character_race.hpp>
+#include <core/models/character_subclass.hpp>
+#include <core/models/character_subrace.hpp>
+#include <core/models/content_piece.hpp>
+#include <core/models/effect_holder/choosable.hpp>
+#include <core/models/effect_holder/feature.hpp>
+#include <core/models/feature_holder.hpp>
+#include <core/models/item.hpp>
+#include <core/models/spell.hpp>
+#include <core/output/string_formatting/formats/format.hpp>
+#include <core/output/string_formatting/string_formatter.hpp>
 
 static const ImVec2 cell_padding = ImVec2(5, 5);
 static const ImGuiTableFlags content_table_flags = ImGuiTableFlags_NoBordersInBodyUntilResize;
@@ -40,9 +40,12 @@ static void source(const dnd::ContentPiece* content_piece_ptr) {
     ImGui::TableNextRow();
     ImGui::TableSetColumnIndex(0);
     ImGui::Text("Source:");
-    ImGui::Separator();
     ImGui::TableSetColumnIndex(1);
     ImGui::TextWrapped("%s", content_piece_ptr->source_file_path.string().c_str());
+    ImGui::TableNextRow();
+    ImGui::TableSetColumnIndex(0);
+    ImGui::Separator();
+    ImGui::TableSetColumnIndex(1);
     ImGui::Separator();
 }
 
@@ -66,9 +69,9 @@ void dnd::DisplayVisitor::visit(const Character* character_ptr) {
     ImGui::Text("Character");
     source(character_ptr);
     label("Level:");
-    ImGui::Text("%d", character_ptr->getLevel());
+    ImGui::Text("%d", character_ptr->get_level());
     label("XP:");
-    ImGui::Text("%d", character_ptr->getXP());
+    ImGui::Text("%d", character_ptr->get_xp());
     label("Stats:");
     ImGui::Text(
         "STR %d, DEX %d, CON %d, INT %d, WIS %d, CHA %d", character_ptr->state.attributes.at("STR") / 100,
@@ -100,6 +103,9 @@ void dnd::DisplayVisitor::visit(const Character* character_ptr) {
             visit(character_ptr->subclass_ptr);
         }
     }
+
+    label("Features:");
+    list_features(character_ptr);
 
     end_content_table();
 }
@@ -248,6 +254,7 @@ void dnd::DisplayVisitor::display_formatted_text(const std::string& formatted_te
 
 void dnd::DisplayVisitor::list_features(const dnd::FeatureHolder* feature_holder_ptr) {
     if (feature_holder_ptr->features.empty()) {
+        ImGui::Text("None");
         return;
     }
     for (const dnd::Feature& feature : feature_holder_ptr->features) {

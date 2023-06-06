@@ -1,13 +1,13 @@
 #ifndef SPELLCASTING_HPP_
 #define SPELLCASTING_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <array>
 #include <string>
 #include <unordered_map>
 
-#include "core/models/spell.hpp"
+#include <core/models/spell.hpp>
 
 namespace dnd {
 

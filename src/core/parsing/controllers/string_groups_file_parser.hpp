@@ -1,7 +1,7 @@
 #ifndef STRING_GROUPS_FILE_PARSER_HPP_
 #define STRING_GROUPS_FILE_PARSER_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <string>
 #include <unordered_map>
@@ -9,10 +9,10 @@
 
 #include <nlohmann/json.hpp>
 
-#include "core/controllers/groups.hpp"
-#include "core/parsing/content_file_parser.hpp"
-#include "core/parsing/models/effect_holder/effect_holder_parser.hpp"
-#include "core/parsing/subparser.hpp"
+#include <core/controllers/groups.hpp>
+#include <core/parsing/content_file_parser.hpp>
+#include <core/parsing/models/effect_holder/effect_holder_parser.hpp>
+#include <core/parsing/subparser.hpp>
 
 namespace dnd {
 
@@ -42,12 +42,12 @@ public:
     /**
      * @brief Saves the parsed group to the groups.
      */
-    virtual void saveResult() override;
+    virtual void save_result() override;
     /**
      * @brief Returns the type of content that this parser parses - string groups
      * @return the type of content that this parser parses - string groups
      */
-    virtual constexpr ParsingType getType() const override { return type; };
+    virtual constexpr ParsingType get_type() const override { return type; };
 private:
     /**
      * @brief Parses one level of the input-map and saves the results in parsed_data

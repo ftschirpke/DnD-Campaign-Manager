@@ -1,7 +1,7 @@
 #ifndef PROFICIENCY_HOLDER_HPP_
 #define PROFICIENCY_HOLDER_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <string>
 #include <unordered_set>

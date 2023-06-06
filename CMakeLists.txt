@@ -161,7 +161,7 @@ target_include_directories(${DND_TESTS}
     PRIVATE
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/tests
-    ${CMAKE_SOURCE_DIR}/src/core
+    # ${CMAKE_SOURCE_DIR}/src/core
     SYSTEM PRIVATE
     ${PROJECT_BINARY_DIR}/src
     ${CMAKE_SOURCE_DIR}/src/lib
@@ -191,10 +191,13 @@ include(Catch.cmake)
 
 catch_discover_tests(${DND_TESTS}) # include catch2 tests
 
+# ------------------------------------------------------------------------------
+# Subdirectories
+add_subdirectory(src)
+add_subdirectory(tests)
+
+# ------------------------------------------------------------------------------
+# CPack
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
-
-# ------------------------------------------------------------------------------
-add_subdirectory(src)
-add_subdirectory(tests)

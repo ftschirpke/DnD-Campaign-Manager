@@ -1,4 +1,4 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "character_class_file_parser.hpp"
 
@@ -12,12 +12,12 @@
 
 #include <nlohmann/json.hpp>
 
-#include "core/models/character_class.hpp"
-#include "core/models/effect_holder/feature.hpp"
-#include "core/parsing/models/effect_holder/features_parser.hpp"
-#include "core/parsing/models/spellcasting/spellcasting_parser.hpp"
-#include "core/parsing/parsing_exceptions.hpp"
-#include "core/parsing/parsing_types.hpp"
+#include <core/models/character_class.hpp>
+#include <core/models/effect_holder/feature.hpp>
+#include <core/parsing/models/effect_holder/features_parser.hpp>
+#include <core/parsing/models/spellcasting/spellcasting_parser.hpp>
+#include <core/parsing/parsing_exceptions.hpp>
+#include <core/parsing/parsing_types.hpp>
 
 void dnd::CharacterClassFileParser::parse() {
     DND_MEASURE_FUNCTION();
@@ -32,15 +32,15 @@ void dnd::CharacterClassFileParser::parse() {
     character_class_hit_dice = diceFromString(json_to_parse.at("hit_dice").get<std::string>());
     asi_levels = json_to_parse.at("asi_levels").get<std::vector<int>>();
 
-    features_parser.parseFeatures(json_to_parse.at("features"));
-    determineSubclassLevel(features_parser.getFeatures());
+    features_parser.parse_features(json_to_parse.at("features"));
+    determine_subclass_level(features_parser.get_features());
 
     if (json_to_parse.contains("spellcasting")) {
-        spellcasting_parser.parseSpellcasting(json_to_parse.at("spellcasting"));
+        spellcasting_parser.parse_spellcasting(json_to_parse.at("spellcasting"));
     }
 }
 
-void dnd::CharacterClassFileParser::determineSubclassLevel(const std::vector<dnd::Feature>& features) {
+void dnd::CharacterClassFileParser::determine_subclass_level(const std::vector<dnd::Feature>& features) {
     DND_MEASURE_FUNCTION();
     const Feature* subclass_feature = nullptr;
     for (const auto& feature : features) {
@@ -56,7 +56,7 @@ void dnd::CharacterClassFileParser::determineSubclassLevel(const std::vector<dnd
     }
 
     subclass_level = 1;
-    while (!subclass_feature->isActiveForLevel(subclass_level)) {
+    while (!subclass_feature->is_active_for_level(subclass_level)) {
         ++subclass_level;
     }
     if (subclass_level < 1 || subclass_level > 20) {
@@ -74,9 +74,9 @@ bool dnd::CharacterClassFileParser::validate() const {
     return true;
 }
 
-void dnd::CharacterClassFileParser::saveResult() {
+void dnd::CharacterClassFileParser::save_result() {
     classes.create(
-        character_class_name, filepath, std::move(features_parser.retrieveFeatures()), character_class_hit_dice,
+        character_class_name, filepath, std::move(features_parser.retrieve_features()), character_class_hit_dice,
         asi_levels, subclass_level
     );
     // TODO: add spellcasting

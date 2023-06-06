@@ -1,9 +1,8 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "cmd_launcher.hpp"
 
 #include <algorithm>
-#include <cctype>
 #include <filesystem>
 #include <map>
 #include <memory>
@@ -13,15 +12,16 @@
 
 #include <cxxopts.hpp>
 
-#include "core/controllers/content_holder.hpp"
-#include "core/models/effect_holder/choosable.hpp"
-#include "core/models/effect_holder/feature.hpp"
-#include "core/models/item.hpp"
-#include "core/models/spell.hpp"
-#include "core/output/command_line_output.hpp"
-#include "core/output/output.hpp"
-#include "core/parsing/controllers/content_parser.hpp"
-#include "core/parsing/parsing_exceptions.hpp"
+#include <core/controllers/content_holder.hpp>
+#include <core/models/effect_holder/choosable.hpp>
+#include <core/models/effect_holder/feature.hpp>
+#include <core/models/item.hpp>
+#include <core/models/spell.hpp>
+#include <core/output/command_line_output.hpp>
+#include <core/output/output.hpp>
+#include <core/parsing/controllers/content_parser.hpp>
+#include <core/parsing/parsing_exceptions.hpp>
+#include <core/utils/string_manipulation.hpp>
 
 int dnd::launch(int argc, char** argv) {
     DND_MEASURE_FUNCTION();
@@ -75,14 +75,14 @@ int dnd::launch(int argc, char** argv) {
         }
         ContentParser parser;
         ContentHolder content = parser.parse(content_path, campaign_dir_name);
-        output->text(content.printStatus());
+        output->text(content.status());
 
         DND_MEASURE_SCOPE("Main execution scope without parsing");
 
         output->text("\n=== CHARACTER INITIALISATION ===\n");
         for (const auto& [name, _] : content.characters.get_all()) {
             output->formatted_text("# {}", name);
-            content.characters.get(name).determineState();
+            content.characters.get(name).determine_state();
             output->text("#\n\n");
         }
 
@@ -223,8 +223,7 @@ bool dnd::content_search(dnd::ContentHolder& content, dnd::Output* output) {
     if (search.size() < 2) {
         return false;
     }
-    auto tolower = [](unsigned char c) { return static_cast<unsigned char>(std::tolower(c)); };
-    std::transform(search.begin(), search.end(), search.begin(), tolower);
+    string_to_lowercase(search);
 
     const std::vector<const dnd::Spell*> spells_found = search_spells(search, content, output);
     const std::vector<const dnd::Item*> items_found = search_items(search, content, output);
@@ -251,8 +250,7 @@ bool dnd::content_search(dnd::ContentHolder& content, dnd::Output* output) {
         if (display[0] == 'X') {
             break;
         }
-        auto toupper = [](unsigned char c) { return static_cast<unsigned char>(std::toupper(c)); };
-        std::transform(display.begin(), display.end(), display.begin(), toupper);
+        string_to_uppercase(display);
 
         char c = display[0];
         size_t idx;

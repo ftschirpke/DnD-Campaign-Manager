@@ -1,19 +1,19 @@
 #ifndef EFFECT_HOLDER_HPP_
 #define EFFECT_HOLDER_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <memory>
 #include <string>
 #include <unordered_map>
 #include <vector>
 
-#include "core/models/effect_holder/action_holder.hpp"
-#include "core/models/effect_holder/activation.hpp"
-#include "core/models/effect_holder/effect.hpp"
-#include "core/models/effect_holder/extra_spells_holder.hpp"
-#include "core/models/effect_holder/proficiency_holder.hpp"
-#include "core/models/effect_holder/riv_holder.hpp"
+#include <core/models/effect_holder/action_holder.hpp>
+#include <core/models/effect_holder/activation.hpp>
+#include <core/models/effect_holder/effect.hpp>
+#include <core/models/effect_holder/extra_spells_holder.hpp>
+#include <core/models/effect_holder/proficiency_holder.hpp>
+#include <core/models/effect_holder/riv_holder.hpp>
 
 namespace dnd {
 
@@ -38,7 +38,7 @@ public:
      * @return "true" if the effect holder is active for a character with these attributes and constants,
      * "false" otherwise
      */
-    bool isActive(
+    bool is_active(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const;
 

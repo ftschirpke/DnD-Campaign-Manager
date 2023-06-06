@@ -1,4 +1,4 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "content_holder.hpp"
 
@@ -6,21 +6,21 @@
 #include <string>
 #include <unordered_map>
 
-#include "core/controllers/content_library.hpp"
-#include "core/models/effect_holder/feature.hpp"
-#include "core/models/feature_holder.hpp"
+#include <core/controllers/content_library.hpp>
+#include <core/models/effect_holder/feature.hpp>
+#include <core/models/feature_holder.hpp>
 
 void add_features_of_feature_holder(
     dnd::ReferencingContentLibrary<const dnd::Feature>& features_library, const dnd::FeatureHolder* feature_holder
 ) {
-    for (const auto& feature : feature_holder->features) {
+    for (const dnd::Feature& feature : feature_holder->features) {
         features_library.add(feature.name, &feature);
     }
 }
 
 void dnd::ContentHolder::finished_parsing() {
     for (const auto& [_, character] : characters.get_all()) {
-        characters.get(character.name).determineState();
+        characters.get(character.name).determine_state();
         add_features_of_feature_holder(features, &character);
     }
     for (const auto& [_, character_class] : character_classes.get_all()) {
@@ -44,9 +44,9 @@ void dnd::ContentHolder::finished_parsing() {
     }
 }
 
-std::string dnd::ContentHolder::printStatus() const {
+std::string dnd::ContentHolder::status() const {
     std::stringstream sstr;
-    sstr << groups.printStatus();
+    sstr << groups.status();
     sstr << "=== Items ===\n";
     sstr << "items parsed: " << items.size() << '\n';
     sstr << "=== Spells ===\n";

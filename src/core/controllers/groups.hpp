@@ -1,7 +1,7 @@
 #ifndef GROUPS_HPP_
 #define GROUPS_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <iterator>
 #include <string>
@@ -9,7 +9,7 @@
 #include <unordered_set>
 #include <utility>
 
-#include "core/models/effect_holder/choosable.hpp"
+#include <core/models/effect_holder/choosable.hpp>
 
 namespace dnd {
 
@@ -103,7 +103,7 @@ public:
      * @brief Returns a string describing the amounts of groups parsed
      * @return a string describing the current parsed groups
      */
-    std::string printStatus() const;
+    std::string status() const;
 private:
     // a map containing all string groups - the members of a string group mapped to the name of the group
     std::unordered_map<std::string, std::unordered_set<std::string>> data;

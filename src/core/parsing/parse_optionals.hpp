@@ -1,7 +1,7 @@
 #ifndef PARSE_OPTIONALS_HPP_
 #define PARSE_OPTIONALS_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <nlohmann/json.hpp>
 
@@ -15,7 +15,7 @@ namespace dnd {
  * @param output the output to write the attribute value to
  */
 template <typename T>
-inline void parseOptional(const nlohmann::json& json_to_parse, const char* attribute_name, T& output) {
+inline void parse_optional(const nlohmann::json& json_to_parse, const char* attribute_name, T& output) {
     if (json_to_parse.contains(attribute_name)) {
         output = json_to_parse.at(attribute_name).get<T>();
     }

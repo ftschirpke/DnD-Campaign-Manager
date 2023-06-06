@@ -1,4 +1,4 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "items_file_parser.hpp"
 
@@ -11,14 +11,14 @@
 
 #include <nlohmann/json.hpp>
 
-#include "core/controllers/groups.hpp"
-#include "core/models/item.hpp"
-#include "core/parsing/content_file_parser.hpp"
-#include "core/parsing/parse_optionals.hpp"
-#include "core/parsing/parsing_exceptions.hpp"
-#include "core/parsing/parsing_types.hpp"
+#include <core/controllers/groups.hpp>
+#include <core/models/item.hpp>
+#include <core/parsing/content_file_parser.hpp>
+#include <core/parsing/parse_optionals.hpp>
+#include <core/parsing/parsing_exceptions.hpp>
+#include <core/parsing/parsing_types.hpp>
 
-void dnd::ItemsFileParser::createItem(std::string_view item_name, const nlohmann::json& item_json) {
+void dnd::ItemsFileParser::create_item(std::string_view item_name, const nlohmann::json& item_json) {
     ItemParsingInfo info;
     info.name = item_name;
     info.requires_attunement = item_json.at("requires_attunement").get<bool>();
@@ -41,7 +41,7 @@ void dnd::ItemsFileParser::parse() {
         if (item_name.empty()) {
             throw invalid_attribute(type, filepath, "item name", "cannot be \"\".");
         }
-        createItem(item_name, item_json);
+        create_item(item_name, item_json);
     }
 }
 
@@ -58,7 +58,7 @@ bool dnd::ItemsFileParser::validate() const {
     return std::any_of(valid.cbegin(), valid.cend(), [](bool b) { return b; });
 }
 
-void dnd::ItemsFileParser::saveResult() {
+void dnd::ItemsFileParser::save_result() {
     for (size_t i = 0; i < items_in_file; ++i) {
         if (valid[i]) {
             ItemParsingInfo& info = item_parsing_info[i];

@@ -1,7 +1,7 @@
 #ifndef DICE_HPP_
 #define DICE_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <stdexcept>
 #include <string>

@@ -1,13 +1,13 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "effect_holder.hpp"
 
 #include <string>
 #include <unordered_map>
 
-#include "core/models/effect_holder/activation.hpp"
+#include <core/models/effect_holder/activation.hpp>
 
-bool dnd::EffectHolder::isActive(
+bool dnd::EffectHolder::is_active(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
     for (auto activation_it = activations.cbegin(); activation_it != activations.cend(); ++activation_it) {

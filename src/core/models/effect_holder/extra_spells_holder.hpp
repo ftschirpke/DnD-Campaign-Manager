@@ -1,7 +1,7 @@
 #ifndef EXTRA_SPELLS_HOLDER_HPP_
 #define EXTRA_SPELLS_HOLDER_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <string>
 #include <unordered_set>

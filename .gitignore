@@ -1,6 +1,7 @@
 # IDE specific ignores
 .vs/*
 .vscode/*
+CMakeSettings.json
 
 # output specific ignores
 build/

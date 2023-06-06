@@ -1,4 +1,4 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "character_file_parser.hpp"
 
@@ -16,19 +16,19 @@
 
 #include <nlohmann/json.hpp>
 
-#include "core/models/character.hpp"
-#include "core/models/character_class.hpp"
-#include "core/models/character_race.hpp"
-#include "core/models/effect_holder/character_decision.hpp"
-#include "core/models/effect_holder/choice.hpp"
-#include "core/models/effect_holder/effect_holder_with_choices.hpp"
-#include "core/models/effect_holder/feature.hpp"
-#include "core/models/feature_holder.hpp"
-#include "core/parsing/content_file_parser.hpp"
-#include "core/parsing/models/effect_holder/effect_holder_parser.hpp"
-#include "core/parsing/models/effect_holder/features_parser.hpp"
-#include "core/parsing/parsing_exceptions.hpp"
-#include "core/parsing/parsing_types.hpp"
+#include <core/models/character.hpp>
+#include <core/models/character_class.hpp>
+#include <core/models/character_race.hpp>
+#include <core/models/effect_holder/character_decision.hpp>
+#include <core/models/effect_holder/choice.hpp>
+#include <core/models/effect_holder/effect_holder_with_choices.hpp>
+#include <core/models/effect_holder/feature.hpp>
+#include <core/models/feature_holder.hpp>
+#include <core/parsing/content_file_parser.hpp>
+#include <core/parsing/models/effect_holder/effect_holder_parser.hpp>
+#include <core/parsing/models/effect_holder/features_parser.hpp>
+#include <core/parsing/parsing_exceptions.hpp>
+#include <core/parsing/parsing_types.hpp>
 
 void dnd::CharacterFileParser::parse() {
     DND_MEASURE_FUNCTION();
@@ -49,8 +49,8 @@ void dnd::CharacterFileParser::parse() {
         throw invalid_attribute(type, filepath, "base_ability_scores", "all entries must be between 1 and 20");
     }
 
-    parseLevelAndXP();
-    parseClassAndRace();
+    parse_level_and_xp();
+    parse_class_and_race();
 
     hit_dice_rolls = json_to_parse.at("hit_dice_rolls").get<std::vector<int>>();
 
@@ -66,7 +66,7 @@ void dnd::CharacterFileParser::parse() {
     DND_UNUSED(spells);
 
     if (json_to_parse.contains("features")) {
-        features_parser.parseFeatures(json_to_parse.at("features"));
+        features_parser.parse_features(json_to_parse.at("features"));
     }
 
     if (json_to_parse.contains("decisions")) {
@@ -77,7 +77,7 @@ void dnd::CharacterFileParser::parse() {
             if (!feature_decisions.is_object()) {
                 throw attribute_format_error(type, filepath, "decisions:" + feature_name, "map/object");
             }
-            parseCharacterDecisions(feature_name, feature_decisions);
+            parse_character_decisions(feature_name, feature_decisions);
         }
     }
 }
@@ -122,7 +122,7 @@ static const dnd::Choice* determineChoice(
             }
 
             auto is_valid_decision = [&](const nlohmann::json& chosen_val) -> bool {
-                return (*choice_it)->isValidDecision(chosen_val.get<std::string>());
+                return (*choice_it)->is_valid_decision(chosen_val.get<std::string>());
             };
             if (std::all_of(decision_json.cbegin(), decision_json.cend(), is_valid_decision)) {
                 return choice_it->get();
@@ -132,7 +132,7 @@ static const dnd::Choice* determineChoice(
     return nullptr;
 }
 
-void dnd::CharacterFileParser::parseCharacterDecisions(
+void dnd::CharacterFileParser::parse_character_decisions(
     const std::string& feature_name, const nlohmann::json& feature_decisions_json
 ) {
     std::vector<const FeatureHolder*> feature_holders{class_ptr, race_ptr};
@@ -172,14 +172,14 @@ void dnd::CharacterFileParser::parseCharacterDecisions(
         }
 
         CharacterDecision new_decision(determined_choice);
-        effect_holder_parser.parseEffectHolder(
+        effect_holder_parser.parse_effect_holder(
             nlohmann::json::object({{attribute_name, decision_json}}), &new_decision.decision_effects
         );
         decisions.emplace_back(std::move(new_decision));
     }
 }
 
-void dnd::CharacterFileParser::parseLevelAndXP() {
+void dnd::CharacterFileParser::parse_level_and_xp() {
     DND_MEASURE_FUNCTION();
     const bool has_level = json_to_parse.contains("level");
     const bool has_xp = json_to_parse.contains("xp");
@@ -203,13 +203,13 @@ void dnd::CharacterFileParser::parseLevelAndXP() {
         xp = Character::minxp_for_level.at(static_cast<size_t>(level - 1));
     } else if (has_xp) {
         xp = json_to_parse.at("xp").get<int>();
-        level = Character::levelForXP(xp);
+        level = Character::level_for_xp(xp);
     } else {
         throw invalid_attribute(type, filepath, "level/xp", "at least one must be provided.");
     }
 }
 
-void dnd::CharacterFileParser::parseClassAndRace() {
+void dnd::CharacterFileParser::parse_class_and_race() {
     DND_MEASURE_FUNCTION();
     const std::string character_class_name = json_to_parse.at("class").get<std::string>();
     try {
@@ -274,10 +274,10 @@ bool dnd::CharacterFileParser::validate() const {
     return true;
 }
 
-void dnd::CharacterFileParser::saveResult() {
+void dnd::CharacterFileParser::save_result() {
     // TODO: change Character constructor
     characters.create(
-        character_name, filepath, std::move(features_parser.retrieveFeatures()), base_ability_scores, level, xp,
+        character_name, filepath, std::move(features_parser.retrieve_features()), base_ability_scores, level, xp,
         hit_dice_rolls
     );
     Character& character = characters.get(character_name);

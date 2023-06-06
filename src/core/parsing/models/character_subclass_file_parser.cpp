@@ -1,4 +1,4 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "character_subclass_file_parser.hpp"
 
@@ -11,12 +11,12 @@
 
 #include <nlohmann/json.hpp>
 
-#include "core/models/character_class.hpp"
-#include "core/models/character_subclass.hpp"
-#include "core/parsing/models/effect_holder/features_parser.hpp"
-#include "core/parsing/models/spellcasting/spellcasting_parser.hpp"
-#include "core/parsing/parsing_exceptions.hpp"
-#include "core/parsing/parsing_types.hpp"
+#include <core/models/character_class.hpp>
+#include <core/models/character_subclass.hpp>
+#include <core/parsing/models/effect_holder/features_parser.hpp>
+#include <core/parsing/models/spellcasting/spellcasting_parser.hpp>
+#include <core/parsing/parsing_exceptions.hpp>
+#include <core/parsing/parsing_types.hpp>
 
 void dnd::CharacterSubclassFileParser::parse() {
     DND_MEASURE_FUNCTION();
@@ -29,10 +29,10 @@ void dnd::CharacterSubclassFileParser::parse() {
     }
     class_name = json_to_parse.at("class").get<std::string>();
 
-    features_parser.parseFeatures(json_to_parse.at("features"));
+    features_parser.parse_features(json_to_parse.at("features"));
 
     if (json_to_parse.contains("spellcasting")) {
-        spellcasting_parser.parseSpellcasting(json_to_parse.at("spellcasting"));
+        spellcasting_parser.parse_spellcasting(json_to_parse.at("spellcasting"));
     }
 }
 
@@ -47,7 +47,7 @@ bool dnd::CharacterSubclassFileParser::validate() const {
     return true;
 }
 
-void dnd::CharacterSubclassFileParser::saveResult() {
-    subclasses.create(character_subclass_name, filepath, std::move(features_parser.retrieveFeatures()), class_name);
+void dnd::CharacterSubclassFileParser::save_result() {
+    subclasses.create(character_subclass_name, filepath, std::move(features_parser.retrieve_features()), class_name);
     // TODO: add spellcasting
 }

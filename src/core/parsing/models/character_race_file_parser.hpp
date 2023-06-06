@@ -1,17 +1,17 @@
 #ifndef CHARACTER_RACE_FILE_PARSER_HPP_
 #define CHARACTER_RACE_FILE_PARSER_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <string>
 
-#include "core/controllers/content_library.hpp"
-#include "core/controllers/groups.hpp"
-#include "core/models/character_race.hpp"
-#include "core/parsing/content_file_parser.hpp"
-#include "core/parsing/models/effect_holder/features_parser.hpp"
-#include "core/parsing/parsing_types.hpp"
-#include "core/parsing/subparser.hpp"
+#include <core/controllers/content_library.hpp>
+#include <core/controllers/groups.hpp>
+#include <core/models/character_race.hpp>
+#include <core/parsing/content_file_parser.hpp>
+#include <core/parsing/models/effect_holder/features_parser.hpp>
+#include <core/parsing/parsing_types.hpp>
+#include <core/parsing/subparser.hpp>
 
 namespace dnd {
 
@@ -27,7 +27,7 @@ public:
      * @param groups the already-parsed groups
      */
     CharacterRaceFileParser(
-        const std::filesystem::path& filepath, StoringContentLibrary<const CharacterRace>& races, const Groups& groups
+        const std::filesystem::path& filepath, StorageContentLibrary<const CharacterRace>& races, const Groups& groups
     ) noexcept;
     /**
      * @brief Parses JSON file containing a race
@@ -44,12 +44,12 @@ public:
     /**
      * @brief Saves the parsed race
      */
-    virtual void saveResult() override;
+    virtual void save_result() override;
     /**
      * @brief Returns the type of content that this parser parses - races
      * @return the type of content that this parser parses - races
      */
-    virtual constexpr ParsingType getType() const override { return type; };
+    virtual constexpr ParsingType get_type() const override { return type; };
 private:
     // the type of content that this parser parses - races
     static constexpr ParsingType type = ParsingType::RACE;
@@ -58,13 +58,13 @@ private:
     // boolean for whether the parsed race has subraces
     bool has_subraces;
     // the already-parsed races to add the parsed race to
-    StoringContentLibrary<const CharacterRace>& races;
+    StorageContentLibrary<const CharacterRace>& races;
     // a subparser used for parsing the race's features
     FeaturesParser features_parser;
 };
 
 inline CharacterRaceFileParser::CharacterRaceFileParser(
-    const std::filesystem::path& filepath, StoringContentLibrary<const CharacterRace>& races, const Groups& groups
+    const std::filesystem::path& filepath, StorageContentLibrary<const CharacterRace>& races, const Groups& groups
 ) noexcept
     : ContentFileParser(filepath), races(races), features_parser(type, filepath, groups) {}
 

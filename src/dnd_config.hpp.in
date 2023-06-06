@@ -23,7 +23,7 @@
 
 // runtime measurement if in debug mode
 #if DND_DEBUG_MODE
-#include "runtime_measurement/measurer.hpp"
+#include <runtime_measurement/measurer.hpp>
 
 #define DND_DUMMY_CONCATENATE(x,y) x##y
 #define DND_CONCATENATE(x,y) DND_DUMMY_CONCATENATE(x,y)
@@ -38,11 +38,15 @@
 #endif // _MSC_VER
 
 #define DND_MEASURE_SCOPE(name) ::dnd::Timer DND_CONCATENATE(timer,__LINE__(name));
+
 #else // DND_DEBUG_MODE
+
+#define NDEBUG 1
 #define DND_START_MEASURING_SESSION(name, filepath)
 #define DND_END_MEASURING_SESSION()
 #define DND_MEASURE_FUNCTION()
 #define DND_MEASURE_SCOPE(name)
+
 #endif // DND_DEBUG_MODE
 
 #endif // DND_CONFIG_HPP_

@@ -1,11 +1,11 @@
 #ifndef SPELL_CARD_BUILDER_HPP_
 #define SPELL_CARD_BUILDER_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <vector>
 
-#include "core/models/spell.hpp"
+#include <core/models/spell.hpp>
 
 namespace dnd {
 

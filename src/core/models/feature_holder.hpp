@@ -1,14 +1,14 @@
 #ifndef FEATURE_HOLDER_HPP_
 #define FEATURE_HOLDER_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <string>
 #include <utility>
 #include <vector>
 
-#include "core/models/content_piece.hpp"
-#include "core/models/effect_holder/feature.hpp"
+#include <core/models/content_piece.hpp>
+#include <core/models/effect_holder/feature.hpp>
 
 namespace dnd {
 

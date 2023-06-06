@@ -1,7 +1,7 @@
 #ifndef CHARACTER_FILE_PARSER_HPP_
 #define CHARACTER_FILE_PARSER_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <array>
 #include <string>
@@ -9,19 +9,19 @@
 
 #include <nlohmann/json.hpp>
 
-#include "core/controllers/content_library.hpp"
-#include "core/controllers/groups.hpp"
-#include "core/models/character.hpp"
-#include "core/models/character_class.hpp"
-#include "core/models/character_race.hpp"
-#include "core/models/character_subclass.hpp"
-#include "core/models/character_subrace.hpp"
-#include "core/models/effect_holder/character_decision.hpp"
-#include "core/models/spell.hpp"
-#include "core/parsing/content_file_parser.hpp"
-#include "core/parsing/models/effect_holder/effect_holder_parser.hpp"
-#include "core/parsing/models/effect_holder/features_parser.hpp"
-#include "core/parsing/subparser.hpp"
+#include <core/controllers/content_library.hpp>
+#include <core/controllers/groups.hpp>
+#include <core/models/character.hpp>
+#include <core/models/character_class.hpp>
+#include <core/models/character_race.hpp>
+#include <core/models/character_subclass.hpp>
+#include <core/models/character_subrace.hpp>
+#include <core/models/effect_holder/character_decision.hpp>
+#include <core/models/spell.hpp>
+#include <core/parsing/content_file_parser.hpp>
+#include <core/parsing/models/effect_holder/effect_holder_parser.hpp>
+#include <core/parsing/models/effect_holder/features_parser.hpp>
+#include <core/parsing/subparser.hpp>
 
 namespace dnd {
 
@@ -42,12 +42,12 @@ public:
      * @param spells the already-parsed spells
      */
     CharacterFileParser(
-        const std::filesystem::path& filepath, StoringContentLibrary<Character>& characters, const Groups& groups,
-        const StoringContentLibrary<const CharacterClass>& character_classes,
-        const StoringContentLibrary<const CharacterSubclass>& character_subclasses,
-        const StoringContentLibrary<const CharacterRace>& character_races,
-        const StoringContentLibrary<const CharacterSubrace>& character_subraces,
-        const StoringContentLibrary<const Spell>& spells
+        const std::filesystem::path& filepath, StorageContentLibrary<Character>& characters, const Groups& groups,
+        const StorageContentLibrary<const CharacterClass>& character_classes,
+        const StorageContentLibrary<const CharacterSubclass>& character_subclasses,
+        const StorageContentLibrary<const CharacterRace>& character_races,
+        const StorageContentLibrary<const CharacterSubrace>& character_subraces,
+        const StorageContentLibrary<const Spell>& spells
     ) noexcept;
     /**
      * @brief Parses JSON file containing a character
@@ -64,12 +64,12 @@ public:
     /**
      * @brief Saves the parsed character
      */
-    virtual void saveResult() override;
+    virtual void save_result() override;
     /**
      * @brief Returns the type of content that this parser parses - characters
      * @return the type of content that this parser parses - characters
      */
-    virtual constexpr ParsingType getType() const override { return type; };
+    virtual constexpr ParsingType get_type() const override { return type; };
 protected:
     /**
      * @brief Parse the character decision for a choice required by a particular feature-like object
@@ -79,7 +79,7 @@ protected:
      * @throws nlohmann::json::out_of_range if any required attribute does not exist
      * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
-    void parseCharacterDecisions(const std::string& feature_name, const nlohmann::json& feature_decisions_json);
+    void parse_character_decisions(const std::string& feature_name, const nlohmann::json& feature_decisions_json);
 private:
     /**
      * @brief Parses the class, race, subclass, and subrace of the character
@@ -87,7 +87,7 @@ private:
      * @throws nlohmann::json::out_of_range if any required attribute does not exist
      * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
-    void parseClassAndRace();
+    void parse_class_and_race();
     /**
      * @brief Parses the level and XP values of the character
      * And if only one of them was provided the other value is determined from the first
@@ -95,7 +95,7 @@ private:
      * @throws nlohmann::json::out_of_range if any required attribute does not exist
      * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
-    void parseLevelAndXP();
+    void parse_level_and_xp();
 
     // the type of content that this parser parses - characters
     static constexpr ParsingType type = ParsingType::CHARACTER;
@@ -120,17 +120,17 @@ private:
     // the XP value of the parsed character
     int xp;
     // the already-parsed characters to add the parsed character to
-    StoringContentLibrary<Character>& characters;
+    StorageContentLibrary<Character>& characters;
     // the already-parsed classes to find the parsed character's class
-    const StoringContentLibrary<const CharacterClass>& character_classes;
+    const StorageContentLibrary<const CharacterClass>& character_classes;
     // the already-parsed classes to find the parsed character's subclass
-    const StoringContentLibrary<const CharacterSubclass>& character_subclasses;
+    const StorageContentLibrary<const CharacterSubclass>& character_subclasses;
     // the already-parsed classes to find the parsed character's race
-    const StoringContentLibrary<const CharacterRace>& character_races;
+    const StorageContentLibrary<const CharacterRace>& character_races;
     // the already-parsed classes to find the parsed character's subrace
-    const StoringContentLibrary<const CharacterSubrace>& character_subraces;
+    const StorageContentLibrary<const CharacterSubrace>& character_subraces;
     // the already-parsed spells
-    const StoringContentLibrary<const Spell>& spells;
+    const StorageContentLibrary<const Spell>& spells;
     // a subparser for effect holders used for parsing the effect holders for the character decisions
     EffectHolderParser effect_holder_parser;
     // a subparser used for parsing the character's features
@@ -138,12 +138,12 @@ private:
 };
 
 inline CharacterFileParser::CharacterFileParser(
-    const std::filesystem::path& filepath, StoringContentLibrary<Character>& characters, const Groups& groups,
-    const StoringContentLibrary<const CharacterClass>& character_classes,
-    const StoringContentLibrary<const CharacterSubclass>& character_subclasses,
-    const StoringContentLibrary<const CharacterRace>& character_races,
-    const StoringContentLibrary<const CharacterSubrace>& character_subraces,
-    const StoringContentLibrary<const Spell>& spells
+    const std::filesystem::path& filepath, StorageContentLibrary<Character>& characters, const Groups& groups,
+    const StorageContentLibrary<const CharacterClass>& character_classes,
+    const StorageContentLibrary<const CharacterSubclass>& character_subclasses,
+    const StorageContentLibrary<const CharacterRace>& character_races,
+    const StorageContentLibrary<const CharacterSubrace>& character_subraces,
+    const StorageContentLibrary<const Spell>& spells
 ) noexcept
     : ContentFileParser(filepath), class_ptr(nullptr), subclass_ptr(nullptr), race_ptr(nullptr), subrace_ptr(nullptr),
       characters(characters), character_classes(character_classes), character_subclasses(character_subclasses),

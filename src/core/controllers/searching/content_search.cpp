@@ -1,24 +1,25 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "content_search.hpp"
 
 #include <algorithm>
+#include <cassert>
 #include <stack>
 #include <string>
 #include <unordered_map>
 
-#include "core/controllers/content_holder.hpp"
-#include "core/controllers/searching/trie.hpp"
-#include "core/models/character.hpp"
-#include "core/models/character_class.hpp"
-#include "core/models/character_race.hpp"
-#include "core/models/character_subclass.hpp"
-#include "core/models/character_subrace.hpp"
-#include "core/models/content_piece.hpp"
-#include "core/models/effect_holder/choosable.hpp"
-#include "core/models/effect_holder/feature.hpp"
-#include "core/models/item.hpp"
-#include "core/models/spell.hpp"
+#include <core/controllers/content_holder.hpp>
+#include <core/controllers/searching/trie.hpp>
+#include <core/models/character.hpp>
+#include <core/models/character_class.hpp>
+#include <core/models/character_race.hpp>
+#include <core/models/character_subclass.hpp>
+#include <core/models/character_subrace.hpp>
+#include <core/models/content_piece.hpp>
+#include <core/models/effect_holder/choosable.hpp>
+#include <core/models/effect_holder/feature.hpp>
+#include <core/models/item.hpp>
+#include <core/models/spell.hpp>
 
 dnd::ContentSearch::ContentSearch(const ContentHolder& content_holder) {
     query.reserve(40);
@@ -51,6 +52,7 @@ void dnd::ContentSearch::set_search_query(const std::string& new_query) {
     while (query.size() > new_query.size()) {
         remove_character_from_query();
     }
+    assert(query.size() == new_query.size());
 
     size_t common_length = 0;
     while (common_length < query.size() && query[common_length] == new_query[common_length]) {
@@ -60,9 +62,15 @@ void dnd::ContentSearch::set_search_query(const std::string& new_query) {
     while (query.size() > common_length) {
         remove_character_from_query();
     }
+    assert(query.size() == common_length);
 
     for (size_t i = common_length; i < new_query.size(); ++i) {
         add_character_to_query(new_query[i]);
+    }
+
+    assert(query.size() == new_query.size());
+    for (size_t i = 0; i < query.size(); ++i) {
+        assert(query[i] == new_query[i]);
     }
 }
 
@@ -95,15 +103,24 @@ void dnd::ContentSearch::remove_character_from_query() {
     query.pop_back();
 
     character_search_path.pop();
+    assert(character_search_path.size() >= 1);
     character_class_search_path.pop();
+    assert(character_class_search_path.size() >= 1);
     character_subclass_search_path.pop();
+    assert(character_subclass_search_path.size() >= 1);
     character_race_search_path.pop();
+    assert(character_race_search_path.size() >= 1);
     character_subrace_search_path.pop();
+    assert(character_subrace_search_path.size() >= 1);
     item_search_path.pop();
+    assert(item_search_path.size() >= 1);
     spell_search_path.pop();
+    assert(spell_search_path.size() >= 1);
     feature_search_path.pop();
+    assert(feature_search_path.size() >= 1);
     for (auto& [choosable_group_name, choosable_search_path] : choosable_search_paths) {
         choosable_search_path.pop();
+        assert(choosable_search_path.size() >= 1);
     }
 }
 

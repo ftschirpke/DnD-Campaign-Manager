@@ -1,7 +1,7 @@
 #ifndef CHARACTER_STATE_HPP_
 #define CHARACTER_STATE_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <algorithm>
 #include <map>
@@ -9,12 +9,12 @@
 #include <unordered_map>
 #include <vector>
 
-#include "core/models/effect_holder/action_holder.hpp"
-#include "core/models/effect_holder/character_decision.hpp"
-#include "core/models/effect_holder/effect_holder.hpp"
-#include "core/models/effect_holder/proficiency_holder.hpp"
-#include "core/models/effect_holder/riv_holder.hpp"
-#include "core/models/feature_holder.hpp"
+#include <core/models/effect_holder/action_holder.hpp>
+#include <core/models/effect_holder/character_decision.hpp>
+#include <core/models/effect_holder/effect_holder.hpp>
+#include <core/models/effect_holder/proficiency_holder.hpp>
+#include <core/models/effect_holder/riv_holder.hpp>
+#include <core/models/feature_holder.hpp>
 
 namespace dnd {
 
@@ -57,7 +57,7 @@ public:
      * @brief Add a character's feature holder to the state so that it can be used for calculation
      * @param feature_holder_ptr a pointer to the feature holder
      */
-    void addFeatureHolder(const FeatureHolder* const feature_holder_ptr);
+    void add_feature_holder(const FeatureHolder* const feature_holder_ptr);
     /**
      * @brief Determines the state for the currently set constants, intial values, and feature holders
      */
@@ -83,29 +83,29 @@ private:
      * @param effect_holder the effect holder to add
      * @return "true" if the effect holder was added, "false" otherwise
      */
-    bool addEffectHolder(const dnd::EffectHolder& effect_holder);
+    bool add_effect_holder(const dnd::EffectHolder& effect_holder);
     /**
      * @brief Add an effect holder with choices if it is currently affecting the character
      * @param effect_holder the effect holder to add
      * @return "true" if the effect holder was added, "false" otherwise
      */
-    bool addEffectHolderWithChoices(const dnd::EffectHolderWithChoices& eh_with_choice);
+    bool add_effect_holder_with_choices(const dnd::EffectHolderWithChoices& eh_with_choice);
     /**
      * @brief Apply all ability score effects to the ability score attributes
      * This usually should be done first because most attributes depend on ability modifiers and therefore,
      * they are required in advance
      */
-    void applyAbilityScoreEffects();
+    void apply_ability_score_effects();
     /**
      * @brief Apply all effect not affecting ability scores
      */
-    void applyNormalEffects();
+    void apply_normal_effects();
     /**
      * @brief Determine all the ability modifiers as well as modifiers for skills and saving throws
      * This should be done after applying the ability score effects,
      * otherwise some of the ability modifiers might be incorrect
      */
-    void determineModifiers();
+    void determine_modifiers();
 };
 
 inline CharacterState::CharacterState(const std::vector<CharacterDecision>& decisions) noexcept

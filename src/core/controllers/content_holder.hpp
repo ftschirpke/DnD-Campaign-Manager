@@ -1,22 +1,22 @@
 #ifndef CONTENT_HOLDER_HPP_
 #define CONTENT_HOLDER_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <string>
 #include <unordered_map>
 
-#include "core/controllers/content_library.hpp"
-#include "core/controllers/groups.hpp"
-#include "core/models/character.hpp"
-#include "core/models/character_class.hpp"
-#include "core/models/character_race.hpp"
-#include "core/models/character_subclass.hpp"
-#include "core/models/character_subrace.hpp"
-#include "core/models/effect_holder/choosable.hpp"
-#include "core/models/effect_holder/feature.hpp"
-#include "core/models/item.hpp"
-#include "core/models/spell.hpp"
+#include <core/controllers/content_library.hpp>
+#include <core/controllers/groups.hpp>
+#include <core/models/character.hpp>
+#include <core/models/character_class.hpp>
+#include <core/models/character_race.hpp>
+#include <core/models/character_subclass.hpp>
+#include <core/models/character_subrace.hpp>
+#include <core/models/effect_holder/choosable.hpp>
+#include <core/models/effect_holder/feature.hpp>
+#include <core/models/item.hpp>
+#include <core/models/spell.hpp>
 
 namespace dnd {
 
@@ -31,28 +31,28 @@ public:
      */
     void finished_parsing();
     /**
-     * @brief Returns whether the content holder is empty
-     * @return true if the content holder is empty, false otherwise
+     * @brief Returns whether all storage libraries are empty
+     * @return true if nothing is stored inside the content holder, false otherwise
      */
     bool empty() const;
     /**
      * @brief Returns a string describing how much content this controller holds
      * @return a string describing the current status of the controller
      */
-    std::string printStatus() const;
+    std::string status() const;
 
     // the controller holding all the groups for the campaign
     Groups groups;
 
     // content libraries for all the types of content
 
-    StoringContentLibrary<Character> characters;
-    StoringContentLibrary<const CharacterClass> character_classes;
-    StoringContentLibrary<const CharacterSubclass> character_subclasses;
-    StoringContentLibrary<const CharacterRace> character_races;
-    StoringContentLibrary<const CharacterSubrace> character_subraces;
-    StoringContentLibrary<const Item> items;
-    StoringContentLibrary<const Spell> spells;
+    StorageContentLibrary<Character> characters;
+    StorageContentLibrary<const CharacterClass> character_classes;
+    StorageContentLibrary<const CharacterSubclass> character_subclasses;
+    StorageContentLibrary<const CharacterRace> character_races;
+    StorageContentLibrary<const CharacterSubrace> character_subraces;
+    StorageContentLibrary<const Item> items;
+    StorageContentLibrary<const Spell> spells;
 
     ReferencingContentLibrary<const Feature> features;
     std::unordered_map<std::string, ReferencingContentLibrary<const Choosable>> choosables;

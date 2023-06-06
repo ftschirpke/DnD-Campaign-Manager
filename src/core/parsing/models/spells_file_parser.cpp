@@ -1,9 +1,7 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "spells_file_parser.hpp"
 
-#include <algorithm>
-#include <cctype>
 #include <future>
 #include <iostream>
 #include <mutex>
@@ -18,10 +16,11 @@
 
 #include <nlohmann/json.hpp>
 
-#include "core/controllers/groups.hpp"
-#include "core/models/spell.hpp"
-#include "core/parsing/parsing_exceptions.hpp"
-#include "core/parsing/parsing_types.hpp"
+#include <core/controllers/groups.hpp>
+#include <core/models/spell.hpp>
+#include <core/parsing/parsing_exceptions.hpp>
+#include <core/parsing/parsing_types.hpp>
+#include <core/utils/string_manipulation.hpp>
 
 constexpr const char*
     dnd::SpellsFileParser::spell_components_regex_cstr = "((1st|2nd|3rd|[4-9]th)-level "
@@ -35,7 +34,7 @@ constexpr const char*
 constexpr const char* dnd::SpellsFileParser::
     spell_type_regex_cstr = "(V, S, M (\\((.*)\\))|V, S|V, M (\\((.*)\\))|S, M (\\((.*)\\))|V|S|M (\\((.*)\\)))";
 
-void dnd::SpellsFileParser::createSpell(std::string_view spell_name, const nlohmann::json& spell_json) {
+void dnd::SpellsFileParser::create_spell(std::string_view spell_name, const nlohmann::json& spell_json) {
     DND_MEASURE_FUNCTION();
     SpellParsingInfo info;
     info.name = spell_name;
@@ -44,8 +43,8 @@ void dnd::SpellsFileParser::createSpell(std::string_view spell_name, const nlohm
     info.duration = spell_json.at("duration").get<std::string>();
     info.description = spell_json.at("description").get<std::string>();
     info.classes = spell_json.at("classes").get<std::unordered_set<std::string>>();
-    info.type = createSpellType(spell_json.at("level_type").get<std::string>());
-    info.components = createSpellComponents(spell_json.at("components").get<std::string>());
+    info.type = create_spell_type(spell_json.at("level_type").get<std::string>());
+    info.components = create_spell_components(spell_json.at("components").get<std::string>());
     std::lock_guard<std::mutex> lock(spell_parsing_mutex);
     spell_parsing_info.emplace_back(std::move(info));
 }
@@ -64,7 +63,7 @@ void dnd::SpellsFileParser::parse() {
             throw invalid_attribute(type, filepath, "spell name", "cannot be \"\".");
         }
         futures.emplace_back(
-            std::async(std::launch::async, &SpellsFileParser::createSpell, this, spell_name, spell_json)
+            std::async(std::launch::async, &SpellsFileParser::create_spell, this, spell_name, spell_json)
         );
     }
     for (auto& future : futures) {
@@ -76,7 +75,7 @@ void dnd::SpellsFileParser::parse() {
     }
 }
 
-dnd::SpellType dnd::SpellsFileParser::createSpellType(const std::string& spell_type_str) const {
+dnd::SpellType dnd::SpellsFileParser::create_spell_type(const std::string& spell_type_str) const {
     DND_MEASURE_FUNCTION();
     if (!std::regex_match(spell_type_str, spell_type_regex)) {
         // TODO: think about how to reintroduce spell name into error message
@@ -99,13 +98,12 @@ dnd::SpellType dnd::SpellsFileParser::createSpellType(const std::string& spell_t
             magic_school_str = spell_type_str.substr(i, spell_type_str.size() - i);
         }
     }
-    auto tolower = [](unsigned char c) { return static_cast<unsigned char>(std::tolower(c)); };
-    std::transform(magic_school_str.begin(), magic_school_str.end(), magic_school_str.begin(), tolower);
+    string_to_lowercase(magic_school_str);
     spell_type.magic_school = magic_school_from_name(magic_school_str);
     return spell_type;
 }
 
-dnd::SpellComponents dnd::SpellsFileParser::createSpellComponents(const std::string& spell_components_str) const {
+dnd::SpellComponents dnd::SpellsFileParser::create_spell_components(const std::string& spell_components_str) const {
     DND_MEASURE_FUNCTION();
     if (!std::regex_match(spell_components_str, spell_components_regex)) {
         // TODO: think about how to reintroduce spell name into error message
@@ -155,7 +153,7 @@ static constexpr std::array<const char*, 10> level_group_names = {
     "level 5 spells", "level 6 spells", "level 7 spells", "level 8 spells", "level 9 spells",
 };
 
-void dnd::SpellsFileParser::saveResult() {
+void dnd::SpellsFileParser::save_result() {
     for (size_t i = 0; i < spells_in_file; ++i) {
         if (valid[i]) {
             SpellParsingInfo& info = spell_parsing_info[i];

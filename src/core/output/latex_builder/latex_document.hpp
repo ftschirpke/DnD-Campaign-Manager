@@ -1,12 +1,12 @@
 #ifndef LATEX_DOCUMENT_HPP_
 #define LATEX_DOCUMENT_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <string>
 
-#include "core/output/latex_builder/latex_command.hpp"
-#include "core/output/latex_builder/latex_scope.hpp"
+#include <core/output/latex_builder/latex_command.hpp>
+#include <core/output/latex_builder/latex_scope.hpp>
 
 namespace dnd {
 
@@ -18,11 +18,11 @@ public:
     LatexDocument(const std::string& document_class_type);
     /**
      * @brief Add a usepackage command to the header of the document
-     * equivalent to header.addCommand("usepackage", package_name)
+     * equivalent to header.add_command("usepackage", package_name)
      * @param package_name name of the package
      * @return the created usepackage-command
      */
-    LatexCommand* usePackage(const std::string& package_name);
+    LatexCommand* use_package(const std::string& package_name);
     /**
      * @brief Creates the full LaTeX document as a string
      * @return the string
@@ -38,13 +38,13 @@ public:
 
 inline LatexDocument::LatexDocument(const std::string& document_class_type)
     : header(), body(), document_class("documentclass") {
-    header.noEnclosingBraces();
-    body.noEnclosingBraces();
-    document_class.addBraceArgument(document_class_type);
+    header.no_enclosing_braces();
+    body.no_enclosing_braces();
+    document_class.add_brace_argument(document_class_type);
 }
 
-inline LatexCommand* LatexDocument::usePackage(const std::string& package_name) {
-    return header.addCommand("usepackage", package_name);
+inline LatexCommand* LatexDocument::use_package(const std::string& package_name) {
+    return header.add_command("usepackage", package_name);
 }
 
 } // namespace dnd

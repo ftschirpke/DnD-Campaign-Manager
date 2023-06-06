@@ -1,22 +1,22 @@
 #ifndef CHARACTER_CLASS_FILE_PARSER_HPP_
 #define CHARACTER_CLASS_FILE_PARSER_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <string>
 #include <unordered_map>
 #include <vector>
 
-#include "core/basic_mechanics/dice.hpp"
-#include "core/controllers/groups.hpp"
-#include "core/models/character_class.hpp"
-#include "core/models/effect_holder/feature.hpp"
-#include "core/models/spell.hpp"
-#include "core/parsing/content_file_parser.hpp"
-#include "core/parsing/models/effect_holder/features_parser.hpp"
-#include "core/parsing/models/spellcasting/spellcasting_parser.hpp"
-#include "core/parsing/parsing_types.hpp"
-#include "core/parsing/subparser.hpp"
+#include <core/basic_mechanics/dice.hpp>
+#include <core/controllers/groups.hpp>
+#include <core/models/character_class.hpp>
+#include <core/models/effect_holder/feature.hpp>
+#include <core/models/spell.hpp>
+#include <core/parsing/content_file_parser.hpp>
+#include <core/parsing/models/effect_holder/features_parser.hpp>
+#include <core/parsing/models/spellcasting/spellcasting_parser.hpp>
+#include <core/parsing/parsing_types.hpp>
+#include <core/parsing/subparser.hpp>
 
 namespace dnd {
 
@@ -33,8 +33,8 @@ public:
      * @param spells the already-parsed spells
      */
     CharacterClassFileParser(
-        const std::filesystem::path& filepath, StoringContentLibrary<const CharacterClass>& classes,
-        const Groups& groups, const StoringContentLibrary<const Spell>& spells
+        const std::filesystem::path& filepath, StorageContentLibrary<const CharacterClass>& classes,
+        const Groups& groups, const StorageContentLibrary<const Spell>& spells
     ) noexcept;
     /**
      * @brief Parses JSON file containing a class
@@ -51,19 +51,19 @@ public:
     /**
      * @brief Saves the parsed class
      */
-    virtual void saveResult() override;
+    virtual void save_result() override;
     /**
      * @brief Returns the type of content that this parser parses - classes
      * @return the type of content that this parser parses - classes
      */
-    virtual constexpr ParsingType getType() const override { return type; };
+    virtual constexpr ParsingType get_type() const override { return type; };
 protected:
     /**
      * @brief Determine the subclass level for the parsed class
      * @param features the classes' features of which one should be a subclass feature
      * @throws invalid_attribute if class does not have exactly one subclass feature or the subclass level is invalid
      */
-    void determineSubclassLevel(const std::vector<Feature>& features);
+    void determine_subclass_level(const std::vector<Feature>& features);
 private:
     // the type of content that this parser parses - classes
     static constexpr ParsingType type = ParsingType::CLASS;
@@ -76,7 +76,7 @@ private:
     // the subclass level of the parsed class
     int subclass_level;
     // the already-parsed classes to add the parsed class to
-    StoringContentLibrary<const CharacterClass>& classes;
+    StorageContentLibrary<const CharacterClass>& classes;
     // a subparser used for parsing the class' features
     FeaturesParser features_parser;
     // a subparser used for parsing the subclass' spellcasting feature if it exists
@@ -84,8 +84,8 @@ private:
 };
 
 inline CharacterClassFileParser::CharacterClassFileParser(
-    const std::filesystem::path& filepath, StoringContentLibrary<const CharacterClass>& classes, const Groups& groups,
-    const StoringContentLibrary<const Spell>& spells
+    const std::filesystem::path& filepath, StorageContentLibrary<const CharacterClass>& classes, const Groups& groups,
+    const StorageContentLibrary<const Spell>& spells
 ) noexcept
     : ContentFileParser(filepath), classes(classes), features_parser(type, filepath, groups),
       spellcasting_parser(type, filepath, spells) {}

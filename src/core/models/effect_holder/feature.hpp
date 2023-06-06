@@ -1,16 +1,16 @@
 #ifndef FEATURE_HPP_
 #define FEATURE_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <filesystem>
 #include <string>
 #include <vector>
 
-#include "core/content_visitors/content_visitor.hpp"
-#include "core/models/content_piece.hpp"
-#include "core/models/effect_holder/effect_holder.hpp"
-#include "core/models/effect_holder/effect_holder_with_choices.hpp"
+#include <core/content_visitors/content_visitor.hpp>
+#include <core/models/content_piece.hpp>
+#include <core/models/effect_holder/effect_holder.hpp>
+#include <core/models/effect_holder/effect_holder_with_choices.hpp>
 
 namespace dnd {
 
@@ -34,7 +34,7 @@ public:
      * @return "true" if the feature is always active for a character of that level i.e there are no other conditions,
      * "false" otherwise
      */
-    bool isActiveForLevel(int level) const;
+    bool is_active_for_level(int level) const;
     /**
      * @brief Accepts a visitor
      * @param visitor pointer to the visitor

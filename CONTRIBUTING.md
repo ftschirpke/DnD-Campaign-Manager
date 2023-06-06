@@ -92,11 +92,11 @@ Includes should be separated into multiple include-blocks which are each sorted 
 - second line: include header file in implementation files or the implementation files in test files
 - first block: include standard library headers (format `<header_name>`)
 - second block: include other library headers (format `<header_name.hpp>`)
-- third block: include header files from this code base with their path relative to the `src/` directory and *not with relative paths* (format `"header_name.hpp"`)
+- third block: include header files from this code base with their path relative to the `src/` directory and *not with relative paths* (format `<header_name.hpp>`)
 
 An example:
 ```c++
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "my_class_parser.hpp"
 
@@ -106,9 +106,9 @@ An example:
 
 #include <nlohann/json.hpp>
 
-#include "models/my_class.hpp"
-#include "models/another_class.hpp"
-#include "parsing/models/another_class_parser.hpp"
+#include <models/my_class.hpp>
+#include <models/another_class.hpp>
+#include <parsing/models/another_class_parser.hpp>
 
 // the implementation of MyClassParser
 ```
@@ -137,11 +137,11 @@ Notice, that implementations of **all** inline functions should be separated fro
 For example:
 ```c++
 class MyClass: {
-private:
-    std::string name;
 public:
     MyClass(const std::string& name);
     void print() const;
+private:
+    std::string name;
 };
 
 inline MyClass::MyClass(const std::string& name) : name(name) {}

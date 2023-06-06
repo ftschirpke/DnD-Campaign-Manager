@@ -1,11 +1,11 @@
 #ifndef PREPARATION_SPELLCASTING_HPP_
 #define PREPARATION_SPELLCASTING_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <string>
 
-#include "core/models/spellcasting/spellcasting.hpp"
+#include <core/models/spellcasting/spellcasting.hpp>
 
 namespace dnd {
 

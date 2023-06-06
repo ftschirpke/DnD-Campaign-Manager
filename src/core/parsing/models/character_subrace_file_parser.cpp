@@ -1,4 +1,4 @@
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include "character_subrace_file_parser.hpp"
 
@@ -9,11 +9,11 @@
 #include <unordered_map>
 #include <utility>
 
-#include "core/models/character_race.hpp"
-#include "core/models/character_subrace.hpp"
-#include "core/parsing/models/effect_holder/features_parser.hpp"
-#include "core/parsing/parsing_exceptions.hpp"
-#include "core/parsing/parsing_types.hpp"
+#include <core/models/character_race.hpp>
+#include <core/models/character_subrace.hpp>
+#include <core/parsing/models/effect_holder/features_parser.hpp>
+#include <core/parsing/parsing_exceptions.hpp>
+#include <core/parsing/parsing_types.hpp>
 
 void dnd::CharacterSubraceFileParser::parse() {
     DND_MEASURE_FUNCTION();
@@ -26,7 +26,7 @@ void dnd::CharacterSubraceFileParser::parse() {
     }
     race_name = json_to_parse.at("race").get<std::string>();
 
-    features_parser.parseFeatures(json_to_parse.at("features"));
+    features_parser.parse_features(json_to_parse.at("features"));
 }
 
 bool dnd::CharacterSubraceFileParser::validate() const {
@@ -45,6 +45,6 @@ bool dnd::CharacterSubraceFileParser::validate() const {
     return true;
 }
 
-void dnd::CharacterSubraceFileParser::saveResult() {
-    subraces.create(character_subrace_name, filepath, std::move(features_parser.retrieveFeatures()), race_name);
+void dnd::CharacterSubraceFileParser::save_result() {
+    subraces.create(character_subrace_name, filepath, std::move(features_parser.retrieve_features()), race_name);
 }

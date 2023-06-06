@@ -1,7 +1,7 @@
 #ifndef EFFECT_HOLDER_PARSER_HPP_
 #define EFFECT_HOLDER_PARSER_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <memory>
 #include <regex>
@@ -9,11 +9,11 @@
 
 #include <nlohmann/json.hpp>
 
-#include "core/controllers/groups.hpp"
-#include "core/models/effect_holder/effect.hpp"
-#include "core/models/effect_holder/effect_holder.hpp"
-#include "core/models/effect_holder/effect_holder_with_choices.hpp"
-#include "core/parsing/subparser.hpp"
+#include <core/controllers/groups.hpp>
+#include <core/models/effect_holder/effect.hpp>
+#include <core/models/effect_holder/effect_holder.hpp>
+#include <core/models/effect_holder/effect_holder_with_choices.hpp>
+#include <core/parsing/subparser.hpp>
 
 namespace dnd {
 
@@ -34,7 +34,7 @@ public:
      * @throws parsing_error if any error occured while trying to parse the effect_holder_json
      * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
-    EffectHolder createEffectHolder(const nlohmann::json& effect_holder_json) const;
+    EffectHolder create_effect_holder(const nlohmann::json& effect_holder_json) const;
     /**
      * @brief Parse and create an effect holder with choices to be made
      * @param effect_holder_json the JSON containing the effect holder
@@ -42,7 +42,7 @@ public:
      * @throws parsing_error if any error occured while trying to parse the effect_holder_json
      * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
-    EffectHolderWithChoices createEffectHolderWithChoices(const nlohmann::json& effect_holder_json) const;
+    EffectHolderWithChoices create_effect_holder_with_choices(const nlohmann::json& effect_holder_json) const;
     /**
      * @brief Parse all (optional) parts from a JSON into an existing effect holder
      * @param effect_holder_json the JSON containing the effect holder
@@ -50,7 +50,7 @@ public:
      * @throws parsing_error if any error occured while trying to parse the effect_holder_json
      * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
-    void parseEffectHolder(const nlohmann::json& effect_holder_json, EffectHolder* const effect_holder) const;
+    void parse_effect_holder(const nlohmann::json& effect_holder_json, EffectHolder* const effect_holder) const;
 protected:
     /**
      * @brief Parse and create an effect
@@ -58,21 +58,21 @@ protected:
      * @return the created effect
      * @throws parsing_error if effect_str does not define a valid effect
      */
-    std::unique_ptr<Effect> createEffect(const std::string& effect_str) const;
+    std::unique_ptr<Effect> create_effect(const std::string& effect_str) const;
     /**
      * @brief Parse an effect and add it to an existing effect holder
      * @param effect_str the string that needs to be parsed
      * @param effect_holder the effect holder the effect will be added to
      * @throws parsing_error if effect_str does not define a valid effect
      */
-    void parseAndAddEffect(const std::string& effect_str, EffectHolder* const effect_holder) const;
+    void parse_and_add_effect(const std::string& effect_str, EffectHolder* const effect_holder) const;
     /**
      * @brief Parse an activation and add it to an existing effect holder
      * @param activation_str the string that needs to be parsed
      * @param effect_holder the effect holder the activation will be added to
      * @throws parsing_error if activation_str does not define a valid activation
      */
-    void parseAndAddActivation(const std::string& activation_str, EffectHolder* const effect_holder) const;
+    void parse_and_add_activation(const std::string& activation_str, EffectHolder* const effect_holder) const;
     /**
      * @brief Parse a choice and add it to an existing effect holder with choices
      * @param choice_key the key of the choice in the JSON map (the attribute name that is affected by the choice)
@@ -80,7 +80,7 @@ protected:
      * @param effect_holder the effect holder with choices the choice will be added to
      * @throws invalid_attribute if a non-existent group was chosen or multiple groups of different types were chosen
      */
-    void parseAndAddChoice(
+    void parse_and_add_choice(
         const std::string& choice_key, const nlohmann::json& choice_json, EffectHolderWithChoices& effect_holder
     ) const;
 private:

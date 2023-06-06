@@ -1,7 +1,7 @@
 #ifndef SPELLCASTING_PARSER_HPP_
 #define SPELLCASTING_PARSER_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <array>
 #include <memory>
@@ -9,12 +9,12 @@
 
 #include <nlohmann/json.hpp>
 
-#include "core/controllers/content_library.hpp"
-#include "core/models/spell.hpp"
-#include "core/models/spellcasting/preparation_spellcasting.hpp"
-#include "core/models/spellcasting/spellcasting.hpp"
-#include "core/models/spellcasting/spells_known_spellcasting.hpp"
-#include "core/parsing/subparser.hpp"
+#include <core/controllers/content_library.hpp>
+#include <core/models/spell.hpp>
+#include <core/models/spellcasting/preparation_spellcasting.hpp>
+#include <core/models/spellcasting/spellcasting.hpp>
+#include <core/models/spellcasting/spells_known_spellcasting.hpp>
+#include <core/parsing/subparser.hpp>
 
 namespace dnd {
 
@@ -36,7 +36,7 @@ public:
      * @param spells the already-parsed spells
      */
     SpellcastingParser(
-        ParsingType type, const std::filesystem::path& filepath, const StoringContentLibrary<const Spell>& spells
+        ParsingType type, const std::filesystem::path& filepath, const StorageContentLibrary<const Spell>& spells
     ) noexcept;
     /**
      * @brief Parses the spellcasting feature from a given JSON
@@ -45,13 +45,13 @@ public:
      * @throws nlohmann::json::out_of_range if any required attribute does not exist
      * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
-    void parseSpellcasting(const nlohmann::json& spellcasting_json);
+    void parse_spellcasting(const nlohmann::json& spellcasting_json);
     /**
      * @brief Creates and returns the parsed spellcasting feature while giving up ownership over all the parsed values
      * @return a unique pointer to the parsed spellcasting
      * @throws attribute_type_error if the creation of this spellcasting type is not implemented
      */
-    std::unique_ptr<Spellcasting> retrieveSpellcasting();
+    std::unique_ptr<Spellcasting> retrieve_spellcasting();
 private:
     /**
      * @brief A helper function to parse optional attributes of which the value should be an length-20 integer array
@@ -61,10 +61,12 @@ private:
      * @throws invalid_attribute if the attribute's value is not an array of size 20
      * @throws nlohmann::json::type_error if the array entries aren't integers
      */
-    void parseSize20Array(const nlohmann::json& json_to_parse, const char* attribute_name, std::array<int, 20>& output);
+    void parse_size20_array(
+        const nlohmann::json& json_to_parse, const char* attribute_name, std::array<int, 20>& output
+    );
 
     // the already-parsed spells to look up spell lists in
-    const StoringContentLibrary<const Spell>& spells;
+    const StorageContentLibrary<const Spell>& spells;
     // the parsed spellcasting ability
     std::string ability;
     // the parsed ritual_casting value for the spellcasting
@@ -84,7 +86,7 @@ private:
 };
 
 inline SpellcastingParser::SpellcastingParser(
-    ParsingType type, const std::filesystem::path& filepath, const StoringContentLibrary<const Spell>& spells
+    ParsingType type, const std::filesystem::path& filepath, const StorageContentLibrary<const Spell>& spells
 ) noexcept
     : Subparser(type, filepath), spells(spells) {}
 

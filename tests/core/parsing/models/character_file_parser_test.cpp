@@ -1,4 +1,4 @@
-#include "parsing/models/character_file_parser.hpp"
+#include <core/parsing/models/character_file_parser.hpp>
 
 #include <array>
 #include <filesystem>
@@ -11,17 +11,17 @@
 #include <catch2/catch_test_macros.hpp>
 #include <nlohmann/json.hpp>
 
-#include "basic_mechanics/dice.hpp"
-#include "controllers/content_holder.hpp"
-#include "controllers/content_library.hpp"
-#include "controllers/groups.hpp"
-#include "models/character.hpp"
-#include "models/character_class.hpp"
-#include "models/character_race.hpp"
-#include "models/character_subclass.hpp"
-#include "models/character_subrace.hpp"
-#include "models/effect_holder/feature.hpp"
-#include "models/spell.hpp"
+#include <core/basic_mechanics/dice.hpp>
+#include <core/controllers/content_holder.hpp>
+#include <core/controllers/content_library.hpp>
+#include <core/controllers/groups.hpp>
+#include <core/models/character.hpp>
+#include <core/models/character_class.hpp>
+#include <core/models/character_race.hpp>
+#include <core/models/character_subclass.hpp>
+#include <core/models/character_subrace.hpp>
+#include <core/models/effect_holder/feature.hpp>
+#include <core/models/spell.hpp>
 
 /**
  * @brief A class that allows us to test the dnd::CharacterFileParser class
@@ -29,12 +29,12 @@
 class TestCharacterFileParser : public dnd::CharacterFileParser {
 public:
     TestCharacterFileParser(
-        const std::filesystem::path& filepath, dnd::StoringContentLibrary<dnd::Character>& characters,
-        const dnd::Groups& groups, const dnd::StoringContentLibrary<const dnd::CharacterClass>& character_classes,
-        const dnd::StoringContentLibrary<const dnd::CharacterSubclass>& character_subclasses,
-        const dnd::StoringContentLibrary<const dnd::CharacterRace>& character_races,
-        const dnd::StoringContentLibrary<const dnd::CharacterSubrace>& character_subraces,
-        const dnd::StoringContentLibrary<const dnd::Spell>& spells
+        const std::filesystem::path& filepath, dnd::StorageContentLibrary<dnd::Character>& characters,
+        const dnd::Groups& groups, const dnd::StorageContentLibrary<const dnd::CharacterClass>& character_classes,
+        const dnd::StorageContentLibrary<const dnd::CharacterSubclass>& character_subclasses,
+        const dnd::StorageContentLibrary<const dnd::CharacterRace>& character_races,
+        const dnd::StorageContentLibrary<const dnd::CharacterSubrace>& character_subraces,
+        const dnd::StorageContentLibrary<const dnd::Spell>& spells
     )
         : dnd::CharacterFileParser(
             filepath, characters, groups, character_classes, character_subclasses, character_races, character_subraces,
@@ -45,17 +45,17 @@ public:
 
 class SetupCharacterParserTest {
 public:
-    dnd::StoringContentLibrary<dnd::Character> characters;
+    dnd::StorageContentLibrary<dnd::Character> characters;
     SetupCharacterParserTest();
     TestCharacterFileParser createParser();
 private:
     dnd::Groups groups;
     const std::filesystem::path filepath;
-    dnd::StoringContentLibrary<const dnd::CharacterClass> character_classes;
-    dnd::StoringContentLibrary<const dnd::CharacterSubclass> character_subclasses;
-    dnd::StoringContentLibrary<const dnd::CharacterRace> character_races;
-    dnd::StoringContentLibrary<const dnd::CharacterSubrace> character_subraces;
-    dnd::StoringContentLibrary<const dnd::Spell> spells;
+    dnd::StorageContentLibrary<const dnd::CharacterClass> character_classes;
+    dnd::StorageContentLibrary<const dnd::CharacterSubclass> character_subclasses;
+    dnd::StorageContentLibrary<const dnd::CharacterRace> character_races;
+    dnd::StorageContentLibrary<const dnd::CharacterSubrace> character_subraces;
+    dnd::StorageContentLibrary<const dnd::Spell> spells;
     void setClasses();
     void setSubclasses();
     void setRaces();
@@ -255,12 +255,12 @@ void testBasicValuesFromJSON(const nlohmann::json& character_json, const dnd::Ch
     }
     REQUIRE(character_ptr->base_ability_scores == character_json.at("base_ability_scores").get<std::array<int, 6>>());
     if (character_json.contains("level")) {
-        REQUIRE(character_ptr->getLevel() == character_json.at("level").get<int>());
+        REQUIRE(character_ptr->get_level() == character_json.at("level").get<int>());
     }
     if (character_json.contains("xp")) {
-        REQUIRE(character_ptr->getXP() == character_json.at("xp").get<int>());
+        REQUIRE(character_ptr->get_xp() == character_json.at("xp").get<int>());
     }
-    REQUIRE(character_ptr->getHitDiceRolls() == character_json.at("hit_dice_rolls").get<std::vector<int>>());
+    REQUIRE(character_ptr->get_hit_dice_rolls() == character_json.at("hit_dice_rolls").get<std::vector<int>>());
 }
 
 TEST_CASE("dnd::CharacterParser::createCharacter: parse minimum characters") {
@@ -295,12 +295,12 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse minimum characters") {
         parser.setJSON(valid_low_level_bob);
         REQUIRE_NOTHROW(parser.parse());
         REQUIRE(parser.validate());
-        REQUIRE_NOTHROW(parser.saveResult());
+        REQUIRE_NOTHROW(parser.save_result());
         REQUIRE(setup.characters.size() == 1);
         character_ptr = &setup.characters.get(valid_low_level_bob.at("name"));
         testBasicValuesFromJSON(valid_low_level_bob, character_ptr);
         REQUIRE(
-            character_ptr->getXP()
+            character_ptr->get_xp()
             == dnd::Character::minxp_for_level.at(valid_low_level_bob.at("level").get<size_t>() - 1)
         );
 
@@ -308,12 +308,12 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse minimum characters") {
         parser.setJSON(valid_high_level_bob);
         REQUIRE_NOTHROW(parser.parse());
         REQUIRE(parser.validate());
-        REQUIRE_NOTHROW(parser.saveResult());
+        REQUIRE_NOTHROW(parser.save_result());
         REQUIRE(setup.characters.size() == 2);
         character_ptr = &setup.characters.get(valid_high_level_bob.at("name"));
         testBasicValuesFromJSON(valid_high_level_bob, character_ptr);
         REQUIRE(
-            character_ptr->getXP()
+            character_ptr->get_xp()
             == dnd::Character::minxp_for_level.at(valid_high_level_bob.at("level").get<size_t>() - 1)
         );
     }
@@ -322,27 +322,27 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse minimum characters") {
         parser.setJSON(valid_low_level_bob);
         REQUIRE_NOTHROW(parser.parse());
         REQUIRE(parser.validate());
-        REQUIRE_NOTHROW(parser.saveResult());
+        REQUIRE_NOTHROW(parser.save_result());
         REQUIRE(setup.characters.size() == 1);
         character_ptr = &setup.characters.get(valid_low_level_bob.at("name"));
         testBasicValuesFromJSON(valid_low_level_bob, character_ptr);
-        REQUIRE(character_ptr->getLevel() == dnd::Character::levelForXP(valid_low_level_bob.at("xp").get<int>()));
+        REQUIRE(character_ptr->get_level() == dnd::Character::level_for_xp(valid_low_level_bob.at("xp").get<int>()));
 
         valid_high_level_bob.erase("level");
         parser.setJSON(valid_high_level_bob);
         REQUIRE_NOTHROW(parser.parse());
         REQUIRE(parser.validate());
-        REQUIRE_NOTHROW(parser.saveResult());
+        REQUIRE_NOTHROW(parser.save_result());
         REQUIRE(setup.characters.size() == 2);
         character_ptr = &setup.characters.get(valid_high_level_bob.at("name"));
         testBasicValuesFromJSON(valid_high_level_bob, character_ptr);
-        REQUIRE(character_ptr->getLevel() == dnd::Character::levelForXP(valid_high_level_bob.at("xp").get<int>()));
+        REQUIRE(character_ptr->get_level() == dnd::Character::level_for_xp(valid_high_level_bob.at("xp").get<int>()));
     }
     SECTION("characters with level and xp") {
         parser.setJSON(valid_low_level_bob);
         REQUIRE_NOTHROW(parser.parse());
         REQUIRE(parser.validate());
-        REQUIRE_NOTHROW(parser.saveResult());
+        REQUIRE_NOTHROW(parser.save_result());
         REQUIRE(setup.characters.size() == 1);
         character_ptr = &setup.characters.get(valid_low_level_bob.at("name"));
         testBasicValuesFromJSON(valid_low_level_bob, character_ptr);
@@ -350,7 +350,7 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse minimum characters") {
         parser.setJSON(valid_high_level_bob);
         REQUIRE_NOTHROW(parser.parse());
         REQUIRE(parser.validate());
-        REQUIRE_NOTHROW(parser.saveResult());
+        REQUIRE_NOTHROW(parser.save_result());
         REQUIRE(setup.characters.size() == 2);
         character_ptr = &setup.characters.get(valid_high_level_bob.at("name"));
         testBasicValuesFromJSON(valid_high_level_bob, character_ptr);

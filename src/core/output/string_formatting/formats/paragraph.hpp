@@ -1,11 +1,11 @@
 #ifndef PARAGRAPH_HPP_
 #define PARAGRAPH_HPP_
 
-#include "dnd_config.hpp"
+#include <dnd_config.hpp>
 
 #include <string_view>
 
-#include "core/output/string_formatting/formats/format.hpp"
+#include <core/output/string_formatting/formats/format.hpp>
 
 namespace dnd {
 
