@@ -5,12 +5,12 @@
 #include <string>
 #include <vector>
 
-dnd::LatexCommand* dnd::LatexCommand::addBraceArgument(const std::string& argument) {
+dnd::LatexCommand* dnd::LatexCommand::add_brace_argument(const std::string& argument) {
     brace_arguments.push_back(argument);
     return this;
 }
 
-dnd::LatexCommand* dnd::LatexCommand::addBracketArgument(const std::string& argument) {
+dnd::LatexCommand* dnd::LatexCommand::add_bracket_argument(const std::string& argument) {
     bracket_arguments.push_back(argument);
     return this;
 }

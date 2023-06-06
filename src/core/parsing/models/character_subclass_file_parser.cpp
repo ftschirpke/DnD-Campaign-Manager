@@ -32,7 +32,7 @@ void dnd::CharacterSubclassFileParser::parse() {
     features_parser.parse_features(json_to_parse.at("features"));
 
     if (json_to_parse.contains("spellcasting")) {
-        spellcasting_parser.parseSpellcasting(json_to_parse.at("spellcasting"));
+        spellcasting_parser.parse_spellcasting(json_to_parse.at("spellcasting"));
     }
 }
 

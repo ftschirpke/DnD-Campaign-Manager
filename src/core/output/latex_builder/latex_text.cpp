@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-dnd::LatexText* dnd::LatexText::addModifier(const std::string& modifier) {
+dnd::LatexText* dnd::LatexText::add_modifier(const std::string& modifier) {
     modifiers.push_back(modifier);
     return this;
 }

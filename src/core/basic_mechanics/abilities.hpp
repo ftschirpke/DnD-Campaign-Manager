@@ -39,7 +39,7 @@ inline constexpr std::array<const char*, 6> ability_cstrings_inorder = {"STR", "
  * @return the ability the 3-letter string represents
  * @throws std::invalid_argument if the string doesn't represent any of the 6 abilities
  */
-inline Ability stringToAbility(const std::string& ability_str) {
+inline Ability string_to_ability(const std::string& ability_str) {
     for (size_t i = 0; i < 6; ++i) {
         if (ability_cstrings_inorder[i] == ability_str) {
             return abilities_inorder[i];
@@ -53,7 +53,7 @@ inline Ability stringToAbility(const std::string& ability_str) {
  * @param ability the ability
  * @return the 3-letter string representation of the ability
  */
-inline std::string abilityToString(Ability ability) {
+inline std::string ability_to_string(Ability ability) {
     switch (ability) {
         case STRENGTH:
             return "STR";
@@ -75,7 +75,7 @@ inline std::string abilityToString(Ability ability) {
  * @param attribute_name the 3-letter string representation of an ability as string_view
  * @return "true" if string represents an ability, "no" otherwise
  */
-inline bool isAbility(std::string_view attribute_name) {
+inline bool is_ability(std::string_view attribute_name) {
     return std::find(ability_cstrings_inorder.cbegin(), ability_cstrings_inorder.cend(), attribute_name)
            != ability_cstrings_inorder.cend();
 }
@@ -85,7 +85,7 @@ inline bool isAbility(std::string_view attribute_name) {
  * @param attribute_name the 3-letter string representation of an ability
  * @return "true" if string represents an ability, "no" otherwise
  */
-inline bool isAbility(const std::string& attribute_name) {
+inline bool is_ability(const std::string& attribute_name) {
     return std::find(ability_cstrings_inorder.cbegin(), ability_cstrings_inorder.cend(), attribute_name)
            != ability_cstrings_inorder.cend();
 }

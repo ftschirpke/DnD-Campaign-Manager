@@ -30,23 +30,23 @@ void dnd::ItemCardBuilder::writeLatexFile() {
 }
 
 static void createHeader(dnd::LatexDocument& document) {
-    document.document_class.addBracketArgument("parskip");
-    document.usePackage("geometry");
-    document.usePackage("tcolorbox")->addBracketArgument("most");
-    document.usePackage("ragged2e");
+    document.document_class.add_bracket_argument("parskip");
+    document.use_package("geometry");
+    document.use_package("tcolorbox")->add_bracket_argument("most");
+    document.use_package("ragged2e");
 
-    document.header.addCommand("pagenumbering", "gobble");
-    document.header.addCommand("geometry", "a4paper,left=3mm,right=3mm,top=3mm,headheight=0mm,headsep=0mm,bottom=3mm");
-    document.header.addCommand("makeatletter");
-    document.header.addCommand("newcommand");
-    document.header.addCommand("notsotiny", "\\@setfontsize\\notsotiny{7.5}{8.5}");
-    document.header.addCommand("makeatother");
+    document.header.add_command("pagenumbering", "gobble");
+    document.header.add_command("geometry", "a4paper,left=3mm,right=3mm,top=3mm,headheight=0mm,headsep=0mm,bottom=3mm");
+    document.header.add_command("makeatletter");
+    document.header.add_command("newcommand");
+    document.header.add_command("notsotiny", "\\@setfontsize\\notsotiny{7.5}{8.5}");
+    document.header.add_command("makeatother");
 }
 
 static dnd::LatexScope* createCardPage(dnd::LatexDocument& document) {
     std::string colour = "white";
-    auto begin_end = document.body.addBeginEnd("tcbitemize");
-    begin_end.begin_command->addBracketArgument(
+    auto begin_end = document.body.add_begin_end("tcbitemize");
+    begin_end.begin_command->add_bracket_argument(
         "size=fbox,raster height=\\textheight,raster columns=3, raster equal skip=5mm,raster rows=3,enhanced,sharp "
         "corners,colback="
         + colour + "!10,colframe=" + colour + "!50!black,text fill"
@@ -55,30 +55,30 @@ static dnd::LatexScope* createCardPage(dnd::LatexDocument& document) {
 }
 
 static dnd::LatexText* createCardHeader(dnd::LatexScope* scope, const dnd::Item* item, int counter) {
-    scope->addCommand("tcbitem");
-    scope->addCommand("vspace", "1mm");
-    dnd::LatexScope* center_scope = scope->addBeginEnd("center").scope;
-    center_scope->addCommand("MakeUppercase");
-    dnd::LatexScope* sub_scope = center_scope->addScope();
-    sub_scope->addCommand("textbf");
-    dnd::LatexText* title = sub_scope->addScope()->addText(item->name + " (" + std::to_string(counter) + ')');
-    scope->addCommand("vspace", "-3mm");
+    scope->add_command("tcbitem");
+    scope->add_command("vspace", "1mm");
+    dnd::LatexScope* center_scope = scope->add_begin_end("center").scope;
+    center_scope->add_command("MakeUppercase");
+    dnd::LatexScope* sub_scope = center_scope->add_scope();
+    sub_scope->add_command("textbf");
+    dnd::LatexText* title = sub_scope->add_scope()->add_text(item->name + " (" + std::to_string(counter) + ')');
+    scope->add_command("vspace", "-3mm");
     if (item->requires_attunement) {
-        scope->addCommand("vspace", "-5mm");
-        scope->addBeginEnd("center").scope->addText("This item requires attunement.")->addModifier("scriptsize");
-        scope->addCommand("vspace", "-3mm");
+        scope->add_command("vspace", "-5mm");
+        scope->add_begin_end("center").scope->add_text("This item requires attunement.")->add_modifier("scriptsize");
+        scope->add_command("vspace", "-3mm");
     }
-    scope->addCommand("scriptsize");
+    scope->add_command("scriptsize");
     return title;
 }
 
-static void createCardFooter(dnd::LatexScope* scope) { scope->addCommand("vspace", "\\fill"); }
+static void createCardFooter(dnd::LatexScope* scope) { scope->add_command("vspace", "\\fill"); }
 
 static dnd::LatexScope* createTextitScope(dnd::LatexScope* scope) {
-    dnd::LatexScope* center_scope = scope->addBeginEnd("Center").scope;
-    center_scope->addCommand("scriptsize");
-    center_scope->addCommand("textit");
-    return center_scope->addScope();
+    dnd::LatexScope* center_scope = scope->add_begin_end("Center").scope;
+    center_scope->add_command("scriptsize");
+    center_scope->add_command("textit");
+    return center_scope->add_scope();
 }
 
 static int createItemCards(dnd::LatexScope* scope, const dnd::Item* item) {
@@ -96,10 +96,10 @@ static int createItemCards(dnd::LatexScope* scope, const dnd::Item* item) {
                 characters_written = 0;
             }
 
-            dnd::LatexText* text = scope->addText(item->description.substr(start, end - start));
+            dnd::LatexText* text = scope->add_text(item->description.substr(start, end - start));
             characters_written += end - start;
             if (end + 1 < item->description.size() && item->description[end + 1] == '\n') {
-                text->addLineBreak();
+                text->add_line_break();
                 end++;
             }
             start = ++end;
@@ -111,7 +111,7 @@ static int createItemCards(dnd::LatexScope* scope, const dnd::Item* item) {
         createCardFooter(scope);
         createCardHeader(scope, item, ++counter);
     }
-    scope->addText(item->description.substr(start, end - start));
+    scope->add_text(item->description.substr(start, end - start));
 
     int last_description_card = counter;
     bool written_cosmetic_description_yet = false;
@@ -121,7 +121,7 @@ static int createItemCards(dnd::LatexScope* scope, const dnd::Item* item) {
     if (!item->cosmetic_description.empty()) {
         start = 0;
         end = 0;
-        scope->addCommand("vfill");
+        scope->add_command("vfill");
         description_swap_card = counter;
         dnd::LatexScope* current_it_scope = createTextitScope(scope);
         while (end < item->cosmetic_description.size()) {
@@ -140,11 +140,12 @@ static int createItemCards(dnd::LatexScope* scope, const dnd::Item* item) {
                     description_swap_card = counter;
                     written_cosmetic_description_yet = true;
                 }
-                dnd::LatexText* text = current_it_scope->addText(item->cosmetic_description.substr(start, end - start));
+                dnd::LatexText* text = current_it_scope->add_text(item->cosmetic_description.substr(start, end - start)
+                );
 
                 characters_written += end - start;
                 if (end + 1 < item->cosmetic_description.size() && item->cosmetic_description[end + 1] == '\n') {
-                    text->addLineBreak();
+                    text->add_line_break();
                     end++;
                 }
                 start = ++end;
@@ -160,14 +161,14 @@ static int createItemCards(dnd::LatexScope* scope, const dnd::Item* item) {
         if (!written_cosmetic_description_yet) {
             skip_last_footer = true;
         }
-        current_it_scope->addText(item->cosmetic_description.substr(start, end - start));
+        current_it_scope->add_text(item->cosmetic_description.substr(start, end - start));
     }
     if (!skip_last_footer) {
         createCardFooter(scope);
     }
 
     if (counter == 1) {
-        first_title->setText(item->name);
+        first_title->set_text(item->name);
     }
     return counter;
 }

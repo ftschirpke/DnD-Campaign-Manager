@@ -16,7 +16,7 @@
 #include <core/models/effect_holder/feature.hpp>
 #include <core/models/feature_holder.hpp>
 
-void dnd::CharacterState::applyAbilityScoreEffects() {
+void dnd::CharacterState::apply_ability_score_effects() {
     for (const auto& [_, effect_time] : effect_times_in_order) {
         for (const auto effect_holder_ptr : active_effect_holders) {
             if (effect_holder_ptr->ability_score_effects.contains(effect_time)) {
@@ -33,7 +33,7 @@ void dnd::CharacterState::applyAbilityScoreEffects() {
     }
 }
 
-void dnd::CharacterState::applyNormalEffects() {
+void dnd::CharacterState::apply_normal_effects() {
     for (const auto& [_, effect_time] : effect_times_in_order) {
         for (const auto effect_holder_ptr : active_effect_holders) {
             if (effect_holder_ptr->normal_effects.contains(effect_time)) {
@@ -46,7 +46,7 @@ void dnd::CharacterState::applyNormalEffects() {
     }
 }
 
-void dnd::CharacterState::determineModifiers() {
+void dnd::CharacterState::determine_modifiers() {
     for (const auto& ability_name_cstr : ability_cstrings_inorder) {
         const std::string ability_name(ability_name_cstr);
         attributes[ability_name + "MOD"] = modifier(attributes.at(ability_name));
@@ -58,23 +58,23 @@ void dnd::CharacterState::determineModifiers() {
     }
 }
 
-void dnd::CharacterState::addFeatureHolder(const FeatureHolder* const feature_holder_ptr) {
+void dnd::CharacterState::add_feature_holder(const FeatureHolder* const feature_holder_ptr) {
     if (feature_holder_ptr == nullptr) {
         return;
     }
     for (const auto& feature : feature_holder_ptr->features) {
-        if (addEffectHolder(feature.main_part)) {
+        if (add_effect_holder(feature.main_part)) {
             for (const auto& eh : feature.parts) {
-                addEffectHolder(eh);
+                add_effect_holder(eh);
             }
             for (const auto& eh_with_choice : feature.parts_with_choices) {
-                addEffectHolderWithChoices(eh_with_choice);
+                add_effect_holder_with_choices(eh_with_choice);
             }
         }
     }
 }
 
-bool dnd::CharacterState::addEffectHolder(const dnd::EffectHolder& effect_holder) {
+bool dnd::CharacterState::add_effect_holder(const dnd::EffectHolder& effect_holder) {
     if (!effect_holder.is_active(attributes, constants)) {
         return false;
     }
@@ -84,7 +84,7 @@ bool dnd::CharacterState::addEffectHolder(const dnd::EffectHolder& effect_holder
     return true;
 }
 
-bool dnd::CharacterState::addEffectHolderWithChoices(const dnd::EffectHolderWithChoices& eh_with_choice) {
+bool dnd::CharacterState::add_effect_holder_with_choices(const dnd::EffectHolderWithChoices& eh_with_choice) {
     if (!eh_with_choice.is_active(attributes, constants)) {
         return false;
     }
@@ -104,8 +104,8 @@ bool dnd::CharacterState::addEffectHolderWithChoices(const dnd::EffectHolderWith
 }
 
 void dnd::CharacterState::calculate() {
-    applyAbilityScoreEffects();
-    determineModifiers();
+    apply_ability_score_effects();
+    determine_modifiers();
     // TODO: calculate MAXHP
-    applyNormalEffects();
+    apply_normal_effects();
 }

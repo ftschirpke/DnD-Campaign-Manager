@@ -19,7 +19,7 @@
 #include <core/parsing/parsing_types.hpp>
 #include <core/parsing/subparser.hpp>
 
-void dnd::SpellcastingParser::parseSize20Array(
+void dnd::SpellcastingParser::parse_size20_array(
     const nlohmann::json& json_to_parse, const char* attribute_name, std::array<int, 20>& output
 ) {
     if (!json_to_parse.contains(attribute_name)) {
@@ -33,7 +33,7 @@ void dnd::SpellcastingParser::parseSize20Array(
     output = attribute_json.get<std::array<int, 20>>();
 }
 
-void dnd::SpellcastingParser::parseSpellcasting(const nlohmann::json& spellcasting_json) {
+void dnd::SpellcastingParser::parse_spellcasting(const nlohmann::json& spellcasting_json) {
     DND_MEASURE_FUNCTION();
 
     ability = spellcasting_json.at("ability").get<std::string>();
@@ -50,7 +50,7 @@ void dnd::SpellcastingParser::parseSpellcasting(const nlohmann::json& spellcasti
         );
     } else if (has_spells_known) {
         spellcasting_type = SpellcastingType::SPELLS_KNOWN;
-        parseSize20Array(spellcasting_json, "spells_known", spells_known);
+        parse_size20_array(spellcasting_json, "spells_known", spells_known);
     } else if (has_preparation_caster) {
         spellcasting_type = SpellcastingType::PREPARATION;
         std::string preparation_spellcasting_type_str = spellcasting_json.at("preparation_caster").get<std::string>();
@@ -65,22 +65,22 @@ void dnd::SpellcastingParser::parseSpellcasting(const nlohmann::json& spellcasti
         throw attribute_missing(type, filepath, "spellcasting:spells_known or spellcasting:preparation_caster");
     }
 
-    parseSize20Array(spellcasting_json, "cantrips_known", cantrips_known);
-    parseSize20Array(spellcasting_json, "level1_slots", spell_slots[0]);
-    parseSize20Array(spellcasting_json, "level2_slots", spell_slots[1]);
-    parseSize20Array(spellcasting_json, "level3_slots", spell_slots[2]);
-    parseSize20Array(spellcasting_json, "level4_slots", spell_slots[3]);
-    parseSize20Array(spellcasting_json, "level5_slots", spell_slots[4]);
-    parseSize20Array(spellcasting_json, "level6_slots", spell_slots[5]);
-    parseSize20Array(spellcasting_json, "level7_slots", spell_slots[6]);
-    parseSize20Array(spellcasting_json, "level8_slots", spell_slots[7]);
-    parseSize20Array(spellcasting_json, "level9_slots", spell_slots[8]);
+    parse_size20_array(spellcasting_json, "cantrips_known", cantrips_known);
+    parse_size20_array(spellcasting_json, "level1_slots", spell_slots[0]);
+    parse_size20_array(spellcasting_json, "level2_slots", spell_slots[1]);
+    parse_size20_array(spellcasting_json, "level3_slots", spell_slots[2]);
+    parse_size20_array(spellcasting_json, "level4_slots", spell_slots[3]);
+    parse_size20_array(spellcasting_json, "level5_slots", spell_slots[4]);
+    parse_size20_array(spellcasting_json, "level6_slots", spell_slots[5]);
+    parse_size20_array(spellcasting_json, "level7_slots", spell_slots[6]);
+    parse_size20_array(spellcasting_json, "level8_slots", spell_slots[7]);
+    parse_size20_array(spellcasting_json, "level9_slots", spell_slots[8]);
 
     // TODO: parse spell list
     DND_UNUSED(spells);
 }
 
-std::unique_ptr<dnd::Spellcasting> dnd::SpellcastingParser::retrieveSpellcasting() {
+std::unique_ptr<dnd::Spellcasting> dnd::SpellcastingParser::retrieve_spellcasting() {
     std::unique_ptr<dnd::Spellcasting> spellcasting_ptr;
     switch (spellcasting_type) {
         case SpellcastingType::PREPARATION:

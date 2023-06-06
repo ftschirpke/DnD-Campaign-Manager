@@ -29,22 +29,22 @@ void dnd::SpellCardBuilder::writeLatexFile() {
 }
 
 static void createHeader(dnd::LatexDocument& document) {
-    document.document_class.addBracketArgument("parskip");
-    document.usePackage("geometry");
-    document.usePackage("tcolorbox")->addBracketArgument("most");
+    document.document_class.add_bracket_argument("parskip");
+    document.use_package("geometry");
+    document.use_package("tcolorbox")->add_bracket_argument("most");
 
-    document.header.addCommand("pagenumbering", "gobble");
-    document.header.addCommand("geometry", "a4paper,left=3mm,right=3mm,top=3mm,headheight=0mm,headsep=0mm,bottom=3mm");
-    document.header.addCommand("makeatletter");
-    document.header.addCommand("newcommand");
-    document.header.addCommand("notsotiny", "\\@setfontsize\\notsotiny{7.5}{8.5}");
-    document.header.addCommand("makeatother");
+    document.header.add_command("pagenumbering", "gobble");
+    document.header.add_command("geometry", "a4paper,left=3mm,right=3mm,top=3mm,headheight=0mm,headsep=0mm,bottom=3mm");
+    document.header.add_command("makeatletter");
+    document.header.add_command("newcommand");
+    document.header.add_command("notsotiny", "\\@setfontsize\\notsotiny{7.5}{8.5}");
+    document.header.add_command("makeatother");
 }
 
 static dnd::LatexScope* createCardPage(dnd::LatexDocument& document) {
     std::string colour = "white";
-    auto begin_end = document.body.addBeginEnd("tcbitemize");
-    begin_end.begin_command->addBracketArgument(
+    auto begin_end = document.body.add_begin_end("tcbitemize");
+    begin_end.begin_command->add_bracket_argument(
         "size=fbox,raster height=\\textheight,raster columns=3, raster equal skip=5mm,raster rows=3,enhanced,sharp "
         "corners,colback="
         + colour + "!10,colframe=" + colour + "!50!black,text fill"
@@ -53,44 +53,44 @@ static dnd::LatexScope* createCardPage(dnd::LatexDocument& document) {
 }
 
 static void createMinipage(dnd::LatexScope* scope, const std::string& name, const std::string& value) {
-    auto minipage = scope->addBeginEnd("minipage");
-    minipage.begin_command->addBraceArgument("0.49\\textwidth");
-    minipage.scope->addCommand("centering");
-    minipage.scope->addCommand("footnotesize");
-    minipage.scope->addScope()->addText(name)->addModifier("scshape");
-    minipage.scope->addLineBreak();
-    minipage.scope->addText(value)->addModifier("scriptsize");
+    auto minipage = scope->add_begin_end("minipage");
+    minipage.begin_command->add_brace_argument("0.49\\textwidth");
+    minipage.scope->add_command("centering");
+    minipage.scope->add_command("footnotesize");
+    minipage.scope->add_scope()->add_text(name)->add_modifier("scshape");
+    minipage.scope->add_line_break();
+    minipage.scope->add_text(value)->add_modifier("scriptsize");
 }
 
 static dnd::LatexText* createCardHeader(dnd::LatexScope* scope, const dnd::Spell* spell, int counter) {
-    scope->addCommand("tcbitem");
-    scope->addCommand("vspace", "1mm");
-    dnd::LatexScope* center_scope = scope->addBeginEnd("center").scope;
-    center_scope->addCommand("MakeUppercase");
-    dnd::LatexScope* sub_scope = center_scope->addScope();
-    sub_scope->addCommand("textbf");
-    dnd::LatexText* title = sub_scope->addScope()->addText(spell->name + " (" + std::to_string(counter) + ')');
-    scope->addCommand("vspace", "-3mm");
+    scope->add_command("tcbitem");
+    scope->add_command("vspace", "1mm");
+    dnd::LatexScope* center_scope = scope->add_begin_end("center").scope;
+    center_scope->add_command("MakeUppercase");
+    dnd::LatexScope* sub_scope = center_scope->add_scope();
+    sub_scope->add_command("textbf");
+    dnd::LatexText* title = sub_scope->add_scope()->add_text(spell->name + " (" + std::to_string(counter) + ')');
+    scope->add_command("vspace", "-3mm");
     createMinipage(scope, "Casting Time", spell->casting_time);
     createMinipage(scope, "Range", spell->range);
-    scope->addLineBreak("4pt");
+    scope->add_line_break("4pt");
     createMinipage(scope, "Components", spell->components.short_str());
     createMinipage(scope, "Duration", spell->duration);
-    scope->addLineBreak("8pt");
+    scope->add_line_break("8pt");
     if (spell->components.material && !spell->components.materials_needed.empty()) {
-        scope->addCommand("vspace", "-8mm");
-        scope->addBeginEnd("center")
-            .scope->addText('(' + spell->components.materials_needed + ')')
-            ->addModifier("scriptsize");
-        scope->addCommand("vspace", "-2mm");
+        scope->add_command("vspace", "-8mm");
+        scope->add_begin_end("center")
+            .scope->add_text('(' + spell->components.materials_needed + ')')
+            ->add_modifier("scriptsize");
+        scope->add_command("vspace", "-2mm");
     }
-    scope->addCommand("scriptsize");
+    scope->add_command("scriptsize");
     return title;
 }
 
 static void createCardFooter(dnd::LatexScope* scope, const dnd::Spell* spell) {
-    scope->addCommand("vfill");
-    scope->addText(spell->type.str())->addModifier("scriptsize")->addModifier("centering");
+    scope->add_command("vfill");
+    scope->add_text(spell->type.str())->add_modifier("scriptsize")->add_modifier("centering");
 }
 
 static int createSpellCards(dnd::LatexScope* scope, const dnd::Spell* spell) {
@@ -108,10 +108,10 @@ static int createSpellCards(dnd::LatexScope* scope, const dnd::Spell* spell) {
                 characters_written = 0;
             }
 
-            dnd::LatexText* text = scope->addText(spell->description.substr(start, end - start));
+            dnd::LatexText* text = scope->add_text(spell->description.substr(start, end - start));
             characters_written += end - start;
             if (end + 1 < spell->description.size() && spell->description[end + 1] == '\n') {
-                text->addLineBreak();
+                text->add_line_break();
                 end++;
             }
             start = ++end;
@@ -123,11 +123,11 @@ static int createSpellCards(dnd::LatexScope* scope, const dnd::Spell* spell) {
         createCardFooter(scope, spell);
         createCardHeader(scope, spell, ++counter);
     }
-    scope->addText(spell->description.substr(start, end - start));
+    scope->add_text(spell->description.substr(start, end - start));
     createCardFooter(scope, spell);
 
     if (counter == 1) {
-        first_title->setText(spell->name);
+        first_title->set_text(spell->name);
     }
     return counter;
 }

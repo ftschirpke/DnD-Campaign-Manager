@@ -58,11 +58,11 @@ void dnd::Character::determine_state() {
 
     state.reset(get_constants(), get_initial_attribute_values());
 
-    state.addFeatureHolder(this);
-    state.addFeatureHolder(class_ptr);
-    state.addFeatureHolder(subclass_ptr);
-    state.addFeatureHolder(race_ptr);
-    state.addFeatureHolder(subrace_ptr);
+    state.add_feature_holder(this);
+    state.add_feature_holder(class_ptr);
+    state.add_feature_holder(subclass_ptr);
+    state.add_feature_holder(race_ptr);
+    state.add_feature_holder(subrace_ptr);
 
     state.calculate();
 }

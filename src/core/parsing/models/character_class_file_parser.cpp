@@ -36,7 +36,7 @@ void dnd::CharacterClassFileParser::parse() {
     determine_subclass_level(features_parser.get_features());
 
     if (json_to_parse.contains("spellcasting")) {
-        spellcasting_parser.parseSpellcasting(json_to_parse.at("spellcasting"));
+        spellcasting_parser.parse_spellcasting(json_to_parse.at("spellcasting"));
     }
 }
 
