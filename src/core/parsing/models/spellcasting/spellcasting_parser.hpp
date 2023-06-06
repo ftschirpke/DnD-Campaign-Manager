@@ -36,7 +36,7 @@ public:
      * @param spells the already-parsed spells
      */
     SpellcastingParser(
-        ParsingType type, const std::filesystem::path& filepath, const StoringContentLibrary<const Spell>& spells
+        ParsingType type, const std::filesystem::path& filepath, const StorageContentLibrary<const Spell>& spells
     ) noexcept;
     /**
      * @brief Parses the spellcasting feature from a given JSON
@@ -64,7 +64,7 @@ private:
     void parseSize20Array(const nlohmann::json& json_to_parse, const char* attribute_name, std::array<int, 20>& output);
 
     // the already-parsed spells to look up spell lists in
-    const StoringContentLibrary<const Spell>& spells;
+    const StorageContentLibrary<const Spell>& spells;
     // the parsed spellcasting ability
     std::string ability;
     // the parsed ritual_casting value for the spellcasting
@@ -84,7 +84,7 @@ private:
 };
 
 inline SpellcastingParser::SpellcastingParser(
-    ParsingType type, const std::filesystem::path& filepath, const StoringContentLibrary<const Spell>& spells
+    ParsingType type, const std::filesystem::path& filepath, const StorageContentLibrary<const Spell>& spells
 ) noexcept
     : Subparser(type, filepath), spells(spells) {}
 

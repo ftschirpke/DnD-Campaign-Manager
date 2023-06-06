@@ -33,8 +33,8 @@ public:
      * @param spells the already-parsed spells
      */
     CharacterClassFileParser(
-        const std::filesystem::path& filepath, StoringContentLibrary<const CharacterClass>& classes,
-        const Groups& groups, const StoringContentLibrary<const Spell>& spells
+        const std::filesystem::path& filepath, StorageContentLibrary<const CharacterClass>& classes,
+        const Groups& groups, const StorageContentLibrary<const Spell>& spells
     ) noexcept;
     /**
      * @brief Parses JSON file containing a class
@@ -76,7 +76,7 @@ private:
     // the subclass level of the parsed class
     int subclass_level;
     // the already-parsed classes to add the parsed class to
-    StoringContentLibrary<const CharacterClass>& classes;
+    StorageContentLibrary<const CharacterClass>& classes;
     // a subparser used for parsing the class' features
     FeaturesParser features_parser;
     // a subparser used for parsing the subclass' spellcasting feature if it exists
@@ -84,8 +84,8 @@ private:
 };
 
 inline CharacterClassFileParser::CharacterClassFileParser(
-    const std::filesystem::path& filepath, StoringContentLibrary<const CharacterClass>& classes, const Groups& groups,
-    const StoringContentLibrary<const Spell>& spells
+    const std::filesystem::path& filepath, StorageContentLibrary<const CharacterClass>& classes, const Groups& groups,
+    const StorageContentLibrary<const Spell>& spells
 ) noexcept
     : ContentFileParser(filepath), classes(classes), features_parser(type, filepath, groups),
       spellcasting_parser(type, filepath, spells) {}

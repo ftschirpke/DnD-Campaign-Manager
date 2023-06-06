@@ -13,7 +13,7 @@
 void add_features_of_feature_holder(
     dnd::ReferencingContentLibrary<const dnd::Feature>& features_library, const dnd::FeatureHolder* feature_holder
 ) {
-    for (const auto& feature : feature_holder->features) {
+    for (const dnd::Feature& feature : feature_holder->features) {
         features_library.add(feature.name, &feature);
     }
 }
@@ -44,9 +44,9 @@ void dnd::ContentHolder::finished_parsing() {
     }
 }
 
-std::string dnd::ContentHolder::printStatus() const {
+std::string dnd::ContentHolder::status() const {
     std::stringstream sstr;
-    sstr << groups.printStatus();
+    sstr << groups.status();
     sstr << "=== Items ===\n";
     sstr << "items parsed: " << items.size() << '\n';
     sstr << "=== Spells ===\n";

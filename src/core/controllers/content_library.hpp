@@ -17,19 +17,20 @@
 
 #include <core/controllers/searching/trie.hpp>
 #include <core/models/content_piece.hpp>
+#include <core/utils/string_manipulation.hpp>
 
 namespace dnd {
 
 template <typename TrieT, typename DataT>
-concept validContentLibraryTypes = ContentPieceType<TrieT>
-                                   && std::is_same_v<TrieT, typename std::remove_pointer<DataT>::type>;
+concept ContentLibraryTypes = ContentPieceType<TrieT>
+                              && std::is_same_v<TrieT, typename std::remove_pointer<DataT>::type>;
 /**
  * @brief A library of content pieces
  * @tparam TrieT the trie type to use for searching
  * @tparam DataT the data type to use for retrieving content pieces
  */
 template <typename TrieT, typename DataT>
-requires validContentLibraryTypes<TrieT, DataT>
+requires ContentLibraryTypes<TrieT, DataT>
 class ContentLibrary {
 public:
     /**
@@ -88,7 +89,7 @@ public:
      * @brief Create a content piece inplace if no piece of content with the same name exists
      * @tparam ...Args the types the constructor for the piece of content allows
      * @param name the name of the piece of content
-     * @param ...constructor_args the constructor arguments to create the piece of content
+     * @param ...constructor_args additional constructor arguments to create the piece of content
      * @return true, if piece was created and added, false if name already exists
      */
     template <
@@ -116,7 +117,7 @@ protected:
  * @tparam T the type of the content pieces being stored
  */
 template <typename T>
-using StoringContentLibrary = ContentLibrary<T, T>;
+using StorageContentLibrary = ContentLibrary<T, T>;
 
 /**
  * @brief A content library that stores pointers to the content pieces, which are stored elsewhere.
@@ -127,43 +128,43 @@ using ReferencingContentLibrary = ContentLibrary<T, T*>;
 
 
 template <typename TrieT, typename DataT>
-requires validContentLibraryTypes<TrieT, DataT>
+requires ContentLibraryTypes<TrieT, DataT>
 inline bool ContentLibrary<TrieT, DataT>::contains(const std::string& name) const {
     return data.contains(name);
 }
 
 template <typename TrieT, typename DataT>
-requires validContentLibraryTypes<TrieT, DataT>
+requires ContentLibraryTypes<TrieT, DataT>
 inline bool ContentLibrary<TrieT, DataT>::empty() const {
     return data.empty();
 }
 
 template <typename TrieT, typename DataT>
-requires validContentLibraryTypes<TrieT, DataT>
+requires ContentLibraryTypes<TrieT, DataT>
 inline size_t ContentLibrary<TrieT, DataT>::size() const {
     return data.size();
 }
 
 template <typename TrieT, typename DataT>
-requires validContentLibraryTypes<TrieT, DataT>
+requires ContentLibraryTypes<TrieT, DataT>
 inline DataT& ContentLibrary<TrieT, DataT>::get(const std::string& name) {
     return data.at(name);
 }
 
 template <typename TrieT, typename DataT>
-requires validContentLibraryTypes<TrieT, DataT>
+requires ContentLibraryTypes<TrieT, DataT>
 inline const DataT& ContentLibrary<TrieT, DataT>::get(const std::string& name) const {
     return data.at(name);
 }
 
 template <typename TrieT, typename DataT>
-requires validContentLibraryTypes<TrieT, DataT>
+requires ContentLibraryTypes<TrieT, DataT>
 inline std::unordered_set<TrieT*> ContentLibrary<TrieT, DataT>::prefix_get(const std::string& prefix) {
     return trie.search_prefix(prefix);
 }
 
 template <typename TrieT, typename DataT>
-requires validContentLibraryTypes<TrieT, DataT>
+requires ContentLibraryTypes<TrieT, DataT>
 inline std::vector<TrieT*> ContentLibrary<TrieT, DataT>::sorted_prefix_get(const std::string& prefix) {
     std::unordered_set<TrieT*> unsorted_result = prefix_get(prefix);
     std::vector<TrieT*> result(unsorted_result.begin(), unsorted_result.end());
@@ -172,14 +173,14 @@ inline std::vector<TrieT*> ContentLibrary<TrieT, DataT>::sorted_prefix_get(const
 }
 
 template <typename TrieT, typename DataT>
-requires validContentLibraryTypes<TrieT, DataT>
+requires ContentLibraryTypes<TrieT, DataT>
 inline const std::unordered_map<std::string, DataT>& ContentLibrary<TrieT, DataT>::get_all() const {
     return data;
 }
 
 template <typename TrieT, typename DataT>
-requires validContentLibraryTypes<TrieT, DataT>
-bool ContentLibrary<TrieT, DataT>::add(const std::string& name, DataT&& new_content_piece) {
+requires ContentLibraryTypes<TrieT, DataT>
+inline bool ContentLibrary<TrieT, DataT>::add(const std::string& name, DataT&& new_content_piece) {
     if (contains(name)) {
         return false;
     }
@@ -189,7 +190,7 @@ bool ContentLibrary<TrieT, DataT>::add(const std::string& name, DataT&& new_cont
 }
 
 template <typename TrieT, typename DataT>
-requires validContentLibraryTypes<TrieT, DataT>
+requires ContentLibraryTypes<TrieT, DataT>
 template <
     typename... Args,
     std::enable_if_t<std::is_constructible<DataT, std::string&, std::filesystem::path&, Args&&...>::value, int>>
@@ -199,7 +200,6 @@ bool ContentLibrary<TrieT, DataT>::create(
     if (contains(name)) {
         return false;
     }
-    // const std::string name_copy = name;
     data.emplace(
         std::piecewise_construct, std::forward_as_tuple(name),
         std::forward_as_tuple(name, source_file_path, std::move(constructor_args)...)
@@ -209,13 +209,10 @@ bool ContentLibrary<TrieT, DataT>::create(
 }
 
 template <typename TrieT, typename DataT>
-requires validContentLibraryTypes<TrieT, DataT>
+requires ContentLibraryTypes<TrieT, DataT>
 void ContentLibrary<TrieT, DataT>::save_in_trie(const std::string& name) {
     DataT& content_piece_ptr = data.at(name);
-
-    auto tolower = [](unsigned char c) { return static_cast<unsigned char>(std::tolower(c)); };
-    std::string lower_name = name;
-    std::transform(lower_name.begin(), lower_name.end(), lower_name.begin(), tolower);
+    std::string lower_name = lower_string_copy(name);
 
     trie.insert(lower_name, content_piece_ptr);
     for (size_t i = 0; i < lower_name.size(); ++i) {
@@ -227,7 +224,7 @@ void ContentLibrary<TrieT, DataT>::save_in_trie(const std::string& name) {
 }
 
 template <typename TrieT, typename DataT>
-requires validContentLibraryTypes<TrieT, DataT>
+requires ContentLibraryTypes<TrieT, DataT>
 const TrieNode<TrieT>* ContentLibrary<TrieT, DataT>::get_trie_root() const {
     return trie.get_root();
 }

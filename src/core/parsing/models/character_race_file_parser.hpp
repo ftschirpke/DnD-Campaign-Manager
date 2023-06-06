@@ -27,7 +27,7 @@ public:
      * @param groups the already-parsed groups
      */
     CharacterRaceFileParser(
-        const std::filesystem::path& filepath, StoringContentLibrary<const CharacterRace>& races, const Groups& groups
+        const std::filesystem::path& filepath, StorageContentLibrary<const CharacterRace>& races, const Groups& groups
     ) noexcept;
     /**
      * @brief Parses JSON file containing a race
@@ -58,13 +58,13 @@ private:
     // boolean for whether the parsed race has subraces
     bool has_subraces;
     // the already-parsed races to add the parsed race to
-    StoringContentLibrary<const CharacterRace>& races;
+    StorageContentLibrary<const CharacterRace>& races;
     // a subparser used for parsing the race's features
     FeaturesParser features_parser;
 };
 
 inline CharacterRaceFileParser::CharacterRaceFileParser(
-    const std::filesystem::path& filepath, StoringContentLibrary<const CharacterRace>& races, const Groups& groups
+    const std::filesystem::path& filepath, StorageContentLibrary<const CharacterRace>& races, const Groups& groups
 ) noexcept
     : ContentFileParser(filepath), races(races), features_parser(type, filepath, groups) {}
 
