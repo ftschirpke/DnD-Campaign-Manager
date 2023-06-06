@@ -49,12 +49,12 @@ public:
     /**
      * @brief Saves the parsed subrace
      */
-    virtual void saveResult() override;
+    virtual void save_result() override;
     /**
      * @brief Returns the type of content that this parser parses - subraces
      * @return the type of content that this parser parses - subraces
      */
-    virtual constexpr ParsingType getType() const override { return type; };
+    virtual constexpr ParsingType get_type() const override { return type; };
 private:
     // the type of content that this parser parses - subraces
     static constexpr ParsingType type = ParsingType::SUBRACE;

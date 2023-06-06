@@ -64,12 +64,12 @@ public:
     /**
      * @brief Saves the parsed character
      */
-    virtual void saveResult() override;
+    virtual void save_result() override;
     /**
      * @brief Returns the type of content that this parser parses - characters
      * @return the type of content that this parser parses - characters
      */
-    virtual constexpr ParsingType getType() const override { return type; };
+    virtual constexpr ParsingType get_type() const override { return type; };
 protected:
     /**
      * @brief Parse the character decision for a choice required by a particular feature-like object
@@ -79,7 +79,7 @@ protected:
      * @throws nlohmann::json::out_of_range if any required attribute does not exist
      * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
-    void parseCharacterDecisions(const std::string& feature_name, const nlohmann::json& feature_decisions_json);
+    void parse_character_decisions(const std::string& feature_name, const nlohmann::json& feature_decisions_json);
 private:
     /**
      * @brief Parses the class, race, subclass, and subrace of the character
@@ -87,7 +87,7 @@ private:
      * @throws nlohmann::json::out_of_range if any required attribute does not exist
      * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
-    void parseClassAndRace();
+    void parse_class_and_race();
     /**
      * @brief Parses the level and XP values of the character
      * And if only one of them was provided the other value is determined from the first
@@ -95,7 +95,7 @@ private:
      * @throws nlohmann::json::out_of_range if any required attribute does not exist
      * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
-    void parseLevelAndXP();
+    void parse_level_and_xp();
 
     // the type of content that this parser parses - characters
     static constexpr ParsingType type = ParsingType::CHARACTER;

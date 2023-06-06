@@ -20,7 +20,7 @@ void add_features_of_feature_holder(
 
 void dnd::ContentHolder::finished_parsing() {
     for (const auto& [_, character] : characters.get_all()) {
-        characters.get(character.name).determineState();
+        characters.get(character.name).determine_state();
         add_features_of_feature_holder(features, &character);
     }
     for (const auto& [_, character_class] : character_classes.get_all()) {

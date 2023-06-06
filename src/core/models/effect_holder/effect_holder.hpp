@@ -38,7 +38,7 @@ public:
      * @return "true" if the effect holder is active for a character with these attributes and constants,
      * "false" otherwise
      */
-    bool isActive(
+    bool is_active(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const;
 

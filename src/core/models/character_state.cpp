@@ -22,7 +22,7 @@ void dnd::CharacterState::applyAbilityScoreEffects() {
             if (effect_holder_ptr->ability_score_effects.contains(effect_time)) {
                 const auto& ability_effects = effect_holder_ptr->ability_score_effects.at(effect_time);
                 for (auto effect_it = ability_effects.cbegin(); effect_it != ability_effects.cend(); ++effect_it) {
-                    (*effect_it)->applyTo(attributes, constants);
+                    (*effect_it)->apply_to(attributes, constants);
                 }
             }
         }
@@ -39,7 +39,7 @@ void dnd::CharacterState::applyNormalEffects() {
             if (effect_holder_ptr->normal_effects.contains(effect_time)) {
                 const auto& ability_effects = effect_holder_ptr->normal_effects.at(effect_time);
                 for (auto effect_it = ability_effects.cbegin(); effect_it != ability_effects.cend(); ++effect_it) {
-                    (*effect_it)->applyTo(attributes, constants);
+                    (*effect_it)->apply_to(attributes, constants);
                 }
             }
         }
@@ -75,7 +75,7 @@ void dnd::CharacterState::addFeatureHolder(const FeatureHolder* const feature_ho
 }
 
 bool dnd::CharacterState::addEffectHolder(const dnd::EffectHolder& effect_holder) {
-    if (!effect_holder.isActive(attributes, constants)) {
+    if (!effect_holder.is_active(attributes, constants)) {
         return false;
     }
 
@@ -85,7 +85,7 @@ bool dnd::CharacterState::addEffectHolder(const dnd::EffectHolder& effect_holder
 }
 
 bool dnd::CharacterState::addEffectHolderWithChoices(const dnd::EffectHolderWithChoices& eh_with_choice) {
-    if (!eh_with_choice.isActive(attributes, constants)) {
+    if (!eh_with_choice.is_active(attributes, constants)) {
         return false;
     }
 

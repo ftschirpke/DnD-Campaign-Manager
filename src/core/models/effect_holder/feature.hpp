@@ -34,7 +34,7 @@ public:
      * @return "true" if the feature is always active for a character of that level i.e there are no other conditions,
      * "false" otherwise
      */
-    bool isActiveForLevel(int level) const;
+    bool is_active_for_level(int level) const;
     /**
      * @brief Accepts a visitor
      * @param visitor pointer to the visitor

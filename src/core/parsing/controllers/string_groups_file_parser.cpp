@@ -73,7 +73,7 @@ bool dnd::StringGroupsFileParser::validate() const {
     return valid;
 }
 
-void dnd::StringGroupsFileParser::saveResult() {
+void dnd::StringGroupsFileParser::save_result() {
     for (auto& [group_name, group_members] : parsed_data) {
         groups.add(std::move(group_name), std::move(group_members));
     }

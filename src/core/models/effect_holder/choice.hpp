@@ -30,7 +30,7 @@ public:
      * @param decision_str the value of the decision
      * @return "true" if the chosen value is valid, "false" otherwise
      */
-    virtual bool isValidDecision(const std::string& decision_str) const = 0;
+    virtual bool is_valid_decision(const std::string& decision_str) const = 0;
 
     // the amount of values that have to be chosen
     const int amount;
@@ -55,7 +55,7 @@ public:
      * @param decision_str the value of the decision
      * @return "true" if the chosen value is valid, "false" otherwise
      */
-    virtual bool isValidDecision(const std::string& decision_str) const;
+    virtual bool is_valid_decision(const std::string& decision_str) const;
 
     // the selection of fixed values the character has to choose out of
     std::vector<std::string> selection;
@@ -81,7 +81,7 @@ public:
      * @param decision_str the value of the decision
      * @return "true" if the chosen value is valid, "false" otherwise
      */
-    virtual bool isValidDecision(const std::string& decision_str) const;
+    virtual bool is_valid_decision(const std::string& decision_str) const;
 
     // pointers to the groups the character can choose out of
     std::vector<const std::unordered_map<std::string, Choosable>*> group_values;
@@ -108,7 +108,7 @@ public:
      * @param decision_str the value of the decision
      * @return "true" if the chosen value is valid, "false" otherwise
      */
-    virtual bool isValidDecision(const std::string& decision_str) const;
+    virtual bool is_valid_decision(const std::string& decision_str) const;
 
     // pointers to the groups the character can choose out of
     std::vector<const std::unordered_set<std::string>*> group_values;

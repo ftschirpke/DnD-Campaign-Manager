@@ -20,14 +20,15 @@ class TestEffectHolderParser : public dnd::EffectHolderParser {
 public:
     TestEffectHolderParser() noexcept
         : dnd::EffectHolderParser(dnd::ParsingType::CHARACTER, "testing", dnd::Groups()) {}
-    void parseAndAddEffectForTesting(const std::string& effect_str, dnd::EffectHolder& effect_holder) const {
-        dnd::EffectHolderParser::parseAndAddEffect(effect_str, &effect_holder);
+    void parse_and_add_effect_for_testing(const std::string& effect_str, dnd::EffectHolder& effect_holder) const {
+        dnd::EffectHolderParser::parse_and_add_effect(effect_str, &effect_holder);
     }
-    void parseAndAddActivationForTesting(const std::string& activation_str, dnd::EffectHolder& effect_holder) const {
-        dnd::EffectHolderParser::parseAndAddActivation(activation_str, &effect_holder);
+    void parse_and_add_activation_for_testing(const std::string& activation_str, dnd::EffectHolder& effect_holder)
+        const {
+        dnd::EffectHolderParser::parse_and_add_activation(activation_str, &effect_holder);
     }
-    dnd::EffectHolder createEffectHolderForTesting(const nlohmann::json& effect_holder_json) const {
-        return createEffectHolder(effect_holder_json);
+    dnd::EffectHolder create_effect_holder_for_testing(const nlohmann::json& effect_holder_json) const {
+        return create_effect_holder(effect_holder_json);
     }
 };
 
@@ -35,42 +36,42 @@ TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse invalid effects") {
     TestEffectHolderParser parser;
     dnd::EffectHolder eh;
     SECTION("wrong format or order") {
-        REQUIRE_THROWS(parser.parseAndAddEffectForTesting("hello", eh));
-        REQUIRE_THROWS(parser.parseAndAddEffectForTesting("", eh));
-        REQUIRE_THROWS(parser.parseAndAddEffectForTesting("CON,normal,add,2", eh));
-        REQUIRE_THROWS(parser.parseAndAddEffectForTesting("WIS.early.mult.-2", eh));
-        REQUIRE_THROWS(parser.parseAndAddEffectForTesting("CHA|latest|div|4.5", eh));
-        REQUIRE_THROWS(parser.parseAndAddEffectForTesting("earliest set STRMAX 22", eh));
-        REQUIRE_THROWS(parser.parseAndAddEffectForTesting("addConst MAXHP LEVEL late", eh));
-        REQUIRE_THROWS(parser.parseAndAddEffectForTesting("INT normal add other:PB", eh));
-        REQUIRE_THROWS(parser.parseAndAddEffectForTesting("CON addOther INTMOD", eh));
-        REQUIRE_THROWS(parser.parseAndAddEffectForTesting("early mult", eh));
-        REQUIRE_THROWS(parser.parseAndAddEffectForTesting("CHAlatestdivLEVEL", eh));
-        REQUIRE_THROWS(parser.parseAndAddEffectForTesting("INT", eh));
+        REQUIRE_THROWS(parser.parse_and_add_effect_for_testing("hello", eh));
+        REQUIRE_THROWS(parser.parse_and_add_effect_for_testing("", eh));
+        REQUIRE_THROWS(parser.parse_and_add_effect_for_testing("CON,normal,add,2", eh));
+        REQUIRE_THROWS(parser.parse_and_add_effect_for_testing("WIS.early.mult.-2", eh));
+        REQUIRE_THROWS(parser.parse_and_add_effect_for_testing("CHA|latest|div|4.5", eh));
+        REQUIRE_THROWS(parser.parse_and_add_effect_for_testing("earliest set STRMAX 22", eh));
+        REQUIRE_THROWS(parser.parse_and_add_effect_for_testing("addConst MAXHP LEVEL late", eh));
+        REQUIRE_THROWS(parser.parse_and_add_effect_for_testing("INT normal add other:PB", eh));
+        REQUIRE_THROWS(parser.parse_and_add_effect_for_testing("CON addOther INTMOD", eh));
+        REQUIRE_THROWS(parser.parse_and_add_effect_for_testing("early mult", eh));
+        REQUIRE_THROWS(parser.parse_and_add_effect_for_testing("CHAlatestdivLEVEL", eh));
+        REQUIRE_THROWS(parser.parse_and_add_effect_for_testing("INT", eh));
     }
     SECTION("numeric operations without number") {
-        REQUIRE_THROWS(parser.parseAndAddEffectForTesting("CON normal add", eh));
-        REQUIRE_THROWS(parser.parseAndAddEffectForTesting("WIS early mult ", eh));
+        REQUIRE_THROWS(parser.parse_and_add_effect_for_testing("CON normal add", eh));
+        REQUIRE_THROWS(parser.parse_and_add_effect_for_testing("WIS early mult ", eh));
     }
     SECTION("numeric operations with identifier") {
-        REQUIRE_THROWS(parser.parseAndAddEffectForTesting("CON normal add INTMOD", eh));
-        REQUIRE_THROWS(parser.parseAndAddEffectForTesting("WIS early mult MAXHP", eh));
-        REQUIRE_THROWS(parser.parseAndAddEffectForTesting("CHA latest div LEVEL", eh));
+        REQUIRE_THROWS(parser.parse_and_add_effect_for_testing("CON normal add INTMOD", eh));
+        REQUIRE_THROWS(parser.parse_and_add_effect_for_testing("WIS early mult MAXHP", eh));
+        REQUIRE_THROWS(parser.parse_and_add_effect_for_testing("CHA latest div LEVEL", eh));
     }
     SECTION("numeric operations: maximum of 2 decimal places") {
-        REQUIRE_THROWS(parser.parseAndAddEffectForTesting("CON normal add -0.3333333333", eh));
-        REQUIRE_THROWS(parser.parseAndAddEffectForTesting("WIS early mult 1.324150", eh));
-        REQUIRE_THROWS(parser.parseAndAddEffectForTesting("INT late set -3.525", eh));
-        REQUIRE_THROWS(parser.parseAndAddEffectForTesting("CHA latest div 1.000", eh));
+        REQUIRE_THROWS(parser.parse_and_add_effect_for_testing("CON normal add -0.3333333333", eh));
+        REQUIRE_THROWS(parser.parse_and_add_effect_for_testing("WIS early mult 1.324150", eh));
+        REQUIRE_THROWS(parser.parse_and_add_effect_for_testing("INT late set -3.525", eh));
+        REQUIRE_THROWS(parser.parse_and_add_effect_for_testing("CHA latest div 1.000", eh));
     }
     SECTION("identifier operations without identifier") {
-        REQUIRE_THROWS(parser.parseAndAddEffectForTesting("CON normal addOther", eh));
-        REQUIRE_THROWS(parser.parseAndAddEffectForTesting("WIS early multConst ", eh));
+        REQUIRE_THROWS(parser.parse_and_add_effect_for_testing("CON normal addOther", eh));
+        REQUIRE_THROWS(parser.parse_and_add_effect_for_testing("WIS early multConst ", eh));
     }
     SECTION("identifier operations with number") {
-        REQUIRE_THROWS(parser.parseAndAddEffectForTesting("CON normal addOther 2", eh));
-        REQUIRE_THROWS(parser.parseAndAddEffectForTesting("WIS early multConst -2", eh));
-        REQUIRE_THROWS(parser.parseAndAddEffectForTesting("CHA latest divOther 4.5", eh));
+        REQUIRE_THROWS(parser.parse_and_add_effect_for_testing("CON normal addOther 2", eh));
+        REQUIRE_THROWS(parser.parse_and_add_effect_for_testing("WIS early multConst -2", eh));
+        REQUIRE_THROWS(parser.parse_and_add_effect_for_testing("CHA latest divOther 4.5", eh));
     }
 }
 
@@ -85,20 +86,20 @@ TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse valid numeric effec
         {"INT", 1000},
     };
     SECTION("add") {
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP normal add 2", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("STR earliest add 1.25", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("CON latest add -0.7", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("INT early add -3", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP normal add 2", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("STR earliest add 1.25", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("CON latest add -0.7", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("INT early add -3", eh));
         REQUIRE(eh.ability_score_effects.size() == 3);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLY).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(eh.normal_effects.size() == 1);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply_to(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 1200},
             {"STR", 1125},
@@ -110,20 +111,20 @@ TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse valid numeric effec
         }
     }
     SECTION("mult") {
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP normal mult 2", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("STR earliest mult 1.25", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("CON latest mult -0.7", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("INT early mult -3", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP normal mult 2", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("STR earliest mult 1.25", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("CON latest mult -0.7", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("INT early mult -3", eh));
         REQUIRE(eh.ability_score_effects.size() == 3);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLY).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(eh.normal_effects.size() == 1);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply_to(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 2000},
             {"STR", 1250},
@@ -135,20 +136,20 @@ TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse valid numeric effec
         }
     }
     SECTION("div") {
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP normal div 2", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("STR earliest div 1.25", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("CON latest div -0.7", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("INT early div -3", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP normal div 2", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("STR earliest div 1.25", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("CON latest div -0.7", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("INT early div -3", eh));
         REQUIRE(eh.ability_score_effects.size() == 3);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLY).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(eh.normal_effects.size() == 1);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply_to(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 500},
             {"STR", 800},
@@ -160,20 +161,20 @@ TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse valid numeric effec
         }
     }
     SECTION("set") {
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP normal set 2", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("STR earliest set 1.25", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("CON latest set -0.7", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("INT early set -3", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP normal set 2", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("STR earliest set 1.25", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("CON latest set -0.7", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("INT early set -3", eh));
         REQUIRE(eh.ability_score_effects.size() == 3);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLY).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(eh.normal_effects.size() == 1);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply_to(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 200},
             {"STR", 125},
@@ -185,20 +186,20 @@ TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse valid numeric effec
         }
     }
     SECTION("max") {
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP normal max 20", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("STR earliest max 1.25", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("CON latest max -0.7", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("INT early max -3", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP normal max 20", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("STR earliest max 1.25", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("CON latest max -0.7", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("INT early max -3", eh));
         REQUIRE(eh.ability_score_effects.size() == 3);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLY).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(eh.normal_effects.size() == 1);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply_to(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 2000},
             {"STR", 1000},
@@ -210,20 +211,20 @@ TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse valid numeric effec
         }
     }
     SECTION("min") {
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP normal min 20", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("STR earliest min 1.25", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("CON latest min -0.7", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("INT early min -3", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP normal min 20", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("STR earliest min 1.25", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("CON latest min -0.7", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("INT early min -3", eh));
         REQUIRE(eh.ability_score_effects.size() == 3);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLY).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(eh.normal_effects.size() == 1);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply_to(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 1000},
             {"STR", 125},
@@ -245,20 +246,20 @@ TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse valid 'Other' ident
         {"MAXHP", 1000}, {"STR", 1000}, {"CON", 1000}, {"INT", 1000},
     };
     SECTION("addOther") {
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP normal addOther AC", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("STR earliest addOther DEX", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("CON latest addOther WIS", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("INT early addOther CHA", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP normal addOther AC", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("STR earliest addOther DEX", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("CON latest addOther WIS", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("INT early addOther CHA", eh));
         REQUIRE(eh.ability_score_effects.size() == 3);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLY).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(eh.normal_effects.size() == 1);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply_to(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"AC", 200},     {"DEX", 125},  {"WIS", -70}, {"CHA", -300},
             {"MAXHP", 1200}, {"STR", 1125}, {"CON", 930}, {"INT", 700},
@@ -268,20 +269,20 @@ TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse valid 'Other' ident
         }
     }
     SECTION("multOther") {
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP normal multOther AC", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("STR earliest multOther DEX", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("CON latest multOther WIS", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("INT early multOther CHA", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP normal multOther AC", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("STR earliest multOther DEX", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("CON latest multOther WIS", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("INT early multOther CHA", eh));
         REQUIRE(eh.ability_score_effects.size() == 3);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLY).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(eh.normal_effects.size() == 1);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply_to(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"AC", 200},     {"DEX", 125},  {"WIS", -70},  {"CHA", -300},
             {"MAXHP", 2000}, {"STR", 1250}, {"CON", -700}, {"INT", -3000},
@@ -291,20 +292,20 @@ TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse valid 'Other' ident
         }
     }
     SECTION("divOther") {
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP normal divOther AC", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("STR earliest divOther DEX", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("CON latest divOther WIS", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("INT early divOther CHA", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP normal divOther AC", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("STR earliest divOther DEX", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("CON latest divOther WIS", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("INT early divOther CHA", eh));
         REQUIRE(eh.ability_score_effects.size() == 3);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLY).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(eh.normal_effects.size() == 1);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply_to(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"AC", 200},    {"DEX", 125}, {"WIS", -70},   {"CHA", -300},
             {"MAXHP", 500}, {"STR", 800}, {"CON", -1428}, {"INT", -333},
@@ -314,20 +315,20 @@ TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse valid 'Other' ident
         }
     }
     SECTION("setOther") {
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP normal setOther AC", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("STR earliest setOther DEX", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("CON latest setOther WIS", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("INT early setOther CHA", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP normal setOther AC", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("STR earliest setOther DEX", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("CON latest setOther WIS", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("INT early setOther CHA", eh));
         REQUIRE(eh.ability_score_effects.size() == 3);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLY).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(eh.normal_effects.size() == 1);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply_to(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"AC", 200},    {"DEX", 125}, {"WIS", -70}, {"CHA", -300},
             {"MAXHP", 200}, {"STR", 125}, {"CON", -70}, {"INT", -300},
@@ -338,20 +339,20 @@ TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse valid 'Other' ident
     }
     SECTION("maxOther") {
         attributes["AC"] = 2000;
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP normal maxOther AC", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("STR earliest maxOther DEX", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("CON latest maxOther WIS", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("INT early maxOther CHA", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP normal maxOther AC", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("STR earliest maxOther DEX", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("CON latest maxOther WIS", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("INT early maxOther CHA", eh));
         REQUIRE(eh.ability_score_effects.size() == 3);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLY).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(eh.normal_effects.size() == 1);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply_to(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"AC", 2000},    {"DEX", 125},  {"WIS", -70},  {"CHA", -300},
             {"MAXHP", 2000}, {"STR", 1000}, {"CON", 1000}, {"INT", 1000},
@@ -362,20 +363,20 @@ TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse valid 'Other' ident
     }
     SECTION("minOther") {
         attributes["AC"] = 2000;
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP normal minOther AC", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("STR earliest minOther DEX", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("CON latest minOther WIS", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("INT early minOther CHA", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP normal minOther AC", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("STR earliest minOther DEX", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("CON latest minOther WIS", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("INT early minOther CHA", eh));
         REQUIRE(eh.ability_score_effects.size() == 3);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLY).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(eh.normal_effects.size() == 1);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply_to(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"AC", 2000},    {"DEX", 125}, {"WIS", -70}, {"CHA", -300},
             {"MAXHP", 1000}, {"STR", 125}, {"CON", -70}, {"INT", -300},
@@ -402,20 +403,20 @@ TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse valid 'Const' ident
         {"INT", 1000},
     };
     SECTION("addConst") {
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP normal addConst LEVEL", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("STR earliest addConst XP", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("CON latest addConst CONST1", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("INT early addConst CONST2", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP normal addConst LEVEL", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("STR earliest addConst XP", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("CON latest addConst CONST1", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("INT early addConst CONST2", eh));
         REQUIRE(eh.ability_score_effects.size() == 3);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLY).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(eh.normal_effects.size() == 1);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply_to(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 1200},
             {"STR", 1125},
@@ -427,20 +428,20 @@ TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse valid 'Const' ident
         }
     }
     SECTION("multConst") {
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP normal multConst LEVEL", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("STR earliest multConst XP", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("CON latest multConst CONST1", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("INT early multConst CONST2", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP normal multConst LEVEL", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("STR earliest multConst XP", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("CON latest multConst CONST1", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("INT early multConst CONST2", eh));
         REQUIRE(eh.ability_score_effects.size() == 3);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLY).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(eh.normal_effects.size() == 1);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply_to(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 2000},
             {"STR", 1250},
@@ -452,20 +453,20 @@ TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse valid 'Const' ident
         }
     }
     SECTION("divConst") {
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP normal divConst LEVEL", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("STR earliest divConst XP", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("CON latest divConst CONST1", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("INT early divConst CONST2", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP normal divConst LEVEL", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("STR earliest divConst XP", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("CON latest divConst CONST1", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("INT early divConst CONST2", eh));
         REQUIRE(eh.ability_score_effects.size() == 3);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLY).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(eh.normal_effects.size() == 1);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply_to(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 500},
             {"STR", 800},
@@ -477,20 +478,20 @@ TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse valid 'Const' ident
         }
     }
     SECTION("setConst") {
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP normal setConst LEVEL", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("STR earliest setConst XP", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("CON latest setConst CONST1", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("INT early setConst CONST2", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP normal setConst LEVEL", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("STR earliest setConst XP", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("CON latest setConst CONST1", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("INT early setConst CONST2", eh));
         REQUIRE(eh.ability_score_effects.size() == 3);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLY).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::LATEST).size() == 1);
         REQUIRE(eh.normal_effects.size() == 1);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply_to(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 200},
             {"STR", 125},
@@ -510,10 +511,10 @@ TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse valid 'Const' ident
     };
 
     SECTION("maxConst") {
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP normal maxConst LEVEL", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("STR earliest maxConst XP", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("CON latest maxConst CONST1", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("INT early maxConst CONST2", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP normal maxConst LEVEL", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("STR earliest maxConst XP", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("CON latest maxConst CONST1", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("INT early maxConst CONST2", eh));
         REQUIRE(eh.ability_score_effects.size() == 3);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLY).size() == 1);
@@ -521,12 +522,13 @@ TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse valid 'Const' ident
         REQUIRE(eh.normal_effects.size() == 1);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
         REQUIRE_NOTHROW(
-            eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, max_min_constants)
+            eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply_to(attributes, max_min_constants)
         );
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, max_min_constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, max_min_constants)
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply_to(attributes, max_min_constants)
         );
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, max_min_constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply_to(attributes, max_min_constants)
+        );
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply_to(attributes, max_min_constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 2000},
             {"STR", 1000},
@@ -538,10 +540,10 @@ TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse valid 'Const' ident
         }
     }
     SECTION("minConst") {
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP normal minConst LEVEL", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("STR earliest minConst XP", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("CON latest minConst CONST1", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("INT early minConst CONST2", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP normal minConst LEVEL", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("STR earliest minConst XP", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("CON latest minConst CONST1", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("INT early minConst CONST2", eh));
         REQUIRE(eh.ability_score_effects.size() == 3);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLY).size() == 1);
@@ -549,12 +551,13 @@ TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse valid 'Const' ident
         REQUIRE(eh.normal_effects.size() == 1);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
         REQUIRE_NOTHROW(
-            eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, max_min_constants)
+            eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply_to(attributes, max_min_constants)
         );
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, max_min_constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, max_min_constants)
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply_to(attributes, max_min_constants)
         );
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, max_min_constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::LATEST)[0]->apply_to(attributes, max_min_constants)
+        );
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply_to(attributes, max_min_constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 1000},
             {"STR", 125},
@@ -583,12 +586,12 @@ TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse effect combinations
         {"INT", 1000},
     };
     SECTION("combination 1 (order of calculation)") {
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP earliest setConst CONST2", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP early div -4", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP normal add 2", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP late multOther STR", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP late mult -1", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP latest addConst LEVEL", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP earliest setConst CONST2", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP early div -4", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP normal add 2", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP late multOther STR", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP late mult -1", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP latest addConst LEVEL", eh));
         REQUIRE(eh.ability_score_effects.empty());
         REQUIRE(eh.normal_effects.size() == 5);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::EARLIEST).size() == 1);
@@ -596,12 +599,12 @@ TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse effect combinations
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::LATE).size() == 2);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::LATEST).size() == 1);
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::LATE)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::LATE)[1]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::EARLIEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::EARLY)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::LATE)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::LATE)[1]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::LATEST)[0]->apply_to(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", -2550},
             {"STR", 1000},
@@ -613,12 +616,12 @@ TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse effect combinations
         }
     }
     SECTION("combination 2") {
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("STR earliest setConst XP", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("STR early mult -2", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP early div 2", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP normal add 2", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP normal add 1", eh));
-        REQUIRE_NOTHROW(parser.parseAndAddEffectForTesting("MAXHP latest addOther STR", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("STR earliest setConst XP", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("STR early mult -2", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP early div 2", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP normal add 2", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP normal add 1", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_effect_for_testing("MAXHP latest addOther STR", eh));
         REQUIRE(eh.ability_score_effects.size() == 2);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLY).size() == 1);
@@ -626,12 +629,12 @@ TEST_CASE("dnd::EffectHolderParser::parseAndAddEffect: parse effect combinations
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::EARLY).size() == 1);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::NORMAL).size() == 2);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::LATEST).size() == 1);
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[1]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::EARLY)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[1]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::LATEST)[0]->apply_to(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 550},
             {"STR", -250},
@@ -648,20 +651,20 @@ TEST_CASE("dnd::EffectHolderParser::parseAndAddActivation: parse invalid activat
     TestEffectHolderParser parser;
     dnd::EffectHolder eh;
     SECTION("wrong format or order") {
-        REQUIRE_THROWS(parser.parseAndAddActivationForTesting("hello", eh));
-        REQUIRE_THROWS(parser.parseAndAddActivationForTesting("", eh));
-        REQUIRE_THROWS(parser.parseAndAddActivationForTesting("CLASS_LEVEL>=2", eh));
-        REQUIRE_THROWS(parser.parseAndAddActivationForTesting("LEVEL== 1", eh));
-        REQUIRE_THROWS(parser.parseAndAddActivationForTesting("ARMOR_ON <0", eh));
-        REQUIRE_THROWS(parser.parseAndAddActivationForTesting("== CLASS_LEVEL LEVEL", eh));
-        REQUIRE_THROWS(parser.parseAndAddActivationForTesting("LEVEL 1 ==", eh));
-        REQUIRE_THROWS(parser.parseAndAddActivationForTesting("CLASS_LEVEL 5", eh));
-        REQUIRE_THROWS(parser.parseAndAddActivationForTesting("LEVEL is CLASS_LEVEL", eh));
-        REQUIRE_THROWS(parser.parseAndAddActivationForTesting("INT 12 greater", eh));
-        REQUIRE_THROWS(parser.parseAndAddActivationForTesting("ARMOR_ON 1 ==", eh));
-        REQUIRE_THROWS(parser.parseAndAddActivationForTesting("ARMOR_ON", eh));
-        REQUIRE_THROWS(parser.parseAndAddActivationForTesting("true == ARMOR_ON", eh));
-        REQUIRE_THROWS(parser.parseAndAddActivationForTesting("13 <= INT", eh));
+        REQUIRE_THROWS(parser.parse_and_add_activation_for_testing("hello", eh));
+        REQUIRE_THROWS(parser.parse_and_add_activation_for_testing("", eh));
+        REQUIRE_THROWS(parser.parse_and_add_activation_for_testing("CLASS_LEVEL>=2", eh));
+        REQUIRE_THROWS(parser.parse_and_add_activation_for_testing("LEVEL== 1", eh));
+        REQUIRE_THROWS(parser.parse_and_add_activation_for_testing("ARMOR_ON <0", eh));
+        REQUIRE_THROWS(parser.parse_and_add_activation_for_testing("== CLASS_LEVEL LEVEL", eh));
+        REQUIRE_THROWS(parser.parse_and_add_activation_for_testing("LEVEL 1 ==", eh));
+        REQUIRE_THROWS(parser.parse_and_add_activation_for_testing("CLASS_LEVEL 5", eh));
+        REQUIRE_THROWS(parser.parse_and_add_activation_for_testing("LEVEL is CLASS_LEVEL", eh));
+        REQUIRE_THROWS(parser.parse_and_add_activation_for_testing("INT 12 greater", eh));
+        REQUIRE_THROWS(parser.parse_and_add_activation_for_testing("ARMOR_ON 1 ==", eh));
+        REQUIRE_THROWS(parser.parse_and_add_activation_for_testing("ARMOR_ON", eh));
+        REQUIRE_THROWS(parser.parse_and_add_activation_for_testing("true == ARMOR_ON", eh));
+        REQUIRE_THROWS(parser.parse_and_add_activation_for_testing("13 <= INT", eh));
     }
 }
 
@@ -673,122 +676,122 @@ TEST_CASE("dnd::EffectHolderParser::parseAndAddActivation: parse valid numeric a
     const std::unordered_map<std::string, int> constants = {{"LEVEL", 500}, {"CLASS_LEVEL", 500}, {"ARMOR_ON", 1}};
     size_t idx = 0;
     SECTION("==") {
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("LEVEL == 5", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("LEVEL == 5", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("CLASS_LEVEL == 3", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("CLASS_LEVEL == 3", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("ARMOR_ON == true", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("ARMOR_ON == true", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("ARMOR_ON == false", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("ARMOR_ON == false", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("CON == 13", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("CON == 13", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("STR == 18", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("STR == 18", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx++)->check(attributes, constants));
     }
     SECTION("!=") {
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("CLASS_LEVEL != 3", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("CLASS_LEVEL != 3", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("LEVEL != 5", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("LEVEL != 5", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("ARMOR_ON != false", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("ARMOR_ON != false", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("ARMOR_ON != true", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("ARMOR_ON != true", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("STR != 18", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("STR != 18", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("CON != 13", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("CON != 13", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx++)->check(attributes, constants));
     }
     SECTION(">=") {
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("CLASS_LEVEL >= 3", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("CLASS_LEVEL >= 3", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("LEVEL >= 5", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("LEVEL >= 5", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("CLASS_LEVEL >= 10", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("CLASS_LEVEL >= 10", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("MAXHP >= 10", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("MAXHP >= 10", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("STR >= 16", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("STR >= 16", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("INT >= 10", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("INT >= 10", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx++)->check(attributes, constants));
     }
     SECTION("<=") {
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("CLASS_LEVEL <= 10", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("CLASS_LEVEL <= 10", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("LEVEL <= 5", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("LEVEL <= 5", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("CLASS_LEVEL <= 3", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("CLASS_LEVEL <= 3", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("STR <= 16", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("STR <= 16", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("INT <= 10", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("INT <= 10", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("MAXHP <= 10", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("MAXHP <= 10", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx++)->check(attributes, constants));
     }
     SECTION(">") {
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("CLASS_LEVEL > 3", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("CLASS_LEVEL > 3", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("LEVEL > 5", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("LEVEL > 5", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("CLASS_LEVEL > 10", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("CLASS_LEVEL > 10", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("MAXHP > 10", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("MAXHP > 10", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("STR > 16", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("STR > 16", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("INT > 10", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("INT > 10", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx++)->check(attributes, constants));
     }
     SECTION("<") {
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("CLASS_LEVEL < 10", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("CLASS_LEVEL < 10", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("LEVEL < 5", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("LEVEL < 5", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("CLASS_LEVEL < 3", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("CLASS_LEVEL < 3", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("INT < 10", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("INT < 10", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("STR < 16", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("STR < 16", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx++)->check(attributes, constants));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("MAXHP < 10", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("MAXHP < 10", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx++)->check(attributes, constants));
     }
@@ -804,19 +807,19 @@ TEST_CASE("dnd::EffectHolderParser::createActivation: parse valid identifier act
     const std::unordered_map<std::string, int> constants2 = {{"LEVEL", 1300}, {"CLASS_LEVEL", 1300}, {"ARMOR_ON", 0}};
     size_t idx = 0;
     SECTION("==") {
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("LEVEL == CLASS_LEVEL", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("LEVEL == CLASS_LEVEL", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx)->check(attributes1, constants1));
         REQUIRE(eh.activations.at(idx)->check(attributes1, constants2));
         REQUIRE(eh.activations.at(idx)->check(attributes2, constants1));
         REQUIRE(eh.activations.at(idx++)->check(attributes2, constants2));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("INT == LEVEL", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("INT == LEVEL", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx)->check(attributes1, constants1));
         REQUIRE(!eh.activations.at(idx)->check(attributes1, constants2));
         REQUIRE(!eh.activations.at(idx)->check(attributes2, constants1));
         REQUIRE(!eh.activations.at(idx++)->check(attributes2, constants2));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("CON == STR", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("CON == STR", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx)->check(attributes1, constants1));
         REQUIRE(!eh.activations.at(idx)->check(attributes1, constants2));
@@ -824,19 +827,19 @@ TEST_CASE("dnd::EffectHolderParser::createActivation: parse valid identifier act
         REQUIRE(!eh.activations.at(idx++)->check(attributes2, constants2));
     }
     SECTION("!=") {
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("LEVEL != CLASS_LEVEL", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("LEVEL != CLASS_LEVEL", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx)->check(attributes1, constants1));
         REQUIRE(!eh.activations.at(idx)->check(attributes1, constants2));
         REQUIRE(!eh.activations.at(idx)->check(attributes2, constants1));
         REQUIRE(!eh.activations.at(idx++)->check(attributes2, constants2));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("INT != LEVEL", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("INT != LEVEL", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx)->check(attributes1, constants1));
         REQUIRE(eh.activations.at(idx)->check(attributes1, constants2));
         REQUIRE(eh.activations.at(idx)->check(attributes2, constants1));
         REQUIRE(eh.activations.at(idx++)->check(attributes2, constants2));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("CON != STR", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("CON != STR", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx)->check(attributes1, constants1));
         REQUIRE(eh.activations.at(idx)->check(attributes1, constants2));
@@ -844,25 +847,25 @@ TEST_CASE("dnd::EffectHolderParser::createActivation: parse valid identifier act
         REQUIRE(eh.activations.at(idx++)->check(attributes2, constants2));
     }
     SECTION(">=") {
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("LEVEL >= CLASS_LEVEL", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("LEVEL >= CLASS_LEVEL", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx)->check(attributes1, constants1));
         REQUIRE(eh.activations.at(idx)->check(attributes1, constants2));
         REQUIRE(eh.activations.at(idx)->check(attributes2, constants1));
         REQUIRE(eh.activations.at(idx++)->check(attributes2, constants2));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("MAXHP >= INT", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("MAXHP >= INT", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx)->check(attributes1, constants1));
         REQUIRE(eh.activations.at(idx)->check(attributes1, constants2));
         REQUIRE(eh.activations.at(idx)->check(attributes2, constants1));
         REQUIRE(eh.activations.at(idx++)->check(attributes2, constants2));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("LEVEL >= CON", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("LEVEL >= CON", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx)->check(attributes1, constants1));
         REQUIRE(eh.activations.at(idx)->check(attributes1, constants2));
         REQUIRE(!eh.activations.at(idx)->check(attributes2, constants1));
         REQUIRE(eh.activations.at(idx++)->check(attributes2, constants2));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("ARMOR_ON >= LEVEL", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("ARMOR_ON >= LEVEL", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx)->check(attributes1, constants1));
         REQUIRE(!eh.activations.at(idx)->check(attributes1, constants2));
@@ -870,25 +873,25 @@ TEST_CASE("dnd::EffectHolderParser::createActivation: parse valid identifier act
         REQUIRE(!eh.activations.at(idx++)->check(attributes2, constants2));
     }
     SECTION("<=") {
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("LEVEL <= CLASS_LEVEL", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("LEVEL <= CLASS_LEVEL", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx)->check(attributes1, constants1));
         REQUIRE(eh.activations.at(idx)->check(attributes1, constants2));
         REQUIRE(eh.activations.at(idx)->check(attributes2, constants1));
         REQUIRE(eh.activations.at(idx++)->check(attributes2, constants2));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("MAXHP <= INT", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("MAXHP <= INT", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx)->check(attributes1, constants1));
         REQUIRE(!eh.activations.at(idx)->check(attributes1, constants2));
         REQUIRE(!eh.activations.at(idx)->check(attributes2, constants1));
         REQUIRE(!eh.activations.at(idx++)->check(attributes2, constants2));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("LEVEL <= CON", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("LEVEL <= CON", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx)->check(attributes1, constants1));
         REQUIRE(eh.activations.at(idx)->check(attributes1, constants2));
         REQUIRE(eh.activations.at(idx)->check(attributes2, constants1));
         REQUIRE(!eh.activations.at(idx++)->check(attributes2, constants2));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("ARMOR_ON <= LEVEL", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("ARMOR_ON <= LEVEL", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx)->check(attributes1, constants1));
         REQUIRE(eh.activations.at(idx)->check(attributes1, constants2));
@@ -896,25 +899,25 @@ TEST_CASE("dnd::EffectHolderParser::createActivation: parse valid identifier act
         REQUIRE(eh.activations.at(idx++)->check(attributes2, constants2));
     }
     SECTION(">") {
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("LEVEL > CLASS_LEVEL", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("LEVEL > CLASS_LEVEL", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx)->check(attributes1, constants1));
         REQUIRE(!eh.activations.at(idx)->check(attributes1, constants2));
         REQUIRE(!eh.activations.at(idx)->check(attributes2, constants1));
         REQUIRE(!eh.activations.at(idx++)->check(attributes2, constants2));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("MAXHP > INT", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("MAXHP > INT", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx)->check(attributes1, constants1));
         REQUIRE(eh.activations.at(idx)->check(attributes1, constants2));
         REQUIRE(eh.activations.at(idx)->check(attributes2, constants1));
         REQUIRE(eh.activations.at(idx++)->check(attributes2, constants2));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("LEVEL > CON", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("LEVEL > CON", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx)->check(attributes1, constants1));
         REQUIRE(!eh.activations.at(idx)->check(attributes1, constants2));
         REQUIRE(!eh.activations.at(idx)->check(attributes2, constants1));
         REQUIRE(eh.activations.at(idx++)->check(attributes2, constants2));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("ARMOR_ON > LEVEL", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("ARMOR_ON > LEVEL", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx)->check(attributes1, constants1));
         REQUIRE(!eh.activations.at(idx)->check(attributes1, constants2));
@@ -922,25 +925,25 @@ TEST_CASE("dnd::EffectHolderParser::createActivation: parse valid identifier act
         REQUIRE(!eh.activations.at(idx++)->check(attributes2, constants2));
     }
     SECTION("<") {
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("LEVEL < CLASS_LEVEL", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("LEVEL < CLASS_LEVEL", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx)->check(attributes1, constants1));
         REQUIRE(!eh.activations.at(idx)->check(attributes1, constants2));
         REQUIRE(!eh.activations.at(idx)->check(attributes2, constants1));
         REQUIRE(!eh.activations.at(idx++)->check(attributes2, constants2));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("MAXHP < INT", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("MAXHP < INT", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(!eh.activations.at(idx)->check(attributes1, constants1));
         REQUIRE(!eh.activations.at(idx)->check(attributes1, constants2));
         REQUIRE(!eh.activations.at(idx)->check(attributes2, constants1));
         REQUIRE(!eh.activations.at(idx++)->check(attributes2, constants2));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("LEVEL < CON", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("LEVEL < CON", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx)->check(attributes1, constants1));
         REQUIRE(!eh.activations.at(idx)->check(attributes1, constants2));
         REQUIRE(eh.activations.at(idx)->check(attributes2, constants1));
         REQUIRE(!eh.activations.at(idx++)->check(attributes2, constants2));
-        REQUIRE_NOTHROW(parser.parseAndAddActivationForTesting("ARMOR_ON < LEVEL", eh));
+        REQUIRE_NOTHROW(parser.parse_and_add_activation_for_testing("ARMOR_ON < LEVEL", eh));
         REQUIRE(eh.activations.size() == idx + 1);
         REQUIRE(eh.activations.at(idx)->check(attributes1, constants1));
         REQUIRE(eh.activations.at(idx)->check(attributes1, constants2));
@@ -971,7 +974,7 @@ TEST_CASE("dnd::EffectHolderParser::createFeature: parse valid effect holders") 
             {"description", description},
         };
         dnd::EffectHolder eh;
-        REQUIRE_NOTHROW(eh = parser.createEffectHolderForTesting(eh_json));
+        REQUIRE_NOTHROW(eh = parser.create_effect_holder_for_testing(eh_json));
         REQUIRE(eh.ability_score_effects.empty());
         REQUIRE(eh.normal_effects.empty());
     }
@@ -986,7 +989,7 @@ TEST_CASE("dnd::EffectHolderParser::createFeature: parse valid effect holders") 
             {"effects", effects_json},
         };
         dnd::EffectHolder eh;
-        REQUIRE_NOTHROW(eh = parser.createEffectHolderForTesting(eh_json));
+        REQUIRE_NOTHROW(eh = parser.create_effect_holder_for_testing(eh_json));
         REQUIRE(eh.ability_score_effects.empty());
         REQUIRE(eh.normal_effects.size() == 5);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::EARLIEST).size() == 1);
@@ -994,12 +997,12 @@ TEST_CASE("dnd::EffectHolderParser::createFeature: parse valid effect holders") 
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::NORMAL).size() == 1);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::LATE).size() == 2);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::LATEST).size() == 1);
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::LATE)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::LATE)[1]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::EARLIEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::EARLY)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::LATE)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::LATE)[1]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::LATEST)[0]->apply_to(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", -2550},
             {"STR", 1000},
@@ -1021,7 +1024,7 @@ TEST_CASE("dnd::EffectHolderParser::createFeature: parse valid effect holders") 
             {"effects", effects_json},
         };
         dnd::EffectHolder eh;
-        REQUIRE_NOTHROW(eh = parser.createEffectHolderForTesting(eh_json));
+        REQUIRE_NOTHROW(eh = parser.create_effect_holder_for_testing(eh_json));
         REQUIRE(eh.ability_score_effects.size() == 2);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST).size() == 1);
         REQUIRE(eh.ability_score_effects.at(dnd::EffectTime::EARLY).size() == 1);
@@ -1029,12 +1032,12 @@ TEST_CASE("dnd::EffectHolderParser::createFeature: parse valid effect holders") 
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::EARLY).size() == 1);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::NORMAL).size() == 2);
         REQUIRE(eh.normal_effects.at(dnd::EffectTime::LATEST).size() == 1);
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::EARLY)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[1]->applyTo(attributes, constants));
-        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::LATEST)[0]->applyTo(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLIEST)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.ability_score_effects.at(dnd::EffectTime::EARLY)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::EARLY)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[0]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::NORMAL)[1]->apply_to(attributes, constants));
+        REQUIRE_NOTHROW(eh.normal_effects.at(dnd::EffectTime::LATEST)[0]->apply_to(attributes, constants));
         const std::unordered_map<std::string, int> result = {
             {"MAXHP", 550},
             {"STR", -250},

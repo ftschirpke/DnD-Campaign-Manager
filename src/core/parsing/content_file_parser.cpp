@@ -8,7 +8,7 @@
 
 #include <nlohmann/json.hpp>
 
-bool dnd::ContentFileParser::openJSON() {
+bool dnd::ContentFileParser::open_json() {
     DND_MEASURE_FUNCTION();
 
     if (filepath.extension().string() != ".json") {

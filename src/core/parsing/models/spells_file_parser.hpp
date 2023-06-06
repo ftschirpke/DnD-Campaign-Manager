@@ -72,12 +72,12 @@ public:
     /**
      * @brief Saves the parsed spells
      */
-    virtual void saveResult() override;
+    virtual void save_result() override;
     /**
      * @brief Returns the type of content that this parser parses - spells
      * @return the type of content that this parser parses - spells
      */
-    virtual constexpr ParsingType getType() const override { return type; };
+    virtual constexpr ParsingType get_type() const override { return type; };
 protected:
     /**
      * @brief Parses a spell and saves its information
@@ -87,21 +87,21 @@ protected:
      * @throws nlohmann::json::out_of_range if any required attribute does not exist
      * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
-    void createSpell(std::string_view spell_name, const nlohmann::json& spell_json);
+    void create_spell(std::string_view spell_name, const nlohmann::json& spell_json);
     /**
      * @brief Parses and creates a spell type
      * @param spell_type_str the string to parse
      * @return the spell type parsed from the string
      * @throws attribute_type_error if spell_type_str does not define a valid spell type
      */
-    SpellType createSpellType(const std::string& spell_type_str) const;
+    SpellType create_spell_type(const std::string& spell_type_str) const;
     /**
      * @brief Parses and creates a spell components object
      * @param spell_components_str the string to parse
      * @return the spell components object parsed from the string
      * @throws attribute_type_error if spell_components_str does not define valid spell components
      */
-    SpellComponents createSpellComponents(const std::string& spell_components_str) const;
+    SpellComponents create_spell_components(const std::string& spell_components_str) const;
 private:
     // the type of content that this parser parses - spells
     static constexpr ParsingType type = ParsingType::SPELL;

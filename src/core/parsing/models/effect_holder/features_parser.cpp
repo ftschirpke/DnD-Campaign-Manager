@@ -14,7 +14,7 @@
 #include <core/parsing/parse_optionals.hpp>
 #include <core/parsing/parsing_exceptions.hpp>
 
-void dnd::FeaturesParser::parseFeatures(const nlohmann::ordered_json& features_json) {
+void dnd::FeaturesParser::parse_features(const nlohmann::ordered_json& features_json) {
     DND_MEASURE_FUNCTION();
 
     if (!features_json.is_object()) {
@@ -24,20 +24,20 @@ void dnd::FeaturesParser::parseFeatures(const nlohmann::ordered_json& features_j
     features.reserve(features_json.size());
 
     for (const auto& [feature_name, feature_json] : features_json.items()) {
-        features.emplace_back(createFeature(feature_name, feature_json));
+        features.emplace_back(create_feature(feature_name, feature_json));
     }
 }
 
-dnd::Feature dnd::FeaturesParser::createFeature(const std::string& feature_name, const nlohmann::json& feature_json)
+dnd::Feature dnd::FeaturesParser::create_feature(const std::string& feature_name, const nlohmann::json& feature_json)
     const {
     const std::string description = feature_json.at("description").get<std::string>();
 
     // TODO: change feature constructor?
     Feature feature(feature_name, filepath, description);
 
-    feature.main_part = effect_holder_parser.createEffectHolder(feature_json);
+    feature.main_part = effect_holder_parser.create_effect_holder(feature_json);
     if (feature_json.contains("choose")) {
-        feature.parts_with_choices.emplace_back(effect_holder_parser.createEffectHolderWithChoices(
+        feature.parts_with_choices.emplace_back(effect_holder_parser.create_effect_holder_with_choices(
             nlohmann::json::object({{"choose", feature_json.at("choose")}})
         ));
     }
@@ -53,14 +53,14 @@ dnd::Feature dnd::FeaturesParser::createFeature(const std::string& feature_name,
                 throw invalid_attribute(type, filepath, "multi", "cannot have empty entry");
             }
             if (part_json.contains("choose")) {
-                feature.parts_with_choices.emplace_back(effect_holder_parser.createEffectHolderWithChoices(part_json));
+                feature.parts_with_choices.emplace_back(effect_holder_parser.create_effect_holder_with_choices(part_json));
             } else {
-                feature.parts.emplace_back(effect_holder_parser.createEffectHolder(part_json));
+                feature.parts.emplace_back(effect_holder_parser.create_effect_holder(part_json));
             }
         }
     }
 
-    dnd::parseOptional(feature_json, "subclass", feature.subclass);
+    dnd::parse_optional(feature_json, "subclass", feature.subclass);
 
     return feature;
 }

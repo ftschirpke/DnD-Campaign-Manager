@@ -82,7 +82,7 @@ int dnd::launch(int argc, char** argv) {
         output->text("\n=== CHARACTER INITIALISATION ===\n");
         for (const auto& [name, _] : content.characters.get_all()) {
             output->formatted_text("# {}", name);
-            content.characters.get(name).determineState();
+            content.characters.get(name).determine_state();
             output->text("#\n\n");
         }
 

@@ -42,12 +42,12 @@ public:
     /**
      * @brief Saves the parsed group to the groups.
      */
-    virtual void saveResult() override;
+    virtual void save_result() override;
     /**
      * @brief Returns the type of content that this parser parses - choosable groups
      * @return the type of content that this parser parses - choosable groups
      */
-    virtual constexpr ParsingType getType() const override { return type; };
+    virtual constexpr ParsingType get_type() const override { return type; };
 private:
     /**
      * @brief Parse and create a choosable

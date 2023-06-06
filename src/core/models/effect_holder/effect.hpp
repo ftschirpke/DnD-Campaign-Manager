@@ -54,7 +54,7 @@ public:
      * @param attributes character attributes may be used for calculation and one of them will be changed
      * @param constants character constants may be used for calculation
      */
-    virtual void applyTo(
+    virtual void apply_to(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const = 0;
 
@@ -90,7 +90,7 @@ public:
      * @param attributes character attributes may be used for calculation and one of them will be changed
      * @param constants character constants may be used for calculation
      */
-    virtual void applyTo(
+    virtual void apply_to(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const override;
 
@@ -123,7 +123,7 @@ public:
      * @param attributes character attributes may be used for calculation and one of them will be changed
      * @param constants character constants may be used for calculation
      */
-    virtual void applyTo(
+    virtual void apply_to(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const override;
 
@@ -184,7 +184,7 @@ public:
      * @param constants character constants may be used for calculation
      * @throws std::out_of_range if the other attribute does not exist
      */
-    virtual void applyTo(
+    virtual void apply_to(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const override;
 };
@@ -213,7 +213,7 @@ public:
      * @param constants character constants may be used for calculation
      * @throws std::out_of_range if the constant does not exist
      */
-    virtual void applyTo(
+    virtual void apply_to(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const override;
 };
@@ -235,7 +235,7 @@ inline IntNumEffect::IntNumEffect(
     throw std::out_of_range("Integer Effect Operator \"" + op_name + "\" does not exist.");
 }
 
-inline void IntNumEffect::applyTo(
+inline void IntNumEffect::apply_to(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
     DND_UNUSED(constants);
@@ -255,7 +255,7 @@ inline FloatNumEffect::FloatNumEffect(
     throw std::out_of_range("Float Effect Operator \"" + op_name + "\" does not exist.");
 }
 
-inline void FloatNumEffect::applyTo(
+inline void FloatNumEffect::apply_to(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
     DND_UNUSED(constants);
@@ -282,7 +282,7 @@ inline OtherAttributeEffect::OtherAttributeEffect(
 )
     : IdentifierEffect(affected_attribute, op_name, time, other_attribute) {}
 
-inline void OtherAttributeEffect::applyTo(
+inline void OtherAttributeEffect::apply_to(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
     try {
@@ -300,7 +300,7 @@ inline ConstEffect::ConstEffect(
 )
     : IdentifierEffect(affected_attribute, op_name, time, constant) {}
 
-inline void ConstEffect::applyTo(
+inline void ConstEffect::apply_to(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
     try {

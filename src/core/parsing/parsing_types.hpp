@@ -37,7 +37,7 @@ inline constexpr std::array<std::pair<ParsingType, const char*>, 8> parsing_type
  * @return the name of the parsing type
  * @throws std::out_of_range if the parsing type does not exist or no name is implemented for it
  */
-constexpr const char* parsingTypeName(ParsingType parsing_type) {
+constexpr const char* parsing_type_name(ParsingType parsing_type) {
     for (const auto& [parsing_type_val, parsing_type_name] : parsing_type_names) {
         if (parsing_type_val == parsing_type) {
             return parsing_type_name;

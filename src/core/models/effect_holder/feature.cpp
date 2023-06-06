@@ -8,10 +8,10 @@
 
 #include <core/models/effect_holder/effect_holder.hpp>
 
-bool dnd::Feature::isActiveForLevel(int level) const {
+bool dnd::Feature::is_active_for_level(int level) const {
     std::unordered_map<std::string, int> empty_attributes;
     try {
-        return main_part.isActive(empty_attributes, {{"CLASS_LEVEL", level * 100}});
+        return main_part.is_active(empty_attributes, {{"CLASS_LEVEL", level * 100}});
     } catch (const std::out_of_range& e) {
         DND_UNUSED(e);
         return false;

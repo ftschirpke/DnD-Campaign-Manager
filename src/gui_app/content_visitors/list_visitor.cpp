@@ -21,7 +21,7 @@
 
 void dnd::ListVisitor::visit(const Character* character_ptr) {
     string_list.emplace_back(fmt::format(
-        "{} [CHARACTER] : Level {} {} {}", character_ptr->name, character_ptr->getLevel(),
+        "{} [CHARACTER] : Level {} {} {}", character_ptr->name, character_ptr->get_level(),
         character_ptr->class_ptr->name, character_ptr->race_ptr->name
     ));
 }

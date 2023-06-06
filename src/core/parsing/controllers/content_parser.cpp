@@ -99,7 +99,7 @@ std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createSingleFilePars
             return std::make_unique<StringGroupsFileParser>(filepath, parsed_content.groups);
         default:
             throw std::logic_error(
-                "No single-file parser for content type \"" + std::string(parsingTypeName(parsing_type)) + "\" exists."
+                "No single-file parser for content type \"" + std::string(parsing_type_name(parsing_type)) + "\" exists."
             );
     }
 }
@@ -139,33 +139,33 @@ std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createMultiFileParse
             return std::make_unique<EffectHolderGroupsFileParser>(filepath, parsed_content.groups);
         default:
             throw std::logic_error(
-                "No multi-file parser for content type \"" + std::string(parsingTypeName(parsing_type)) + "\" exists."
+                "No multi-file parser for content type \"" + std::string(parsing_type_name(parsing_type)) + "\" exists."
             );
     }
 }
 
 void dnd::ContentParser::parseFile(std::unique_ptr<ContentFileParser> parser) {
-    DND_MEASURE_SCOPE(("dnd::ContentParser::parseFile ( " + std::string(parsingTypeName(parser->getType())) + ", "
+    DND_MEASURE_SCOPE(("dnd::ContentParser::parseFile ( " + std::string(parsing_type_name(parser->get_type())) + ", "
                        + parser->filepath.filename().string() + " )")
                           .c_str());
 
-    if (!parser->openJSON()) {
+    if (!parser->open_json()) {
         return;
     }
 
     try {
         parser->parse();
     } catch (const nlohmann::json::out_of_range& e) {
-        const std::string stripped_what = stripJsonExceptionWhat(e.what());
-        throw attribute_missing(parser->getType(), parser->filepath, stripped_what);
+        const std::string stripped_what = strip_json_exception_what(e.what());
+        throw attribute_missing(parser->get_type(), parser->filepath, stripped_what);
     } catch (const nlohmann::json::type_error& e) {
-        const std::string stripped_what = stripJsonExceptionWhat(e.what());
-        throw attribute_type_error(parser->getType(), parser->filepath, stripped_what);
+        const std::string stripped_what = strip_json_exception_what(e.what());
+        throw attribute_type_error(parser->get_type(), parser->filepath, stripped_what);
     }
 
     if (parser->validate()) {
-        std::lock_guard<std::mutex> lock(parsing_mutexes[parser->getType()]);
-        parser->saveResult();
+        std::lock_guard<std::mutex> lock(parsing_mutexes[parser->get_type()]);
+        parser->save_result();
     }
 }
 
@@ -183,7 +183,7 @@ void dnd::ContentParser::parseAllOfType(const dnd::ParsingType parsing_type) {
 
 void dnd::ContentParser::parseAllOfSingleFileType(const ParsingType parsing_type) {
     DND_MEASURE_SCOPE(
-        ("dnd::ContentParser::parseAllOfSingleFileType ( " + std::string(parsingTypeName(parsing_type)) + " )").c_str()
+        ("dnd::ContentParser::parseAllOfSingleFileType ( " + std::string(parsing_type_name(parsing_type)) + " )").c_str()
     );
     std::vector<std::unique_ptr<ContentFileParser>> to_parse;
     std::vector<std::future<void>> futures;
@@ -194,7 +194,7 @@ void dnd::ContentParser::parseAllOfSingleFileType(const ParsingType parsing_type
         );
         if (type_file_it == file_names.end()) {
             throw std::logic_error(
-                "Cannot parse type \"" + std::string(parsingTypeName(parsing_type)) + "\" as single-file type."
+                "Cannot parse type \"" + std::string(parsing_type_name(parsing_type)) + "\" as single-file type."
             );
         }
         const std::string type_file_name = type_file_it->second;
@@ -226,7 +226,7 @@ void dnd::ContentParser::parseAllOfSingleFileType(const ParsingType parsing_type
 
 void dnd::ContentParser::parseAllOfMultiFileType(const ParsingType parsing_type) {
     DND_MEASURE_SCOPE(
-        ("dnd::ContentParser::parseAllOfMultiFileType ( " + std::string(parsingTypeName(parsing_type)) + " )").c_str()
+        ("dnd::ContentParser::parseAllOfMultiFileType ( " + std::string(parsing_type_name(parsing_type)) + " )").c_str()
     );
     std::vector<std::unique_ptr<ContentFileParser>> to_parse;
     std::vector<std::future<void>> futures;
@@ -237,7 +237,7 @@ void dnd::ContentParser::parseAllOfMultiFileType(const ParsingType parsing_type)
         );
         if (type_dir_it == subdir_names.end()) {
             throw std::logic_error(
-                "Cannot parse type \"" + std::string(parsingTypeName(parsing_type)) + "\" as multi-file type."
+                "Cannot parse type \"" + std::string(parsing_type_name(parsing_type)) + "\" as multi-file type."
             );
         }
         const std::string type_dir_name = type_dir_it->second;

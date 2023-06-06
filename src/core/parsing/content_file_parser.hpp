@@ -28,7 +28,7 @@ public:
      * @brief Opens the json file to be parsed and deserialises the JSON.
      * @return "true" if opening and deserialising was successful, "false" otherwise
      */
-    virtual bool openJSON();
+    virtual bool open_json();
     /**
      * @brief Parses JSON content file.
      * @throws parsing_error if any error occured while trying to parse the content file
@@ -44,12 +44,12 @@ public:
     /**
      * @brief Saves the parsed content.
      */
-    virtual void saveResult() = 0;
+    virtual void save_result() = 0;
     /**
      * @brief Returns the type of content that this parser parses
      * @return the type of content that this parser parses
      */
-    virtual ParsingType getType() const = 0;
+    virtual ParsingType get_type() const = 0;
 
     // the file which is being parsed
     const std::filesystem::path filepath;

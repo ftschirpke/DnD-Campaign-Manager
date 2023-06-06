@@ -16,7 +16,7 @@ namespace dnd {
  * @param original_what the original exception message
  * @return a stripped version of the same message
  */
-std::string stripJsonExceptionWhat(const std::string& original_what);
+std::string strip_json_exception_what(const std::string& original_what);
 
 /**
  * @brief An exception that is thrown when something went wrong while parsing DnD content
@@ -143,7 +143,7 @@ public:
     );
 };
 
-inline std::string stripJsonExceptionWhat(const std::string& original_what) {
+inline std::string strip_json_exception_what(const std::string& original_what) {
     std::string what = original_what;
     if (size_t i = what.find("]"); i != std::string::npos) {
         what.erase(0, i + 2);
@@ -159,7 +159,7 @@ inline parsing_error::parsing_error(const std::filesystem::path& path, const std
 inline parsing_error::parsing_error(
     ParsingType parsing_type, const std::filesystem::path& path, const std::string& error_msg
 )
-    : std::invalid_argument(""), path(path), msg_start(std::string(parsingTypeName(parsing_type)) + " in file"),
+    : std::invalid_argument(""), path(path), msg_start(std::string(parsing_type_name(parsing_type)) + " in file"),
       error_msg(error_msg) {
     updateWhat();
 }

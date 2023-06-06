@@ -51,12 +51,12 @@ public:
     /**
      * @brief Saves the parsed subclass
      */
-    virtual void saveResult() override;
+    virtual void save_result() override;
     /**
      * @brief Returns the type of content that this parser parses - subclasses
      * @return the type of content that this parser parses - subclasses
      */
-    virtual constexpr ParsingType getType() const override { return type; };
+    virtual constexpr ParsingType get_type() const override { return type; };
 private:
     // the type of content that this parser parses - subclasses
     static constexpr ParsingType type = ParsingType::SUBCLASS;

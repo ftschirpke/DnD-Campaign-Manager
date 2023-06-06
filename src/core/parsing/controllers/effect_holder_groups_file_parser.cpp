@@ -41,7 +41,7 @@ dnd::Choosable dnd::EffectHolderGroupsFileParser::createChoosable(
     // TODO: change choosable constructor?
     Choosable choosable(choosable_name, filepath, description);
 
-    choosable.main_part = effect_holder_parser.createEffectHolder(choosable_json);
+    choosable.main_part = effect_holder_parser.create_effect_holder(choosable_json);
     if (choosable_json.contains("multi")) {
         if (!choosable_json.at("multi").is_array()) {
             throw attribute_format_error(type, filepath, "multi", "array");
@@ -53,7 +53,7 @@ dnd::Choosable dnd::EffectHolderGroupsFileParser::createChoosable(
             if (part_json.empty()) {
                 throw invalid_attribute(type, filepath, "multi", "cannot have empty entry");
             }
-            choosable.parts.emplace_back(effect_holder_parser.createEffectHolder(part_json));
+            choosable.parts.emplace_back(effect_holder_parser.create_effect_holder(part_json));
         }
     }
 
@@ -76,4 +76,4 @@ bool dnd::EffectHolderGroupsFileParser::validate() const {
     return true;
 }
 
-void dnd::EffectHolderGroupsFileParser::saveResult() { groups.add(group_name, std::move(choosables)); }
+void dnd::EffectHolderGroupsFileParser::save_result() { groups.add(group_name, std::move(choosables)); }

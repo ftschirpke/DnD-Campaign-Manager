@@ -51,14 +51,14 @@ public:
     /**
      * @brief Saves the parsed spells
      */
-    virtual void saveResult() override;
+    virtual void save_result() override;
     /**
      * @brief Returns the type of content that this parser parses - spells
      * @return the type of content that this parser parses - spells
      */
-    virtual constexpr ParsingType getType() const override { return type; };
+    virtual constexpr ParsingType get_type() const override { return type; };
 protected:
-    void createItem(std::string_view item_name, const nlohmann::json& item_json);
+    void create_item(std::string_view item_name, const nlohmann::json& item_json);
 private:
     // the type of content that this parser parses - items
     static constexpr ParsingType type = ParsingType::ITEM;

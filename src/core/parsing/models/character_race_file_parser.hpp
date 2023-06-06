@@ -44,12 +44,12 @@ public:
     /**
      * @brief Saves the parsed race
      */
-    virtual void saveResult() override;
+    virtual void save_result() override;
     /**
      * @brief Returns the type of content that this parser parses - races
      * @return the type of content that this parser parses - races
      */
-    virtual constexpr ParsingType getType() const override { return type; };
+    virtual constexpr ParsingType get_type() const override { return type; };
 private:
     // the type of content that this parser parses - races
     static constexpr ParsingType type = ParsingType::RACE;

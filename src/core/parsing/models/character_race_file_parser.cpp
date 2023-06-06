@@ -27,7 +27,7 @@ void dnd::CharacterRaceFileParser::parse() {
     }
     has_subraces = json_to_parse.at("has_subraces").get<bool>();
 
-    features_parser.parseFeatures(json_to_parse.at("features"));
+    features_parser.parse_features(json_to_parse.at("features"));
 }
 
 bool dnd::CharacterRaceFileParser::validate() const {
@@ -38,6 +38,6 @@ bool dnd::CharacterRaceFileParser::validate() const {
     return true;
 }
 
-void dnd::CharacterRaceFileParser::saveResult() {
-    races.create(character_race_name, filepath, std::move(features_parser.retrieveFeatures()), has_subraces);
+void dnd::CharacterRaceFileParser::save_result() {
+    races.create(character_race_name, filepath, std::move(features_parser.retrieve_features()), has_subraces);
 }

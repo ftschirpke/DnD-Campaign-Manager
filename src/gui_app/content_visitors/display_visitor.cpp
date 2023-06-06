@@ -69,9 +69,9 @@ void dnd::DisplayVisitor::visit(const Character* character_ptr) {
     ImGui::Text("Character");
     source(character_ptr);
     label("Level:");
-    ImGui::Text("%d", character_ptr->getLevel());
+    ImGui::Text("%d", character_ptr->get_level());
     label("XP:");
-    ImGui::Text("%d", character_ptr->getXP());
+    ImGui::Text("%d", character_ptr->get_xp());
     label("Stats:");
     ImGui::Text(
         "STR %d, DEX %d, CON %d, INT %d, WIS %d, CHA %d", character_ptr->state.attributes.at("STR") / 100,

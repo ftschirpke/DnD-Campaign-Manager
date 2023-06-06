@@ -34,17 +34,17 @@ public:
      * @param features_json the JSON that need s ot be parsed
      * @throws attribute_format_error if features_json has wrong format
      */
-    void parseFeatures(const nlohmann::ordered_json& features_json);
+    void parse_features(const nlohmann::ordered_json& features_json);
     /**
      * @brief Returns the parsed features while maintaining ownership
      * @return the parsed features as l-value-reference
      */
-    const std::vector<Feature>& getFeatures() const;
+    const std::vector<Feature>& get_features() const;
     /**
      * @brief Returns and gives up ownership of the parsed features
      * @return the parsed features as r-value-reference
      */
-    std::vector<Feature>&& retrieveFeatures();
+    std::vector<Feature>&& retrieve_features();
 protected:
     /**
      * @brief Parse and create a feature
@@ -55,7 +55,7 @@ protected:
      * @throws nlohmann::json::out_of_range if any required attribute does not exist
      * @throws nlohmann::json::type_error if any of the parsed attributes have the wrong type
      */
-    Feature createFeature(const std::string& feature_name, const nlohmann::json& feature_json) const;
+    Feature create_feature(const std::string& feature_name, const nlohmann::json& feature_json) const;
 private:
     // the parsed features
     std::vector<Feature> features;
@@ -68,9 +68,9 @@ inline FeaturesParser::FeaturesParser(
 ) noexcept
     : Subparser(type, filepath), effect_holder_parser(type, filepath, groups) {}
 
-inline const std::vector<Feature>& FeaturesParser::getFeatures() const { return features; }
+inline const std::vector<Feature>& FeaturesParser::get_features() const { return features; }
 
-inline std::vector<Feature>&& FeaturesParser::retrieveFeatures() { return std::move(features); }
+inline std::vector<Feature>&& FeaturesParser::retrieve_features() { return std::move(features); }
 
 } // namespace dnd
 

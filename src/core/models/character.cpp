@@ -18,7 +18,7 @@ constexpr std::array<int, 20> dnd::Character::minxp_for_level = {
     85000, 100000, 120000, 140000, 165000, 195000, 225000, 265000, 305000, 355000,
 };
 
-int dnd::Character::levelForXP(int xp) {
+int dnd::Character::level_for_xp(int xp) {
     if (xp < 0) {
         throw std::invalid_argument("XP value cannot be negative.");
     }
@@ -30,18 +30,18 @@ int dnd::Character::levelForXP(int xp) {
     return 20;
 }
 
-const std::unordered_map<std::string, int> dnd::Character::getConstants() const {
+const std::unordered_map<std::string, int> dnd::Character::get_constants() const {
     std::unordered_map<std::string, int> character_constants = {
-        {"LEVEL", getLevel() * 100},
-        {"CLASS_LEVEL", getLevel() * 100},
-        {"XP", getXP() * 100},
+        {"LEVEL", get_level() * 100},
+        {"CLASS_LEVEL", get_level() * 100},
+        {"XP", get_xp() * 100},
         {"ARMOR_ON", false},        // TODO
         {"HAS_SPELLCASTING", false} // TODO
     };
     return character_constants;
 }
 
-const std::unordered_map<std::string, int> dnd::Character::getInitialAttributeValues() const {
+const std::unordered_map<std::string, int> dnd::Character::get_initial_attribute_values() const {
     std::unordered_map<std::string, int> character_initial_values = {
         {"MAXHP", 0},
     };
@@ -53,10 +53,10 @@ const std::unordered_map<std::string, int> dnd::Character::getInitialAttributeVa
     return character_initial_values;
 }
 
-void dnd::Character::determineState() {
+void dnd::Character::determine_state() {
     DND_MEASURE_FUNCTION();
 
-    state.reset(getConstants(), getInitialAttributeValues());
+    state.reset(get_constants(), get_initial_attribute_values());
 
     state.addFeatureHolder(this);
     state.addFeatureHolder(class_ptr);
@@ -67,7 +67,7 @@ void dnd::Character::determineState() {
     state.calculate();
 }
 
-std::vector<const dnd::Feature*> dnd::Character::allFeatures() const {
+std::vector<const dnd::Feature*> dnd::Character::all_features() const {
     std::vector<const Feature*> all_features;
 
     for (const auto& feature : class_ptr->features) {

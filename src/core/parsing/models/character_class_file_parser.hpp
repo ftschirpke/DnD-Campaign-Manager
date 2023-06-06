@@ -51,19 +51,19 @@ public:
     /**
      * @brief Saves the parsed class
      */
-    virtual void saveResult() override;
+    virtual void save_result() override;
     /**
      * @brief Returns the type of content that this parser parses - classes
      * @return the type of content that this parser parses - classes
      */
-    virtual constexpr ParsingType getType() const override { return type; };
+    virtual constexpr ParsingType get_type() const override { return type; };
 protected:
     /**
      * @brief Determine the subclass level for the parsed class
      * @param features the classes' features of which one should be a subclass feature
      * @throws invalid_attribute if class does not have exactly one subclass feature or the subclass level is invalid
      */
-    void determineSubclassLevel(const std::vector<Feature>& features);
+    void determine_subclass_level(const std::vector<Feature>& features);
 private:
     // the type of content that this parser parses - classes
     static constexpr ParsingType type = ParsingType::CLASS;

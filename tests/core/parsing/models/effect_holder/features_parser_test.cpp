@@ -16,24 +16,24 @@
 class TestFeaturesParser : public dnd::FeaturesParser {
 public:
     TestFeaturesParser() noexcept : dnd::FeaturesParser(dnd::ParsingType::CHARACTER, "testing", dnd::Groups()) {}
-    dnd::Feature createFeatureForTesting(const std::string& feature_name, const nlohmann::json& feature_json) const {
-        return createFeature(feature_name, feature_json);
+    dnd::Feature create_feature_for_testing(const std::string& feature_name, const nlohmann::json& feature_json) const {
+        return create_feature(feature_name, feature_json);
     }
 };
 
-TEST_CASE("dnd::FeaturesParser::createFeature: invalid JSON format") {
+TEST_CASE("dnd::FeaturesParser::create_feature: invalid JSON format") {
     TestFeaturesParser parser;
     SECTION("JSON is array") {
         const nlohmann::json feature_json = {
             "feature for testing of effect parsing",
             {"CON normal add 2", "INT normal mult 3"},
         };
-        REQUIRE_THROWS(parser.createFeatureForTesting("test", feature_json));
+        REQUIRE_THROWS(parser.create_feature_for_testing("test", feature_json));
     }
     SECTION("JSON is literal") {
-        REQUIRE_THROWS(parser.createFeatureForTesting("test", true));
-        REQUIRE_THROWS(parser.createFeatureForTesting("test", 1));
-        REQUIRE_THROWS(parser.createFeatureForTesting("test", -3.4));
-        REQUIRE_THROWS(parser.createFeatureForTesting("test", "string"));
+        REQUIRE_THROWS(parser.create_feature_for_testing("test", true));
+        REQUIRE_THROWS(parser.create_feature_for_testing("test", 1));
+        REQUIRE_THROWS(parser.create_feature_for_testing("test", -3.4));
+        REQUIRE_THROWS(parser.create_feature_for_testing("test", "string"));
     }
 }
