@@ -37,7 +37,7 @@ void dnd::SpellcastingParser::parse_spellcasting(const nlohmann::json& spellcast
     DND_MEASURE_FUNCTION();
 
     ability = spellcasting_json.at("ability").get<std::string>();
-    if (!isAbility(ability)) {
+    if (!is_ability(ability)) {
         throw invalid_attribute(type, filepath, "spellcasting:attribute", "is not an ability");
     }
     ritual_casting = spellcasting_json.at("ritual_casting").get<bool>();

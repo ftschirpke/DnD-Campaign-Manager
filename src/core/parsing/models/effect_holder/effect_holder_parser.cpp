@@ -282,7 +282,7 @@ std::unique_ptr<dnd::Effect> dnd::EffectHolderParser::create_effect(const std::s
 void dnd::EffectHolderParser::parse_and_add_effect(const std::string& effect_str, EffectHolder* const effect_holder)
     const {
     auto effect = create_effect(effect_str);
-    if (isAbility(std::string_view(effect->affected_attribute.c_str(), 3))) {
+    if (is_ability(std::string_view(effect->affected_attribute.c_str(), 3))) {
         effect_holder->ability_score_effects[effect->time].emplace_back(std::move(effect));
     } else {
         effect_holder->normal_effects[effect->time].emplace_back(std::move(effect));
