@@ -44,6 +44,11 @@ void dnd::ContentHolder::finished_parsing() {
     }
 }
 
+bool dnd::ContentHolder::empty() const {
+    return characters.empty() && character_classes.empty() && character_subclasses.empty() && character_races.empty()
+           && character_subraces.empty() && items.empty() && spells.empty();
+}
+
 std::string dnd::ContentHolder::status() const {
     std::stringstream sstr;
     sstr << groups.status();

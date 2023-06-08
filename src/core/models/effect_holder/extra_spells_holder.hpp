@@ -14,7 +14,7 @@ namespace dnd {
 class ExtraSpellsHolder {
 public:
     /**
-     * @brief Returns true if the ExtraSpellsHolder is empty
+     * @brief Returns whether if the ExtraSpellsHolder is empty
      * @return "true" if the ExtraSpellsHolder is empty, "false" otherwise
      */
     bool empty() const;

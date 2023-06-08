@@ -99,7 +99,8 @@ std::unique_ptr<dnd::ContentFileParser> dnd::ContentParser::createSingleFilePars
             return std::make_unique<StringGroupsFileParser>(filepath, parsed_content.groups);
         default:
             throw std::logic_error(
-                "No single-file parser for content type \"" + std::string(parsing_type_name(parsing_type)) + "\" exists."
+                "No single-file parser for content type \"" + std::string(parsing_type_name(parsing_type))
+                + "\" exists."
             );
     }
 }
@@ -182,9 +183,9 @@ void dnd::ContentParser::parseAllOfType(const dnd::ParsingType parsing_type) {
 }
 
 void dnd::ContentParser::parseAllOfSingleFileType(const ParsingType parsing_type) {
-    DND_MEASURE_SCOPE(
-        ("dnd::ContentParser::parseAllOfSingleFileType ( " + std::string(parsing_type_name(parsing_type)) + " )").c_str()
-    );
+    DND_MEASURE_SCOPE(("dnd::ContentParser::parseAllOfSingleFileType ( " + std::string(parsing_type_name(parsing_type))
+                       + " )")
+                          .c_str());
     std::vector<std::unique_ptr<ContentFileParser>> to_parse;
     std::vector<std::future<void>> futures;
     for (const auto& dir : dirs_to_parse) {

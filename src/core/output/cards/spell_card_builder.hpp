@@ -19,12 +19,12 @@ public:
     /**
      * @brief Creates a LaTeX file that allows printing the cards with the timestamp as the file name
      */
-    void writeLatexFile();
+    void write_latex_file();
     /**
      * @brief Creates a LaTeX file that allows printing the cards with a given file name
      * @param filename the name of the file
      */
-    void writeLatexFile(const std::string& filename);
+    void write_latex_file(const std::string& filename);
 private:
     std::vector<const Spell*> spells;
 };

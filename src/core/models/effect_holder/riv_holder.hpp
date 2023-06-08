@@ -3,8 +3,8 @@
 
 #include <dnd_config.hpp>
 
+#include <set>
 #include <string>
-#include <unordered_set>
 
 namespace dnd {
 
@@ -14,19 +14,19 @@ namespace dnd {
 class RIVHolder {
 public:
     /**
-     * @brief Returns true if the RIVHolder is empty
+     * @brief Returns whether if the RIVHolder is empty
      * @return "true" if the RIVHolder is empty, "false" otherwise
      */
     bool empty() const;
 
     // the damage types the creature is resistant to
-    std::unordered_set<std::string> damage_resistances;
+    std::set<std::string> damage_resistances;
     // the damage types the creature is immune to
-    std::unordered_set<std::string> damage_immunities;
+    std::set<std::string> damage_immunities;
     // the damage types the creature is vulnerable to
-    std::unordered_set<std::string> damage_vulnerabilities;
+    std::set<std::string> damage_vulnerabilities;
     // the conditions the creature is immune to
-    std::unordered_set<std::string> condition_immunities;
+    std::set<std::string> condition_immunities;
 };
 
 inline bool RIVHolder::empty() const {

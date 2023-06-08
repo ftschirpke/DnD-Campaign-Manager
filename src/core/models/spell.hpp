@@ -18,7 +18,7 @@ namespace dnd {
 /**
  * @brief An enum for the types of magic or so called magic schools
  */
-enum MagicSchool {
+enum class MagicSchool {
     // abjuration - wards and defensive spells
     ABJURATION,
     // conjuration - summoning, creation, and teleportation
@@ -72,7 +72,7 @@ constexpr MagicSchool magic_school_from_name(const std::string& magic_school_nam
 /**
  * @brief An enum for the possible spell levels
  */
-enum SpellLevel {
+enum class SpellLevel {
     CANTRIP = 0,
     LEVEL1 = 1,
     LEVEL2 = 2,

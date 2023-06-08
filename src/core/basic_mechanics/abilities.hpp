@@ -3,19 +3,16 @@
 
 #include <dnd_config.hpp>
 
-#include <algorithm>
 #include <array>
-#include <stdexcept>
 #include <string>
 #include <string_view>
-#include <unordered_map>
 
 namespace dnd {
 
 /**
  * @brief An enum for the basic 6 abilities
  */
-enum Ability {
+enum class Ability {
     STRENGTH,
     DEXTERITY,
     CONSTITUTION,
@@ -29,7 +26,6 @@ inline constexpr std::array<Ability, 6> abilities_inorder = {
     Ability::STRENGTH,     Ability::DEXTERITY, Ability::CONSTITUTION,
     Ability::INTELLIGENCE, Ability::WISDOM,    Ability::CHARISMA,
 };
-
 // the 3-letter c-style strings for the abilities in order
 inline constexpr std::array<const char*, 6> ability_cstrings_inorder = {"STR", "DEX", "CON", "INT", "WIS", "CHA"};
 
@@ -39,56 +35,28 @@ inline constexpr std::array<const char*, 6> ability_cstrings_inorder = {"STR", "
  * @return the ability the 3-letter string represents
  * @throws std::invalid_argument if the string doesn't represent any of the 6 abilities
  */
-inline Ability string_to_ability(const std::string& ability_str) {
-    for (size_t i = 0; i < 6; ++i) {
-        if (ability_cstrings_inorder[i] == ability_str) {
-            return abilities_inorder[i];
-        }
-    }
-    throw std::invalid_argument("The ability \"" + ability_str + "\" does not exist.");
-}
+Ability string_to_ability(const std::string& ability_str);
 
 /**
  * @brief Given a certain ability, return the 3-letter string representation
  * @param ability the ability
  * @return the 3-letter string representation of the ability
  */
-inline std::string ability_to_string(Ability ability) {
-    switch (ability) {
-        case STRENGTH:
-            return "STR";
-        case DEXTERITY:
-            return "DEX";
-        case CONSTITUTION:
-            return "CON";
-        case INTELLIGENCE:
-            return "INT";
-        case WISDOM:
-            return "WIS";
-        case CHARISMA:
-            return "CHA";
-    }
-}
+std::string ability_to_string(Ability ability);
 
 /**
  * @brief Checks whether the given 3-letter string represents an ability
  * @param attribute_name the 3-letter string representation of an ability as string_view
- * @return "true" if string represents an ability, "no" otherwise
+ * @return "true" if string represents an ability, "false" otherwise
  */
-inline bool is_ability(std::string_view attribute_name) {
-    return std::find(ability_cstrings_inorder.cbegin(), ability_cstrings_inorder.cend(), attribute_name)
-           != ability_cstrings_inorder.cend();
-}
+bool is_ability(std::string_view attribute_name);
 
 /**
  * @brief Checks whether the given 3-letter string represents an ability
  * @param attribute_name the 3-letter string representation of an ability
- * @return "true" if string represents an ability, "no" otherwise
+ * @return "true" if string represents an ability, "false" otherwise
  */
-inline bool is_ability(const std::string& attribute_name) {
-    return std::find(ability_cstrings_inorder.cbegin(), ability_cstrings_inorder.cend(), attribute_name)
-           != ability_cstrings_inorder.cend();
-}
+bool is_ability(const std::string& attribute_name);
 
 } // namespace dnd
 

@@ -14,7 +14,7 @@ namespace dnd {
 class ProficiencyHolder {
 public:
     /**
-     * @brief Returns true if the ProficiencyHolder is empty
+     * @brief Returns whether if the ProficiencyHolder is empty
      * @return "true" if the ProficiencyHolder is empty, "false" otherwise
      */
     bool empty() const;

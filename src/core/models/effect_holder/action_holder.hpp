@@ -3,8 +3,8 @@
 
 #include <dnd_config.hpp>
 
+#include <map>
 #include <string>
-#include <unordered_map>
 
 namespace dnd {
 
@@ -14,17 +14,17 @@ namespace dnd {
 class ActionHolder {
 public:
     /**
-     * @brief Returns true if the ActionHolder is empty
+     * @brief Returns whether the ActionHolder is empty
      * @return "true" if the ActionHolder is empty, "false" otherwise
      */
     bool empty() const;
 
     // actions represented as a pair of a name (key) and a short description (value)
-    std::unordered_map<std::string, std::string> actions;
+    std::map<std::string, std::string> actions;
     // bonus actions represented as a pair of a name (key) and a short description (value)
-    std::unordered_map<std::string, std::string> bonus_actions;
+    std::map<std::string, std::string> bonus_actions;
     // reactions represented as a pair of a name (key) and a short description (value)
-    std::unordered_map<std::string, std::string> reactions;
+    std::map<std::string, std::string> reactions;
 };
 
 inline bool ActionHolder::empty() const { return actions.empty() && bonus_actions.empty() && reactions.empty(); }

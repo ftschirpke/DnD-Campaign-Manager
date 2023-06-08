@@ -21,7 +21,7 @@ public:
     EffectHolderWithChoices(EffectHolderWithChoices&& other) noexcept = default;
     EffectHolderWithChoices& operator=(EffectHolderWithChoices&& other) noexcept = default;
     /**
-     * @brief Returns true if the EffectHolderWithChoices is empty
+     * @brief Returns whether the EffectHolderWithChoices is empty
      * @return "true" if the EffectHolderWithChoices is empty, "false" otherwise
      */
     bool empty() const;

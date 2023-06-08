@@ -27,7 +27,7 @@ public:
     EffectHolder(EffectHolder&& other) noexcept = default;
     EffectHolder& operator=(EffectHolder&& other) noexcept = default;
     /**
-     * @brief Returns true if the EffectHolder is empty
+     * @brief Returns whether the EffectHolder is empty
      * @return "true" if the EffectHolder is empty, "false" otherwise
      */
     bool empty() const;

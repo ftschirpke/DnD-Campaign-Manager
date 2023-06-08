@@ -16,6 +16,25 @@
 #include <core/models/effect_holder/feature.hpp>
 #include <core/models/feature_holder.hpp>
 
+int dnd::CharacterState::modifier(int ability_score) noexcept { return ability_score / 2 - 5; }
+
+dnd::CharacterState::CharacterState(const std::vector<dnd::CharacterDecision>& decisions) noexcept
+    : decisions(decisions) {}
+
+dnd::CharacterState::CharacterState(
+    const std::unordered_map<std::string, int>& constants,
+    const std::unordered_map<std::string, int>& initial_attributes, const std::vector<dnd::CharacterDecision>& decisions
+) noexcept
+    : constants(constants), attributes(initial_attributes), decisions(decisions) {}
+
+void dnd::CharacterState::reset(
+    const std::unordered_map<std::string, int>& new_constants,
+    const std::unordered_map<std::string, int>& new_initial_attributes
+) noexcept {
+    constants = new_constants;
+    attributes = new_initial_attributes;
+}
+
 void dnd::CharacterState::apply_ability_score_effects() {
     for (const auto& [_, effect_time] : effect_times_in_order) {
         for (const auto effect_holder_ptr : active_effect_holders) {

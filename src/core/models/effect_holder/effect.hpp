@@ -16,7 +16,7 @@ namespace dnd {
 /**
  * @brief An enum to manage the calculation of effects that might rely on the proper order of execution
  */
-enum EffectTime {
+enum class EffectTime {
     // earliest - executed first, e.g. setting a new default value
     EARLIEST,
     // early - executed early, e.g. multiplication that shouldn't affect added boni

@@ -41,7 +41,7 @@ const char* setup_glfw() {
     return glsl_version;
 }
 
-void setup_style() {
+static void setup_style() {
     ImGui::StyleColorsDark();
     // ImGui::StyleColorsLight();
 
@@ -54,7 +54,7 @@ void setup_style() {
     }
 }
 
-void setup_font() {
+static void setup_font() {
     ImGuiIO& io = ImGui::GetIO();
     io.Fonts->AddFontDefault();
     std::filesystem::path aileron_regular_path = std::filesystem::path(DND_ASSET_DIRECTORY) / "Aileron-Regular.ttf";
@@ -63,7 +63,7 @@ void setup_font() {
     io.FontDefault = main_font;
 }
 
-void setup_imgui_context() {
+static void setup_imgui_context() {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
@@ -75,12 +75,12 @@ void setup_imgui_context() {
     // io.ConfigViewportsNoTaskBarIcon = true;
 }
 
-void setup_backends(GLFWwindow* window, const char* glsl_version) {
+static void setup_backends(GLFWwindow* window, const char* glsl_version) {
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 }
 
-void render(GLFWwindow* window) {
+static void render(GLFWwindow* window) {
     ImGui::Render();
     int display_w, display_h;
     glfwGetFramebufferSize(window, &display_w, &display_h);
@@ -89,7 +89,7 @@ void render(GLFWwindow* window) {
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void render_platform_windows() {
+static void render_platform_windows() {
     if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
         GLFWwindow* backup_current_context = glfwGetCurrentContext();
         ImGui::UpdatePlatformWindows();
@@ -98,7 +98,7 @@ void render_platform_windows() {
     }
 }
 
-void clean_up(GLFWwindow* window) {
+static void clean_up(GLFWwindow* window) {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();

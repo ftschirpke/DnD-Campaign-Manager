@@ -3,11 +3,9 @@
 
 #include <dnd_config.hpp>
 
-#include <iterator>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
-#include <utility>
 
 #include <core/models/effect_holder/choosable.hpp>
 
@@ -110,42 +108,6 @@ private:
     // a map containing all choosable groups - the members of a choosable group mapped to the name of the group
     std::unordered_map<std::string, std::unordered_map<std::string, Choosable>> choosables;
 };
-
-inline const std::unordered_map<std::string, Choosable>& Groups::get_choosable_group(const std::string& group_name
-) const {
-    return choosables.at(group_name);
-}
-
-inline const std::unordered_set<std::string>& Groups::get_string_group(const std::string& group_name) const {
-    return data.at(group_name);
-}
-
-inline const std::unordered_map<std::string, std::unordered_map<std::string, Choosable>>& Groups::
-    get_all_choosable_groups() const {
-    return choosables;
-}
-
-inline const std::unordered_map<std::string, std::unordered_set<std::string>>& Groups::get_all_string_groups() const {
-    return data;
-}
-
-inline void Groups::add(const std::string& group_name, const std::string& value) { data[group_name].insert(value); }
-
-inline void Groups::add(const std::string& group_name, std::unordered_set<std::string>&& values) {
-    data[group_name].insert(std::make_move_iterator(values.begin()), std::make_move_iterator(values.end()));
-}
-
-inline void Groups::add(const std::string& group_name, Choosable&& value) {
-    choosables[group_name].emplace(value.name, std::move(value));
-}
-
-inline void Groups::add(const std::string& group_name, std::unordered_map<std::string, Choosable>&& values) {
-    choosables[group_name].insert(std::make_move_iterator(values.begin()), std::make_move_iterator(values.end()));
-}
-
-inline bool Groups::is_group(const std::string& group_name) const {
-    return is_string_group(group_name) || is_choosable_group(group_name);
-}
 
 } // namespace dnd
 

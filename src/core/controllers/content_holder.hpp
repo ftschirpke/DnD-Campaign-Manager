@@ -32,7 +32,7 @@ public:
     void finished_parsing();
     /**
      * @brief Returns whether all storage libraries are empty
-     * @return true if nothing is stored inside the content holder, false otherwise
+     * @return "true" if nothing is stored inside the content holder, "false" otherwise
      */
     bool empty() const;
     /**
@@ -57,11 +57,6 @@ public:
     ReferencingContentLibrary<const Feature> features;
     std::unordered_map<std::string, ReferencingContentLibrary<const Choosable>> choosables;
 };
-
-inline bool ContentHolder::empty() const {
-    return characters.empty() && character_classes.empty() && character_subclasses.empty() && character_races.empty()
-           && character_subraces.empty() && items.empty() && spells.empty();
-}
 
 } // namespace dnd
 

@@ -4,7 +4,6 @@
 #include <dnd_config.hpp>
 
 #include <algorithm>
-#include <map>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -107,25 +106,6 @@ private:
      */
     void determine_modifiers();
 };
-
-inline CharacterState::CharacterState(const std::vector<CharacterDecision>& decisions) noexcept
-    : decisions(decisions) {}
-
-inline CharacterState::CharacterState(
-    const std::unordered_map<std::string, int>& constants,
-    const std::unordered_map<std::string, int>& initial_attributes, const std::vector<CharacterDecision>& decisions
-) noexcept
-    : constants(constants), attributes(initial_attributes), decisions(decisions) {}
-
-inline void CharacterState::reset(
-    const std::unordered_map<std::string, int>& new_constants,
-    const std::unordered_map<std::string, int>& new_initial_attributes
-) noexcept {
-    constants = new_constants;
-    attributes = new_initial_attributes;
-}
-
-inline int CharacterState::modifier(int ability_score) noexcept { return ability_score / 2 - 5; }
 
 
 } // namespace dnd

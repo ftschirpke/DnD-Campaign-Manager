@@ -53,7 +53,8 @@ dnd::Feature dnd::FeaturesParser::create_feature(const std::string& feature_name
                 throw invalid_attribute(type, filepath, "multi", "cannot have empty entry");
             }
             if (part_json.contains("choose")) {
-                feature.parts_with_choices.emplace_back(effect_holder_parser.create_effect_holder_with_choices(part_json));
+                feature.parts_with_choices.emplace_back(effect_holder_parser.create_effect_holder_with_choices(part_json
+                ));
             } else {
                 feature.parts.emplace_back(effect_holder_parser.create_effect_holder(part_json));
             }

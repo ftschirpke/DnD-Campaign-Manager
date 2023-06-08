@@ -3,8 +3,8 @@
 
 #include <dnd_config.hpp>
 
+#include <filesystem>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include <core/basic_mechanics/dice.hpp>
@@ -44,15 +44,6 @@ public:
     // the level at which a character of this class gains access to subclasses
     int subclass_level;
 };
-
-inline CharacterClass::CharacterClass(
-    const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
-    const Dice hit_dice, const std::vector<int>& asi_levels, int subclass_level
-) noexcept
-    : FeatureHolder(name, source_file_path, std::move(features)), hit_dice(hit_dice), asi_levels(asi_levels),
-      subclass_level(subclass_level) {}
-
-inline void CharacterClass::accept(ContentVisitor* visitor) const { visitor->visit(this); }
 
 } // namespace dnd
 

@@ -21,14 +21,14 @@ constexpr int card_character_cutoff = 750;
 
 void dnd::SpellCardBuilder::addSpell(const Spell* spell) { spells.push_back(spell); }
 
-void dnd::SpellCardBuilder::writeLatexFile() {
+void dnd::SpellCardBuilder::write_latex_file() {
     std::stringstream sstr;
     auto t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     sstr << std::put_time(std::localtime(&t), "%F %T\n\n") << ".tex";
-    writeLatexFile(sstr.str());
+    write_latex_file(sstr.str());
 }
 
-static void createHeader(dnd::LatexDocument& document) {
+static void create_header(dnd::LatexDocument& document) {
     document.document_class.add_bracket_argument("parskip");
     document.use_package("geometry");
     document.use_package("tcolorbox")->add_bracket_argument("most");
@@ -41,7 +41,7 @@ static void createHeader(dnd::LatexDocument& document) {
     document.header.add_command("makeatother");
 }
 
-static dnd::LatexScope* createCardPage(dnd::LatexDocument& document) {
+static dnd::LatexScope* create_card_page(dnd::LatexDocument& document) {
     std::string color = "white";
     auto begin_end = document.body.add_begin_end("tcbitemize");
     begin_end.begin_command->add_bracket_argument(
@@ -52,7 +52,7 @@ static dnd::LatexScope* createCardPage(dnd::LatexDocument& document) {
     return begin_end.scope;
 }
 
-static void createMinipage(dnd::LatexScope* scope, const std::string& name, const std::string& value) {
+static void create_minipage(dnd::LatexScope* scope, const std::string& name, const std::string& value) {
     auto minipage = scope->add_begin_end("minipage");
     minipage.begin_command->add_brace_argument("0.49\\textwidth");
     minipage.scope->add_command("centering");
@@ -62,7 +62,7 @@ static void createMinipage(dnd::LatexScope* scope, const std::string& name, cons
     minipage.scope->add_text(value)->add_modifier("scriptsize");
 }
 
-static dnd::LatexText* createCardHeader(dnd::LatexScope* scope, const dnd::Spell* spell, int counter) {
+static dnd::LatexText* create_card_header(dnd::LatexScope* scope, const dnd::Spell* spell, int counter) {
     scope->add_command("tcbitem");
     scope->add_command("vspace", "1mm");
     dnd::LatexScope* center_scope = scope->add_begin_end("center").scope;
@@ -71,11 +71,11 @@ static dnd::LatexText* createCardHeader(dnd::LatexScope* scope, const dnd::Spell
     sub_scope->add_command("textbf");
     dnd::LatexText* title = sub_scope->add_scope()->add_text(spell->name + " (" + std::to_string(counter) + ')');
     scope->add_command("vspace", "-3mm");
-    createMinipage(scope, "Casting Time", spell->casting_time);
-    createMinipage(scope, "Range", spell->range);
+    create_minipage(scope, "Casting Time", spell->casting_time);
+    create_minipage(scope, "Range", spell->range);
     scope->add_line_break("4pt");
-    createMinipage(scope, "Components", spell->components.short_str());
-    createMinipage(scope, "Duration", spell->duration);
+    create_minipage(scope, "Components", spell->components.short_str());
+    create_minipage(scope, "Duration", spell->duration);
     scope->add_line_break("8pt");
     if (spell->components.material && !spell->components.materials_needed.empty()) {
         scope->add_command("vspace", "-8mm");
@@ -88,14 +88,14 @@ static dnd::LatexText* createCardHeader(dnd::LatexScope* scope, const dnd::Spell
     return title;
 }
 
-static void createCardFooter(dnd::LatexScope* scope, const dnd::Spell* spell) {
+static void create_card_footer(dnd::LatexScope* scope, const dnd::Spell* spell) {
     scope->add_command("vfill");
     scope->add_text(spell->type.str())->add_modifier("scriptsize")->add_modifier("centering");
 }
 
-static int createSpellCards(dnd::LatexScope* scope, const dnd::Spell* spell) {
+static int create_spell_cards(dnd::LatexScope* scope, const dnd::Spell* spell) {
     int counter = 1;
-    dnd::LatexText* first_title = createCardHeader(scope, spell, counter);
+    dnd::LatexText* first_title = create_card_header(scope, spell, counter);
     size_t start = 0;
     size_t end = 0;
     size_t characters_written = 0;
@@ -103,8 +103,8 @@ static int createSpellCards(dnd::LatexScope* scope, const dnd::Spell* spell) {
         if (spell->description[end] == '\n') {
             if (characters_written + end - start > card_character_cutoff) {
                 // end last card, and start a new card
-                createCardFooter(scope, spell);
-                createCardHeader(scope, spell, ++counter);
+                create_card_footer(scope, spell);
+                create_card_header(scope, spell, ++counter);
                 characters_written = 0;
             }
 
@@ -120,11 +120,11 @@ static int createSpellCards(dnd::LatexScope* scope, const dnd::Spell* spell) {
     }
     if (characters_written + end - start > card_character_cutoff) {
         // end last card, and start a new card
-        createCardFooter(scope, spell);
-        createCardHeader(scope, spell, ++counter);
+        create_card_footer(scope, spell);
+        create_card_header(scope, spell, ++counter);
     }
     scope->add_text(spell->description.substr(start, end - start));
-    createCardFooter(scope, spell);
+    create_card_footer(scope, spell);
 
     if (counter == 1) {
         first_title->set_text(spell->name);
@@ -132,7 +132,7 @@ static int createSpellCards(dnd::LatexScope* scope, const dnd::Spell* spell) {
     return counter;
 }
 
-static int cardsToCreate(const dnd::Spell* spell) {
+static int calculate_cards_to_create(const dnd::Spell* spell) {
     int counter = 1;
     size_t start = 0;
     size_t end = 0;
@@ -158,15 +158,15 @@ static int cardsToCreate(const dnd::Spell* spell) {
     return counter;
 }
 
-void dnd::SpellCardBuilder::writeLatexFile(const std::string& filename) {
+void dnd::SpellCardBuilder::write_latex_file(const std::string& filename) {
     LatexDocument document("scrartcl");
-    createHeader(document);
+    create_header(document);
 
     std::unordered_map<int, std::deque<dnd::LatexScope*>> not_full_scopes;
-    not_full_scopes[9].push_back(createCardPage(document));
+    not_full_scopes[9].push_back(create_card_page(document));
 
     for (const Spell* spell : spells) {
-        int cards_to_create = cardsToCreate(spell);
+        int cards_to_create = calculate_cards_to_create(spell);
         LatexScope* scope = nullptr;
 
         int open_slots_before = -1;
@@ -179,11 +179,11 @@ void dnd::SpellCardBuilder::writeLatexFile(const std::string& filename) {
             }
         }
         if (scope == nullptr) {
-            scope = createCardPage(document);
+            scope = create_card_page(document);
             open_slots_before = 9;
         }
 
-        int cards_created = createSpellCards(scope, spell);
+        int cards_created = create_spell_cards(scope, spell);
         if (cards_created != cards_to_create) {
             throw std::logic_error("Not yet implemented.");
         }

@@ -20,16 +20,16 @@
 constexpr int card_character_cutoff = 900;
 
 
-void dnd::ItemCardBuilder::addItem(const Item* item) { items.push_back(item); }
+void dnd::ItemCardBuilder::add_item(const Item* item) { items.push_back(item); }
 
-void dnd::ItemCardBuilder::writeLatexFile() {
+void dnd::ItemCardBuilder::write_latex_file() {
     std::stringstream sstr;
     auto t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     sstr << std::put_time(std::localtime(&t), "%F %T\n\n") << ".tex";
-    writeLatexFile(sstr.str());
+    write_latex_file(sstr.str());
 }
 
-static void createHeader(dnd::LatexDocument& document) {
+static void create_header(dnd::LatexDocument& document) {
     document.document_class.add_bracket_argument("parskip");
     document.use_package("geometry");
     document.use_package("tcolorbox")->add_bracket_argument("most");
@@ -43,7 +43,7 @@ static void createHeader(dnd::LatexDocument& document) {
     document.header.add_command("makeatother");
 }
 
-static dnd::LatexScope* createCardPage(dnd::LatexDocument& document) {
+static dnd::LatexScope* create_card_page(dnd::LatexDocument& document) {
     std::string color = "white";
     auto begin_end = document.body.add_begin_end("tcbitemize");
     begin_end.begin_command->add_bracket_argument(
@@ -54,7 +54,7 @@ static dnd::LatexScope* createCardPage(dnd::LatexDocument& document) {
     return begin_end.scope;
 }
 
-static dnd::LatexText* createCardHeader(dnd::LatexScope* scope, const dnd::Item* item, int counter) {
+static dnd::LatexText* create_card_header(dnd::LatexScope* scope, const dnd::Item* item, int counter) {
     scope->add_command("tcbitem");
     scope->add_command("vspace", "1mm");
     dnd::LatexScope* center_scope = scope->add_begin_end("center").scope;
@@ -72,18 +72,18 @@ static dnd::LatexText* createCardHeader(dnd::LatexScope* scope, const dnd::Item*
     return title;
 }
 
-static void createCardFooter(dnd::LatexScope* scope) { scope->add_command("vspace", "\\fill"); }
+static void create_card_footer(dnd::LatexScope* scope) { scope->add_command("vspace", "\\fill"); }
 
-static dnd::LatexScope* createTextitScope(dnd::LatexScope* scope) {
+static dnd::LatexScope* create_textit_scope(dnd::LatexScope* scope) {
     dnd::LatexScope* center_scope = scope->add_begin_end("Center").scope;
     center_scope->add_command("scriptsize");
     center_scope->add_command("textit");
     return center_scope->add_scope();
 }
 
-static int createItemCards(dnd::LatexScope* scope, const dnd::Item* item) {
+static int create_item_cards(dnd::LatexScope* scope, const dnd::Item* item) {
     int counter = 1;
-    dnd::LatexText* first_title = createCardHeader(scope, item, counter);
+    dnd::LatexText* first_title = create_card_header(scope, item, counter);
     size_t start = 0;
     size_t end = 0;
     size_t characters_written = 0;
@@ -91,8 +91,8 @@ static int createItemCards(dnd::LatexScope* scope, const dnd::Item* item) {
         if (item->description[end] == '\n') {
             if (characters_written + end - start > card_character_cutoff) {
                 // start a new card
-                createCardFooter(scope);
-                createCardHeader(scope, item, ++counter);
+                create_card_footer(scope);
+                create_card_header(scope, item, ++counter);
                 characters_written = 0;
             }
 
@@ -108,8 +108,8 @@ static int createItemCards(dnd::LatexScope* scope, const dnd::Item* item) {
     }
     if (characters_written + end - start > card_character_cutoff) {
         // start a new card
-        createCardFooter(scope);
-        createCardHeader(scope, item, ++counter);
+        create_card_footer(scope);
+        create_card_header(scope, item, ++counter);
     }
     scope->add_text(item->description.substr(start, end - start));
 
@@ -123,16 +123,16 @@ static int createItemCards(dnd::LatexScope* scope, const dnd::Item* item) {
         end = 0;
         scope->add_command("vfill");
         description_swap_card = counter;
-        dnd::LatexScope* current_it_scope = createTextitScope(scope);
+        dnd::LatexScope* current_it_scope = create_textit_scope(scope);
         while (end < item->cosmetic_description.size()) {
             if (item->cosmetic_description[end] == '\n') {
                 if (characters_written + end - start > card_character_cutoff) {
                     // start a new card
                     if (counter != description_swap_card or !written_cosmetic_description_yet) {
-                        createCardFooter(scope);
+                        create_card_footer(scope);
                     }
-                    createCardHeader(scope, item, ++counter);
-                    current_it_scope = createTextitScope(scope);
+                    create_card_header(scope, item, ++counter);
+                    current_it_scope = create_textit_scope(scope);
                     characters_written = 0;
                 }
 
@@ -154,9 +154,9 @@ static int createItemCards(dnd::LatexScope* scope, const dnd::Item* item) {
         }
         if (characters_written + end - start > card_character_cutoff) {
             // start a new card
-            createCardFooter(scope);
-            createCardHeader(scope, item, ++counter);
-            current_it_scope = createTextitScope(scope);
+            create_card_footer(scope);
+            create_card_header(scope, item, ++counter);
+            current_it_scope = create_textit_scope(scope);
         }
         if (!written_cosmetic_description_yet) {
             skip_last_footer = true;
@@ -164,7 +164,7 @@ static int createItemCards(dnd::LatexScope* scope, const dnd::Item* item) {
         current_it_scope->add_text(item->cosmetic_description.substr(start, end - start));
     }
     if (!skip_last_footer) {
-        createCardFooter(scope);
+        create_card_footer(scope);
     }
 
     if (counter == 1) {
@@ -173,7 +173,7 @@ static int createItemCards(dnd::LatexScope* scope, const dnd::Item* item) {
     return counter;
 }
 
-static int cardsToCreate(const dnd::Item* item) {
+static int calculate_cards_to_create(const dnd::Item* item) {
     int counter = 1;
     size_t start = 0;
     size_t end = 0;
@@ -220,15 +220,15 @@ static int cardsToCreate(const dnd::Item* item) {
     return counter;
 }
 
-void dnd::ItemCardBuilder::writeLatexFile(const std::string& filename) {
+void dnd::ItemCardBuilder::write_latex_file(const std::string& filename) {
     LatexDocument document("scrartcl");
-    createHeader(document);
+    create_header(document);
 
     std::unordered_map<int, std::deque<dnd::LatexScope*>> not_full_scopes;
-    not_full_scopes[9].push_back(createCardPage(document));
+    not_full_scopes[9].push_back(create_card_page(document));
 
     for (const Item* item : items) {
-        int cards_to_create = cardsToCreate(item);
+        int cards_to_create = calculate_cards_to_create(item);
         LatexScope* scope = nullptr;
 
         int open_slots_before = -1;
@@ -241,11 +241,11 @@ void dnd::ItemCardBuilder::writeLatexFile(const std::string& filename) {
             }
         }
         if (scope == nullptr) {
-            scope = createCardPage(document);
+            scope = create_card_page(document);
             open_slots_before = 9;
         }
 
-        int cards_created = createItemCards(scope, item);
+        int cards_created = create_item_cards(scope, item);
         if (cards_created != cards_to_create) {
             throw std::logic_error("Not yet implemented.");
         }

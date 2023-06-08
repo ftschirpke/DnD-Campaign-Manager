@@ -2,10 +2,12 @@
 
 #include "groups.hpp"
 
+#include <iterator>
 #include <sstream>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
+#include <utility>
 
 #include <core/basic_mechanics/abilities.hpp>
 #include <core/basic_mechanics/skills.hpp>
@@ -27,6 +29,42 @@ dnd::Groups::Groups() {
         }
         data["skills"].insert(lowercase_skill);
     }
+}
+
+const std::unordered_map<std::string, dnd::Choosable>& dnd::Groups::get_choosable_group(const std::string& group_name
+) const {
+    return choosables.at(group_name);
+}
+
+const std::unordered_set<std::string>& dnd::Groups::get_string_group(const std::string& group_name) const {
+    return data.at(group_name);
+}
+
+const std::unordered_map<std::string, std::unordered_map<std::string, dnd::Choosable>>& dnd::Groups::
+    get_all_choosable_groups() const {
+    return choosables;
+}
+
+const std::unordered_map<std::string, std::unordered_set<std::string>>& dnd::Groups::get_all_string_groups() const {
+    return data;
+}
+
+void dnd::Groups::add(const std::string& group_name, const std::string& value) { data[group_name].insert(value); }
+
+void dnd::Groups::add(const std::string& group_name, std::unordered_set<std::string>&& values) {
+    data[group_name].insert(std::make_move_iterator(values.begin()), std::make_move_iterator(values.end()));
+}
+
+void dnd::Groups::add(const std::string& group_name, Choosable&& value) {
+    choosables[group_name].emplace(value.name, std::move(value));
+}
+
+void dnd::Groups::add(const std::string& group_name, std::unordered_map<std::string, dnd::Choosable>&& values) {
+    choosables[group_name].insert(std::make_move_iterator(values.begin()), std::make_move_iterator(values.end()));
+}
+
+bool dnd::Groups::is_group(const std::string& group_name) const {
+    return is_string_group(group_name) || is_choosable_group(group_name);
 }
 
 bool dnd::Groups::is_string_group(const std::string& group_name) const { return data.contains(group_name); }
