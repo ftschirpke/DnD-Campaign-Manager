@@ -3,8 +3,8 @@
 
 #include <dnd_config.hpp>
 
-#include <string>
 #include <set>
+#include <string>
 
 namespace dnd {
 

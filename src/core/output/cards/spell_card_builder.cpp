@@ -132,7 +132,7 @@ static int create_spell_cards(dnd::LatexScope* scope, const dnd::Spell* spell) {
     return counter;
 }
 
-static int cards_to_create(const dnd::Spell* spell) {
+static int calculate_cards_to_create(const dnd::Spell* spell) {
     int counter = 1;
     size_t start = 0;
     size_t end = 0;
@@ -166,7 +166,7 @@ void dnd::SpellCardBuilder::write_latex_file(const std::string& filename) {
     not_full_scopes[9].push_back(create_card_page(document));
 
     for (const Spell* spell : spells) {
-        int cards_to_create = cards_to_create(spell);
+        int cards_to_create = calculate_cards_to_create(spell);
         LatexScope* scope = nullptr;
 
         int open_slots_before = -1;

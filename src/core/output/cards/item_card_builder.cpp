@@ -173,7 +173,7 @@ static int create_item_cards(dnd::LatexScope* scope, const dnd::Item* item) {
     return counter;
 }
 
-static int cards_to_create(const dnd::Item* item) {
+static int calculate_cards_to_create(const dnd::Item* item) {
     int counter = 1;
     size_t start = 0;
     size_t end = 0;
@@ -228,7 +228,7 @@ void dnd::ItemCardBuilder::write_latex_file(const std::string& filename) {
     not_full_scopes[9].push_back(create_card_page(document));
 
     for (const Item* item : items) {
-        int cards_to_create = cards_to_create(item);
+        int cards_to_create = calculate_cards_to_create(item);
         LatexScope* scope = nullptr;
 
         int open_slots_before = -1;
