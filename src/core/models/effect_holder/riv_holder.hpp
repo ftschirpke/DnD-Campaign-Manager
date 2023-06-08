@@ -4,7 +4,7 @@
 #include <dnd_config.hpp>
 
 #include <string>
-#include <unordered_set>
+#include <set>
 
 namespace dnd {
 
@@ -20,13 +20,13 @@ public:
     bool empty() const;
 
     // the damage types the creature is resistant to
-    std::unordered_set<std::string> damage_resistances;
+    std::set<std::string> damage_resistances;
     // the damage types the creature is immune to
-    std::unordered_set<std::string> damage_immunities;
+    std::set<std::string> damage_immunities;
     // the damage types the creature is vulnerable to
-    std::unordered_set<std::string> damage_vulnerabilities;
+    std::set<std::string> damage_vulnerabilities;
     // the conditions the creature is immune to
-    std::unordered_set<std::string> condition_immunities;
+    std::set<std::string> condition_immunities;
 };
 
 inline bool RIVHolder::empty() const {
