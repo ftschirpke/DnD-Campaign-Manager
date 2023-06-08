@@ -3,8 +3,8 @@
 
 #include <dnd_config.hpp>
 
+#include <filesystem>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include <core/content_visitors/content_visitor.hpp>
@@ -37,14 +37,6 @@ public:
     // "true" if this race has subraces, "false" otherwise
     const bool has_subraces;
 };
-
-inline CharacterRace::CharacterRace(
-    const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
-    const bool has_subraces
-) noexcept
-    : FeatureHolder(name, source_file_path, std::move(features)), has_subraces(has_subraces) {}
-
-inline void CharacterRace::accept(ContentVisitor* visitor) const { visitor->visit(this); }
 
 } // namespace dnd
 

@@ -3,8 +3,8 @@
 
 #include <dnd_config.hpp>
 
+#include <filesystem>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include <core/content_visitors/content_visitor.hpp>
@@ -37,14 +37,6 @@ public:
     // the name of the class this is a subclass of
     const std::string class_name;
 };
-
-inline CharacterSubclass::CharacterSubclass(
-    const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
-    const std::string& class_name
-) noexcept
-    : FeatureHolder(name, source_file_path, std::move(features)), class_name(class_name) {}
-
-inline void CharacterSubclass::accept(ContentVisitor* visitor) const { visitor->visit(this); }
 
 } // namespace dnd
 

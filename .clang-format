@@ -15,7 +15,7 @@ IndentCaseLabels: true
 IndentRequiresClause: false
 KeepEmptyLinesAtTheStartOfBlocks: false
 MaxEmptyLinesToKeep: 2
-PenaltyReturnTypeOnItsOwnLine: 10000
+PenaltyReturnTypeOnItsOwnLine: 100
 PenaltyBreakAssignment: 10000
 PointerAlignment: Left
 SpaceInEmptyBlock: false
