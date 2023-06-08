@@ -40,8 +40,8 @@ const std::unordered_set<std::string>& dnd::Groups::get_string_group(const std::
     return data.at(group_name);
 }
 
-const std::unordered_map<std::string, std::unordered_map<std::string, dnd::Choosable>>&
-dnd::Groups::get_all_choosable_groups() const {
+const std::unordered_map<std::string, std::unordered_map<std::string, dnd::Choosable>>& dnd::Groups::
+    get_all_choosable_groups() const {
     return choosables;
 }
 
