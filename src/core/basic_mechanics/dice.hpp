@@ -3,7 +3,6 @@
 
 #include <dnd_config.hpp>
 
-#include <stdexcept>
 #include <string>
 
 namespace dnd {
@@ -25,7 +24,7 @@ enum class Dice {
  * @param dice_type a type tabletop dice
  * @return the maximum value for that type of dice
  */
-inline int dice_to_int(Dice dice_type) { return static_cast<int>(dice_type); }
+int dice_to_int(Dice dice_type);
 
 /**
  * @brief Returns the type of dice for a given number
@@ -33,31 +32,14 @@ inline int dice_to_int(Dice dice_type) { return static_cast<int>(dice_type); }
  * @return the type of dice that has the number as the maximum value
  * @throws std::invalid_argument if no such dice exist (i.e. number is not 4, 6, 8, 10, 12, or 20)
  */
-inline Dice int_to_dice(int number) {
-    switch (number) {
-        case 4:
-            return Dice::D4;
-        case 6:
-            return Dice::D6;
-        case 8:
-            return Dice::D8;
-        case 10:
-            return Dice::D10;
-        case 12:
-            return Dice::D12;
-        case 20:
-            return Dice::D20;
-        default:
-            throw std::invalid_argument("No such dice exist.");
-    };
-}
+Dice int_to_dice(int number);
 
 /**
  * @brief Returns the string representation for a type of dice
  * @param dice_type a type tabletop dice
  * @return the string representation for that type of dice
  */
-inline std::string dice_to_string(Dice dice_type) { return 'd' + std::to_string(dice_to_int(dice_type)); }
+std::string dice_to_string(Dice dice_type);
 
 /**
  * @brief Returns a type of dice given its string representation
@@ -65,23 +47,7 @@ inline std::string dice_to_string(Dice dice_type) { return 'd' + std::to_string(
  * @return the type of tabletop dice that this string represents
  * @throws std::invalid_argument if no such dice exist (i.e. is not d4, d6, d8, d10, d12, or d20)
  */
-inline Dice string_to_dice(const std::string& str) {
-    if (str == "d4") {
-        return Dice::D4;
-    } else if (str == "d6") {
-        return Dice::D6;
-    } else if (str == "d8") {
-        return Dice::D8;
-    } else if (str == "d10") {
-        return Dice::D10;
-    } else if (str == "d12") {
-        return Dice::D12;
-    } else if (str == "d20") {
-        return Dice::D20;
-    } else {
-        throw std::invalid_argument("No such dice exist.");
-    }
-}
+Dice string_to_dice(const std::string& str);
 
 } // namespace dnd
 

@@ -3,11 +3,9 @@
 
 #include <dnd_config.hpp>
 
-#include <algorithm>
 #include <array>
-#include <stdexcept>
 #include <string>
-#include <unordered_map>
+#include <string_view>
 
 namespace dnd {
 

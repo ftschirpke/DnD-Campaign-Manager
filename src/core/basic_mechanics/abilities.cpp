@@ -7,7 +7,6 @@
 #include <stdexcept>
 #include <string>
 #include <string_view>
-#include <unordered_map>
 
 dnd::Ability dnd::string_to_ability(const std::string& ability_str) {
     for (size_t i = 0; i < 6; ++i) {

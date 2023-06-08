@@ -24,6 +24,7 @@ namespace dnd {
 template <typename TrieT, typename DataT>
 concept ContentLibraryTypes = ContentPieceType<TrieT>
                               && std::is_same_v<TrieT, typename std::remove_pointer<DataT>::type>;
+
 /**
  * @brief A library of content pieces
  * @tparam TrieT the trie type to use for searching

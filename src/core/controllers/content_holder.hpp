@@ -58,11 +58,6 @@ public:
     std::unordered_map<std::string, ReferencingContentLibrary<const Choosable>> choosables;
 };
 
-inline bool ContentHolder::empty() const {
-    return characters.empty() && character_classes.empty() && character_subclasses.empty() && character_races.empty()
-           && character_subraces.empty() && items.empty() && spells.empty();
-}
-
 } // namespace dnd
 
 #endif // CONTENT_HOLDER_HPP_
