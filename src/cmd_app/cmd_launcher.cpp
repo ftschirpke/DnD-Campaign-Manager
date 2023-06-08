@@ -111,7 +111,7 @@ int dnd::launch(int argc, char** argv) {
     return 0;
 }
 
-std::vector<const dnd::Spell*> search_spells(
+static std::vector<const dnd::Spell*> search_spells(
     const std::string& search, dnd::ContentHolder& content, dnd::Output* output
 ) {
     size_t i = 0;
@@ -133,7 +133,7 @@ std::vector<const dnd::Spell*> search_spells(
     return spells_in_order;
 }
 
-std::vector<const dnd::Item*> search_items(
+static std::vector<const dnd::Item*> search_items(
     const std::string& search, dnd::ContentHolder& content, dnd::Output* output
 ) {
     size_t i = 0;
@@ -155,7 +155,7 @@ std::vector<const dnd::Item*> search_items(
     return items_in_order;
 }
 
-std::vector<const dnd::Feature*> search_features(
+static std::vector<const dnd::Feature*> search_features(
     const std::string& search, dnd::ContentHolder& content, dnd::Output* output
 ) {
     size_t i = 0;
@@ -177,7 +177,7 @@ std::vector<const dnd::Feature*> search_features(
     return features_in_order;
 }
 
-std::map<std::string, std::vector<const dnd::Choosable*>> search_choosables(
+static std::map<std::string, std::vector<const dnd::Choosable*>> search_choosables(
     const std::string& search, dnd::ContentHolder& content, dnd::Output* output
 ) {
     size_t i = 0;

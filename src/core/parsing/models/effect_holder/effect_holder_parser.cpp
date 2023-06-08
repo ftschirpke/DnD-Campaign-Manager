@@ -41,13 +41,13 @@ constexpr const char*
                                                  "addConst|multConst|divConst|setConst|maxConst|minConst"
                                                  ") [A-Z][_A-Z0-9]+)";
 
-static void parseActionsOptionals(const nlohmann::json& effect_holder_json, dnd::EffectHolder* const effect_holder) {
+static void parse_action_optionals(const nlohmann::json& effect_holder_json, dnd::EffectHolder* const effect_holder) {
     dnd::parse_optional(effect_holder_json, "actions", effect_holder->actions.actions);
     dnd::parse_optional(effect_holder_json, "bonus_actions", effect_holder->actions.bonus_actions);
     dnd::parse_optional(effect_holder_json, "reactions", effect_holder->actions.reactions);
 }
 
-static void parseExtraSpellsOptionals(
+static void parse_extra_spell_optionals(
     const nlohmann::json& effect_holder_json, dnd::EffectHolder* const effect_holder
 ) {
     dnd::parse_optional(effect_holder_json, "cantrips_free", effect_holder->extra_spells.free_cantrips);
@@ -67,14 +67,14 @@ static void parseExtraSpellsOptionals(
     );
 }
 
-static void parseRIVsOptionals(const nlohmann::json& effect_holder_json, dnd::EffectHolder* const effect_holder) {
+static void parse_riv_optionals(const nlohmann::json& effect_holder_json, dnd::EffectHolder* const effect_holder) {
     dnd::parse_optional(effect_holder_json, "damage_resistances", effect_holder->rivs.damage_resistances);
     dnd::parse_optional(effect_holder_json, "damage_immunities", effect_holder->rivs.damage_immunities);
     dnd::parse_optional(effect_holder_json, "damage_vulnerabilities", effect_holder->rivs.damage_vulnerabilities);
     dnd::parse_optional(effect_holder_json, "condition_immunities", effect_holder->rivs.condition_immunities);
 }
 
-static void parseProficienciesOptionals(
+static void parse_proficiency_optionals(
     const nlohmann::json& effect_holder_json, dnd::EffectHolder* const effect_holder
 ) {
     dnd::parse_optional(effect_holder_json, "armor_proficiencies", effect_holder->proficiencies.armor);
@@ -89,10 +89,10 @@ static void parseProficienciesOptionals(
 void dnd::EffectHolderParser::parse_effect_holder(
     const nlohmann::json& effect_holder_json, dnd::EffectHolder* const effect_holder
 ) const {
-    parseActionsOptionals(effect_holder_json, effect_holder);
-    parseExtraSpellsOptionals(effect_holder_json, effect_holder);
-    parseRIVsOptionals(effect_holder_json, effect_holder);
-    parseProficienciesOptionals(effect_holder_json, effect_holder);
+    parse_action_optionals(effect_holder_json, effect_holder);
+    parse_extra_spell_optionals(effect_holder_json, effect_holder);
+    parse_riv_optionals(effect_holder_json, effect_holder);
+    parse_proficiency_optionals(effect_holder_json, effect_holder);
 
     if (effect_holder_json.contains("activation") && effect_holder_json.contains("activations")) {
         throw invalid_attribute(type, filepath, "activation/activations", "attributes are mutally exclusive.");

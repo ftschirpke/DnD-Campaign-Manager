@@ -56,44 +56,44 @@ private:
     dnd::StorageContentLibrary<const dnd::CharacterRace> character_races;
     dnd::StorageContentLibrary<const dnd::CharacterSubrace> character_subraces;
     dnd::StorageContentLibrary<const dnd::Spell> spells;
-    void setClasses();
-    void setSubclasses();
-    void setRaces();
-    void setSubraces();
-    void setSpells();
+    void set_classes();
+    void set_subclasses();
+    void set_races();
+    void set_subraces();
+    void set_spells();
 };
 
-inline void SetupCharacterParserTest::setClasses() {
+void SetupCharacterParserTest::set_classes() {
     character_classes.create(
         "Barbarian", "dummy_path", std::vector<dnd::Feature>(), dnd::int_to_dice(12),
         std::vector<int>({4, 8, 12, 16, 19}), 3
     );
 }
 
-inline void SetupCharacterParserTest::setSubclasses() {
+void SetupCharacterParserTest::set_subclasses() {
     character_subclasses.create("Path of the Berserker", "dummy_path", std::vector<dnd::Feature>(), "Barbarian");
 }
 
-inline void SetupCharacterParserTest::setRaces() {
+void SetupCharacterParserTest::set_races() {
     character_races.create("Dwarf", "dummy_path", std::vector<dnd::Feature>(), true);
 }
 
-inline void SetupCharacterParserTest::setSubraces() {
+void SetupCharacterParserTest::set_subraces() {
     character_subraces.create("Hill Dwarf", "dummy_path", std::vector<dnd::Feature>(), "Dwarf");
 }
 
-inline void SetupCharacterParserTest::setSpells() {}
+void SetupCharacterParserTest::set_spells() {}
 
 
-inline SetupCharacterParserTest::SetupCharacterParserTest() : groups(), filepath("testing") {
-    setClasses();
-    setSubclasses();
-    setRaces();
-    setSubraces();
-    setSpells();
+SetupCharacterParserTest::SetupCharacterParserTest() : groups(), filepath("testing") {
+    set_classes();
+    set_subclasses();
+    set_races();
+    set_subraces();
+    set_spells();
 }
 
-inline TestCharacterFileParser SetupCharacterParserTest::createParser() {
+TestCharacterFileParser SetupCharacterParserTest::createParser() {
     return TestCharacterFileParser(
         filepath, characters, groups, character_classes, character_subclasses, character_races, character_subraces,
         spells

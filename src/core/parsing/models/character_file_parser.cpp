@@ -82,7 +82,7 @@ void dnd::CharacterFileParser::parse() {
     }
 }
 
-static const dnd::Feature* determineFeature(
+static const dnd::Feature* determine_feature(
     const std::string& feature_name, const std::vector<const dnd::FeatureHolder*> feature_holders
 ) {
     const dnd::Feature* feature_ptr = nullptr;
@@ -103,7 +103,7 @@ static const dnd::Feature* determineFeature(
     return feature_ptr;
 }
 
-static const dnd::Choice* determineChoice(
+static const dnd::Choice* determine_choice(
     const std::vector<dnd::CharacterDecision>& parsed_decisions, const std::string& attribute_name,
     const nlohmann::json& decision_json, const std::vector<dnd::EffectHolderWithChoices>& ehs_with_choices
 ) {
@@ -143,7 +143,7 @@ void dnd::CharacterFileParser::parse_character_decisions(
         feature_holders.emplace_back(subrace_ptr);
     }
 
-    const Feature* feature_ptr = determineFeature(feature_name, feature_holders);
+    const Feature* feature_ptr = determine_feature(feature_name, feature_holders);
 
     if (feature_ptr == nullptr) {
         throw invalid_attribute(type, filepath, "decision", "no feature \"" + feature_name + "\" exists.");
@@ -161,7 +161,7 @@ void dnd::CharacterFileParser::parse_character_decisions(
             throw attribute_format_error(type, filepath, "decision:" + feature_name, "array");
         }
 
-        const Choice* determined_choice = determineChoice(
+        const Choice* determined_choice = determine_choice(
             decisions, attribute_name, decision_json, feature_ptr->parts_with_choices
         );
         if (determined_choice == nullptr) {
