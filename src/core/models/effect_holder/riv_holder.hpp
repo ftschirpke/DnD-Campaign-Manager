@@ -14,7 +14,7 @@ namespace dnd {
 class RIVHolder {
 public:
     /**
-     * @brief Returns true if the RIVHolder is empty
+     * @brief Returns whether if the RIVHolder is empty
      * @return "true" if the RIVHolder is empty, "false" otherwise
      */
     bool empty() const;

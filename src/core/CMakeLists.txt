@@ -1,3 +1,4 @@
+add_subdirectory(basic_mechanics)
 add_subdirectory(controllers)
 add_subdirectory(models)
 add_subdirectory(output)

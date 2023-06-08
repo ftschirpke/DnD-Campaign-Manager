@@ -14,7 +14,7 @@ namespace dnd {
 class ActionHolder {
 public:
     /**
-     * @brief Returns true if the ActionHolder is empty
+     * @brief Returns whether the ActionHolder is empty
      * @return "true" if the ActionHolder is empty, "false" otherwise
      */
     bool empty() const;

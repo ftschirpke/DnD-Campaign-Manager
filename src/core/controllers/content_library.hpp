@@ -36,12 +36,12 @@ public:
     /**
      * @brief Check whether piece of content with given name exists
      * @param name the name
-     * @return true if such a piece of content exists, false otherwise
+     * @return "true" if such a piece of content exists, "false" otherwise
      */
     bool contains(const std::string& name) const;
     /**
      * @brief Returns whether the content library is empty
-     * @return true if the content library is empty, false otherwise
+     * @return "true" if the content library is empty, "false" otherwise
      */
     bool empty() const;
     /**
@@ -82,7 +82,7 @@ public:
      * @brief Add a content piece if no piece of content with the same name exists
      * @param name the name of the piece of content
      * @param new_content_piece the new piece of content
-     * @return true, if piece was added, false if name already exists
+     * @return true, if piece was added, "false" if name already exists
      */
     bool add(const std::string& name, DataT&& new_content_piece);
     /**
@@ -90,7 +90,7 @@ public:
      * @tparam ...Args the types the constructor for the piece of content allows
      * @param name the name of the piece of content
      * @param ...constructor_args additional constructor arguments to create the piece of content
-     * @return true, if piece was created and added, false if name already exists
+     * @return true, if piece was created and added, "false" if name already exists
      */
     template <
         typename... Args,

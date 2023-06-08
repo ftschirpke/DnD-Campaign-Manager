@@ -32,7 +32,7 @@ public:
     void finished_parsing();
     /**
      * @brief Returns whether all storage libraries are empty
-     * @return true if nothing is stored inside the content holder, false otherwise
+     * @return "true" if nothing is stored inside the content holder, "false" otherwise
      */
     bool empty() const;
     /**

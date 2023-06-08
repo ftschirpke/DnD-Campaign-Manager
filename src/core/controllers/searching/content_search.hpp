@@ -34,7 +34,7 @@ public:
      * @brief Insert the successors of the top node into a vector if such successors exist
      * @tparam S
      * @param vector the vector to insert the successors into
-     * @return true if successors were inserted, false otherwise (nothing inserted)
+     * @return "true" if successors were inserted, "false" otherwise (nothing inserted)
      */
     template <typename S>
     requires std::derived_from<T, S>
