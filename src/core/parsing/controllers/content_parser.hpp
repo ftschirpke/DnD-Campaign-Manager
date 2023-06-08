@@ -32,7 +32,7 @@ public:
     ContentHolder parse(const std::filesystem::path& content_path, const std::string& campaign_dir_name);
 private:
     /**
-     * @brief Deletes all parsed content and resets to a state as if just initialised
+     * @brief Deletes all parsed content and resets to a state as if just initialized
      */
     void reset() noexcept;
     /**

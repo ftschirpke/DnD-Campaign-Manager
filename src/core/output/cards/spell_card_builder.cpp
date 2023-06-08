@@ -42,12 +42,12 @@ static void createHeader(dnd::LatexDocument& document) {
 }
 
 static dnd::LatexScope* createCardPage(dnd::LatexDocument& document) {
-    std::string colour = "white";
+    std::string color = "white";
     auto begin_end = document.body.add_begin_end("tcbitemize");
     begin_end.begin_command->add_bracket_argument(
         "size=fbox,raster height=\\textheight,raster columns=3, raster equal skip=5mm,raster rows=3,enhanced,sharp "
         "corners,colback="
-        + colour + "!10,colframe=" + colour + "!50!black,text fill"
+        + color + "!10,colframe=" + color + "!50!black,text fill"
     );
     return begin_end.scope;
 }

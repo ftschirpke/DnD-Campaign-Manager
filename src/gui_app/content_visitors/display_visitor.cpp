@@ -117,7 +117,7 @@ void dnd::DisplayVisitor::visit(const CharacterClass* character_class_ptr) {
     ImGui::Text("Class");
     source(character_class_ptr);
     label("Hit Die:");
-    ImGui::Text("%s", diceToString(character_class_ptr->hit_dice).c_str());
+    ImGui::Text("%s", dice_to_string(character_class_ptr->hit_dice).c_str());
     label("ASI Levels:");
     std::stringstream asi_sstr;
     bool first = true;

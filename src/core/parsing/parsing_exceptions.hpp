@@ -37,10 +37,10 @@ public:
      */
     parsing_error(ParsingType parsing_type, const std::filesystem::path& path, const std::string& error_msg);
     /**
-     * @brief Relativises the file path of the parsing_error to the given path (helps making the error message cleaner)
+     * @brief Relativizes the file path of the parsing_error to the given path (helps making the error message cleaner)
      * @param root_path the updated path will be relative to this root path
      */
-    void relativiseFileName(const std::filesystem::path& root_path);
+    void relativize_file_name(const std::filesystem::path& root_path);
     /**
      * @brief Returns a C-style character string describing the general cause of the error
      * @return a C-style character string describing the general cause of the error
@@ -167,7 +167,7 @@ inline parsing_error::parsing_error(
 inline void parsing_error::updateWhat() { w = msg_start + " \"" + path.string() + "\" " + error_msg; }
 
 
-inline void parsing_error::relativiseFileName(const std::filesystem::path& root_path) {
+inline void parsing_error::relativize_file_name(const std::filesystem::path& root_path) {
     path = path.lexically_relative(root_path);
     updateWhat();
 }

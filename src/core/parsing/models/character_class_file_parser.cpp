@@ -29,7 +29,7 @@ void dnd::CharacterClassFileParser::parse() {
         throw invalid_attribute(type, filepath, "name", "cannot be \"\".");
     }
 
-    character_class_hit_dice = diceFromString(json_to_parse.at("hit_dice").get<std::string>());
+    character_class_hit_dice = string_to_dice(json_to_parse.at("hit_dice").get<std::string>());
     asi_levels = json_to_parse.at("asi_levels").get<std::vector<int>>();
 
     features_parser.parse_features(json_to_parse.at("features"));

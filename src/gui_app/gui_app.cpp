@@ -228,7 +228,7 @@ static void render_content_count_table(const dnd::ContentHolder& content) {
     display_size(
         "Choosables",
         static_cast<size_t>(std::accumulate(
-            content.groups.getAllChoosableGroups().begin(), content.groups.getAllChoosableGroups().end(), 0,
+            content.groups.get_all_choosable_groups().begin(), content.groups.get_all_choosable_groups().end(), 0,
             [](size_t sum, const auto& choosable_group) {
                 return static_cast<int>(sum + choosable_group.second.size());
             }

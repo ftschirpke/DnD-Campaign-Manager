@@ -30,24 +30,24 @@ public:
      * @return an unordered map containing the group members (choosables)
      * @throws std::out_of_range if group doesn't exist
      */
-    const std::unordered_map<std::string, Choosable>& getChoosableGroup(const std::string& group_name) const;
+    const std::unordered_map<std::string, Choosable>& get_choosable_group(const std::string& group_name) const;
     /**
      * @brief Get the values of a string group
      * @param group_name the name of the group
      * @return an unordered set containing the group members (strings)
      * @throws std::out_of_range if group doesn't exist
      */
-    const std::unordered_set<std::string>& getStringGroup(const std::string& group_name) const;
+    const std::unordered_set<std::string>& get_string_group(const std::string& group_name) const;
     /**
      * @brief Get all choosable groups
      * @return reference to all the choosable groups saved
      */
-    const std::unordered_map<std::string, std::unordered_map<std::string, Choosable>>& getAllChoosableGroups() const;
+    const std::unordered_map<std::string, std::unordered_map<std::string, Choosable>>& get_all_choosable_groups() const;
     /**
      * @brief Get all string groups
      * @return reference to all the string groups saved
      */
-    const std::unordered_map<std::string, std::unordered_set<std::string>>& getAllStringGroups() const;
+    const std::unordered_map<std::string, std::unordered_set<std::string>>& get_all_string_groups() const;
     /**
      * @brief Add a string value to a group (creates the group if it doesn't exist)
      * @param group_name the name of the group
@@ -79,26 +79,26 @@ public:
      * @param group_name the name of the group
      * @return "true" if any group with this name exists, "false" otherwise
      */
-    bool isGroup(const std::string& group_name) const;
+    bool is_group(const std::string& group_name) const;
     /**
      * @brief Determines wheteher a group of strings with given name exists.
      * @param group_name the name of the group
      * @return "true" if a string-group with this name exists, "false" otherwise
      */
-    bool isStringGroup(const std::string& group_name) const;
+    bool is_string_group(const std::string& group_name) const;
     /**
      * @brief Determines wheteher a group of choosables with the given name exists.
      * @param group_name the name of the group
      * @return "true" if a choosable-group with this name exists, "false" otherwise
      */
-    bool isChoosableGroup(const std::string& group_name) const;
+    bool is_choosable_group(const std::string& group_name) const;
     /**
      * @brief Determines whether a certain string is part of a given group.
      * @param name the string that is supposed to be a part of the group
      * @param group_name the name of the group
      * @return "true" if name is part of the group, "false" otherwise (also when the group does not exist)
      */
-    bool isPartOfGroup(const std::string& name, const std::string& group_name) const;
+    bool is_part_of_group(const std::string& name, const std::string& group_name) const;
     /**
      * @brief Returns a string describing the amounts of groups parsed
      * @return a string describing the current parsed groups
@@ -111,21 +111,21 @@ private:
     std::unordered_map<std::string, std::unordered_map<std::string, Choosable>> choosables;
 };
 
-inline const std::unordered_map<std::string, Choosable>& Groups::getChoosableGroup(const std::string& group_name
+inline const std::unordered_map<std::string, Choosable>& Groups::get_choosable_group(const std::string& group_name
 ) const {
     return choosables.at(group_name);
 }
 
-inline const std::unordered_set<std::string>& Groups::getStringGroup(const std::string& group_name) const {
+inline const std::unordered_set<std::string>& Groups::get_string_group(const std::string& group_name) const {
     return data.at(group_name);
 }
 
-inline const std::unordered_map<std::string, std::unordered_map<std::string, Choosable>>& Groups::getAllChoosableGroups(
-) const {
+inline const std::unordered_map<std::string, std::unordered_map<std::string, Choosable>>& Groups::
+    get_all_choosable_groups() const {
     return choosables;
 }
 
-inline const std::unordered_map<std::string, std::unordered_set<std::string>>& Groups::getAllStringGroups() const {
+inline const std::unordered_map<std::string, std::unordered_set<std::string>>& Groups::get_all_string_groups() const {
     return data;
 }
 
@@ -143,8 +143,8 @@ inline void Groups::add(const std::string& group_name, std::unordered_map<std::s
     choosables[group_name].insert(std::make_move_iterator(values.begin()), std::make_move_iterator(values.end()));
 }
 
-inline bool Groups::isGroup(const std::string& group_name) const {
-    return isStringGroup(group_name) || isChoosableGroup(group_name);
+inline bool Groups::is_group(const std::string& group_name) const {
+    return is_string_group(group_name) || is_choosable_group(group_name);
 }
 
 } // namespace dnd

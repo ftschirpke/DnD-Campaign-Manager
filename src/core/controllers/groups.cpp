@@ -29,14 +29,14 @@ dnd::Groups::Groups() {
     }
 }
 
-bool dnd::Groups::isStringGroup(const std::string& group_name) const { return data.contains(group_name); }
+bool dnd::Groups::is_string_group(const std::string& group_name) const { return data.contains(group_name); }
 
-bool dnd::Groups::isChoosableGroup(const std::string& group_name) const { return choosables.contains(group_name); }
+bool dnd::Groups::is_choosable_group(const std::string& group_name) const { return choosables.contains(group_name); }
 
-bool dnd::Groups::isPartOfGroup(const std::string& name, const std::string& group_name) const {
-    if (isStringGroup(group_name)) {
+bool dnd::Groups::is_part_of_group(const std::string& name, const std::string& group_name) const {
+    if (is_string_group(group_name)) {
         return std::find(data.at(group_name).cbegin(), data.at(group_name).cend(), name) != data.at(group_name).cend();
-    } else if (isChoosableGroup(group_name)) {
+    } else if (is_choosable_group(group_name)) {
         return choosables.at(group_name).contains(name);
     }
     return false;

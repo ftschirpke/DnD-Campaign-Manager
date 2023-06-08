@@ -58,12 +58,12 @@ dnd::ContentHolder dnd::ContentParser::parse(
     }
     if (!std::filesystem::exists(content_path / "general")) {
         parsing_error error((content_path / "general"), "does not exist.");
-        error.relativiseFileName(content_path);
+        error.relativize_file_name(content_path);
         throw error;
     }
     if (!std::filesystem::exists(content_path / campaign_dir_name)) {
         parsing_error error((content_path / campaign_dir_name), "does not exist.");
-        error.relativiseFileName(content_path);
+        error.relativize_file_name(content_path);
         throw error;
     }
 
@@ -84,7 +84,7 @@ dnd::ContentHolder dnd::ContentParser::parse(
         parseAllOfType(ParsingType::SUBRACE);
         parseAllOfType(ParsingType::CHARACTER);
     } catch (parsing_error& e) {
-        e.relativiseFileName(content_path);
+        e.relativize_file_name(content_path);
         throw e;
     }
 
