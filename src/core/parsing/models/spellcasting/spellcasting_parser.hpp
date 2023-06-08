@@ -21,7 +21,7 @@ namespace dnd {
 /**
  * @brief An enum for the types of spellcasting
  */
-enum SpellcastingType {
+enum class SpellcastingType {
     PREPARATION,
     SPELLS_KNOWN,
 };

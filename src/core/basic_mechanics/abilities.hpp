@@ -15,7 +15,7 @@ namespace dnd {
 /**
  * @brief An enum for the basic 6 abilities
  */
-enum Ability {
+enum class Ability {
     STRENGTH,
     DEXTERITY,
     CONSTITUTION,
@@ -55,17 +55,17 @@ inline Ability string_to_ability(const std::string& ability_str) {
  */
 inline std::string ability_to_string(Ability ability) {
     switch (ability) {
-        case STRENGTH:
+        case Ability::STRENGTH:
             return "STR";
-        case DEXTERITY:
+        case Ability::DEXTERITY:
             return "DEX";
-        case CONSTITUTION:
+        case Ability::CONSTITUTION:
             return "CON";
-        case INTELLIGENCE:
+        case Ability::INTELLIGENCE:
             return "INT";
-        case WISDOM:
+        case Ability::WISDOM:
             return "WIS";
-        case CHARISMA:
+        case Ability::CHARISMA:
             return "CHA";
     }
 }

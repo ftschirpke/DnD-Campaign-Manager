@@ -11,7 +11,7 @@ namespace dnd {
 /**
  * @brief An enum for the types of typical tabletop dice.
  */
-enum Dice {
+enum class Dice {
     D4 = 4,
     D6 = 6,
     D8 = 8,

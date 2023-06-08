@@ -12,7 +12,7 @@ namespace dnd {
 /**
  * @brief An enum for the types of contents that can be parsed
  */
-enum ParsingType {
+enum class ParsingType {
     GROUP,
     ITEM,
     SPELL,
