@@ -25,7 +25,7 @@ enum Dice {
  * @param dice_type a type tabletop dice
  * @return the maximum value for that type of dice
  */
-inline int diceToInt(Dice dice_type) { return static_cast<int>(dice_type); }
+inline int dice_to_int(Dice dice_type) { return static_cast<int>(dice_type); }
 
 /**
  * @brief Returns the type of dice for a given number
@@ -33,7 +33,7 @@ inline int diceToInt(Dice dice_type) { return static_cast<int>(dice_type); }
  * @return the type of dice that has the number as the maximum value
  * @throws std::invalid_argument if no such dice exist (i.e. number is not 4, 6, 8, 10, 12, or 20)
  */
-inline Dice diceFromInt(int number) {
+inline Dice int_to_dice(int number) {
     switch (number) {
         case 4:
             return Dice::D4;
@@ -57,7 +57,7 @@ inline Dice diceFromInt(int number) {
  * @param dice_type a type tabletop dice
  * @return the string representation for that type of dice
  */
-inline std::string diceToString(Dice dice_type) { return 'd' + std::to_string(diceToInt(dice_type)); }
+inline std::string dice_to_string(Dice dice_type) { return 'd' + std::to_string(dice_to_int(dice_type)); }
 
 /**
  * @brief Returns a type of dice given its string representation
@@ -65,7 +65,7 @@ inline std::string diceToString(Dice dice_type) { return 'd' + std::to_string(di
  * @return the type of tabletop dice that this string represents
  * @throws std::invalid_argument if no such dice exist (i.e. is not d4, d6, d8, d10, d12, or d20)
  */
-inline Dice diceFromString(const std::string& str) {
+inline Dice string_to_dice(const std::string& str) {
     if (str == "d4") {
         return Dice::D4;
     } else if (str == "d6") {

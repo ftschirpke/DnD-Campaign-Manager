@@ -36,7 +36,7 @@ void dnd::ContentHolder::finished_parsing() {
         add_features_of_feature_holder(features, &character_subrace);
     }
 
-    for (const auto& [group_name, group_choosables] : groups.getAllChoosableGroups()) {
+    for (const auto& [group_name, group_choosables] : groups.get_all_choosable_groups()) {
         choosables[group_name] = ReferencingContentLibrary<const Choosable>();
         for (const auto& [choosable_name, choosable] : group_choosables) {
             choosables[group_name].add(choosable_name, &choosable);

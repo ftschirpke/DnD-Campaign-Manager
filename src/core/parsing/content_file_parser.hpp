@@ -25,7 +25,7 @@ public:
     ContentFileParser(ContentFileParser&& other) noexcept = default;
     virtual ~ContentFileParser() noexcept = default;
     /**
-     * @brief Opens the json file to be parsed and deserialises the JSON.
+     * @brief Opens the json file to be parsed and deserializes the JSON.
      * @return "true" if opening and deserialising was successful, "false" otherwise
      */
     virtual bool open_json();

@@ -180,25 +180,25 @@ void dnd::EffectHolderParser::parse_and_add_choice(
                 group_name[idx] = ' ';
                 idx = group_name.find('_');
             }
-            if (!groups.isGroup(group_name)) {
+            if (!groups.is_group(group_name)) {
                 throw invalid_attribute(type, filepath, "choose:group", '\"' + group_name + "\" is not a group");
             }
         }
 
         bool all_are_choosable_groups = std::all_of(
             group_names.begin(), group_names.end(),
-            [&](const std::string& group_name) { return groups.isChoosableGroup(group_name); }
+            [&](const std::string& group_name) { return groups.is_choosable_group(group_name); }
         );
         bool all_are_string_groups = std::all_of(
             group_names.begin(), group_names.end(),
-            [&](const std::string& group_name) { return groups.isStringGroup(group_name); }
+            [&](const std::string& group_name) { return groups.is_string_group(group_name); }
         );
 
         if (all_are_choosable_groups) {
             std::vector<const std::unordered_map<std::string, Choosable>*> group_values;
             group_values.reserve(group_names.size());
             for (const auto& group_name : group_names) {
-                group_values.emplace_back(&groups.getChoosableGroup(group_name));
+                group_values.emplace_back(&groups.get_choosable_group(group_name));
             }
             effect_holder.choices.emplace_back(
                 std::make_unique<ChoosableGroupChoice>(amount, choice_key, std::move(group_values))
@@ -207,7 +207,7 @@ void dnd::EffectHolderParser::parse_and_add_choice(
             std::vector<const std::unordered_set<std::string>*> group_values;
             group_values.reserve(group_names.size());
             for (const auto& group_name : group_names) {
-                group_values.emplace_back(&groups.getStringGroup(group_name));
+                group_values.emplace_back(&groups.get_string_group(group_name));
             }
             effect_holder.choices.emplace_back(
                 std::make_unique<StringGroupChoice>(amount, choice_key, std::move(group_values))

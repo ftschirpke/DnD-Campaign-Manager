@@ -54,11 +54,11 @@ void dnd::CharacterFileParser::parse() {
 
     hit_dice_rolls = json_to_parse.at("hit_dice_rolls").get<std::vector<int>>();
 
-    auto not_between_one_and_dicemax = [&](int x) { return (x <= 0 || x > diceToInt(class_ptr->hit_dice)); };
+    auto not_between_one_and_dicemax = [&](int x) { return (x <= 0 || x > dice_to_int(class_ptr->hit_dice)); };
     if (std::any_of(hit_dice_rolls.begin(), hit_dice_rolls.end(), not_between_one_and_dicemax)) {
         throw invalid_attribute(
             type, filepath, "hit_dice_rolls",
-            "all entries must be valid values for the hit dice (" + diceToString(class_ptr->hit_dice) + ')'
+            "all entries must be valid values for the hit dice (" + dice_to_string(class_ptr->hit_dice) + ')'
         );
     }
 
