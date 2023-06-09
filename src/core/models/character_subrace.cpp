@@ -12,9 +12,9 @@
 #include <core/models/feature_holder.hpp>
 
 dnd::CharacterSubrace::CharacterSubrace(
-    const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
+    const std::string& name, const std::filesystem::path& source_path, std::vector<Feature>&& features,
     const std::string& race_name
 ) noexcept
-    : FeatureHolder(name, source_file_path, std::move(features)), race_name(race_name) {}
+    : FeatureHolder(name, source_path, std::move(features)), race_name(race_name) {}
 
 void dnd::CharacterSubrace::accept(ContentVisitor* visitor) const { visitor->visit(this); }

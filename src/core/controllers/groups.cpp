@@ -56,7 +56,7 @@ void dnd::Groups::add(const std::string& group_name, std::unordered_set<std::str
 }
 
 void dnd::Groups::add(const std::string& group_name, Choosable&& value) {
-    choosables[group_name].emplace(value.name, std::move(value));
+    choosables[group_name].emplace(value.get_name(), std::move(value));
 }
 
 void dnd::Groups::add(const std::string& group_name, std::unordered_map<std::string, dnd::Choosable>&& values) {

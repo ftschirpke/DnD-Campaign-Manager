@@ -41,7 +41,7 @@ static void source(const dnd::ContentPiece* content_piece_ptr) {
     ImGui::TableSetColumnIndex(0);
     ImGui::Text("Source:");
     ImGui::TableSetColumnIndex(1);
-    ImGui::TextWrapped("%s", content_piece_ptr->source_file_path.string().c_str());
+    ImGui::TextWrapped("%s", content_piece_ptr->get_source_path().string().c_str());
     ImGui::TableNextRow();
     ImGui::TableSetColumnIndex(0);
     ImGui::Separator();
@@ -50,7 +50,7 @@ static void source(const dnd::ContentPiece* content_piece_ptr) {
 }
 
 static void begin_content_table(const dnd::ContentPiece* content_piece_ptr) {
-    std::string table_id = content_piece_ptr->name + "_table";
+    std::string table_id = content_piece_ptr->get_name() + "_table";
     ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, cell_padding);
     ImGui::BeginTable(table_id.c_str(), 2, content_table_flags);
     ImGui::TableSetupColumn("Labels", ImGuiTableColumnFlags_WidthFixed, first_column_width);
@@ -81,25 +81,25 @@ void dnd::DisplayVisitor::visit(const Character* character_ptr) {
     ); // TODO - this is a hack, fix it
 
     label("Race:");
-    if (ImGui::CollapsingHeader(character_ptr->race_ptr->name.c_str())) {
+    if (ImGui::CollapsingHeader(character_ptr->race_ptr->get_name().c_str())) {
         visit(character_ptr->race_ptr);
     }
 
     if (character_ptr->subrace_ptr != nullptr) {
         label("Subrace:");
-        if (ImGui::CollapsingHeader(character_ptr->subrace_ptr->name.c_str())) {
+        if (ImGui::CollapsingHeader(character_ptr->subrace_ptr->get_name().c_str())) {
             visit(character_ptr->subrace_ptr);
         }
     }
 
     label("Class:");
-    if (ImGui::CollapsingHeader(character_ptr->class_ptr->name.c_str())) {
+    if (ImGui::CollapsingHeader(character_ptr->class_ptr->get_name().c_str())) {
         visit(character_ptr->class_ptr);
     }
 
     if (character_ptr->subclass_ptr != nullptr) {
         label("Subclass:");
-        if (ImGui::CollapsingHeader(character_ptr->subclass_ptr->name.c_str())) {
+        if (ImGui::CollapsingHeader(character_ptr->subclass_ptr->get_name().c_str())) {
             visit(character_ptr->subclass_ptr);
         }
     }
@@ -259,7 +259,7 @@ void dnd::DisplayVisitor::list_features(const dnd::FeatureHolder* feature_holder
     }
     for (const dnd::Feature& feature : feature_holder_ptr->features) {
         ImGui::Separator();
-        if (ImGui::TreeNode(feature.name.c_str())) {
+        if (ImGui::TreeNode(feature.get_name().c_str())) {
             ImGui::Separator();
             visit(&feature);
             ImGui::TreePop();

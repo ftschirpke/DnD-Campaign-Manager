@@ -121,11 +121,11 @@ static std::vector<const dnd::Spell*> search_spells(
     }
     std::vector<const dnd::Spell*> spells_in_order(matched_spells.begin(), matched_spells.end());
     std::sort(spells_in_order.begin(), spells_in_order.end(), [](const dnd::Spell* a, const dnd::Spell* b) {
-        return a->name < b->name;
+        return a->get_name() < b->get_name();
     });
     output->text("-- A -- Spells");
     for (const dnd::Spell* spell : spells_in_order) {
-        output->formatted_text("- [{:>2d}] {:<30s} ({:s})", i, spell->name, spell->type.str());
+        output->formatted_text("- [{:>2d}] {:<30s} ({:s})", i, spell->get_name(), spell->type.str());
         if (++i >= 100) {
             break;
         }
@@ -143,11 +143,11 @@ static std::vector<const dnd::Item*> search_items(
     }
     std::vector<const dnd::Item*> items_in_order(matched_items.begin(), matched_items.end());
     std::sort(items_in_order.begin(), items_in_order.end(), [](const dnd::Item* a, const dnd::Item* b) {
-        return a->name < b->name;
+        return a->get_name() < b->get_name();
     });
     output->text("-- B --  Items");
     for (const dnd::Item* item : items_in_order) {
-        output->formatted_text("- [{:>2d}] {:<30s}", i, item->name);
+        output->formatted_text("- [{:>2d}] {:<30s}", i, item->get_name());
         if (++i >= 100) {
             break;
         }
@@ -165,11 +165,11 @@ static std::vector<const dnd::Feature*> search_features(
     }
     std::vector<const dnd::Feature*> features_in_order(matched_features.begin(), matched_features.end());
     std::sort(features_in_order.begin(), features_in_order.end(), [](const dnd::Feature* a, const dnd::Feature* b) {
-        return a->name < b->name;
+        return a->get_name() < b->get_name();
     });
     output->text("-- C -- Features");
     for (const dnd::Feature* feature : features_in_order) {
-        output->formatted_text("- [{:>2d}] {:<30s}", i, feature->name);
+        output->formatted_text("- [{:>2d}] {:<30s}", i, feature->get_name());
         if (++i >= 100) {
             break;
         }
@@ -192,7 +192,7 @@ static std::map<std::string, std::vector<const dnd::Choosable*>> search_choosabl
         );
         std::sort(
             choosables_in_order[name].begin(), choosables_in_order[name].end(),
-            [](const dnd::Choosable* a, const dnd::Choosable* b) { return a->name < b->name; }
+            [](const dnd::Choosable* a, const dnd::Choosable* b) { return a->get_name() < b->get_name(); }
         );
     }
     if (choosables_in_order.empty()) {
@@ -204,7 +204,7 @@ static std::map<std::string, std::vector<const dnd::Choosable*>> search_choosabl
             output->formatted_text("-- {} -- {:s}", letter++, category);
         }
         for (const dnd::Choosable* choosable : ordered_choosables) {
-            output->formatted_text("- [{:>2d}] {:<30s}", i, choosable->name);
+            output->formatted_text("- [{:>2d}] {:<30s}", i, choosable->get_name());
             if (++i >= 100) {
                 break;
             }

@@ -22,7 +22,7 @@ public:
      * @param description a description of how the item works and/or what is does
      */
     Item(
-        const std::string& name, const std::filesystem::path& source_file_path, bool requires_attunement,
+        const std::string& name, const std::filesystem::path& source_path, bool requires_attunement,
         const std::string description
     ) noexcept;
     /**
@@ -33,7 +33,7 @@ public:
      * @param cosmetic_description a description of the purely cosmetic (non-functional) aspects of the item
      */
     Item(
-        const std::string& name, const std::filesystem::path& source_file_path, bool requires_attunement,
+        const std::string& name, const std::filesystem::path& source_path, bool requires_attunement,
         const std::string description, const std::string cosmetic_description
     ) noexcept;
     /**
@@ -50,17 +50,16 @@ public:
 };
 
 inline Item::Item(
-    const std::string& name, const std::filesystem::path& source_file_path, bool requires_attunement,
+    const std::string& name, const std::filesystem::path& source_path, bool requires_attunement,
     const std::string description
 ) noexcept
-    : ContentPiece(name, source_file_path), requires_attunement(requires_attunement), description(description),
-      cosmetic_description() {}
+    : ContentPiece(name, description, source_path), requires_attunement(requires_attunement), cosmetic_description() {}
 
 inline Item::Item(
-    const std::string& name, const std::filesystem::path& source_file_path, bool requires_attunement,
+    const std::string& name, const std::filesystem::path& source_path, bool requires_attunement,
     const std::string description, const std::string cosmetic_description
 ) noexcept
-    : ContentPiece(name, source_file_path), requires_attunement(requires_attunement), description(description),
+    : ContentPiece(name, description, source_path), requires_attunement(requires_attunement),
       cosmetic_description(cosmetic_description) {}
 
 inline void Item::accept(ContentVisitor* visitor) const { visitor->visit(this); }

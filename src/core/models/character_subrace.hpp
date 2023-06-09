@@ -25,7 +25,7 @@ public:
      * @param race_name the name of the race this is a subrace of
      */
     CharacterSubrace(
-        const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
+        const std::string& name, const std::filesystem::path& source_path, std::vector<Feature>&& features,
         const std::string& race_name
     ) noexcept;
     /**

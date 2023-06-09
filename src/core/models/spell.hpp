@@ -156,7 +156,7 @@ public:
      * @param classes the names of classes (and subclasses) that can cast this spell
      */
     Spell(
-        const std::string& name, const std::filesystem::path& source_file_path, const SpellType& type,
+        const std::string& name, const std::filesystem::path& source_path, const SpellType& type,
         const std::string& casting_time, const std::string& range, const SpellComponents& components,
         const std::string& duration, const std::string& description, const std::unordered_set<std::string>& classes
     ) noexcept;
@@ -183,12 +183,12 @@ public:
 };
 
 inline Spell::Spell(
-    const std::string& name, const std::filesystem::path& source_file_path, const SpellType& type,
+    const std::string& name, const std::filesystem::path& source_path, const SpellType& type,
     const std::string& casting_time, const std::string& range, const SpellComponents& components,
     const std::string& duration, const std::string& description, const std::unordered_set<std::string>& classes
 ) noexcept
-    : ContentPiece(name, source_file_path), casting_time(casting_time), range(range), duration(duration),
-      description(description), classes(classes), type(type), components(components) {}
+    : ContentPiece(name, description, source_path), casting_time(casting_time), range(range), duration(duration),
+      classes(classes), type(type), components(components) {}
 
 inline void Spell::accept(ContentVisitor* visitor) const { visitor->visit(this); }
 

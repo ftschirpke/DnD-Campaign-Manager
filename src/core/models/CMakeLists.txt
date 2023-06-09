@@ -6,6 +6,7 @@ target_sources(${DND_CORE}
     character_race.cpp
     character_subrace.cpp
     character_state.cpp
+    content_piece.cpp
     spell.cpp
 )
 

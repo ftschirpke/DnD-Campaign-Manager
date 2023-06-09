@@ -91,7 +91,7 @@ static const dnd::Feature* determine_feature(
             continue;
         }
         for (const auto& feature : feature_holder->features) {
-            if (feature.name == feature_name) {
+            if (feature.get_name() == feature_name) {
                 feature_ptr = &feature;
                 break;
             }
@@ -229,14 +229,14 @@ void dnd::CharacterFileParser::parse_class_and_race() {
         }
         if (class_ptr->subclass_level > level) {
             std::cerr << "Warning: Character " << character_name << " has subclass although the class \""
-                      << class_ptr->name << "\" only allows subclasses from level " << class_ptr->subclass_level
+                      << class_ptr->get_name() << "\" only allows subclasses from level " << class_ptr->subclass_level
                       << " on. Thus, the subclass will be ignored.\n";
         }
     } else if (class_ptr->subclass_level <= level) {
         throw attribute_missing(
             type, filepath,
             "beginning at level " + std::to_string(class_ptr->subclass_level) + " a subclass is required for "
-                + class_ptr->name + "s."
+                + class_ptr->get_name() + "s."
         );
     }
 
@@ -251,7 +251,8 @@ void dnd::CharacterFileParser::parse_class_and_race() {
     if (json_to_parse.contains("subrace")) {
         if (!race_ptr->has_subraces) {
             throw invalid_attribute(
-                type, filepath, "subrace", "is invalid because the race \"" + race_ptr->name + "\" has no subraces."
+                type, filepath, "subrace",
+                "is invalid because the race \"" + race_ptr->get_name() + "\" has no subraces."
             );
         }
         const std::string character_subrace_name = json_to_parse.at("subrace").get<std::string>();
@@ -262,7 +263,9 @@ void dnd::CharacterFileParser::parse_class_and_race() {
             throw invalid_attribute(type, filepath, "subrace", '\"' + character_subrace_name + "\" does not exist");
         }
     } else if (race_ptr->has_subraces) {
-        throw attribute_missing(type, filepath, "The race \"" + race_ptr->name + "\" requires a subrace selection.");
+        throw attribute_missing(
+            type, filepath, "The race \"" + race_ptr->get_name() + "\" requires a subrace selection."
+        );
     }
 }
 

@@ -244,14 +244,14 @@ TEST_CASE("dnd::CharacterParser::createCharacter: parse logically wrong characte
 }
 
 void test_basic_values_from_json(const nlohmann::json& character_json, const dnd::Character* const character_ptr) {
-    REQUIRE(character_ptr->name == character_json.at("name").get<std::string>());
-    REQUIRE(character_ptr->class_ptr->name == character_json.at("class").get<std::string>());
+    REQUIRE(character_ptr->get_name() == character_json.at("name").get<std::string>());
+    REQUIRE(character_ptr->class_ptr->get_name() == character_json.at("class").get<std::string>());
     if (character_json.contains("subclass")) {
-        REQUIRE(character_ptr->subclass_ptr->name == character_json.at("subclass").get<std::string>());
+        REQUIRE(character_ptr->subclass_ptr->get_name() == character_json.at("subclass").get<std::string>());
     }
-    REQUIRE(character_ptr->race_ptr->name == character_json.at("race").get<std::string>());
+    REQUIRE(character_ptr->race_ptr->get_name() == character_json.at("race").get<std::string>());
     if (character_json.contains("subrace")) {
-        REQUIRE(character_ptr->subrace_ptr->name == character_json.at("subrace").get<std::string>());
+        REQUIRE(character_ptr->subrace_ptr->get_name() == character_json.at("subrace").get<std::string>());
     }
     REQUIRE(character_ptr->base_ability_scores == character_json.at("base_ability_scores").get<std::array<int, 6>>());
     if (character_json.contains("level")) {

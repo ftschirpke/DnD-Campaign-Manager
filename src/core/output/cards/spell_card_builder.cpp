@@ -69,7 +69,7 @@ static dnd::LatexText* create_card_header(dnd::LatexScope* scope, const dnd::Spe
     center_scope->add_command("MakeUppercase");
     dnd::LatexScope* sub_scope = center_scope->add_scope();
     sub_scope->add_command("textbf");
-    dnd::LatexText* title = sub_scope->add_scope()->add_text(spell->name + " (" + std::to_string(counter) + ')');
+    dnd::LatexText* title = sub_scope->add_scope()->add_text(spell->get_name() + " (" + std::to_string(counter) + ')');
     scope->add_command("vspace", "-3mm");
     create_minipage(scope, "Casting Time", spell->casting_time);
     create_minipage(scope, "Range", spell->range);
@@ -127,7 +127,7 @@ static int create_spell_cards(dnd::LatexScope* scope, const dnd::Spell* spell) {
     create_card_footer(scope, spell);
 
     if (counter == 1) {
-        first_title->set_text(spell->name);
+        first_title->set_text(spell->get_name());
     }
     return counter;
 }

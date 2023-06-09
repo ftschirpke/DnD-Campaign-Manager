@@ -25,7 +25,7 @@ public:
      * @param has_subraces "true" if this race has subraces, "false" otherwise
      */
     CharacterRace(
-        const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
+        const std::string& name, const std::filesystem::path& source_path, std::vector<Feature>&& features,
         const bool has_subraces
     ) noexcept;
     /**

@@ -96,7 +96,7 @@ public:
     template <
         typename... Args,
         std::enable_if_t<std::is_constructible<DataT, std::string&, std::filesystem::path&, Args&&...>::value, int> = 0>
-    bool create(const std::string& name, const std::filesystem::path& source_file_path, Args&&... constructor_args);
+    bool create(const std::string& name, const std::filesystem::path& source_path, Args&&... constructor_args);
     /**
      * @brief Get the root of the search trie
      * @return a pointer the root node
@@ -196,14 +196,14 @@ template <
     typename... Args,
     std::enable_if_t<std::is_constructible<DataT, std::string&, std::filesystem::path&, Args&&...>::value, int>>
 bool ContentLibrary<TrieT, DataT>::create(
-    const std::string& name, const std::filesystem::path& source_file_path, Args&&... constructor_args
+    const std::string& name, const std::filesystem::path& source_path, Args&&... constructor_args
 ) {
     if (contains(name)) {
         return false;
     }
     data.emplace(
         std::piecewise_construct, std::forward_as_tuple(name),
-        std::forward_as_tuple(name, source_file_path, std::move(constructor_args)...)
+        std::forward_as_tuple(name, source_path, std::move(constructor_args)...)
     );
     save_in_trie(name);
     return true;

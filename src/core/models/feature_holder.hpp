@@ -23,7 +23,7 @@ public:
      * @param features a collection of features this holder provides to a character of its type
      */
     FeatureHolder(
-        const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features
+        const std::string& name, const std::filesystem::path& source_path, std::vector<Feature>&& features
     ) noexcept;
     virtual ~FeatureHolder() noexcept = default;
 
@@ -32,9 +32,9 @@ public:
 };
 
 inline FeatureHolder::FeatureHolder(
-    const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features
+    const std::string& name, const std::filesystem::path& source_path, std::vector<Feature>&& features
 ) noexcept
-    : ContentPiece(name, source_file_path), features(std::move(features)) {}
+    : ContentPiece(name, "", source_path), features(std::move(features)) {}
 
 } // namespace dnd
 

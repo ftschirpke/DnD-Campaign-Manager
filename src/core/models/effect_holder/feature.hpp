@@ -24,9 +24,7 @@ public:
      * @param name the name of the feature
      * @param description a human-readable description of what the feature provides
      */
-    Feature(
-        const std::string& name, const std::filesystem::path& source_file_path, const std::string& description
-    ) noexcept;
+    Feature(const std::string& name, const std::filesystem::path& source_path, const std::string& description) noexcept;
     Feature(Feature&& other) noexcept = default;
     /**
      * @brief Checks whether the feature is active (provides its effects) for a character of a certain level
@@ -54,9 +52,9 @@ public:
 };
 
 inline Feature::Feature(
-    const std::string& name, const std::filesystem::path& source_file_path, const std::string& description
+    const std::string& name, const std::filesystem::path& source_path, const std::string& description
 ) noexcept
-    : ContentPiece(name, source_file_path), description(description), subclass(false) {}
+    : ContentPiece(name, description, source_path), subclass(false) {}
 
 inline void Feature::accept(ContentVisitor* visitor) const { visitor->visit(this); }
 

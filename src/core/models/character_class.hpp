@@ -28,7 +28,7 @@ public:
      * @param subclass_level the level at which a character of this class gains access to subclasses
      */
     CharacterClass(
-        const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
+        const std::string& name, const std::filesystem::path& source_path, std::vector<Feature>&& features,
         const Dice hit_dice, const std::vector<int>& asi_levels, int subclass_level
     ) noexcept;
     /**

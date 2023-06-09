@@ -20,19 +20,19 @@ void dnd::CommandLineOutput::error(const char* error_msg) { std::cerr << error_m
 void dnd::CommandLineOutput::error(std::string_view error_msg) { std::cerr << error_msg << '\n'; }
 
 void dnd::CommandLineOutput::display(const dnd::Item* item) {
-    std::cout << item->name << '\n' << item->description << '\n';
+    std::cout << item->get_name() << '\n' << item->get_description() << '\n';
 }
 
 void dnd::CommandLineOutput::display(const dnd::Spell* spell) {
-    std::cout << spell->name << '\n' << spell->description << '\n';
+    std::cout << spell->get_name() << '\n' << spell->get_description() << '\n';
 }
 
 void dnd::CommandLineOutput::display(const dnd::Feature* feature) {
-    std::cout << feature->name << '\n' << feature->description << '\n';
+    std::cout << feature->get_name() << '\n' << feature->get_description() << '\n';
 }
 
 void dnd::CommandLineOutput::display(const dnd::Choosable* choosable) {
-    std::cout << choosable->name << '\n' << choosable->description << '\n';
+    std::cout << choosable->get_name() << '\n' << choosable->get_description() << '\n';
 }
 
 void dnd::CommandLineOutput::prompt_input(std::string_view prompt_msg, std::string& out) {

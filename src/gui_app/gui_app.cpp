@@ -441,8 +441,8 @@ void dnd::GUIApp::render_content_window() {
     if (ImGui::BeginTabBar("Content Tabs", tab_bar_flags)) {
         for (auto it = open_content_pieces.begin(); it != open_content_pieces.end();) {
             bool open = true;
-            if (ImGui::BeginTabItem((*it)->name.c_str(), &open)) {
-                ImGui::SeparatorText((*it)->name.c_str());
+            if (ImGui::BeginTabItem((*it)->get_name().c_str(), &open)) {
+                ImGui::SeparatorText((*it)->get_name().c_str());
                 (*it)->accept(&display_visitor);
                 ImGui::EndTabItem();
             }

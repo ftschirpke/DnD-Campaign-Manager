@@ -25,7 +25,7 @@ public:
      * @param class_name the name of the class this is a subclass of
      */
     CharacterSubclass(
-        const std::string& name, const std::filesystem::path& source_file_path, std::vector<Feature>&& features,
+        const std::string& name, const std::filesystem::path& source_path, std::vector<Feature>&& features,
         const std::string& class_name
     ) noexcept;
     /**

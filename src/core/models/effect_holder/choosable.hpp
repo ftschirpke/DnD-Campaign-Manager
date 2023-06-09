@@ -26,7 +26,7 @@ public:
      * @param description a human-readable description of what the choosable provides
      */
     Choosable(
-        const std::string& name, const std::filesystem::path& source_file_path, const std::string& description
+        const std::string& name, const std::filesystem::path& source_path, const std::string& description
     ) noexcept;
     Choosable(Choosable&& other) noexcept = default;
     /**
@@ -46,9 +46,9 @@ public:
 };
 
 inline Choosable::Choosable(
-    const std::string& name, const std::filesystem::path& source_file_path, const std::string& description
+    const std::string& name, const std::filesystem::path& source_path, const std::string& description
 ) noexcept
-    : ContentPiece(name, source_file_path), description(description) {}
+    : ContentPiece(name, description, source_path) {}
 
 inline void Choosable::accept(ContentVisitor* visitor) const { visitor->visit(this); }
 

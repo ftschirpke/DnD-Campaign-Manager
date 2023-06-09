@@ -61,7 +61,7 @@ static dnd::LatexText* create_card_header(dnd::LatexScope* scope, const dnd::Ite
     center_scope->add_command("MakeUppercase");
     dnd::LatexScope* sub_scope = center_scope->add_scope();
     sub_scope->add_command("textbf");
-    dnd::LatexText* title = sub_scope->add_scope()->add_text(item->name + " (" + std::to_string(counter) + ')');
+    dnd::LatexText* title = sub_scope->add_scope()->add_text(item->get_name() + " (" + std::to_string(counter) + ')');
     scope->add_command("vspace", "-3mm");
     if (item->requires_attunement) {
         scope->add_command("vspace", "-5mm");
@@ -168,7 +168,7 @@ static int create_item_cards(dnd::LatexScope* scope, const dnd::Item* item) {
     }
 
     if (counter == 1) {
-        first_title->set_text(item->name);
+        first_title->set_text(item->get_name());
     }
     return counter;
 }

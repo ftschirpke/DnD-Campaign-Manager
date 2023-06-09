@@ -14,13 +14,13 @@ void add_features_of_feature_holder(
     dnd::ReferencingContentLibrary<const dnd::Feature>& features_library, const dnd::FeatureHolder* feature_holder
 ) {
     for (const dnd::Feature& feature : feature_holder->features) {
-        features_library.add(feature.name, &feature);
+        features_library.add(feature.get_name(), &feature);
     }
 }
 
 void dnd::ContentHolder::finished_parsing() {
     for (const auto& [_, character] : characters.get_all()) {
-        characters.get(character.name).determine_state();
+        characters.get(character.get_name()).determine_state();
         add_features_of_feature_holder(features, &character);
     }
     for (const auto& [_, character_class] : character_classes.get_all()) {

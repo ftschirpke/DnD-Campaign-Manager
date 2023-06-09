@@ -146,7 +146,7 @@ std::vector<const dnd::ContentPiece*> dnd::ContentSearch::get_results() const {
 std::vector<const dnd::ContentPiece*> dnd::ContentSearch::get_sorted_results() const {
     std::vector<const dnd::ContentPiece*> results = get_results();
     std::sort(results.begin(), results.end(), [](const ContentPiece* a, const ContentPiece* b) {
-        return a->name < b->name;
+        return a->get_name() < b->get_name();
     });
     return results;
 }

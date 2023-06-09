@@ -12,9 +12,9 @@
 #include <core/models/feature_holder.hpp>
 
 dnd::CharacterSubclass::CharacterSubclass(
-    const std::string& name, const std::filesystem::path& source_file_path, std::vector<dnd::Feature>&& features,
+    const std::string& name, const std::filesystem::path& source_path, std::vector<dnd::Feature>&& features,
     const std::string& class_name
 ) noexcept
-    : FeatureHolder(name, source_file_path, std::move(features)), class_name(class_name) {}
+    : FeatureHolder(name, source_path, std::move(features)), class_name(class_name) {}
 
 void dnd::CharacterSubclass::accept(dnd::ContentVisitor* visitor) const { visitor->visit(this); }

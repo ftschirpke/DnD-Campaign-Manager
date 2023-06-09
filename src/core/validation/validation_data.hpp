@@ -16,7 +16,7 @@ public:
 
     std::string name;
     std::string description;
-    std::filesystem::path source_file_path;
+    std::filesystem::path source_path;
 };
 
 } // namespace dnd
