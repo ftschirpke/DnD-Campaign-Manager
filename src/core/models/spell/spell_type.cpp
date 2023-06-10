@@ -11,6 +11,8 @@
 #include <fmt/format.h>
 
 #include <core/utils/char_manipulation.hpp>
+#include <core/utils/string_manipulation.hpp>
+#include <core/validation/spell/spell_type_data.hpp>
 
 inline constexpr std::array<std::pair<std::string_view, MagicSchool>, 8> magic_schools = {
     std::pair("abjuration", MagicSchool::ABJURATION), std::pair("conjuration", MagicSchool::CONJURATION),
@@ -64,6 +66,34 @@ dnd::MagicSchool dnd::magic_school_from_name(std::string_view magic_school_name)
     throw std::out_of_range("The magic school \"" + magic_school_name + "\" does not exist.");
 }
 
+dnd::SpellType dnd::SpellType::create(dnd::SpellTypeData&& type_data) {
+    if (!type_data.validate().ok()) {
+        throw invalid_data("Invalid spell type");
+    }
+    bool is_ritual;
+    SpellLevel level;
+    MagicSchool magic_school;
+
+    size_t ritual_idx = type_str.find(" (ritual)");
+    is_ritual = ritual_idx != std::string::npos;
+    std::string magic_school_str;
+    size_t cantrip_idx = type_str.find(" cantrip");
+    if (cantrip_idx != std::string::npos) {
+        level = SpellLevel::CANTRIP;
+        magic_school_str = type_str.substr(0, cantrip_idx);
+    } else {
+        level = SpellLevel(std::atoi(&type_str[0]));
+        size_t i = type_str.find("level ") + 6;
+        if (is_ritual) {
+            magic_school_str = type_str.substr(i, ritual_idx - i);
+        } else {
+            magic_school_str = type_str.substr(i, type_str.size() - i);
+        }
+    }
+    string_to_lowercase(magic_school_str);
+    magic_school = magic_school_from_name(magic_school_str);
+    return SpellType(level, magic_school, is_ritual);
+}
 
 dnd::SpellType::SpellType(dnd::SpellLevel spell_level, dnd::MagicSchool magic_school, bool is_ritual) noexcept
     : spell_level(spell_level), magic_school(magic_school), is_ritual(is_ritual) {}

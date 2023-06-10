@@ -10,6 +10,9 @@
 
 namespace dnd {
 
+/**
+ * @brief A base class for the validation of data for content pieces.
+ */
 class ValidationData {
 public:
     virtual ~ValidationData() = default;

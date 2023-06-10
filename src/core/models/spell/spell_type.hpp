@@ -6,6 +6,8 @@
 #include <string>
 #include <string_view>
 
+#include <core/validation/spell/spell_type_data.hpp>
+
 namespace dnd {
 
 /**
@@ -86,6 +88,8 @@ MagicSchool magic_school_from_name(std::string_view magic_school_name);
  */
 class SpellType {
 public:
+    static SpellType create(SpellTypeData&& type_data);
+
     SpellType(SpellLevel spell_level, MagicSchool magic_school, bool is_ritual) noexcept;
 
     SpellLevel get_spell_level() const noexcept;

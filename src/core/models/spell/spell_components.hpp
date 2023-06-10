@@ -5,10 +5,20 @@
 
 #include <string>
 
+#include <core/validation/spell/spell_components_data.hpp>
+
 namespace dnd {
 
 class SpellComponents {
 public:
+    /**
+     * @brief Constructs a SpellComponents object
+     * @param components_data the data to construct the SpellComponents object from
+     * @return the constructed SpellComponents object
+     * @throw dnd::invalid_data if the data is invalid
+     */
+    static SpellComponents create(SpellComponentsData&& components_data);
+
     SpellComponents(bool verbal, bool somatic, bool material, const std::string& material_components = "") noexcept;
     SpellComponents(bool verbal, bool somatic, bool material, std::string&& material_components = "") noexcept;
 

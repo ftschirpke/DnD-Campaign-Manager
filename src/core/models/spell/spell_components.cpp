@@ -8,6 +8,39 @@
 
 #include <fmt/format.h>
 
+#include <core/validation/spell/spell_components_data.hpp>
+
+dnd::SpellComponents dnd::SpellComponents::create(SpellComponentsData&& components_data) {
+    if (!components_data.validate().ok()) {
+        throw invalid_data("Invalid spell components");
+    }
+    bool verbal, somatic, material;
+    std::string materials_needed;
+
+    size_t parentheses_idx = components_data.str.find(" (");
+    std::string first_part = (parentheses_idx == std::string::npos) ? components_data.str
+                                                                    : components_data.str.substr(0, parentheses_idx);
+    if (first_part.size() == 7) {
+        verbal = true;
+        somatic = true;
+        material = true;
+    } else if (first_part.size() == 4) {
+        verbal = first_part[0] == 'V';
+        somatic = first_part[0] == 'S' || first_part[3] == 'S';
+        material = first_part[3] == 'M';
+    } else if (first_part.size() == 1) {
+        verbal = first_part == "V";
+        somatic = first_part == "S";
+        material = first_part == "M";
+    }
+    if (material) {
+        materials_needed = components_data.str.substr(
+            parentheses_idx + 2, components_data.str.size() - parentheses_idx - 3
+        );
+    }
+    return SpellComponents(verbal, somatic, material, std::move(materials_needed));
+}
+
 dnd::SpellComponents::SpellComponents(
     bool verbal, bool somatic, bool material, const std::string& material_components = ""
 ) noexcept
