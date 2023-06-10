@@ -28,6 +28,10 @@ dnd::Item dnd::Item::create(ItemData&& item_data) {
     );
 }
 
+const std::string& dnd::Item::get_cosmetic_description() const noexcept { return cosmetic_description; }
+
+bool dnd::Item::requires_attunement() const noexcept { return attunement; }
+
 void dnd::Item::accept(ContentVisitor* visitor) const { visitor->visit(this); }
 
 dnd::Item::Item(
@@ -35,4 +39,4 @@ dnd::Item::Item(
     std::string&& cosmetic_description, bool requires_attunement
 ) noexcept
     : ContentPiece(std::move(name), std::move(description), std::move(source_path)),
-      cosmetic_description(std::move(cosmetic_description)), requires_attunement(requires_attunement) {}
+      cosmetic_description(std::move(cosmetic_description)), attunement(requires_attunement) {}

@@ -11,7 +11,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include <core/models/spell.hpp>
+#include <core/models/spell/spell.hpp>
 #include <core/output/latex_builder/latex_command.hpp>
 #include <core/output/latex_builder/latex_document.hpp>
 #include <core/output/latex_builder/latex_scope.hpp>
@@ -71,16 +71,16 @@ static dnd::LatexText* create_card_header(dnd::LatexScope* scope, const dnd::Spe
     sub_scope->add_command("textbf");
     dnd::LatexText* title = sub_scope->add_scope()->add_text(spell->get_name() + " (" + std::to_string(counter) + ')');
     scope->add_command("vspace", "-3mm");
-    create_minipage(scope, "Casting Time", spell->casting_time);
-    create_minipage(scope, "Range", spell->range);
+    create_minipage(scope, "Casting Time", spell->get_casting_time());
+    create_minipage(scope, "Range", spell->get_range());
     scope->add_line_break("4pt");
-    create_minipage(scope, "Components", spell->components.short_str());
-    create_minipage(scope, "Duration", spell->duration);
+    create_minipage(scope, "Components", spell->get_components().short_str());
+    create_minipage(scope, "Duration", spell->get_duration());
     scope->add_line_break("8pt");
-    if (spell->components.material && !spell->components.materials_needed.empty()) {
+    if (spell->get_components().has_material() && !spell->get_components().get_material_components().empty()) {
         scope->add_command("vspace", "-8mm");
         scope->add_begin_end("center")
-            .scope->add_text('(' + spell->components.materials_needed + ')')
+            .scope->add_text('(' + spell->get_components().get_material_components() + ')')
             ->add_modifier("scriptsize");
         scope->add_command("vspace", "-2mm");
     }
@@ -90,7 +90,7 @@ static dnd::LatexText* create_card_header(dnd::LatexScope* scope, const dnd::Spe
 
 static void create_card_footer(dnd::LatexScope* scope, const dnd::Spell* spell) {
     scope->add_command("vfill");
-    scope->add_text(spell->type.str())->add_modifier("scriptsize")->add_modifier("centering");
+    scope->add_text(spell->get_type().str())->add_modifier("scriptsize")->add_modifier("centering");
 }
 
 static int create_spell_cards(dnd::LatexScope* scope, const dnd::Spell* spell) {
@@ -99,8 +99,8 @@ static int create_spell_cards(dnd::LatexScope* scope, const dnd::Spell* spell) {
     size_t start = 0;
     size_t end = 0;
     size_t characters_written = 0;
-    while (end < spell->description.size()) {
-        if (spell->description[end] == '\n') {
+    while (end < spell->get_description().size()) {
+        if (spell->get_description()[end] == '\n') {
             if (characters_written + end - start > card_character_cutoff) {
                 // end last card, and start a new card
                 create_card_footer(scope, spell);
@@ -108,9 +108,9 @@ static int create_spell_cards(dnd::LatexScope* scope, const dnd::Spell* spell) {
                 characters_written = 0;
             }
 
-            dnd::LatexText* text = scope->add_text(spell->description.substr(start, end - start));
+            dnd::LatexText* text = scope->add_text(spell->get_description().substr(start, end - start));
             characters_written += end - start;
-            if (end + 1 < spell->description.size() && spell->description[end + 1] == '\n') {
+            if (end + 1 < spell->get_description().size() && spell->get_description()[end + 1] == '\n') {
                 text->add_line_break();
                 end++;
             }
@@ -123,7 +123,7 @@ static int create_spell_cards(dnd::LatexScope* scope, const dnd::Spell* spell) {
         create_card_footer(scope, spell);
         create_card_header(scope, spell, ++counter);
     }
-    scope->add_text(spell->description.substr(start, end - start));
+    scope->add_text(spell->get_description().substr(start, end - start));
     create_card_footer(scope, spell);
 
     if (counter == 1) {
@@ -137,15 +137,15 @@ static int calculate_cards_to_create(const dnd::Spell* spell) {
     size_t start = 0;
     size_t end = 0;
     size_t characters_written = 0;
-    while (end < spell->description.size()) {
-        if (spell->description[end] == '\n') {
+    while (end < spell->get_description().size()) {
+        if (spell->get_description()[end] == '\n') {
             if (characters_written + end - start > card_character_cutoff) {
                 counter++;
                 characters_written = 0;
             }
 
             characters_written += end - start;
-            if (end + 1 < spell->description.size() && spell->description[end + 1] == '\n') {
+            if (end + 1 < spell->get_description().size() && spell->get_description()[end + 1] == '\n') {
                 end++;
             }
             start = ++end;

@@ -9,7 +9,7 @@
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/validation/effect_holder/subholders/action_holder_data.hpp>
 
-dnd::ActionHolder dnd::ActionHolder::create(dnd::ActionHolderData&& data) noexcept {
+dnd::ActionHolder dnd::ActionHolder::create(dnd::ActionHolderData&& data) {
     if (!data.validate().ok()) {
         throw dnd::invalid_data("Cannot create ActionHolder from invalid data.");
     }

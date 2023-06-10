@@ -7,16 +7,16 @@
 #include <unordered_map>
 
 #include <core/controllers/content_library.hpp>
-#include <core/controllers/groups.hpp>
-#include <core/models/character.hpp>
-#include <core/models/character_class.hpp>
-#include <core/models/character_race.hpp>
-#include <core/models/character_subclass.hpp>
-#include <core/models/character_subrace.hpp>
-#include <core/models/effect_holder/choosable.hpp>
-#include <core/models/effect_holder/feature.hpp>
-#include <core/models/item.hpp>
-#include <core/models/spell.hpp>
+// #include <core/controllers/groups.hpp>
+// #include <core/models/character.hpp>
+// #include <core/models/character_class.hpp>
+// #include <core/models/character_race.hpp>
+// #include <core/models/character_subclass.hpp>
+// #include <core/models/character_subrace.hpp>
+// #include <core/models/effect_holder/choosable.hpp>
+// #include <core/models/effect_holder/feature.hpp>
+#include <core/models/item/item.hpp>
+#include <core/models/spell/spell.hpp>
 
 namespace dnd {
 
@@ -42,20 +42,20 @@ public:
     std::string status() const;
 
     // the controller holding all the groups for the campaign
-    Groups groups;
+    // Groups groups;
 
     // content libraries for all the types of content
 
-    StorageContentLibrary<Character> characters;
-    StorageContentLibrary<const CharacterClass> character_classes;
-    StorageContentLibrary<const CharacterSubclass> character_subclasses;
-    StorageContentLibrary<const CharacterRace> character_races;
-    StorageContentLibrary<const CharacterSubrace> character_subraces;
+    // StorageContentLibrary<Character> characters;
+    // StorageContentLibrary<const CharacterClass> character_classes;
+    // StorageContentLibrary<const CharacterSubclass> character_subclasses;
+    // StorageContentLibrary<const CharacterRace> character_races;
+    // StorageContentLibrary<const CharacterSubrace> character_subraces;
     StorageContentLibrary<const Item> items;
     StorageContentLibrary<const Spell> spells;
 
-    ReferencingContentLibrary<const Feature> features;
-    std::unordered_map<std::string, ReferencingContentLibrary<const Choosable>> choosables;
+    // ReferencingContentLibrary<const Feature> features;
+    // std::unordered_map<std::string, ReferencingContentLibrary<const Choosable>> choosables;
 };
 
 } // namespace dnd

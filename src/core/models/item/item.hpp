@@ -25,7 +25,7 @@ public:
      */
     static Item create(
         const std::string& name, const std::filesystem::path& source_path, const std::string& description,
-        const std::string& cosmetic_description = "", bool requires_attunement
+        const std::string& cosmetic_description, bool requires_attunement
     );
     /**
      * @brief Constructs an item
@@ -34,6 +34,9 @@ public:
      * @throws dnd::invalid_data if the data is invalid
      */
     static Item create(ItemData&& item_data);
+
+    const std::string& get_cosmetic_description() const noexcept;
+    bool requires_attunement() const noexcept;
 
     /**
      * @brief Accepts a visitor
@@ -47,7 +50,7 @@ private:
     ) noexcept;
 
     std::string cosmetic_description;
-    bool requires_attunement;
+    bool attunement;
 };
 
 } // namespace dnd

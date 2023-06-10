@@ -21,7 +21,7 @@ public:
      * @return the constructed ActionHolder
      * @throws dnd::invalid_data if the given data is invalid
      */
-    static ActionHolder create(ActionHolderData&& data) noexcept;
+    static ActionHolder create(ActionHolderData&& data);
 
     const std::map<std::string, std::string>& get_actions() const noexcept;
     const std::map<std::string, std::string>& get_bonus_actions() const noexcept;

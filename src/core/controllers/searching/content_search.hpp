@@ -9,16 +9,16 @@
 
 #include <core/controllers/content_holder.hpp>
 #include <core/controllers/searching/trie.hpp>
-#include <core/models/character.hpp>
-#include <core/models/character_class.hpp>
-#include <core/models/character_race.hpp>
-#include <core/models/character_subclass.hpp>
-#include <core/models/character_subrace.hpp>
+// #include <core/models/character.hpp>
+// #include <core/models/character_class.hpp>
+// #include <core/models/character_race.hpp>
+// #include <core/models/character_subclass.hpp>
+// #include <core/models/character_subrace.hpp>
 #include <core/models/content_piece.hpp>
-#include <core/models/effect_holder/choosable.hpp>
-#include <core/models/effect_holder/feature.hpp>
-#include <core/models/item.hpp>
-#include <core/models/spell.hpp>
+// #include <core/models/effect_holder/choosable.hpp>
+// #include <core/models/effect_holder/feature.hpp>
+#include <core/models/item/item.hpp>
+#include <core/models/spell/spell.hpp>
 
 namespace dnd {
 
@@ -112,15 +112,15 @@ public:
     std::vector<const ContentPiece*> get_sorted_results() const;
 private:
     std::vector<char> query;
-    SearchPath<Character> character_search_path;
-    SearchPath<const CharacterClass> character_class_search_path;
-    SearchPath<const CharacterSubclass> character_subclass_search_path;
-    SearchPath<const CharacterRace> character_race_search_path;
-    SearchPath<const CharacterSubrace> character_subrace_search_path;
+    // SearchPath<Character> character_search_path;
+    // SearchPath<const CharacterClass> character_class_search_path;
+    // SearchPath<const CharacterSubclass> character_subclass_search_path;
+    // SearchPath<const CharacterRace> character_race_search_path;
+    // SearchPath<const CharacterSubrace> character_subrace_search_path;
     SearchPath<const Item> item_search_path;
     SearchPath<const Spell> spell_search_path;
-    SearchPath<const Feature> feature_search_path;
-    std::unordered_map<std::string, SearchPath<const Choosable>> choosable_search_paths;
+    // SearchPath<const Feature> feature_search_path;
+    // std::unordered_map<std::string, SearchPath<const Choosable>> choosable_search_paths;
 };
 
 

@@ -37,6 +37,18 @@ dnd::Spell dnd::Spell::create(dnd::SpellData&& spell_data) {
     );
 }
 
+const dnd::SpellComponents& dnd::Spell::get_components() const noexcept { return components; }
+
+const dnd::SpellType& dnd::Spell::get_type() const noexcept { return type; }
+
+const std::string& dnd::Spell::get_casting_time() const noexcept { return casting_time; }
+
+const std::string& dnd::Spell::get_range() const noexcept { return range; }
+
+const std::string& dnd::Spell::get_duration() const noexcept { return duration; }
+
+const std::set<std::string>& dnd::Spell::get_classes() const noexcept { return classes; }
+
 void dnd::Spell::accept(dnd::ContentVisitor* visitor) const { visitor->visit(this); }
 
 dnd::Spell::Spell(

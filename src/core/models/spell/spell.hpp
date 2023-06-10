@@ -43,6 +43,13 @@ public:
      */
     static Spell create(SpellData&& spell_data);
 
+    const SpellComponents& get_components() const noexcept;
+    const SpellType& get_type() const noexcept;
+    const std::string& get_casting_time() const noexcept;
+    const std::string& get_range() const noexcept;
+    const std::string& get_duration() const noexcept;
+    const std::set<std::string>& get_classes() const noexcept;
+
     /**
      * @brief Accepts a visitor
      * @param visitor pointer to the visitor
