@@ -43,3 +43,35 @@ dnd::ExtraSpellsHolder dnd::ExtraSpellsHolder::create(
         std::move(spells_known), std::move(spells_known_included), std::move(added_to_spell_list)
     );
 }
+
+const std::vector<const dnd::Spell*>& dnd::ExtraSpellsHolder::get_free_cantrips() const noexcept {
+    return free_cantrips;
+}
+
+const std::vector<const dnd::Spell*>& dnd::ExtraSpellsHolder::get_at_will() const noexcept { return at_will; }
+
+const std::vector<const dnd::Spell*>& dnd::ExtraSpellsHolder::get_innate() const noexcept { return innate; }
+
+const std::vector<const dnd::Spell*>& dnd::ExtraSpellsHolder::get_free_once_a_day() const noexcept {
+    return free_once_a_day;
+}
+
+const std::vector<const dnd::Spell*>& dnd::ExtraSpellsHolder::get_spells_known() const noexcept { return spells_known; }
+
+const std::vector<const dnd::Spell*>& dnd::ExtraSpellsHolder::get_spells_known_included() const noexcept {
+    return spells_known_included;
+}
+
+const std::vector<const dnd::Spell*>& dnd::ExtraSpellsHolder::get_added_to_spell_list() const noexcept {
+    return added_to_spell_list;
+}
+
+dnd::ExtraSpellsHolder::ExtraSpellsHolder(
+    std::vector<const dnd::Spell*>&& free_cantrips, std::vector<const dnd::Spell*>&& at_will,
+    std::vector<const dnd::Spell*>&& innate, std::vector<const dnd::Spell*>&& free_once_a_day,
+    std::vector<const dnd::Spell*>&& spells_known, std::vector<const dnd::Spell*>&& spells_known_included,
+    std::vector<const dnd::Spell*>&& added_to_spell_list
+) noexcept
+    : free_cantrips(std::move(free_cantrips)), at_will(std::move(at_will)), innate(std::move(innate)),
+      free_once_a_day(std::move(free_once_a_day)), spells_known(std::move(spells_known)),
+      spells_known_included(std::move(spells_known_included)), added_to_spell_list(std::move(added_to_spell_list)) {}

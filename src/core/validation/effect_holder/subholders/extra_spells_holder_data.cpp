@@ -31,13 +31,13 @@ static dnd::Errors spells_set_validate(const std::set<std::string>& spells, cons
 
 dnd::Errors dnd::ExtraSpellsHolderData::validate() const {
     Errors errors;
-    spells_set_validate(free_cantrips, parent);
-    spells_set_validate(at_will, parent);
-    spells_set_validate(innate, parent);
-    spells_set_validate(free_once_a_day, parent);
-    spells_set_validate(spells_known, parent);
-    spells_set_validate(spells_known_included, parent);
-    spells_set_validate(added_to_spell_list, parent);
+    errors.merge(spells_set_validate(free_cantrips, parent));
+    errors.merge(spells_set_validate(at_will, parent));
+    errors.merge(spells_set_validate(innate, parent));
+    errors.merge(spells_set_validate(free_once_a_day, parent));
+    errors.merge(spells_set_validate(spells_known, parent));
+    errors.merge(spells_set_validate(spells_known_included, parent));
+    errors.merge(spells_set_validate(added_to_spell_list, parent));
     return errors;
 }
 
@@ -72,11 +72,11 @@ dnd::Errors dnd::ExtraSpellsHolderData::validate_relations(const ContentHolder* 
             );
         }
     }
-    spells_set_validate_relations(at_will, parent, content);
-    spells_set_validate_relations(innate, parent, content);
-    spells_set_validate_relations(free_once_a_day, parent, content);
-    spells_set_validate_relations(spells_known, parent, content);
-    spells_set_validate_relations(spells_known_included, parent, content);
-    spells_set_validate_relations(added_to_spell_list, parent, content);
+    errors.merge(spells_set_validate_relations(at_will, parent, content));
+    errors.merge(spells_set_validate_relations(innate, parent, content));
+    errors.merge(spells_set_validate_relations(free_once_a_day, parent, content));
+    errors.merge(spells_set_validate_relations(spells_known, parent, content));
+    errors.merge(spells_set_validate_relations(spells_known_included, parent, content));
+    errors.merge(spells_set_validate_relations(added_to_spell_list, parent, content));
     return errors;
 }

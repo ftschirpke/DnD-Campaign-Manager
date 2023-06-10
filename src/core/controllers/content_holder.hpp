@@ -7,7 +7,7 @@
 #include <unordered_map>
 
 #include <core/controllers/content_library.hpp>
-// #include <core/controllers/groups.hpp>
+#include <core/controllers/groups.hpp>
 // #include <core/models/character.hpp>
 // #include <core/models/character_class.hpp>
 // #include <core/models/character_race.hpp>
@@ -42,7 +42,7 @@ public:
     std::string status() const;
 
     // the controller holding all the groups for the campaign
-    // Groups groups;
+    Groups groups;
 
     // content libraries for all the types of content
 
