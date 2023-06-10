@@ -15,6 +15,10 @@ namespace dnd {
 class ActionHolderData : public ValidationSubdata {
 public:
     ActionHolderData(const ValidationData* parent) noexcept;
+    /**
+     * @brief Validates the data
+     * @return the errors that occured during validation
+     */
     virtual Errors validate() const override;
 
     std::map<std::string, std::string> actions;

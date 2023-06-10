@@ -12,6 +12,10 @@ namespace dnd {
 class SpellComponentsData : public ValidationSubdata {
 public:
     SpellComponentsData(const ValidationData* parent) noexcept;
+    /**
+     * @brief Validates the data
+     * @return the errors that occured during validation
+     */
     virtual Errors validate() const override;
 
     std::string str;

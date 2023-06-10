@@ -14,7 +14,17 @@ namespace dnd {
 class ValidationSubdata {
 public:
     virtual ~ValidationSubdata() = default;
+    /**
+     * @brief Validates the data
+     * @return the errors that occured during validation
+     */
     virtual Errors validate() const = 0;
+    /**
+     * @brief Validates the relations of the data to other content pieces with regard to a given content holder
+     * @param content the content holder to validate the relations against
+     * @return the errors that occured during validation
+     */
+    virtual Errors validate_relations(const ContentHolder* content) const;
 protected:
     ValidationSubdata(const ValidationData* parent) noexcept;
 

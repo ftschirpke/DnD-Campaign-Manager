@@ -18,6 +18,10 @@ enum class ValidationErrorCode {
     INVALID_ATTRIBUTE_VALUE,
     // found inconsistencies between attributes
     INCONSISTENT_ATTRIBUTES,
+    // a relation to another content piece was not found
+    RELATION_NOT_FOUND,
+    // a relation to another content piece is invalid
+    INVALID_RELATION,
     // an unknown error occurred
     UNKNOWN_ERROR,
 };

@@ -17,6 +17,10 @@ namespace dnd {
 
 class SpellData : public ValidationData {
 public:
+    /**
+     * @brief Validates the data
+     * @return the errors that occured during validation
+     */
     virtual Errors validate() const override;
 
     SpellComponentsData components;
