@@ -13,7 +13,7 @@ namespace dnd {
 class ValidationData {
 public:
     virtual ~ValidationData() = default;
-    virtual Errors validate();
+    virtual Errors validate() const;
 
     std::string name;
     std::string description;

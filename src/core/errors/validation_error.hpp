@@ -25,15 +25,15 @@ enum class ValidationErrorCode {
 class ValidationError {
 public:
     ValidationError(
-        ValidationErrorCode error_code, ValidationData* const validation_data, const std::string& message
+        ValidationErrorCode error_code, const ValidationData* validation_data, const std::string& message
     ) noexcept;
 
     ValidationErrorCode get_error_code() const noexcept;
-    ValidationData* get_validation_data() const noexcept;
+    const ValidationData* get_validation_data() const noexcept;
     const std::string& get_error_message() const noexcept;
 private:
     ValidationErrorCode error_code;
-    ValidationData* const validation_data;
+    const ValidationData* validation_data;
     std::string error_message;
 };
 

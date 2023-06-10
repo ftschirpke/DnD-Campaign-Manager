@@ -11,10 +11,11 @@
 #include <core/models/content_piece.hpp>
 
 dnd::Item dnd::Item::create(
-    const std::string& name, const std::filesystem::path& source_path, bool requires_attunement,
-    const std::string& description, const std::string& cosmetic_description
+    const std::string& name, const std::filesystem::path& source_path, const std::string& description,
+    const std::string& cosmetic_description, bool requires_attunement
 ) {
-    return create(ItemData{name, source_path, requires_attunement, description, cosmetic_description});
+    ItemData item_data{name, source_path, description, cosmetic_description, requires_attunement};
+    return create(std::move(item_data));
 }
 
 dnd::Item dnd::Item::create(ItemData&& item_data) {
@@ -30,8 +31,8 @@ dnd::Item dnd::Item::create(ItemData&& item_data) {
 void dnd::Item::accept(ContentVisitor* visitor) const { visitor->visit(this); }
 
 dnd::Item::Item(
-    std::string&& name, std::filesystem::path&& source_path, bool requires_attunement, std::string&& description,
-    std::string&& cosmetic_description
+    std::string&& name, std::filesystem::path&& source_path, std::string&& description,
+    std::string&& cosmetic_description, bool requires_attunement
 ) noexcept
     : ContentPiece(std::move(name), std::move(description), std::move(source_path)),
       cosmetic_description(std::move(cosmetic_description)), requires_attunement(requires_attunement) {}

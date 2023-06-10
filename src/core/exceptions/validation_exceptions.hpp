@@ -7,7 +7,11 @@
 
 namespace dnd {
 
-class invalid_data : public std::invalid_argument {};
+class invalid_data : public std::invalid_argument {
+public:
+    invalid_data(const std::string& message);
+    invalid_data(const char* message);
+};
 
 } // namespace dnd
 

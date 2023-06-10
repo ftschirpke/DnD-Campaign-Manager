@@ -5,7 +5,6 @@
 
 #include <string>
 
-#include <core/errors/errors.hpp>
 #include <core/validation/validation_data.hpp>
 
 namespace dnd {

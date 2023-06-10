@@ -37,7 +37,7 @@ public:
      * @param message the error message
      */
     void add_validation_error(
-        ValidationErrorCode error_code, ValidationData* const validation_data, std::string&& message
+        ValidationErrorCode error_code, const ValidationData* validation_data, std::string&& message
     );
     /**
      * @brief Adds a validation error to the list of errors
