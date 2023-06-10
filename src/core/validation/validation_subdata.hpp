@@ -16,7 +16,7 @@ public:
     virtual ~ValidationSubdata() = default;
     virtual Errors validate() const = 0;
 protected:
-    ValidationSubdata(const ValidationData* parent);
+    ValidationSubdata(const ValidationData* parent) noexcept;
 
     const ValidationData* parent;
 };

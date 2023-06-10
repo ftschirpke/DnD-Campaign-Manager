@@ -68,7 +68,7 @@ dnd::MagicSchool dnd::magic_school_from_name(std::string_view magic_school_name)
 
 dnd::SpellType dnd::SpellType::create(dnd::SpellTypeData&& type_data) {
     if (!type_data.validate().ok()) {
-        throw invalid_data("Invalid spell type");
+        throw invalid_data("Cannot create SpellType from invalid data.");
     }
     bool is_ritual;
     SpellLevel level;

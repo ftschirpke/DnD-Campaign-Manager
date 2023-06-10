@@ -20,7 +20,7 @@ dnd::Item dnd::Item::create(
 
 dnd::Item dnd::Item::create(ItemData&& item_data) {
     if (!item_data.validate().ok()) {
-        throw invalid_data("Item cannot be created from invalid data.");
+        throw invalid_data("Cannot create Item from invalid data.");
     }
     return Item(
         std::move(item_data.name), std::move(item_data.source_path), item_data.requires_attunement,

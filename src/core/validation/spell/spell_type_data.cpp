@@ -8,7 +8,7 @@
 #include <core/validation/validation_data.hpp>
 #include <core/validation/validation_subdata.hpp>
 
-dnd::SpellTypeData::SpellTypeData(const dnd::ValidationData* parent) : ValidationSubdata(parent) {}
+dnd::SpellTypeData::SpellTypeData(const dnd::ValidationData* parent) noexcept : ValidationSubdata(parent) {}
 
 dnd::Errors dnd::SpellTypeData::validate() const {
     DND_MEASURE_FUNCTION();

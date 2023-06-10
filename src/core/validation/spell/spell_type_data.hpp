@@ -11,7 +11,7 @@ namespace dnd {
 
 class SpellTypeData : public ValidationSubdata {
 public:
-    SpellTypeData(const ValidationData* parent);
+    SpellTypeData(const ValidationData* parent) noexcept;
     virtual Errors validate() const override;
 
     std::string str;

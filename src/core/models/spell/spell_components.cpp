@@ -12,7 +12,7 @@
 
 dnd::SpellComponents dnd::SpellComponents::create(SpellComponentsData&& components_data) {
     if (!components_data.validate().ok()) {
-        throw invalid_data("Invalid spell components");
+        throw invalid_data("Cannot create SpellComponents from invalid data.");
     }
     bool verbal, somatic, material;
     std::string materials_needed;

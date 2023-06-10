@@ -24,7 +24,7 @@ dnd::Spell dnd::Spell::create(
 
 dnd::Spell dnd::Spell::create(dnd::SpellData&& spell_data) {
     if (!spell_data.validate().ok()) {
-        throw invalid_data("Spell cannot be created from invalid data.");
+        throw invalid_data("Cannot create Spell from invalid data.");
     }
 
     SpellComponents components = spell_data.create_components();

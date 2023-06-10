@@ -4,4 +4,4 @@
 
 #include <core/validation/validation_data.hpp>
 
-dnd::ValidationSubdata::ValidationSubdata(const ValidationData* parent) : parent(parent) {}
+dnd::ValidationSubdata::ValidationSubdata(const ValidationData* parent) noexcept : parent(parent) {}

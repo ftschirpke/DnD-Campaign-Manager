@@ -3,4 +3,5 @@ target_sources(${DND_CORE}
     validation_data.cpp
 )
 
+add_subdirectory(effect_holder)
 add_subdirectory(spell)
