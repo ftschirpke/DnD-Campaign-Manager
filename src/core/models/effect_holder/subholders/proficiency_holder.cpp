@@ -34,6 +34,11 @@ dnd::ProficiencyHolder dnd::ProficiencyHolder::create(ProficiencyHolderData&& da
     );
 }
 
+bool dnd::ProficiencyHolder::empty() const {
+    return armor.empty() && weapons.empty() && tools.empty() && skills.empty() && saving_throws.empty()
+           && languages.empty() && senses.empty();
+}
+
 const std::vector<std::string>& dnd::ProficiencyHolder::get_armor() const noexcept { return armor; }
 
 const std::vector<std::string>& dnd::ProficiencyHolder::get_weapons() const noexcept { return weapons; }

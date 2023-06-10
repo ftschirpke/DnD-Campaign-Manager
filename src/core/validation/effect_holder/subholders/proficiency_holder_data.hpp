@@ -14,7 +14,16 @@ namespace dnd {
 class ProficiencyHolderData : public ValidationSubdata {
 public:
     ProficiencyHolderData(const ValidationData* parent) noexcept;
+    /**
+     * @brief Validates the data
+     * @return the errors that occured during validation
+     */
     virtual Errors validate() const override;
+    /**
+     * @brief Validates the relations of the data to other content pieces with regard to a given content holder
+     * @param content the content holder to validate the relations against
+     * @return the errors that occured during validation
+     */
     virtual Errors validate_relations(const ContentHolder* content) const override;
 
     // the types of armor the character is proficient with
