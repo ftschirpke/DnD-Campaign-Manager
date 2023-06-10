@@ -11,6 +11,6 @@ dnd::ValidationError::ValidationError(
 
 dnd::ValidationErrorCode dnd::ValidationError::get_error_code() const noexcept { return error_code; }
 
-dnd::ValidationData* const dnd::ValidationError::get_validation_data() const noexcept { return validation_data; }
+dnd::ValidationData* dnd::ValidationError::get_validation_data() const noexcept { return validation_data; }
 
 const std::string& dnd::ValidationError::get_error_message() const noexcept { return message; }

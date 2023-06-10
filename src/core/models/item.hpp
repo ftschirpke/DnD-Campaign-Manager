@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <filesystem>
 #include <string>
 
 #include <core/content_visitors/content_visitor.hpp>

@@ -12,11 +12,14 @@ namespace dnd {
 
 class ValidationData {
 public:
-    virtual Errors validate() const = 0;
+    virtual ~ValidationData() = default;
+    virtual Errors validate();
 
     std::string name;
     std::string description;
     std::filesystem::path source_path;
+protected:
+    ValidationData() = default;
 };
 
 } // namespace dnd

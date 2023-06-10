@@ -7,12 +7,16 @@
 #include <string>
 
 #include <core/content_visitors/content_visitor.hpp>
+#include <core/validation/validation_data.hpp>
 
 namespace dnd {
 
 class ContentPiece {
 public:
-    ContentPiece(const std::string& name, const std::string& description, const std::filesystem::path& source_path);
+    ContentPiece(
+        const std::string& name, const std::string& description, const std::filesystem::path& source_path
+    ) noexcept;
+    ContentPiece(std::string&& name, std::string&& description, std::filesystem::path&& source_path) noexcept;
     virtual ~ContentPiece() = default;
     /**
      * @brief Accepts a visitor

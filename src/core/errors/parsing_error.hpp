@@ -11,9 +11,7 @@ namespace dnd {
 /**
  * @brief An enum representing the different types of errors that can occur while parsing a file.
  */
-enum ParsingErrorCode {
-    // the parsing was successful
-    OK = 0,
+enum class ParsingErrorCode {
     // the file was not found
     FILE_NOT_FOUND,
     // the format of the file was invalid

@@ -9,9 +9,7 @@ namespace dnd {
 
 class ValidationData;
 
-enum ValidationErrorCode {
-    // the validation was successful
-    OK = 0,
+enum class ValidationErrorCode {
     // a required value was not found
     MISSING_ATTRIBUTE,
     // the format of an attribute was invalid
@@ -31,7 +29,7 @@ public:
     ) noexcept;
 
     ValidationErrorCode get_error_code() const noexcept;
-    ValidationData* const get_validation_data() const noexcept;
+    ValidationData* get_validation_data() const noexcept;
     const std::string& get_error_message() const noexcept;
 private:
     ValidationErrorCode error_code;
