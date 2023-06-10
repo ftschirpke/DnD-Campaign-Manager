@@ -23,7 +23,7 @@ dnd::ProficiencyHolder dnd::ProficiencyHolder::create(ProficiencyHolderData&& da
     if (!data.validate().ok()) {
         throw dnd::invalid_data("Cannot create ProficiencyHolder from invalid data.");
     }
-    if (!data.validate(content).ok()) {
+    if (!data.validate_relations(content).ok()) {
         throw dnd::invalid_data("ProficiencyHolderData is incompatible with the given content.");
     }
     return ProficiencyHolder(
