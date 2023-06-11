@@ -7,7 +7,7 @@
 #include <vector>
 
 #include <core/errors/errors.hpp>
-#include <core/validation/effect_holder/activation/activation_data.hpp>
+#include <core/validation/effect_holder/condition/condition_data.hpp>
 #include <core/validation/effect_holder/effect/effect_data.hpp>
 #include <core/validation/effect_holder/subholders/action_holder_data.hpp>
 #include <core/validation/effect_holder/subholders/extra_spells_holder_data.hpp>
@@ -33,7 +33,7 @@ public:
      */
     virtual Errors validate_relations(const ContentHolder* content) const override;
 
-    std::vector<ActivationData> activations;
+    std::vector<ConditionData> activation_conditions;
     std::vector<EffectData> effects;
     ActionHolderData action_holder_data;
     ExtraSpellsHolderData extra_spells_holder_data;

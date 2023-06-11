@@ -9,7 +9,7 @@
 
 #include <core/controllers/content_holder.hpp>
 #include <core/errors/errors.hpp>
-#include <core/validation/effect_holder/activation/activation_data.hpp>
+#include <core/validation/effect_holder/condition/condition_data.hpp>
 #include <core/validation/effect_holder/effect/effect_data.hpp>
 #include <core/validation/effect_holder/subholders/action_holder_data.hpp>
 #include <core/validation/effect_holder/subholders/extra_spells_holder_data.hpp>
@@ -28,8 +28,8 @@ dnd::Errors dnd::EffectHolderData::validate() const {
     errors.merge(extra_spells_holder_data.validate());
     errors.merge(proficiency_holder_data.validate());
     errors.merge(riv_holder_data.validate());
-    if (activations.empty() && effects.empty() && action_holder_data.empty() && extra_spells_holder_data.empty()
-        && proficiency_holder_data.empty() && riv_holder_data.empty()) {
+    if (activation_conditions.empty() && effects.empty() && action_holder_data.empty()
+        && extra_spells_holder_data.empty() && proficiency_holder_data.empty() && riv_holder_data.empty()) {
         errors.add_validation_error(
             ValidationErrorCode::MISSING_ATTRIBUTE, parent, "Effect holder is completely empty."
         );

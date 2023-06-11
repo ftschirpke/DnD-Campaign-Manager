@@ -1,5 +1,5 @@
-#ifndef ACTIVATION_DATA_HPP_
-#define ACTIVATION_DATA_HPP_
+#ifndef CONDITION_DATA_HPP_
+#define CONDITION_DATA_HPP_
 
 #include <dnd_config.hpp>
 
@@ -11,18 +11,18 @@
 
 namespace dnd {
 
-class ActivationData : public ValidationSubdata {
+class ConditionData : public ValidationSubdata {
 public:
-    ActivationData(const ValidationData* parent) noexcept;
+    ConditionData(const ValidationData* parent) noexcept;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation
      */
     virtual Errors validate() const override;
 
-    std::string activation_str;
+    std::string condition_str;
 };
 
 } // namespace dnd
 
-#endif // ACTIVATION_DATA_HPP_
+#endif // CONDITION_DATA_HPP_

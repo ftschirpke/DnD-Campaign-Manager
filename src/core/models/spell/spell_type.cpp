@@ -82,7 +82,8 @@ dnd::SpellType dnd::SpellType::create(dnd::SpellTypeData&& type_data) {
         level = SpellLevel::CANTRIP;
         magic_school_str = type_str.substr(0, cantrip_idx);
     } else {
-        level = SpellLevel(std::atoi(&type_str[0]));
+        assert(std::isdigit(static_cast<unsigned char>(type_str[0])));
+        level = SpellLevel(type_str[0] - '0');
         size_t i = type_str.find("level ") + 6;
         if (is_ritual) {
             magic_school_str = type_str.substr(i, ritual_idx - i);
