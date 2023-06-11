@@ -12,13 +12,9 @@
 #include <core/validation/validation_data.hpp>
 #include <core/validation/validation_subdata.hpp>
 
-static constexpr const char* effect_regex_cstr = "[A-Z][_A-Z0-9]+ (earliest|early|normal|late|latest) (("
-                                                 "(add|mult|div|set|max|min) -?\\d+(\\.\\d\\d?)?)"
-                                                 "|("
-                                                 "addOther|multOther|divOther|setOther|maxOther|minOther"
-                                                 "|"
-                                                 "addConst|multConst|divConst|setConst|maxConst|minConst"
-                                                 ") [A-Z][_A-Z0-9]+)";
+static constexpr const char*
+    effect_regex_cstr = "[A-Z][_A-Z0-9]+ (earliest|early|normal|late|latest) ((add|mult|div|set|max|min) "
+                        "([A-Z][_A-Z0-9]+|-?\\d+(\\.\\d\\d?)?)|(set (false|true)))";
 
 dnd::EffectData::EffectData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
 
