@@ -26,6 +26,11 @@ public:
      * @return the errors that occured during validation
      */
     virtual Errors validate_relations(const ContentHolder* content) const override;
+    /**
+     * @brief Checks if the extra spells holder is empty
+     * @return "true" if the extra spells holder is empty, "false" otherwise
+     */
+    bool empty() const noexcept;
 
     // cantrips that do not count against the number of cantrips known
     std::set<std::string> free_cantrips;

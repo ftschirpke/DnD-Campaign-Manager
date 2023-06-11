@@ -69,3 +69,8 @@ dnd::Errors dnd::ProficiencyHolderData::validate_relations(const dnd::ContentHol
     errors.merge(string_group_set_validate_relations(languages, parent, "languages", "languages", content));
     return errors;
 }
+
+bool dnd::ProficiencyHolderData::empty() const noexcept {
+    return armor.empty() && weapons.empty() && tools.empty() && skills.empty() && saving_throws.empty()
+           && languages.empty() && senses.empty();
+}

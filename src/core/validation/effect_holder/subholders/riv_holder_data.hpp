@@ -25,6 +25,11 @@ public:
      * @return the errors that occured during validation
      */
     virtual Errors validate_relations(const ContentHolder* content) const override;
+    /**
+     * @brief Checks if the RIV holder is empty
+     * @return "true" if the RIV holder is empty, "false" otherwise
+     */
+    bool empty() const noexcept;
 
     // the damage types the creature is resistant to
     std::set<std::string> damage_resistances;

@@ -25,6 +25,11 @@ public:
      * @return the errors that occured during validation
      */
     virtual Errors validate_relations(const ContentHolder* content) const override;
+    /**
+     * @brief Checks if the proficiency holder is empty
+     * @return "true" if the proficiency holder is empty, "false" otherwise
+     */
+    bool empty() const noexcept;
 
     // the types of armor the character is proficient with
     std::set<std::string> armor;

@@ -68,3 +68,8 @@ dnd::Errors dnd::RIVHolderData::validate_relations(const dnd::ContentHolder* con
     );
     return errors;
 }
+
+bool dnd::RIVHolderData::empty() const noexcept {
+    return damage_resistances.empty() && damage_immunities.empty() && damage_vulnerabilities.empty()
+           && condition_immunities.empty();
+}

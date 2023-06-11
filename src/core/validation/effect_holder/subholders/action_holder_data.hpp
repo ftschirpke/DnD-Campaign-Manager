@@ -20,12 +20,15 @@ public:
      * @return the errors that occured during validation
      */
     virtual Errors validate() const override;
+    /**
+     * @brief Checks if the action holder is empty
+     * @return "true" if the action holder is empty, "false" otherwise
+     */
+    bool empty() const noexcept;
 
     std::map<std::string, std::string> actions;
     std::map<std::string, std::string> bonus_actions;
     std::map<std::string, std::string> reactions;
-protected:
-private:
 };
 
 } // namespace dnd

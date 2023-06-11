@@ -80,3 +80,8 @@ dnd::Errors dnd::ExtraSpellsHolderData::validate_relations(const ContentHolder* 
     errors.merge(spells_set_validate_relations(added_to_spell_list, parent, content));
     return errors;
 }
+
+bool dnd::ExtraSpellsHolderData::empty() const noexcept {
+    return free_cantrips.empty() && at_will.empty() && innate.empty() && free_once_a_day.empty() && spells_known.empty()
+           && spells_known_included.empty() && added_to_spell_list.empty();
+}

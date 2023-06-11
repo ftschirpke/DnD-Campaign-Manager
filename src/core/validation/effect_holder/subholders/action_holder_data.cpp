@@ -25,3 +25,7 @@ dnd::Errors dnd::ActionHolderData::validate() const {
     }
     return errors;
 }
+
+bool dnd::ActionHolderData::empty() const noexcept {
+    return actions.empty() && bonus_actions.empty() && reactions.empty();
+}

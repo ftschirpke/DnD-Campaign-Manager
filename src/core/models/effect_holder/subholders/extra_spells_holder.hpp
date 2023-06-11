@@ -71,7 +71,6 @@ public:
      * @return the spells that are added to your spell list
      */
     const std::vector<const Spell*>& get_added_to_spell_list() const noexcept;
-protected:
 private:
     ExtraSpellsHolder(
         std::vector<const Spell*>&& free_cantrips, std::vector<const Spell*>&& at_will,
