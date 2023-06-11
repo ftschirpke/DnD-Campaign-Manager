@@ -49,7 +49,7 @@
         "prerequisites": ["HAS_CANTRIP Eldritch Blast"]
     },
     "Eyes of the Rune Keeper": {
-        "description": "You can read all writing"
+        "description": "You can read all writing."
     },
     "Fiendish Vigor": {
         "description": "You can cast false life on yourself at will as a 1st-level spell, without expending a spell slot or material components.",

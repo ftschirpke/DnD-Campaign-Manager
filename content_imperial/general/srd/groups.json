@@ -48,7 +48,7 @@
             "disguise kit", "forgery kit", "herbalism kit", "navigator's tools", "poisoner's kit", "thieves' tools"
         ]
     },
-    "languages": ["Common", "Draconic", "Druidic", "Elvish", "Gnomish", "Halfling", "Infernal", "Orc", "Thieves' Cant"],
+    "languages": ["Common", "Draconic", "Druidic", "Elvish", "Gnomish", "Halfling", "Infernal", "Orc", "Thieves' Cant", "Giant"],
     "damage types": ["acid", "bludgeoning", "cold", "fire", "force", "lightning", "necrotic", "piercing", "poison", "psychic", "radiant", "slashing", "thunder"],
     "conditions": ["blinded", "charmed", "deafened", "exhaustion", "frightened", "grappled", "incapacitated", "invisible", "paralyzed", "petrified", "poisoned", "prone", "restrained", "stunned", "unconscious"]
 }
