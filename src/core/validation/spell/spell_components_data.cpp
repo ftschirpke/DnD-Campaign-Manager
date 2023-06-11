@@ -3,6 +3,9 @@
 #include "spell_components_data.hpp"
 
 #include <regex>
+#include <string>
+
+#include <fmt/format.h>
 
 #include <core/errors/errors.hpp>
 #include <core/validation/validation_data.hpp>
@@ -15,7 +18,9 @@ dnd::Errors dnd::SpellComponentsData::validate() const {
     static const std::regex spell_components_regex(spell_components_regex_cstr);
     Errors errors;
     if (!std::regex_match(str, spell_components_regex)) {
-        errors.add_validation_error(ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Invalid spell components");
+        errors.add_validation_error(
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, , fmt::format("Invalid spell components \"{}\"", str)
+        );
     }
     return errors;
 }
