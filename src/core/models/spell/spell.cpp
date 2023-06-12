@@ -7,6 +7,7 @@
 #include <string>
 #include <utility>
 
+#include <core/content_visitors/content_visitor.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/models/spell/spell_components.hpp>

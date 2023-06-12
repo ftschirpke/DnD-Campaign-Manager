@@ -6,10 +6,11 @@
 #include <string>
 #include <vector>
 
-#include <core/controllers/content_holder.hpp>
 #include <core/validation/effect_holder/subholders/proficiency_holder_data.hpp>
 
 namespace dnd {
+
+class ContentHolder;
 
 /**
  * @brief This class holds a characters's proficiencies, its known languages, and special senses it has.

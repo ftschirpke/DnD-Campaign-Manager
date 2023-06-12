@@ -13,6 +13,9 @@
 
 namespace dnd {
 
+class ContentHolder;
+class ContentVisitor;
+
 /**
  * @brief A class representing a feature provided by classes, races, subclasses and subraces
  */

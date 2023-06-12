@@ -10,9 +10,9 @@
 #include <core/controllers/groups.hpp>
 // #include <core/models/character.hpp>
 // #include <core/models/character_class.hpp>
-// #include <core/models/character_race.hpp>
+#include <core/models/character_race/character_race.hpp>
 // #include <core/models/character_subclass.hpp>
-// #include <core/models/character_subrace.hpp>
+#include <core/models/character_subrace/character_subrace.hpp>
 // #include <core/models/effect_holder/choosable.hpp>
 // #include <core/models/effect_holder/feature.hpp>
 #include <core/models/item/item.hpp>
@@ -49,8 +49,8 @@ public:
     // StorageContentLibrary<Character> characters;
     // StorageContentLibrary<const CharacterClass> character_classes;
     // StorageContentLibrary<const CharacterSubclass> character_subclasses;
-    // StorageContentLibrary<const CharacterRace> character_races;
-    // StorageContentLibrary<const CharacterSubrace> character_subraces;
+    StorageContentLibrary<const CharacterRace> character_races;
+    StorageContentLibrary<const CharacterSubrace> character_subraces;
     StorageContentLibrary<const Item> items;
     StorageContentLibrary<const Spell> spells;
 

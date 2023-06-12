@@ -5,6 +5,8 @@
 #include <set>
 #include <string>
 
+#include <fmt/format.h>
+
 #include <core/controllers/content_holder.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
@@ -45,7 +47,7 @@ static dnd::Errors string_group_set_validate_relations(
         if (!content->groups.is_part_of_string_group(str_item, group_name)) {
             errors.add_validation_error(
                 dnd::ValidationErrorCode::RELATION_NOT_FOUND, parent,
-                fmt::format("'{}' ({}) is not part of the {} group.", str_item, set_name, group_name)
+                fmt::format("No '{}' ({}) exists in the {} group.", str_item, set_name, group_name)
             );
         }
     }

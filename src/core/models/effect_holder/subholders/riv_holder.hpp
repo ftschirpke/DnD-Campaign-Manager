@@ -6,10 +6,11 @@
 #include <string>
 #include <vector>
 
-#include <core/controllers/content_holder.hpp>
 #include <core/validation/effect_holder/subholders/riv_holder_data.hpp>
 
 namespace dnd {
+
+class ContentHolder;
 
 /**
  * @brief This class holds a creature's resistances, immunities, and vulnerabilities.

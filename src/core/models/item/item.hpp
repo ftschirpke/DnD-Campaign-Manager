@@ -11,6 +11,8 @@
 
 namespace dnd {
 
+class ContentVisitor;
+
 class Item : public ContentPiece {
 public:
     /**

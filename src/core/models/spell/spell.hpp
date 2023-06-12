@@ -14,6 +14,8 @@
 
 namespace dnd {
 
+class ContentVisitor;
+
 class Spell : public ContentPiece {
 public:
     /**
