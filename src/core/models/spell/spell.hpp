@@ -18,25 +18,6 @@ class Spell : public ContentPiece {
 public:
     /**
      * @brief Constructs a spell
-     * @param name the name of the spell
-     * @param source_path the path to the source file
-     * @param description a description of how the spell works and what is does
-     * @param components_str the string representation of the spell's components
-     * @param type_str the string representation of the spell's type
-     * @param casting_time the casting time of the spell
-     * @param range the range of the spell
-     * @param duration the duration of the spell
-     * @param classes the classes that can cast the spell
-     * @return the constructed spell
-     * @throws dnd::invalid_data if the data is invalid
-     */
-    static Spell create(
-        const std::string& name, const std::filesystem::path& source_path, const std::string& description,
-        const std::string& components_str, const std::string& type_str, const std::string& casting_time,
-        const std::string& range, const std::string& duration, const std::set<std::string>& classes
-    );
-    /**
-     * @brief Constructs a spell
      * @param spell_data the data to construct the spell from
      * @return the constructed spell
      * @throws dnd::invalid_data if the data is invalid

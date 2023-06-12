@@ -14,8 +14,8 @@ namespace dnd {
 class Errors {
 public:
     /**
-     * @brief Returns true if there are no errors.
-     * @return true if there are no errors, false otherwise
+     * @brief Returns "true" if there are no errors.
+     * @return "true" if there are no errors, "false" otherwise
      */
     bool ok() const;
     /**

@@ -8,7 +8,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include <core/models/effect_holder/choice.hpp>
+#include <core/models/effect_holder/choice/choice.hpp>
 #include <core/models/effect_holder/condition/condition.hpp>
 #include <core/models/effect_holder/effect/effect.hpp>
 #include <core/models/effect_holder/subholders/action_holder.hpp>
@@ -27,8 +27,9 @@ public:
     /**
      * @brief Constructs an effect holder from the given data
      * @param data the data to construct the effect holder from
+     * @param content the content to use for the construction
      * @return the constructed effect holder
-     * @throws dnd::invalid_data if the data is invalid
+     * @throws dnd::invalid_data if the data is invalid or is incompatible with the given content
      */
     static EffectHolder create(EffectHolderData&& data, const ContentHolder* content);
 
@@ -47,6 +48,10 @@ public:
         std::vector<std::unique_ptr<Effect>>&& effects, ActionHolder&& action_holder,
         ExtraSpellsHolder&& extra_spells_holder, ProficiencyHolder&& proficiency_holder, RIVHolder&& riv_holder
     ) noexcept;
+    EffectHolder(const EffectHolder&) = delete;
+    EffectHolder& operator=(const EffectHolder&) = delete;
+    EffectHolder(EffectHolder&&) noexcept = default;
+    EffectHolder& operator=(EffectHolder&&) noexcept = default;
     virtual ~EffectHolder() noexcept = default;
 
     const std::vector<std::unique_ptr<Condition>>& get_activation_conditions() const;

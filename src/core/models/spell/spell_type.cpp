@@ -10,15 +10,17 @@
 
 #include <fmt/format.h>
 
+#include <core/errors/errors.hpp>
+#include <core/exceptions/validation_exceptions.hpp>
 #include <core/utils/char_manipulation.hpp>
 #include <core/utils/string_manipulation.hpp>
 #include <core/validation/spell/spell_type_data.hpp>
 
-inline constexpr std::array<std::pair<std::string_view, MagicSchool>, 8> magic_schools = {
-    std::pair("abjuration", MagicSchool::ABJURATION), std::pair("conjuration", MagicSchool::CONJURATION),
-    std::pair("divination", MagicSchool::DIVINATION), std::pair("enchantment", MagicSchool::ENCHANTMENT),
-    std::pair("evocation", MagicSchool::EVOCATION),   std::pair("illusion", MagicSchool::ILLUSION),
-    std::pair("necromancy", MagicSchool::NECROMANCY), std::pair("transmutation", MagicSchool::TRANSMUTATION),
+inline constexpr std::array<std::pair<std::string_view, dnd::MagicSchool>, 8> magic_schools = {
+    std::pair("abjuration", dnd::MagicSchool::ABJURATION), std::pair("conjuration", dnd::MagicSchool::CONJURATION),
+    std::pair("divination", dnd::MagicSchool::DIVINATION), std::pair("enchantment", dnd::MagicSchool::ENCHANTMENT),
+    std::pair("evocation", dnd::MagicSchool::EVOCATION),   std::pair("illusion", dnd::MagicSchool::ILLUSION),
+    std::pair("necromancy", dnd::MagicSchool::NECROMANCY), std::pair("transmutation", dnd::MagicSchool::TRANSMUTATION),
 };
 
 bool dnd::is_magic_school(const std::string& magic_school_name) {
@@ -54,7 +56,7 @@ dnd::MagicSchool dnd::magic_school_from_name(const std::string& magic_school_nam
             return school_val;
         }
     }
-    throw std::out_of_range("The magic school \"" + magic_school_name + "\" does not exist.");
+    throw std::out_of_range(fmt::format("The magic school \"{}\" does not exist.", magic_school_name));
 }
 
 dnd::MagicSchool dnd::magic_school_from_name(std::string_view magic_school_name) {
@@ -63,7 +65,7 @@ dnd::MagicSchool dnd::magic_school_from_name(std::string_view magic_school_name)
             return school_val;
         }
     }
-    throw std::out_of_range("The magic school \"" + magic_school_name + "\" does not exist.");
+    throw std::out_of_range(fmt::format("The magic school \"{}\" does not exist.", magic_school_name));
 }
 
 dnd::SpellType dnd::SpellType::create(dnd::SpellTypeData&& type_data) {
@@ -74,21 +76,21 @@ dnd::SpellType dnd::SpellType::create(dnd::SpellTypeData&& type_data) {
     SpellLevel level;
     MagicSchool magic_school;
 
-    size_t ritual_idx = type_str.find(" (ritual)");
+    size_t ritual_idx = type_data.str.find(" (ritual)");
     is_ritual = ritual_idx != std::string::npos;
     std::string magic_school_str;
-    size_t cantrip_idx = type_str.find(" cantrip");
+    size_t cantrip_idx = type_data.str.find(" cantrip");
     if (cantrip_idx != std::string::npos) {
         level = SpellLevel::CANTRIP;
-        magic_school_str = type_str.substr(0, cantrip_idx);
+        magic_school_str = type_data.str.substr(0, cantrip_idx);
     } else {
-        assert(std::isdigit(static_cast<unsigned char>(type_str[0])));
-        level = SpellLevel(type_str[0] - '0');
-        size_t i = type_str.find("level ") + 6;
+        assert(std::isdigit(static_cast<unsigned char>(type_data.str[0])));
+        level = SpellLevel(type_data.str[0] - '0');
+        size_t i = type_data.str.find("level ") + 6;
         if (is_ritual) {
-            magic_school_str = type_str.substr(i, ritual_idx - i);
+            magic_school_str = type_data.str.substr(i, ritual_idx - i);
         } else {
-            magic_school_str = type_str.substr(i, type_str.size() - i);
+            magic_school_str = type_data.str.substr(i, type_data.str.size() - i);
         }
     }
     string_to_lowercase(magic_school_str);

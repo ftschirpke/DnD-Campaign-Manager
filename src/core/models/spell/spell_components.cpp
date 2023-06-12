@@ -8,6 +8,8 @@
 
 #include <fmt/format.h>
 
+#include <core/errors/errors.hpp>
+#include <core/exceptions/validation_exceptions.hpp>
 #include <core/validation/spell/spell_components_data.hpp>
 
 dnd::SpellComponents dnd::SpellComponents::create(SpellComponentsData&& components_data) {
@@ -42,12 +44,12 @@ dnd::SpellComponents dnd::SpellComponents::create(SpellComponentsData&& componen
 }
 
 dnd::SpellComponents::SpellComponents(
-    bool verbal, bool somatic, bool material, const std::string& material_components = ""
+    bool verbal, bool somatic, bool material, const std::string& material_components
 ) noexcept
     : verbal(verbal), somatic(somatic), material(material), material_components(material_components) {}
 
 dnd::SpellComponents::SpellComponents(
-    bool verbal, bool somatic, bool material, std::string&& material_components = ""
+    bool verbal, bool somatic, bool material, std::string&& material_components
 ) noexcept
     : verbal(verbal), somatic(somatic), material(material), material_components(std::move(material_components)) {}
 

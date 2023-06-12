@@ -7,8 +7,6 @@
 #include <string>
 
 #include <core/errors/errors.hpp>
-#include <core/models/spell/spell_components.hpp>
-#include <core/models/spell/spell_type.hpp>
 #include <core/validation/spell/spell_components_data.hpp>
 #include <core/validation/spell/spell_type_data.hpp>
 #include <core/validation/validation_data.hpp>
@@ -23,8 +21,8 @@ public:
      */
     virtual Errors validate() const override;
 
-    SpellComponentsData components;
-    SpellTypeData type;
+    SpellComponentsData components_data;
+    SpellTypeData type_data;
 
     std::string casting_time;
     std::string range;

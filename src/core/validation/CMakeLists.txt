@@ -4,4 +4,5 @@ target_sources(${DND_CORE}
 )
 
 add_subdirectory(effect_holder)
+add_subdirectory(feature)
 add_subdirectory(spell)

@@ -22,11 +22,6 @@ static std::vector<const dnd::Spell*> find_spells_in_content(
     return spells;
 }
 
-bool dnd::ExtraSpellsHolder::empty() const {
-    return free_cantrips.empty() && at_will.empty() && innate.empty() && free_once_a_day.empty() && spells_known.empty()
-           && spells_known_included.empty() && added_to_spell_list.empty();
-}
-
 dnd::ExtraSpellsHolder dnd::ExtraSpellsHolder::create(
     dnd::ExtraSpellsHolderData&& data, const dnd::ContentHolder* content
 ) {
@@ -47,6 +42,11 @@ dnd::ExtraSpellsHolder dnd::ExtraSpellsHolder::create(
         std::move(free_cantrips), std::move(at_will), std::move(innate), std::move(free_once_a_day),
         std::move(spells_known), std::move(spells_known_included), std::move(added_to_spell_list)
     );
+}
+
+bool dnd::ExtraSpellsHolder::empty() const {
+    return free_cantrips.empty() && at_will.empty() && innate.empty() && free_once_a_day.empty() && spells_known.empty()
+           && spells_known_included.empty() && added_to_spell_list.empty();
 }
 
 const std::vector<const dnd::Spell*>& dnd::ExtraSpellsHolder::get_free_cantrips() const noexcept {
