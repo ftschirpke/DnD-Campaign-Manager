@@ -24,11 +24,17 @@ dnd::EffectHolderData::EffectHolderData(const ValidationData* parent) noexcept
 
 dnd::Errors dnd::EffectHolderData::validate() const {
     Errors errors;
+    for (const auto& condition_data : activation_conditions_data) {
+        errors.merge(condition_data.validate());
+    }
+    for (const auto& effect_data : effects_data) {
+        errors.merge(effect_data.validate());
+    }
     errors.merge(action_holder_data.validate());
     errors.merge(extra_spells_holder_data.validate());
     errors.merge(proficiency_holder_data.validate());
     errors.merge(riv_holder_data.validate());
-    if (activation_conditions.empty() && effects.empty() && action_holder_data.empty()
+    if (activation_conditions_data.empty() && effects_data.empty() && action_holder_data.empty()
         && extra_spells_holder_data.empty() && proficiency_holder_data.empty() && riv_holder_data.empty()) {
         errors.add_validation_error(
             ValidationErrorCode::MISSING_ATTRIBUTE, parent, "Effect holder is completely empty."

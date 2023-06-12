@@ -33,8 +33,8 @@ public:
      */
     virtual Errors validate_relations(const ContentHolder* content) const override;
 
-    std::vector<ConditionData> activation_conditions;
-    std::vector<EffectData> effects;
+    std::vector<ConditionData> activation_conditions_data;
+    std::vector<EffectData> effects_data;
     ActionHolderData action_holder_data;
     ExtraSpellsHolderData extra_spells_holder_data;
     ProficiencyHolderData proficiency_holder_data;
