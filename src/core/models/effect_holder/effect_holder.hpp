@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include <core/models/effect_holder/choice.hpp>
 #include <core/models/effect_holder/condition/condition.hpp>
 #include <core/models/effect_holder/effect/effect.hpp>
 #include <core/models/effect_holder/subholders/action_holder.hpp>
@@ -34,6 +35,7 @@ public:
     /**
      * @brief Constructs an effect holder
      * @param activation_conditions the conditions that need to be met for the effects to be activated
+     * @param choices choices that need to be made/are provided by the effect holder
      * @param effects the effects that are activated when the conditions are met
      * @param action_holder the actions provided by the effect holder
      * @param extra_spells_holder the extra spells provided by the effect holder
@@ -41,9 +43,9 @@ public:
      * @param riv_holder the resistances, immunities, and vulnerabilities provided by the effect holder
      */
     EffectHolder(
-        std::vector<std::unique_ptr<Condition>>&& activation_conditions, std::vector<std::unique_ptr<Effect>>&& effects,
-        ActionHolder&& action_holder, ExtraSpellsHolder&& extra_spells_holder, ProficiencyHolder&& proficiency_holder,
-        RIVHolder&& riv_holder
+        std::vector<std::unique_ptr<Condition>>&& activation_conditions, std::vector<std::unique_ptr<Choice>>&& choices,
+        std::vector<std::unique_ptr<Effect>>&& effects, ActionHolder&& action_holder,
+        ExtraSpellsHolder&& extra_spells_holder, ProficiencyHolder&& proficiency_holder, RIVHolder&& riv_holder
     ) noexcept;
     virtual ~EffectHolder() noexcept = default;
 
@@ -71,6 +73,7 @@ public:
     ) const;
 private:
     std::vector<std::unique_ptr<Condition>> activation_conditions;
+    std::vector<std::unique_ptr<Choice>> choices;
     std::vector<std::unique_ptr<Effect>> effects;
     ActionHolder actions;
     ExtraSpellsHolder extra_spells;

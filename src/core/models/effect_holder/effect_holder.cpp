@@ -34,12 +34,17 @@ dnd::EffectHolder dnd::EffectHolder::create(dnd::EffectHolderData&& data, const 
     std::vector<std::unique_ptr<Condition>> activation_conditions;
     activation_conditions.reserve(data.activation_conditions_data.size());
     for (auto& condition_data : data.activation_conditions_data) {
-        activation_conditions.push_back(std::make_unique<Condition>(create_condition(std::move(condition_data))));
+        activation_conditions.emplace_back(std::move(create_condition(std::move(condition_data))));
     }
-    std::vector<std::unique_ptr<dnd::Effect>> effects;
+    std::vector<std::unique_ptr<Choice>> choices;
+    choices.reserve(data.choices_data.size());
+    for (auto& choice_data : data.choices_data) {
+        choices.emplace_back(std::move(std::make_unique<dnd::Choice>())); // TODO: implement
+    }
+    std::vector<std::unique_ptr<Effect>> effects;
     effects.reserve(data.effects_data.size());
     for (auto& effect_data : data.effects_data) {
-        effects.push_back(std::make_unique<dnd::Effect>(create_effect(std::move(effect_data))));
+        effects.emplace_back(std::move(create_effect(std::move(effect_data))));
     }
     return EffectHolder(
         std::move(activation_conditions), std::move(effects), ActionHolder::create(std::move(data.action_holder_data)),
@@ -50,11 +55,11 @@ dnd::EffectHolder dnd::EffectHolder::create(dnd::EffectHolderData&& data, const 
 }
 
 dnd::EffectHolder::EffectHolder(
-    std::vector<std::unique_ptr<Condition>>&& activation_conditions, std::vector<std::unique_ptr<Effect>>&& effects,
-    ActionHolder&& action_holder, ExtraSpellsHolder&& extra_spells_holder, ProficiencyHolder&& proficiency_holder,
-    RIVHolder&& riv_holder
+    std::vector<std::unique_ptr<Condition>>&& activation_conditions, std::vector<std::unique_ptr<Choice>>&& choices,
+    std::vector<std::unique_ptr<Effect>>&& effects, ActionHolder&& action_holder,
+    ExtraSpellsHolder&& extra_spells_holder, ProficiencyHolder&& proficiency_holder, RIVHolder&& riv_holder
 ) noexcept
-    : activation_conditions(std::move(activation_conditions)), effects(std::move(effects)),
+    : activation_conditions(std::move(activation_conditions)), choices(std::move(choices)), effects(std::move(effects)),
       actions(std::move(action_holder)), extra_spells(std::move(extra_spells_holder)),
       proficiencies(std::move(proficiency_holder)), rivs(std::move(riv_holder)) {}
 

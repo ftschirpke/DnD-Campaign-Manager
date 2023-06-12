@@ -27,6 +27,9 @@ dnd::Errors dnd::EffectHolderData::validate() const {
     for (const auto& condition_data : activation_conditions_data) {
         errors.merge(condition_data.validate());
     }
+    for (const auto& choice_data : choices_data) {
+        errors.merge(choice_data.validate());
+    }
     for (const auto& effect_data : effects_data) {
         errors.merge(effect_data.validate());
     }
@@ -45,6 +48,9 @@ dnd::Errors dnd::EffectHolderData::validate() const {
 
 dnd::Errors dnd::EffectHolderData::validate_relations(const ContentHolder* content) const {
     Errors errors;
+    for (const auto& choice_data : choices_data) {
+        errors.merge(choice_data.validate_relations(content));
+    }
     errors.merge(extra_spells_holder_data.validate_relations(content));
     errors.merge(proficiency_holder_data.validate_relations(content));
     errors.merge(riv_holder_data.validate_relations(content));
