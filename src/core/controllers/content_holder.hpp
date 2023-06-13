@@ -9,12 +9,12 @@
 #include <core/controllers/content_library.hpp>
 #include <core/controllers/groups.hpp>
 // #include <core/models/character.hpp>
-// #include <core/models/character_class.hpp>
+#include <core/models/character_class/character_class.hpp>
 #include <core/models/character_race/character_race.hpp>
-// #include <core/models/character_subclass.hpp>
+#include <core/models/character_subclass/character_subclass.hpp>
 #include <core/models/character_subrace/character_subrace.hpp>
 // #include <core/models/effect_holder/choosable.hpp>
-// #include <core/models/effect_holder/feature.hpp>
+#include <core/models/feature/feature.hpp>
 #include <core/models/item/item.hpp>
 #include <core/models/spell/spell.hpp>
 
@@ -47,14 +47,14 @@ public:
     // content libraries for all the types of content
 
     // StorageContentLibrary<Character> characters;
-    // StorageContentLibrary<const CharacterClass> character_classes;
-    // StorageContentLibrary<const CharacterSubclass> character_subclasses;
+    StorageContentLibrary<const CharacterClass> character_classes;
+    StorageContentLibrary<const CharacterSubclass> character_subclasses;
     StorageContentLibrary<const CharacterRace> character_races;
     StorageContentLibrary<const CharacterSubrace> character_subraces;
     StorageContentLibrary<const Item> items;
     StorageContentLibrary<const Spell> spells;
 
-    // ReferencingContentLibrary<const Feature> features;
+    ReferencingContentLibrary<const Feature> features;
     // std::unordered_map<std::string, ReferencingContentLibrary<const Choosable>> choosables;
 };
 

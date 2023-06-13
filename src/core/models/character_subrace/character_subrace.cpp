@@ -28,8 +28,10 @@ dnd::CharacterSubrace dnd::CharacterSubrace::create(
     for (auto& feature_data : data.features_data) {
         features.emplace_back(Feature::create(std::move(feature_data), content));
     }
-    const CharacterRace* race = &content.character_races.get(data.race_name);
-    return CharacterSubrace(std::move(data.name));
+    const CharacterRace* race = &content->character_races.get(data.race_name);
+    return CharacterSubrace(
+        std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(features), race
+    );
 }
 
 const dnd::CharacterRace* dnd::CharacterSubrace::get_race() const noexcept { return race; }

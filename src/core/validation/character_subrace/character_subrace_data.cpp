@@ -2,6 +2,8 @@
 
 #include "character_subrace_data.hpp"
 
+#include <string>
+#include <unordered_set>
 #include <vector>
 
 #include <fmt/format.h>
@@ -14,8 +16,17 @@
 
 dnd::Errors dnd::CharacterSubraceData::validate() const {
     Errors errors;
+    std::unordered_set<std::string> unique_feature_names;
     for (const auto& feature_data : features_data) {
         errors.merge(feature_data.validate());
+        if (unique_feature_names.contains(feature_data.name)) {
+            errors.add_validation_error(
+                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
+                fmt::format("Character class has duplicate feature \"{}\".", feature_data.name)
+            );
+        } else {
+            unique_feature_names.insert(feature_data.name);
+        }
     }
     if (features_data.empty()) {
         errors.add_validation_error(
@@ -29,6 +40,12 @@ dnd::Errors dnd::CharacterSubraceData::validate_relations(const ContentHolder* c
     Errors errors;
     for (const auto& feature_data : features_data) {
         errors.merge(feature_data.validate_relations(content));
+        if (content->features.contains(name)) {
+            errors.add_validation_error(
+                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
+                fmt::format("Feature has duplicate name \"{}\".", name)
+            );
+        }
     }
     if (!content->character_races.contains(race_name)) {
         errors.add_validation_error(
