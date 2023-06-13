@@ -17,7 +17,7 @@ dnd::Errors dnd::ImportantLevelsData::validate() const {
         if (asi_level <= 0 || asi_level > 20) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
-                "ASI (ability score improvement) levels must all be between 1 and 20."
+                "ASI (ability score improvement) levels must all be between 1 and 20 (inclusive)."
             );
             break;
         }

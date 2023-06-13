@@ -12,7 +12,7 @@
 dnd::ImportantLevels dnd::ImportantLevels::create(dnd::ImportantLevelsData&& data, int subclass_level) {
     if (subclass_level <= 0 || subclass_level > 20) {
         throw dnd::invalid_data(
-            "Cannot create important levels object with a subclass level that is not between 1 and 20."
+            "Cannot create important levels object with a subclass level that is not between 1 and 20 (inclusive)."
         );
     }
     if (!data.validate().ok()) {

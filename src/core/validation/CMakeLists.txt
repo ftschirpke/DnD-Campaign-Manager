@@ -4,6 +4,7 @@ target_sources(${DND_CORE}
 )
 
 add_subdirectory(basic_mechanics)
+add_subdirectory(character)
 add_subdirectory(character_class)
 add_subdirectory(character_subclass)
 add_subdirectory(character_race)
