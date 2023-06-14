@@ -34,6 +34,9 @@ dnd::SpellComponents dnd::SpellComponents::create(SpellComponentsData&& componen
         verbal = first_part == "V";
         somatic = first_part == "S";
         material = first_part == "M";
+    } else {
+        // this should never happen, if the validation is correct
+        throw invalid_data("Cannot create SpellComponents from invalid data.");
     }
     if (material) {
         materials_needed = components_data.str.substr(

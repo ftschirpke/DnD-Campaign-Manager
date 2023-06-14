@@ -44,10 +44,10 @@ const std::set<std::string>& dnd::Spell::get_classes() const noexcept { return c
 void dnd::Spell::accept(dnd::ContentVisitor* visitor) const { visitor->visit(this); }
 
 dnd::Spell::Spell(
-    std::string&& name, std::filesystem::path&& source_path, std::string&& description, SpellComponents&& components,
+    std::string&& name, std::string&& description, std::filesystem::path&& source_path, SpellComponents&& components,
     SpellType&& type, std::string&& casting_time, std::string&& range, std::string&& duration,
     std::set<std::string>&& classes
 ) noexcept
-    : ContentPiece(std::move(name), std::move(source_path), std::move(description)), components(std::move(components)),
+    : ContentPiece(std::move(name), std::move(description), std::move(source_path)), components(std::move(components)),
       type(std::move(type)), casting_time(std::move(casting_time)), range(std::move(range)),
       duration(std::move(duration)), classes(std::move(classes)) {}
