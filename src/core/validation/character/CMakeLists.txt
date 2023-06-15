@@ -5,3 +5,5 @@ target_sources(${DND_CORE}
     character_basis_data.cpp
     progression_data.cpp
 )
+
+add_subdirectory(decision)

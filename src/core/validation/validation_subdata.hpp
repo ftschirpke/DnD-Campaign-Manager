@@ -8,6 +8,8 @@
 
 namespace dnd {
 
+class ContentHolder;
+
 /**
  * @brief A base class for the validation of data for parts of content pieces.
  */
