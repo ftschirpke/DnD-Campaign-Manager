@@ -27,7 +27,7 @@ public:
      * @return the constructed character race
      * @throws dnd::invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static CharacterRace create(CharacterRaceData&& data, const ContentHolder* content);
+    static CharacterRace create(CharacterRaceData&& data, const ContentHolder& content);
 
     CharacterRace(const CharacterRace&) = delete;
     CharacterRace& operator=(const CharacterRace&) = delete;

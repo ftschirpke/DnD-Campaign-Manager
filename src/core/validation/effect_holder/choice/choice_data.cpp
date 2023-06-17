@@ -9,4 +9,4 @@ dnd::ChoiceData::ChoiceData(const ValidationData* parent) noexcept : ValidationS
 
 dnd::Errors dnd::ChoiceData::validate() const { return Errors(); }
 
-dnd::Errors dnd::ChoiceData::validate_relations(const ContentHolder* content) const { return Errors(); }
+dnd::Errors dnd::ChoiceData::validate_relations(const ContentHolder& content) const { return Errors(); }

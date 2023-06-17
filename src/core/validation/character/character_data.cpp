@@ -37,11 +37,11 @@ dnd::Errors dnd::CharacterData::validate() const {
     return errors;
 }
 
-dnd::Errors dnd::CharacterData::validate_relations(const dnd::ContentHolder* content) const {
+dnd::Errors dnd::CharacterData::validate_relations(const dnd::ContentHolder& content) const {
     Errors errors;
     for (const auto& feature_data : features_data) {
         errors.merge(feature_data.validate_relations(content));
-        if (content->features.contains(name)) {
+        if (content.features.contains(name)) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
                 fmt::format("Feature has duplicate name \"{}\".", name)
@@ -52,8 +52,8 @@ dnd::Errors dnd::CharacterData::validate_relations(const dnd::ContentHolder* con
     errors.merge(base_ability_scores_data.validate_relations(content));
 
     if (!character_basis_data.class_name.empty()
-        && content->character_classes.contains(character_basis_data.class_name)) {
-        const CharacterClass& cls = content->character_classes.get(character_basis_data.class_name);
+        && content.character_classes.contains(character_basis_data.class_name)) {
+        const CharacterClass& cls = content.character_classes.get(character_basis_data.class_name);
         if (progression_data.level >= cls.get_important_levels().get_subclass_level()
             && character_basis_data.subclass_name.empty()) {
             errors.add_validation_error(

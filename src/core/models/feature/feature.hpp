@@ -28,7 +28,7 @@ public:
      * @return the constructed feature
      * @throws dnd::invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static Feature create(FeatureData&& data, const ContentHolder* content);
+    static Feature create(FeatureData&& data, const ContentHolder& content);
 
     Feature(const Feature&) = delete;
     Feature& operator=(const Feature&) = delete;

@@ -24,7 +24,7 @@ public:
      * @return the constructed ExtraSpellsHolder
      * @throws dnd::invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static ExtraSpellsHolder create(ExtraSpellsHolderData&& data, const ContentHolder* content);
+    static ExtraSpellsHolder create(ExtraSpellsHolderData&& data, const ContentHolder& content);
 
     /**
      * @brief Returns whether if the ExtraSpellsHolder is empty

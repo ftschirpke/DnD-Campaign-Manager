@@ -28,7 +28,7 @@ public:
      * @param content the content holder to validate the relations against
      * @return the errors that occured during validation
      */
-    virtual Errors validate_relations(const ContentHolder* content) const;
+    virtual Errors validate_relations(const ContentHolder& content) const;
 
     std::string name;
     std::string description;

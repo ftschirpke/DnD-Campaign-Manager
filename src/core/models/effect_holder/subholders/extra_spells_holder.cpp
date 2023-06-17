@@ -12,18 +12,18 @@
 #include <core/validation/effect_holder/subholders/extra_spells_holder_data.hpp>
 
 static std::vector<const dnd::Spell*> find_spells_in_content(
-    const std::set<std::string>& spell_names, const dnd::ContentHolder* content
+    const std::set<std::string>& spell_names, const dnd::ContentHolder& content
 ) {
     std::vector<const dnd::Spell*> spells;
     spells.reserve(spell_names.size());
     for (const auto& spell_name : spell_names) {
-        spells.push_back(&content->spells.get(spell_name));
+        spells.push_back(&content.spells.get(spell_name));
     }
     return spells;
 }
 
 dnd::ExtraSpellsHolder dnd::ExtraSpellsHolder::create(
-    dnd::ExtraSpellsHolderData&& data, const dnd::ContentHolder* content
+    dnd::ExtraSpellsHolderData&& data, const dnd::ContentHolder& content
 ) {
     if (!data.validate().ok()) {
         throw dnd::invalid_data("Cannot create ExtraSpellsHolderData from invalid data.");

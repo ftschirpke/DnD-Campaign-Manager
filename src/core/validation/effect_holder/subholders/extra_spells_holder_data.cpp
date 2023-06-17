@@ -42,12 +42,12 @@ dnd::Errors dnd::ExtraSpellsHolderData::validate() const {
 }
 
 static dnd::Errors spells_set_validate_relations(
-    const std::set<std::string>& spells, const dnd::ValidationData* parent, const dnd::ContentHolder* content
+    const std::set<std::string>& spells, const dnd::ValidationData* parent, const dnd::ContentHolder& content
 ) {
     dnd::Errors errors;
 
     for (const auto& spell_name : spells) {
-        if (!content->spells.contains(spell_name)) {
+        if (!content.spells.contains(spell_name)) {
             errors.add_validation_error(
                 dnd::ValidationErrorCode::RELATION_NOT_FOUND, parent,
                 fmt::format("Spell '{}' does not exist.", spell_name)
@@ -57,15 +57,15 @@ static dnd::Errors spells_set_validate_relations(
     return errors;
 }
 
-dnd::Errors dnd::ExtraSpellsHolderData::validate_relations(const ContentHolder* content) const {
+dnd::Errors dnd::ExtraSpellsHolderData::validate_relations(const ContentHolder& content) const {
     Errors errors;
     for (const auto& cantrip_name : free_cantrips) {
-        if (!content->spells.contains(cantrip_name)) {
+        if (!content.spells.contains(cantrip_name)) {
             errors.add_validation_error(
                 dnd::ValidationErrorCode::RELATION_NOT_FOUND, parent,
                 fmt::format("Cantrip '{}' does not exist.", cantrip_name)
             );
-        } else if (content->spells.get(cantrip_name).get_type().get_spell_level() != dnd::SpellLevel::CANTRIP) {
+        } else if (content.spells.get(cantrip_name).get_type().get_spell_level() != dnd::SpellLevel::CANTRIP) {
             errors.add_validation_error(
                 dnd::ValidationErrorCode::INVALID_RELATION, parent,
                 fmt::format("Spell '{}' is not a cantrip.", cantrip_name)

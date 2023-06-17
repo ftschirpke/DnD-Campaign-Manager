@@ -24,7 +24,7 @@ public:
      * @return the constructed RIVHolder
      * @throws dnd::invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static RIVHolder create(RIVHolderData&& data, const ContentHolder* content);
+    static RIVHolder create(RIVHolderData&& data, const ContentHolder& content);
 
     /**
      * @brief Returns whether the RIVHolder is empty

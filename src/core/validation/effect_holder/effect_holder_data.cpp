@@ -46,7 +46,7 @@ dnd::Errors dnd::EffectHolderData::validate() const {
     return errors;
 }
 
-dnd::Errors dnd::EffectHolderData::validate_relations(const ContentHolder* content) const {
+dnd::Errors dnd::EffectHolderData::validate_relations(const ContentHolder& content) const {
     Errors errors;
     for (const auto& choice_data : choices_data) {
         errors.merge(choice_data.validate_relations(content));

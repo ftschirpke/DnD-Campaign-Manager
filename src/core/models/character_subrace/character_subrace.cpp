@@ -15,7 +15,7 @@
 #include <core/validation/character_subrace/character_subrace_data.hpp>
 
 dnd::CharacterSubrace dnd::CharacterSubrace::create(
-    dnd::CharacterSubraceData&& data, const dnd::ContentHolder* content
+    dnd::CharacterSubraceData&& data, const dnd::ContentHolder& content
 ) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create character subrace from invalid data.");
@@ -28,7 +28,7 @@ dnd::CharacterSubrace dnd::CharacterSubrace::create(
     for (auto& feature_data : data.features_data) {
         features.emplace_back(Feature::create(std::move(feature_data), content));
     }
-    const CharacterRace* race = &content->character_races.get(data.race_name);
+    const CharacterRace* race = &content.character_races.get(data.race_name);
     return CharacterSubrace(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(features), race
     );

@@ -38,7 +38,7 @@ static int determine_subclass_level(const dnd::FeatureData& subclass_feature_dat
     return 1;
 }
 
-dnd::CharacterClass dnd::CharacterClass::create(dnd::CharacterClassData&& data, const dnd::ContentHolder* content) {
+dnd::CharacterClass dnd::CharacterClass::create(dnd::CharacterClassData&& data, const dnd::ContentHolder& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create character class from invalid data.");
     }

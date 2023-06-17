@@ -7,7 +7,7 @@
 
 static std::string nth_parent_stem(const std::filesystem::path& path, int n) noexcept {
     std::filesystem::path parent = path;
-    for (size_t i = 0; i < n; ++i) {
+    for (int i = 0; i < n; ++i) {
         parent = parent.parent_path();
     }
     return parent.stem().string();

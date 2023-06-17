@@ -25,7 +25,7 @@ public:
      * @return the constructed character subrace
      * @throws dnd::invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static CharacterSubrace create(CharacterSubraceData&& data, const ContentHolder* content);
+    static CharacterSubrace create(CharacterSubraceData&& data, const ContentHolder& content);
 
     CharacterSubrace(const CharacterSubrace&) = delete;
     CharacterSubrace& operator=(const CharacterSubrace&) = delete;

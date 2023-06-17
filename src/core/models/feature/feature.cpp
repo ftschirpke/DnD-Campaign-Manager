@@ -13,7 +13,7 @@
 #include <core/models/content_piece.hpp>
 #include <core/models/effect_holder/effect_holder.hpp>
 
-dnd::Feature dnd::Feature::create(dnd::FeatureData&& data, const dnd::ContentHolder* content) {
+dnd::Feature dnd::Feature::create(dnd::FeatureData&& data, const dnd::ContentHolder& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create feature from invalid data.");
     }

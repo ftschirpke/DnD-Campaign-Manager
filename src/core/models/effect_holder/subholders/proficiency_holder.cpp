@@ -19,7 +19,7 @@ static std::vector<std::string> set_to_vector(std::set<std::string>&& set) {
     return vector;
 }
 
-dnd::ProficiencyHolder dnd::ProficiencyHolder::create(ProficiencyHolderData&& data, const ContentHolder* content) {
+dnd::ProficiencyHolder dnd::ProficiencyHolder::create(ProficiencyHolderData&& data, const ContentHolder& content) {
     if (!data.validate().ok()) {
         throw dnd::invalid_data("Cannot create ProficiencyHolder from invalid data.");
     }

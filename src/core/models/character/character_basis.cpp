@@ -12,22 +12,22 @@
 #include <core/models/character_subrace/character_subrace.hpp>
 #include <core/validation/character/character_basis_data.hpp>
 
-dnd::CharacterBasis dnd::CharacterBasis::create(dnd::CharacterBasisData&& data, const dnd::ContentHolder* content) {
+dnd::CharacterBasis dnd::CharacterBasis::create(dnd::CharacterBasisData&& data, const dnd::ContentHolder& content) {
     if (!data.validate().ok()) {
         throw dnd::invalid_data("Cannot create CharacterBasis object from invalid data.");
     }
     if (!data.validate_relations(content).ok()) {
         throw dnd::invalid_data("CharacterBasis data is incompatible with the given content.");
     }
-    const CharacterRace* race = &content->character_races.get(data.race_name);
+    const CharacterRace* race = &content.character_races.get(data.race_name);
     const CharacterSubrace* subrace = nullptr;
-    const CharacterClass* cls = &content->character_classes.get(data.class_name);
+    const CharacterClass* cls = &content.character_classes.get(data.class_name);
     const CharacterSubclass* subclass = nullptr;
     if (!data.subrace_name.empty()) {
-        subrace = &content->character_subraces.get(data.subrace_name);
+        subrace = &content.character_subraces.get(data.subrace_name);
     }
     if (!data.subclass_name.empty()) {
-        subclass = &content->character_subclasses.get(data.subclass_name);
+        subclass = &content.character_subclasses.get(data.subclass_name);
     }
     return CharacterBasis(race, subrace, cls, subclass);
 }

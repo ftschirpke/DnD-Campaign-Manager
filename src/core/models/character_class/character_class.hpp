@@ -27,7 +27,7 @@ public:
      * @return the constructed character class
      * @throws dnd::invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static CharacterClass create(CharacterClassData&& data, const ContentHolder* content);
+    static CharacterClass create(CharacterClassData&& data, const ContentHolder& content);
 
     CharacterClass(const CharacterClass&) = delete;
     CharacterClass& operator=(const CharacterClass&) = delete;

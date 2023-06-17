@@ -21,7 +21,7 @@ static std::vector<std::string> set_to_vector(std::set<std::string>&& set) {
     return vector;
 }
 
-dnd::RIVHolder dnd::RIVHolder::create(dnd::RIVHolderData&& data, const dnd::ContentHolder* content) {
+dnd::RIVHolder dnd::RIVHolder::create(dnd::RIVHolderData&& data, const dnd::ContentHolder& content) {
     if (!data.validate().ok()) {
         throw dnd::invalid_data("Cannot create RIVHolder from invalid data.");
     }

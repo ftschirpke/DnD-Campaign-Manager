@@ -26,7 +26,7 @@ public:
      * @param content the content holder to validate the relations against
      * @return the errors that occured during validation
      */
-    virtual Errors validate_relations(const ContentHolder* content) const override;
+    virtual Errors validate_relations(const ContentHolder& content) const override;
 
     std::string race_name;
     std::string subrace_name;

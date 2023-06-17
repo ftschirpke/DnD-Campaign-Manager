@@ -52,11 +52,11 @@ dnd::Errors dnd::CharacterClassData::validate() const {
     return errors;
 }
 
-dnd::Errors dnd::CharacterClassData::validate_relations(const dnd::ContentHolder* content) const {
+dnd::Errors dnd::CharacterClassData::validate_relations(const dnd::ContentHolder& content) const {
     Errors errors;
     for (const auto& feature_data : features_data) {
         errors.merge(feature_data.validate_relations(content));
-        if (content->features.contains(name)) {
+        if (content.features.contains(name)) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
                 fmt::format("Feature has duplicate name \"{}\".", name)
