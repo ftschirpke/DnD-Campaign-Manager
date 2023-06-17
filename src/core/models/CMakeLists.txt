@@ -1,6 +1,7 @@
 target_sources(${DND_CORE}
     PRIVATE
     content_piece.cpp
+    source_info.cpp
 )
 
 add_subdirectory(character)

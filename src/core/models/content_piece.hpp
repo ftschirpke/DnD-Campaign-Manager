@@ -6,10 +6,11 @@
 #include <filesystem>
 #include <string>
 
-#include <core/content_visitors/content_visitor.hpp>
-#include <core/validation/validation_data.hpp>
+#include <core/models/source_info.hpp>
 
 namespace dnd {
+
+class ContentVisitor;
 
 class ContentPiece {
 public:
@@ -34,14 +35,14 @@ public:
      */
     const std::string& get_description() const;
     /**
-     * @brief Returns the path to the source file of the content piece
-     * @return path to the source file of the content piece
+     * @brief Returns the information about the source of the content piece
+     * @return the information about the source of the content piece
      */
-    const std::filesystem::path& get_source_path() const;
+    const SourceInfo& get_source_info() const;
 protected:
     std::string name;
     std::string description;
-    std::filesystem::path source_path;
+    SourceInfo source_info;
 };
 
 template <typename T>
