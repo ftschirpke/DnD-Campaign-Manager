@@ -55,6 +55,7 @@ public:
     virtual ~EffectHolder() noexcept = default;
 
     const std::vector<std::unique_ptr<Condition>>& get_activation_conditions() const;
+    const std::vector<std::unique_ptr<Choice>>& get_choices() const;
     const std::vector<std::unique_ptr<Effect>>& get_effects() const;
     const ActionHolder& get_actions() const;
     const ExtraSpellsHolder& get_extra_spells() const;
@@ -76,6 +77,11 @@ public:
     bool is_active(
         const std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const;
+    /**
+     * @brief Merge another effect holder into this one
+     * @param other the other effect holder which will be merged into this one
+     */
+    void merge(EffectHolder&& other);
 private:
     std::vector<std::unique_ptr<Condition>> activation_conditions;
     std::vector<std::unique_ptr<Choice>> choices;

@@ -26,16 +26,21 @@ public:
      */
     static RIVHolder create(RIVHolderData&& data, const ContentHolder& content);
 
+    const std::vector<std::string>& get_damage_resistances() const noexcept;
+    const std::vector<std::string>& get_damage_immunities() const noexcept;
+    const std::vector<std::string>& get_damage_vulnerabilities() const noexcept;
+    const std::vector<std::string>& get_condition_immunities() const noexcept;
+
     /**
      * @brief Returns whether the RIVHolder is empty
      * @return "true" if the RIVHolder is empty, "false" otherwise
      */
     bool empty() const;
-
-    const std::vector<std::string>& get_damage_resistances() const noexcept;
-    const std::vector<std::string>& get_damage_immunities() const noexcept;
-    const std::vector<std::string>& get_damage_vulnerabilities() const noexcept;
-    const std::vector<std::string>& get_condition_immunities() const noexcept;
+    /**
+     * @brief Merges the given RIVHolder into this one
+     * @param other the RIVHolder to merge into this one
+     */
+    void merge(RIVHolder&& other);
 private:
     RIVHolder(
         std::vector<std::string>&& damage_resistances, std::vector<std::string>&& damage_immunities,

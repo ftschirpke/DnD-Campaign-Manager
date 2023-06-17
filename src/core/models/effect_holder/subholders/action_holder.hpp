@@ -32,6 +32,11 @@ public:
      * @return "true" if the ActionHolder is empty, "false" otherwise
      */
     bool empty() const;
+    /**
+     * @brief Merges the given ActionHolder into this one
+     * @param other the ActionHolder to merge into this one
+     */
+    void merge(ActionHolder&& other);
 private:
     ActionHolder(
         std::map<std::string, std::string>&& actions, std::map<std::string, std::string>&& bonus_actions,

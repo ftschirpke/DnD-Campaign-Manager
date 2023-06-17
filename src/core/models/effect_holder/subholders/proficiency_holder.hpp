@@ -27,12 +27,6 @@ public:
     static ProficiencyHolder create(ProficiencyHolderData&& data, const ContentHolder& content);
 
     /**
-     * @brief Returns whether the ProficiencyHolder is empty
-     * @return "true" if the ProficiencyHolder is empty, "false" otherwise
-     */
-    bool empty() const;
-
-    /**
      * @brief Returns the types of armor the character is proficient with
      * @return the types of armor the character is proficient with
      */
@@ -67,6 +61,17 @@ public:
      * @return the special types of senses the character has e.g. darkvision
      */
     const std::vector<std::string>& get_senses() const noexcept;
+
+    /**
+     * @brief Returns whether the ProficiencyHolder is empty
+     * @return "true" if the ProficiencyHolder is empty, "false" otherwise
+     */
+    bool empty() const;
+    /**
+     * @brief Merge the given ProficiencyHolder into this one
+     * @param other the ProficiencyHolder to merge into this one
+     */
+    void merge(ProficiencyHolder&& other);
 private:
     ProficiencyHolder(
         std::vector<std::string>&& armor, std::vector<std::string>&& weapons, std::vector<std::string>&& tools,

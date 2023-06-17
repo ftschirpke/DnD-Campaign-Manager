@@ -34,11 +34,6 @@ dnd::ProficiencyHolder dnd::ProficiencyHolder::create(ProficiencyHolderData&& da
     );
 }
 
-bool dnd::ProficiencyHolder::empty() const {
-    return armor.empty() && weapons.empty() && tools.empty() && skills.empty() && saving_throws.empty()
-           && languages.empty() && senses.empty();
-}
-
 const std::vector<std::string>& dnd::ProficiencyHolder::get_armor() const noexcept { return armor; }
 
 const std::vector<std::string>& dnd::ProficiencyHolder::get_weapons() const noexcept { return weapons; }
@@ -52,6 +47,33 @@ const std::vector<std::string>& dnd::ProficiencyHolder::get_saving_throws() cons
 const std::vector<std::string>& dnd::ProficiencyHolder::get_languages() const noexcept { return languages; }
 
 const std::vector<std::string>& dnd::ProficiencyHolder::get_senses() const noexcept { return senses; }
+
+bool dnd::ProficiencyHolder::empty() const {
+    return armor.empty() && weapons.empty() && tools.empty() && skills.empty() && saving_throws.empty()
+           && languages.empty() && senses.empty();
+}
+
+void dnd::ProficiencyHolder::merge(dnd::ProficiencyHolder&& other) {
+    armor.insert(armor.end(), std::make_move_iterator(other.armor.begin()), std::make_move_iterator(other.armor.end()));
+    weapons.insert(
+        weapons.end(), std::make_move_iterator(other.weapons.begin()), std::make_move_iterator(other.weapons.end())
+    );
+    tools.insert(tools.end(), std::make_move_iterator(other.tools.begin()), std::make_move_iterator(other.tools.end()));
+    skills.insert(
+        skills.end(), std::make_move_iterator(other.skills.begin()), std::make_move_iterator(other.skills.end())
+    );
+    saving_throws.insert(
+        saving_throws.end(), std::make_move_iterator(other.saving_throws.begin()),
+        std::make_move_iterator(other.saving_throws.end())
+    );
+    languages.insert(
+        languages.end(), std::make_move_iterator(other.languages.begin()),
+        std::make_move_iterator(other.languages.end())
+    );
+    senses.insert(
+        senses.end(), std::make_move_iterator(other.senses.begin()), std::make_move_iterator(other.senses.end())
+    );
+}
 
 dnd::ProficiencyHolder::ProficiencyHolder(
     std::vector<std::string>&& armor, std::vector<std::string>&& weapons, std::vector<std::string>&& tools,

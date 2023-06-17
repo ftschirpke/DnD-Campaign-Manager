@@ -27,12 +27,6 @@ public:
     static ExtraSpellsHolder create(ExtraSpellsHolderData&& data, const ContentHolder& content);
 
     /**
-     * @brief Returns whether if the ExtraSpellsHolder is empty
-     * @return "true" if the ExtraSpellsHolder is empty, "false" otherwise
-     */
-    bool empty() const;
-
-    /**
      * @brief Returns the cantrips that do not count against the number of cantrips known
      * @return the cantrips that do not count against the number of cantrips known
      */
@@ -71,6 +65,17 @@ public:
      * @return the spells that are added to your spell list
      */
     const std::vector<const Spell*>& get_added_to_spell_list() const noexcept;
+
+    /**
+     * @brief Returns whether if the ExtraSpellsHolder is empty
+     * @return "true" if the ExtraSpellsHolder is empty, "false" otherwise
+     */
+    bool empty() const;
+    /**
+     * @brief Merges the given ExtraSpellsHolder into this one
+     * @param other the ExtraSpellsHolder to merge into this one
+     */
+    void merge(ExtraSpellsHolder&& other);
 private:
     ExtraSpellsHolder(
         std::vector<const Spell*>&& free_cantrips, std::vector<const Spell*>&& at_will,

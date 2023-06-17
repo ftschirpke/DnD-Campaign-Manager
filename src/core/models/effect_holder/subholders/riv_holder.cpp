@@ -34,11 +34,6 @@ dnd::RIVHolder dnd::RIVHolder::create(dnd::RIVHolderData&& data, const dnd::Cont
     );
 }
 
-bool dnd::RIVHolder::empty() const {
-    return damage_resistances.empty() && damage_immunities.empty() && damage_vulnerabilities.empty()
-           && condition_immunities.empty();
-}
-
 const std::vector<std::string>& dnd::RIVHolder::get_damage_resistances() const noexcept { return damage_resistances; }
 
 const std::vector<std::string>& dnd::RIVHolder::get_damage_immunities() const noexcept { return damage_immunities; }
@@ -49,6 +44,30 @@ const std::vector<std::string>& dnd::RIVHolder::get_damage_vulnerabilities() con
 
 const std::vector<std::string>& dnd::RIVHolder::get_condition_immunities() const noexcept {
     return condition_immunities;
+}
+
+bool dnd::RIVHolder::empty() const {
+    return damage_resistances.empty() && damage_immunities.empty() && damage_vulnerabilities.empty()
+           && condition_immunities.empty();
+}
+
+void dnd::RIVHolder::merge(dnd::RIVHolder&& other) {
+    damage_resistances.insert(
+        damage_resistances.end(), std::make_move_iterator(other.damage_resistances.begin()),
+        std::make_move_iterator(other.damage_resistances.end())
+    );
+    damage_immunities.insert(
+        damage_immunities.end(), std::make_move_iterator(other.damage_immunities.begin()),
+        std::make_move_iterator(other.damage_immunities.end())
+    );
+    damage_vulnerabilities.insert(
+        damage_vulnerabilities.end(), std::make_move_iterator(other.damage_vulnerabilities.begin()),
+        std::make_move_iterator(other.damage_vulnerabilities.end())
+    );
+    condition_immunities.insert(
+        condition_immunities.end(), std::make_move_iterator(other.condition_immunities.begin()),
+        std::make_move_iterator(other.condition_immunities.end())
+    );
 }
 
 dnd::RIVHolder::RIVHolder(

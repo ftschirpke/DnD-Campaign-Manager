@@ -44,11 +44,6 @@ dnd::ExtraSpellsHolder dnd::ExtraSpellsHolder::create(
     );
 }
 
-bool dnd::ExtraSpellsHolder::empty() const {
-    return free_cantrips.empty() && at_will.empty() && innate.empty() && free_once_a_day.empty() && spells_known.empty()
-           && spells_known_included.empty() && added_to_spell_list.empty();
-}
-
 const std::vector<const dnd::Spell*>& dnd::ExtraSpellsHolder::get_free_cantrips() const noexcept {
     return free_cantrips;
 }
@@ -69,6 +64,25 @@ const std::vector<const dnd::Spell*>& dnd::ExtraSpellsHolder::get_spells_known_i
 
 const std::vector<const dnd::Spell*>& dnd::ExtraSpellsHolder::get_added_to_spell_list() const noexcept {
     return added_to_spell_list;
+}
+
+bool dnd::ExtraSpellsHolder::empty() const {
+    return free_cantrips.empty() && at_will.empty() && innate.empty() && free_once_a_day.empty() && spells_known.empty()
+           && spells_known_included.empty() && added_to_spell_list.empty();
+}
+
+void dnd::ExtraSpellsHolder::merge(dnd::ExtraSpellsHolder&& other) {
+    free_cantrips.insert(free_cantrips.end(), other.free_cantrips.begin(), other.free_cantrips.end());
+    at_will.insert(at_will.end(), other.at_will.begin(), other.at_will.end());
+    innate.insert(innate.end(), other.innate.begin(), other.innate.end());
+    free_once_a_day.insert(free_once_a_day.end(), other.free_once_a_day.begin(), other.free_once_a_day.end());
+    spells_known.insert(spells_known.end(), other.spells_known.begin(), other.spells_known.end());
+    spells_known_included.insert(
+        spells_known_included.end(), other.spells_known_included.begin(), other.spells_known_included.end()
+    );
+    added_to_spell_list.insert(
+        added_to_spell_list.end(), other.added_to_spell_list.begin(), other.added_to_spell_list.end()
+    );
 }
 
 dnd::ExtraSpellsHolder::ExtraSpellsHolder(

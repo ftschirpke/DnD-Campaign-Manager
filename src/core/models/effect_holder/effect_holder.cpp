@@ -10,6 +10,7 @@
 
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
+#include <core/models/effect_holder/choice/choice.hpp>
 #include <core/models/effect_holder/condition/condition.hpp>
 #include <core/models/effect_holder/condition/condition_factory.hpp>
 #include <core/models/effect_holder/effect/effect.hpp>
@@ -67,6 +68,8 @@ const std::vector<std::unique_ptr<dnd::Condition>>& dnd::EffectHolder::get_activ
     return activation_conditions;
 }
 
+const std::vector<std::unique_ptr<dnd::Choice>>& dnd::EffectHolder::get_choices() const noexcept { return choices; }
+
 const std::vector<std::unique_ptr<dnd::Effect>>& dnd::EffectHolder::get_effects() const noexcept { return effects; }
 
 const dnd::ActionHolder& dnd::EffectHolder::get_actions() const noexcept { return actions; }
@@ -91,4 +94,21 @@ bool dnd::EffectHolder::is_active(
         }
     }
     return true;
+}
+
+void dnd::EffectHolder::merge(dnd::EffectHolder&& other) {
+    activation_conditions.insert(
+        activation_conditions.end(), std::make_move_iterator(other.activation_conditions.begin()),
+        std::make_move_iterator(other.activation_conditions.end())
+    );
+    choices.insert(
+        choices.end(), std::make_move_iterator(other.choices.begin()), std::make_move_iterator(other.choices.end())
+    );
+    effects.insert(
+        effects.end(), std::make_move_iterator(other.effects.begin()), std::make_move_iterator(other.effects.end())
+    );
+    actions.merge(std::move(other.actions));
+    extra_spells.merge(std::move(other.extra_spells));
+    proficiencies.merge(std::move(other.proficiencies));
+    rivs.merge(std::move(other.rivs));
 }
