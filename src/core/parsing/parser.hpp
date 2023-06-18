@@ -30,26 +30,20 @@ protected:
      * @param json the json the attribute is supposed to be in
      * @param attribute_name the name of the attribute in the json
      * @param out the output to write the attribute value to
-     * @param filepath the path to the file which is being parsed
      * @return the errors that occured while parsing
      */
     template <typename T>
-    static Errors parse_optional_attribute(
-        const nlohmann::json& json, const char* attribute_name, T& out, const std::filesystem::path& filepath
-    );
+    Errors parse_optional_attribute(const nlohmann::json& json, const char* attribute_name, T& out);
     /**
      * @brief Parses a required attribute from a json and adding it into the output variable
      * @tparam T the type the attribute value is supposed to be
      * @param json the json the attribute is supposed to be in
      * @param attribute_name the name of the attribute in the json
      * @param out the output to write the attribute value to
-     * @param filepath the path to the file which is being parsed
      * @return the errors that occured while parsing
      */
     template <typename T>
-    static Errors parse_required_attribute(
-        const nlohmann::json& json, const char* attribute_name, T& out, const std::filesystem::path& filepath
-    );
+    Errors parse_required_attribute(const nlohmann::json& json, const char* attribute_name, T& out);
 private:
     std::filesystem::path filepath;
 };
@@ -60,9 +54,7 @@ const char* type_name() {
 }
 
 template <typename T>
-Errors Parser::parse_optional_attribute(
-    const nlohmann::json& json, const char* attribute_name, T& out, const std::filesystem::path& filepath
-) {
+Errors Parser::parse_optional_attribute(const nlohmann::json& json, const char* attribute_name, T& out) {
     assert(json.is_object());
     Errors errors;
     if (!json.contains(attribute_name)) {
@@ -80,9 +72,7 @@ Errors Parser::parse_optional_attribute(
 }
 
 template <typename T>
-Errors Parser::parse_required_attribute(
-    const nlohmann::json& json, const char* attribute_name, T& out, const std::filesystem::path& filepath
-) {
+Errors Parser::parse_required_attribute(const nlohmann::json& json, const char* attribute_name, T& out) {
     assert(json.is_object());
     Errors errors;
     if (!json.contains(attribute_name)) {

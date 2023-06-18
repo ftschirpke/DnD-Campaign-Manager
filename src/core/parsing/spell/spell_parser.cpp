@@ -32,13 +32,13 @@ dnd::Errors dnd::SpellParser::parse() {
         SpellData data;
         data.name = spell_name;
         data.source_path = get_filepath();
-        spell_errors += parse_required_attribute(spell_json, "description", data.description, get_filepath());
-        spell_errors += parse_required_attribute(spell_json, "components", data.components_data.str, get_filepath());
-        spell_errors += parse_required_attribute(spell_json, "level_type", data.type_data.str, get_filepath());
-        spell_errors += parse_required_attribute(spell_json, "casting_time", data.casting_time, get_filepath());
-        spell_errors += parse_required_attribute(spell_json, "range", data.range, get_filepath());
-        spell_errors += parse_required_attribute(spell_json, "duration", data.duration, get_filepath());
-        spell_errors += parse_required_attribute(spell_json, "classes", data.classes, get_filepath());
+        spell_errors += parse_required_attribute(spell_json, "description", data.description);
+        spell_errors += parse_required_attribute(spell_json, "components", data.components_data.str);
+        spell_errors += parse_required_attribute(spell_json, "level_type", data.type_data.str);
+        spell_errors += parse_required_attribute(spell_json, "casting_time", data.casting_time);
+        spell_errors += parse_required_attribute(spell_json, "range", data.range);
+        spell_errors += parse_required_attribute(spell_json, "duration", data.duration);
+        spell_errors += parse_required_attribute(spell_json, "classes", data.classes);
         if (spell_errors.ok()) {
             spell_data.emplace_back(std::move(data));
         }

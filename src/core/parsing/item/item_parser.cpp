@@ -38,13 +38,9 @@ dnd::Errors dnd::ItemParser::parse() {
         ItemData data;
         data.name = item_name;
         data.source_path = get_filepath();
-        item_errors += parse_required_attribute(item_json, "description", data.description, get_filepath());
-        item_errors += parse_required_attribute(
-            item_json, "requires_attunement", data.requires_attunement, get_filepath()
-        );
-        item_errors += parse_optional_attribute(
-            item_json, "cosmetic_description", data.cosmetic_description, get_filepath()
-        );
+        item_errors += parse_required_attribute(item_json, "description", data.description);
+        item_errors += parse_required_attribute(item_json, "requires_attunement", data.requires_attunement);
+        item_errors += parse_optional_attribute(item_json, "cosmetic_description", data.cosmetic_description);
         if (item_errors.ok()) {
             item_data.emplace_back(std::move(data));
         }
