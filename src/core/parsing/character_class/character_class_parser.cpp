@@ -9,16 +9,18 @@
 
 #include <nlohmann/json.hpp>
 
+#include <core/controllers/content_holder.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
+#include <core/models/character_class/character_class.hpp>
 #include <core/parsing/feature/feature_parser.hpp>
-#include <core/parsing/parser.hpp>
+#include <core/parsing/file_parser.hpp>
 #include <core/validation/character_class/character_class_data.hpp>
 
 dnd::CharacterClassParser::CharacterClassParser(const std::filesystem::path& filepath) noexcept
-    : Parser(filepath), feature_parser(filepath) {}
+    : FileParser(filepath), feature_parser(filepath), data() {}
 
-dnd::Errors dnd::CharacterClassParser::parse(nlohmann::ordered_json&& json, CharacterClassData& data) const {
+dnd::Errors dnd::CharacterClassParser::parse() {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
@@ -44,4 +46,14 @@ dnd::Errors dnd::CharacterClassParser::parse(nlohmann::ordered_json&& json, Char
     }
 
     return errors;
+}
+
+dnd::Errors dnd::CharacterClassParser::validate(const dnd::ContentHolder& content) const {
+    Errors errors = data.validate();
+    errors += data.validate_relations(content);
+    return errors;
+}
+
+void dnd::CharacterClassParser::save_result(dnd::ContentHolder& content) {
+    content.character_classes.add(CharacterClass::create(std::move(data), content));
 }

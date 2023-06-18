@@ -7,16 +7,18 @@
 
 #include <nlohmann/json.hpp>
 
+#include <core/controllers/content_holder.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
+#include <core/models/character_subrace/character_subrace.hpp>
 #include <core/parsing/feature/feature_parser.hpp>
-#include <core/parsing/parser.hpp>
+#include <core/parsing/file_parser.hpp>
 #include <core/validation/character_subrace/character_subrace_data.hpp>
 
 dnd::CharacterSubraceParser::CharacterSubraceParser(const std::filesystem::path& filepath) noexcept
-    : Parser(filepath), feature_parser(filepath) {}
+    : FileParser(filepath), feature_parser(filepath), data() {}
 
-dnd::Errors dnd::CharacterSubraceParser::parse(nlohmann::ordered_json&& json, CharacterSubraceData& data) const {
+dnd::Errors dnd::CharacterSubraceParser::parse() {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
@@ -40,4 +42,14 @@ dnd::Errors dnd::CharacterSubraceParser::parse(nlohmann::ordered_json&& json, Ch
     }
 
     return errors;
+}
+
+dnd::Errors dnd::CharacterSubraceParser::validate(const dnd::ContentHolder& content) const {
+    Errors errors = data.validate();
+    errors += data.validate_relations(content);
+    return errors;
+}
+
+void dnd::CharacterSubraceParser::save_result(dnd::ContentHolder& content) {
+    content.character_subraces.add(CharacterSubrace::create(std::move(data), content));
 }

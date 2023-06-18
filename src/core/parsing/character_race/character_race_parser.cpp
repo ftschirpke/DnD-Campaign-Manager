@@ -9,16 +9,18 @@
 
 #include <nlohmann/json.hpp>
 
+#include <core/controllers/content_holder.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
+#include <core/models/character_race/character_race.hpp>
 #include <core/parsing/feature/feature_parser.hpp>
-#include <core/parsing/parser.hpp>
+#include <core/parsing/file_parser.hpp>
 #include <core/validation/character_race/character_race_data.hpp>
 
 dnd::CharacterRaceParser::CharacterRaceParser(const std::filesystem::path& filepath) noexcept
-    : Parser(filepath), feature_parser(filepath) {}
+    : FileParser(filepath), feature_parser(filepath), data() {}
 
-dnd::Errors dnd::CharacterRaceParser::parse(nlohmann::ordered_json&& json, CharacterRaceData& data) const {
+dnd::Errors dnd::CharacterRaceParser::parse() {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
@@ -42,4 +44,14 @@ dnd::Errors dnd::CharacterRaceParser::parse(nlohmann::ordered_json&& json, Chara
     }
 
     return errors;
+}
+
+dnd::Errors dnd::CharacterRaceParser::validate(const dnd::ContentHolder& content) const {
+    Errors errors = data.validate();
+    errors += data.validate_relations(content);
+    return errors;
+}
+
+void dnd::CharacterRaceParser::save_result(dnd::ContentHolder& content) {
+    content.character_races.add(CharacterRace::create(std::move(data), content));
 }

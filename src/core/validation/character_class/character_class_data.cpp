@@ -16,6 +16,9 @@
 #include <core/validation/feature/feature_data.hpp>
 #include <core/validation/validation_data.hpp>
 
+dnd::CharacterClassData::CharacterClassData() noexcept
+    : ValidationData(), subclass_feature_name(), hit_dice_data(this), important_levels_data(this) {}
+
 dnd::Errors dnd::CharacterClassData::validate() const {
     Errors errors = ValidationData::validate();
     bool has_subclass_feature = false;

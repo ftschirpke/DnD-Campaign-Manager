@@ -84,14 +84,14 @@ public:
      * @param new_content_piece the new piece of content
      * @return true, if piece was added, "false" if name already exists
      */
-    bool add(DataT&& new_content_piece);
+    bool add(typename std::remove_const<DataT>::type&& new_content_piece);
     /**
      * @brief Add a content piece if no piece of content with the same name exists
      * @param name the name of the piece of content
      * @param new_content_piece the new piece of content
      * @return true, if piece was added, "false" if name already exists
      */
-    bool add(const std::string& name, DataT&& new_content_piece);
+    bool add(const std::string& name, typename std::remove_const<DataT>::type&& new_content_piece);
     /**
      * @brief Create a content piece inplace if no piece of content with the same name exists
      * @tparam ...Args the types the constructor for the piece of content allows
@@ -187,13 +187,15 @@ inline const std::unordered_map<std::string, DataT>& ContentLibrary<TrieT, DataT
 
 template <typename TrieT, typename DataT>
 requires ContentLibraryTypes<TrieT, DataT>
-inline bool ContentLibrary<TrieT, DataT>::add(DataT&& new_content_piece) {
+inline bool ContentLibrary<TrieT, DataT>::add(typename std::remove_const<DataT>::type&& new_content_piece) {
     return add(new_content_piece.get_name(), std::move(new_content_piece));
 }
 
 template <typename TrieT, typename DataT>
 requires ContentLibraryTypes<TrieT, DataT>
-inline bool ContentLibrary<TrieT, DataT>::add(const std::string& name, DataT&& new_content_piece) {
+inline bool ContentLibrary<TrieT, DataT>::add(
+    const std::string& name, typename std::remove_const<DataT>::type&& new_content_piece
+) {
     if (contains(name)) {
         return false;
     }
