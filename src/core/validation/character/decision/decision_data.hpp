@@ -33,6 +33,8 @@ public:
     const CharacterData* get_character_data() const noexcept;
     const EffectHolder* get_target() const noexcept;
 
+    void set_target(const EffectHolder* new_target) noexcept;
+
     std::string feature_name;
     std::map<std::string, std::vector<std::string>> selections;
 private:

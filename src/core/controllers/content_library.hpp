@@ -197,7 +197,7 @@ inline bool ContentLibrary<TrieT, DataT>::add(const std::string& name, DataT&& n
     if (contains(name)) {
         return false;
     }
-    data.emplace(name, new_content_piece);
+    data.emplace(name, std::move(new_content_piece));
     save_in_trie(name);
     return true;
 }

@@ -15,6 +15,7 @@ class ContentHolder;
 
 class FileParser : public Parser {
 public:
+    explicit FileParser(const std::filesystem::path& filepath) noexcept;
     /**
      * @brief Opens the json file and saves it in the json variable
      * @return the errors that occured while opening the file
@@ -25,6 +26,11 @@ public:
      * @return the errors that occured while parsing
      */
     virtual Errors parse() = 0;
+    /**
+     * @brief Sets the context for the parser
+     * @param content the content to set the context to
+     */
+    virtual void set_context(const ContentHolder& content);
     /**
      * @brief Validates the parsed content piece data using the given content
      * @param content the content to validate against

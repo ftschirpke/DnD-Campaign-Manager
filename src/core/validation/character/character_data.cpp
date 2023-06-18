@@ -17,6 +17,10 @@
 #include <core/validation/feature/feature_data.hpp>
 #include <core/validation/validation_data.hpp>
 
+dnd::CharacterData::CharacterData() noexcept
+    : ValidationData(), features_data(), base_ability_scores_data(this), character_basis_data(this),
+      progression_data(this), decisions_data() {}
+
 dnd::Errors dnd::CharacterData::validate() const {
     Errors errors = ValidationData::validate();
     std::unordered_set<std::string> unique_feature_names;

@@ -11,6 +11,8 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
 
+dnd::FileParser::FileParser(const std::filesystem::path& filepath) noexcept : Parser(filepath) {}
+
 dnd::Errors dnd::FileParser::open_json() {
     DND_MEASURE_FUNCTION();
     Errors errors;
@@ -33,3 +35,5 @@ dnd::Errors dnd::FileParser::open_json() {
     }
     return errors;
 }
+
+void dnd::FileParser::set_context(const dnd::ContentHolder& content) { DND_UNUSED(content); }

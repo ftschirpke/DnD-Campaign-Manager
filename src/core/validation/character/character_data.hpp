@@ -20,6 +20,7 @@ class ContentHolder;
 
 class CharacterData : public ValidationData {
 public:
+    CharacterData() noexcept;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

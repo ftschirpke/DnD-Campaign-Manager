@@ -27,15 +27,18 @@ dnd::Errors dnd::DecisionData::validate() const {
         errors.add_validation_error(
             ValidationErrorCode::MISSING_ATTRIBUTE, parent, "Decision has no character that it belongs to."
         );
-    } else if (target == nullptr) {
+    }
+    if (target == nullptr) {
         errors.add_validation_error(
             ValidationErrorCode::MISSING_ATTRIBUTE, parent, "Decision has no target that it belongs to."
         );
-    } else if (feature_name.empty()) {
+    }
+    if (feature_name.empty()) {
         errors.add_validation_error(
             ValidationErrorCode::MISSING_ATTRIBUTE, parent, "Decision's feature name is empty."
         );
-    } else if (selections.empty()) {
+    }
+    if (selections.empty()) {
         errors.add_validation_error(ValidationErrorCode::MISSING_ATTRIBUTE, parent, "Decision's selections are empty.");
     }
 
@@ -148,3 +151,5 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::ContentHolder& cont
 const dnd::CharacterData* dnd::DecisionData::get_character_data() const noexcept { return character_data; }
 
 const dnd::EffectHolder* dnd::DecisionData::get_target() const noexcept { return target; }
+
+void dnd::DecisionData::set_target(const dnd::EffectHolder* new_target) noexcept { target = new_target; }
