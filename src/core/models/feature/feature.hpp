@@ -42,8 +42,8 @@ public:
      * @brief Accepts a visitor
      * @param visitor pointer to the visitor
      */
-    virtual void accept(ContentVisitor* visitor) const override final;
-private:
+    virtual void accept(ContentVisitor* visitor) const override;
+protected:
     /**
      * @brief Constructs a feature
      * @param name the name of the feature
@@ -55,7 +55,7 @@ private:
         std::string&& name, std::string&& description, std::filesystem::path&& source_path, EffectHolder&& main_part,
         std::vector<EffectHolder>&& other_parts = {}
     ) noexcept;
-
+private:
     EffectHolder main_part;
     std::vector<EffectHolder> other_parts;
 };

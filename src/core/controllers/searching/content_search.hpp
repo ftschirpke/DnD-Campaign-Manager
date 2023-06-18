@@ -15,7 +15,7 @@
 #include <core/models/character_subclass/character_subclass.hpp>
 #include <core/models/character_subrace/character_subrace.hpp>
 #include <core/models/content_piece.hpp>
-// #include <core/models/effect_holder/choosable.hpp>
+#include <core/models/feature/choosable_feature.hpp>
 #include <core/models/feature/feature.hpp>
 #include <core/models/item/item.hpp>
 #include <core/models/spell/spell.hpp>
@@ -120,7 +120,7 @@ private:
     SearchPath<const Item> item_search_path;
     SearchPath<const Spell> spell_search_path;
     SearchPath<const Feature> feature_search_path;
-    // std::unordered_map<std::string, SearchPath<const Choosable>> choosable_search_paths;
+    SearchPath<const ChoosableFeature> choosable_search_path;
 };
 
 

@@ -16,7 +16,7 @@
 #include <core/models/character_subclass/character_subclass.hpp>
 #include <core/models/character_subrace/character_subrace.hpp>
 #include <core/models/content_piece.hpp>
-// #include <core/models/effect_holder/choosable.hpp>
+#include <core/models/feature/choosable_feature.hpp>
 #include <core/models/feature/feature.hpp>
 #include <core/models/item/item.hpp>
 #include <core/models/spell/spell.hpp>
@@ -31,10 +31,7 @@ dnd::ContentSearch::ContentSearch(const ContentHolder& content_holder) {
     item_search_path.push(content_holder.items.get_trie_root());
     spell_search_path.push(content_holder.spells.get_trie_root());
     feature_search_path.push(content_holder.features.get_trie_root());
-    // for (const auto& [choosable_group_name, choosable_library] : content_holder.choosables) {
-    //     choosable_search_paths[choosable_group_name] = SearchPath<const Choosable>();
-    //     choosable_search_paths[choosable_group_name].push(choosable_library.get_trie_root());
-    // }
+    choosable_search_path.push(content_holder.choosable_features.get_trie_root());
 }
 
 dnd::ContentSearch::ContentSearch(const dnd::ContentHolder& content_holder, const std::string& initial_query)

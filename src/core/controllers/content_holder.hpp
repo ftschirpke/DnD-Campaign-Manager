@@ -13,7 +13,7 @@
 #include <core/models/character_race/character_race.hpp>
 #include <core/models/character_subclass/character_subclass.hpp>
 #include <core/models/character_subrace/character_subrace.hpp>
-// #include <core/models/effect_holder/choosable.hpp>
+#include <core/models/feature/choosable_feature.hpp>
 #include <core/models/feature/feature.hpp>
 #include <core/models/item/item.hpp>
 #include <core/models/spell/spell.hpp>
@@ -55,7 +55,7 @@ public:
     StorageContentLibrary<const Spell> spells;
 
     ReferencingContentLibrary<const Feature> features;
-    // std::unordered_map<std::string, ReferencingContentLibrary<const Choosable>> choosables;
+    ReferencingContentLibrary<const ChoosableFeature> choosable_features;
 };
 
 } // namespace dnd
