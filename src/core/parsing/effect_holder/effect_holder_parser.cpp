@@ -21,6 +21,8 @@
 #include <core/validation/effect_holder/subholders/proficiency_holder_data.hpp>
 #include <core/validation/effect_holder/subholders/riv_holder_data.hpp>
 
+dnd::EffectHolderParser::EffectHolderParser(const std::filesystem::path& filepath) noexcept : Parser(filepath) {}
+
 dnd::Errors dnd::EffectHolderParser::parse(nlohmann::ordered_json&& json, dnd::EffectHolderData& data) const {
     Errors errors;
     if (!json.is_object()) {

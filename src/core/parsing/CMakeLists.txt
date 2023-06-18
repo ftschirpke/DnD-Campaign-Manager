@@ -5,5 +5,6 @@ target_sources(${DND_CORE}
 )
 
 add_subdirectory(item)
+add_subdirectory(feature)
 add_subdirectory(spell)
 add_subdirectory(effect_holder)

@@ -24,6 +24,8 @@ public:
      */
     virtual Errors validate_relations(const ContentHolder& content) const override;
 
+    const ValidationData* get_parent() const noexcept;
+
     EffectHolderData main_part_data;
     std::vector<EffectHolderData> other_parts_data;
 private:

@@ -16,6 +16,7 @@ namespace dnd {
 
 class EffectHolderParser : public Parser {
 public:
+    explicit EffectHolderParser(const std::filesystem::path& filepath) noexcept;
     /**
      * @brief Parses the data from the json into the data object
      * @param json the json to parse

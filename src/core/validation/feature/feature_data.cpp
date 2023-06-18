@@ -25,3 +25,5 @@ dnd::Errors dnd::FeatureData::validate_relations(const ContentHolder& content) c
     }
     return errors;
 }
+
+const dnd::ValidationData* dnd::FeatureData::get_parent() const noexcept { return parent; }
