@@ -13,7 +13,7 @@
 bool dnd::Errors::ok() const { return parsing_errors.empty() && validation_errors.empty(); }
 
 void dnd::Errors::add_parsing_error(
-    ParsingErrorCode error_code, std::filesystem::path&& filepath, std::string&& message
+    ParsingErrorCode error_code, const std::filesystem::path& filepath, std::string&& message
 ) {
     parsing_errors.emplace_back(error_code, std::move(filepath), std::move(message));
 }

@@ -3,7 +3,8 @@
 
 #include <dnd_config.hpp>
 
-#include <utility>
+#include <filesystem>
+#include <string>
 #include <vector>
 
 #include <core/errors/parsing_error.hpp>
@@ -13,6 +14,12 @@ namespace dnd {
 
 class Errors {
 public:
+    Errors() noexcept = default;
+    Errors(const Errors&) = delete;
+    Errors& operator=(const Errors&) = delete;
+    Errors(Errors&&) noexcept = default;
+    Errors& operator=(Errors&&) noexcept = default;
+
     /**
      * @brief Returns "true" if there are no errors.
      * @return "true" if there are no errors, "false" otherwise
@@ -24,7 +31,7 @@ public:
      * @param filepath the path to the file where the error occurred
      * @param message the error message
      */
-    void add_parsing_error(ParsingErrorCode error_code, std::filesystem::path&& filepath, std::string&& message);
+    void add_parsing_error(ParsingErrorCode error_code, const std::filesystem::path& filepath, std::string&& message);
     /**
      * @brief Adds a parsing error to the list of errors
      * @param error the parsing error
