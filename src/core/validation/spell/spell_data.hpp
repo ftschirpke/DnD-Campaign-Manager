@@ -15,6 +15,8 @@ namespace dnd {
 
 class SpellData : public ValidationData {
 public:
+    SpellData() noexcept;
+
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

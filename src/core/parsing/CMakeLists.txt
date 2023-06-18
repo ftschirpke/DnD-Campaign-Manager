@@ -5,3 +5,4 @@ target_sources(${DND_CORE}
 )
 
 add_subdirectory(item)
+add_subdirectory(spell)

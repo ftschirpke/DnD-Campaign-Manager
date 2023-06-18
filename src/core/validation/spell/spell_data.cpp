@@ -25,6 +25,8 @@ static constexpr const char* spell_components_regex_cstr = "((1st|2nd|3rd|[4-9]t
 static constexpr const char*
     spell_type_regex_cstr = "(V, S, M \\(.+\\)|V, S|V, M \\(.*\\)|S, M \\(.+\\)|V|S|M \\(.+\\))";
 
+dnd::SpellData::SpellData() noexcept : components_data(this), type_data(this) {}
+
 dnd::Errors dnd::SpellData::validate() const {
     DND_MEASURE_FUNCTION();
     Errors errors = ValidationData::validate();
