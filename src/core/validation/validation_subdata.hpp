@@ -27,6 +27,8 @@ public:
      * @return the errors that occured during validation
      */
     virtual Errors validate_relations(const ContentHolder& content) const;
+
+    const ValidationData* get_parent() const noexcept;
 protected:
     ValidationSubdata(const ValidationData* parent) noexcept;
 

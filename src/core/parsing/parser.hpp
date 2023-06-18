@@ -33,7 +33,7 @@ protected:
      * @return the errors that occured while parsing
      */
     template <typename T>
-    Errors parse_optional_attribute(const nlohmann::json& json, const char* attribute_name, T& out);
+    Errors parse_optional_attribute(const nlohmann::json& json, const char* attribute_name, T& out) const;
     /**
      * @brief Parses a required attribute from a json and adding it into the output variable
      * @tparam T the type the attribute value is supposed to be
@@ -43,7 +43,7 @@ protected:
      * @return the errors that occured while parsing
      */
     template <typename T>
-    Errors parse_required_attribute(const nlohmann::json& json, const char* attribute_name, T& out);
+    Errors parse_required_attribute(const nlohmann::json& json, const char* attribute_name, T& out) const;
 private:
     std::filesystem::path filepath;
 };
@@ -54,7 +54,7 @@ const char* type_name() {
 }
 
 template <typename T>
-Errors Parser::parse_optional_attribute(const nlohmann::json& json, const char* attribute_name, T& out) {
+Errors Parser::parse_optional_attribute(const nlohmann::json& json, const char* attribute_name, T& out) const {
     assert(json.is_object());
     Errors errors;
     if (!json.contains(attribute_name)) {
@@ -72,7 +72,7 @@ Errors Parser::parse_optional_attribute(const nlohmann::json& json, const char* 
 }
 
 template <typename T>
-Errors Parser::parse_required_attribute(const nlohmann::json& json, const char* attribute_name, T& out) {
+Errors Parser::parse_required_attribute(const nlohmann::json& json, const char* attribute_name, T& out) const {
     assert(json.is_object());
     Errors errors;
     if (!json.contains(attribute_name)) {
@@ -90,6 +90,11 @@ Errors Parser::parse_required_attribute(const nlohmann::json& json, const char* 
         );
     }
     return errors;
+}
+
+template <>
+const char* type_name<std::map<std::string, std::string>>() {
+    return "map of strings to strings";
 }
 
 template <>

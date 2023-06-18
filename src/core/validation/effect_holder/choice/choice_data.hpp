@@ -29,7 +29,6 @@ public:
 
     std::string attribute_name;
     int amount;
-    std::string group_name;
     std::vector<std::string> group_names;
     std::vector<std::string> explicit_choices;
 };

@@ -23,11 +23,7 @@ dnd::Choice dnd::Choice::create(dnd::ChoiceData&& data, const dnd::ContentHolder
 
     std::vector<std::string> group_names = std::move(data.group_names);
     if (group_names.empty()) {
-        if (data.group_name.empty()) {
-            group_names.emplace_back(std::move(data.attribute_name));
-        } else {
-            group_names.emplace_back(std::move(data.group_name));
-        }
+        group_names.emplace_back(std::move(data.attribute_name));
     }
 
     return Choice(

@@ -26,11 +26,6 @@ dnd::Errors dnd::ChoiceData::validate() const {
             ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent, "Choice has non-positive amount"
         );
     }
-    if (!group_name.empty() && !group_names.empty()) {
-        errors.add_validation_error(
-            ValidationErrorCode::INCONSISTENT_ATTRIBUTES, parent, "Choice has both group and groups"
-        );
-    }
     return errors;
 }
 
@@ -44,13 +39,6 @@ dnd::Errors dnd::ChoiceData::validate_relations(const ContentHolder& content) co
                     fmt::format("Choice has group name '{}' which is not a group", group_name)
                 );
             }
-        }
-    } else if (!group_name.empty()) {
-        if (!content.groups.is_string_group(group_name)) {
-            errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
-                fmt::format("Choice has group name '{}' which is not a group", group_name)
-            );
         }
     } else if (explicit_choices.empty()) {
         if (!content.groups.is_string_group(attribute_name)) {
