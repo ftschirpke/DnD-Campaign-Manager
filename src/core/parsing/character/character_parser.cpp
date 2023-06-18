@@ -87,6 +87,9 @@ void dnd::CharacterParser::set_context(const dnd::ContentHolder& content) {
             feature = content.features.get(decision_data.feature_name);
         } else if (content.choosable_features.contains(decision_data.feature_name)) {
             feature = content.choosable_features.get(decision_data.feature_name);
+        } else {
+            decision_data.set_target(nullptr);
+            continue;
         }
         std::vector<const EffectHolder*> effect_holders_with_choices;
         if (!feature->get_main_part().get_choices().empty()) {
@@ -117,17 +120,19 @@ void dnd::CharacterParser::save_result(ContentHolder& content) {
     content.characters.add(Character::create(std::move(data), content));
 }
 
-dnd::Errors dnd::CharacterParser::parse_decision(nlohmann::ordered_json&& json, dnd::DecisionData& data) const {
+dnd::Errors dnd::CharacterParser::parse_decision(
+    nlohmann::ordered_json&& decision_json, dnd::DecisionData& decision_data
+) const {
     Errors errors;
-    if (!json.is_object()) {
+    if (!decision_json.is_object()) {
         errors.add_parsing_error(
             ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(), "The decision json is not an object."
         );
         return errors;
     }
 
-    for (auto& [key, _] : json.items()) {
-        errors += parse_optional_attribute(json, key.c_str(), data.selections[key]);
+    for (auto& [key, _] : decision_json.items()) {
+        errors += parse_optional_attribute(decision_json, key.c_str(), decision_data.selections[key]);
     }
 
     return errors;

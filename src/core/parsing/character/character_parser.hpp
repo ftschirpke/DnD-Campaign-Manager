@@ -40,7 +40,7 @@ public:
      */
     virtual void save_result(ContentHolder& content) override;
 private:
-    Errors parse_decision(nlohmann::ordered_json&& json, DecisionData& data) const;
+    Errors parse_decision(nlohmann::ordered_json&& decision_json, DecisionData& decision_data) const;
 
     FeatureParser feature_parser;
     CharacterData data;

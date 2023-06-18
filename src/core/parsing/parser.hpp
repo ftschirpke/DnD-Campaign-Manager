@@ -63,6 +63,7 @@ Errors Parser::parse_optional_attribute(const nlohmann::json& json, const char* 
     try {
         out = json[attribute_name].get<T>();
     } catch (const nlohmann::json::type_error& e) {
+        DND_UNUSED(e);
         errors.add_parsing_error(
             ParsingErrorCode::INVALID_ATTRIBUTE_TYPE, filepath,
             fmt::format("The attribute '{}' is of the wrong type, it should be a {}", attribute_name, type_name<T>())
@@ -84,6 +85,7 @@ Errors Parser::parse_required_attribute(const nlohmann::json& json, const char* 
     try {
         out = json[attribute_name].get<T>();
     } catch (const nlohmann::json::type_error& e) {
+        DND_UNUSED(e);
         errors.add_parsing_error(
             ParsingErrorCode::INVALID_ATTRIBUTE_TYPE, filepath,
             fmt::format("The attribute '{}' is of the wrong type, it should be {}", attribute_name, type_name<T>())
