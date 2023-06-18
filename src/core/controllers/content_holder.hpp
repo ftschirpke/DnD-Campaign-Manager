@@ -26,11 +26,6 @@ namespace dnd {
 class ContentHolder {
 public:
     /**
-     * @brief Should be called when you finished parsing to allow automatic collection of features etc. out of the other
-     * parsed content types
-     */
-    void finished_parsing();
-    /**
      * @brief Returns whether all storage libraries are empty
      * @return "true" if nothing is stored inside the content holder, "false" otherwise
      */

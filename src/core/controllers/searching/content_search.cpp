@@ -80,17 +80,15 @@ void dnd::ContentSearch::clear_query() {
 void dnd::ContentSearch::add_character_to_query(char c) {
     query.push_back(c);
 
-    // character_search_path.push_top_child(c);
-    // character_class_search_path.push_top_child(c);
-    // character_subclass_search_path.push_top_child(c);
-    // character_race_search_path.push_top_child(c);
-    // character_subrace_search_path.push_top_child(c);
+    character_search_path.push_top_child(c);
+    character_class_search_path.push_top_child(c);
+    character_subclass_search_path.push_top_child(c);
+    character_race_search_path.push_top_child(c);
+    character_subrace_search_path.push_top_child(c);
     item_search_path.push_top_child(c);
     spell_search_path.push_top_child(c);
-    // feature_search_path.push_top_child(c);
-    // for (auto& [_, choosable_search_path] : choosable_search_paths) {
-    //     choosable_search_path.push_top_child(c);
-    // }
+    feature_search_path.push_top_child(c);
+    choosable_search_path.push_top_child(c);
 }
 
 void dnd::ContentSearch::remove_character_from_query() {
@@ -99,43 +97,39 @@ void dnd::ContentSearch::remove_character_from_query() {
     }
     query.pop_back();
 
-    // character_search_path.pop();
-    // assert(character_search_path.size() >= 1);
-    // character_class_search_path.pop();
-    // assert(character_class_search_path.size() >= 1);
-    // character_subclass_search_path.pop();
-    // assert(character_subclass_search_path.size() >= 1);
-    // character_race_search_path.pop();
-    // assert(character_race_search_path.size() >= 1);
-    // character_subrace_search_path.pop();
-    // assert(character_subrace_search_path.size() >= 1);
+    character_search_path.pop();
+    assert(character_search_path.size() >= 1);
+    character_class_search_path.pop();
+    assert(character_class_search_path.size() >= 1);
+    character_subclass_search_path.pop();
+    assert(character_subclass_search_path.size() >= 1);
+    character_race_search_path.pop();
+    assert(character_race_search_path.size() >= 1);
+    character_subrace_search_path.pop();
+    assert(character_subrace_search_path.size() >= 1);
     item_search_path.pop();
     assert(item_search_path.size() >= 1);
     spell_search_path.pop();
     assert(spell_search_path.size() >= 1);
-    // feature_search_path.pop();
-    // assert(feature_search_path.size() >= 1);
-    // for (auto& [choosable_group_name, choosable_search_path] : choosable_search_paths) {
-    //     choosable_search_path.pop();
-    //     assert(choosable_search_path.size() >= 1);
-    // }
+    feature_search_path.pop();
+    assert(feature_search_path.size() >= 1);
+    choosable_search_path.pop();
+    assert(choosable_search_path.size() >= 1);
 }
 
 std::vector<const dnd::ContentPiece*> dnd::ContentSearch::get_results() const {
     std::vector<const ContentPiece*> results;
     results.reserve(100);
 
-    // character_search_path.insert_top_successors_into(results);
-    // character_class_search_path.insert_top_successors_into(results);
-    // character_subclass_search_path.insert_top_successors_into(results);
-    // character_race_search_path.insert_top_successors_into(results);
-    // character_subrace_search_path.insert_top_successors_into(results);
+    character_search_path.insert_top_successors_into(results);
+    character_class_search_path.insert_top_successors_into(results);
+    character_subclass_search_path.insert_top_successors_into(results);
+    character_race_search_path.insert_top_successors_into(results);
+    character_subrace_search_path.insert_top_successors_into(results);
     item_search_path.insert_top_successors_into(results);
     spell_search_path.insert_top_successors_into(results);
-    // feature_search_path.insert_top_successors_into(results);
-    // for (const auto& [_, choosable_search_path] : choosable_search_paths) {
-    //     choosable_search_path.insert_top_successors_into(results);
-    // }
+    feature_search_path.insert_top_successors_into(results);
+    choosable_search_path.insert_top_successors_into(results);
 
     return results;
 }
