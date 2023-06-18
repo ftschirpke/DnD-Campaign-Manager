@@ -4,6 +4,7 @@ target_sources(${DND_CORE}
     parser.cpp
 )
 
+add_subdirectory(character_race)
 add_subdirectory(item)
 add_subdirectory(effect_holder)
 add_subdirectory(feature)
