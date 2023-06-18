@@ -49,7 +49,7 @@ private:
 };
 
 template <typename T>
-const char* type_name() {
+inline const char* type_name() {
     return typeid(T).name();
 }
 
@@ -95,32 +95,32 @@ Errors Parser::parse_required_attribute(const nlohmann::json& json, const char* 
 }
 
 template <>
-const char* type_name<std::map<std::string, std::string>>() {
+inline const char* type_name<std::map<std::string, std::string>>() {
     return "map of strings to strings";
 }
 
 template <>
-const char* type_name<std::vector<std::string>>() {
+inline const char* type_name<std::vector<std::string>>() {
     return "array of strings";
 }
 
 template <>
-const char* type_name<std::set<std::string>>() {
+inline const char* type_name<std::set<std::string>>() {
     return "set of strings";
 }
 
 template <>
-const char* type_name<std::string>() {
+inline const char* type_name<std::string>() {
     return "string";
 }
 
 template <>
-const char* type_name<int>() {
+inline const char* type_name<int>() {
     return "integer";
 }
 
 template <>
-const char* type_name<bool>() {
+inline const char* type_name<bool>() {
     return "boolean";
 }
 
