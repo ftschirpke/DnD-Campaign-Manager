@@ -26,11 +26,11 @@ dnd::AbilityScoresData::AbilityScoresData(const ValidationData* parent) noexcept
 
 dnd::Errors dnd::AbilityScoresData::validate() const {
     Errors errors = ValidationSubdata::validate();
-    errors.merge(check_ability_score(ability_scores[0], parent, "strength"));
-    errors.merge(check_ability_score(ability_scores[1], parent, "dexterity"));
-    errors.merge(check_ability_score(ability_scores[2], parent, "constitution"));
-    errors.merge(check_ability_score(ability_scores[3], parent, "intelligence"));
-    errors.merge(check_ability_score(ability_scores[4], parent, "wisdom"));
-    errors.merge(check_ability_score(ability_scores[5], parent, "charisma"));
+    errors += check_ability_score(ability_scores[0], parent, "strength");
+    errors += check_ability_score(ability_scores[1], parent, "dexterity");
+    errors += check_ability_score(ability_scores[2], parent, "constitution");
+    errors += check_ability_score(ability_scores[3], parent, "intelligence");
+    errors += check_ability_score(ability_scores[4], parent, "wisdom");
+    errors += check_ability_score(ability_scores[5], parent, "charisma");
     return errors;
 }

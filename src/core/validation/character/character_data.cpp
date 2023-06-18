@@ -21,7 +21,7 @@ dnd::Errors dnd::CharacterData::validate() const {
     Errors errors = ValidationData::validate();
     std::unordered_set<std::string> unique_feature_names;
     for (const auto& feature_data : features_data) {
-        errors.merge(feature_data.validate());
+        errors += feature_data.validate();
         if (unique_feature_names.contains(feature_data.name)) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
@@ -31,11 +31,11 @@ dnd::Errors dnd::CharacterData::validate() const {
             unique_feature_names.insert(feature_data.name);
         }
     }
-    errors.merge(base_ability_scores_data.validate());
-    errors.merge(character_basis_data.validate());
-    errors.merge(progression_data.validate());
+    errors += base_ability_scores_data.validate();
+    errors += character_basis_data.validate();
+    errors += progression_data.validate();
     for (const auto& decision_data : decisions_data) {
-        errors.merge(decision_data.validate());
+        errors += decision_data.validate();
     }
     return errors;
 }
@@ -62,7 +62,7 @@ std::vector<const dnd::FeatureHolder*> get_feature_holders(
 dnd::Errors dnd::CharacterData::validate_relations(const dnd::ContentHolder& content) const {
     Errors errors;
     for (const auto& feature_data : features_data) {
-        errors.merge(feature_data.validate_relations(content));
+        errors += feature_data.validate_relations(content);
         if (content.features.contains(name)) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
@@ -71,7 +71,7 @@ dnd::Errors dnd::CharacterData::validate_relations(const dnd::ContentHolder& con
         }
     }
 
-    errors.merge(base_ability_scores_data.validate_relations(content));
+    errors += base_ability_scores_data.validate_relations(content);
 
     if (!character_basis_data.class_name.empty()
         && content.character_classes.contains(character_basis_data.class_name)) {
@@ -109,7 +109,7 @@ dnd::Errors dnd::CharacterData::validate_relations(const dnd::ContentHolder& con
     }
 
     for (const auto& decision_data : decisions_data) {
-        errors.merge(decision_data.validate_relations(content));
+        errors += decision_data.validate_relations(content);
     }
 
     std::vector<const EffectHolder*> effect_holders_with_choices;

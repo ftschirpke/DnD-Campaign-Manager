@@ -81,6 +81,12 @@ public:
     const std::unordered_map<std::string, DataT>& get_all() const;
     /**
      * @brief Add a content piece if no piece of content with the same name exists
+     * @param new_content_piece the new piece of content
+     * @return true, if piece was added, "false" if name already exists
+     */
+    bool add(DataT&& new_content_piece);
+    /**
+     * @brief Add a content piece if no piece of content with the same name exists
      * @param name the name of the piece of content
      * @param new_content_piece the new piece of content
      * @return true, if piece was added, "false" if name already exists
@@ -177,6 +183,12 @@ template <typename TrieT, typename DataT>
 requires ContentLibraryTypes<TrieT, DataT>
 inline const std::unordered_map<std::string, DataT>& ContentLibrary<TrieT, DataT>::get_all() const {
     return data;
+}
+
+template <typename TrieT, typename DataT>
+requires ContentLibraryTypes<TrieT, DataT>
+inline bool ContentLibrary<TrieT, DataT>::add(DataT&& new_content_piece) {
+    return add(new_content_piece.get_name(), std::move(new_content_piece));
 }
 
 template <typename TrieT, typename DataT>

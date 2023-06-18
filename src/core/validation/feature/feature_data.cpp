@@ -11,9 +11,9 @@ dnd::FeatureData::FeatureData(const ValidationData* parent) noexcept
 
 dnd::Errors dnd::FeatureData::validate() const {
     Errors errors = ValidationData::validate();
-    errors.merge(main_part_data.validate());
+    errors += main_part_data.validate();
     for (const auto& other_part_data : other_parts_data) {
-        errors.merge(other_part_data.validate());
+        errors += other_part_data.validate();
     }
     return errors;
 }
@@ -21,7 +21,7 @@ dnd::Errors dnd::FeatureData::validate() const {
 dnd::Errors dnd::FeatureData::validate_relations(const ContentHolder& content) const {
     Errors errors = main_part_data.validate_relations(content);
     for (const auto& other_part_data : other_parts_data) {
-        errors.merge(other_part_data.validate_relations(content));
+        errors += other_part_data.validate_relations(content);
     }
     return errors;
 }

@@ -18,7 +18,7 @@ dnd::Errors dnd::CharacterSubraceData::validate() const {
     Errors errors;
     std::unordered_set<std::string> unique_feature_names;
     for (const auto& feature_data : features_data) {
-        errors.merge(feature_data.validate());
+        errors += feature_data.validate();
         if (unique_feature_names.contains(feature_data.name)) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
@@ -39,7 +39,7 @@ dnd::Errors dnd::CharacterSubraceData::validate() const {
 dnd::Errors dnd::CharacterSubraceData::validate_relations(const ContentHolder& content) const {
     Errors errors;
     for (const auto& feature_data : features_data) {
-        errors.merge(feature_data.validate_relations(content));
+        errors += feature_data.validate_relations(content);
         if (content.features.contains(name)) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,

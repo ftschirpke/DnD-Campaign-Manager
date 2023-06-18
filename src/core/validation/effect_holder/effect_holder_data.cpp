@@ -25,18 +25,18 @@ dnd::EffectHolderData::EffectHolderData(const ValidationData* parent) noexcept
 dnd::Errors dnd::EffectHolderData::validate() const {
     Errors errors;
     for (const auto& condition_data : activation_conditions_data) {
-        errors.merge(condition_data.validate());
+        errors += condition_data.validate();
     }
     for (const auto& choice_data : choices_data) {
-        errors.merge(choice_data.validate());
+        errors += choice_data.validate();
     }
     for (const auto& effect_data : effects_data) {
-        errors.merge(effect_data.validate());
+        errors += effect_data.validate();
     }
-    errors.merge(action_holder_data.validate());
-    errors.merge(extra_spells_holder_data.validate());
-    errors.merge(proficiency_holder_data.validate());
-    errors.merge(riv_holder_data.validate());
+    errors += action_holder_data.validate();
+    errors += extra_spells_holder_data.validate();
+    errors += proficiency_holder_data.validate();
+    errors += riv_holder_data.validate();
     if (activation_conditions_data.empty() && effects_data.empty() && action_holder_data.empty()
         && extra_spells_holder_data.empty() && proficiency_holder_data.empty() && riv_holder_data.empty()) {
         errors.add_validation_error(
@@ -49,10 +49,10 @@ dnd::Errors dnd::EffectHolderData::validate() const {
 dnd::Errors dnd::EffectHolderData::validate_relations(const ContentHolder& content) const {
     Errors errors;
     for (const auto& choice_data : choices_data) {
-        errors.merge(choice_data.validate_relations(content));
+        errors += choice_data.validate_relations(content);
     }
-    errors.merge(extra_spells_holder_data.validate_relations(content));
-    errors.merge(proficiency_holder_data.validate_relations(content));
-    errors.merge(riv_holder_data.validate_relations(content));
+    errors += extra_spells_holder_data.validate_relations(content);
+    errors += proficiency_holder_data.validate_relations(content);
+    errors += riv_holder_data.validate_relations(content);
     return errors;
 }

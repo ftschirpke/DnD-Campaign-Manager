@@ -21,7 +21,7 @@ dnd::Errors dnd::CharacterClassData::validate() const {
     bool has_subclass_feature = false;
     std::unordered_set<std::string> unique_feature_names;
     for (const auto& feature_data : features_data) {
-        errors.merge(feature_data.validate());
+        errors += feature_data.validate();
         if (unique_feature_names.contains(feature_data.name)) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
@@ -47,15 +47,15 @@ dnd::Errors dnd::CharacterClassData::validate() const {
             )
         );
     }
-    errors.merge(hit_dice_data.validate());
-    errors.merge(important_levels_data.validate());
+    errors += hit_dice_data.validate();
+    errors += important_levels_data.validate();
     return errors;
 }
 
 dnd::Errors dnd::CharacterClassData::validate_relations(const dnd::ContentHolder& content) const {
     Errors errors;
     for (const auto& feature_data : features_data) {
-        errors.merge(feature_data.validate_relations(content));
+        errors += feature_data.validate_relations(content);
         if (content.features.contains(name)) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,

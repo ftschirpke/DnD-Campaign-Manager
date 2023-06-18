@@ -31,10 +31,10 @@ static dnd::Errors string_set_validate(
 
 dnd::Errors dnd::RIVHolderData::validate() const {
     Errors errors;
-    errors.merge(string_set_validate(damage_resistances, parent, "Damage resistances"));
-    errors.merge(string_set_validate(damage_immunities, parent, "Damage immunities"));
-    errors.merge(string_set_validate(damage_vulnerabilities, parent, "Damage vulnerabilities"));
-    errors.merge(string_set_validate(condition_immunities, parent, "Condition immunities"));
+    errors += string_set_validate(damage_resistances, parent, "Damage resistances");
+    errors += string_set_validate(damage_immunities, parent, "Damage immunities");
+    errors += string_set_validate(damage_vulnerabilities, parent, "Damage vulnerabilities");
+    errors += string_set_validate(condition_immunities, parent, "Condition immunities");
     return errors;
 }
 
@@ -56,17 +56,17 @@ static dnd::Errors string_group_set_validate_relations(
 
 dnd::Errors dnd::RIVHolderData::validate_relations(const dnd::ContentHolder& content) const {
     Errors errors;
-    errors.merge(
-        string_group_set_validate_relations(damage_resistances, parent, "damage resistances", "damage types", content)
+    errors += string_group_set_validate_relations(
+        damage_resistances, parent, "damage resistances", "damage types", content
     );
-    errors.merge(
-        string_group_set_validate_relations(damage_immunities, parent, "damage immunities", "damage types", content)
+    errors += string_group_set_validate_relations(
+        damage_immunities, parent, "damage immunities", "damage types", content
     );
-    errors.merge(string_group_set_validate_relations(
+    errors += string_group_set_validate_relations(
         damage_vulnerabilities, parent, "damage vulnerabilities", "damage types", content
-    ));
-    errors.merge(
-        string_group_set_validate_relations(condition_immunities, parent, "condition immunities", "conditions", content)
+    );
+    errors += string_group_set_validate_relations(
+        condition_immunities, parent, "condition immunities", "conditions", content
     );
     return errors;
 }

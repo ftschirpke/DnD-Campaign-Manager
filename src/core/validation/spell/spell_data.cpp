@@ -28,8 +28,8 @@ static constexpr const char*
 dnd::Errors dnd::SpellData::validate() const {
     DND_MEASURE_FUNCTION();
     Errors errors = ValidationData::validate();
-    errors.merge(components_data.validate());
-    errors.merge(type_data.validate());
+    errors += components_data.validate();
+    errors += type_data.validate();
     if (casting_time.empty()) {
         errors.add_validation_error(ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Casting time is empty");
     }

@@ -66,6 +66,11 @@ public:
      * @param other the Errors object to merge
      */
     void merge(Errors&& other);
+    /**
+     * @brief Merges the errors from another Errors object into this one
+     * @param other the Errors object to merge
+     */
+    Errors& operator+=(Errors&& other);
 private:
     std::vector<ParsingError> parsing_errors;
     std::vector<ValidationError> validation_errors;

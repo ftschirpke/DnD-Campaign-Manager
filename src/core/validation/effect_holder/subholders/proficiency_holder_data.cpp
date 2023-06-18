@@ -33,13 +33,13 @@ static dnd::Errors string_set_validate(
 
 dnd::Errors dnd::ProficiencyHolderData::validate() const {
     Errors errors;
-    errors.merge(string_set_validate(armor, parent, "Armor"));
-    errors.merge(string_set_validate(weapons, parent, "Weapons"));
-    errors.merge(string_set_validate(tools, parent, "Tools"));
-    errors.merge(string_set_validate(skills, parent, "Skills"));
-    errors.merge(string_set_validate(saving_throws, parent, "Saving throws"));
-    errors.merge(string_set_validate(languages, parent, "Languages"));
-    errors.merge(string_set_validate(senses, parent, "Senses"));
+    errors += string_set_validate(armor, parent, "Armor");
+    errors += string_set_validate(weapons, parent, "Weapons");
+    errors += string_set_validate(tools, parent, "Tools");
+    errors += string_set_validate(skills, parent, "Skills");
+    errors += string_set_validate(saving_throws, parent, "Saving throws");
+    errors += string_set_validate(languages, parent, "Languages");
+    errors += string_set_validate(senses, parent, "Senses");
     return errors;
 }
 
@@ -61,12 +61,12 @@ static dnd::Errors string_group_set_validate_relations(
 
 dnd::Errors dnd::ProficiencyHolderData::validate_relations(const dnd::ContentHolder& content) const {
     Errors errors;
-    errors.merge(string_group_set_validate_relations(armor, parent, "armor", "armor", content));
-    errors.merge(string_group_set_validate_relations(weapons, parent, "weapons", "weapons", content));
-    errors.merge(string_group_set_validate_relations(tools, parent, "tools", "tools", content));
-    errors.merge(string_group_set_validate_relations(skills, parent, "skills", "skills", content));
-    errors.merge(string_group_set_validate_relations(saving_throws, parent, "saving_throws", "abilities", content));
-    errors.merge(string_group_set_validate_relations(languages, parent, "languages", "languages", content));
+    errors += string_group_set_validate_relations(armor, parent, "armor", "armor", content);
+    errors += string_group_set_validate_relations(weapons, parent, "weapons", "weapons", content);
+    errors += string_group_set_validate_relations(tools, parent, "tools", "tools", content);
+    errors += string_group_set_validate_relations(skills, parent, "skills", "skills", content);
+    errors += string_group_set_validate_relations(saving_throws, parent, "saving_throws", "abilities", content);
+    errors += string_group_set_validate_relations(languages, parent, "languages", "languages", content);
     return errors;
 }
 

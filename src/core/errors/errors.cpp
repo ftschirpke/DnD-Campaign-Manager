@@ -28,6 +28,10 @@ void dnd::Errors::add_validation_error(
 
 void dnd::Errors::add_validation_error(ValidationError&& error) { validation_errors.emplace_back(std::move(error)); }
 
+const std::vector<dnd::ParsingError>& dnd::Errors::get_parsing_errors() const { return parsing_errors; }
+
+const std::vector<dnd::ValidationError>& dnd::Errors::get_validation_errors() const { return validation_errors; }
+
 void dnd::Errors::merge(Errors&& other) {
     parsing_errors.insert(
         parsing_errors.end(), std::make_move_iterator(other.parsing_errors.begin()),
@@ -39,6 +43,7 @@ void dnd::Errors::merge(Errors&& other) {
     );
 }
 
-const std::vector<dnd::ParsingError>& dnd::Errors::get_parsing_errors() const { return parsing_errors; }
-
-const std::vector<dnd::ValidationError>& dnd::Errors::get_validation_errors() const { return validation_errors; }
+dnd::Errors& dnd::Errors::operator+=(Errors&& other) {
+    merge(std::move(other));
+    return *this;
+}

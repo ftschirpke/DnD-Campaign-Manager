@@ -17,7 +17,7 @@ dnd::Errors dnd::ChoosableFeatureData::validate() const {
         );
     }
     for (const auto& prerequisite_data : prerequisites_data) {
-        errors.merge(prerequisite_data.validate());
+        errors += prerequisite_data.validate();
     }
     return errors;
 }

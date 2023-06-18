@@ -20,7 +20,7 @@ public:
      * @brief Opens the json file and saves it in the json variable
      * @return the errors that occured while opening the file
      */
-    Errors open_json() final;
+    virtual Errors open_json() final;
     /**
      * @brief Parses the json into content piece data
      * @return the errors that occured while parsing
