@@ -122,6 +122,11 @@ const char* type_name<int>() {
     return "integer";
 }
 
+template <>
+const char* type_name<bool>() {
+    return "boolean";
+}
+
 } // namespace dnd
 
 #endif // PARSER_HPP_

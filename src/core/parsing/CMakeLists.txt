@@ -3,3 +3,5 @@ target_sources(${DND_CORE}
     file_parser.cpp
     parser.cpp
 )
+
+add_subdirectory(item)
