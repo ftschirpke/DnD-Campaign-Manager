@@ -32,4 +32,6 @@ dnd::Errors dnd::CharacterSubraceParser::parse(nlohmann::ordered_json&& json, Ch
     errors += parse_required_attribute(json, "race", data.race_name);
 
     errors += feature_parser.parse_multiple(std::move(json), data.features_data, &data);
+
+    return errors;
 }
