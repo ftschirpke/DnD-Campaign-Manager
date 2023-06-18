@@ -33,7 +33,13 @@ dnd::Errors dnd::CharacterRaceParser::parse(nlohmann::ordered_json&& json, Chara
 
     errors += parse_required_attribute(json, "has_subraces", data.subraces);
 
-    errors += feature_parser.parse_multiple(std::move(json), data.features_data, &data);
+    if (json.contains("features")) {
+        errors += feature_parser.parse_multiple(std::move(json["features"]), data.features_data, &data);
+    } else {
+        errors.add_parsing_error(
+            ParsingErrorCode::MISSING_ATTRIBUTE, get_filepath(), "Character race has no features."
+        );
+    }
 
     return errors;
 }
