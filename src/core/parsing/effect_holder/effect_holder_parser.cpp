@@ -54,7 +54,6 @@ dnd::Errors dnd::EffectHolderParser::parse_activation_conditions(
             ParsingErrorCode::UNEXPECTED_ATTRIBUTE, get_filepath(),
             "The effect holder json contains both \"activation\" and \"activations\"."
         );
-        return errors;
     } else if (has_activation) {
         ConditionData& condition_data = data.emplace_back(parent);
         errors += parse_optional_attribute(json, "activation", condition_data.condition_str);

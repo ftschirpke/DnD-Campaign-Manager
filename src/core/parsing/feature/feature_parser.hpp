@@ -3,7 +3,7 @@
 
 #include <dnd_config.hpp>
 
-#include <vector>
+#include <filesystem>
 
 #include <nlohmann/json.hpp>
 
@@ -11,8 +11,6 @@
 #include <core/parsing/effect_holder/effect_holder_parser.hpp>
 #include <core/parsing/parser.hpp>
 #include <core/validation/feature/feature_data.hpp>
-#include <core/validation/validation_data.hpp>
-
 namespace dnd {
 
 class FeatureParser : public Parser {

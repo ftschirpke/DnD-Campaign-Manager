@@ -27,6 +27,9 @@ dnd::Errors dnd::FeatureParser::parse(nlohmann::ordered_json&& json, FeatureData
         return errors;
     }
 
+    errors += parse_required_attribute(json, "description", data.description);
+    json.erase("description");
+
     if (json.contains("multi")) {
         if (json["multi"].is_array()) {
             for (auto& part : json["multi"]) {
