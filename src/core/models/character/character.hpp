@@ -8,6 +8,7 @@
 
 #include <core/models/character/ability_scores.hpp>
 #include <core/models/character/character_basis.hpp>
+#include <core/models/character/decision/decision.hpp>
 #include <core/models/character/progression.hpp>
 #include <core/models/character_class/character_class.hpp>
 #include <core/models/character_race/character_race.hpp>
@@ -51,12 +52,13 @@ private:
     Character(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path,
         std::vector<Feature>&& features, AbilityScores&& base_ability_scores, CharacterBasis&& basis,
-        Progression&& progression
+        Progression&& progression, std::vector<Decision>&& decisions
     ) noexcept;
 
     AbilityScores base_ability_scores;
     CharacterBasis basis;
     Progression progression;
+    std::vector<Decision> decisions;
 };
 
 } // namespace dnd

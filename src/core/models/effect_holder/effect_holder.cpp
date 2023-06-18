@@ -37,10 +37,10 @@ dnd::EffectHolder dnd::EffectHolder::create(dnd::EffectHolderData&& data, const 
     for (auto& condition_data : data.activation_conditions_data) {
         activation_conditions.emplace_back(std::move(create_condition(std::move(condition_data))));
     }
-    std::vector<std::unique_ptr<Choice>> choices;
+    std::vector<Choice> choices;
     choices.reserve(data.choices_data.size());
     for (auto& choice_data : data.choices_data) {
-        choices.emplace_back(std::move(std::make_unique<dnd::Choice>())); // TODO: implement
+        choices.emplace_back(Choice::create(std::move(choice_data), content));
     }
     std::vector<std::unique_ptr<Effect>> effects;
     effects.reserve(data.effects_data.size());
@@ -48,7 +48,8 @@ dnd::EffectHolder dnd::EffectHolder::create(dnd::EffectHolderData&& data, const 
         effects.emplace_back(std::move(create_effect(std::move(effect_data))));
     }
     return EffectHolder(
-        std::move(activation_conditions), std::move(effects), ActionHolder::create(std::move(data.action_holder_data)),
+        std::move(activation_conditions), std::move(choices), std::move(effects),
+        ActionHolder::create(std::move(data.action_holder_data)),
         ExtraSpellsHolder::create(std::move(data.extra_spells_holder_data), content),
         ProficiencyHolder::create(std::move(data.proficiency_holder_data), content),
         RIVHolder::create(std::move(data.riv_holder_data), content)
@@ -56,7 +57,7 @@ dnd::EffectHolder dnd::EffectHolder::create(dnd::EffectHolderData&& data, const 
 }
 
 dnd::EffectHolder::EffectHolder(
-    std::vector<std::unique_ptr<Condition>>&& activation_conditions, std::vector<std::unique_ptr<Choice>>&& choices,
+    std::vector<std::unique_ptr<Condition>>&& activation_conditions, std::vector<Choice>&& choices,
     std::vector<std::unique_ptr<Effect>>&& effects, ActionHolder&& action_holder,
     ExtraSpellsHolder&& extra_spells_holder, ProficiencyHolder&& proficiency_holder, RIVHolder&& riv_holder
 ) noexcept
@@ -68,7 +69,7 @@ const std::vector<std::unique_ptr<dnd::Condition>>& dnd::EffectHolder::get_activ
     return activation_conditions;
 }
 
-const std::vector<std::unique_ptr<dnd::Choice>>& dnd::EffectHolder::get_choices() const noexcept { return choices; }
+const std::vector<dnd::Choice>& dnd::EffectHolder::get_choices() const noexcept { return choices; }
 
 const std::vector<std::unique_ptr<dnd::Effect>>& dnd::EffectHolder::get_effects() const noexcept { return effects; }
 

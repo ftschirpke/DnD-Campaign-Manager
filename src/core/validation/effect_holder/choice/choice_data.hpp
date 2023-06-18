@@ -3,6 +3,9 @@
 
 #include <dnd_config.hpp>
 
+#include <string>
+#include <vector>
+
 #include <core/errors/errors.hpp>
 #include <core/validation/validation_data.hpp>
 #include <core/validation/validation_subdata.hpp>
@@ -23,6 +26,12 @@ public:
      * @return the errors that occured during validation
      */
     virtual Errors validate_relations(const ContentHolder& content) const override;
+
+    std::string attribute_name;
+    int amount;
+    std::string group_name;
+    std::vector<std::string> group_names;
+    std::vector<std::string> explicit_choices;
 };
 
 } // namespace dnd

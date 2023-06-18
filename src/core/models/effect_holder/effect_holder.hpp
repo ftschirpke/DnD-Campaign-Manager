@@ -44,7 +44,7 @@ public:
      * @param riv_holder the resistances, immunities, and vulnerabilities provided by the effect holder
      */
     EffectHolder(
-        std::vector<std::unique_ptr<Condition>>&& activation_conditions, std::vector<std::unique_ptr<Choice>>&& choices,
+        std::vector<std::unique_ptr<Condition>>&& activation_conditions, std::vector<Choice>&& choices,
         std::vector<std::unique_ptr<Effect>>&& effects, ActionHolder&& action_holder,
         ExtraSpellsHolder&& extra_spells_holder, ProficiencyHolder&& proficiency_holder, RIVHolder&& riv_holder
     ) noexcept;
@@ -54,13 +54,13 @@ public:
     EffectHolder& operator=(EffectHolder&&) noexcept = default;
     virtual ~EffectHolder() noexcept = default;
 
-    const std::vector<std::unique_ptr<Condition>>& get_activation_conditions() const;
-    const std::vector<std::unique_ptr<Choice>>& get_choices() const;
-    const std::vector<std::unique_ptr<Effect>>& get_effects() const;
-    const ActionHolder& get_actions() const;
-    const ExtraSpellsHolder& get_extra_spells() const;
-    const ProficiencyHolder& get_proficiencies() const;
-    const RIVHolder& get_rivs() const;
+    const std::vector<std::unique_ptr<Condition>>& get_activation_conditions() const noexcept;
+    const std::vector<Choice>& get_choices() const noexcept;
+    const std::vector<std::unique_ptr<Effect>>& get_effects() const noexcept;
+    const ActionHolder& get_actions() const noexcept;
+    const ExtraSpellsHolder& get_extra_spells() const noexcept;
+    const ProficiencyHolder& get_proficiencies() const noexcept;
+    const RIVHolder& get_rivs() const noexcept;
 
     /**
      * @brief Returns whether the effect holder is empty
@@ -84,7 +84,7 @@ public:
     void merge(EffectHolder&& other);
 private:
     std::vector<std::unique_ptr<Condition>> activation_conditions;
-    std::vector<std::unique_ptr<Choice>> choices;
+    std::vector<Choice> choices;
     std::vector<std::unique_ptr<Effect>> effects;
     ActionHolder actions;
     ExtraSpellsHolder extra_spells;

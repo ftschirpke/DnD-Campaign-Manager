@@ -3,19 +3,21 @@
 
 #include <dnd_config.hpp>
 
+#include <map>
 #include <string>
+#include <vector>
 
 #include <core/errors/errors.hpp>
-#include <core/validation/effect_holder/effect_holder_data.hpp>
 #include <core/validation/validation_subdata.hpp>
 
 namespace dnd {
 
 class CharacterData;
+class EffectHolder;
 
 class DecisionData : public ValidationSubdata {
 public:
-    DecisionData(const CharacterData* parent) noexcept;
+    DecisionData(const CharacterData* parent, const EffectHolder* target) noexcept;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation
@@ -28,8 +30,14 @@ public:
      */
     virtual Errors validate_relations(const ContentHolder& content) const override;
 
-    std::string choice_name;
-    EffectHolderData effects_data;
+    const CharacterData* get_character_data() const noexcept;
+    const EffectHolder* get_target() const noexcept;
+
+    std::string feature_name;
+    std::map<std::string, std::vector<std::string>> selections;
+private:
+    const CharacterData* character_data;
+    const EffectHolder* target;
 };
 
 } // namespace dnd

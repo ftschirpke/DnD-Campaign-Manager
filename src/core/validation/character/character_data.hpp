@@ -8,8 +8,9 @@
 
 #include <core/errors/errors.hpp>
 #include <core/validation/character/ability_scores_data.hpp>
-#include <core/validation/character/progression_data.hpp>
 #include <core/validation/character/character_basis_data.hpp>
+#include <core/validation/character/decision/decision_data.hpp>
+#include <core/validation/character/progression_data.hpp>
 #include <core/validation/feature/feature_data.hpp>
 #include <core/validation/validation_data.hpp>
 
@@ -35,6 +36,7 @@ public:
     AbilityScoresData base_ability_scores_data;
     CharacterBasisData character_basis_data;
     ProgressionData progression_data;
+    std::vector<DecisionData> decisions_data;
 };
 
 } // namespace dnd

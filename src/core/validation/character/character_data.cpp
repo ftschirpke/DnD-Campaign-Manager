@@ -34,7 +34,29 @@ dnd::Errors dnd::CharacterData::validate() const {
     errors.merge(base_ability_scores_data.validate());
     errors.merge(character_basis_data.validate());
     errors.merge(progression_data.validate());
+    for (const auto& decision_data : decisions_data) {
+        errors.merge(decision_data.validate());
+    }
     return errors;
+}
+
+std::vector<const dnd::FeatureHolder*> get_feature_holders(
+    const dnd::CharacterBasisData& basis, const dnd::ContentHolder& content
+) {
+    std::vector<const dnd::FeatureHolder*> feature_holders;
+    if (content.character_races.contains(basis.race_name)) {
+        feature_holders.push_back(&content.character_races.get(basis.race_name));
+    }
+    if (content.character_subraces.contains(basis.subrace_name)) {
+        feature_holders.push_back(&content.character_subraces.get(basis.subrace_name));
+    }
+    if (content.character_classes.contains(basis.class_name)) {
+        feature_holders.push_back(&content.character_classes.get(basis.class_name));
+    }
+    if (content.character_subclasses.contains(basis.subclass_name)) {
+        feature_holders.push_back(&content.character_subclasses.get(basis.subclass_name));
+    }
+    return feature_holders;
 }
 
 dnd::Errors dnd::CharacterData::validate_relations(const dnd::ContentHolder& content) const {
@@ -85,5 +107,23 @@ dnd::Errors dnd::CharacterData::validate_relations(const dnd::ContentHolder& con
             }
         }
     }
+
+    for (const auto& decision_data : decisions_data) {
+        errors.merge(decision_data.validate_relations(content));
+    }
+
+    std::vector<const EffectHolder*> effect_holders_with_choices;
+    for (const auto& [_, feature] : content.features.get_all()) {
+        std::vector<const EffectHolder*> effect_holders = {&feature->get_main_part()};
+        for (const EffectHolder& effect_holder : feature->get_other_parts()) {
+            effect_holders.push_back(&effect_holder);
+        }
+        for (const EffectHolder* effect_holder : effect_holders) {
+            if (!effect_holder->get_choices().empty()) {
+                effect_holders_with_choices.push_back(effect_holder);
+            }
+        }
+    }
+
     return errors;
 }

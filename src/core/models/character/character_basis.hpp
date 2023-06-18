@@ -3,6 +3,9 @@
 
 #include <dnd_config.hpp>
 
+#include <vector>
+
+#include <core/models/feature_holder/feature_holder.hpp>
 #include <core/validation/character/character_basis_data.hpp>
 
 namespace dnd {
@@ -31,6 +34,8 @@ public:
 
     bool has_subrace() const noexcept;
     bool has_subclass() const noexcept;
+
+    std::vector<const FeatureHolder*> get_feature_holders() const;
 private:
     CharacterBasis(
         const CharacterRace* race, const CharacterSubrace* subrace, const CharacterClass* cls,
