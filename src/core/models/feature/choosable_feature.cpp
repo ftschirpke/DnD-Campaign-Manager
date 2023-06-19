@@ -49,6 +49,8 @@ dnd::ChoosableFeature dnd::ChoosableFeature::create(
     );
 }
 
+const std::string& dnd::ChoosableFeature::get_type() const noexcept { return type; }
+
 const std::vector<std::unique_ptr<dnd::Condition>>& dnd::ChoosableFeature::get_prerequisites() const noexcept {
     return prerequisites;
 }

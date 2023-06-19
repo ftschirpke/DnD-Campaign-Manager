@@ -8,15 +8,15 @@
 #include <vector>
 
 #include <core/content_visitors/content_visitor.hpp>
-#include <core/models/character.hpp>
-#include <core/models/character_class.hpp>
-#include <core/models/character_race.hpp>
-#include <core/models/character_subclass.hpp>
-#include <core/models/character_subrace.hpp>
-#include <core/models/effect_holder/choosable.hpp>
-#include <core/models/effect_holder/feature.hpp>
-#include <core/models/item.hpp>
-#include <core/models/spell.hpp>
+#include <core/models/character/character.hpp>
+#include <core/models/character_class/character_class.hpp>
+#include <core/models/character_race/character_race.hpp>
+#include <core/models/character_subclass/character_subclass.hpp>
+#include <core/models/character_subrace/character_subrace.hpp>
+#include <core/models/feature/choosable_feature.hpp>
+#include <core/models/feature/feature.hpp>
+#include <core/models/item/item.hpp>
+#include <core/models/spell/spell.hpp>
 
 namespace dnd {
 
@@ -38,7 +38,7 @@ public:
     virtual void visit(const Item* item_ptr) override;
     virtual void visit(const Spell* spell_ptr) override;
     virtual void visit(const Feature* feature_ptr) override;
-    virtual void visit(const Choosable* choosable_ptr) override;
+    virtual void visit(const ChoosableFeature* choosable_ptr) override;
 private:
     std::vector<std::string> string_list;
 };

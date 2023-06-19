@@ -33,6 +33,7 @@ public:
     ChoosableFeature(ChoosableFeature&&) = default;
     ChoosableFeature& operator=(ChoosableFeature&&) = default;
 
+    const std::string& get_type() const noexcept;
     const std::vector<std::unique_ptr<Condition>>& get_prerequisites() const noexcept;
 
     /**

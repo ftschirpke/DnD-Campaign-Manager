@@ -41,4 +41,5 @@ std::unique_ptr<dnd::Spellcasting> dnd::create_spellcasting(dnd::SpellcastingDat
         );
     }
     assert(false);
+    return nullptr;
 }

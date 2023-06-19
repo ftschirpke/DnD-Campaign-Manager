@@ -192,6 +192,7 @@ static dnd::Errors parse_file_of_type(
             return parse_file(content, dnd::ChoosableGroupParser(file));
         default:
             assert(false);
+            return dnd::Errors();
     }
 }
 
@@ -215,6 +216,7 @@ static const char* type_directory_name(ParsingType type) {
             return "groups";
         default:
             assert(false);
+            return "";
     }
 }
 

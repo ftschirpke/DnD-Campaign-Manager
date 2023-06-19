@@ -12,15 +12,14 @@
 
 #include <cxxopts.hpp>
 
+#include <cmd_app/output/command_line_output.hpp>
 #include <core/controllers/content_holder.hpp>
-#include <core/models/effect_holder/choosable.hpp>
-#include <core/models/effect_holder/feature.hpp>
-#include <core/models/item.hpp>
-#include <core/models/spell.hpp>
-#include <core/output/command_line_output.hpp>
+#include <core/models/feature/choosable_feature.hpp>
+#include <core/models/feature/feature.hpp>
+#include <core/models/item/item.hpp>
+#include <core/models/spell/spell.hpp>
 #include <core/output/output.hpp>
-#include <core/parsing/controllers/content_parser.hpp>
-#include <core/parsing/parsing_exceptions.hpp>
+#include <core/parsing/content_parser.hpp>
 #include <core/utils/string_manipulation.hpp>
 
 int dnd::launch(int argc, char** argv) {
@@ -74,19 +73,11 @@ int dnd::launch(int argc, char** argv) {
             throw std::invalid_argument("Campaign directory name cannot be \"\".");
         }
         ContentParser parser;
-        ContentHolder content = parser.parse(content_path, campaign_dir_name);
+        ParsingResult result = parser.parse(content_path, campaign_dir_name);
+        ContentHolder content = std::move(result.content);
         output->text(content.status());
 
         DND_MEASURE_SCOPE("Main execution scope without parsing");
-
-        output->text("\n=== CHARACTER INITIALISATION ===\n");
-        for (const auto& [name, _] : content.characters.get_all()) {
-            output->formatted_text("# {}", name);
-            content.characters.get(name).determine_state();
-            output->text("#\n\n");
-        }
-
-        content.finished_parsing();
 
         if (args.count("testrun")) {
             return 0;
@@ -97,12 +88,6 @@ int dnd::launch(int argc, char** argv) {
             exit = content_search(content, output.get());
         }
 
-    } catch (const parsing_error& e) {
-        output->formatted_error("Parsing Error: {}", e.what());
-        return -1;
-    } catch (const std::invalid_argument& e) {
-        output->formatted_error("Invalid Argument: {}", e.what());
-        return -1;
     } catch (const std::exception& e) {
         output->formatted_error("Error: {}", e.what());
         return -1;
@@ -125,7 +110,7 @@ static std::vector<const dnd::Spell*> search_spells(
     });
     output->text("-- A -- Spells");
     for (const dnd::Spell* spell : spells_in_order) {
-        output->formatted_text("- [{:>2d}] {:<30s} ({:s})", i, spell->get_name(), spell->type.str());
+        output->formatted_text("- [{:>2d}] {:<30s} ({:s})", i, spell->get_name(), spell->get_type().str());
         if (++i >= 100) {
             break;
         }
@@ -177,33 +162,28 @@ static std::vector<const dnd::Feature*> search_features(
     return features_in_order;
 }
 
-static std::map<std::string, std::vector<const dnd::Choosable*>> search_choosables(
+static std::map<std::string, std::vector<const dnd::ChoosableFeature*>> search_choosables(
     const std::string& search, dnd::ContentHolder& content, dnd::Output* output
 ) {
     size_t i = 0;
-    std::map<std::string, std::vector<const dnd::Choosable*>> choosables_in_order;
-    for (auto& [name, choosables_content] : content.choosables) {
-        std::unordered_set<const dnd::Choosable*> matched_choosables = choosables_content.prefix_get(search);
-        if (matched_choosables.empty()) {
-            continue;
-        }
-        choosables_in_order[name] = std::vector<const dnd::Choosable*>(
-            matched_choosables.begin(), matched_choosables.end()
-        );
-        std::sort(
-            choosables_in_order[name].begin(), choosables_in_order[name].end(),
-            [](const dnd::Choosable* a, const dnd::Choosable* b) { return a->get_name() < b->get_name(); }
-        );
+    std::map<std::string, std::vector<const dnd::ChoosableFeature*>> choosables_in_order;
+    std::unordered_set<const dnd::ChoosableFeature*> matched_choosables = content.choosable_features.prefix_get(search);
+    for (auto matched_choosable : matched_choosables) {
+        choosables_in_order[matched_choosable->get_type()].push_back(matched_choosable);
     }
     if (choosables_in_order.empty()) {
         return choosables_in_order;
     }
     char letter = 'D';
     for (auto& [category, ordered_choosables] : choosables_in_order) {
+        std::sort(
+            ordered_choosables.begin(), ordered_choosables.end(),
+            [](const dnd::ChoosableFeature* a, const dnd::ChoosableFeature* b) { return a->get_name() < b->get_name(); }
+        );
         if (!ordered_choosables.empty()) {
             output->formatted_text("-- {} -- {:s}", letter++, category);
         }
-        for (const dnd::Choosable* choosable : ordered_choosables) {
+        for (const dnd::ChoosableFeature* choosable : ordered_choosables) {
             output->formatted_text("- [{:>2d}] {:<30s}", i, choosable->get_name());
             if (++i >= 100) {
                 break;
@@ -228,7 +208,7 @@ bool dnd::content_search(dnd::ContentHolder& content, dnd::Output* output) {
     const std::vector<const dnd::Spell*> spells_found = search_spells(search, content, output);
     const std::vector<const dnd::Item*> items_found = search_items(search, content, output);
     const std::vector<const dnd::Feature*> features_found = search_features(search, content, output);
-    const std::map<std::string, std::vector<const dnd::Choosable*>> choosables_found = search_choosables(
+    const std::map<std::string, std::vector<const dnd::ChoosableFeature*>> choosables_found = search_choosables(
         search, content, output
     );
     std::string display;

@@ -17,7 +17,7 @@
 
 #include <core/controllers/content_holder.hpp>
 #include <core/controllers/searching/content_search.hpp>
-#include <core/parsing/controllers/content_parser.hpp>
+#include <core/parsing/content_parser.hpp>
 #include <gui_app/content_visitors/display_visitor.hpp>
 
 namespace dnd {
@@ -80,7 +80,7 @@ private:
 
     std::vector<std::string> error_messages;
 
-    std::future<ContentHolder> parsed_content;
+    std::future<ParsingResult> parsing_results;
     ContentParser parser;
     // the object holding all the DnD content relevant for the selected campaign
     ContentHolder content;

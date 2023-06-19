@@ -75,10 +75,10 @@ void dnd::StringGroupParser::save_result(dnd::ContentHolder& content) {
 }
 
 dnd::Errors dnd::StringGroupParser::parse_subgroups(
-    nlohmann::ordered_json& json, std::set<std::string>& parent_group_values
+    nlohmann::ordered_json& sub_json, std::set<std::string>& parent_group_values
 ) {
     Errors errors;
-    for (auto& [key, value] : json.items()) {
+    for (auto& [key, value] : sub_json.items()) {
         if (data.contains(key)) {
             errors.add_parsing_error(
                 ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(),

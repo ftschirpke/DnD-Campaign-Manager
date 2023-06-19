@@ -5,15 +5,15 @@
 #include <nlohmann/json.hpp>
 
 #include <core/content_visitors/content_visitor.hpp>
-#include <core/models/character.hpp>
-#include <core/models/character_class.hpp>
-#include <core/models/character_race.hpp>
-#include <core/models/character_subclass.hpp>
-#include <core/models/character_subrace.hpp>
-#include <core/models/effect_holder/choosable.hpp>
-#include <core/models/effect_holder/feature.hpp>
-#include <core/models/item.hpp>
-#include <core/models/spell.hpp>
+#include <core/models/character/character.hpp>
+#include <core/models/character_class/character_class.hpp>
+#include <core/models/character_race/character_race.hpp>
+#include <core/models/character_subclass/character_subclass.hpp>
+#include <core/models/character_subrace/character_subrace.hpp>
+#include <core/models/feature/choosable_feature.hpp>
+#include <core/models/feature/feature.hpp>
+#include <core/models/item/item.hpp>
+#include <core/models/spell/spell.hpp>
 
 void dnd::SessionVisitor::visit(const Character* character_ptr) {
     if (!open_tabs_json.contains("character")) {
@@ -70,7 +70,7 @@ void dnd::SessionVisitor::visit(const Feature* feature_ptr) {
     open_tabs_json["feature"].push_back(feature_ptr->get_name());
 }
 
-void dnd::SessionVisitor::visit(const Choosable* choosable_ptr) {
+void dnd::SessionVisitor::visit(const ChoosableFeature* choosable_ptr) {
     if (!open_tabs_json.contains("choosable")) {
         open_tabs_json["choosable"] = nlohmann::json::array();
     }

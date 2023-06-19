@@ -21,11 +21,10 @@
 
 #include <core/controllers/content_holder.hpp>
 #include <core/controllers/searching/content_search.hpp>
-#include <core/models/effect_holder/feature.hpp>
-#include <core/models/item.hpp>
-#include <core/models/spell.hpp>
-#include <core/parsing/controllers/content_parser.hpp>
-#include <core/parsing/parsing_exceptions.hpp>
+#include <core/models/feature/feature.hpp>
+#include <core/models/item/item.hpp>
+#include <core/models/spell/spell.hpp>
+#include <core/parsing/content_parser.hpp>
 #include <core/utils/string_manipulation.hpp>
 #include <gui_app/content_visitors/display_visitor.hpp>
 #include <gui_app/content_visitors/list_visitor.hpp>
@@ -224,17 +223,7 @@ static void render_content_count_table(const dnd::ContentHolder& content) {
     display_size("Items", content.items.size(), w);
     display_size("Spells", content.spells.size(), w);
     display_size("Features", content.features.size(), w);
-    display_size("Choosable groups", content.choosables.size(), w);
-    display_size(
-        "Choosables",
-        static_cast<size_t>(std::accumulate(
-            content.groups.get_all_choosable_groups().begin(), content.groups.get_all_choosable_groups().end(), 0,
-            [](size_t sum, const auto& choosable_group) {
-                return static_cast<int>(sum + choosable_group.second.size());
-            }
-        )),
-        w
-    );
+    display_size("Choosables", content.choosable_features.size(), w);
 }
 
 void dnd::GUIApp::render_overview_window() {
@@ -268,7 +257,7 @@ void dnd::GUIApp::render_overview_window() {
 
     if (is_parsing) {
         ImGui::Text("Parsing...");
-        if (parsed_content.valid()) {
+        if (parsing_results.valid()) {
             finish_parsing();
         }
     }
@@ -325,17 +314,15 @@ void dnd::GUIApp::render_parsing_error_popup() {
 
 void dnd::GUIApp::start_parsing() {
     open_content_pieces.clear();
-    parsed_content = std::async(std::launch::async, &ContentParser::parse, &parser, content_directory, campaign_name);
+    parsing_results = std::async(std::launch::async, &ContentParser::parse, &parser, content_directory, campaign_name);
     is_parsing = true;
 }
 
 void dnd::GUIApp::finish_parsing() {
     try {
-        content = parsed_content.get();
-        content.finished_parsing();
+        ParsingResult parsing_result = parsing_results.get();
+        content = std::move(parsing_result.content);
         search = std::make_unique<ContentSearch>(content);
-    } catch (const parsing_error& e) {
-        error_messages.push_back(e.what());
     } catch (const std::exception& e) {
         error_messages.push_back(e.what());
     }
@@ -370,13 +357,8 @@ void dnd::GUIApp::open_last_session_tabs() {
     for (const std::string& feature_to_open : last_session_open_tabs["feature"]) {
         open_content_pieces.push_back(content.features.get(feature_to_open));
     }
-    for (const std::string& choosable_to_open : last_session_open_tabs["choosable"]) {
-        for (const auto& [choosable_group, choosable_library] : content.choosables) {
-            if (choosable_library.contains(choosable_to_open)) {
-                open_content_pieces.push_back(choosable_library.get(choosable_to_open));
-                break;
-            }
-        }
+    for (const std::string& choosable_to_open : last_session_open_tabs["choosable_feature"]) {
+        open_content_pieces.push_back(content.choosable_features.get(choosable_to_open));
     }
 }
 

@@ -3,10 +3,10 @@
 
 #include <dnd_config.hpp>
 
-#include <core/models/effect_holder/choosable.hpp>
-#include <core/models/effect_holder/feature.hpp>
-#include <core/models/item.hpp>
-#include <core/models/spell.hpp>
+#include <core/models/feature/choosable_feature.hpp>
+#include <core/models/feature/feature.hpp>
+#include <core/models/item/item.hpp>
+#include <core/models/spell/spell.hpp>
 #include <core/output/output.hpp>
 
 namespace dnd {
@@ -55,7 +55,7 @@ public:
      * @brief Display a choosable
      * @param choosable a pointer to the choosable
      */
-    virtual void display(const Choosable* choosable) override;
+    virtual void display(const ChoosableFeature* choosable) override;
     /**
      * @brief Ask user for input
      * @param prompt_msg the message asking for input

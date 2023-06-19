@@ -5,10 +5,10 @@
 #include <iostream>
 #include <string_view>
 
-#include <core/models/effect_holder/choosable.hpp>
-#include <core/models/effect_holder/feature.hpp>
-#include <core/models/item.hpp>
-#include <core/models/spell.hpp>
+#include <core/models/feature/choosable_feature.hpp>
+#include <core/models/feature/feature.hpp>
+#include <core/models/item/item.hpp>
+#include <core/models/spell/spell.hpp>
 #include <core/output/output.hpp>
 
 void dnd::CommandLineOutput::text(const char* text) { std::cout << text << '\n'; }
@@ -31,7 +31,7 @@ void dnd::CommandLineOutput::display(const dnd::Feature* feature) {
     std::cout << feature->get_name() << '\n' << feature->get_description() << '\n';
 }
 
-void dnd::CommandLineOutput::display(const dnd::Choosable* choosable) {
+void dnd::CommandLineOutput::display(const dnd::ChoosableFeature* choosable) {
     std::cout << choosable->get_name() << '\n' << choosable->get_description() << '\n';
 }
 
