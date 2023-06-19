@@ -3,10 +3,10 @@
 #include "groups.hpp"
 
 #include <iterator>
+#include <set>
 #include <sstream>
 #include <string>
 #include <unordered_map>
-#include <unordered_set>
 #include <utility>
 
 #include <core/basic_mechanics/abilities.hpp>
@@ -15,9 +15,7 @@
 #include <core/utils/string_manipulation.hpp>
 
 dnd::Groups::Groups() {
-    data["abilities"] = std::unordered_set<std::string>(
-        ability_cstrings_inorder.begin(), ability_cstrings_inorder.end()
-    );
+    data["abilities"] = std::set<std::string>(ability_cstrings_inorder.begin(), ability_cstrings_inorder.end());
 
     std::string lowercase_skill;
     for (const auto& [skill, _] : skill_abilities) {
@@ -38,7 +36,7 @@ const std::unordered_map<std::string, dnd::ChoosableFeature>& dnd::Groups::get_c
     return choosables.at(group_name);
 }
 
-const std::unordered_set<std::string>& dnd::Groups::get_string_group(const std::string& group_name) const {
+const std::set<std::string>& dnd::Groups::get_string_group(const std::string& group_name) const {
     return data.at(group_name);
 }
 
@@ -47,13 +45,13 @@ const std::unordered_map<std::string, std::unordered_map<std::string, dnd::Choos
     return choosables;
 }
 
-const std::unordered_map<std::string, std::unordered_set<std::string>>& dnd::Groups::get_all_string_groups() const {
+const std::unordered_map<std::string, std::set<std::string>>& dnd::Groups::get_all_string_groups() const {
     return data;
 }
 
 void dnd::Groups::add(const std::string& group_name, const std::string& value) { data[group_name].insert(value); }
 
-void dnd::Groups::add(const std::string& group_name, std::unordered_set<std::string>&& values) {
+void dnd::Groups::add(const std::string& group_name, std::set<std::string>&& values) {
     data[group_name].insert(std::make_move_iterator(values.begin()), std::make_move_iterator(values.end()));
 }
 

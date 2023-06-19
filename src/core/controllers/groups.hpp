@@ -3,9 +3,9 @@
 
 #include <dnd_config.hpp>
 
+#include <set>
 #include <string>
 #include <unordered_map>
-#include <unordered_set>
 
 #include <core/models/feature/choosable_feature.hpp>
 
@@ -35,7 +35,7 @@ public:
      * @return an unordered set containing the group members (strings)
      * @throws std::out_of_range if group doesn't exist
      */
-    const std::unordered_set<std::string>& get_string_group(const std::string& group_name) const;
+    const std::set<std::string>& get_string_group(const std::string& group_name) const;
     /**
      * @brief Get all choosable groups
      * @return reference to all the choosable groups saved
@@ -46,7 +46,7 @@ public:
      * @brief Get all string groups
      * @return reference to all the string groups saved
      */
-    const std::unordered_map<std::string, std::unordered_set<std::string>>& get_all_string_groups() const;
+    const std::unordered_map<std::string, std::set<std::string>>& get_all_string_groups() const;
     /**
      * @brief Add a string value to a group (creates the group if it doesn't exist)
      * @param group_name the name of the group
@@ -58,7 +58,7 @@ public:
      * @param group_name the name of the group
      * @param values an unordered set of string values to add to the group
      */
-    void add(const std::string& group_name, std::unordered_set<std::string>&& values);
+    void add(const std::string& group_name, std::set<std::string>&& values);
     /**
      * @brief Add a choosable to a group (creates the group if it doesn't exist)
      * and overwrites any existing choosable with the same name
@@ -120,7 +120,7 @@ public:
     std::string status() const;
 private:
     // a map containing all string groups - the members of a string group mapped to the name of the group
-    std::unordered_map<std::string, std::unordered_set<std::string>> data;
+    std::unordered_map<std::string, std::set<std::string>> data;
     // a map containing all choosable groups - the members of a choosable group mapped to the name of the group
     std::unordered_map<std::string, std::unordered_map<std::string, ChoosableFeature>> choosables;
 };
