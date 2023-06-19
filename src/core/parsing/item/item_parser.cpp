@@ -17,6 +17,8 @@
 #include <core/models/item/item.hpp>
 #include <core/validation/item/item_data.hpp>
 
+dnd::ItemParser::ItemParser(const std::filesystem::path& file_path) : FileParser(file_path) {}
+
 dnd::Errors dnd::ItemParser::parse() {
     Errors errors;
     if (!json.is_object()) {

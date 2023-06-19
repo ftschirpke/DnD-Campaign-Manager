@@ -11,6 +11,8 @@
 #include <core/models/spell/spell.hpp>
 #include <core/validation/spell/spell_data.hpp>
 
+dnd::SpellParser::SpellParser(const std::filesystem::path& file_path) : FileParser(file_path) {}
+
 dnd::Errors dnd::SpellParser::parse() {
     Errors errors;
     if (!json.is_object()) {

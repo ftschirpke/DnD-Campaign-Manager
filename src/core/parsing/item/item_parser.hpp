@@ -14,6 +14,7 @@ namespace dnd {
 
 class ItemParser : public FileParser {
 public:
+    explicit ItemParser(const std::filesystem::path& file_path);
     /**
      * @brief Parses the json into item data
      * @return the errors that occured while parsing

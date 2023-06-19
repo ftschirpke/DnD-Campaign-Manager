@@ -14,6 +14,7 @@ namespace dnd {
 
 class SpellParser : public FileParser {
 public:
+    explicit SpellParser(const std::filesystem::path& file_path);
     /**
      * @brief Parses the json into spell data
      * @return the errors that occured while parsing

@@ -14,6 +14,7 @@ namespace dnd {
 
 class StringGroupParser : public FileParser {
 public:
+    explicit StringGroupParser(const std::filesystem::path& file_path);
     /**
      * @brief Parses the json into string groups data
      * @return the errors that occured while parsing

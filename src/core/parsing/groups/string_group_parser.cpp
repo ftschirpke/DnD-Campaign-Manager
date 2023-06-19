@@ -14,6 +14,8 @@
 #include <core/errors/parsing_error.hpp>
 #include <core/errors/validation_error.hpp>
 
+dnd::StringGroupParser::StringGroupParser(const std::filesystem::path& file_path) : FileParser(file_path) {}
+
 dnd::Errors dnd::StringGroupParser::parse() {
     Errors errors;
     if (!json.is_object()) {
