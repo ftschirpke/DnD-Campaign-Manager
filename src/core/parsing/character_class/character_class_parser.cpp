@@ -16,6 +16,7 @@
 #include <core/parsing/feature/feature_parser.hpp>
 #include <core/parsing/file_parser.hpp>
 #include <core/validation/character_class/character_class_data.hpp>
+#include <core/validation/character_class/spellcasting/spellcasting_data.hpp>
 
 dnd::CharacterClassParser::CharacterClassParser(const std::filesystem::path& filepath) noexcept
     : FileParser(filepath), feature_parser(filepath), data() {}
@@ -32,6 +33,27 @@ dnd::Errors dnd::CharacterClassParser::parse() {
     errors += parse_required_attribute(json, "name", data.name);
     errors += parse_required_attribute(json, "description", data.description);
     data.source_path = get_filepath();
+
+    data.spellcasting_data.is_spellcaster = json.contains("spellcasting");
+    if (data.spellcasting_data.is_spellcaster) {
+        nlohmann::ordered_json& spellcasting_json = json["spellcasting"];
+        errors += parse_required_attribute(spellcasting_json, "ability", data.spellcasting_data.ability);
+        errors += parse_required_attribute(spellcasting_json, "ritual_casting", data.spellcasting_data.ritual_casting);
+
+        data.spellcasting_data.is_spells_known_type = spellcasting_json.contains("spells_known");
+        errors += parse_optional_attribute(spellcasting_json, "spells_known", data.spellcasting_data.spells_known);
+
+        errors += parse_required_attribute(spellcasting_json, "cantrips_known", data.spellcasting_data.cantrips_known);
+        errors += parse_optional_attribute(spellcasting_json, "level1_slots", data.spellcasting_data.spell_slots[0]);
+        errors += parse_optional_attribute(spellcasting_json, "level2_slots", data.spellcasting_data.spell_slots[1]);
+        errors += parse_optional_attribute(spellcasting_json, "level3_slots", data.spellcasting_data.spell_slots[2]);
+        errors += parse_optional_attribute(spellcasting_json, "level4_slots", data.spellcasting_data.spell_slots[3]);
+        errors += parse_optional_attribute(spellcasting_json, "level5_slots", data.spellcasting_data.spell_slots[4]);
+        errors += parse_optional_attribute(spellcasting_json, "level6_slots", data.spellcasting_data.spell_slots[5]);
+        errors += parse_optional_attribute(spellcasting_json, "level7_slots", data.spellcasting_data.spell_slots[6]);
+        errors += parse_optional_attribute(spellcasting_json, "level8_slots", data.spellcasting_data.spell_slots[7]);
+        errors += parse_optional_attribute(spellcasting_json, "level9_slots", data.spellcasting_data.spell_slots[8]);
+    }
 
     errors += parse_required_attribute(json, "subclass", data.subclass_feature_name);
     errors += parse_required_attribute(json, "hit_dice", data.hit_dice_data.str);

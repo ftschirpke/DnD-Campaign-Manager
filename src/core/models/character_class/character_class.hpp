@@ -4,11 +4,13 @@
 #include <dnd_config.hpp>
 
 #include <filesystem>
+#include <memory>
 #include <string>
 #include <vector>
 
 #include <core/basic_mechanics/dice.hpp>
 #include <core/models/character_class/important_levels.hpp>
+#include <core/models/character_class/spellcasting/spellcasting.hpp>
 #include <core/models/feature/feature.hpp>
 #include <core/models/feature_holder/feature_holder.hpp>
 #include <core/validation/character_class/character_class_data.hpp>
@@ -34,6 +36,8 @@ public:
     CharacterClass(CharacterClass&&) = default;
     CharacterClass& operator=(CharacterClass&&) = default;
 
+    bool has_spellcasting() const noexcept;
+    const Spellcasting* get_spellcasting() const noexcept;
     const Feature* get_subclass_feature() const noexcept;
     const Dice& get_hit_dice() const noexcept;
     const ImportantLevels& get_important_levels() const noexcept;
@@ -47,9 +51,10 @@ private:
     CharacterClass(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path,
         std::vector<Feature>&& features, const Feature* subclass_feature, Dice hit_dice,
-        ImportantLevels&& important_levels
+        ImportantLevels&& important_levels, std::unique_ptr<Spellcasting>&& spellcasting = nullptr
     ) noexcept;
 
+    std::unique_ptr<Spellcasting> spellcasting;
     const Feature* subclass_feature;
     Dice hit_dice;
     ImportantLevels important_levels;

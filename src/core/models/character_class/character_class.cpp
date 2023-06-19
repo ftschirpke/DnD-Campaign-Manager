@@ -5,8 +5,10 @@
 #include <algorithm>
 #include <cassert>
 #include <filesystem>
+#include <memory>
 #include <regex>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include <core/basic_mechanics/dice.hpp>
@@ -17,6 +19,7 @@
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/character_class/important_levels.hpp>
+#include <core/models/character_class/spellcasting/spellcasting_factory.hpp>
 #include <core/models/feature/feature.hpp>
 #include <core/models/feature_holder/feature_holder.hpp>
 #include <core/validation/character_class/character_class_data.hpp>
@@ -68,9 +71,14 @@ dnd::CharacterClass dnd::CharacterClass::create(dnd::CharacterClassData&& data, 
 
     return CharacterClass(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(features),
-        subclass_feature, std::move(hit_dice), std::move(important_levels)
+        subclass_feature, std::move(hit_dice), std::move(important_levels),
+        create_spellcasting(std::move(data.spellcasting_data))
     );
 }
+
+bool dnd::CharacterClass::has_spellcasting() const noexcept { return spellcasting != nullptr; }
+
+const dnd::Spellcasting* dnd::CharacterClass::get_spellcasting() const noexcept { return spellcasting.get(); }
 
 const dnd::Feature* dnd::CharacterClass::get_subclass_feature() const noexcept { return subclass_feature; }
 
@@ -83,8 +91,8 @@ void dnd::CharacterClass::accept(dnd::ContentVisitor* visitor) const { visitor->
 dnd::CharacterClass::CharacterClass(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path,
     std::vector<dnd::Feature>&& features, const dnd::Feature* subclass_feature, dnd::Dice hit_dice,
-    dnd::ImportantLevels&& important_levels
+    dnd::ImportantLevels&& important_levels, std::unique_ptr<dnd::Spellcasting>&& spellcasting
 ) noexcept
     : FeatureHolder(std::move(name), std::move(description), std::move(source_path), std::move(features)),
-      subclass_feature(subclass_feature), hit_dice(std::move(hit_dice)), important_levels(std::move(important_levels)) {
-}
+      spellcasting(std::move(spellcasting)), subclass_feature(subclass_feature), hit_dice(std::move(hit_dice)),
+      important_levels(std::move(important_levels)) {}

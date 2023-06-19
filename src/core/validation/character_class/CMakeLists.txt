@@ -3,3 +3,5 @@ target_sources(${DND_CORE}
     character_class_data.cpp
     important_levels_data.cpp
 )
+
+add_subdirectory(spellcasting)
