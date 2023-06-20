@@ -36,7 +36,7 @@ dnd::SpellComponents dnd::SpellComponents::create(SpellComponentsData&& componen
         material = first_part == "M";
     } else {
         // this should never happen, if the validation is correct
-        throw invalid_data("Cannot create SpellComponents from invalid data.");
+        assert(false);
     }
     if (material) {
         materials_needed = components_data.str.substr(

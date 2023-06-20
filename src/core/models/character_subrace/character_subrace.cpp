@@ -35,3 +35,11 @@ dnd::CharacterSubrace dnd::CharacterSubrace::create(
 }
 
 const dnd::CharacterRace* dnd::CharacterSubrace::get_race() const noexcept { return race; }
+
+void dnd::CharacterSubrace::accept(dnd::ContentVisitor* visitor) const { visitor->visit(this); }
+
+dnd::CharacterSubrace::CharacterSubrace(
+    std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::vector<Feature>&& features,
+    const CharacterRace* race
+) noexcept
+    : FeatureHolder(std::move(name), std::move(description), std::move(source_path), std::move(features)), race(race) {}

@@ -2,6 +2,11 @@
 
 #include "character_race.hpp"
 
+#include <filesystem>
+#include <string>
+#include <utility>
+#include <vector>
+
 #include <core/content_visitors/content_visitor.hpp>
 #include <core/controllers/content_holder.hpp>
 #include <core/errors/errors.hpp>
@@ -29,3 +34,10 @@ dnd::CharacterRace dnd::CharacterRace::create(dnd::CharacterRaceData&& data, con
 bool dnd::CharacterRace::has_subraces() const noexcept { return subraces; }
 
 void dnd::CharacterRace::accept(dnd::ContentVisitor* visitor) const { visitor->visit(this); }
+
+dnd::CharacterRace::CharacterRace(
+    std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::vector<Feature>&& features,
+    bool has_subraces
+) noexcept
+    : FeatureHolder(std::move(name), std::move(description), std::move(source_path), std::move(features)),
+      subraces(has_subraces) {}

@@ -56,3 +56,17 @@ std::vector<const dnd::FeatureHolder*> dnd::CharacterBasis::get_feature_holders(
     }
     return feature_holders;
 }
+
+dnd::CharacterBasis::CharacterBasis(
+    const CharacterRace* race, const CharacterSubrace* subrace, const CharacterClass* cls,
+    const CharacterSubclass* subclass
+) noexcept
+    : race(race), subrace(subrace), cls(cls), subclass(subclass) {}
+
+dnd::CharacterBasis::CharacterBasis(
+    const CharacterRace* race, const CharacterClass* cls, const CharacterSubclass* subclass
+) noexcept
+    : race(race), subrace(nullptr), cls(cls), subclass(subclass) {}
+
+dnd::CharacterBasis::CharacterBasis(const CharacterRace* race, const CharacterClass* cls) noexcept
+    : race(race), subrace(nullptr), cls(cls), subclass(nullptr) {}
