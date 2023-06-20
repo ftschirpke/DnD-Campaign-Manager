@@ -32,7 +32,7 @@ dnd::Errors dnd::StringGroupParser::parse() {
                 "The group '__no_subgroup__' is not allowed in the root of the string group file."
             );
         } else if (value.is_array()) {
-            errors += parse_optional_attribute(value, key.c_str(), data[key]);
+            errors += parse_optional_attribute(json, key.c_str(), data[key]);
         } else if (value.is_object()) {
             errors += parse_subgroups(value, data[key]);
         } else {
@@ -87,7 +87,7 @@ dnd::Errors dnd::StringGroupParser::parse_subgroups(
         }
         if (value.is_array()) {
             std::set<std::string> values;
-            errors += parse_optional_attribute(value, key.c_str(), values);
+            errors += parse_optional_attribute(sub_json, key.c_str(), values);
             if (key == "__no_subgroup__") {
                 parent_group_values.insert(
                     std::make_move_iterator(values.begin()), std::make_move_iterator(values.end())

@@ -37,6 +37,7 @@ dnd::SpellComponents dnd::SpellComponents::create(SpellComponentsData&& componen
     } else {
         // this should never happen, if the validation is correct
         assert(false);
+        return SpellComponents(false, false, false, "");
     }
     if (material) {
         materials_needed = components_data.str.substr(
