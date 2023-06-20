@@ -21,8 +21,12 @@
 
 #include <core/controllers/content_holder.hpp>
 #include <core/controllers/searching/content_search.hpp>
+#include <core/errors/errors.hpp>
+#include <core/errors/parsing_error.hpp>
+#include <core/errors/validation_error.hpp>
 #include <core/models/feature/feature.hpp>
 #include <core/models/item/item.hpp>
+#include <core/models/source_info.hpp>
 #include <core/models/spell/spell.hpp>
 #include <core/parsing/content_parser.hpp>
 #include <core/utils/string_manipulation.hpp>
@@ -275,6 +279,26 @@ void dnd::GUIApp::render_overview_window() {
         render_content_count_table(content);
     }
 
+    ImGui::SeparatorText("Errors");
+    if (ImGui::BeginChild("Error list")) {
+        for (const std::string& message : error_messages) {
+            ImGui::TextWrapped("%s", message.c_str());
+        }
+        ImGui::SeparatorText("Parsing errors");
+        for (const ParsingError& error : errors.get_parsing_errors()) {
+            SourceInfo source_info(error.get_filepath());
+            ImGui::TextWrapped(
+                "%s (%s - %s - %s)", error.get_error_message().c_str(), source_info.get_source_group_name().c_str(),
+                source_info.get_source_type_name().c_str(), source_info.get_source_name().c_str()
+            );
+        }
+        for (const ValidationError& error : errors.get_validation_errors()) {
+            ImGui::TextWrapped("%s", error.get_error_message().c_str());
+        }
+        ImGui::EndChild();
+    }
+
+
     ImGui::End();
 }
 
@@ -322,6 +346,7 @@ void dnd::GUIApp::finish_parsing() {
     try {
         ParsingResult parsing_result = parsing_results.get();
         content = std::move(parsing_result.content);
+        errors = std::move(parsing_result.errors);
         search = std::make_unique<ContentSearch>(content);
     } catch (const std::exception& e) {
         error_messages.push_back(e.what());
