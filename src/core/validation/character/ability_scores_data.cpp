@@ -10,7 +10,7 @@
 #include <core/validation/validation_data.hpp>
 #include <core/validation/validation_subdata.hpp>
 
-dnd::Errors check_ability_score(int ability_score, const dnd::ValidationData* data_ptr, const char* name) {
+static dnd::Errors check_ability_score(int ability_score, const dnd::ValidationData* data_ptr, const char* name) {
     dnd::Errors errors;
     if (ability_score <= 0 || ability_score > 30) {
         errors.add_validation_error(
@@ -25,7 +25,7 @@ dnd::Errors check_ability_score(int ability_score, const dnd::ValidationData* da
 dnd::AbilityScoresData::AbilityScoresData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
 
 dnd::Errors dnd::AbilityScoresData::validate() const {
-    Errors errors = ValidationSubdata::validate();
+    Errors errors;
     errors += check_ability_score(ability_scores[0], parent, "strength");
     errors += check_ability_score(ability_scores[1], parent, "dexterity");
     errors += check_ability_score(ability_scores[2], parent, "constitution");

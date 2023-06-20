@@ -4,11 +4,11 @@
 
 #include <core/validation/validation_data.hpp>
 
-dnd::ValidationSubdata::ValidationSubdata(const ValidationData* parent) noexcept : parent(parent) {}
-
 dnd::Errors dnd::ValidationSubdata::validate_relations(const ContentHolder& content) const {
     DND_UNUSED(content);
     return Errors();
 }
 
 const dnd::ValidationData* dnd::ValidationSubdata::get_parent() const noexcept { return parent; }
+
+dnd::ValidationSubdata::ValidationSubdata(const dnd::ValidationData* parent) noexcept : parent(parent) {}

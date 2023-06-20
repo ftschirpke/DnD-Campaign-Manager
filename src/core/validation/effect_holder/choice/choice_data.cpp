@@ -11,6 +11,7 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/validation/validation_data.hpp>
+#include <core/validation/validation_subdata.hpp>
 
 dnd::ChoiceData::ChoiceData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
 

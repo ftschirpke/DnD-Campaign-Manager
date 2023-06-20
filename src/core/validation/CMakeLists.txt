@@ -1,6 +1,7 @@
 target_sources(${DND_CORE}
     PRIVATE
     validation_data.cpp
+    validation_subdata.cpp
 )
 
 add_subdirectory(basic_mechanics)
