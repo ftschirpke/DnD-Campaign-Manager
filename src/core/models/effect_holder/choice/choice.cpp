@@ -47,3 +47,11 @@ std::vector<std::string_view> dnd::Choice::possible_values(const dnd::ContentHol
     }
     return possible_values;
 }
+
+
+dnd::Choice::Choice(
+    std::string&& attribute_name, int amount, std::vector<std::string>&& group_names,
+    std::vector<std::string>&& explicit_choices
+) noexcept
+    : attribute_name(std::move(attribute_name)), amount(amount), group_names(std::move(group_names)),
+      explicit_choices(std::move(explicit_choices)) {}

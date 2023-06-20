@@ -81,3 +81,10 @@ int dnd::AbilityScores::get_intelligence_modifier() const noexcept { return calc
 int dnd::AbilityScores::get_wisdom_modifier() const noexcept { return calculate_modifier(wisdom); }
 
 int dnd::AbilityScores::get_charisma_modifier() const noexcept { return calculate_modifier(charisma); }
+
+
+dnd::AbilityScores::AbilityScores(
+    int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma
+) noexcept
+    : strength(strength), dexterity(dexterity), constitution(constitution), intelligence(intelligence), wisdom(wisdom),
+      charisma(charisma) {}

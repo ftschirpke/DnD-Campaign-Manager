@@ -12,18 +12,9 @@
 #include <core/models/spell/spell_components.hpp>
 #include <core/models/spell/spell_type.hpp>
 #include <core/utils/string_manipulation.hpp>
+#include <core/validation/spell/spell_components_data.hpp>
+#include <core/validation/spell/spell_type_data.hpp>
 #include <core/validation/validation_data.hpp>
-
-static constexpr const char* spell_components_regex_cstr = "((1st|2nd|3rd|[4-9]th)-level "
-                                                           "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|"
-                                                           "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)"
-                                                           "( \\(ritual\\))?)|("
-                                                           "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|"
-                                                           "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)"
-                                                           " cantrip)";
-
-static constexpr const char*
-    spell_type_regex_cstr = "(V, S, M \\(.+\\)|V, S|V, M \\(.*\\)|S, M \\(.+\\)|V|S|M \\(.+\\))";
 
 dnd::SpellData::SpellData() noexcept : components_data(this), type_data(this) {}
 
