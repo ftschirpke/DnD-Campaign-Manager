@@ -48,6 +48,8 @@ dnd::Errors dnd::ChoosableFeatureParser::parse(nlohmann::ordered_json&& json, Ch
         json.erase("prerequisites");
     }
 
+    data.type = get_filepath().stem().string();
+
     errors += feature_parser.parse(std::move(json), data);
 
     return errors;

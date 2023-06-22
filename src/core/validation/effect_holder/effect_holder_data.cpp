@@ -37,12 +37,6 @@ dnd::Errors dnd::EffectHolderData::validate() const {
     errors += extra_spells_holder_data.validate();
     errors += proficiency_holder_data.validate();
     errors += riv_holder_data.validate();
-    if (activation_conditions_data.empty() && effects_data.empty() && action_holder_data.empty()
-        && extra_spells_holder_data.empty() && proficiency_holder_data.empty() && riv_holder_data.empty()) {
-        errors.add_validation_error(
-            ValidationErrorCode::MISSING_ATTRIBUTE, parent, "Effect holder is completely empty."
-        );
-    }
     return errors;
 }
 

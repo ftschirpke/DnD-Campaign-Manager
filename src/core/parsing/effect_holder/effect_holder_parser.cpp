@@ -72,9 +72,9 @@ dnd::Errors dnd::EffectHolderParser::parse_choices(
     nlohmann::ordered_json& json, std::vector<dnd::ChoiceData>& data, const dnd::ValidationData* parent
 ) const {
     Errors errors;
-    if (!json["choices"].is_object()) {
+    if (!json["choose"].is_object()) {
         errors.add_parsing_error(
-            ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(), "The choices json is not an object."
+            ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(), "The 'choose' json is not an object."
         );
         return errors;
     }

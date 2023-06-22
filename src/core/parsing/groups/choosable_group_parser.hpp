@@ -5,6 +5,7 @@
 
 #include <filesystem>
 #include <unordered_map>
+#include <vector>
 
 #include <core/errors/errors.hpp>
 #include <core/parsing/feature/choosable_feature_parser.hpp>
@@ -22,6 +23,11 @@ public:
      */
     virtual Errors parse() override;
     /**
+     * @brief Returns whether the parser should continue after an invalid parsing
+     * @return "true" because there are multiple choosable features in one file
+     */
+    virtual bool continue_after_invalid_parsing() const noexcept override;
+    /**
      * @brief Validates the parsed choosable groups data using the given content
      * @param content the content to validate against
      * @return the errors that occured while validating
@@ -36,6 +42,7 @@ protected:
     ChoosableFeatureParser choosable_feature_parser;
     std::string group_name;
     std::vector<ChoosableFeatureData> data;
+    size_t choosable_features_in_file;
     mutable std::vector<bool> feature_data_valid;
 };
 

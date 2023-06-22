@@ -52,6 +52,8 @@ dnd::Errors dnd::ItemParser::parse() {
     return errors;
 }
 
+bool dnd::ItemParser::continue_after_invalid_parsing() const noexcept { return true; }
+
 dnd::Errors dnd::ItemParser::validate(const dnd::ContentHolder& content) const {
     Errors errors;
     assert(items_in_file == item_data.size());

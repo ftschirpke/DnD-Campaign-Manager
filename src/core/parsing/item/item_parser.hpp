@@ -21,6 +21,11 @@ public:
      */
     virtual Errors parse() override;
     /**
+     * @brief Returns whether the parser should continue after an invalid parsing
+     * @return "true" because there are multiple items in one file
+     */
+    virtual bool continue_after_invalid_parsing() const noexcept override;
+    /**
      * @brief Validates the parsed item data using the given content
      * @param content the content to validate against
      * @return the errors that occured while validating

@@ -2,8 +2,10 @@
 
 #include "choosable_group_parser.hpp"
 
+#include <cassert>
 #include <filesystem>
 #include <unordered_map>
+#include <vector>
 
 #include <core/controllers/content_holder.hpp>
 #include <core/errors/errors.hpp>
@@ -12,6 +14,20 @@
 #include <core/parsing/file_parser.hpp>
 #include <core/utils/char_manipulation.hpp>
 #include <core/validation/feature/choosable_feature_data.hpp>
+
+void snake_case_to_spaced_words(std::string& str) {
+    bool first_in_word = true;
+    for (auto& c : str) {
+        if (c == '_') {
+            c = ' ';
+            first_in_word = true;
+        }
+        if (first_in_word) {
+            c = dnd::char_to_uppercase(c);
+            first_in_word = false;
+        }
+    }
+}
 
 dnd::ChoosableGroupParser::ChoosableGroupParser(const std::filesystem::path& filepath) noexcept
     : FileParser(filepath), choosable_feature_parser(filepath) {}
@@ -26,18 +42,7 @@ dnd::Errors dnd::ChoosableGroupParser::parse() {
     }
 
     group_name = get_filepath().stem().string();
-
-    bool first_in_word = true;
-    for (auto& c : group_name) {
-        if (c == '_') {
-            c = ' ';
-            first_in_word = true;
-        }
-        if (first_in_word) {
-            c = char_to_uppercase(c);
-            first_in_word = false;
-        }
-    }
+    snake_case_to_spaced_words(group_name);
 
     data.reserve(json.size());
     for (auto& [feature_name, feature_json] : json.items()) {
@@ -57,13 +62,17 @@ dnd::Errors dnd::ChoosableGroupParser::parse() {
         }
         errors += std::move(feature_errors);
     }
+    choosable_features_in_file = data.size();
     return errors;
 }
 
+bool dnd::ChoosableGroupParser::continue_after_invalid_parsing() const noexcept { return true; }
+
 dnd::Errors dnd::ChoosableGroupParser::validate(const dnd::ContentHolder& content) const {
     Errors errors;
-    feature_data_valid.resize(data.size(), false);
-    for (size_t i = 0; i < data.size(); ++i) {
+    assert(choosable_features_in_file == data.size());
+    feature_data_valid.resize(choosable_features_in_file, false);
+    for (size_t i = 0; i < choosable_features_in_file; ++i) {
         Errors validation_errors = data[i].validate();
         validation_errors += data[i].validate_relations(content);
         feature_data_valid[i] = validation_errors.ok();
@@ -75,6 +84,7 @@ dnd::Errors dnd::ChoosableGroupParser::validate(const dnd::ContentHolder& conten
 void dnd::ChoosableGroupParser::save_result(dnd::ContentHolder& content) {
     for (size_t i = 0; i < data.size(); ++i) {
         if (feature_data_valid[i]) {
+            snake_case_to_spaced_words(data[i].type);
             content.groups.add(group_name, ChoosableFeature::create(std::move(data[i]), content));
         }
     }

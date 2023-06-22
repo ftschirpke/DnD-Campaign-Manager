@@ -49,7 +49,7 @@ void dnd::ContentSearch::set_search_query(const std::string& new_query) {
     while (query.size() > new_query.size()) {
         remove_character_from_query();
     }
-    assert(query.size() == new_query.size());
+    assert(query.size() <= new_query.size());
 
     size_t common_length = 0;
     while (common_length < query.size() && query[common_length] == new_query[common_length]) {

@@ -97,16 +97,16 @@ dnd::ParsingResult dnd::ContentParser::parse(
         result.errors += parse_string_groups(result.content, content_directories);
     }
     {
-        DND_MEASURE_SCOPE("Parsing choosable groups");
-        result.errors += parse_all_of_type(ParsingType::CHOOSABLES, result.content, content_directories);
-    }
-    {
         DND_MEASURE_SCOPE("Parsing spells");
         result.errors += parse_all_of_type(ParsingType::SPELL, result.content, content_directories);
     }
     {
         DND_MEASURE_SCOPE("Parsing items");
         result.errors += parse_all_of_type(ParsingType::ITEM, result.content, content_directories);
+    }
+    {
+        DND_MEASURE_SCOPE("Parsing choosable groups");
+        result.errors += parse_all_of_type(ParsingType::CHOOSABLES, result.content, content_directories);
     }
     {
         DND_MEASURE_SCOPE("Parsing races");
@@ -146,7 +146,7 @@ static dnd::Errors parse_file(dnd::ContentHolder& content, dnd::FileParser&& par
         dnd::Errors parse_errors = parser.parse();
         successful = parse_errors.ok();
         errors += std::move(parse_errors);
-        if (!successful) {
+        if (!successful && !parser.continue_after_invalid_parsing()) {
             return errors;
         }
     } catch (const std::exception& e) {

@@ -36,4 +36,6 @@ dnd::Errors dnd::FileParser::open_json() {
     return errors;
 }
 
+bool dnd::FileParser::continue_after_invalid_parsing() const noexcept { return false; }
+
 void dnd::FileParser::set_context(const dnd::ContentHolder& content) { DND_UNUSED(content); }

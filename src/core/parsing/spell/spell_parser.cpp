@@ -50,6 +50,8 @@ dnd::Errors dnd::SpellParser::parse() {
     return errors;
 }
 
+bool dnd::SpellParser::continue_after_invalid_parsing() const noexcept { return true; }
+
 dnd::Errors dnd::SpellParser::validate(const dnd::ContentHolder& content) const {
     Errors errors;
     assert(spells_in_file == spell_data.size());

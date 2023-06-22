@@ -27,6 +27,11 @@ public:
      */
     virtual Errors parse() = 0;
     /**
+     * @brief Returns whether the parser should continue after an invalid parsing
+     * @return "false" by default
+     */
+    virtual bool continue_after_invalid_parsing() const noexcept;
+    /**
      * @brief Sets the context for the parser
      * @param content the content to set the context to
      */

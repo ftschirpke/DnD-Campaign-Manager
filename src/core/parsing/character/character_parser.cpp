@@ -56,7 +56,7 @@ dnd::Errors dnd::CharacterParser::parse() {
                 ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(), "The decisions json is not an object."
             );
         } else {
-            for (auto& [feature_name, decisions_for_feature] : json.items()) {
+            for (auto& [feature_name, decisions_for_feature] : json["decisions"].items()) {
                 if (decisions_for_feature.is_array()) {
                     for (auto& decision_json : decisions_for_feature) {
                         DecisionData& decision_data = data.decisions_data.emplace_back(&data, nullptr);
