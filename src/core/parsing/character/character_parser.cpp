@@ -83,10 +83,10 @@ void dnd::CharacterParser::set_context(const dnd::ContentHolder& content) {
     std::set<const EffectHolder*> processed_effect_holders;
     for (auto& decision_data : data.decisions_data) {
         const Feature* feature;
-        if (content.features.contains(decision_data.feature_name)) {
-            feature = content.features.get(decision_data.feature_name);
-        } else if (content.choosable_features.contains(decision_data.feature_name)) {
-            feature = content.choosable_features.get(decision_data.feature_name);
+        if (content.get_features().contains(decision_data.feature_name)) {
+            feature = content.get_features().get(decision_data.feature_name);
+        } else if (content.get_choosable_features().contains(decision_data.feature_name)) {
+            feature = &content.get_choosable_features().get(decision_data.feature_name);
         } else {
             decision_data.set_target(nullptr);
             continue;
@@ -117,7 +117,7 @@ dnd::Errors dnd::CharacterParser::validate(const ContentHolder& content) const {
 }
 
 void dnd::CharacterParser::save_result(ContentHolder& content) {
-    content.characters.add(Character::create(std::move(data), content));
+    content.add_character(Character::create(std::move(data), content));
 }
 
 dnd::Errors dnd::CharacterParser::parse_decision(

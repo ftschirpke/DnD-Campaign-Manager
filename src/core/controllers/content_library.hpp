@@ -67,13 +67,13 @@ public:
      * @param prefix the prefix to the name (or the prefix to one word of the whole name)
      * @return all pieces of content matching the prefix (empty if none such piece exists)
      */
-    std::unordered_set<TrieT*> prefix_get(const std::string& prefix);
+    std::unordered_set<TrieT*> prefix_get(const std::string& prefix) const;
     /**
      * @brief Get all pieces of content matching a given prefix in order
      * @param prefix the prefix to the name (or the prefix to one word of the whole name)
      * @return all pieces of content matching the prefix in order (empty if none such piece exists)
      */
-    std::vector<TrieT*> sorted_prefix_get(const std::string& prefix);
+    std::vector<TrieT*> sorted_prefix_get(const std::string& prefix) const;
     /**
      * @brief Get all pieces of content
      * @return the map containing the pieces of content
@@ -81,28 +81,18 @@ public:
     const std::unordered_map<std::string, DataT>& get_all() const;
     /**
      * @brief Add a content piece if no piece of content with the same name exists
+     * @param name the name of the piece of content
      * @param new_content_piece the new piece of content
-     * @return true, if piece was added, "false" if name already exists
+     * @return "true" if piece was added, "false" if name already exists
      */
-    bool add(typename std::remove_const<DataT>::type&& new_content_piece);
+    bool add(const std::string& name, typename std::remove_const<DataT>::type&& new_content_piece);
     /**
      * @brief Add a content piece if no piece of content with the same name exists
      * @param name the name of the piece of content
      * @param new_content_piece the new piece of content
-     * @return true, if piece was added, "false" if name already exists
+     * @return "true" if piece was added, "false" if name already exists
      */
-    bool add(const std::string& name, typename std::remove_const<DataT>::type&& new_content_piece);
-    /**
-     * @brief Create a content piece inplace if no piece of content with the same name exists
-     * @tparam ...Args the types the constructor for the piece of content allows
-     * @param name the name of the piece of content
-     * @param ...constructor_args additional constructor arguments to create the piece of content
-     * @return true, if piece was created and added, "false" if name already exists
-     */
-    template <
-        typename... Args,
-        std::enable_if_t<std::is_constructible<DataT, std::string&, std::filesystem::path&, Args&&...>::value, int> = 0>
-    bool create(const std::string& name, const std::filesystem::path& source_path, Args&&... constructor_args);
+    bool add(const std::string& name, const DataT& new_content_piece);
     /**
      * @brief Get the root of the search trie
      * @return a pointer the root node
@@ -166,13 +156,13 @@ inline const DataT& ContentLibrary<TrieT, DataT>::get(const std::string& name) c
 
 template <typename TrieT, typename DataT>
 requires ContentLibraryTypes<TrieT, DataT>
-inline std::unordered_set<TrieT*> ContentLibrary<TrieT, DataT>::prefix_get(const std::string& prefix) {
+inline std::unordered_set<TrieT*> ContentLibrary<TrieT, DataT>::prefix_get(const std::string& prefix) const {
     return trie.search_prefix(prefix);
 }
 
 template <typename TrieT, typename DataT>
 requires ContentLibraryTypes<TrieT, DataT>
-inline std::vector<TrieT*> ContentLibrary<TrieT, DataT>::sorted_prefix_get(const std::string& prefix) {
+inline std::vector<TrieT*> ContentLibrary<TrieT, DataT>::sorted_prefix_get(const std::string& prefix) const {
     std::unordered_set<TrieT*> unsorted_result = prefix_get(prefix);
     std::vector<TrieT*> result(unsorted_result.begin(), unsorted_result.end());
     std::sort(result.begin(), result.end(), [](TrieT* a, TrieT* b) { return a->name < b->name; });
@@ -183,12 +173,6 @@ template <typename TrieT, typename DataT>
 requires ContentLibraryTypes<TrieT, DataT>
 inline const std::unordered_map<std::string, DataT>& ContentLibrary<TrieT, DataT>::get_all() const {
     return data;
-}
-
-template <typename TrieT, typename DataT>
-requires ContentLibraryTypes<TrieT, DataT>
-inline bool ContentLibrary<TrieT, DataT>::add(typename std::remove_const<DataT>::type&& new_content_piece) {
-    return add(new_content_piece.get_name(), std::move(new_content_piece));
 }
 
 template <typename TrieT, typename DataT>
@@ -206,19 +190,11 @@ inline bool ContentLibrary<TrieT, DataT>::add(
 
 template <typename TrieT, typename DataT>
 requires ContentLibraryTypes<TrieT, DataT>
-template <
-    typename... Args,
-    std::enable_if_t<std::is_constructible<DataT, std::string&, std::filesystem::path&, Args&&...>::value, int>>
-bool ContentLibrary<TrieT, DataT>::create(
-    const std::string& name, const std::filesystem::path& source_path, Args&&... constructor_args
-) {
+inline bool ContentLibrary<TrieT, DataT>::add(const std::string& name, const DataT& new_content_piece) {
     if (contains(name)) {
         return false;
     }
-    data.emplace(
-        std::piecewise_construct, std::forward_as_tuple(name),
-        std::forward_as_tuple(name, source_path, std::move(constructor_args)...)
-    );
+    data.emplace(name, new_content_piece);
     save_in_trie(name);
     return true;
 }

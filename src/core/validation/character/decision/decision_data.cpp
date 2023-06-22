@@ -90,14 +90,14 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::ContentHolder& cont
         }
     }
 
-    if (!content.features.contains(feature_name)) {
+    if (!content.get_features().contains(feature_name)) {
         errors.add_validation_error(
             ValidationErrorCode::RELATION_NOT_FOUND, parent, "Decision cannot be linked to any existing feature."
         );
         return errors;
     }
 
-    const Feature* linked_feature = content.features.get(feature_name);
+    const Feature* linked_feature = content.get_features().get(feature_name);
 
     if (&linked_feature->get_main_part() != target) {
         bool target_found_in_feature = false;
@@ -117,25 +117,28 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::ContentHolder& cont
 
     bool feature_found = false;
     if (character_data != nullptr) {
-        if (content.character_races.contains(character_data->character_basis_data.race_name)) {
+        if (content.get_character_races().contains(character_data->character_basis_data.race_name)) {
             feature_found = feature_is_in(
-                linked_feature, content.character_races.get(character_data->character_basis_data.race_name)
-            );
-        }
-        if (!feature_found && content.character_subraces.contains(character_data->character_basis_data.subrace_name)) {
-            feature_found = feature_is_in(
-                linked_feature, content.character_subraces.get(character_data->character_basis_data.subrace_name)
-            );
-        }
-        if (!feature_found && content.character_classes.contains(character_data->character_basis_data.class_name)) {
-            feature_found = feature_is_in(
-                linked_feature, content.character_classes.get(character_data->character_basis_data.class_name)
+                linked_feature, content.get_character_races().get(character_data->character_basis_data.race_name)
             );
         }
         if (!feature_found
-            && content.character_subclasses.contains(character_data->character_basis_data.subclass_name)) {
+            && content.get_character_subraces().contains(character_data->character_basis_data.subrace_name)) {
             feature_found = feature_is_in(
-                linked_feature, content.character_subclasses.get(character_data->character_basis_data.subclass_name)
+                linked_feature, content.get_character_subraces().get(character_data->character_basis_data.subrace_name)
+            );
+        }
+        if (!feature_found
+            && content.get_character_classes().contains(character_data->character_basis_data.class_name)) {
+            feature_found = feature_is_in(
+                linked_feature, content.get_character_classes().get(character_data->character_basis_data.class_name)
+            );
+        }
+        if (!feature_found
+            && content.get_character_subclasses().contains(character_data->character_basis_data.subclass_name)) {
+            feature_found = feature_is_in(
+                linked_feature,
+                content.get_character_subclasses().get(character_data->character_basis_data.subclass_name)
             );
         }
     }

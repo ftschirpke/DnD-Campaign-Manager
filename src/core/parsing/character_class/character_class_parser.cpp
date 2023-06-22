@@ -80,5 +80,5 @@ dnd::Errors dnd::CharacterClassParser::validate(const dnd::ContentHolder& conten
 }
 
 void dnd::CharacterClassParser::save_result(dnd::ContentHolder& content) {
-    content.character_classes.add(CharacterClass::create(std::move(data), content));
+    content.add_character_class(CharacterClass::create(std::move(data), content));
 }

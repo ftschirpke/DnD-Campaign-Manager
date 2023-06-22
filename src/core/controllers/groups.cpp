@@ -4,18 +4,19 @@
 
 #include <iterator>
 #include <set>
-#include <sstream>
 #include <string>
 #include <unordered_map>
 #include <utility>
+#include <vector>
+
+#include <fmt/format.h>
 
 #include <core/basic_mechanics/abilities.hpp>
 #include <core/basic_mechanics/skills.hpp>
-#include <core/models/feature/choosable_feature.hpp>
 #include <core/utils/string_manipulation.hpp>
 
 dnd::Groups::Groups() {
-    data["abilities"] = std::set<std::string>(ability_cstrings_inorder.begin(), ability_cstrings_inorder.end());
+    members["abilities"] = std::set<std::string>(ability_cstrings_inorder.begin(), ability_cstrings_inorder.end());
 
     std::string lowercase_skill;
     for (const auto& [skill, _] : skill_abilities) {
@@ -26,97 +27,74 @@ dnd::Groups::Groups() {
             lowercase_skill[idx] = ' ';
             idx = lowercase_skill.find('_');
         }
-        data["skills"].insert(lowercase_skill);
+        members["skills"].insert(lowercase_skill);
     }
 }
 
-const std::unordered_map<std::string, dnd::ChoosableFeature>& dnd::Groups::get_choosable_group(
-    const std::string& group_name
-) const {
-    return choosables.at(group_name);
+std::set<std::string> dnd::Groups::get_group(const std::string& group_name) const {
+    std::set<std::string> group_members = members.at(group_name);
+    for (const auto& subgroup_name : subgroups.at(group_name)) {
+        std::set<std::string> subgroup_members = get_group(subgroup_name);
+        group_members.insert(
+            std::make_move_iterator(subgroup_members.begin()), std::make_move_iterator(subgroup_members.end())
+        );
+    }
+    return group_members;
 }
 
-const std::set<std::string>& dnd::Groups::get_string_group(const std::string& group_name) const {
-    return data.at(group_name);
+std::vector<std::string> dnd::Groups::get_all_group_names() const {
+    std::vector<std::string> group_names;
+    group_names.reserve(members.size());
+    for (const auto& [group_name, _] : members) {
+        group_names.push_back(group_name);
+    }
+    return group_names;
 }
 
-const std::unordered_map<std::string, std::unordered_map<std::string, dnd::ChoosableFeature>>& dnd::Groups::
-    get_all_choosable_groups() const {
-    return choosables;
-}
-
-const std::unordered_map<std::string, std::set<std::string>>& dnd::Groups::get_all_string_groups() const {
-    return data;
-}
-
-void dnd::Groups::add(const std::string& group_name, const std::string& value) { data[group_name].insert(value); }
+void dnd::Groups::add(const std::string& group_name, const std::string& value) { members[group_name].insert(value); }
 
 void dnd::Groups::add(const std::string& group_name, std::set<std::string>&& values) {
-    data[group_name].insert(std::make_move_iterator(values.begin()), std::make_move_iterator(values.end()));
+    members[group_name].insert(std::make_move_iterator(values.begin()), std::make_move_iterator(values.end()));
 }
 
-void dnd::Groups::add(const std::string& group_name, ChoosableFeature&& value) {
-    choosables[group_name].emplace(value.get_name(), std::move(value));
+void dnd::Groups::set_subgroup(const std::string& group_name, const std::string& subgroup_name) {
+    subgroups[group_name].insert(subgroup_name);
+    members[group_name];
+    members[subgroup_name];
 }
 
-void dnd::Groups::add(const std::string& group_name, std::unordered_map<std::string, dnd::ChoosableFeature>&& values) {
-    choosables[group_name].insert(std::make_move_iterator(values.begin()), std::make_move_iterator(values.end()));
+void dnd::Groups::set_subgroups(const std::string& group_name, std::set<std::string>&& subgroup_names) {
+    subgroups[group_name].insert(
+        std::make_move_iterator(subgroup_names.begin()), std::make_move_iterator(subgroup_names.end())
+    );
+    members[group_name];
+    for (const auto& subgroup_name : subgroup_names) {
+        members[subgroup_name];
+    }
 }
 
-bool dnd::Groups::is_group(const std::string& group_name) const {
-    return is_string_group(group_name) || is_choosable_group(group_name);
-}
+bool dnd::Groups::is_group(const std::string& group_name) const { return members.contains(group_name); }
 
-bool dnd::Groups::is_string_group(const std::string& group_name) const { return data.contains(group_name); }
-
-bool dnd::Groups::is_string_subgroup(const std::string& subgroup_name, const std::string& group_name) const {
-    if (!is_string_group(subgroup_name)) {
+bool dnd::Groups::is_subgroup(const std::string& subgroup_name, const std::string& group_name) const {
+    if (!subgroups.contains(group_name)) {
         return false;
     }
-    if (!is_string_group(group_name)) {
+    return subgroups.at(group_name).contains(subgroup_name);
+}
+
+bool dnd::Groups::is_part_of_group(const std::string& name, const std::string& group_name) const {
+    if (members.at(group_name).contains(name)) {
+        return true;
+    }
+    if (!subgroups.contains(group_name)) {
         return false;
     }
-    auto subgroup_it = data.at(subgroup_name).cbegin();
-    auto group_it = data.at(group_name).cbegin();
-    while (group_it != data.at(group_name).cend()) {
-        if (*subgroup_it == *group_it) {
-            ++subgroup_it;
-            if (subgroup_it == data.at(subgroup_name).cend()) {
-                return true;
-            }
+    for (const auto& subgroup_name : subgroups.at(group_name)) {
+        if (is_part_of_group(name, subgroup_name)) {
+            return true;
         }
-        ++group_it;
     }
     return false;
 }
 
-bool dnd::Groups::is_choosable_group(const std::string& group_name) const { return choosables.contains(group_name); }
-
-bool dnd::Groups::is_part_of_group(const std::string& name, const std::string& group_name) const {
-    if (is_part_of_string_group(name, group_name)) {
-        return true;
-    }
-    return is_part_of_choosable_group(name, group_name);
-}
-
-bool dnd::Groups::is_part_of_string_group(const std::string& name, const std::string& string_group_name) const {
-    if (!is_string_group(string_group_name)) {
-        return false;
-    }
-    return data.at(string_group_name).contains(name);
-}
-
-bool dnd::Groups::is_part_of_choosable_group(const std::string& name, const std::string& choosable_group_name) const {
-    if (!is_choosable_group(choosable_group_name)) {
-        return false;
-    }
-    return data.at(choosable_group_name).contains(name);
-}
-
-std::string dnd::Groups::status() const {
-    std::stringstream sstr;
-    sstr << "=== Groups ===\n";
-    sstr << "string-based groups parsed: " << data.size() << '\n';
-    sstr << "choosable-based groups parsed: " << choosables.size() << '\n';
-    return sstr.str();
-}
+std::string dnd::Groups::status() const { return fmt::format("=== Groups ===\ngroups parsed: {}\n", members.size()); }

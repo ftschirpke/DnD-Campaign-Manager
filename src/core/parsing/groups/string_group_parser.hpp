@@ -32,9 +32,10 @@ public:
      */
     virtual void save_result(ContentHolder& content) override;
 private:
-    Errors parse_subgroups(nlohmann::ordered_json& json, std::set<std::string>& parent_group_values);
+    Errors parse_subgroups(nlohmann::ordered_json& json, const std::string& parent);
 
-    std::unordered_map<std::string, std::set<std::string>> data;
+    std::unordered_map<std::string, std::set<std::string>> members;
+    std::unordered_map<std::string, std::set<std::string>> subgroups;
 };
 
 } // namespace dnd

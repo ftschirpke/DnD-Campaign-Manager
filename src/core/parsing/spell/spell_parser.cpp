@@ -70,7 +70,7 @@ void dnd::SpellParser::save_result(dnd::ContentHolder& content) {
     assert(spells_in_file == spell_data.size());
     for (size_t i = 0; i < spells_in_file; ++i) {
         if (spell_data_valid[i]) {
-            content.spells.add(Spell::create(std::move(spell_data[i])));
+            content.add_spell(Spell::create(std::move(spell_data[i])));
         }
     }
 }

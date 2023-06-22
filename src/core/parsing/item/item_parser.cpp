@@ -72,7 +72,7 @@ void dnd::ItemParser::save_result(dnd::ContentHolder& content) {
     assert(items_in_file == item_data.size());
     for (size_t i = 0; i < items_in_file; ++i) {
         if (item_data_valid[i]) {
-            content.items.add(Item::create(std::move(item_data[i])));
+            content.add_item(Item::create(std::move(item_data[i])));
         }
     }
 }

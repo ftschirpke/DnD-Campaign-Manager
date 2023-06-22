@@ -17,7 +17,7 @@ static std::vector<const dnd::Spell*> find_spells_in_content(
     std::vector<const dnd::Spell*> spells;
     spells.reserve(spell_names.size());
     for (const auto& spell_name : spell_names) {
-        spells.push_back(&content.spells.get(spell_name));
+        spells.push_back(&content.get_spells().get(spell_name));
     }
     return spells;
 }

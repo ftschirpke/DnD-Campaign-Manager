@@ -53,5 +53,5 @@ dnd::Errors dnd::CharacterRaceParser::validate(const dnd::ContentHolder& content
 }
 
 void dnd::CharacterRaceParser::save_result(dnd::ContentHolder& content) {
-    content.character_races.add(CharacterRace::create(std::move(data), content));
+    content.add_character_race(CharacterRace::create(std::move(data), content));
 }

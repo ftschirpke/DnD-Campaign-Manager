@@ -19,15 +19,15 @@ dnd::CharacterBasis dnd::CharacterBasis::create(dnd::CharacterBasisData&& data, 
     if (!data.validate_relations(content).ok()) {
         throw dnd::invalid_data("CharacterBasis data is incompatible with the given content.");
     }
-    const CharacterRace* race = &content.character_races.get(data.race_name);
+    const CharacterRace* race = &content.get_character_races().get(data.race_name);
     const CharacterSubrace* subrace = nullptr;
-    const CharacterClass* cls = &content.character_classes.get(data.class_name);
+    const CharacterClass* cls = &content.get_character_classes().get(data.class_name);
     const CharacterSubclass* subclass = nullptr;
     if (!data.subrace_name.empty()) {
-        subrace = &content.character_subraces.get(data.subrace_name);
+        subrace = &content.get_character_subraces().get(data.subrace_name);
     }
     if (!data.subclass_name.empty()) {
-        subclass = &content.character_subclasses.get(data.subclass_name);
+        subclass = &content.get_character_subclasses().get(data.subclass_name);
     }
     return CharacterBasis(race, subrace, cls, subclass);
 }

@@ -40,14 +40,14 @@ dnd::Errors dnd::CharacterSubclassData::validate_relations(const ContentHolder& 
     Errors errors;
     for (const auto& feature_data : features_data) {
         errors += feature_data.validate_relations(content);
-        if (content.features.contains(name)) {
+        if (content.get_features().contains(name)) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
                 fmt::format("Feature has duplicate name \"{}\".", name)
             );
         }
     }
-    if (!content.character_classes.contains(class_name)) {
+    if (!content.get_character_classes().contains(class_name)) {
         errors.add_validation_error(
             ValidationErrorCode::RELATION_NOT_FOUND, this,
             fmt::format("Character class '{}' does not exist.", class_name)

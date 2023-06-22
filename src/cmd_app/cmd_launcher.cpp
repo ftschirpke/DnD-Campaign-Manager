@@ -100,7 +100,7 @@ static std::vector<const dnd::Spell*> search_spells(
     const std::string& search, dnd::ContentHolder& content, dnd::Output* output
 ) {
     size_t i = 0;
-    std::unordered_set<const dnd::Spell*> matched_spells = content.spells.prefix_get(search);
+    std::unordered_set<const dnd::Spell*> matched_spells = content.get_spells().prefix_get(search);
     if (matched_spells.empty()) {
         return std::vector<const dnd::Spell*>();
     }
@@ -122,7 +122,7 @@ static std::vector<const dnd::Item*> search_items(
     const std::string& search, dnd::ContentHolder& content, dnd::Output* output
 ) {
     size_t i = 0;
-    std::unordered_set<const dnd::Item*> matched_items = content.items.prefix_get(search);
+    std::unordered_set<const dnd::Item*> matched_items = content.get_items().prefix_get(search);
     if (matched_items.empty()) {
         return std::vector<const dnd::Item*>();
     }
@@ -144,7 +144,7 @@ static std::vector<const dnd::Feature*> search_features(
     const std::string& search, dnd::ContentHolder& content, dnd::Output* output
 ) {
     size_t i = 0;
-    std::unordered_set<const dnd::Feature*> matched_features = content.features.prefix_get(search);
+    std::unordered_set<const dnd::Feature*> matched_features = content.get_features().prefix_get(search);
     if (matched_features.empty()) {
         return std::vector<const dnd::Feature*>();
     }
@@ -167,7 +167,7 @@ static std::map<std::string, std::vector<const dnd::ChoosableFeature*>> search_c
 ) {
     size_t i = 0;
     std::map<std::string, std::vector<const dnd::ChoosableFeature*>> choosables_in_order;
-    std::unordered_set<const dnd::ChoosableFeature*> matched_choosables = content.choosable_features.prefix_get(search);
+    std::unordered_set<const dnd::ChoosableFeature*> matched_choosables = content.get_choosable_features().prefix_get(search);
     for (auto matched_choosable : matched_choosables) {
         choosables_in_order[matched_choosable->get_type()].push_back(matched_choosable);
     }

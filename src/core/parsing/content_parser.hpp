@@ -15,6 +15,12 @@ namespace dnd {
  * @brief A struct containing the result of parsing content
  */
 struct ParsingResult {
+    ParsingResult() = default;
+    ParsingResult(const ParsingResult&) = delete;
+    ParsingResult& operator=(const ParsingResult&) = delete;
+    ParsingResult(ParsingResult&&) = default;
+    ParsingResult& operator=(ParsingResult&&) = default;
+
     ContentHolder content;
     Errors errors;
     std::filesystem::path content_path;

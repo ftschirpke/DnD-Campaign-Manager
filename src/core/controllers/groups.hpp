@@ -6,15 +6,12 @@
 #include <set>
 #include <string>
 #include <unordered_map>
-
-#include <core/models/feature/choosable_feature.hpp>
+#include <vector>
 
 namespace dnd {
 
 /**
  * @brief A class handling all the groups for a certain session or campaign
- * String groups (such as "musical instruments") are mostly cosmetic whereas choosable groups (such as "feats") contain
- * values that can be chosen and affect a characters stats and abilities.
  */
 class Groups {
 public:
@@ -23,30 +20,17 @@ public:
      */
     Groups();
     /**
-     * @brief Get the values of a choosable group
-     * @param group_name the name of the group
-     * @return an unordered map containing the group members (choosables)
-     * @throws std::out_of_range if group doesn't exist
-     */
-    const std::unordered_map<std::string, ChoosableFeature>& get_choosable_group(const std::string& group_name) const;
-    /**
-     * @brief Get the values of a string group
+     * @brief Get the values of a group
      * @param group_name the name of the group
      * @return an unordered set containing the group members (strings)
      * @throws std::out_of_range if group doesn't exist
      */
-    const std::set<std::string>& get_string_group(const std::string& group_name) const;
+    std::set<std::string> get_group(const std::string& group_name) const;
     /**
-     * @brief Get all choosable groups
-     * @return reference to all the choosable groups saved
+     * @brief Get all group names
+     * @return set of all group names
      */
-    const std::unordered_map<std::string, std::unordered_map<std::string, ChoosableFeature>>& get_all_choosable_groups(
-    ) const;
-    /**
-     * @brief Get all string groups
-     * @return reference to all the string groups saved
-     */
-    const std::unordered_map<std::string, std::set<std::string>>& get_all_string_groups() const;
+    std::vector<std::string> get_all_group_names() const;
     /**
      * @brief Add a string value to a group (creates the group if it doesn't exist)
      * @param group_name the name of the group
@@ -56,23 +40,23 @@ public:
     /**
      * @brief Add string values to a group (creates the group if it doesn't exist)
      * @param group_name the name of the group
-     * @param values an unordered set of string values to add to the group
+     * @param values an set of string values to add to the group
      */
     void add(const std::string& group_name, std::set<std::string>&& values);
     /**
-     * @brief Add a choosable to a group (creates the group if it doesn't exist)
-     * and overwrites any existing choosable with the same name
+     * @brief Set the subgroup of a group (creates the group and subgroup if it doesn't exist)
      * @param group_name the name of the group
-     * @param value the choosable to add to the group
+     * @param subgroup_name the name of the subgroup
+     * @throws std::out_of_range if group doesn't exist
      */
-    void add(const std::string& group_name, ChoosableFeature&& value);
+    void set_subgroup(const std::string& group_name, const std::string& subgroup_name);
     /**
-     * @brief Add choosables to a group (creates the group if it doesn't exist)
-     * and overwrites any existing choosables with the same name
+     * @brief Set the subgroups of a group (creates the group and subgroups if they don't exist)
      * @param group_name the name of the group
-     * @param values an unordered map of choosables to add to the group
+     * @param subgroup_names the names of the subgroups
+     * @throws std::out_of_range if group doesn't exist
      */
-    void add(const std::string& group_name, std::unordered_map<std::string, ChoosableFeature>&& values);
+    void set_subgroups(const std::string& group_name, std::set<std::string>&& subgroup_names);
     /**
      * @brief Determines wheteher a group with the given name exists.
      * @param group_name the name of the group
@@ -80,24 +64,12 @@ public:
      */
     bool is_group(const std::string& group_name) const;
     /**
-     * @brief Determines wheteher a group of strings with given name exists.
-     * @param group_name the name of the group
-     * @return "true" if a string-group with this name exists, "false" otherwise
-     */
-    bool is_string_group(const std::string& group_name) const;
-    /**
-     * @brief Determines wheteher a group of strings with given name exists and is a subgroup of another group.
+     * @brief Determines wheteher a group with given name exists and is a subgroup of another group.
      * @param subgroup_name the name of the subgroup
      * @param group_name the name of the group
      * @return "true" if it exists and is a subgroup, "false" otherwise
      */
-    bool is_string_subgroup(const std::string& subgroup_name, const std::string& group_name) const;
-    /**
-     * @brief Determines wheteher a group of choosables with the given name exists.
-     * @param group_name the name of the group
-     * @return "true" if a choosable-group with this name exists, "false" otherwise
-     */
-    bool is_choosable_group(const std::string& group_name) const;
+    bool is_subgroup(const std::string& subgroup_name, const std::string& group_name) const;
     /**
      * @brief Determines whether a certain string is part of a given group
      * @param name the string that is supposed to be a part of the group
@@ -106,30 +78,15 @@ public:
      */
     bool is_part_of_group(const std::string& name, const std::string& group_name) const;
     /**
-     * @brief Determines whether a certain string is part of a given string group
-     * @param name the string that is supposed to be a part of the string group
-     * @param group_name the name of the string group
-     * @return "true" if name is part of the string group, "false" otherwise (also when the string group does not exist)
-     */
-    bool is_part_of_string_group(const std::string& name, const std::string& string_group_name) const;
-    /**
-     * @brief Determines whether a certain string is part of a given choosable group
-     * @param name the string that is supposed to be a part of the choosable group
-     * @param group_name the name of the choosable group
-     * @return "true" if name is part of the choosable group, "false" otherwise (also when the choosable group does not
-     * exist)
-     */
-    bool is_part_of_choosable_group(const std::string& name, const std::string& choosable_group_name) const;
-    /**
      * @brief Returns a string describing the amounts of groups parsed
      * @return a string describing the current parsed groups
      */
     std::string status() const;
 private:
-    // a map containing all string groups - the members of a string group mapped to the name of the group
-    std::unordered_map<std::string, std::set<std::string>> data;
-    // a map containing all choosable groups - the members of a choosable group mapped to the name of the group
-    std::unordered_map<std::string, std::unordered_map<std::string, ChoosableFeature>> choosables;
+    // a map containing all the direct members of a group
+    std::unordered_map<std::string, std::set<std::string>> members;
+    // a map containing all the subgroups of a group
+    std::unordered_map<std::string, std::set<std::string>> subgroups;
 };
 
 } // namespace dnd

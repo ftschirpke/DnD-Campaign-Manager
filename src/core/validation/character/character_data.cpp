@@ -48,17 +48,17 @@ std::vector<const dnd::FeatureHolder*> get_feature_holders(
     const dnd::CharacterBasisData& basis, const dnd::ContentHolder& content
 ) {
     std::vector<const dnd::FeatureHolder*> feature_holders;
-    if (content.character_races.contains(basis.race_name)) {
-        feature_holders.push_back(&content.character_races.get(basis.race_name));
+    if (content.get_character_races().contains(basis.race_name)) {
+        feature_holders.push_back(&content.get_character_races().get(basis.race_name));
     }
-    if (content.character_subraces.contains(basis.subrace_name)) {
-        feature_holders.push_back(&content.character_subraces.get(basis.subrace_name));
+    if (content.get_character_subraces().contains(basis.subrace_name)) {
+        feature_holders.push_back(&content.get_character_subraces().get(basis.subrace_name));
     }
-    if (content.character_classes.contains(basis.class_name)) {
-        feature_holders.push_back(&content.character_classes.get(basis.class_name));
+    if (content.get_character_classes().contains(basis.class_name)) {
+        feature_holders.push_back(&content.get_character_classes().get(basis.class_name));
     }
-    if (content.character_subclasses.contains(basis.subclass_name)) {
-        feature_holders.push_back(&content.character_subclasses.get(basis.subclass_name));
+    if (content.get_character_subclasses().contains(basis.subclass_name)) {
+        feature_holders.push_back(&content.get_character_subclasses().get(basis.subclass_name));
     }
     return feature_holders;
 }
@@ -67,7 +67,7 @@ dnd::Errors dnd::CharacterData::validate_relations(const dnd::ContentHolder& con
     Errors errors;
     for (const auto& feature_data : features_data) {
         errors += feature_data.validate_relations(content);
-        if (content.features.contains(name)) {
+        if (content.get_features().contains(name)) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
                 fmt::format("Feature has duplicate name \"{}\".", name)
@@ -78,8 +78,8 @@ dnd::Errors dnd::CharacterData::validate_relations(const dnd::ContentHolder& con
     errors += base_ability_scores_data.validate_relations(content);
 
     if (!character_basis_data.class_name.empty()
-        && content.character_classes.contains(character_basis_data.class_name)) {
-        const CharacterClass& cls = content.character_classes.get(character_basis_data.class_name);
+        && content.get_character_classes().contains(character_basis_data.class_name)) {
+        const CharacterClass& cls = content.get_character_classes().get(character_basis_data.class_name);
         if (progression_data.level >= cls.get_important_levels().get_subclass_level()
             && character_basis_data.subclass_name.empty()) {
             errors.add_validation_error(
@@ -117,7 +117,7 @@ dnd::Errors dnd::CharacterData::validate_relations(const dnd::ContentHolder& con
     }
 
     std::vector<const EffectHolder*> effect_holders_with_choices;
-    for (const auto& [_, feature] : content.features.get_all()) {
+    for (const auto& [_, feature] : content.get_features().get_all()) {
         std::vector<const EffectHolder*> effect_holders = {&feature->get_main_part()};
         for (const EffectHolder& effect_holder : feature->get_other_parts()) {
             effect_holders.push_back(&effect_holder);

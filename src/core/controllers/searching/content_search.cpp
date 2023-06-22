@@ -21,21 +21,21 @@
 #include <core/models/item/item.hpp>
 #include <core/models/spell/spell.hpp>
 
-dnd::ContentSearch::ContentSearch(const ContentHolder& content_holder) {
+dnd::ContentSearch::ContentSearch(const ContentHolder& content) {
     query.reserve(40);
-    character_search_path.push(content_holder.characters.get_trie_root());
-    character_class_search_path.push(content_holder.character_classes.get_trie_root());
-    character_subclass_search_path.push(content_holder.character_subclasses.get_trie_root());
-    character_race_search_path.push(content_holder.character_races.get_trie_root());
-    character_subrace_search_path.push(content_holder.character_subraces.get_trie_root());
-    item_search_path.push(content_holder.items.get_trie_root());
-    spell_search_path.push(content_holder.spells.get_trie_root());
-    feature_search_path.push(content_holder.features.get_trie_root());
-    choosable_search_path.push(content_holder.choosable_features.get_trie_root());
+    character_search_path.push(content.get_characters().get_trie_root());
+    character_class_search_path.push(content.get_character_classes().get_trie_root());
+    character_subclass_search_path.push(content.get_character_subclasses().get_trie_root());
+    character_race_search_path.push(content.get_character_races().get_trie_root());
+    character_subrace_search_path.push(content.get_character_subraces().get_trie_root());
+    item_search_path.push(content.get_items().get_trie_root());
+    spell_search_path.push(content.get_spells().get_trie_root());
+    feature_search_path.push(content.get_features().get_trie_root());
+    choosable_search_path.push(content.get_choosable_features().get_trie_root());
 }
 
-dnd::ContentSearch::ContentSearch(const dnd::ContentHolder& content_holder, const std::string& initial_query)
-    : ContentSearch(content_holder) {
+dnd::ContentSearch::ContentSearch(const dnd::ContentHolder& content, const std::string& initial_query)
+    : ContentSearch(content) {
     for (char c : initial_query) {
         add_character_to_query(c);
     }

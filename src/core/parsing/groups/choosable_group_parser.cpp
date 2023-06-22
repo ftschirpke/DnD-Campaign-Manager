@@ -85,7 +85,7 @@ void dnd::ChoosableGroupParser::save_result(dnd::ContentHolder& content) {
     for (size_t i = 0; i < data.size(); ++i) {
         if (feature_data_valid[i]) {
             snake_case_to_spaced_words(data[i].type);
-            content.groups.add(group_name, ChoosableFeature::create(std::move(data[i]), content));
+            content.add_choosable_feature(ChoosableFeature::create(std::move(data[i]), content));
         }
     }
 }

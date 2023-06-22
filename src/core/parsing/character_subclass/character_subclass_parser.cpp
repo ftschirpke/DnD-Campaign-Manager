@@ -53,5 +53,5 @@ dnd::Errors dnd::CharacterSubclassParser::validate(const ContentHolder& content)
 }
 
 void dnd::CharacterSubclassParser::save_result(ContentHolder& content) {
-    content.character_subclasses.add(CharacterSubclass::create(std::move(data), content));
+    content.add_character_subclass(CharacterSubclass::create(std::move(data), content));
 }

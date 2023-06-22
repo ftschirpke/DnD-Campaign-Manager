@@ -51,5 +51,5 @@ dnd::Errors dnd::CharacterSubraceParser::validate(const dnd::ContentHolder& cont
 }
 
 void dnd::CharacterSubraceParser::save_result(dnd::ContentHolder& content) {
-    content.character_subraces.add(CharacterSubrace::create(std::move(data), content));
+    content.add_character_subrace(CharacterSubrace::create(std::move(data), content));
 }

@@ -29,35 +29,35 @@ dnd::Errors dnd::CharacterBasisData::validate() const {
 
 dnd::Errors dnd::CharacterBasisData::validate_relations(const dnd::ContentHolder& content) const {
     Errors errors;
-    if (!content.character_races.contains(race_name)) {
+    if (!content.get_character_races().contains(race_name)) {
         errors.add_validation_error(
             ValidationErrorCode::RELATION_NOT_FOUND, parent, fmt::format("Race '{}' does not exist.", race_name)
         );
     } else if (!subrace_name.empty()) {
-        if (!content.character_races.get(race_name).has_subraces()) {
+        if (!content.get_character_races().get(race_name).has_subraces()) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_RELATION, parent,
                 fmt::format("Race '{}' does not have subraces.", race_name)
             );
         }
-        if (!content.character_subraces.contains(subrace_name)) {
+        if (!content.get_character_subraces().contains(subrace_name)) {
             errors.add_validation_error(
                 ValidationErrorCode::RELATION_NOT_FOUND, parent,
                 fmt::format("Subrace '{}' does not exist.", subrace_name)
             );
         }
-    } else if (content.character_races.get(race_name).has_subraces()) {
+    } else if (content.get_character_races().get(race_name).has_subraces()) {
         errors.add_validation_error(
             ValidationErrorCode::INVALID_RELATION, parent, fmt::format("Race '{}' requires subraces.", race_name)
         );
     }
 
-    if (!content.character_classes.contains(class_name)) {
+    if (!content.get_character_classes().contains(class_name)) {
         errors.add_validation_error(
             ValidationErrorCode::RELATION_NOT_FOUND, parent, fmt::format("Class '{}' does not exist.", class_name)
         );
     }
-    if (!subclass_name.empty() && !content.character_subclasses.contains(subclass_name)) {
+    if (!subclass_name.empty() && !content.get_character_subclasses().contains(subclass_name)) {
         errors.add_validation_error(
             ValidationErrorCode::RELATION_NOT_FOUND, parent, fmt::format("Subclass '{}' does not exist.", subclass_name)
         );

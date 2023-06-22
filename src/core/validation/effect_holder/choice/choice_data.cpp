@@ -34,7 +34,7 @@ dnd::Errors dnd::ChoiceData::validate_relations(const ContentHolder& content) co
     Errors errors;
     if (!group_names.empty()) {
         for (const auto& group_name : group_names) {
-            if (!content.groups.is_string_group(group_name)) {
+            if (!content.get_groups().is_group(group_name)) {
                 errors.add_validation_error(
                     ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
                     fmt::format("Choice has group name '{}' which is not a group", group_name)
@@ -42,7 +42,7 @@ dnd::Errors dnd::ChoiceData::validate_relations(const ContentHolder& content) co
             }
         }
     } else if (explicit_choices.empty()) {
-        if (!content.groups.is_string_group(attribute_name)) {
+        if (!content.get_groups().is_group(attribute_name)) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
                 fmt::format(

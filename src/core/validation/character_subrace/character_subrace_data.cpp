@@ -40,18 +40,18 @@ dnd::Errors dnd::CharacterSubraceData::validate_relations(const ContentHolder& c
     Errors errors;
     for (const auto& feature_data : features_data) {
         errors += feature_data.validate_relations(content);
-        if (content.features.contains(name)) {
+        if (content.get_features().contains(name)) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
                 fmt::format("Feature has duplicate name \"{}\".", name)
             );
         }
     }
-    if (!content.character_races.contains(race_name)) {
+    if (!content.get_character_races().contains(race_name)) {
         errors.add_validation_error(
             ValidationErrorCode::RELATION_NOT_FOUND, this, fmt::format("Character race '{}' does not exist.", race_name)
         );
-    } else if (!content.character_races.get(race_name).has_subraces()) {
+    } else if (!content.get_character_races().get(race_name).has_subraces()) {
         errors.add_validation_error(
             ValidationErrorCode::INVALID_RELATION, this,
             fmt::format("Character race '{}' does not have subraces.", race_name)

@@ -41,7 +41,7 @@ std::vector<std::string_view> dnd::Choice::possible_values(const dnd::ContentHol
         possible_values.emplace_back(explicit_choice);
     }
     for (const std::string& group_name : group_names) {
-        for (const std::string& group_member : content.groups.get_string_group(group_name)) {
+        for (const std::string& group_member : content.get_groups().get_group(group_name)) {
             possible_values.emplace_back(group_member);
         }
     }

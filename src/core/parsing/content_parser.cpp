@@ -151,6 +151,7 @@ static dnd::Errors parse_file(dnd::ContentHolder& content, dnd::FileParser&& par
         }
     } catch (const std::exception& e) {
         errors.add_parsing_error(dnd::ParsingErrorCode::UNKNOWN_ERROR, parser.get_filepath(), e.what());
+        return errors;
     }
 
     try {

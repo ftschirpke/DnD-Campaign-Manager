@@ -219,15 +219,15 @@ static const float min_w = 240.0f;
 static void render_content_count_table(const dnd::ContentHolder& content) {
     float window_width = ImGui::GetWindowWidth();
     float w = std::max(min_w, window_width);
-    display_size("Characters", content.characters.size(), w);
-    display_size("Classes", content.character_classes.size(), w);
-    display_size("Subclasses", content.character_subclasses.size(), w);
-    display_size("Races", content.character_races.size(), w);
-    display_size("Subraces", content.character_subraces.size(), w);
-    display_size("Items", content.items.size(), w);
-    display_size("Spells", content.spells.size(), w);
-    display_size("Features", content.features.size(), w);
-    display_size("Choosables", content.choosable_features.size(), w);
+    display_size("Characters", content.get_characters().size(), w);
+    display_size("Classes", content.get_character_classes().size(), w);
+    display_size("Subclasses", content.get_character_subclasses().size(), w);
+    display_size("Races", content.get_character_races().size(), w);
+    display_size("Subraces", content.get_character_subraces().size(), w);
+    display_size("Items", content.get_items().size(), w);
+    display_size("Spells", content.get_spells().size(), w);
+    display_size("Features", content.get_features().size(), w);
+    display_size("Choosables", content.get_choosable_features().size(), w);
 }
 
 void dnd::GUIApp::render_overview_window() {
@@ -359,31 +359,31 @@ void dnd::GUIApp::finish_parsing() {
 
 void dnd::GUIApp::open_last_session_tabs() {
     for (const std::string& character_to_open : last_session_open_tabs["character"]) {
-        open_content_pieces.push_back(&content.characters.get(character_to_open));
+        open_content_pieces.push_back(&content.get_characters().get(character_to_open));
     }
     for (const std::string& character_class_to_open : last_session_open_tabs["character_class"]) {
-        open_content_pieces.push_back(&content.character_classes.get(character_class_to_open));
+        open_content_pieces.push_back(&content.get_character_classes().get(character_class_to_open));
     }
     for (const std::string& character_subclass_to_open : last_session_open_tabs["character_subclass"]) {
-        open_content_pieces.push_back(&content.character_subclasses.get(character_subclass_to_open));
+        open_content_pieces.push_back(&content.get_character_subclasses().get(character_subclass_to_open));
     }
     for (const std::string& character_race_to_open : last_session_open_tabs["character_race"]) {
-        open_content_pieces.push_back(&content.character_races.get(character_race_to_open));
+        open_content_pieces.push_back(&content.get_character_races().get(character_race_to_open));
     }
     for (const std::string& character_subrace_to_open : last_session_open_tabs["character_subrace"]) {
-        open_content_pieces.push_back(&content.character_subraces.get(character_subrace_to_open));
+        open_content_pieces.push_back(&content.get_character_subraces().get(character_subrace_to_open));
     }
     for (const std::string& item_to_open : last_session_open_tabs["item"]) {
-        open_content_pieces.push_back(&content.items.get(item_to_open));
+        open_content_pieces.push_back(&content.get_items().get(item_to_open));
     }
     for (const std::string& spell_to_open : last_session_open_tabs["spell"]) {
-        open_content_pieces.push_back(&content.spells.get(spell_to_open));
+        open_content_pieces.push_back(&content.get_spells().get(spell_to_open));
     }
     for (const std::string& feature_to_open : last_session_open_tabs["feature"]) {
-        open_content_pieces.push_back(content.features.get(feature_to_open));
+        open_content_pieces.push_back(content.get_features().get(feature_to_open));
     }
     for (const std::string& choosable_to_open : last_session_open_tabs["choosable_feature"]) {
-        open_content_pieces.push_back(content.choosable_features.get(choosable_to_open));
+        open_content_pieces.push_back(&content.get_choosable_features().get(choosable_to_open));
     }
 }
 
