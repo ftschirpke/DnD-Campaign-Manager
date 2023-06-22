@@ -28,7 +28,7 @@ dnd::Errors dnd::ProgressionData::validate() const {
             fmt::format("Character xp ({}) must be 0 or larger.", xp)
         );
     }
-    if (valid_level && valid_xp && level_to_xp(level) != xp) {
+    if (valid_level && valid_xp && xp_to_level(xp) != level) {
         errors.add_validation_error(
             ValidationErrorCode::INCONSISTENT_ATTRIBUTES, parent,
             fmt::format("Character level ({}) and xp ({}) do not match.", level, xp)
@@ -44,7 +44,7 @@ dnd::Errors dnd::ProgressionData::validate() const {
         }
     }
 
-    if (static_cast<size_t>(level) == hit_dice_rolls.size()) {
+    if (static_cast<size_t>(level) != hit_dice_rolls.size()) {
         errors.add_validation_error(
             ValidationErrorCode::INCONSISTENT_ATTRIBUTES, parent,
             fmt::format("Character level ({}) and hit dice rolls ({}) do not match.", level, hit_dice_rolls.size())
