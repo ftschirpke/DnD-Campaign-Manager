@@ -4,6 +4,7 @@
 
 #include <string>
 #include <unordered_set>
+#include <memory>
 #include <vector>
 
 #include <fmt/format.h>
@@ -13,6 +14,10 @@
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/validation/feature/feature_data.hpp>
+
+std::unique_ptr<dnd::ValidationData> dnd::CharacterSubraceData::pack() const {
+    return std::make_unique<CharacterSubraceData>(*this);
+}
 
 dnd::Errors dnd::CharacterSubraceData::validate() const {
     Errors errors;

@@ -6,12 +6,18 @@
 #include <core/errors/errors.hpp>
 #include <core/validation/effect_holder/effect_holder_data.hpp>
 #include <core/validation/validation_data.hpp>
+#include <memory>
 
 namespace dnd {
 
 class FeatureData : public ValidationData {
 public:
     explicit FeatureData(const ValidationData* parent = nullptr) noexcept;
+    /**
+     * @brief Packs the data into a ValidationData unique pointer
+     * @return the packed data
+     */
+    virtual std::unique_ptr<ValidationData> pack() const override;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

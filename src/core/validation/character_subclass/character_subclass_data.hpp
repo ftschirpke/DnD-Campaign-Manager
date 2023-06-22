@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <memory>
 #include <vector>
 
 #include <core/errors/errors.hpp>
@@ -13,6 +14,11 @@ namespace dnd {
 
 class CharacterSubclassData : public ValidationData {
 public:
+    /**
+     * @brief Packs the data into a ValidationData unique pointer
+     * @return the packed data
+     */
+    virtual std::unique_ptr<ValidationData> pack() const override;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

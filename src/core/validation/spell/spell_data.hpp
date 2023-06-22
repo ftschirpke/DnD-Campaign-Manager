@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <memory>
 #include <set>
 #include <string>
 
@@ -16,6 +17,11 @@ namespace dnd {
 class SpellData : public ValidationData {
 public:
     SpellData() noexcept;
+    /**
+     * @brief Packs the data into a ValidationData unique pointer
+     * @return the packed data
+     */
+    virtual std::unique_ptr<ValidationData> pack() const override;
 
     /**
      * @brief Validates the data

@@ -4,6 +4,7 @@
 #include <dnd_config.hpp>
 
 #include <array>
+#include <memory>
 #include <vector>
 
 #include <core/errors/errors.hpp>
@@ -21,6 +22,11 @@ class ContentHolder;
 class CharacterData : public ValidationData {
 public:
     CharacterData() noexcept;
+    /**
+     * @brief Packs the data into a ValidationData unique pointer
+     * @return the packed data
+     */
+    virtual std::unique_ptr<ValidationData> pack() const override;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

@@ -3,6 +3,7 @@
 #include "character_data.hpp"
 
 #include <array>
+#include <memory>
 #include <vector>
 
 #include <fmt/format.h>
@@ -20,6 +21,8 @@
 dnd::CharacterData::CharacterData() noexcept
     : ValidationData(), features_data(), base_ability_scores_data(this), character_basis_data(this),
       progression_data(this), decisions_data() {}
+
+std::unique_ptr<dnd::ValidationData> dnd::CharacterData::pack() const { return std::make_unique<CharacterData>(*this); }
 
 dnd::Errors dnd::CharacterData::validate() const {
     Errors errors = ValidationData::validate();

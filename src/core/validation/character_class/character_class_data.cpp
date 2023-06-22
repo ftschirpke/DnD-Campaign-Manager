@@ -2,6 +2,7 @@
 
 #include "character_class_data.hpp"
 
+#include <memory>
 #include <string>
 #include <unordered_set>
 #include <vector>
@@ -20,6 +21,10 @@
 dnd::CharacterClassData::CharacterClassData() noexcept
     : ValidationData(), spellcasting_data(this), features_data(), subclass_feature_name(), hit_dice_data(this),
       important_levels_data(this) {}
+
+std::unique_ptr<dnd::ValidationData> dnd::CharacterClassData::pack() const {
+    return std::make_unique<CharacterClassData>(*this);
+}
 
 dnd::Errors dnd::CharacterClassData::validate() const {
     Errors errors = ValidationData::validate();

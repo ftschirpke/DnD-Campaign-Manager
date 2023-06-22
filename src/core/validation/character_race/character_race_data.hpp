@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <memory>
 #include <vector>
 
 #include <core/errors/errors.hpp>
@@ -18,6 +19,11 @@ public:
      * @return the errors that occured during validation
      */
     virtual Errors validate() const override;
+    /**
+     * @brief Packs the data into a ValidationData unique pointer
+     * @return the packed data
+     */
+    virtual std::unique_ptr<ValidationData> pack() const override;
     /**
      * @brief Validates the relations of the data to other content pieces with regard to a given content holder
      * @param content the content holder to validate the relations against

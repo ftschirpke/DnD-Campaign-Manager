@@ -2,6 +2,7 @@
 
 #include "character_subclass_data.hpp"
 
+#include <memory>
 #include <string>
 #include <unordered_set>
 #include <vector>
@@ -13,6 +14,10 @@
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/validation/feature/feature_data.hpp>
+
+std::unique_ptr<dnd::ValidationData> dnd::CharacterSubclassData::pack() const {
+    return std::make_unique<CharacterSubclassData>(*this);
+}
 
 dnd::Errors dnd::CharacterSubclassData::validate() const {
     Errors errors;

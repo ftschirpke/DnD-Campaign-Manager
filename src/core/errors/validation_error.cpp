@@ -11,7 +11,7 @@
 dnd::ValidationError::ValidationError(
     dnd::ValidationErrorCode error_code, const dnd::ValidationData* validation_data, const std::string& message
 ) noexcept
-    : error_code(error_code), validation_data(std::make_unique<ValidationData>(*validation_data)),
+    : error_code(error_code), validation_data(validation_data == nullptr ? nullptr : validation_data->pack()),
       error_message(message) {}
 
 dnd::ValidationErrorCode dnd::ValidationError::get_error_code() const noexcept { return error_code; }

@@ -2,6 +2,7 @@
 
 #include "character_race_data.hpp"
 
+#include <memory>
 #include <string>
 #include <unordered_set>
 #include <vector>
@@ -12,6 +13,10 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
+
+std::unique_ptr<dnd::ValidationData> dnd::CharacterRaceData::pack() const {
+    return std::make_unique<CharacterRaceData>(*this);
+}
 
 dnd::Errors dnd::CharacterRaceData::validate() const {
     Errors errors;

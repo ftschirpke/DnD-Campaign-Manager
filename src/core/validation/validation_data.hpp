@@ -4,6 +4,7 @@
 #include <dnd_config.hpp>
 
 #include <filesystem>
+#include <memory>
 #include <string>
 
 namespace dnd {
@@ -17,6 +18,11 @@ class Errors;
 class ValidationData {
 public:
     virtual ~ValidationData() = default;
+    /**
+     * @brief Packs the data into a ValidationData unique pointer
+     * @return the packed data
+     */
+    virtual std::unique_ptr<ValidationData> pack() const = 0;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

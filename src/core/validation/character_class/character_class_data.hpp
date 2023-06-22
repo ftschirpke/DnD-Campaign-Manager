@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -20,6 +21,11 @@ class ContentHolder;
 class CharacterClassData : public ValidationData {
 public:
     CharacterClassData() noexcept;
+    /**
+     * @brief Packs the data into a ValidationData unique pointer
+     * @return the packed data
+     */
+    virtual std::unique_ptr<ValidationData> pack() const override;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

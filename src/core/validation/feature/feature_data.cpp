@@ -2,12 +2,16 @@
 
 #include "feature_data.hpp"
 
+#include <memory>
+
 #include <core/errors/errors.hpp>
 #include <core/validation/effect_holder/effect_holder_data.hpp>
 #include <core/validation/validation_data.hpp>
 
 dnd::FeatureData::FeatureData(const ValidationData* parent) noexcept
     : ValidationData(), main_part_data(parent == nullptr ? this : parent), parent(parent) {}
+
+std::unique_ptr<dnd::ValidationData> dnd::FeatureData::pack() const { return std::make_unique<FeatureData>(*this); }
 
 dnd::Errors dnd::FeatureData::validate() const {
     Errors errors = ValidationData::validate();
