@@ -40,6 +40,9 @@ dnd::Errors dnd::CharacterClassParser::parse() {
         errors += parse_required_attribute(spellcasting_json, "ability", data.spellcasting_data.ability);
         errors += parse_required_attribute(spellcasting_json, "ritual_casting", data.spellcasting_data.ritual_casting);
 
+        errors += parse_optional_attribute(
+            spellcasting_json, "preparation_caster", data.spellcasting_data.preparation_spellcasting_type
+        );
         data.spellcasting_data.is_spells_known_type = spellcasting_json.contains("spells_known");
         errors += parse_optional_attribute(spellcasting_json, "spells_known", data.spellcasting_data.spells_known);
 
