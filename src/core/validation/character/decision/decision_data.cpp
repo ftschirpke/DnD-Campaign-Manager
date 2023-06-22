@@ -57,6 +57,12 @@ bool feature_is_in(const dnd::Feature* feature_to_find, const dnd::FeatureHolder
 dnd::Errors dnd::DecisionData::validate_relations(const dnd::ContentHolder& content) const {
     Errors errors;
 
+    if (target == nullptr) {
+        errors.add_validation_error(
+            ValidationErrorCode::MISSING_ATTRIBUTE, parent, "Decision has no target assigned to it."
+        );
+        return errors;
+    }
     std::map<std::string, const dnd::Choice*> choices;
     for (const auto& choice : target->get_choices()) {
         assert(!choices.contains(choice.get_attribute_name()));
