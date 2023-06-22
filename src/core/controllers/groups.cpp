@@ -32,6 +32,9 @@ dnd::Groups::Groups() {
 }
 
 std::set<std::string> dnd::Groups::get_group(const std::string& group_name) const {
+    if (!is_group(group_name)) {
+        return {};
+    }
     std::set<std::string> group_members = members.at(group_name);
     for (const auto& subgroup_name : subgroups.at(group_name)) {
         std::set<std::string> subgroup_members = get_group(subgroup_name);

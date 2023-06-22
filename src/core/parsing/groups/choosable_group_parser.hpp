@@ -24,9 +24,9 @@ public:
     virtual Errors parse() override;
     /**
      * @brief Returns whether the parser should continue after an invalid parsing
-     * @return "true" because there are multiple choosable features in one file
+     * @return "true" because there are multiple choosable features in one file and some may still be valid
      */
-    virtual bool continue_after_invalid_parsing() const noexcept override;
+    virtual bool continue_after_errors() const noexcept override;
     /**
      * @brief Validates the parsed choosable groups data using the given content
      * @param content the content to validate against

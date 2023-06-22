@@ -22,8 +22,8 @@ dnd::Choice dnd::Choice::create(dnd::ChoiceData&& data, const dnd::ContentHolder
     }
 
     std::vector<std::string> group_names = std::move(data.group_names);
-    if (group_names.empty()) {
-        group_names.emplace_back(std::move(data.attribute_name));
+    if (group_names.empty() && data.explicit_choices.empty()) {
+        group_names.push_back(data.attribute_name);
     }
 
     return Choice(

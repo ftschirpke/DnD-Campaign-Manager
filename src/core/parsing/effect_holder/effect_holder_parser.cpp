@@ -78,9 +78,9 @@ dnd::Errors dnd::EffectHolderParser::parse_choices(
         );
         return errors;
     }
-    for (const auto& [attribute_name, choice_json] : json["choices"].items()) {
+    for (const auto& [attribute_name, choice_json] : json["choose"].items()) {
         Errors choice_errors;
-        ChoiceData& choice_data = data.emplace_back(parent);
+        ChoiceData choice_data(parent);
         choice_data.attribute_name = attribute_name;
         choice_errors += parse_required_attribute(choice_json, "amount", choice_data.amount);
 

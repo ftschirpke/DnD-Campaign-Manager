@@ -146,7 +146,7 @@ static dnd::Errors parse_file(dnd::ContentHolder& content, dnd::FileParser&& par
         dnd::Errors parse_errors = parser.parse();
         successful = parse_errors.ok();
         errors += std::move(parse_errors);
-        if (!successful && !parser.continue_after_invalid_parsing()) {
+        if (!successful && !parser.continue_after_errors()) {
             return errors;
         }
     } catch (const std::exception& e) {
@@ -160,7 +160,7 @@ static dnd::Errors parse_file(dnd::ContentHolder& content, dnd::FileParser&& par
         dnd::Errors validation_errors = parser.validate(content);
         successful = validation_errors.ok();
         errors += std::move(validation_errors);
-        if (!successful) {
+        if (!successful && !parser.continue_after_errors()) {
             return errors;
         }
 

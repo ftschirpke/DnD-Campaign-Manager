@@ -52,7 +52,7 @@ dnd::Errors dnd::ItemParser::parse() {
     return errors;
 }
 
-bool dnd::ItemParser::continue_after_invalid_parsing() const noexcept { return true; }
+bool dnd::ItemParser::continue_after_errors() const noexcept { return true; }
 
 dnd::Errors dnd::ItemParser::validate(const dnd::ContentHolder& content) const {
     Errors errors;

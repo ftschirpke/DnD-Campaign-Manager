@@ -66,7 +66,7 @@ dnd::Errors dnd::ChoosableGroupParser::parse() {
     return errors;
 }
 
-bool dnd::ChoosableGroupParser::continue_after_invalid_parsing() const noexcept { return true; }
+bool dnd::ChoosableGroupParser::continue_after_errors() const noexcept { return true; }
 
 dnd::Errors dnd::ChoosableGroupParser::validate(const dnd::ContentHolder& content) const {
     Errors errors;
