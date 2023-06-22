@@ -292,8 +292,17 @@ void dnd::GUIApp::render_overview_window() {
                 source_info.get_source_type_name().c_str(), source_info.get_source_name().c_str()
             );
         }
+        ImGui::SeparatorText("Validation errors");
         for (const ValidationError& error : errors.get_validation_errors()) {
-            ImGui::TextWrapped("%s", error.get_error_message().c_str());
+            if (error.get_validation_data() == nullptr) {
+                ImGui::TextWrapped("%s", error.get_error_message().c_str());
+            } else {
+                SourceInfo source_info(error.get_validation_data()->source_path);
+                ImGui::TextWrapped(
+                    "%s (%s - %s - %s)", error.get_error_message().c_str(), source_info.get_source_group_name().c_str(),
+                    source_info.get_source_type_name().c_str(), source_info.get_source_name().c_str()
+                );
+            }
         }
         ImGui::EndChild();
     }

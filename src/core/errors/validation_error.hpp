@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <memory>
 #include <string>
 
 namespace dnd {
@@ -37,7 +38,7 @@ public:
     const std::string& get_error_message() const noexcept;
 private:
     ValidationErrorCode error_code;
-    const ValidationData* validation_data;
+    std::unique_ptr<ValidationData> validation_data;
     std::string error_message;
 };
 

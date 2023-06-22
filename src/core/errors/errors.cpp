@@ -9,6 +9,7 @@
 
 #include <core/errors/parsing_error.hpp>
 #include <core/errors/validation_error.hpp>
+#include <core/validation/validation_data.hpp>
 
 bool dnd::Errors::ok() const { return parsing_errors.empty() && validation_errors.empty(); }
 

@@ -6,11 +6,10 @@
 #include <filesystem>
 #include <string>
 
-#include <core/errors/errors.hpp>
-
 namespace dnd {
 
 class ContentHolder;
+class Errors;
 
 /**
  * @brief A base class for the validation of data for content pieces.
