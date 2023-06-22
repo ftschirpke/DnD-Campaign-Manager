@@ -54,11 +54,11 @@ dnd::Errors dnd::ChoosableGroupParser::parse() {
             continue;
         }
         Errors feature_errors;
-        ChoosableFeatureData feature_data;
+        ChoosableFeatureData& feature_data = data.emplace_back();
         feature_data.name = feature_name;
         feature_errors += choosable_feature_parser.parse(std::move(feature_json), feature_data);
-        if (feature_errors.ok()) {
-            data.emplace_back(std::move(feature_data));
+        if (!feature_errors.ok()) {
+            data.pop_back();
         }
         errors += std::move(feature_errors);
     }

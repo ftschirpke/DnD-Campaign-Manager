@@ -80,7 +80,7 @@ dnd::Errors dnd::EffectHolderParser::parse_choices(
     }
     for (const auto& [attribute_name, choice_json] : json["choose"].items()) {
         Errors choice_errors;
-        ChoiceData choice_data(parent);
+        ChoiceData& choice_data = data.emplace_back(parent);
         choice_data.attribute_name = attribute_name;
         choice_errors += parse_required_attribute(choice_json, "amount", choice_data.amount);
 
@@ -100,8 +100,8 @@ dnd::Errors dnd::EffectHolderParser::parse_choices(
 
         choice_errors += parse_optional_attribute(choice_json, "choices", choice_data.explicit_choices);
 
-        if (choice_errors.ok()) {
-            data.emplace_back(choice_data);
+        if (!choice_errors.ok()) {
+            data.pop_back();
         }
         errors += std::move(choice_errors);
     }
