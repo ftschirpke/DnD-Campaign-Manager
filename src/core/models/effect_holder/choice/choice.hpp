@@ -4,7 +4,6 @@
 #include <dnd_config.hpp>
 
 #include <string>
-#include <string_view>
 #include <vector>
 
 #include <core/errors/errors.hpp>
@@ -34,7 +33,7 @@ public:
      * @param content the content to use for the selection
      * @return the possible values that could be selected for this choice as strings
      */
-    std::vector<std::string_view> possible_values(const ContentHolder& content) const;
+    std::vector<std::string> possible_values(const ContentHolder& content) const;
 private:
     Choice(
         std::string&& attribute_name, int amount, std::vector<std::string>&& group_names,

@@ -82,7 +82,7 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::ContentHolder& cont
             );
             continue;
         }
-        const std::vector<std::string_view> possible_values = choices[attribute_name]->possible_values(content);
+        const std::vector<std::string> possible_values = choices[attribute_name]->possible_values(content);
         for (const auto& value : selection) {
             if (std::find(possible_values.cbegin(), possible_values.cend(), value) == possible_values.cend()) {
                 errors.add_validation_error(

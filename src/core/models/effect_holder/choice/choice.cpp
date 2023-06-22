@@ -3,7 +3,6 @@
 #include "choice.hpp"
 
 #include <string>
-#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -35,8 +34,8 @@ const std::string& dnd::Choice::get_attribute_name() const noexcept { return att
 
 int dnd::Choice::get_amount() const noexcept { return amount; }
 
-std::vector<std::string_view> dnd::Choice::possible_values(const dnd::ContentHolder& content) const {
-    std::vector<std::string_view> possible_values;
+std::vector<std::string> dnd::Choice::possible_values(const dnd::ContentHolder& content) const {
+    std::vector<std::string> possible_values;
     for (const auto& explicit_choice : explicit_choices) {
         possible_values.emplace_back(explicit_choice);
     }
