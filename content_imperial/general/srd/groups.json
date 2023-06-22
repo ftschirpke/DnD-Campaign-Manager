@@ -11,7 +11,7 @@
                 "club", "dagger", "greatclub", "handaxe", "javelin", "light hammer", "mace", "quarterstaff", "sickle", "spear"
             ],
             "simple range weapons": [
-                "light crossbow", "dart", "sling"
+                "light crossbow", "dart", "sling", "shortbow"
             ]
         },
         "martial weapons": {

@@ -58,9 +58,6 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::ContentHolder& cont
     Errors errors;
 
     if (target == nullptr) {
-        errors.add_validation_error(
-            ValidationErrorCode::MISSING_ATTRIBUTE, parent, "Decision has no target assigned to it."
-        );
         return errors;
     }
     std::map<std::string, const dnd::Choice*> choices;
