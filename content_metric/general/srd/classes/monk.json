@@ -1,12 +1,14 @@
 {
     "name": "Monk",
+    "description": "A master of martial arts, harnessing the power of the body in pursuit of physical and spiritual perfection",
     "hit_dice": "d8",
     "asi_levels": [4, 8, 12, 16, 19],
+    "subclass_feature": "Monastic Tradition",
     "features": {
         "Monk Base": {
             "description": "Hit Dice: 1d8 per monk level\n\nProficiencies\nArmor: None\nWeapons: Simple weapons, shortswords\nTools: Choose one type of artisan's tools or one musical instrument\nSaving Throws: Strength, Dexterity\nSkills: Choose two from Acrobatics, Athletics, History, Insight, Religion, and Stealth",
             "weapon_proficiencies": ["simple weapons", "shortsword"],
-            "savingthrow_proficiencies": ["STR", "DEX"],
+            "saving_throw_proficiencies": ["STR", "DEX"],
             "choose": {
                 "skill_proficiencies": {
                     "amount": 2,
@@ -49,8 +51,7 @@
         },
         "Monastic Tradition": {
             "description": "When you reach 3rd level, you commit yourself to a monastic tradition. Your tradition grants you features at 3rd level and again at 6th, 11th, and 17th level.",
-            "activation": "CLASS_LEVEL >= 3",
-            "subclass": true
+            "activation": "CLASS_LEVEL >= 3"
         },
         "Deflect Missiles": {
             "description": "Starting at 3rd level, you can use your reaction to deflect or catch the missile when you are hit by a ranged weapon attack. When you do so, the damage you take from the attack is reduced by 1d10 + your Dexterity modifier + your monk level.\n\nIf you reduce the damage to 0, you can catch the missile if it is small enough for you to hold in one hand and you have at least one hand free. If you catch a missile in this way, you can spend 1 ki point to make a ranged attack with the weapon or piece of ammunition you just caught, as part of the same reaction. You make this attack with proficiency, regardless of your weapon proficiencies, and the missile counts as a monk weapon for the attack, which has a normal range of 6m and a long range of 18m.",
@@ -102,7 +103,7 @@
         "Diamond Soul": {
             "description": "Beginning at 14th level, your mastery of ki grants you proficiency in all saving throws.\n\nAdditionally, whenever you make a saving throw and fail, you can spend 1 ki point to reroll it and take the second result.",
             "activation": "CLASS_LEVEL >= 14",
-            "savingthrow_proficiencies": ["STR", "DEX", "CON", "INT", "WIS", "CHA"]
+            "saving_throw_proficiencies": ["STR", "DEX", "CON", "INT", "WIS", "CHA"]
         },
         "Timeless Body": {
             "description": "At 15th level, your ki sustains you so that you suffer none of the frailty of old age, and you can't be aged magically. You can still die of old age, however. In addition, you no longer need food or water.",

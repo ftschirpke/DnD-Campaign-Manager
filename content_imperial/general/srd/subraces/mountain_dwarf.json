@@ -1,6 +1,7 @@
 {
     "name": "Mountain Dwarf",
     "race": "Dwarf",
+    "description": "Dwarves skilled in combat and craftsmanship, with a focus on strength and weaponsmithing.",
     "features": {
         "Ability Score Increase (Mountain Dwarf)": {
             "description": "Your Strength score increases by 2.",

@@ -1,5 +1,6 @@
 {
     "name": "Druid",
+    "description": "A priest of the Old Faith, wielding the powers of nature and adopting animal forms",
     "hit_dice": "d8",
     "asi_levels": [4, 8, 12, 16, 19],
     "spellcasting": {
@@ -17,13 +18,14 @@
         "level8_slots":   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
         "level9_slots":   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1]
     },
+    "subclass_feature": "Druid Circle",
     "features": {
         "Druid Base": {
             "description": "Hit Dice: 1d8 per druid level\n\nProficiencies\nArmor: Light armor, medium armor, shields (druids will not wear armor or use shields made of metal)\nWeapons: Clubs, daggers, darts, javelins, maces, quarterstaffs, scimitars, sickles, slings, spears\nTools: Herbalism kit\nSaving Throws: Intelligence, Wisdom\nSkills: Choose two from Arcana, Animal Handling, Insight, Medicine, Nature, Perception, Religion, and Survival",
             "armor_proficiencies": ["light armor", "medium armor", "shields"],
             "weapon_proficiencies": ["club", "dagger", "dart", "javelin", "mace", "quarterstaff", "scimitar", "sickle", "sling", "spear"],
             "tool_proficiencies": ["herbalism kit"],
-            "savingthrow_proficiencies": ["INT", "WIS"],
+            "saving_throw_proficiencies": ["INT", "WIS"],
             "choose": {
                 "skill_proficiencies": {
                     "amount": 2,
@@ -44,8 +46,7 @@
         },
         "Druid Circle": {
             "description": "At 2nd level, you choose to identify with a circle of druids: the Circle of the Land or the Circle of the Moon, both detailed at the end of the class description. Your choice grants you features at 2nd level and again at 6th, 10th, and 14th level.",
-            "activation": "CLASS_LEVEL >= 2",
-            "subclass": true
+            "activation": "CLASS_LEVEL >= 2"
         },
         "Timeless Body": {
             "description": "Starting at 18th level, the primal magic that you wield causes you to age more slowly. For every 10 years that pass, your body ages only 1 year.",

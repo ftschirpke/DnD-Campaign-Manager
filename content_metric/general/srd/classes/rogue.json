@@ -1,14 +1,16 @@
 {
     "name": "Rogue",
+    "description": "A scoundrel who uses stealth and trickery to overcome obstacles and enemies",
     "hit_dice": "d8",
     "asi_levels": [4, 8, 10, 12, 16, 19],
+    "subclass_feature": "Roguish Archetype",
     "features": {
         "Rogue Base": {
             "description": "Hit Dice: 1d8 per rogue level\n\nProficiencies\nArmor: Light armor\nWeapons: Simple weapons, hand crossbows, longswords, rapiers, shortswords\nTools: Thieves' tools\nSaving Throws: Dexterity, Intelligence\nSkills: Choose four from Acrobatics, Athletics, Deception, Insight, Intimidation, Investigation, Perception, Performance, Persuasion, Sleight of Hand, and Stealth",
             "armor_proficiencies": ["light armor"],
             "weapon_proficiencies": ["simple weapons", "hand crossbow", "longsword", "rapier", "shortsword"],
             "tool_proficiencies": ["thieves' tools"],
-            "savingthrow_proficiencies": ["DEX", "INT"],
+            "saving_throw_proficiencies": ["DEX", "INT"],
             "choose": {
                 "skill_proficiencies": {
                     "amount": 4,
@@ -35,8 +37,7 @@
         },
         "Roguish Archetype": {
             "description": "At 3rd level, you choose an archetype that you emulate in the exercise of your rogue abilities. Your choice grants you features at 3rd level and then again at 9th, 13th, and 17th level.",
-            "activation": "CLASS_LEVEL >= 3",
-            "subclass": true
+            "activation": "CLASS_LEVEL >= 3"
         },
         "Uncanny Dodge": {
             "description": "Starting at 5th level, when an attacker that you can see hits you with an attack, you can use your reaction to halve the attack's damage against you.",
@@ -60,7 +61,7 @@
         "Slippery Mind": {
             "description": "By 15th level, you have acquired greater mental strength. You gain proficiency in Wisdom saving throws.",
             "activation": "CLASS_LEVEL >= 15",
-            "savingthrow_proficiencies": ["WIS"]
+            "saving_throw_proficiencies": ["WIS"]
         },
         "Elusive": {
             "description": "Beginning at 18th level, you are so evasive that attackers rarely gain the upper hand against you. No attack roll has advantage against you while you aren't incapacitated.",

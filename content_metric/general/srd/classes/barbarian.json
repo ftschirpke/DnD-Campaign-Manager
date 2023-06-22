@@ -1,13 +1,15 @@
 {
     "name": "Barbarian",
+    "description": "A fierce warrior of primitive background who can enter a battle rage",
     "hit_dice": "d12",
     "asi_levels": [4, 8, 12, 16, 19],
+    "subclass_feature": "Primal Path",
     "features": {
         "Barbarian Base": {
             "description": "Hit Dice: 1d12 per barbarian level\n\nProficiencies\n\nArmor: Light armor, medium armor, shields\nWeapons: Simple weapons, martial weapons\nTools: None\nSaving Throws: Strength, Constitution\nSkills: Choose two from Animal Handling, Athletics, Intimidation, Nature, Perception, and Survival",
             "armor_proficiencies": ["light armor", "medium armor", "shields"],
             "weapon_proficiencies": ["simple weapons", "martial weapons"],
-            "savingthrow_proficiencies": ["STR", "CON"],
+            "saving_throw_proficiencies": ["STR", "CON"],
             "choose": {
                 "skill_proficiencies": {
                     "amount": 2,
@@ -37,8 +39,7 @@
         },
         "Primal Path": {
             "description": "At 3rd level, you choose a path that shapes the nature of your rage. Your choice grants you features at 3rd level and again at 6th, 10th, and 14th levels.",
-            "activation": "CLASS_LEVEL >= 3",
-            "subclass": true
+            "activation": "CLASS_LEVEL >= 3"
         },
         "Extra Attack (Barbarian)": {
             "description": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn.",

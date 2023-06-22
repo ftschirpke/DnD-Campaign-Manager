@@ -1,5 +1,6 @@
 {
     "name": "Sorcerer",
+    "description": "A spellcaster who draws on inherent magic from a gift or bloodline",
     "hit_dice": "d6",
     "asi_levels": [4, 8, 12, 16, 19],
     "spellcasting": {
@@ -17,11 +18,12 @@
         "level8_slots":   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
         "level9_slots":   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1]
     },
+    "subclass_feature": "Sorcerous Origin",
     "features": {
         "Sorcerer Base": {
             "description": "Hit Dice: 1d6 per sorcerer level\n\nProficiencies\nArmor: None\nWeapons: Daggers, darts, slings, quarterstaffs, light crossbows\nTools: None\nSaving Throws: Constitution, Charisma\nSkills: Choose two from Arcana, Deception, Insight, Intimidation, Persuasion, and Religion",
             "weapon_proficiencies": ["dagger", "dart", "sling", "quarterstaff", "light crossbow"],
-            "savingthrow_proficiencies": ["CON", "CHA"],
+            "saving_throw_proficiencies": ["CON", "CHA"],
             "choose": {
                 "skill_proficiencies": {
                     "amount": 2,
@@ -30,8 +32,7 @@
             }
         },
         "Sorcerous Origin": {
-            "description": "Choose a sorcerous origin, which describes the source of your innate magical power.\n\nYour choice grants you features when you choose it at 1st level and again at 6th, 14th, and 18th level.",
-            "subclass": true
+            "description": "Choose a sorcerous origin, which describes the source of your innate magical power.\n\nYour choice grants you features when you choose it at 1st level and again at 6th, 14th, and 18th level."
         },
         "Font of Magic": {
             "description": "At 2nd level, you tap into a deep wellspring of magic within yourself. This wellspring is represented by sorcery points, which allow you to create a variety of magical effects.\n\nSorcery Points\nYou have am amount of sorcery points equal to your sorcerer level. You can never have more sorcery points than that. You regain all spent sorcery points when you finish a long rest.\n\nFlexible Casting\nYou can use your sorcery points to gain additional spell slots, or sacrifice spell slots to gain additional sorcery points. You learn other ways to use your sorcery points as you reach higher levels.\n\nCreating Spell Slots. You can transform unexpended sorcery points into one spell slot as a bonus action on your turn. The Creating Spell Slots table below shows the cost of creating a spell slot of a given level. You can create spell slots no higher in level than 5th.\n\nAny spell slot you create with this feature vanishes when you finish a long rest.\n\nCreating Spell Slots\nSpell Slot Level|Sorcery Point Cost\n1st|2\n2nd|3\n3rd|5\n4th|6\n5th|7\n\nConverting a Spell Slot to Sorcery Points. As a bonus action on your turn, you can expend one spell slot and gain a number of sorcery points equal to the slot's level.",

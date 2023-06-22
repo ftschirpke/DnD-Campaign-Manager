@@ -1,6 +1,7 @@
 {
     "name": "Way of the Open Hand",
     "class": "Monk",
+    "description": "Monks who master martial arts and focus on using precise strikes and stunning techniques to control and disable opponents.",
     "features": {
         "Open Hand Technique": {
             "description": "Starting when you choose this tradition at 3rd level, you can manipulate your enemy's ki when you harness your own. Whenever you hit a creature with one of the attacks granted by your Flurry of Blows, you can impose one of the following effects on that target:\n\n- It must succeed on a Dexterity saving throw or be knocked prone.\n- It must make a Strength saving throw. If it fails, you can push it up to 4.5m away from you.\n- It can't take reactions until the end of your next turn.",

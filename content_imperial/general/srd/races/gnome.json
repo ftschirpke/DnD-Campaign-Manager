@@ -1,5 +1,6 @@
 {
     "name": "Gnome",
+    "description": "Small and clever humanoids, often known for their tinkering skills, love of pranks, and curiosity",
     "has_subraces": true,
     "features": {
         "Ability Score Increase (Gnome)": {

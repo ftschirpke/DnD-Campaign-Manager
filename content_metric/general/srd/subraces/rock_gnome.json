@@ -1,6 +1,7 @@
 {
     "name": "Rock Gnome",
     "race": "Gnome",
+    "description": "Gnomes known for their affinity for tinkering, mechanical prowess, and an insatiable curiosity for the world around them.",
     "features": {
         "Ability Score Increase (Rock Gnome)": {
             "description": "Your Constitution score increases by 1.",

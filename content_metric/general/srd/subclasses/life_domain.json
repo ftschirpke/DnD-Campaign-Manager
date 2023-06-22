@@ -1,6 +1,7 @@
 {
     "name": "Life Domain",
     "class": "Cleric",
+    "description": "Clerics devoted to preserving life and healing, wielding restorative magic and providing support to allies in battle.",
     "features": {
         "Life Domain Spells": {
             "description": "Cleric Level|Spells\n1st|Bless, Cure Wounds\n3rd|Lesser Restoration, Spiritual Weapon\n5th|Beacon of Hope, Revivify\n7th|Death Ward, Guardian of Faith\n9th|Mass Cure Wounds, Raise Dead",

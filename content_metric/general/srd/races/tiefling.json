@@ -1,5 +1,6 @@
 {
     "name": "Tiefling",
+    "description": "Individuals with infernal bloodlines, displaying demonic features and having innate magical abilities",
     "has_subraces": false,
     "features": {
         "Ability Score Increase (Tiefling)": {

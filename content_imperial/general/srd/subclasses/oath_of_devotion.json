@@ -1,6 +1,7 @@
 {
     "name": "Oath of Devotion",
     "class": "Paladin",
+    "description": "Paladins bound by a strict code of honor and righteousness, harnessing holy magic and becoming paragons of virtue.",
     "features": {
         "Oath of Devotion Spells": {
             "description": "Paladin Level|Spells\n3rd|Protection from Evil and Good, Sanctuary\n5th|Lesser Restoration, Zone of Truth\n9th|Beacon of Hope, Dispel Magic\n13th|Freedom of Movement, Guardian of Faith\n17th|Commune, Flame Strike",

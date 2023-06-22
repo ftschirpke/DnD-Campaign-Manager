@@ -1,6 +1,7 @@
 {
     "name": "Draconic Bloodline",
     "class": "Sorcerer",
+    "description": "Sorcerers with innate draconic ancestry, manifesting draconic powers, gaining resistance to certain elements, and eventually sprouting dragon-like features.",
     "features": {
         "Dragon Ancestor": {
             "description": "At 1st level, you choose one type of dragon as your ancestor. The damage type associated with each dragon is used by features you gain later.\n\nDraconic Ancestry\n\nDragon|Damage Type\nBlack|Acid\nBlue|Lightning\nBrass|Fire\nBronze|Lightning\nCopper|Acid\nGold|Fire\nGreen|Poison\nRed|Fire\nSilver|Cold\nWhite|Cold\n\nYou can speak, read, and write Draconic. Additionally, whenever you make a Charisma check when interacting with dragons, your proficiency bonus is doubled if it applies to the check.",

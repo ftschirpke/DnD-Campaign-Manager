@@ -1,5 +1,6 @@
 {
     "name": "Half-Elf",
+    "description": "Individuals with mixed human and elf heritage, possessing a blend of their parent races' qualities and abilities",
     "has_subraces": false,
     "features": {
         "Ability Score Increase (Half-Elf)": {

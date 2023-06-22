@@ -1,6 +1,7 @@
 {
     "name": "Hill Dwarf",
     "race": "Dwarf",
+    "description": "Dwarves known for their toughness, endurance, and affinity for life and healing.",
     "features": {
         "Ability Score Increase (Hill Dwarf)": {
             "description": "Your Wisdom score increases by 1.",

@@ -1,6 +1,7 @@
 {
     "name": "Stout",
     "race": "Halfling",
+    "description": "Halflings with exceptional resilience, endurance, and resistance to poison.",
     "features": {
         "Ability Score Increase (Stout)": {
             "description": "Your Constitution score increases by 1.",

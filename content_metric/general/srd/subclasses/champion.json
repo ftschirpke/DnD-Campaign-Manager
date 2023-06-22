@@ -1,6 +1,7 @@
 {
     "name": "Champion",
     "class": "Fighter",
+    "description": "Fighters who specialize in straightforward combat, mastering a wide array of weapons and gaining exceptional physical abilities.",
     "features": {
         "Improved Critical": {
             "description": "Beginning when you choose this archetype at 3rd level, your weapon attacks score a critical hit on a roll of 19 or 20.",
