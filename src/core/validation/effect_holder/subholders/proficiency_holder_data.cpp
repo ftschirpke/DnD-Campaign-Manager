@@ -49,10 +49,11 @@ static dnd::Errors string_group_set_validate_relations(
 ) {
     dnd::Errors errors;
     for (const auto& str_item : string_group_set) {
-        if (!content.groups.is_part_of_string_group(str_item, group_name)) {
+        if (!content.groups.is_part_of_string_group(str_item, group_name)
+            && !content.groups.is_string_subgroup(str_item, group_name)) {
             errors.add_validation_error(
                 dnd::ValidationErrorCode::RELATION_NOT_FOUND, parent,
-                fmt::format("No '{}' ({}) exists in the {} group.", str_item, set_name, group_name)
+                fmt::format("'{}' ({}) is neither element or subgroup of the {} group.", str_item, set_name, group_name)
             );
         }
     }

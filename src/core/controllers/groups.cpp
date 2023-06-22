@@ -69,6 +69,27 @@ bool dnd::Groups::is_group(const std::string& group_name) const {
 
 bool dnd::Groups::is_string_group(const std::string& group_name) const { return data.contains(group_name); }
 
+bool dnd::Groups::is_string_subgroup(const std::string& subgroup_name, const std::string& group_name) const {
+    if (!is_string_group(subgroup_name)) {
+        return false;
+    }
+    if (!is_string_group(group_name)) {
+        return false;
+    }
+    auto subgroup_it = data.at(subgroup_name).cbegin();
+    auto group_it = data.at(group_name).cbegin();
+    while (group_it != data.at(group_name).cend()) {
+        if (*subgroup_it == *group_it) {
+            ++subgroup_it;
+            if (subgroup_it == data.at(subgroup_name).cend()) {
+                return true;
+            }
+        }
+        ++group_it;
+    }
+    return false;
+}
+
 bool dnd::Groups::is_choosable_group(const std::string& group_name) const { return choosables.contains(group_name); }
 
 bool dnd::Groups::is_part_of_group(const std::string& name, const std::string& group_name) const {

@@ -86,6 +86,13 @@ public:
      */
     bool is_string_group(const std::string& group_name) const;
     /**
+     * @brief Determines wheteher a group of strings with given name exists and is a subgroup of another group.
+     * @param subgroup_name the name of the subgroup
+     * @param group_name the name of the group
+     * @return "true" if it exists and is a subgroup, "false" otherwise
+     */
+    bool is_string_subgroup(const std::string& subgroup_name, const std::string& group_name) const;
+    /**
      * @brief Determines wheteher a group of choosables with the given name exists.
      * @param group_name the name of the group
      * @return "true" if a choosable-group with this name exists, "false" otherwise
