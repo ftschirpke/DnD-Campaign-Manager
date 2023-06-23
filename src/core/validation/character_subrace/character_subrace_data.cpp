@@ -2,9 +2,9 @@
 
 #include "character_subrace_data.hpp"
 
+#include <memory>
 #include <string>
 #include <unordered_set>
-#include <memory>
 #include <vector>
 
 #include <fmt/format.h>

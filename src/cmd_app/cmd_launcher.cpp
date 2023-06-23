@@ -167,7 +167,9 @@ static std::map<std::string, std::vector<const dnd::ChoosableFeature*>> search_c
 ) {
     size_t i = 0;
     std::map<std::string, std::vector<const dnd::ChoosableFeature*>> choosables_in_order;
-    std::unordered_set<const dnd::ChoosableFeature*> matched_choosables = content.get_choosable_features().prefix_get(search);
+    std::unordered_set<const dnd::ChoosableFeature*> matched_choosables = content.get_choosable_features().prefix_get(
+        search
+    );
     for (auto matched_choosable : matched_choosables) {
         choosables_in_order[matched_choosable->get_type()].push_back(matched_choosable);
     }

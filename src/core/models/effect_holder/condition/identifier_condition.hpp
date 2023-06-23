@@ -37,8 +37,7 @@ public:
      * @param right_side_identifier the identifier on the right side of the condition
      */
     IdentifierCondition(
-        std::string_view left_side_identifier, std::string_view operator_name,
-        std::string_view right_side_identifier
+        std::string_view left_side_identifier, std::string_view operator_name, std::string_view right_side_identifier
     ) noexcept;
     /**
      * @brief Evaluates the condition for given attributes and constants

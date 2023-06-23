@@ -17,8 +17,7 @@ dnd::Errors dnd::ValidationData::validate() const {
     }
     if (description.empty()) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
-            fmt::format("Description for '{}' is empty", name)
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, fmt::format("Description for '{}' is empty", name)
         );
     }
     if (!std::filesystem::exists(source_path)) {
