@@ -36,12 +36,19 @@ TEST_CASE("dnd::dice_to_string", tags) {
 
 TEST_CASE("dnd::string_to_dice", tags) {
     REQUIRE(dnd::string_to_dice("d4") == dnd::Dice::D4);
+    REQUIRE(dnd::string_to_dice("D4") == dnd::Dice::D4);
     REQUIRE(dnd::string_to_dice("d6") == dnd::Dice::D6);
+    REQUIRE(dnd::string_to_dice("D6") == dnd::Dice::D6);
     REQUIRE(dnd::string_to_dice("d8") == dnd::Dice::D8);
+    REQUIRE(dnd::string_to_dice("D8") == dnd::Dice::D8);
     REQUIRE(dnd::string_to_dice("d10") == dnd::Dice::D10);
+    REQUIRE(dnd::string_to_dice("D10") == dnd::Dice::D10);
     REQUIRE(dnd::string_to_dice("d12") == dnd::Dice::D12);
+    REQUIRE(dnd::string_to_dice("D12") == dnd::Dice::D12);
     REQUIRE(dnd::string_to_dice("d20") == dnd::Dice::D20);
+    REQUIRE(dnd::string_to_dice("D20") == dnd::Dice::D20);
     REQUIRE(dnd::string_to_dice("d100") == dnd::Dice::D100);
+    REQUIRE(dnd::string_to_dice("D100") == dnd::Dice::D100);
 }
 
 TEST_CASE("dnd::value_is_possible_for", tags) {
