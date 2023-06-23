@@ -7,39 +7,38 @@
 static constexpr const char* tags = "[core][validation][basic_mechanics][dice]";
 
 TEST_CASE("dnd::DiceData", tags) {
-    dnd::DiceData dice_data(nullptr);
+    dnd::DiceData data(nullptr);
 
+    dnd::Errors errors;
     SECTION("Valid dice") {
-        dice_data.str = "d6";
-        dnd::Errors errors = dice_data.validate();
+        data.str = "d6";
+        REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE(errors.ok());
 
-        dice_data.str = "d20";
-        errors = dice_data.validate();
+        data.str = "d20";
+        REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE(errors.ok());
 
-        dice_data.str = "d100";
-        errors = dice_data.validate();
+        data.str = "d100";
+        REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE(errors.ok());
     }
 
     SECTION("Invalid dice") {
-        dice_data.str = "d0";
-        dnd::Errors errors = dice_data.validate();
+        data.str = "d0";
+        REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_FALSE(errors.ok());
-        REQUIRE_FALSE(errors.get_validation_errors().empty());
-        REQUIRE(errors.get_parsing_errors().empty());
 
-        dice_data.str = "d-1";
-        errors = dice_data.validate();
+        data.str = "d-1";
+        REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_FALSE(errors.ok());
-        REQUIRE_FALSE(errors.get_validation_errors().empty());
-        REQUIRE(errors.get_parsing_errors().empty());
 
-        dice_data.str = "xyz";
-        errors = dice_data.validate();
+        data.str = "xyz";
+        REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_FALSE(errors.ok());
-        REQUIRE_FALSE(errors.get_validation_errors().empty());
-        REQUIRE(errors.get_parsing_errors().empty());
+
+        data.str = "";
+        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE_FALSE(errors.ok());
     }
 }

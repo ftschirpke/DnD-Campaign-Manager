@@ -6,3 +6,4 @@ target_sources(${DND_TESTS}
 
 add_subdirectory(basic_mechanics)
 add_subdirectory(item)
+add_subdirectory(spell)

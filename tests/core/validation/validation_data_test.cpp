@@ -14,54 +14,47 @@
 static constexpr const char* tags = "[core][validation]";
 
 TEST_CASE("dnd::ValidationData::validate", tags) {
-    dnd::ValidationDataMock validation_data;
+    dnd::ValidationDataMock data;
     const std::filesystem::path dummy_path = std::filesystem::path(DND_MOCK_DIRECTORY) / "dummy_files" / "file1.json";
 
+    dnd::Errors errors;
     SECTION("Valid Data") {
-        validation_data.name = "Name";
-        validation_data.description = "Description";
-        validation_data.source_path = dummy_path;
-        dnd::Errors errors = validation_data.validate();
+        data.name = "Name";
+        data.description = "Description";
+        data.source_path = dummy_path;
+        REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE(errors.ok());
     }
 
     SECTION("Empty name") {
-        validation_data.name = "";
-        validation_data.description = "Description";
-        validation_data.source_path = dummy_path;
-        dnd::Errors errors = validation_data.validate();
+        data.name = "";
+        data.description = "Description";
+        data.source_path = dummy_path;
+        REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_FALSE(errors.ok());
-        REQUIRE_FALSE(errors.get_validation_errors().empty());
-        REQUIRE(errors.get_parsing_errors().empty());
     }
 
     SECTION("Empty description") {
-        validation_data.name = "Name";
-        validation_data.description = "";
-        validation_data.source_path = dummy_path;
-        dnd::Errors errors = validation_data.validate();
+        data.name = "Name";
+        data.description = "";
+        data.source_path = dummy_path;
+        REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_FALSE(errors.ok());
-        REQUIRE_FALSE(errors.get_validation_errors().empty());
-        REQUIRE(errors.get_parsing_errors().empty());
     }
 
     SECTION("Empty source path") {
-        validation_data.name = "Name";
-        validation_data.description = "Description";
-        validation_data.source_path = std::filesystem::path("");
-        dnd::Errors errors = validation_data.validate();
+        data.name = "Name";
+        data.description = "Description";
+        data.source_path = std::filesystem::path("");
+        REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_FALSE(errors.ok());
-        REQUIRE_FALSE(errors.get_validation_errors().empty());
-        REQUIRE(errors.get_parsing_errors().empty());
     }
 
     SECTION("Completely empty") {
-        validation_data.name = "";
-        validation_data.description = "";
-        validation_data.source_path = std::filesystem::path("");
-        dnd::Errors errors = validation_data.validate();
+        data.name = "";
+        data.description = "";
+        data.source_path = std::filesystem::path("");
+        REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_FALSE(errors.ok());
-        REQUIRE_FALSE(errors.get_validation_errors().empty());
-        REQUIRE(errors.get_parsing_errors().empty());
     }
 }

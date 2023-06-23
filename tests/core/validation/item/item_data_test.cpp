@@ -14,18 +14,19 @@ TEST_CASE("dnd::ItemData::validate", tags) {
     set_valid_mock_values(item_data, "Item");
     item_data.requires_attunement = false;
 
+    dnd::Errors errors;
     SECTION("Valid data without optional fields") {
-        dnd::Errors errors = item_data.validate();
+        REQUIRE_NOTHROW(errors = item_data.validate());
         REQUIRE(errors.ok());
 
         item_data.requires_attunement = true;
-        errors = item_data.validate();
+        REQUIRE_NOTHROW(errors = item_data.validate());
         REQUIRE(errors.ok());
     }
 
     SECTION("Valid data with optional fields") {
         item_data.cosmetic_description = "Cosmetic Description";
-        dnd::Errors errors = item_data.validate();
+        REQUIRE_NOTHROW(errors = item_data.validate());
         REQUIRE(errors.ok());
     }
 }
