@@ -19,9 +19,9 @@ dnd::SourceInfo::SourceInfo(const std::filesystem::path& source_path) noexcept
       source_name(source_path.stem().string()) {}
 
 dnd::SourceInfo::SourceInfo(std::filesystem::path&& source_path) noexcept
-    : source_path(std::move(source_path)), source_book(nth_parent_stem(source_path, 3) == "general"),
-      source_group_name(nth_parent_stem(source_path, 2)), source_type_name(nth_parent_stem(source_path, 1)),
-      source_name(source_path.stem().string()) {}
+    : source_path(std::move(source_path)), source_book(nth_parent_stem(this->source_path, 3) == "general"),
+      source_group_name(nth_parent_stem(this->source_path, 2)), source_type_name(nth_parent_stem(this->source_path, 1)),
+      source_name(this->source_path.stem().string()) {}
 
 const std::filesystem::path& dnd::SourceInfo::get_source_path() const noexcept { return source_path; }
 

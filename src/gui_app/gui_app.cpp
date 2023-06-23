@@ -443,7 +443,10 @@ void dnd::GUIApp::render_search_window() {
     if (ImGui::BeginChild("Search Results", ImVec2(-FLT_MIN, -FLT_MIN))) {
         for (size_t i = 0; i < search_result_count; ++i) {
             if (ImGui::Selectable(search_result_strings[i].c_str(), false)) {
-                open_content_pieces.push_back(search_results[i]);
+                if (std::find(open_content_pieces.begin(), open_content_pieces.end(), search_results[i])
+                    == open_content_pieces.end()) {
+                    open_content_pieces.push_back(search_results[i]);
+                }
             }
         }
         ImGui::EndChild();
