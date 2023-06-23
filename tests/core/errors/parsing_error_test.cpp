@@ -8,7 +8,7 @@
 static constexpr const char* tags = "[core/errors/parsing_error]";
 
 TEST_CASE("dnd::ParsingError: basic getters", tags) {
-    std::filesystem::path filepath = "/path/to/file.txt";
+    std::filesystem::path filepath("/path/to/file.txt");
     std::string error_message = "An error occurred";
 
     SECTION("Get error code") {
@@ -23,7 +23,7 @@ TEST_CASE("dnd::ParsingError: basic getters", tags) {
         dnd::ParsingError error1(dnd::ParsingErrorCode::MISSING_ATTRIBUTE, filepath, error_message);
         REQUIRE(error1.get_filepath() == filepath);
 
-        std::filesystem::path other_filepath = "/another/path/file.txt";
+        std::filesystem::path other_filepath("/another/path/file.txt");
         dnd::ParsingError error2(dnd::ParsingErrorCode::INVALID_ATTRIBUTE_TYPE, other_filepath, error_message);
         REQUIRE(error2.get_filepath() == other_filepath);
     }
