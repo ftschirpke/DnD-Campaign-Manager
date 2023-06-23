@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <map>
 #include <string>
 
@@ -15,7 +16,7 @@ namespace dnd {
 class ActionHolderData : public ValidationSubdata {
 public:
     ActionHolderData(const ValidationData* parent) noexcept;
-    int operator<=>(const ActionHolderData&) const noexcept = default;
+    std::strong_ordering operator<=>(const ActionHolderData&) const noexcept = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

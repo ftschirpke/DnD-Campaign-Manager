@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <map>
 #include <string>
 #include <vector>
@@ -18,7 +19,7 @@ class EffectHolder;
 class DecisionData : public ValidationSubdata {
 public:
     DecisionData(const CharacterData* parent, const EffectHolder* target) noexcept;
-    int operator<=>(const DecisionData&) const noexcept = default;
+    std::strong_ordering operator<=>(const DecisionData&) const noexcept = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

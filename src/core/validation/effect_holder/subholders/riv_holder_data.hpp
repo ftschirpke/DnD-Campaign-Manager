@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <set>
 #include <string>
 
@@ -14,7 +15,7 @@ namespace dnd {
 class RIVHolderData : public ValidationSubdata {
 public:
     RIVHolderData(const ValidationData* parent) noexcept;
-    int operator<=>(const RIVHolderData&) const noexcept = default;
+    std::strong_ordering operator<=>(const RIVHolderData&) const noexcept = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

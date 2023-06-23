@@ -3,6 +3,8 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
+
 #include <core/errors/errors.hpp>
 #include <core/validation/validation_data.hpp>
 
@@ -16,7 +18,7 @@ class ContentHolder;
 class ValidationSubdata {
 public:
     virtual ~ValidationSubdata() noexcept = default;
-    int operator<=>(const ValidationSubdata&) const = default;
+    std::strong_ordering operator<=>(const ValidationSubdata&) const = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

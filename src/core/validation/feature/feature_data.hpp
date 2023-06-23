@@ -3,17 +3,19 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
+#include <memory>
+
 #include <core/errors/errors.hpp>
 #include <core/validation/effect_holder/effect_holder_data.hpp>
 #include <core/validation/validation_data.hpp>
-#include <memory>
 
 namespace dnd {
 
 class FeatureData : public ValidationData {
 public:
     explicit FeatureData(const ValidationData* parent = nullptr) noexcept;
-    int operator<=>(const FeatureData&) const noexcept = default;
+    std::strong_ordering operator<=>(const FeatureData&) const noexcept = default;
     /**
      * @brief Packs the data into a ValidationData unique pointer
      * @return the packed data

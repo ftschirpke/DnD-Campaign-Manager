@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <set>
 #include <string>
 
@@ -14,7 +15,7 @@ namespace dnd {
 class ProficiencyHolderData : public ValidationSubdata {
 public:
     ProficiencyHolderData(const ValidationData* parent) noexcept;
-    int operator<=>(const ProficiencyHolderData&) const noexcept = default;
+    std::strong_ordering operator<=>(const ProficiencyHolderData&) const noexcept = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

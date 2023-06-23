@@ -46,7 +46,7 @@ TEST_CASE("dnd::is_ability // string_view implementation", tags) {
     REQUIRE_FALSE(dnd::is_ability(empty_string));
 }
 
-TEST_CASE("dnd::is_ability // std::string implementation", tags) {
+TEST_CASE("dnd::is_ability // string implementation", tags) {
     std::string valid_ability1 = "STR";
     std::string valid_ability2 = "CHA";
     std::string invalid_ability = "ABCD";

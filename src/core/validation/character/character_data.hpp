@@ -5,6 +5,7 @@
 
 #include <array>
 #include <memory>
+#include <compare>
 #include <vector>
 
 #include <core/errors/errors.hpp>
@@ -22,7 +23,7 @@ class ContentHolder;
 class CharacterData : public ValidationData {
 public:
     CharacterData() noexcept;
-    int operator<=>(const CharacterData&) const noexcept = default;
+    std::strong_ordering operator<=>(const CharacterData&) const noexcept = default;
     /**
      * @brief Packs the data into a ValidationData unique pointer
      * @return the packed data

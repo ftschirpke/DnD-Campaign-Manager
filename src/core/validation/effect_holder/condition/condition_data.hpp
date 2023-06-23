@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <string>
 
 #include <core/errors/errors.hpp>
@@ -14,7 +15,7 @@ namespace dnd {
 class ConditionData : public ValidationSubdata {
 public:
     ConditionData(const ValidationData* parent) noexcept;
-    int operator<=>(const ConditionData&) const noexcept = default;
+    std::strong_ordering operator<=>(const ConditionData&) const noexcept = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

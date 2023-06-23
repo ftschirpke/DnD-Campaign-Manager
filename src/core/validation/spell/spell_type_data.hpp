@@ -3,6 +3,9 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
+#include <string>
+
 #include <core/errors/errors.hpp>
 #include <core/validation/validation_data.hpp>
 #include <core/validation/validation_subdata.hpp>
@@ -12,7 +15,7 @@ namespace dnd {
 class SpellTypeData : public ValidationSubdata {
 public:
     SpellTypeData(const ValidationData* parent) noexcept;
-    int operator<=>(const SpellTypeData&) const noexcept = default;
+    std::strong_ordering operator<=>(const SpellTypeData&) const noexcept = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

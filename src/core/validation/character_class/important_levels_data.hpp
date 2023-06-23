@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <vector>
 
 #include <core/errors/errors.hpp>
@@ -15,7 +16,7 @@ class CharacterClassData;
 class ImportantLevelsData : public ValidationSubdata {
 public:
     ImportantLevelsData(const CharacterClassData* parent) noexcept;
-    int operator<=>(const ImportantLevelsData&) const noexcept = default;
+    std::strong_ordering operator<=>(const ImportantLevelsData&) const noexcept = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

@@ -5,6 +5,7 @@
 
 #include <memory>
 #include <vector>
+#include <compare>
 
 #include <core/errors/errors.hpp>
 #include <core/validation/feature/feature_data.hpp>
@@ -14,7 +15,7 @@ namespace dnd {
 
 class CharacterSubraceData : public ValidationData {
 public:
-    int operator<=>(const CharacterSubraceData&) const noexcept = default;
+    std::strong_ordering operator<=>(const CharacterSubraceData&) const noexcept = default;
     /**
      * @brief Packs the data into a ValidationData unique pointer
      * @return the packed data

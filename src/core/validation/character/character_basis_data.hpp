@@ -4,6 +4,7 @@
 #include <dnd_config.hpp>
 
 #include <string>
+#include <compare>
 
 #include <core/errors/errors.hpp>
 #include <core/validation/validation_data.hpp>
@@ -16,7 +17,7 @@ class ContentHolder;
 class CharacterBasisData : public ValidationSubdata {
 public:
     CharacterBasisData(const ValidationData* parent) noexcept;
-    int operator<=>(const CharacterBasisData&) const noexcept = default;
+    std::strong_ordering operator<=>(const CharacterBasisData&) const noexcept = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

@@ -5,6 +5,7 @@
 
 #include <set>
 #include <string>
+#include <compare>
 
 #include <core/errors/errors.hpp>
 #include <core/validation/validation_data.hpp>
@@ -15,7 +16,7 @@ namespace dnd {
 class ExtraSpellsHolderData : public ValidationSubdata {
 public:
     ExtraSpellsHolderData(const ValidationData* parent) noexcept;
-    int operator<=>(const ExtraSpellsHolderData&) const noexcept = default;
+    std::strong_ordering operator<=>(const ExtraSpellsHolderData&) const noexcept = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <memory>
 #include <vector>
 
@@ -14,7 +15,7 @@ namespace dnd {
 
 class CharacterSubclassData : public ValidationData {
 public:
-    int operator<=>(const CharacterSubclassData&) const noexcept = default;
+    std::strong_ordering operator<=>(const CharacterSubclassData&) const noexcept = default;
     /**
      * @brief Packs the data into a ValidationData unique pointer
      * @return the packed data

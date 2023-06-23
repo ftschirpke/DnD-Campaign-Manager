@@ -5,6 +5,7 @@
 
 #include <string>
 #include <vector>
+#include <compare>
 
 #include <core/errors/errors.hpp>
 #include <core/validation/effect_holder/choice/choice_data.hpp>
@@ -22,7 +23,7 @@ namespace dnd {
 class EffectHolderData : public ValidationSubdata {
 public:
     EffectHolderData(const ValidationData* parent) noexcept;
-    int operator<=>(const EffectHolderData&) const noexcept = default;
+    std::strong_ordering operator<=>(const EffectHolderData&) const noexcept = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

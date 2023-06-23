@@ -6,6 +6,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <compare>
 
 #include <core/errors/errors.hpp>
 #include <core/validation/basic_mechanics/dice_data.hpp>
@@ -21,7 +22,7 @@ class ContentHolder;
 class CharacterClassData : public ValidationData {
 public:
     CharacterClassData() noexcept;
-    int operator<=>(const CharacterClassData&) const noexcept = default;
+    std::strong_ordering operator<=>(const CharacterClassData&) const noexcept = default;
     /**
      * @brief Packs the data into a ValidationData unique pointer
      * @return the packed data
