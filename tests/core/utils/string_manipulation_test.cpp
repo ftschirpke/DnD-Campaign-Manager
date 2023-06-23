@@ -2,10 +2,10 @@
 
 #include <core/utils/string_manipulation.hpp>
 
-#include <catch2/catch_test_macros.hpp>
-
 #include <string>
 #include <string_view>
+
+#include <catch2/catch_test_macros.hpp>
 
 static constexpr const char* tags = "[core][utils]";
 

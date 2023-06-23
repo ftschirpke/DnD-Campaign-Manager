@@ -4,8 +4,6 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-#include <core/basic_mechanics/dice.hpp>
-
 static constexpr const char* tags = "[core][validation][basic_mechanics][dice]";
 
 TEST_CASE("dnd::DiceData", tags) {
