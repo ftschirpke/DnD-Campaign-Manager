@@ -21,6 +21,8 @@ dnd::Dice dnd::int_to_dice(int number) {
             return Dice::D12;
         case 20:
             return Dice::D20;
+        case 100:
+            return Dice::D100;
         default:
             throw std::invalid_argument("No such dice exist.");
     };
@@ -41,6 +43,8 @@ dnd::Dice dnd::string_to_dice(const std::string& str) {
         return Dice::D12;
     } else if (str == "d20") {
         return Dice::D20;
+    } else if (str == "d100") {
+        return Dice::D100;
     } else {
         throw std::invalid_argument("No such dice exist.");
     }
