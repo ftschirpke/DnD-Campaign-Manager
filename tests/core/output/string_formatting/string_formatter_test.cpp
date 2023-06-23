@@ -12,7 +12,7 @@
 #include <core/output/string_formatting/formats/paragraph.hpp>
 #include <core/output/string_formatting/formats/table.hpp>
 
-TEST_CASE("dnd::StringFormatter::parse_formats: empty text") {
+TEST_CASE("dnd::StringFormatter::parse_formats // empty text") {
     dnd::StringFormatter formatter;
     std::string text = "";
 
@@ -21,7 +21,7 @@ TEST_CASE("dnd::StringFormatter::parse_formats: empty text") {
     REQUIRE(formats.empty());
 }
 
-TEST_CASE("dnd::StringFormatter::parse_formats: single paragraph") {
+TEST_CASE("dnd::StringFormatter::parse_formats // single paragraph") {
     dnd::StringFormatter formatter;
     std::string text = "This is a paragraph.";
 
@@ -31,7 +31,7 @@ TEST_CASE("dnd::StringFormatter::parse_formats: single paragraph") {
     REQUIRE(dynamic_cast<dnd::Paragraph*>(formats[0].get()) != nullptr);
 }
 
-TEST_CASE("dnd::StringFormatter::parse_formats: simple bulleted list") {
+TEST_CASE("dnd::StringFormatter::parse_formats // simple bulleted list") {
     dnd::StringFormatter formatter;
     std::string text = "- Item 1\n- Item 2\n- Item 3";
 
@@ -43,7 +43,7 @@ TEST_CASE("dnd::StringFormatter::parse_formats: simple bulleted list") {
 
 #include <iostream>
 
-TEST_CASE("dnd::StringFormatter::parse_formats: simple table") {
+TEST_CASE("dnd::StringFormatter::parse_formats // simple table") {
     dnd::StringFormatter formatter;
     std::string text = "Header 1|Header 2\nCell 1|Cell 2";
 

@@ -4,7 +4,7 @@
 
 #include <unordered_set>
 
-TEST_CASE("Simple Trie with integer data", "[controllers][trie]") {
+TEST_CASE("dnd::Trie // Simple Trie with integer data", "[controllers][trie]") {
     dnd::Trie<int> trie;
     int data1 = 1, data2 = 2, data3 = 3;
 
@@ -35,7 +35,7 @@ struct MyData {
     std::string name;
 };
 
-TEST_CASE("Simple Trie with custom struct data", "[controllers][trie]") {
+TEST_CASE("dnd::Trie // Simple Trie with custom struct data", "[controllers][trie]") {
     dnd::Trie<MyData> trie;
     MyData data1 = {1, "one"};
     MyData data2 = {2, "two"};

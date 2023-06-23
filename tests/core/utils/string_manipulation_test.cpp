@@ -189,7 +189,7 @@ TEST_CASE("dnd::snake_case_to_spaced_words", tags) {
     }
 }
 
-TEST_CASE("dnd::str_view: Creating string views from iterators", tags) {
+TEST_CASE("dnd::str_view // creating string views from iterators", tags) {
     std::string input1 = "Hello, world!";
     std::string input2 = "Testing str_view function";
     std::string::const_iterator first1 = input1.begin();

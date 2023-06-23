@@ -34,7 +34,7 @@ TEST_CASE("dnd::ability_to_string", tags) {
     REQUIRE(dnd::ability_to_string(dnd::Ability::CHARISMA) == "CHA");
 }
 
-TEST_CASE("dnd::is_ability: string_view implementation", tags) {
+TEST_CASE("dnd::is_ability // string_view implementation", tags) {
     std::string_view valid_ability1 = "DEX";
     std::string_view valid_ability2 = "CON";
     std::string_view invalid_ability = "XYZ";
@@ -46,7 +46,7 @@ TEST_CASE("dnd::is_ability: string_view implementation", tags) {
     REQUIRE_FALSE(dnd::is_ability(empty_string));
 }
 
-TEST_CASE("dnd::is_ability: std::string implementation", tags) {
+TEST_CASE("dnd::is_ability // std::string implementation", tags) {
     std::string valid_ability1 = "STR";
     std::string valid_ability2 = "CHA";
     std::string invalid_ability = "ABCD";

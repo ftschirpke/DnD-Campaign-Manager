@@ -9,7 +9,7 @@
 
 static constexpr const char* tags = "[core][parsing][errors]";
 
-TEST_CASE("dnd::ParsingError: basic getters", tags) {
+TEST_CASE("dnd::ParsingError // basic getters", tags) {
     std::filesystem::path filepath("/path/to/file.txt");
     std::string error_message = "An error occurred";
 

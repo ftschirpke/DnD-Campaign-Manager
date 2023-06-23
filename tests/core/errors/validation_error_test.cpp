@@ -8,7 +8,7 @@
 
 static constexpr const char* tags = "[core][validation][errors]";
 
-TEST_CASE("dnd::ValidationError: basic getters", tags) {
+TEST_CASE("dnd::ValidationError // basic getters", tags) {
     dnd::ValidationDataMock validation_data;
     validation_data.name = "First Mock Validation Data";
     validation_data.description = "some description";

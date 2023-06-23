@@ -4,7 +4,7 @@
 
 #include <core/errors/errors.hpp>
 
-TEST_CASE("dnd::ContentParser::parse: providing invalid directory to parser") {
+TEST_CASE("dnd::ContentParser::parse // providing invalid directory to parser") {
     dnd::ContentParser parser;
     dnd::ParsingResult result = parser.parse("/this/directory/doesnt/exist", "example_campaign");
     REQUIRE(!result.errors.ok());
