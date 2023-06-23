@@ -9,6 +9,8 @@
 
 namespace dnd {
 
+void set_valid_mock_values(ValidationData& data, const char* data_name = nullptr);
+
 class ValidationDataMock : public ValidationData {
 public:
     ValidationDataMock() = default;

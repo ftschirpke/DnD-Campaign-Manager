@@ -51,6 +51,7 @@ if(CCACHE_PROGRAM)
 endif()
 
 set (DND_ASSET_DIRECTORY ${CMAKE_SOURCE_DIR}/assets)
+set (DND_MOCK_DIRECTORY ${CMAKE_SOURCE_DIR}/mock)
 
 # ------------------------------------------------------------------------------
 # DND core library
