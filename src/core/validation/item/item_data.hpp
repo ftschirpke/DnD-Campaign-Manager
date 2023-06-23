@@ -12,6 +12,7 @@ namespace dnd {
 
 class ItemData : public ValidationData {
 public:
+    int operator<=>(const ItemData&) const noexcept = default;
     /**
      * @brief Packs the data into a ValidationData unique pointer
      * @return the packed data

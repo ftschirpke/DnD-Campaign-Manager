@@ -14,6 +14,7 @@ namespace dnd {
 
 class CharacterSubclassData : public ValidationData {
 public:
+    int operator<=>(const CharacterSubclassData&) const noexcept = default;
     /**
      * @brief Packs the data into a ValidationData unique pointer
      * @return the packed data

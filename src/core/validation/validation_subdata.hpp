@@ -16,7 +16,7 @@ class ContentHolder;
 class ValidationSubdata {
 public:
     virtual ~ValidationSubdata() noexcept = default;
-
+    int operator<=>(const ValidationSubdata&) const = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

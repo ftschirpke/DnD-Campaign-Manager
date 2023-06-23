@@ -14,6 +14,7 @@ namespace dnd {
 class AbilityScoresData : public ValidationSubdata {
 public:
     AbilityScoresData(const ValidationData* parent) noexcept;
+    int operator<=>(const AbilityScoresData&) const noexcept = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

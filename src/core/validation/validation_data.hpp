@@ -18,6 +18,7 @@ class Errors;
 class ValidationData {
 public:
     virtual ~ValidationData() = default;
+    int operator<=>(const ValidationData&) const = default;
     /**
      * @brief Packs the data into a ValidationData unique pointer
      * @return the packed data

@@ -14,6 +14,7 @@ namespace dnd {
 class ProficiencyHolderData : public ValidationSubdata {
 public:
     ProficiencyHolderData(const ValidationData* parent) noexcept;
+    int operator<=>(const ProficiencyHolderData&) const noexcept = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

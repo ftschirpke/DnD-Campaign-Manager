@@ -22,6 +22,7 @@ namespace dnd {
 class EffectHolderData : public ValidationSubdata {
 public:
     EffectHolderData(const ValidationData* parent) noexcept;
+    int operator<=>(const EffectHolderData&) const noexcept = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

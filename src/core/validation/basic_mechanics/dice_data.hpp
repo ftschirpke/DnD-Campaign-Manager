@@ -14,6 +14,7 @@ namespace dnd {
 class DiceData : public ValidationSubdata {
 public:
     DiceData(const ValidationData* parent) noexcept;
+    int operator<=>(const DiceData&) const noexcept = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

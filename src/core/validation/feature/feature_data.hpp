@@ -13,6 +13,7 @@ namespace dnd {
 class FeatureData : public ValidationData {
 public:
     explicit FeatureData(const ValidationData* parent = nullptr) noexcept;
+    int operator<=>(const FeatureData&) const noexcept = default;
     /**
      * @brief Packs the data into a ValidationData unique pointer
      * @return the packed data

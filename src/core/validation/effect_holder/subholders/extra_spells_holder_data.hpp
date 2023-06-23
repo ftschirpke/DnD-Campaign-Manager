@@ -15,6 +15,7 @@ namespace dnd {
 class ExtraSpellsHolderData : public ValidationSubdata {
 public:
     ExtraSpellsHolderData(const ValidationData* parent) noexcept;
+    int operator<=>(const ExtraSpellsHolderData&) const noexcept = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

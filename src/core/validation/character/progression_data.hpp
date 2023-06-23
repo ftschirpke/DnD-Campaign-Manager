@@ -14,6 +14,7 @@ namespace dnd {
 class ProgressionData : public ValidationSubdata {
 public:
     ProgressionData(const ValidationData* parent) noexcept;
+    int operator<=>(const ProgressionData&) const noexcept = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

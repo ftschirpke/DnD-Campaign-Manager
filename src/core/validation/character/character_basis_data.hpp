@@ -16,6 +16,7 @@ class ContentHolder;
 class CharacterBasisData : public ValidationSubdata {
 public:
     CharacterBasisData(const ValidationData* parent) noexcept;
+    int operator<=>(const CharacterBasisData&) const noexcept = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

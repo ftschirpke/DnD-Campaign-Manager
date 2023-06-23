@@ -14,6 +14,7 @@ namespace dnd {
 class RIVHolderData : public ValidationSubdata {
 public:
     RIVHolderData(const ValidationData* parent) noexcept;
+    int operator<=>(const RIVHolderData&) const noexcept = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

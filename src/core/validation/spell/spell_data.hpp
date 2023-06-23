@@ -17,6 +17,7 @@ namespace dnd {
 class SpellData : public ValidationData {
 public:
     SpellData() noexcept;
+    int operator<=>(const SpellData&) const noexcept = default;
     /**
      * @brief Packs the data into a ValidationData unique pointer
      * @return the packed data

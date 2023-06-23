@@ -15,6 +15,7 @@ namespace dnd {
 class ChoiceData : public ValidationSubdata {
 public:
     ChoiceData(const ValidationData* parent) noexcept;
+    int operator<=>(const ChoiceData&) const noexcept = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

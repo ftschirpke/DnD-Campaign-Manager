@@ -12,6 +12,7 @@ namespace dnd {
 class SpellComponentsData : public ValidationSubdata {
 public:
     SpellComponentsData(const ValidationData* parent) noexcept;
+    int operator<=>(const SpellComponentsData&) const noexcept = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

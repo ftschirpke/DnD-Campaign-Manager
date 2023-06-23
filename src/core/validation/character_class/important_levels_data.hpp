@@ -15,6 +15,7 @@ class CharacterClassData;
 class ImportantLevelsData : public ValidationSubdata {
 public:
     ImportantLevelsData(const CharacterClassData* parent) noexcept;
+    int operator<=>(const ImportantLevelsData&) const noexcept = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

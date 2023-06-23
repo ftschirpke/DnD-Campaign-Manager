@@ -14,6 +14,7 @@ namespace dnd {
 class ChoosableFeatureData : public FeatureData {
 public:
     ChoosableFeatureData() noexcept;
+    int operator<=>(const ChoosableFeatureData&) const noexcept = default;
     /**
      * @brief Packs the data into a ValidationData unique pointer
      * @return the packed data

@@ -14,6 +14,7 @@ namespace dnd {
 
 class CharacterRaceData : public ValidationData {
 public:
+    int operator<=>(const CharacterRaceData&) const noexcept = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation

@@ -21,6 +21,7 @@ class ContentHolder;
 class CharacterClassData : public ValidationData {
 public:
     CharacterClassData() noexcept;
+    int operator<=>(const CharacterClassData&) const noexcept = default;
     /**
      * @brief Packs the data into a ValidationData unique pointer
      * @return the packed data
