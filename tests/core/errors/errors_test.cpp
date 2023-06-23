@@ -1,3 +1,5 @@
+#include <dnd_config.hpp>
+
 #include <core/errors/errors.hpp>
 
 #include <filesystem>

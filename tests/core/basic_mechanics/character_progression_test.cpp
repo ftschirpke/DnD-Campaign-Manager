@@ -1,3 +1,5 @@
+#include <dnd_config.hpp>
+
 #include <core/basic_mechanics/character_progression.hpp>
 
 #include <catch2/catch_test_macros.hpp>

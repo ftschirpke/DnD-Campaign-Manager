@@ -1,3 +1,5 @@
+#include <dnd_config.hpp>
+
 #include <core/basic_mechanics/dice.hpp>
 
 #include <catch2/catch_test_macros.hpp>

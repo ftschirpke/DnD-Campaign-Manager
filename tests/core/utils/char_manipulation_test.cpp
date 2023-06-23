@@ -1,3 +1,5 @@
+#include <dnd_config.hpp>
+
 #include <core/utils/char_manipulation.hpp>
 
 #include <catch2/catch_test_macros.hpp>

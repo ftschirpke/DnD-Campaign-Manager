@@ -1,3 +1,5 @@
+#include <dnd_config.hpp>
+
 #include <core/validation/basic_mechanics/dice_data.hpp>
 
 #include <catch2/catch_test_macros.hpp>
