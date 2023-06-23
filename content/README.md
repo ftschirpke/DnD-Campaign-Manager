@@ -11,6 +11,7 @@
   - [Spells](#spells)
   - [Features](#features)
   - [Effects](#effects)
+    - [Custom Attributes](#custom-attributes)
   - [Groups](#groups)
   - [Anything unclear?](#anything-unclear)
 
@@ -239,8 +240,10 @@ Effects are defined as a string of the following format:
 ```
 ATTRIBUTE time operation PARAMETER
 ```
-The `ATTRIBUTE` is the value the effect is changing. This can be one of the following:
+The `ATTRIBUTE` is the value the effect is changing.
+Below, I listed the hard-coded attributes that will always be there, but [you can also use and create your own](#custom-effects).
 ```
+// mutable attributes:
 MAXHP, AC, SPEED,
 STR,     DEX,     CON,     INT,     WIS,     CHA,
 STRMAX,  DEXMAX,  CONMAX,  INTMAX,  WISMAX,  CHAMAX,
@@ -260,23 +263,25 @@ The `time` describes how early in the calculation this effect should be applied.
 - `latest` - executed latest, e.g. setting a fixed value
 
 The `operation` is the operation that should be applied to the attribute.
-At the moment addition, multiplication, division and setting values are supported.
-The operations can use numeric values, other attributes or constants.
-Therefore, you can use the following operations:
-```
-numeric:
-    add, mult, div, set
-other attributes:
-    addOther, multOther, divOther, setOther
-constants:
-    addConst, multConst, divConst, setConst
-```
-For numeric operations, the `PARAMETER` needs to be a number e.g. `-1`, `2`, `-2.5` or `34`.
+At the moment the following values are supported:
 
-For operations with other attributes, the `PARAMETER` needs to be the other attribute.
+|operation|description|parameter limitations|
+|---------|-----------|---------------------|
+| add | add the parameter value to the attribute value | booleans not allowed |
+| mult | multiply the attribute value with the parameter value | booleans not allowed |
+| div | divide the attribute value by the parameter value | booleans not allowed |
+| set | set the attribute value to the parameter value | none (booleans allowed) |
+| max | set the attribute value to the maximum of the parameter value and its previous value | booleans not allowed |
+| min | set the attribute value to the minimum of the parameter value and its previous value | booleans not allowed |
 
-For operations with constants, the `PARAMETER` needs to be the constant. The constants that can be used are:
+The `PARAMETER` can be a number e.g. `-1`, `2`, `-2.5` or `34`, but floating point numbers may only have up to 2 decimal places.
+
+`PARAMETER` can also be a boolean value (i.e. `true` or `false`) but in that case only the `set` operation is allowed (see table above).
+
+Lastly, the `PARAMETER` can also be another attribute. In that case the value for the given attribute is retrieved and used for the calculation. Here, you can choose one of the mutable attributes above, or one of the hard-coded immutable ones:
 ```
+// immutable attributes:
+HAS_ARMOR_ON, HAS_SPELLCASTING
 LEVEL, XP
 ```
 
@@ -285,10 +290,25 @@ Examples:
 "effects": [
     "AC earliest set 12",           // set new default value for armor class to 12
     "SPEED normal add 1.5",         // increase speed by 1.5
-    "AC normal addOther DEXMOD",    // add dexterity modifier to armor class
-    "MAXHP normal addConst LEVEL"   // add the character level to its armor class
+    "AC normal add DEXMOD",         // add dexterity modifier to armor class
+    "MAXHP normal add LEVEL"        // add the character level to its armor class
 ]
 ```
+
+### Custom Attributes
+Declaring your custom attributes allows you to create even more complex effects.
+A custom attribute is created the first time you use it as the `ATTRIBUTE` part of an effect.
+It is recommended to `set` the attribute to a value first, otherwise it will be initialized with the value `0` (or `false`) by default.
+After it has been created, you can manipulate the value as any other attribute and recombine it with existing attributes to implement effects like the Monk's Unarmored Defense:
+```jsonc
+"effects": [
+    "UNARMORED_DEFENSE_MONK earliest set 10",
+    "UNARMORED_DEFENSE_MONK normal add DEXMOD",
+    "UNARMORED_DEFENSE_MONK normal add WISMOD",
+    "AC latest max UNARMORED_DEFENSE_MONK"
+]
+```
+Custom attributes are a nice way to keep each effect's calculations separate and only combine them when and how it is intended.
 
 ## Groups
 Groups define any kind of related things, that you might want to put into a group for the tool to use.

@@ -1,5 +1,6 @@
 {
     "name": "Bob the Great",
+    "description": "A high-level example character.",
     "class": "Barbarian",
     "subclass": "Path of the Berserker",
     "race": "Dwarf",

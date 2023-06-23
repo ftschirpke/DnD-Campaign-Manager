@@ -1,12 +1,16 @@
 target_sources(${DND_CORE}
     PRIVATE
-    character.cpp
-    character_class.cpp
-    character_subclass.cpp
-    character_race.cpp
-    character_subrace.cpp
-    character_state.cpp
-    spell.cpp
+    content_piece.cpp
+    source_info.cpp
 )
 
+add_subdirectory(character)
+add_subdirectory(character_class)
+add_subdirectory(character_race)
+add_subdirectory(character_subclass)
+add_subdirectory(character_subrace)
 add_subdirectory(effect_holder)
+add_subdirectory(feature)
+add_subdirectory(feature_holder)
+add_subdirectory(item)
+add_subdirectory(spell)

@@ -49,6 +49,14 @@ std::string dice_to_string(Dice dice_type);
  */
 Dice string_to_dice(const std::string& str);
 
+/**
+ * @brief Returns whether a value is possible for a type of dice
+ * @param value the value to check
+ * @param dice_type the type of dice to check
+ * @return "true" if the value is possible for the type of dice, "false" otherwise
+ */
+bool value_is_possible_for(int value, Dice dice_type);
+
 } // namespace dnd
 
 #endif // DICE_HPP_

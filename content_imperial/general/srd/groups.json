@@ -2,16 +2,16 @@
     "armor": {
         "light armor": ["padded", "leather", "studded leather"],
         "medium armor": ["hide", "chain shirt", "scale mail", "breastplate", "half plate"],
-        "heavy armor": ["ring mail", "chain mail", "splint", "plate"]
+        "heavy armor": ["ring mail", "chain mail", "splint", "plate"],
+        "shields": ["shield"]
     },
-    "shields": ["Shield"],
     "weapons": {
         "simple weapons": {
             "simple melee weapons": [
                 "club", "dagger", "greatclub", "handaxe", "javelin", "light hammer", "mace", "quarterstaff", "sickle", "spear"
             ],
             "simple range weapons": [
-                "light crossbow", "dart", "sling"
+                "light crossbow", "dart", "sling", "shortbow"
             ]
         },
         "martial weapons": {
@@ -48,5 +48,7 @@
             "disguise kit", "forgery kit", "herbalism kit", "navigator's tools", "poisoner's kit", "thieves' tools"
         ]
     },
-    "languages": ["Common", "Draconic", "Druidic", "Elvish", "Gnomish", "Halfling", "Infernal", "Orc", "Thieves' Cant"]
+    "languages": ["Common", "Draconic", "Druidic", "Elvish", "Gnomish", "Halfling", "Infernal", "Orc", "Thieves' Cant", "Dwarvish"],
+    "damage types": ["acid", "bludgeoning", "cold", "fire", "force", "lightning", "necrotic", "piercing", "poison", "psychic", "radiant", "slashing", "thunder"],
+    "conditions": ["blinded", "charmed", "deafened", "exhaustion", "frightened", "grappled", "incapacitated", "invisible", "paralyzed", "petrified", "poisoned", "prone", "restrained", "stunned", "unconscious"]
 }

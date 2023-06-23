@@ -10,35 +10,32 @@
 
 #include <core/controllers/content_holder.hpp>
 #include <core/controllers/searching/trie.hpp>
-#include <core/models/character.hpp>
-#include <core/models/character_class.hpp>
-#include <core/models/character_race.hpp>
-#include <core/models/character_subclass.hpp>
-#include <core/models/character_subrace.hpp>
+#include <core/models/character/character.hpp>
+#include <core/models/character_class/character_class.hpp>
+#include <core/models/character_race/character_race.hpp>
+#include <core/models/character_subclass/character_subclass.hpp>
+#include <core/models/character_subrace/character_subrace.hpp>
 #include <core/models/content_piece.hpp>
-#include <core/models/effect_holder/choosable.hpp>
-#include <core/models/effect_holder/feature.hpp>
-#include <core/models/item.hpp>
-#include <core/models/spell.hpp>
+#include <core/models/feature/choosable_feature.hpp>
+#include <core/models/feature/feature.hpp>
+#include <core/models/item/item.hpp>
+#include <core/models/spell/spell.hpp>
 
-dnd::ContentSearch::ContentSearch(const ContentHolder& content_holder) {
+dnd::ContentSearch::ContentSearch(const ContentHolder& content) {
     query.reserve(40);
-    character_search_path.push(content_holder.characters.get_trie_root());
-    character_class_search_path.push(content_holder.character_classes.get_trie_root());
-    character_subclass_search_path.push(content_holder.character_subclasses.get_trie_root());
-    character_race_search_path.push(content_holder.character_races.get_trie_root());
-    character_subrace_search_path.push(content_holder.character_subraces.get_trie_root());
-    item_search_path.push(content_holder.items.get_trie_root());
-    spell_search_path.push(content_holder.spells.get_trie_root());
-    feature_search_path.push(content_holder.features.get_trie_root());
-    for (const auto& [choosable_group_name, choosable_library] : content_holder.choosables) {
-        choosable_search_paths[choosable_group_name] = SearchPath<const Choosable>();
-        choosable_search_paths[choosable_group_name].push(choosable_library.get_trie_root());
-    }
+    character_search_path.push(content.get_characters().get_trie_root());
+    character_class_search_path.push(content.get_character_classes().get_trie_root());
+    character_subclass_search_path.push(content.get_character_subclasses().get_trie_root());
+    character_race_search_path.push(content.get_character_races().get_trie_root());
+    character_subrace_search_path.push(content.get_character_subraces().get_trie_root());
+    item_search_path.push(content.get_items().get_trie_root());
+    spell_search_path.push(content.get_spells().get_trie_root());
+    feature_search_path.push(content.get_features().get_trie_root());
+    choosable_search_path.push(content.get_choosable_features().get_trie_root());
 }
 
-dnd::ContentSearch::ContentSearch(const dnd::ContentHolder& content_holder, const std::string& initial_query)
-    : ContentSearch(content_holder) {
+dnd::ContentSearch::ContentSearch(const dnd::ContentHolder& content, const std::string& initial_query)
+    : ContentSearch(content) {
     for (char c : initial_query) {
         add_character_to_query(c);
     }
@@ -52,7 +49,7 @@ void dnd::ContentSearch::set_search_query(const std::string& new_query) {
     while (query.size() > new_query.size()) {
         remove_character_from_query();
     }
-    assert(query.size() == new_query.size());
+    assert(query.size() <= new_query.size());
 
     size_t common_length = 0;
     while (common_length < query.size() && query[common_length] == new_query[common_length]) {
@@ -91,9 +88,7 @@ void dnd::ContentSearch::add_character_to_query(char c) {
     item_search_path.push_top_child(c);
     spell_search_path.push_top_child(c);
     feature_search_path.push_top_child(c);
-    for (auto& [_, choosable_search_path] : choosable_search_paths) {
-        choosable_search_path.push_top_child(c);
-    }
+    choosable_search_path.push_top_child(c);
 }
 
 void dnd::ContentSearch::remove_character_from_query() {
@@ -118,10 +113,8 @@ void dnd::ContentSearch::remove_character_from_query() {
     assert(spell_search_path.size() >= 1);
     feature_search_path.pop();
     assert(feature_search_path.size() >= 1);
-    for (auto& [choosable_group_name, choosable_search_path] : choosable_search_paths) {
-        choosable_search_path.pop();
-        assert(choosable_search_path.size() >= 1);
-    }
+    choosable_search_path.pop();
+    assert(choosable_search_path.size() >= 1);
 }
 
 std::vector<const dnd::ContentPiece*> dnd::ContentSearch::get_results() const {
@@ -136,9 +129,7 @@ std::vector<const dnd::ContentPiece*> dnd::ContentSearch::get_results() const {
     item_search_path.insert_top_successors_into(results);
     spell_search_path.insert_top_successors_into(results);
     feature_search_path.insert_top_successors_into(results);
-    for (const auto& [_, choosable_search_path] : choosable_search_paths) {
-        choosable_search_path.insert_top_successors_into(results);
-    }
+    choosable_search_path.insert_top_successors_into(results);
 
     return results;
 }
@@ -146,7 +137,7 @@ std::vector<const dnd::ContentPiece*> dnd::ContentSearch::get_results() const {
 std::vector<const dnd::ContentPiece*> dnd::ContentSearch::get_sorted_results() const {
     std::vector<const dnd::ContentPiece*> results = get_results();
     std::sort(results.begin(), results.end(), [](const ContentPiece* a, const ContentPiece* b) {
-        return a->name < b->name;
+        return a->get_name() < b->get_name();
     });
     return results;
 }

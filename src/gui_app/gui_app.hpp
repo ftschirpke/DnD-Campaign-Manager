@@ -17,7 +17,8 @@
 
 #include <core/controllers/content_holder.hpp>
 #include <core/controllers/searching/content_search.hpp>
-#include <core/parsing/controllers/content_parser.hpp>
+#include <core/errors/errors.hpp>
+#include <core/parsing/content_parser.hpp>
 #include <gui_app/content_visitors/display_visitor.hpp>
 
 namespace dnd {
@@ -75,13 +76,15 @@ private:
     std::unique_ptr<ContentSearch> search;
     std::array<const ContentPiece*, 100> search_results;
     size_t search_result_count;
+    const ContentPiece* forced_next_selection;
     std::deque<const ContentPiece*> open_content_pieces;
     std::array<std::string, 100> search_result_strings;
 
     std::vector<std::string> error_messages;
 
-    std::future<ContentHolder> parsed_content;
+    std::future<ParsingResult> parsing_results;
     ContentParser parser;
+    Errors errors;
     // the object holding all the DnD content relevant for the selected campaign
     ContentHolder content;
 

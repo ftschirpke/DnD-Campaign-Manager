@@ -1,5 +1,6 @@
 {
     "name": "Wizard",
+    "description": "A scholarly magic-user capable of manipulating the structures of reality.",
     "hit_dice": "d6",
     "asi_levels": [4, 8, 12, 16, 19],
     "spellcasting": {
@@ -17,11 +18,12 @@
         "level8_slots":   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
         "level9_slots":   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1]
     },
+    "subclass_feature": "Arcane Tradition",
     "features": {
         "Wizard Base": {
             "description": "Hit Dice: 1d6 per wizard level\n\nProficiencies\nArmor: None\nWeapons: Daggers, darts, slings, quarterstaffs, light crossbows\nTools: None\nSaving Throws: Intelligence, Wisdom\nSkills: Choose two from Arcana, History, Insight, Investigation, Medicine, and Religion",
             "weapon_proficiencies": ["dagger", "dart", "sling", "quarterstaff", "light crossbow"],
-            "savingthrow_proficiencies": ["INT", "WIS"],
+            "saving_throw_proficiencies": ["INT", "WIS"],
             "choose": {
                 "skill_proficiencies": {
                     "amount": 2,
@@ -37,8 +39,7 @@
         },
         "Arcane Tradition": {
             "description": "When you reach 2nd level, you choose an arcane tradition, shaping your practice of magic through one of eight schools: Abjuration, Conjuration, Divination, Enchantment, Evocation, Illusion, Necromancy, or Transmutation.\n\nYour choice grants you features at 2nd level and again at 6th, 10th, and 14th level.",
-            "activation": "CLASS_LEVEL >= 2",
-            "subclass": true
+            "activation": "CLASS_LEVEL >= 2"
         },
         "Spell Mastery": {
             "description": "At 18th level, you have achieved such mastery over certain spells that you can cast them at will. Choose a 1st-level wizard spell and a 2nd-level wizard spell that are in your spellbook. You can cast those spells at their lowest level without expending a spell slot when you have them prepared. If you want to cast either spell at a higher level, you must expend a spell slot as normal.\n\nBy spending 8 hours in study, you can exchange one or both of the spells you chose for different spells of the same levels.",

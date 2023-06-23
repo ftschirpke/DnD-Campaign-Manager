@@ -1,0 +1,30 @@
+#include <dnd_config.hpp>
+
+#include "character_progression.hpp"
+
+#include <array>
+#include <stdexcept>
+
+static constexpr std::array<int, 20> minxp_for_level = {
+    0,     300,    900,    2700,   6500,   14000,  23000,  34000,  48000,  64000,
+    85000, 100000, 120000, 140000, 165000, 195000, 225000, 265000, 305000, 355000,
+};
+
+int dnd::level_to_xp(int level) {
+    if (level < 1 || level > 20) {
+        throw std::invalid_argument("Level must be between 1 and 20 (inclusive).");
+    }
+    return minxp_for_level[static_cast<size_t>(level) - 1];
+}
+
+int dnd::xp_to_level(int xp) {
+    if (xp < 0) {
+        throw std::invalid_argument("XP value cannot be negative.");
+    }
+    for (size_t lv = 1; lv < 20; ++lv) {
+        if (minxp_for_level[lv] > xp) {
+            return static_cast<int>(lv);
+        }
+    }
+    return 20;
+}

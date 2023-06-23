@@ -13,7 +13,7 @@ class CharacterSubrace;
 class Item;
 class Spell;
 class Feature;
-class Choosable;
+class ChoosableFeature;
 
 class ContentVisitor {
 public:
@@ -26,7 +26,7 @@ public:
     virtual void visit(const Item* item_ptr) = 0;
     virtual void visit(const Spell* spell_ptr) = 0;
     virtual void visit(const Feature* feature_ptr) = 0;
-    virtual void visit(const Choosable* choosable_ptr) = 0;
+    virtual void visit(const ChoosableFeature* choosable_ptr) = 0;
 };
 
 } // namespace dnd

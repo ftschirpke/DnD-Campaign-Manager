@@ -1,5 +1,6 @@
 {
     "name": "Ranger",
+    "description": "A warrior who uses martial prowess and nature magic to combat threats on the edges of civilization",
     "hit_dice": "d10",
     "asi_levels": [4, 8, 12, 16, 19],
     "spellcasting": {
@@ -13,12 +14,13 @@
         "level4_slots":   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 3, 3],
         "level5_slots":   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 2]
     },
+    "subclass_feature": "Ranger Archetype",
     "features": {
         "Ranger Base": {
             "description": "Hit Dice: 1d10 per ranger level\n\nProficiencies\nArmor: Light armor, medium armor, shields\nWeapons: Simple weapons, martial weapons\nTools: None\nSaving Throws: Strength, Dexterity\nSkills: Choose three from Animal Handling, Athletics, Insight, Investigation, Nature, Perception, Stealth, and Survival",
             "armor_proficiencies": ["light armor", "medium armor", "shields"],
             "weapon_proficiencies": ["simple weapons", "martial weapons"],
-            "savingthrow_proficiencies": ["STR", "DEX"],
+            "saving_throw_proficiencies": ["STR", "DEX"],
             "choose": {
                 "skill_proficiencies": {
                     "amount": 3,
@@ -38,8 +40,7 @@
         },
         "Ranger Archetype": {
             "description": "At 3rd level, you choose an archetype that you strive to emulate. Your choice grants you features at 3rd level and again at 7th, 11th, and 15th level.",
-            "activation": "CLASS_LEVEL >= 3",
-            "subclass": true
+            "activation": "CLASS_LEVEL >= 3"
         },
         "Primeval Awareness": {
             "description": "Beginning at 3rd level, you can use your action and expend one ranger spell slot to focus your awareness on the region around you. For 1 minute per level of the spell slot you expend, you can sense whether the following types of creatures are present within 1.6km of you (or within up to 10km if you are in your favored terrain): aberrations, celestials, dragons, elementals, fey, fiends, and undead. This feature doesn't reveal the creatures' location or number.",

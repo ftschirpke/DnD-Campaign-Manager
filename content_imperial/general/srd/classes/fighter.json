@@ -1,13 +1,15 @@
 {
     "name": "Fighter",
+    "description": "A master of martial combat, skilled with a variety of weapons and armor",
     "hit_dice": "d10",
     "asi_levels": [4, 6, 8, 12, 14, 16, 19],
+    "subclass_feature": "Martial Archetype",
     "features": {
         "Fighter Base": {
             "description": "Hit Dice: 1d10 per fighter level\n\nProficiencies\n\nArmor: All armor, shields\nWeapons: Simple weapons, martial weapons\nSaving Throws: Strength, Constitution\nSkills: Choose two skills from Acrobatics, Animal Handling, Athletics, History, Insight, Intimidation, Perception, and Survival",
             "armor_proficiencies": ["light armor", "medium armor", "heavy armor"],
             "weapon_proficiencies": ["simple weapons", "martial weapons"],
-            "savingthrow_proficiencies": ["STR", "CON"],
+            "saving_throw_proficiencies": ["STR", "CON"],
             "choose": {
                 "skill_proficiencies": {
                     "amount": 2,
@@ -28,8 +30,7 @@
         },
         "Martial Archetype": {
             "description": "At 3rd level, you choose an archetype that you strive to emulate in your combat styles and techniques. The archetype you choose grants you features at 3rd level and again at 7th, 10th, 15th, and 18th level.",
-            "activation": "CLASS_LEVEL >= 3",
-            "subclass": true
+            "activation": "CLASS_LEVEL >= 3"
         },
         "Extra Attack (Fighter)": {
             "description": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn.\n\nThe number of attacks increases to three when you reach 11th level in this class and to four when you reach 20th level in this class.",

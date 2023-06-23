@@ -1,5 +1,6 @@
 {
     "name": "Elf",
+    "description": "Graceful and long-lived humanoids, with keen senses, mastery of magic, and an affinity for nature",
     "has_subraces": true,
     "features": {
         "Ability Score Increase (Elf)": {

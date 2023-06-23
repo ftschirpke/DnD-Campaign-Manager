@@ -11,7 +11,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include <core/models/item.hpp>
+#include <core/models/item/item.hpp>
 #include <core/output/latex_builder/latex_command.hpp>
 #include <core/output/latex_builder/latex_document.hpp>
 #include <core/output/latex_builder/latex_scope.hpp>
@@ -61,9 +61,9 @@ static dnd::LatexText* create_card_header(dnd::LatexScope* scope, const dnd::Ite
     center_scope->add_command("MakeUppercase");
     dnd::LatexScope* sub_scope = center_scope->add_scope();
     sub_scope->add_command("textbf");
-    dnd::LatexText* title = sub_scope->add_scope()->add_text(item->name + " (" + std::to_string(counter) + ')');
+    dnd::LatexText* title = sub_scope->add_scope()->add_text(item->get_name() + " (" + std::to_string(counter) + ')');
     scope->add_command("vspace", "-3mm");
-    if (item->requires_attunement) {
+    if (item->requires_attunement()) {
         scope->add_command("vspace", "-5mm");
         scope->add_begin_end("center").scope->add_text("This item requires attunement.")->add_modifier("scriptsize");
         scope->add_command("vspace", "-3mm");
@@ -87,8 +87,8 @@ static int create_item_cards(dnd::LatexScope* scope, const dnd::Item* item) {
     size_t start = 0;
     size_t end = 0;
     size_t characters_written = 0;
-    while (end < item->description.size()) {
-        if (item->description[end] == '\n') {
+    while (end < item->get_description().size()) {
+        if (item->get_description()[end] == '\n') {
             if (characters_written + end - start > card_character_cutoff) {
                 // start a new card
                 create_card_footer(scope);
@@ -96,9 +96,9 @@ static int create_item_cards(dnd::LatexScope* scope, const dnd::Item* item) {
                 characters_written = 0;
             }
 
-            dnd::LatexText* text = scope->add_text(item->description.substr(start, end - start));
+            dnd::LatexText* text = scope->add_text(item->get_description().substr(start, end - start));
             characters_written += end - start;
-            if (end + 1 < item->description.size() && item->description[end + 1] == '\n') {
+            if (end + 1 < item->get_description().size() && item->get_description()[end + 1] == '\n') {
                 text->add_line_break();
                 end++;
             }
@@ -111,21 +111,21 @@ static int create_item_cards(dnd::LatexScope* scope, const dnd::Item* item) {
         create_card_footer(scope);
         create_card_header(scope, item, ++counter);
     }
-    scope->add_text(item->description.substr(start, end - start));
+    scope->add_text(item->get_description().substr(start, end - start));
 
     int last_description_card = counter;
     bool written_cosmetic_description_yet = false;
     int description_swap_card = -1;
     bool skip_last_footer = false;
 
-    if (!item->cosmetic_description.empty()) {
+    if (!item->get_cosmetic_description().empty()) {
         start = 0;
         end = 0;
         scope->add_command("vfill");
         description_swap_card = counter;
         dnd::LatexScope* current_it_scope = create_textit_scope(scope);
-        while (end < item->cosmetic_description.size()) {
-            if (item->cosmetic_description[end] == '\n') {
+        while (end < item->get_cosmetic_description().size()) {
+            if (item->get_cosmetic_description()[end] == '\n') {
                 if (characters_written + end - start > card_character_cutoff) {
                     // start a new card
                     if (counter != description_swap_card or !written_cosmetic_description_yet) {
@@ -140,11 +140,13 @@ static int create_item_cards(dnd::LatexScope* scope, const dnd::Item* item) {
                     description_swap_card = counter;
                     written_cosmetic_description_yet = true;
                 }
-                dnd::LatexText* text = current_it_scope->add_text(item->cosmetic_description.substr(start, end - start)
+                dnd::LatexText* text = current_it_scope->add_text(
+                    item->get_cosmetic_description().substr(start, end - start)
                 );
 
                 characters_written += end - start;
-                if (end + 1 < item->cosmetic_description.size() && item->cosmetic_description[end + 1] == '\n') {
+                if (end + 1 < item->get_cosmetic_description().size()
+                    && item->get_cosmetic_description()[end + 1] == '\n') {
                     text->add_line_break();
                     end++;
                 }
@@ -161,14 +163,14 @@ static int create_item_cards(dnd::LatexScope* scope, const dnd::Item* item) {
         if (!written_cosmetic_description_yet) {
             skip_last_footer = true;
         }
-        current_it_scope->add_text(item->cosmetic_description.substr(start, end - start));
+        current_it_scope->add_text(item->get_cosmetic_description().substr(start, end - start));
     }
     if (!skip_last_footer) {
         create_card_footer(scope);
     }
 
     if (counter == 1) {
-        first_title->set_text(item->name);
+        first_title->set_text(item->get_name());
     }
     return counter;
 }
@@ -178,14 +180,14 @@ static int calculate_cards_to_create(const dnd::Item* item) {
     size_t start = 0;
     size_t end = 0;
     size_t characters_written = 0;
-    while (end < item->description.size()) {
-        if (item->description[end] == '\n') {
+    while (end < item->get_description().size()) {
+        if (item->get_description()[end] == '\n') {
             if (characters_written + end - start > card_character_cutoff) {
                 counter++;
                 characters_written = 0;
             }
             characters_written += end - start;
-            if (end + 1 < item->description.size() && item->description[end + 1] == '\n') {
+            if (end + 1 < item->get_description().size() && item->get_description()[end + 1] == '\n') {
                 end++;
             }
             start = ++end;
@@ -196,17 +198,18 @@ static int calculate_cards_to_create(const dnd::Item* item) {
         counter++;
     }
 
-    if (!item->cosmetic_description.empty()) {
+    if (!item->get_cosmetic_description().empty()) {
         start = 0;
         end = 0;
-        while (end < item->cosmetic_description.size()) {
-            if (item->cosmetic_description[end] == '\n') {
+        while (end < item->get_cosmetic_description().size()) {
+            if (item->get_cosmetic_description()[end] == '\n') {
                 if (characters_written + end - start > card_character_cutoff) {
                     counter++;
                     characters_written = 0;
                 }
                 characters_written += end - start;
-                if (end + 1 < item->cosmetic_description.size() && item->cosmetic_description[end + 1] == '\n') {
+                if (end + 1 < item->get_cosmetic_description().size()
+                    && item->get_cosmetic_description()[end + 1] == '\n') {
                     end++;
                 }
                 start = ++end;

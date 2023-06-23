@@ -1,5 +1,6 @@
 {
     "name": "Bob",
+    "description": "A low-level example character.",
     "class": "Barbarian",
     "race": "Dwarf",
     "subrace": "Hill Dwarf",

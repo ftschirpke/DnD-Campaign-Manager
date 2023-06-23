@@ -1,7 +1,17 @@
 target_sources(${DND_CORE}
     PRIVATE
-    content_file_parser.cpp
+    content_parser.cpp
+    file_parser.cpp
+    parser.cpp
 )
 
-add_subdirectory(controllers)
-add_subdirectory(models)
+add_subdirectory(character)
+add_subdirectory(character_class)
+add_subdirectory(character_subclass)
+add_subdirectory(character_race)
+add_subdirectory(character_subrace)
+add_subdirectory(effect_holder)
+add_subdirectory(feature)
+add_subdirectory(groups)
+add_subdirectory(item)
+add_subdirectory(spell)

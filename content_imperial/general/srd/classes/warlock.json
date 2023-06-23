@@ -1,5 +1,6 @@
 {
     "name": "Warlock",
+    "description": "A wielder of magic that is derived from a bargain with an extraplanar entity",
     "hit_dice": "d8",
     "asi_levels": [4, 8, 12, 16, 19],
     "spellcasting": {
@@ -13,12 +14,13 @@
         "level4_slots":   [0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         "level5_slots":   [0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4]
     },
+    "subclass_feature": "Otherwordly Patron",
     "features": {
         "Warlock Base": {
             "description": "Hit Dice: 1d8 per warlock level\n\nProficiencies\nArmor: Light armor\nWeapons: Simple weapons\nTools: None\nSaving Throws: Wisdom, Charisma\nSkills: Choose two skills from Arcana, Deception, History, Intimidation, Investigation, Nature, and Religion",
             "armor_proficiencies": ["light armor"],
             "weapon_proficiencies": ["simple weapons"],
-            "savingthrow_proficiencies": ["WIS", "CHA"],
+            "saving_throw_proficiencies": ["WIS", "CHA"],
             "choose": {
                 "skill_proficiencies": {
                     "amount": 2,
@@ -27,8 +29,7 @@
             }
         },
         "Otherwordly Patron": {
-            "description": "At 1st level, you have struck a bargain with an otherworldly being of your choice. Your choice grants you features at 1st level and again at 6th, 10th, and 14th level.",
-            "subclass": true
+            "description": "At 1st level, you have struck a bargain with an otherworldly being of your choice. Your choice grants you features at 1st level and again at 6th, 10th, and 14th level."
         },
         "Eldritch Invocations": {
             "description": "In your study of occult lore, you have unearthed eldritch invocations, fragments of forbidden knowledge that imbue you with an abiding magical ability.\nAt 2nd level, you gain two eldritch invocations of your choice. Your invocation options are detailed at the end of the class description. When you gain certain warlock levels, you gain additional invocations of your choice, as shown in the Invocations Known table below.\nAdditionally, when you gain a level in this class, you can choose one of the invocations you know and replace it with another invocation that you could learn at that level.\n\nLevel|Invocations Known\n2|2\n3|2\n4|2\n5|3\n6|3\n7|4\n8|4\n9|5\n10|5\n11|5\n12|6\n13|6\n14|6\n15|7\n16|7\n17|7\n18|8\n19|8\n20|8",

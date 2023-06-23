@@ -1,6 +1,7 @@
 {
     "name": "School of Evocation",
     "class": "Wizard",
+    "description": "Wizards specializing in the destructive power of evocation magic, capable of unleashing devastating spells with precision.",
     "features": {
         "Evocation Savant": {
             "description": "Beginning when you select this school at 2nd level, the gold and time you must spend to copy an evocation spell into your spellbook is halved.",

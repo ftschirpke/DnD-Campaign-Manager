@@ -1,5 +1,6 @@
 {
     "name": "Cleric",
+    "description": "A priestly champion who wields divine magic in service of a higher power",
     "hit_dice": "d8",
     "asi_levels": [4, 8, 12, 16, 19],
     "spellcasting": {
@@ -17,12 +18,13 @@
         "level8_slots":   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
         "level9_slots":   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1]
     },
+    "subclass_feature": "Divine Domain",
     "features": {
         "Cleric Base": {
             "description": "Hit Dice: 1d8 per cleric level\n\nProficiencies\nArmor: Light armor, medium armor, shields\nWeapons: Simple weapons\nTools: None\nSaving Throws: Wisdom, Charisma\nSkills: Choose two from History, Insight, Medicine, Persuasion, and Religion",
             "armor_proficiencies": ["light armor", "medium armor", "shields"],
             "weapon_proficiencies": ["simple weapons"],
-            "savingthrow_proficiencies": ["WIS", "CHA"],
+            "saving_throw_proficiencies": ["WIS", "CHA"],
             "choose": {
                 "skill_proficiencies": {
                     "amount": 2,
@@ -31,8 +33,7 @@
             }
         },
         "Divine Domain": {
-            "description": "Choose one domain related to your deity. Each domain provides examples of gods associated with it. Your choice grants you domain spells and other features when you choose it at 1st level. It also grants you additional ways to use Channel Divinity when you gain that feature at 2nd level, and additional benefits at 6th, 8th, and 17th levels.\n\nDomain Spells\n\nEach domain has a list of spells — its domain spells — that you gain at the cleric levels noted in the domain description. Once you gain a domain spell, you always have it prepared, and it doesn't count against the number of spells you can prepare each day.\n\nIf you have a domain spell that doesn't appear on the cleric spell list, the spell is nonetheless a cleric spell for you.",
-            "subclass": true
+            "description": "Choose one domain related to your deity. Each domain provides examples of gods associated with it. Your choice grants you domain spells and other features when you choose it at 1st level. It also grants you additional ways to use Channel Divinity when you gain that feature at 2nd level, and additional benefits at 6th, 8th, and 17th levels.\n\nDomain Spells\n\nEach domain has a list of spells — its domain spells — that you gain at the cleric levels noted in the domain description. Once you gain a domain spell, you always have it prepared, and it doesn't count against the number of spells you can prepare each day.\n\nIf you have a domain spell that doesn't appear on the cleric spell list, the spell is nonetheless a cleric spell for you."
         },
         "Channel Divinity (Cleric)": {
             "description": "At 2nd level, you gain the ability to channel divine energy directly from your deity, using that energy to fuel magical effects. You start with two such effects: Turn Undead and an effect determined by your domain. Some domains grant you additional effects as you advance in levels, as noted in the domain description.\n\nWhen you use your Channel Divinity, you choose which effect to create. You must then finish a short or long rest to use your Channel Divinity again.\n\nSome Channel Divinity effects require saving throws. When you use such an effect from this class, the DC equals your cleric spell save DC.\n\nBeginning at 6th level, you can use your Channel Divinity twice between rests, and beginning at 18th level, you can use it three times between rests. When you finish a short or long rest, you regain your expended uses.",

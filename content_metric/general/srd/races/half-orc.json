@@ -1,5 +1,6 @@
 {
     "name": "Half-Orc",
+    "description": "Individuals with mixed human and orc heritage, often strong and resilient, but with a fierce reputation",
     "has_subraces": false,
     "features": {
         "Ability Score Increase (Half-Orc)": {

@@ -45,3 +45,7 @@ dnd::Dice dnd::string_to_dice(const std::string& str) {
         throw std::invalid_argument("No such dice exist.");
     }
 }
+
+bool dnd::value_is_possible_for(int value, dnd::Dice dice_type) {
+    return value >= 1 && value <= dice_to_int(dice_type);
+}

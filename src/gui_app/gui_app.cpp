@@ -21,11 +21,14 @@
 
 #include <core/controllers/content_holder.hpp>
 #include <core/controllers/searching/content_search.hpp>
-#include <core/models/effect_holder/feature.hpp>
-#include <core/models/item.hpp>
-#include <core/models/spell.hpp>
-#include <core/parsing/controllers/content_parser.hpp>
-#include <core/parsing/parsing_exceptions.hpp>
+#include <core/errors/errors.hpp>
+#include <core/errors/parsing_error.hpp>
+#include <core/errors/validation_error.hpp>
+#include <core/models/feature/feature.hpp>
+#include <core/models/item/item.hpp>
+#include <core/models/source_info.hpp>
+#include <core/models/spell/spell.hpp>
+#include <core/parsing/content_parser.hpp>
 #include <core/utils/string_manipulation.hpp>
 #include <gui_app/content_visitors/display_visitor.hpp>
 #include <gui_app/content_visitors/list_visitor.hpp>
@@ -39,7 +42,8 @@ static const ImGuiWindowFlags error_popup_options = ImGuiWindowFlags_AlwaysAutoR
 
 dnd::GUIApp::GUIApp()
     : show_demo_window(false), select_campaign(false), is_parsing(false),
-      content_dir_dialog(content_dir_dialog_options), search(nullptr), search_result_count(0), display_visitor() {
+      content_dir_dialog(content_dir_dialog_options), search(nullptr), search_result_count(0),
+      forced_next_selection(nullptr), display_visitor() {
     ImGui::GetIO().IniFilename = imgui_ini_filename;
 }
 
@@ -216,25 +220,15 @@ static const float min_w = 240.0f;
 static void render_content_count_table(const dnd::ContentHolder& content) {
     float window_width = ImGui::GetWindowWidth();
     float w = std::max(min_w, window_width);
-    display_size("Characters", content.characters.size(), w);
-    display_size("Classes", content.character_classes.size(), w);
-    display_size("Subclasses", content.character_subclasses.size(), w);
-    display_size("Races", content.character_races.size(), w);
-    display_size("Subraces", content.character_subraces.size(), w);
-    display_size("Items", content.items.size(), w);
-    display_size("Spells", content.spells.size(), w);
-    display_size("Features", content.features.size(), w);
-    display_size("Choosable groups", content.choosables.size(), w);
-    display_size(
-        "Choosables",
-        static_cast<size_t>(std::accumulate(
-            content.groups.get_all_choosable_groups().begin(), content.groups.get_all_choosable_groups().end(), 0,
-            [](size_t sum, const auto& choosable_group) {
-                return static_cast<int>(sum + choosable_group.second.size());
-            }
-        )),
-        w
-    );
+    display_size("Characters", content.get_characters().size(), w);
+    display_size("Classes", content.get_character_classes().size(), w);
+    display_size("Subclasses", content.get_character_subclasses().size(), w);
+    display_size("Races", content.get_character_races().size(), w);
+    display_size("Subraces", content.get_character_subraces().size(), w);
+    display_size("Items", content.get_items().size(), w);
+    display_size("Spells", content.get_spells().size(), w);
+    display_size("Features", content.get_features().size(), w);
+    display_size("Choosables", content.get_choosable_features().size(), w);
 }
 
 void dnd::GUIApp::render_overview_window() {
@@ -268,7 +262,7 @@ void dnd::GUIApp::render_overview_window() {
 
     if (is_parsing) {
         ImGui::Text("Parsing...");
-        if (parsed_content.valid()) {
+        if (parsing_results.valid()) {
             finish_parsing();
         }
     }
@@ -285,6 +279,35 @@ void dnd::GUIApp::render_overview_window() {
     } else {
         render_content_count_table(content);
     }
+
+    ImGui::SeparatorText("Errors");
+    if (ImGui::BeginChild("Error list")) {
+        for (const std::string& message : error_messages) {
+            ImGui::TextWrapped("%s", message.c_str());
+        }
+        ImGui::SeparatorText("Parsing errors");
+        for (const ParsingError& error : errors.get_parsing_errors()) {
+            SourceInfo source_info(error.get_filepath());
+            ImGui::TextWrapped(
+                "%s (%s - %s - %s)", error.get_error_message().c_str(), source_info.get_source_group_name().c_str(),
+                source_info.get_source_type_name().c_str(), source_info.get_source_name().c_str()
+            );
+        }
+        ImGui::SeparatorText("Validation errors");
+        for (const ValidationError& error : errors.get_validation_errors()) {
+            if (error.get_validation_data() == nullptr) {
+                ImGui::TextWrapped("%s", error.get_error_message().c_str());
+            } else {
+                SourceInfo source_info(error.get_validation_data()->source_path);
+                ImGui::TextWrapped(
+                    "%s (%s - %s - %s)", error.get_error_message().c_str(), source_info.get_source_group_name().c_str(),
+                    source_info.get_source_type_name().c_str(), source_info.get_source_name().c_str()
+                );
+            }
+        }
+        ImGui::EndChild();
+    }
+
 
     ImGui::End();
 }
@@ -325,17 +348,16 @@ void dnd::GUIApp::render_parsing_error_popup() {
 
 void dnd::GUIApp::start_parsing() {
     open_content_pieces.clear();
-    parsed_content = std::async(std::launch::async, &ContentParser::parse, &parser, content_directory, campaign_name);
+    parsing_results = std::async(std::launch::async, &ContentParser::parse, &parser, content_directory, campaign_name);
     is_parsing = true;
 }
 
 void dnd::GUIApp::finish_parsing() {
     try {
-        content = parsed_content.get();
-        content.finished_parsing();
+        ParsingResult parsing_result = parsing_results.get();
+        content = std::move(parsing_result.content);
+        errors = std::move(parsing_result.errors);
         search = std::make_unique<ContentSearch>(content);
-    } catch (const parsing_error& e) {
-        error_messages.push_back(e.what());
     } catch (const std::exception& e) {
         error_messages.push_back(e.what());
     }
@@ -347,36 +369,31 @@ void dnd::GUIApp::finish_parsing() {
 
 void dnd::GUIApp::open_last_session_tabs() {
     for (const std::string& character_to_open : last_session_open_tabs["character"]) {
-        open_content_pieces.push_back(&content.characters.get(character_to_open));
+        open_content_pieces.push_back(&content.get_characters().get(character_to_open));
     }
     for (const std::string& character_class_to_open : last_session_open_tabs["character_class"]) {
-        open_content_pieces.push_back(&content.character_classes.get(character_class_to_open));
+        open_content_pieces.push_back(&content.get_character_classes().get(character_class_to_open));
     }
     for (const std::string& character_subclass_to_open : last_session_open_tabs["character_subclass"]) {
-        open_content_pieces.push_back(&content.character_subclasses.get(character_subclass_to_open));
+        open_content_pieces.push_back(&content.get_character_subclasses().get(character_subclass_to_open));
     }
     for (const std::string& character_race_to_open : last_session_open_tabs["character_race"]) {
-        open_content_pieces.push_back(&content.character_races.get(character_race_to_open));
+        open_content_pieces.push_back(&content.get_character_races().get(character_race_to_open));
     }
     for (const std::string& character_subrace_to_open : last_session_open_tabs["character_subrace"]) {
-        open_content_pieces.push_back(&content.character_subraces.get(character_subrace_to_open));
+        open_content_pieces.push_back(&content.get_character_subraces().get(character_subrace_to_open));
     }
     for (const std::string& item_to_open : last_session_open_tabs["item"]) {
-        open_content_pieces.push_back(&content.items.get(item_to_open));
+        open_content_pieces.push_back(&content.get_items().get(item_to_open));
     }
     for (const std::string& spell_to_open : last_session_open_tabs["spell"]) {
-        open_content_pieces.push_back(&content.spells.get(spell_to_open));
+        open_content_pieces.push_back(&content.get_spells().get(spell_to_open));
     }
     for (const std::string& feature_to_open : last_session_open_tabs["feature"]) {
-        open_content_pieces.push_back(content.features.get(feature_to_open));
+        open_content_pieces.push_back(content.get_features().get(feature_to_open));
     }
-    for (const std::string& choosable_to_open : last_session_open_tabs["choosable"]) {
-        for (const auto& [choosable_group, choosable_library] : content.choosables) {
-            if (choosable_library.contains(choosable_to_open)) {
-                open_content_pieces.push_back(choosable_library.get(choosable_to_open));
-                break;
-            }
-        }
+    for (const std::string& choosable_to_open : last_session_open_tabs["choosable_feature"]) {
+        open_content_pieces.push_back(&content.get_choosable_features().get(choosable_to_open));
     }
 }
 
@@ -427,7 +444,12 @@ void dnd::GUIApp::render_search_window() {
     if (ImGui::BeginChild("Search Results", ImVec2(-FLT_MIN, -FLT_MIN))) {
         for (size_t i = 0; i < search_result_count; ++i) {
             if (ImGui::Selectable(search_result_strings[i].c_str(), false)) {
-                open_content_pieces.push_back(search_results[i]);
+                auto existent = std::find(open_content_pieces.begin(), open_content_pieces.end(), search_results[i]);
+                if (existent != open_content_pieces.end()) {
+                    forced_next_selection = *existent;
+                } else {
+                    open_content_pieces.push_back(search_results[i]);
+                }
             }
         }
         ImGui::EndChild();
@@ -441,8 +463,8 @@ void dnd::GUIApp::render_content_window() {
     if (ImGui::BeginTabBar("Content Tabs", tab_bar_flags)) {
         for (auto it = open_content_pieces.begin(); it != open_content_pieces.end();) {
             bool open = true;
-            if (ImGui::BeginTabItem((*it)->name.c_str(), &open)) {
-                ImGui::SeparatorText((*it)->name.c_str());
+            if (ImGui::BeginTabItem((*it)->get_name().c_str(), &open)) {
+                ImGui::SeparatorText((*it)->get_name().c_str());
                 (*it)->accept(&display_visitor);
                 ImGui::EndTabItem();
             }
@@ -459,6 +481,14 @@ void dnd::GUIApp::render_content_window() {
             if (ImGui::IsItemHovered()) {
                 ImGui::SetTooltip("Close all tabs");
             }
+        }
+        if (forced_next_selection != nullptr) {
+            ImGuiTabBar* tab_bar = ImGui::GetCurrentTabBar();
+            ImGuiTabItem* tab_item = ImGui::TabBarFindTabByID(
+                tab_bar, ImGui::GetID(forced_next_selection->get_name().c_str())
+            );
+            ImGui::TabBarQueueFocus(tab_bar, tab_item);
+            forced_next_selection = nullptr;
         }
         ImGui::EndTabBar();
     }

@@ -1,6 +1,7 @@
 {
     "name": "Circle of the Land",
     "class": "Druid",
+    "description": "Druids who focus on harnessing the power of a specific natural environment, gaining enhanced spellcasting and attunement to the land.",
     "features": {
         "Bonus Cantrip (Circle of the Land)": {
             "description": "When you choose this circle at 2nd level, you learn one additional druid cantrip of your choice. This cantrip doesn't count against the number of druid cantrips you know.",

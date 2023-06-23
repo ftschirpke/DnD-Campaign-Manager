@@ -1,6 +1,7 @@
 {
     "name": "College of Lore",
     "class": "Bard",
+    "description": "Bards with a vast repertoire of knowledge and versatile skills, excelling in magic, lore, and manipulating minds.",
     "features": {
         "Bonus Proficiencies (College of Lore)": {
             "description": "When you join the College of Lore at 3rd level, you gain proficiency with three skills of your choice.",
@@ -22,8 +23,9 @@
             "description": "At 6th level, you learn two spells of your choice from any class. A spell you choose must be of a level you can cast, as shown on the Bard table, or a cantrip. The chosen spells count as bard spells for you but don't count against the number of bard spells you know.",
             "activation": "CLASS_LEVEL >= 6",
             "choose": {
-                "spells": {
-                    "amount": 2
+                "spells_known": {
+                    "amount": 2,
+                    "group": "spells"
                 }
             }
         },

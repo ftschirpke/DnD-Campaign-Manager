@@ -11,6 +11,7 @@
 #include <core/output/string_formatting/formats/format.hpp>
 #include <core/output/string_formatting/formats/paragraph.hpp>
 #include <core/output/string_formatting/formats/table.hpp>
+#include <core/utils/string_manipulation.hpp>
 
 std::vector<std::unique_ptr<dnd::Format>> dnd::StringFormatter::parse_formats(const std::string& text) const {
     std::vector<std::unique_ptr<dnd::Format>> formats;
