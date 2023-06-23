@@ -35,7 +35,7 @@ dnd::EffectHolder dnd::EffectHolder::create(dnd::EffectHolderData&& data, const 
     std::vector<std::unique_ptr<Condition>> activation_conditions;
     activation_conditions.reserve(data.activation_conditions_data.size());
     for (auto& condition_data : data.activation_conditions_data) {
-        activation_conditions.emplace_back(std::move(create_condition(std::move(condition_data))));
+        activation_conditions.emplace_back(create_condition(std::move(condition_data)));
     }
     std::vector<Choice> choices;
     choices.reserve(data.choices_data.size());
@@ -45,7 +45,7 @@ dnd::EffectHolder dnd::EffectHolder::create(dnd::EffectHolderData&& data, const 
     std::vector<std::unique_ptr<Effect>> effects;
     effects.reserve(data.effects_data.size());
     for (auto& effect_data : data.effects_data) {
-        effects.emplace_back(std::move(create_effect(std::move(effect_data))));
+        effects.emplace_back(create_effect(std::move(effect_data)));
     }
     return EffectHolder(
         std::move(activation_conditions), std::move(choices), std::move(effects),
