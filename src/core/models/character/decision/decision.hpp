@@ -29,6 +29,7 @@ public:
     Decision(Decision&&) = default;
     Decision& operator=(Decision&&) = default;
 
+    const EffectHolder* get_target() const noexcept;
     const EffectHolder& get_effects() const noexcept;
 private:
     Decision(const EffectHolder* target, EffectHolder effects) noexcept;

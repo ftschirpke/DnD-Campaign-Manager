@@ -3,6 +3,7 @@
 #include "spell_type.hpp"
 
 #include <array>
+#include <cassert>
 #include <stdexcept>
 #include <string>
 #include <string_view>

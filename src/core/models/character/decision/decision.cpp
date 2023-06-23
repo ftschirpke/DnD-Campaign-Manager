@@ -59,6 +59,8 @@ dnd::Decision dnd::Decision::create(dnd::DecisionData&& data, const dnd::Content
     return Decision(data.get_target(), EffectHolder::create(std::move(res_data), content));
 }
 
+const dnd::EffectHolder* dnd::Decision::get_target() const noexcept { return target; }
+
 const dnd::EffectHolder& dnd::Decision::get_effects() const noexcept { return effects; }
 
 dnd::Decision::Decision(const dnd::EffectHolder* target, dnd::EffectHolder effects) noexcept

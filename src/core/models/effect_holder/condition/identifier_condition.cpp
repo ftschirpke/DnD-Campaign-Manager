@@ -3,6 +3,7 @@
 #include "identifier_condition.hpp"
 
 #include <functional>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <unordered_map>
