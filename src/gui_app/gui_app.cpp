@@ -42,7 +42,8 @@ static const ImGuiWindowFlags error_popup_options = ImGuiWindowFlags_AlwaysAutoR
 
 dnd::GUIApp::GUIApp()
     : show_demo_window(false), select_campaign(false), is_parsing(false),
-      content_dir_dialog(content_dir_dialog_options), search(nullptr), search_result_count(0), display_visitor() {
+      content_dir_dialog(content_dir_dialog_options), search(nullptr), search_result_count(0),
+      forced_next_selection(nullptr), display_visitor() {
     ImGui::GetIO().IniFilename = imgui_ini_filename;
 }
 
@@ -443,8 +444,10 @@ void dnd::GUIApp::render_search_window() {
     if (ImGui::BeginChild("Search Results", ImVec2(-FLT_MIN, -FLT_MIN))) {
         for (size_t i = 0; i < search_result_count; ++i) {
             if (ImGui::Selectable(search_result_strings[i].c_str(), false)) {
-                if (std::find(open_content_pieces.begin(), open_content_pieces.end(), search_results[i])
-                    == open_content_pieces.end()) {
+                auto existent = std::find(open_content_pieces.begin(), open_content_pieces.end(), search_results[i]);
+                if (existent != open_content_pieces.end()) {
+                    forced_next_selection = *existent;
+                } else {
                     open_content_pieces.push_back(search_results[i]);
                 }
             }
@@ -478,6 +481,14 @@ void dnd::GUIApp::render_content_window() {
             if (ImGui::IsItemHovered()) {
                 ImGui::SetTooltip("Close all tabs");
             }
+        }
+        if (forced_next_selection != nullptr) {
+            ImGuiTabBar* tab_bar = ImGui::GetCurrentTabBar();
+            ImGuiTabItem* tab_item = ImGui::TabBarFindTabByID(
+                tab_bar, ImGui::GetID(forced_next_selection->get_name().c_str())
+            );
+            ImGui::TabBarQueueFocus(tab_bar, tab_item);
+            forced_next_selection = nullptr;
         }
         ImGui::EndTabBar();
     }
