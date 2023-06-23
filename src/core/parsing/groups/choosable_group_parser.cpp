@@ -12,22 +12,8 @@
 #include <core/models/feature/choosable_feature.hpp>
 #include <core/parsing/feature/choosable_feature_parser.hpp>
 #include <core/parsing/file_parser.hpp>
-#include <core/utils/char_manipulation.hpp>
+#include <core/utils/string_manipulation.hpp>
 #include <core/validation/feature/choosable_feature_data.hpp>
-
-void snake_case_to_spaced_words(std::string& str) {
-    bool first_in_word = true;
-    for (auto& c : str) {
-        if (c == '_') {
-            c = ' ';
-            first_in_word = true;
-        }
-        if (first_in_word) {
-            c = dnd::char_to_uppercase(c);
-            first_in_word = false;
-        }
-    }
-}
 
 dnd::ChoosableGroupParser::ChoosableGroupParser(const std::filesystem::path& filepath) noexcept
     : FileParser(filepath), choosable_feature_parser(filepath) {}

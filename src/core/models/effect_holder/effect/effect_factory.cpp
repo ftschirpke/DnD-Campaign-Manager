@@ -14,6 +14,7 @@
 #include <core/models/effect_holder/effect/effect.hpp>
 #include <core/models/effect_holder/effect/identifier_effect.hpp>
 #include <core/models/effect_holder/effect/literal_effect.hpp>
+#include <core/utils/string_manipulation.hpp>
 #include <core/validation/effect_holder/effect/effect_data.hpp>
 
 std::unique_ptr<dnd::Effect> dnd::create_effect(dnd::EffectData&& effect_data) {
@@ -21,11 +22,11 @@ std::unique_ptr<dnd::Effect> dnd::create_effect(dnd::EffectData&& effect_data) {
         throw invalid_data("Cannot create effect from invalid data.");
     }
     std::string::const_iterator it = std::find(effect_data.effect_str.cbegin(), effect_data.effect_str.cend(), ' ');
-    const std::string_view affected_attribute = std::string_view(effect_data.effect_str.cbegin(), it);
+    const std::string_view affected_attribute = str_view(effect_data.effect_str.cbegin(), it);
     std::string::const_iterator last_it = ++it;
     it = std::find(it, effect_data.effect_str.cend(), ' ');
 
-    const std::string_view effect_time_str = std::string_view(last_it, it);
+    const std::string_view effect_time_str = str_view(last_it, it);
     dnd::EffectTime effect_time = static_cast<dnd::EffectTime>(-1);
     if (effect_time_str == "earliest") {
         effect_time = dnd::EffectTime::EARLIEST;
@@ -42,8 +43,8 @@ std::unique_ptr<dnd::Effect> dnd::create_effect(dnd::EffectData&& effect_data) {
 
     last_it = ++it;
     it = std::find(it, effect_data.effect_str.cend(), ' ');
-    const std::string_view operator_name = std::string_view(last_it, it);
-    const std::string_view value = std::string_view(++it, effect_data.effect_str.cend());
+    const std::string_view operator_name = str_view(last_it, it);
+    const std::string_view value = str_view(++it, effect_data.effect_str.cend());
 
     if (value[0] >= 'A' && value[0] <= 'Z') {
         return std::make_unique<IdentifierEffect>(affected_attribute, effect_time, operator_name, value);

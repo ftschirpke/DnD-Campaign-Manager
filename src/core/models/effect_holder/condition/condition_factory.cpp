@@ -13,6 +13,7 @@
 #include <core/models/effect_holder/condition/condition.hpp>
 #include <core/models/effect_holder/condition/identifier_condition.hpp>
 #include <core/models/effect_holder/condition/literal_condition.hpp>
+#include <core/utils/string_manipulation.hpp>
 #include <core/validation/effect_holder/condition/condition_data.hpp>
 
 std::unique_ptr<dnd::Condition> dnd::create_condition(dnd::ConditionData&& condition_data) {
@@ -22,11 +23,11 @@ std::unique_ptr<dnd::Condition> dnd::create_condition(dnd::ConditionData&& condi
     std::string::const_iterator it = std::find(
         condition_data.condition_str.cbegin(), condition_data.condition_str.cend(), ' '
     );
-    const std::string_view left_side_identifier = std::string_view(condition_data.condition_str.cbegin(), it);
+    const std::string_view left_side_identifier = str_view(condition_data.condition_str.cbegin(), it);
     std::string::const_iterator last_it = ++it;
     it = std::find(it, condition_data.condition_str.cend(), ' ');
-    const std::string_view operator_name = std::string_view(last_it, it);
-    const std::string_view right_side_identifier = std::string_view(++it, condition_data.condition_str.cend());
+    const std::string_view operator_name = str_view(last_it, it);
+    const std::string_view right_side_identifier = str_view(++it, condition_data.condition_str.cend());
 
     if (right_side_identifier[0] >= 'A' && right_side_identifier[0] <= 'Z') {
         return std::make_unique<IdentifierCondition>(left_side_identifier, operator_name, right_side_identifier);
