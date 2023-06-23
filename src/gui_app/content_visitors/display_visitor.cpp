@@ -36,12 +36,23 @@ static void label(const char* label) {
     ImGui::TableSetColumnIndex(1);
 }
 
+static void wrapped_label(const char* label) {
+    ImGui::TableNextRow();
+    ImGui::TableSetColumnIndex(0);
+    ImGui::TextWrapped("%s", label);
+    ImGui::TableSetColumnIndex(1);
+}
+
 static void source(const dnd::ContentPiece* content_piece_ptr) {
     ImGui::TableNextRow();
     ImGui::TableSetColumnIndex(0);
     ImGui::Text("Source:");
     ImGui::TableSetColumnIndex(1);
-    ImGui::TextWrapped("%s", content_piece_ptr->get_source_info().get_source_path().string().c_str());
+    ImGui::TextWrapped(
+        "%s / %s / %s", content_piece_ptr->get_source_info().get_source_group_name().c_str(),
+        content_piece_ptr->get_source_info().get_source_type_name().c_str(),
+        content_piece_ptr->get_source_info().get_source_name().c_str()
+    );
     ImGui::TableNextRow();
     ImGui::TableSetColumnIndex(0);
     ImGui::Separator();
@@ -187,8 +198,10 @@ void dnd::DisplayVisitor::visit(const Item* item_ptr) {
     ImGui::Text("%s", attunement);
     label("Description:");
     display_formatted_text(item_ptr->get_description());
-    label("Cosmetic Description:");
-    display_formatted_text(item_ptr->get_cosmetic_description());
+    if (!item_ptr->get_cosmetic_description().empty()) {
+        wrapped_label("Cosmetic Description:");
+        display_formatted_text(item_ptr->get_cosmetic_description());
+    }
 
     end_content_table();
 }
@@ -232,8 +245,7 @@ void dnd::DisplayVisitor::visit(const ChoosableFeature* choosable_ptr) {
     begin_content_table(choosable_ptr);
 
     label("Type:");
-    ImGui::Text("Choosable");
-    ImGui::Text("%s", choosable_ptr->get_type().c_str());
+    ImGui::Text("Choosable Feature - %s", choosable_ptr->get_type().c_str());
     source(choosable_ptr);
     label("Description:");
     display_formatted_text(choosable_ptr->get_description());
