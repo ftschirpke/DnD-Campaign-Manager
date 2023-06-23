@@ -2,7 +2,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-static constexpr const char* tags = "[core/basic_mechanics/dice]";
+static constexpr const char* tags = "[core][basic_mechanics][dice]";
 
 TEST_CASE("dnd::dice_to_int", tags) {
     REQUIRE(dnd::dice_to_int(dnd::Dice::D4) == 4);

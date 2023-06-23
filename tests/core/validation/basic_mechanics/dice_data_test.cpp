@@ -4,7 +4,7 @@
 
 #include <core/basic_mechanics/dice.hpp>
 
-static constexpr const char* tags = "[core/validation/basic_mechanics/dice_data]";
+static constexpr const char* tags = "[core][validation][basic_mechanics][dice]";
 
 TEST_CASE("dnd::DiceData", tags) {
     dnd::DiceData dice_data(nullptr);

@@ -4,7 +4,7 @@
 
 #include <stdexcept>
 
-static constexpr const char* tags = "[core/basic_mechanics/abilities]";
+static constexpr const char* tags = "[core][basic_mechanics]";
 
 TEST_CASE("dnd::string_to_ability", tags) {
     SECTION("Valid ability strings") {

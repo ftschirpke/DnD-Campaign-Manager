@@ -2,7 +2,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-static constexpr const char* tags = "[core/basic_mechanics/character_progression]";
+static constexpr const char* tags = "[core][basic_mechanics][character][progression]";
 
 TEST_CASE("dnd::level_to_xp", tags) {
     SECTION("Valid character levels") {

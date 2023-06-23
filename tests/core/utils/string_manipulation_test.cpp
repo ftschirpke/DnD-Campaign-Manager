@@ -5,7 +5,7 @@
 #include <string>
 #include <string_view>
 
-static constexpr const char* tags = "[core/utils/string_manipulation]";
+static constexpr const char* tags = "[core][utils]";
 
 TEST_CASE("dnd::string_to_lowercase", tags) {
     SECTION("Lowercase string") {

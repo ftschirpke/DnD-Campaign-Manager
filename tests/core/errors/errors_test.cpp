@@ -1,4 +1,4 @@
-#include <core/errors/errors.cpp>
+#include <core/errors/errors.hpp>
 
 #include <filesystem>
 #include <utility>
@@ -7,7 +7,7 @@
 
 #include <core/validation/character/character_data.hpp>
 
-static constexpr const char* tags = "[core/errors/errors.cpp]";
+static constexpr const char* tags = "[core][errors]";
 
 TEST_CASE("dnd::Errors - Construction and Getter Methods", tags) {
     dnd::Errors errors;

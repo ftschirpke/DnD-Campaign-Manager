@@ -2,7 +2,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-static constexpr const char* tags = "[core/utils/char_manipulation]";
+static constexpr const char* tags = "[core][utils]";
 
 TEST_CASE("dnd::uchar_to_lowercase", tags) {
     REQUIRE(dnd::uchar_to_lowercase('A') == 'a');

@@ -5,7 +5,7 @@
 #include <core/validation/character/character_data.hpp>
 #include <core/validation/feature/choosable_feature_data.hpp>
 
-static constexpr const char* tags = "[core/errors/validation_error]";
+static constexpr const char* tags = "[core][validation][errors]";
 
 TEST_CASE("dnd::ValidationError: basic getters", tags) {
     const dnd::CharacterData validation_data;

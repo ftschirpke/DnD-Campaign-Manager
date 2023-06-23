@@ -5,7 +5,7 @@
 #include <filesystem>
 #include <string>
 
-static constexpr const char* tags = "[core/errors/parsing_error]";
+static constexpr const char* tags = "[core][parsing][errors]";
 
 TEST_CASE("dnd::ParsingError: basic getters", tags) {
     std::filesystem::path filepath("/path/to/file.txt");
