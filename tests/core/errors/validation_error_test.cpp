@@ -4,14 +4,17 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-#include <core/validation/character/character_data.hpp>
-#include <core/validation/feature/choosable_feature_data.hpp>
+#include <core/validation/validation_data_mock.hpp>
 
 static constexpr const char* tags = "[core][validation][errors]";
 
 TEST_CASE("dnd::ValidationError: basic getters", tags) {
-    const dnd::CharacterData validation_data;
-    const dnd::ChoosableFeatureData other_validation_data;
+    dnd::ValidationDataMock validation_data;
+    validation_data.name = "First Mock Validation Data";
+    validation_data.description = "some description";
+    dnd::ValidationDataMock other_validation_data;
+    other_validation_data.name = "Second Mock Validation Data";
+    other_validation_data.description = "another description";
     const std::string error_message = "Error message";
 
     SECTION("Get error code") {
@@ -26,10 +29,10 @@ TEST_CASE("dnd::ValidationError: basic getters", tags) {
 
     SECTION("Get validation data") {
         dnd::ValidationError error1(dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, &validation_data, error_message);
-        REQUIRE(*dynamic_cast<const dnd::CharacterData*>(error1.get_validation_data()) == validation_data);
+        REQUIRE(*dynamic_cast<const dnd::ValidationDataMock*>(error1.get_validation_data()) == validation_data);
 
         dnd::ValidationError error2(dnd::ValidationErrorCode::INVALID_RELATION, &other_validation_data, error_message);
-        REQUIRE(*dynamic_cast<const dnd::ChoosableFeatureData*>(error2.get_validation_data()) == other_validation_data);
+        REQUIRE(*dynamic_cast<const dnd::ValidationDataMock*>(error2.get_validation_data()) == other_validation_data);
     }
 
     SECTION("Get error message") {
