@@ -2,7 +2,9 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-TEST_CASE("dnd::uchar_to_lowercase", "[utils][char_manipulation]") {
+static constexpr const char* tags = "[core/utils/char_manipulation]";
+
+TEST_CASE("dnd::uchar_to_lowercase", tags) {
     REQUIRE(dnd::uchar_to_lowercase('A') == 'a');
     REQUIRE(dnd::uchar_to_lowercase('Z') == 'z');
     REQUIRE(dnd::uchar_to_lowercase('a') == 'a');
@@ -16,7 +18,7 @@ TEST_CASE("dnd::uchar_to_lowercase", "[utils][char_manipulation]") {
     REQUIRE(dnd::uchar_to_lowercase('\0') == '\0');
 }
 
-TEST_CASE("dnd::char_to_lowercase", "[utils][char_manipulation]") {
+TEST_CASE("dnd::char_to_lowercase", tags) {
     REQUIRE(dnd::char_to_lowercase('A') == 'a');
     REQUIRE(dnd::char_to_lowercase('Z') == 'z');
     REQUIRE(dnd::char_to_lowercase('a') == 'a');
@@ -30,7 +32,7 @@ TEST_CASE("dnd::char_to_lowercase", "[utils][char_manipulation]") {
     REQUIRE(dnd::char_to_lowercase('\0') == '\0');
 }
 
-TEST_CASE("dnd::uchar_to_uppercase", "[utils][char_manipulation]") {
+TEST_CASE("dnd::uchar_to_uppercase", tags) {
     REQUIRE(dnd::uchar_to_uppercase('A') == 'A');
     REQUIRE(dnd::uchar_to_uppercase('Z') == 'Z');
     REQUIRE(dnd::uchar_to_uppercase('a') == 'A');
@@ -44,7 +46,7 @@ TEST_CASE("dnd::uchar_to_uppercase", "[utils][char_manipulation]") {
     REQUIRE(dnd::uchar_to_uppercase('\0') == '\0');
 }
 
-TEST_CASE("dnd::char_to_uppercase", "[utils][char_manipulation]") {
+TEST_CASE("dnd::char_to_uppercase", tags) {
     REQUIRE(dnd::char_to_uppercase('A') == 'A');
     REQUIRE(dnd::char_to_uppercase('Z') == 'Z');
     REQUIRE(dnd::char_to_uppercase('a') == 'A');

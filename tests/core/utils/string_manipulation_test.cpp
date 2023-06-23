@@ -5,7 +5,9 @@
 #include <string>
 #include <string_view>
 
-TEST_CASE("dnd::string_to_lowercase", "[utils][string_manipulation]") {
+static constexpr const char* tags = "[core/utils/string_manipulation]";
+
+TEST_CASE("dnd::string_to_lowercase", tags) {
     SECTION("Lowercase string") {
         std::string str1 = "hello world!";
         std::string str2 = "testing lowercase";
@@ -40,7 +42,7 @@ TEST_CASE("dnd::string_to_lowercase", "[utils][string_manipulation]") {
     }
 }
 
-TEST_CASE("dnd::string_to_uppercase", "[utils][string_manipulation]") {
+TEST_CASE("dnd::string_to_uppercase", tags) {
     SECTION("Lowercase string") {
         std::string str1 = "hello world!";
         std::string str2 = "testing uppercase";
@@ -75,7 +77,7 @@ TEST_CASE("dnd::string_to_uppercase", "[utils][string_manipulation]") {
     }
 }
 
-TEST_CASE("dnd::string_lowercase_copy", "[utils][string_manipulation]") {
+TEST_CASE("dnd::string_lowercase_copy", tags) {
     SECTION("Lowercase string") {
         std::string str1 = "hello world!";
         std::string str2 = "testing lowercase";
@@ -117,7 +119,7 @@ TEST_CASE("dnd::string_lowercase_copy", "[utils][string_manipulation]") {
     }
 }
 
-TEST_CASE("dnd::string_uppercase_copy", "[utils][string_manipulation]") {
+TEST_CASE("dnd::string_uppercase_copy", tags) {
     SECTION("Lowercase string") {
         std::string str1 = "hello world!";
         std::string str2 = "testing uppercase";
@@ -159,7 +161,7 @@ TEST_CASE("dnd::string_uppercase_copy", "[utils][string_manipulation]") {
     }
 }
 
-TEST_CASE("dnd::snake_case_to_spaced_words", "[utils][string_manipulation]") {
+TEST_CASE("dnd::snake_case_to_spaced_words", tags) {
     SECTION("Single word snake_case") {
         std::string str1 = "hello_world";
         std::string str2 = "testing_snake_";
@@ -185,7 +187,7 @@ TEST_CASE("dnd::snake_case_to_spaced_words", "[utils][string_manipulation]") {
     }
 }
 
-TEST_CASE("dnd::str_view: Creating string views from iterators", "[utils][string_manipulation]") {
+TEST_CASE("dnd::str_view: Creating string views from iterators", tags) {
     std::string input1 = "Hello, world!";
     std::string input2 = "Testing str_view function";
     std::string::const_iterator first1 = input1.begin();
