@@ -35,5 +35,8 @@ dnd::Errors dnd::SpellData::validate() const {
     if (duration.empty()) {
         errors.add_validation_error(ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Duration is empty");
     }
+    if (classes.empty()) {
+        errors.add_validation_error(ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Spell has no classes");
+    }
     return errors;
 }
