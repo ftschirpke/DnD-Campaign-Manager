@@ -7,7 +7,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/models/feature/choosable_feature.hpp>
 #include <core/parsing/feature/choosable_feature_parser.hpp>
@@ -54,7 +54,7 @@ dnd::Errors dnd::ChoosableGroupParser::parse() {
 
 bool dnd::ChoosableGroupParser::continue_after_errors() const noexcept { return true; }
 
-dnd::Errors dnd::ChoosableGroupParser::validate(const dnd::ContentHolder& content) const {
+dnd::Errors dnd::ChoosableGroupParser::validate(const dnd::Content& content) const {
     Errors errors;
     assert(choosable_features_in_file == data.size());
     feature_data_valid.resize(choosable_features_in_file, false);
@@ -67,7 +67,7 @@ dnd::Errors dnd::ChoosableGroupParser::validate(const dnd::ContentHolder& conten
     return errors;
 }
 
-void dnd::ChoosableGroupParser::save_result(dnd::ContentHolder& content) {
+void dnd::ChoosableGroupParser::save_result(dnd::Content& content) {
     for (size_t i = 0; i < data.size(); ++i) {
         if (feature_data_valid[i]) {
             snake_case_to_spaced_words(data[i].type);

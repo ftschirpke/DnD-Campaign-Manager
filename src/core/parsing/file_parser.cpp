@@ -38,4 +38,4 @@ dnd::Errors dnd::FileParser::open_json() {
 
 bool dnd::FileParser::continue_after_errors() const noexcept { return false; }
 
-void dnd::FileParser::set_context(const dnd::ContentHolder& content) { DND_UNUSED(content); }
+void dnd::FileParser::set_context(const dnd::Content& content) { DND_UNUSED(content); }

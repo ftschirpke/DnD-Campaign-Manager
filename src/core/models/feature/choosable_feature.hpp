@@ -14,7 +14,7 @@
 
 namespace dnd {
 
-class ContentHolder;
+class Content;
 class ContentVisitor;
 
 class ChoosableFeature : public Feature {
@@ -26,7 +26,7 @@ public:
      * @return the constructed choosable feature
      * @throws dnd::invalid_data if the data is invalid or is incompatible with the given content
      */
-    static ChoosableFeature create(ChoosableFeatureData&& data, const ContentHolder& content);
+    static ChoosableFeature create(ChoosableFeatureData&& data, const Content& content);
 
     ChoosableFeature(const ChoosableFeature&) = delete;
     ChoosableFeature& operator=(const ChoosableFeature&) = delete;

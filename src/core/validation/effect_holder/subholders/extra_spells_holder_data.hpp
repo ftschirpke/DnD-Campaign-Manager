@@ -3,9 +3,9 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <set>
 #include <string>
-#include <compare>
 
 #include <core/errors/errors.hpp>
 #include <core/validation/validation_data.hpp>
@@ -27,7 +27,7 @@ public:
      * @param content the content holder to validate the relations against
      * @return the errors that occured during validation
      */
-    virtual Errors validate_relations(const ContentHolder& content) const override;
+    virtual Errors validate_relations(const Content& content) const override;
     /**
      * @brief Checks if the extra spells holder is empty
      * @return "true" if the extra spells holder is empty, "false" otherwise

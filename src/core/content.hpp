@@ -1,13 +1,13 @@
-#ifndef CONTENT_HOLDER_HPP_
-#define CONTENT_HOLDER_HPP_
+#ifndef CONTENT_HPP_
+#define CONTENT_HPP_
 
 #include <dnd_config.hpp>
 
 #include <string>
 #include <unordered_map>
 
-#include <core/controllers/content_library.hpp>
-#include <core/controllers/groups.hpp>
+#include <core/content_library.hpp>
+#include <core/groups.hpp>
 #include <core/models/character/character.hpp>
 #include <core/models/character_class/character_class.hpp>
 #include <core/models/character_race/character_race.hpp>
@@ -23,7 +23,7 @@ namespace dnd {
 /**
  * @brief A class that holds all the content for a certain session or campaign
  */
-class ContentHolder {
+class Content {
 public:
     /**
      * @brief Returns whether all storage libraries are empty
@@ -76,4 +76,4 @@ private:
 
 } // namespace dnd
 
-#endif // CONTENT_HOLDER_HPP_
+#endif // CONTENT_HPP_

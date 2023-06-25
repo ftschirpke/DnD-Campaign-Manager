@@ -7,16 +7,14 @@
 #include <utility>
 #include <vector>
 
+#include <core/content.hpp>
 #include <core/content_visitors/content_visitor.hpp>
-#include <core/controllers/content_holder.hpp>
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/character_race/character_race.hpp>
 #include <core/validation/character_subrace/character_subrace_data.hpp>
 
-dnd::CharacterSubrace dnd::CharacterSubrace::create(
-    dnd::CharacterSubraceData&& data, const dnd::ContentHolder& content
-) {
+dnd::CharacterSubrace dnd::CharacterSubrace::create(dnd::CharacterSubraceData&& data, const dnd::Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create character subrace from invalid data.");
     }

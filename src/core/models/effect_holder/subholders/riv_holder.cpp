@@ -10,7 +10,7 @@
 
 #include <fmt/format.h>
 
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/validation/effect_holder/subholders/riv_holder_data.hpp>
 
@@ -21,7 +21,7 @@ static std::vector<std::string> set_to_vector(std::set<std::string>&& set) {
     return vector;
 }
 
-dnd::RIVHolder dnd::RIVHolder::create(dnd::RIVHolderData&& data, const dnd::ContentHolder& content) {
+dnd::RIVHolder dnd::RIVHolder::create(dnd::RIVHolderData&& data, const dnd::Content& content) {
     if (!data.validate().ok()) {
         throw dnd::invalid_data("Cannot create RIVHolder from invalid data.");
     }

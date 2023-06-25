@@ -7,7 +7,7 @@
 #include <utility>
 #include <vector>
 
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
@@ -19,7 +19,7 @@ void ins(std::set<std::string>& set, std::vector<std::string>&& vec) {
     set.insert(std::make_move_iterator(vec.begin()), std::make_move_iterator(vec.end()));
 }
 
-dnd::Decision dnd::Decision::create(dnd::DecisionData&& data, const dnd::ContentHolder& content) {
+dnd::Decision dnd::Decision::create(dnd::DecisionData&& data, const dnd::Content& content) {
     if (!data.validate().ok()) {
         throw dnd::invalid_data("Cannot create Decision from invalid data.");
     }

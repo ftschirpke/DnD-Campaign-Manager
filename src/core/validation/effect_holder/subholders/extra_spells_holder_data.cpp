@@ -7,7 +7,7 @@
 
 #include <fmt/format.h>
 
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/models/spell/spell.hpp>
@@ -42,7 +42,7 @@ dnd::Errors dnd::ExtraSpellsHolderData::validate() const {
 }
 
 static dnd::Errors spells_set_validate_relations(
-    const std::set<std::string>& spells, const dnd::ValidationData* parent, const dnd::ContentHolder& content
+    const std::set<std::string>& spells, const dnd::ValidationData* parent, const dnd::Content& content
 ) {
     dnd::Errors errors;
 
@@ -57,7 +57,7 @@ static dnd::Errors spells_set_validate_relations(
     return errors;
 }
 
-dnd::Errors dnd::ExtraSpellsHolderData::validate_relations(const ContentHolder& content) const {
+dnd::Errors dnd::ExtraSpellsHolderData::validate_relations(const Content& content) const {
     Errors errors;
     for (const auto& cantrip_name : free_cantrips) {
         if (!content.get_spells().contains(cantrip_name)) {

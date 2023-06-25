@@ -7,7 +7,7 @@
 
 #include <fmt/format.h>
 
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/validation/effect_holder/condition/condition_data.hpp>
 #include <core/validation/effect_holder/effect/effect_data.hpp>
@@ -40,7 +40,7 @@ dnd::Errors dnd::EffectHolderData::validate() const {
     return errors;
 }
 
-dnd::Errors dnd::EffectHolderData::validate_relations(const ContentHolder& content) const {
+dnd::Errors dnd::EffectHolderData::validate_relations(const Content& content) const {
     Errors errors;
     for (const auto& choice_data : choices_data) {
         errors += choice_data.validate_relations(content);

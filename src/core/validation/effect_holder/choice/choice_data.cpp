@@ -7,7 +7,7 @@
 
 #include <fmt/format.h>
 
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/validation/validation_data.hpp>
@@ -30,7 +30,7 @@ dnd::Errors dnd::ChoiceData::validate() const {
     return errors;
 }
 
-dnd::Errors dnd::ChoiceData::validate_relations(const ContentHolder& content) const {
+dnd::Errors dnd::ChoiceData::validate_relations(const Content& content) const {
     Errors errors;
     if (!group_names.empty()) {
         for (const auto& group_name : group_names) {

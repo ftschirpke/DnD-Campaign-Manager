@@ -19,8 +19,7 @@
 #include <imgui/imgui_stdlib.h>
 #include <nlohmann/json.hpp>
 
-#include <core/controllers/content_holder.hpp>
-#include <core/controllers/searching/content_search.hpp>
+#include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
 #include <core/errors/validation_error.hpp>
@@ -29,6 +28,7 @@
 #include <core/models/source_info.hpp>
 #include <core/models/spell/spell.hpp>
 #include <core/parsing/content_parser.hpp>
+#include <core/searching/content_search.hpp>
 #include <core/utils/string_manipulation.hpp>
 #include <gui_app/content_visitors/display_visitor.hpp>
 #include <gui_app/content_visitors/list_visitor.hpp>
@@ -217,7 +217,7 @@ static void display_size(const char* const name, size_t s, float w) {
 }
 
 static const float min_w = 240.0f;
-static void render_content_count_table(const dnd::ContentHolder& content) {
+static void render_content_count_table(const dnd::Content& content) {
     float window_width = ImGui::GetWindowWidth();
     float w = std::max(min_w, window_width);
     display_size("Characters", content.get_characters().size(), w);

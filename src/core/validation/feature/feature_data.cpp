@@ -22,7 +22,7 @@ dnd::Errors dnd::FeatureData::validate() const {
     return errors;
 }
 
-dnd::Errors dnd::FeatureData::validate_relations(const ContentHolder& content) const {
+dnd::Errors dnd::FeatureData::validate_relations(const Content& content) const {
     Errors errors = main_part_data.validate_relations(content);
     for (const auto& other_part_data : other_parts_data) {
         errors += other_part_data.validate_relations(content);

@@ -9,7 +9,7 @@
 
 namespace dnd {
 
-class ContentHolder;
+class Content;
 class Spell;
 
 /**
@@ -24,7 +24,7 @@ public:
      * @return the constructed ExtraSpellsHolder
      * @throws dnd::invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static ExtraSpellsHolder create(ExtraSpellsHolderData&& data, const ContentHolder& content);
+    static ExtraSpellsHolder create(ExtraSpellsHolderData&& data, const Content& content);
 
     /**
      * @brief Returns the cantrips that do not count against the number of cantrips known

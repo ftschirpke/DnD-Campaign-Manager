@@ -15,10 +15,10 @@
 #include <imgui/imfilebrowser.h>
 #include <imgui/imgui.h>
 
-#include <core/controllers/content_holder.hpp>
-#include <core/controllers/searching/content_search.hpp>
+#include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/parsing/content_parser.hpp>
+#include <core/searching/content_search.hpp>
 #include <gui_app/content_visitors/display_visitor.hpp>
 
 namespace dnd {
@@ -86,7 +86,7 @@ private:
     ContentParser parser;
     Errors errors;
     // the object holding all the DnD content relevant for the selected campaign
-    ContentHolder content;
+    Content content;
 
     DisplayVisitor display_visitor;
 };

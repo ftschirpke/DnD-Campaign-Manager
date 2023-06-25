@@ -2,7 +2,7 @@
 
 #include "character_basis.hpp"
 
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
@@ -12,7 +12,7 @@
 #include <core/models/character_subrace/character_subrace.hpp>
 #include <core/validation/character/character_basis_data.hpp>
 
-dnd::CharacterBasis dnd::CharacterBasis::create(dnd::CharacterBasisData&& data, const dnd::ContentHolder& content) {
+dnd::CharacterBasis dnd::CharacterBasis::create(dnd::CharacterBasisData&& data, const dnd::Content& content) {
     if (!data.validate().ok()) {
         throw dnd::invalid_data("Cannot create CharacterBasis object from invalid data.");
     }

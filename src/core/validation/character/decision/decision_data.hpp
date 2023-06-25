@@ -30,7 +30,7 @@ public:
      * @param content the content holder to validate the relations against
      * @return the errors that occured during validation
      */
-    virtual Errors validate_relations(const ContentHolder& content) const override;
+    virtual Errors validate_relations(const Content& content) const override;
 
     const CharacterData* get_character_data() const noexcept;
     const EffectHolder* get_target() const noexcept;

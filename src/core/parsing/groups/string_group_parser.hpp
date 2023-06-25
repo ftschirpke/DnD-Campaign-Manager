@@ -25,12 +25,12 @@ public:
      * @param content the content to validate against
      * @return the errors that occured while validating
      */
-    virtual Errors validate(const ContentHolder& content) const override;
+    virtual Errors validate(const Content& content) const override;
     /**
      * @brief Saves the parsed string groups data into the given content
      * @param content the content to save the parsed string groups into
      */
-    virtual void save_result(ContentHolder& content) override;
+    virtual void save_result(Content& content) override;
 private:
     Errors parse_subgroups(nlohmann::ordered_json& json, const std::string& parent);
 

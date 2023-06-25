@@ -5,7 +5,7 @@
 #include <fmt/format.h>
 #include <nlohmann/json.hpp>
 
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
 #include <core/models/spell/spell.hpp>
@@ -52,7 +52,7 @@ dnd::Errors dnd::SpellParser::parse() {
 
 bool dnd::SpellParser::continue_after_errors() const noexcept { return true; }
 
-dnd::Errors dnd::SpellParser::validate(const dnd::ContentHolder& content) const {
+dnd::Errors dnd::SpellParser::validate(const dnd::Content& content) const {
     Errors errors;
     assert(spells_in_file == spell_data.size());
     spell_data_valid.resize(spells_in_file, false);
@@ -65,7 +65,7 @@ dnd::Errors dnd::SpellParser::validate(const dnd::ContentHolder& content) const 
     return errors;
 }
 
-void dnd::SpellParser::save_result(dnd::ContentHolder& content) {
+void dnd::SpellParser::save_result(dnd::Content& content) {
     assert(spells_in_file == spell_data_valid.size());
     assert(spells_in_file == spell_data.size());
     for (size_t i = 0; i < spells_in_file; ++i) {

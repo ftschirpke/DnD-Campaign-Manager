@@ -3,10 +3,10 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <memory>
 #include <string>
 #include <vector>
-#include <compare>
 
 #include <core/errors/errors.hpp>
 #include <core/validation/basic_mechanics/dice_data.hpp>
@@ -17,7 +17,7 @@
 
 namespace dnd {
 
-class ContentHolder;
+class Content;
 
 class CharacterClassData : public ValidationData {
 public:
@@ -38,7 +38,7 @@ public:
      * @param content the content holder to validate the relations against
      * @return the errors that occured during validation
      */
-    virtual Errors validate_relations(const ContentHolder& content) const override;
+    virtual Errors validate_relations(const Content& content) const override;
 
     SpellcastingData spellcasting_data;
     std::vector<FeatureData> features_data;

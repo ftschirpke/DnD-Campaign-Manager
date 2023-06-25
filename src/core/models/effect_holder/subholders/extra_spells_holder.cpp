@@ -6,13 +6,13 @@
 #include <utility>
 #include <vector>
 
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/spell/spell.hpp>
 #include <core/validation/effect_holder/subholders/extra_spells_holder_data.hpp>
 
 static std::vector<const dnd::Spell*> find_spells_in_content(
-    const std::set<std::string>& spell_names, const dnd::ContentHolder& content
+    const std::set<std::string>& spell_names, const dnd::Content& content
 ) {
     std::vector<const dnd::Spell*> spells;
     spells.reserve(spell_names.size());
@@ -22,9 +22,7 @@ static std::vector<const dnd::Spell*> find_spells_in_content(
     return spells;
 }
 
-dnd::ExtraSpellsHolder dnd::ExtraSpellsHolder::create(
-    dnd::ExtraSpellsHolderData&& data, const dnd::ContentHolder& content
-) {
+dnd::ExtraSpellsHolder dnd::ExtraSpellsHolder::create(dnd::ExtraSpellsHolderData&& data, const dnd::Content& content) {
     if (!data.validate().ok()) {
         throw dnd::invalid_data("Cannot create ExtraSpellsHolderData from invalid data.");
     }

@@ -9,7 +9,7 @@
 
 #include <nlohmann/json.hpp>
 
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
 #include <core/models/character_class/character_class.hpp>
@@ -73,12 +73,12 @@ dnd::Errors dnd::CharacterClassParser::parse() {
     return errors;
 }
 
-dnd::Errors dnd::CharacterClassParser::validate(const dnd::ContentHolder& content) const {
+dnd::Errors dnd::CharacterClassParser::validate(const dnd::Content& content) const {
     Errors errors = data.validate();
     errors += data.validate_relations(content);
     return errors;
 }
 
-void dnd::CharacterClassParser::save_result(dnd::ContentHolder& content) {
+void dnd::CharacterClassParser::save_result(dnd::Content& content) {
     content.add_character_class(CharacterClass::create(std::move(data), content));
 }

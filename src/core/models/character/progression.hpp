@@ -9,7 +9,7 @@
 
 namespace dnd {
 
-class ContentHolder;
+class Content;
 
 class Progression {
 public:

@@ -9,7 +9,7 @@
 
 #include <nlohmann/json.hpp>
 
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
 #include <core/errors/validation_error.hpp>
@@ -55,7 +55,7 @@ dnd::Errors dnd::StringGroupParser::parse() {
     return errors;
 }
 
-dnd::Errors dnd::StringGroupParser::validate(const dnd::ContentHolder& content) const {
+dnd::Errors dnd::StringGroupParser::validate(const dnd::Content& content) const {
     DND_UNUSED(content);
     Errors errors;
     for (const auto& [group_name, values] : subgroups) {
@@ -77,7 +77,7 @@ dnd::Errors dnd::StringGroupParser::validate(const dnd::ContentHolder& content) 
     return errors;
 }
 
-void dnd::StringGroupParser::save_result(dnd::ContentHolder& content) {
+void dnd::StringGroupParser::save_result(dnd::Content& content) {
     for (auto& [group_name, values] : subgroups) {
         content.set_subgroups(group_name, std::move(values));
     }

@@ -9,7 +9,7 @@
 
 #include <fmt/format.h>
 
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
@@ -40,7 +40,7 @@ dnd::Errors dnd::CharacterRaceData::validate() const {
     return errors;
 }
 
-dnd::Errors dnd::CharacterRaceData::validate_relations(const ContentHolder& content) const {
+dnd::Errors dnd::CharacterRaceData::validate_relations(const Content& content) const {
     Errors errors;
     for (const auto& feature_data : features_data) {
         errors += feature_data.validate_relations(content);

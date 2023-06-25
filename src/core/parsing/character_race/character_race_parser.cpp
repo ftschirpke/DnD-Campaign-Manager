@@ -9,7 +9,7 @@
 
 #include <nlohmann/json.hpp>
 
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
 #include <core/models/character_race/character_race.hpp>
@@ -46,12 +46,12 @@ dnd::Errors dnd::CharacterRaceParser::parse() {
     return errors;
 }
 
-dnd::Errors dnd::CharacterRaceParser::validate(const dnd::ContentHolder& content) const {
+dnd::Errors dnd::CharacterRaceParser::validate(const dnd::Content& content) const {
     Errors errors = data.validate();
     errors += data.validate_relations(content);
     return errors;
 }
 
-void dnd::CharacterRaceParser::save_result(dnd::ContentHolder& content) {
+void dnd::CharacterRaceParser::save_result(dnd::Content& content) {
     content.add_character_race(CharacterRace::create(std::move(data), content));
 }

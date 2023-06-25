@@ -7,8 +7,7 @@
 #include <string>
 #include <unordered_map>
 
-#include <core/controllers/content_holder.hpp>
-#include <core/controllers/searching/trie.hpp>
+#include <core/content.hpp>
 #include <core/models/character/character.hpp>
 #include <core/models/character_class/character_class.hpp>
 #include <core/models/character_race/character_race.hpp>
@@ -19,6 +18,7 @@
 #include <core/models/feature/feature.hpp>
 #include <core/models/item/item.hpp>
 #include <core/models/spell/spell.hpp>
+#include <core/searching/trie.hpp>
 
 namespace dnd {
 
@@ -75,13 +75,13 @@ public:
      * @brief Initialize the search with the content holder that should be searched
      * @param content_holder the content holder to search
      */
-    ContentSearch(const ContentHolder& content_holder);
+    ContentSearch(const Content& content_holder);
     /**
      * @brief Initialize the search with the content holder that should be searched and an initial query
      * @param content_holder the content holder to search
      * @param initial_query the initial search query
      */
-    ContentSearch(const ContentHolder& content_holder, const std::string& initial_query);
+    ContentSearch(const Content& content_holder, const std::string& initial_query);
     /**
      * @brief Set the search query
      * @param query the search query

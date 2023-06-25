@@ -10,7 +10,7 @@
 
 namespace dnd {
 
-class ContentHolder;
+class Content;
 
 /**
  * @brief This class holds a characters's proficiencies, its known languages, and special senses it has.
@@ -24,7 +24,7 @@ public:
      * @return the constructed ProficiencyHolder
      * @throws dnd::invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static ProficiencyHolder create(ProficiencyHolderData&& data, const ContentHolder& content);
+    static ProficiencyHolder create(ProficiencyHolderData&& data, const Content& content);
 
     /**
      * @brief Returns the types of armor the character is proficient with

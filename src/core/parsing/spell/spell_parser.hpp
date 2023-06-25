@@ -30,12 +30,12 @@ public:
      * @param content the content to validate against
      * @return the errors that occured while validating
      */
-    virtual Errors validate(const ContentHolder& content) const override;
+    virtual Errors validate(const Content& content) const override;
     /**
      * @brief Saves the parsed spell data into the given content
      * @param content the content to save the parsed spell into
      */
-    virtual void save_result(ContentHolder& content) override;
+    virtual void save_result(Content& content) override;
 private:
     size_t spells_in_file;
     std::vector<SpellData> spell_data;

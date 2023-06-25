@@ -8,7 +8,7 @@
 
 #include <fmt/format.h>
 
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/validation/validation_subdata.hpp>
@@ -45,7 +45,7 @@ dnd::Errors dnd::ProficiencyHolderData::validate() const {
 
 static dnd::Errors string_group_set_validate_relations(
     const std::set<std::string>& string_group_set, const dnd::ValidationData* parent, const char* set_name,
-    const char* group_name, const dnd::ContentHolder& content
+    const char* group_name, const dnd::Content& content
 ) {
     dnd::Errors errors;
     for (const auto& str_item : string_group_set) {
@@ -60,7 +60,7 @@ static dnd::Errors string_group_set_validate_relations(
     return errors;
 }
 
-dnd::Errors dnd::ProficiencyHolderData::validate_relations(const dnd::ContentHolder& content) const {
+dnd::Errors dnd::ProficiencyHolderData::validate_relations(const dnd::Content& content) const {
     Errors errors;
     errors += string_group_set_validate_relations(armor, parent, "armor", "armor", content);
     errors += string_group_set_validate_relations(weapons, parent, "weapons", "weapons", content);

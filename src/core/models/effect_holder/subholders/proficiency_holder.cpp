@@ -8,7 +8,7 @@
 #include <utility>
 #include <vector>
 
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/validation/effect_holder/subholders/proficiency_holder_data.hpp>
 
@@ -19,7 +19,7 @@ static std::vector<std::string> set_to_vector(std::set<std::string>&& set) {
     return vector;
 }
 
-dnd::ProficiencyHolder dnd::ProficiencyHolder::create(ProficiencyHolderData&& data, const ContentHolder& content) {
+dnd::ProficiencyHolder dnd::ProficiencyHolder::create(ProficiencyHolderData&& data, const Content& content) {
     if (!data.validate().ok()) {
         throw dnd::invalid_data("Cannot create ProficiencyHolder from invalid data.");
     }

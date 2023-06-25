@@ -9,7 +9,7 @@
 
 #include <nlohmann/json.hpp>
 
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
 #include <core/models/character/character.hpp>
@@ -79,7 +79,7 @@ dnd::Errors dnd::CharacterParser::parse() {
     return errors;
 }
 
-void dnd::CharacterParser::set_context(const dnd::ContentHolder& content) {
+void dnd::CharacterParser::set_context(const dnd::Content& content) {
     std::set<const EffectHolder*> processed_effect_holders;
     for (auto& decision_data : data.decisions_data) {
         const Feature* feature;
@@ -110,13 +110,13 @@ void dnd::CharacterParser::set_context(const dnd::ContentHolder& content) {
     }
 }
 
-dnd::Errors dnd::CharacterParser::validate(const ContentHolder& content) const {
+dnd::Errors dnd::CharacterParser::validate(const Content& content) const {
     Errors errors = data.validate();
     errors += data.validate_relations(content);
     return errors;
 }
 
-void dnd::CharacterParser::save_result(ContentHolder& content) {
+void dnd::CharacterParser::save_result(Content& content) {
     content.add_character(Character::create(std::move(data), content));
 }
 

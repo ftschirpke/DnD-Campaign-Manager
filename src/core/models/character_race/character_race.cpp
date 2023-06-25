@@ -7,13 +7,13 @@
 #include <utility>
 #include <vector>
 
+#include <core/content.hpp>
 #include <core/content_visitors/content_visitor.hpp>
-#include <core/controllers/content_holder.hpp>
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/validation/character_race/character_race_data.hpp>
 
-dnd::CharacterRace dnd::CharacterRace::create(dnd::CharacterRaceData&& data, const dnd::ContentHolder& content) {
+dnd::CharacterRace dnd::CharacterRace::create(dnd::CharacterRaceData&& data, const dnd::Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create character race from invalid data.");
     }

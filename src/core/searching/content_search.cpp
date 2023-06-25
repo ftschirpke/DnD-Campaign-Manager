@@ -8,8 +8,7 @@
 #include <string>
 #include <unordered_map>
 
-#include <core/controllers/content_holder.hpp>
-#include <core/controllers/searching/trie.hpp>
+#include <core/content.hpp>
 #include <core/models/character/character.hpp>
 #include <core/models/character_class/character_class.hpp>
 #include <core/models/character_race/character_race.hpp>
@@ -20,8 +19,9 @@
 #include <core/models/feature/feature.hpp>
 #include <core/models/item/item.hpp>
 #include <core/models/spell/spell.hpp>
+#include <core/searching/trie.hpp>
 
-dnd::ContentSearch::ContentSearch(const ContentHolder& content) {
+dnd::ContentSearch::ContentSearch(const Content& content) {
     query.reserve(40);
     character_search_path.push(content.get_characters().get_trie_root());
     character_class_search_path.push(content.get_character_classes().get_trie_root());
@@ -34,7 +34,7 @@ dnd::ContentSearch::ContentSearch(const ContentHolder& content) {
     choosable_search_path.push(content.get_choosable_features().get_trie_root());
 }
 
-dnd::ContentSearch::ContentSearch(const dnd::ContentHolder& content, const std::string& initial_query)
+dnd::ContentSearch::ContentSearch(const dnd::Content& content, const std::string& initial_query)
     : ContentSearch(content) {
     for (char c : initial_query) {
         add_character_to_query(c);

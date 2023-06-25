@@ -15,8 +15,8 @@
 
 #include <iostream>
 
-#include <core/controllers/searching/trie.hpp>
 #include <core/models/content_piece.hpp>
+#include <core/searching/trie.hpp>
 #include <core/utils/string_manipulation.hpp>
 
 namespace dnd {

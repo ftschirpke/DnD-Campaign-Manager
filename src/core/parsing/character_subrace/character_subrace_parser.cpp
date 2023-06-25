@@ -7,7 +7,7 @@
 
 #include <nlohmann/json.hpp>
 
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
 #include <core/models/character_subrace/character_subrace.hpp>
@@ -44,12 +44,12 @@ dnd::Errors dnd::CharacterSubraceParser::parse() {
     return errors;
 }
 
-dnd::Errors dnd::CharacterSubraceParser::validate(const dnd::ContentHolder& content) const {
+dnd::Errors dnd::CharacterSubraceParser::validate(const dnd::Content& content) const {
     Errors errors = data.validate();
     errors += data.validate_relations(content);
     return errors;
 }
 
-void dnd::CharacterSubraceParser::save_result(dnd::ContentHolder& content) {
+void dnd::CharacterSubraceParser::save_result(dnd::Content& content) {
     content.add_character_subrace(CharacterSubrace::create(std::move(data), content));
 }

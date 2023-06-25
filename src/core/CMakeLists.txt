@@ -1,9 +1,15 @@
+target_sources(${DND_CORE}
+    PRIVATE
+    content.cpp
+    groups.cpp
+)
+
 add_subdirectory(basic_mechanics)
-add_subdirectory(controllers)
 add_subdirectory(errors)
 add_subdirectory(exceptions)
 add_subdirectory(models)
 add_subdirectory(output)
 add_subdirectory(parsing)
+add_subdirectory(searching)
 add_subdirectory(utils)
 add_subdirectory(validation)

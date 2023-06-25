@@ -11,7 +11,7 @@
 
 namespace dnd {
 
-class ContentHolder;
+class Content;
 
 class FileParser : public Parser {
 public:
@@ -35,18 +35,18 @@ public:
      * @brief Sets the context for the parser
      * @param content the content to set the context to
      */
-    virtual void set_context(const ContentHolder& content);
+    virtual void set_context(const Content& content);
     /**
      * @brief Validates the parsed content piece data using the given content
      * @param content the content to validate against
      * @return the errors that occured while validating
      */
-    virtual Errors validate(const ContentHolder& content) const = 0;
+    virtual Errors validate(const Content& content) const = 0;
     /**
      * @brief Saves the parsed content piece data into the given content
      * @param content the content to save the parsed data into
      */
-    virtual void save_result(ContentHolder& content) = 0;
+    virtual void save_result(Content& content) = 0;
 protected:
     nlohmann::ordered_json json;
 };

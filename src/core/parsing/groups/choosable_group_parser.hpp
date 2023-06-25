@@ -32,12 +32,12 @@ public:
      * @param content the content to validate against
      * @return the errors that occured while validating
      */
-    virtual Errors validate(const ContentHolder& content) const override;
+    virtual Errors validate(const Content& content) const override;
     /**
      * @brief Saves the parsed choosable groups data into the given content
      * @param content the content to save the parsed choosable groups into
      */
-    virtual void save_result(ContentHolder& content) override;
+    virtual void save_result(Content& content) override;
 protected:
     ChoosableFeatureParser choosable_feature_parser;
     std::string group_name;

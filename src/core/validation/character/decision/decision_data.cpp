@@ -9,7 +9,7 @@
 
 #include <fmt/format.h>
 
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/models/effect_holder/choice/choice.hpp>
@@ -54,7 +54,7 @@ bool feature_is_in(const dnd::Feature* feature_to_find, const dnd::FeatureHolder
     return false;
 }
 
-dnd::Errors dnd::DecisionData::validate_relations(const dnd::ContentHolder& content) const {
+dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) const {
     Errors errors;
 
     if (target == nullptr) {
@@ -82,7 +82,7 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::ContentHolder& cont
             );
             continue;
         }
-        const std::vector<std::string> possible_values = choices[attribute_name]->possible_values(content);
+        const std::set<std::string> possible_values = choices[attribute_name]->possible_values(content);
         for (const auto& value : selection) {
             if (std::find(possible_values.cbegin(), possible_values.cend(), value) == possible_values.cend()) {
                 errors.add_validation_error(

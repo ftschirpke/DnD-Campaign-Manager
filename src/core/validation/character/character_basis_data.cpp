@@ -6,7 +6,7 @@
 
 #include <fmt/format.h>
 
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/validation/validation_data.hpp>
@@ -27,7 +27,7 @@ dnd::Errors dnd::CharacterBasisData::validate() const {
     return errors;
 }
 
-dnd::Errors dnd::CharacterBasisData::validate_relations(const dnd::ContentHolder& content) const {
+dnd::Errors dnd::CharacterBasisData::validate_relations(const dnd::Content& content) const {
     Errors errors;
     if (!content.get_character_races().contains(race_name)) {
         errors.add_validation_error(

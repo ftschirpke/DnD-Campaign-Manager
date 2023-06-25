@@ -21,7 +21,7 @@
 #include <core/models/feature/feature.hpp>
 #include <core/validation/character/character_data.hpp>
 
-dnd::Character dnd::Character::create(dnd::CharacterData&& data, const ContentHolder& content) {
+dnd::Character dnd::Character::create(dnd::CharacterData&& data, const Content& content) {
     if (!data.validate().ok()) {
         throw dnd::invalid_data("Cannot create character from invalid data.");
     }

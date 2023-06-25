@@ -1,10 +1,14 @@
-#include <core/controllers/searching/trie.hpp>
+#include <dnd_config.hpp>
 
-#include <catch2/catch_test_macros.hpp>
+#include <core/searching/trie.hpp>
 
 #include <unordered_set>
 
-TEST_CASE("dnd::Trie // Simple Trie with integer data", "[controllers][trie]") {
+#include <catch2/catch_test_macros.hpp>
+
+static constexpr const char* tags = "[core][searching][trie]";
+
+TEST_CASE("dnd::Trie // Simple Trie with integer data", tags) {
     dnd::Trie<int> trie;
     int data1 = 1, data2 = 2, data3 = 3;
 
@@ -35,7 +39,7 @@ struct MyData {
     std::string name;
 };
 
-TEST_CASE("dnd::Trie // Simple Trie with custom struct data", "[controllers][trie]") {
+TEST_CASE("dnd::Trie // Simple Trie with custom struct data", tags) {
     dnd::Trie<MyData> trie;
     MyData data1 = {1, "one"};
     MyData data2 = {2, "two"};
