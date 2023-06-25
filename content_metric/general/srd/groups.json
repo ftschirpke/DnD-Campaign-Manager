@@ -10,7 +10,7 @@
             "simple melee weapons": [
                 "club", "dagger", "greatclub", "handaxe", "javelin", "light hammer", "mace", "quarterstaff", "sickle", "spear"
             ],
-            "simple range weapons": [
+            "simple ranged weapons": [
                 "light crossbow", "dart", "sling", "shortbow"
             ]
         },
