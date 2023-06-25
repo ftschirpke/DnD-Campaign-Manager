@@ -14,7 +14,7 @@ void dnd::set_valid_mock_values(ValidationData& data, const char* data_name) {
         data.name = "Name";
         data.description = "Description";
     } else {
-        data.name = fmt::format("{} Name", data_name);
+        data.name = std::string(data_name);
         data.description = fmt::format("{} Description", data_name);
     }
     data.source_path = std::filesystem::path(DND_MOCK_DIRECTORY) / "dummy_files" / "file1.json";
