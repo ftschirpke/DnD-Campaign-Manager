@@ -12,13 +12,13 @@
 #include <core/validation/validation_data.hpp>
 #include <core/validation/validation_subdata.hpp>
 
-static constexpr const char* spell_type_regex_cstr = "((1st|2nd|3rd|[4-9]th)-level "
+static constexpr const char* spell_type_regex_cstr = "(1st|2nd|3rd|[4-9]th)-level "
                                                      "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|"
                                                      "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)"
-                                                     "( \\(ritual\\))?)|("
+                                                     "( \\(ritual\\))?|"
                                                      "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|"
                                                      "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)"
-                                                     " cantrip)";
+                                                     " cantrip";
 
 dnd::SpellTypeData::SpellTypeData(const dnd::ValidationData* parent) noexcept : ValidationSubdata(parent) {}
 

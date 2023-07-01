@@ -4,4 +4,5 @@ target_sources(${DND_CORE}
     character_progression.cpp
     dice.cpp
     dice_factory.cpp
+    skills.cpp
 )

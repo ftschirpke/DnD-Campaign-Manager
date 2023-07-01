@@ -39,8 +39,6 @@ public:
      * @return a struct containing the parsed content, errors and further information
      */
     ParsingResult parse(const std::filesystem::path& content_path, const std::string& campaign_dir_name);
-protected:
-private:
 };
 
 } // namespace dnd

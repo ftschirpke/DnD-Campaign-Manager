@@ -45,8 +45,15 @@ TEST_CASE("dnd::ChoiceData::validate // valid choice data", tags) {
         REQUIRE_NOTHROW(errors += choice_data.validate_relations(content));
         REQUIRE(errors.ok());
 
-        choice_data.attribute_name = "spells_added_to_spell_list";
+        choice_data.attribute_name = "cantrips_free";
         choice_data.group_names = {"Wizard cantrips"};
+        choice_data.amount = 1;
+        REQUIRE_NOTHROW(errors = choice_data.validate());
+        REQUIRE_NOTHROW(errors += choice_data.validate_relations(content));
+        REQUIRE(errors.ok());
+
+        choice_data.attribute_name = "spells_added_to_spell_list";
+        choice_data.group_names = {"Wizard spells"};
         choice_data.amount = 3;
         REQUIRE_NOTHROW(errors = choice_data.validate());
         REQUIRE_NOTHROW(errors += choice_data.validate_relations(content));
@@ -71,7 +78,7 @@ TEST_CASE("dnd::ChoiceData::validate // valid choice data", tags) {
 
     SECTION("group names and explicit choices") {
         choice_data.attribute_name = "spells_known";
-        choice_data.group_names = {"Sorcerer spells"};
+        choice_data.group_names = {"Wizard spells"};
         choice_data.explicit_choices = {"Cure Wounds"};
         choice_data.amount = 2;
         REQUIRE_NOTHROW(errors = choice_data.validate());
@@ -150,6 +157,45 @@ TEST_CASE("dnd::ChoiceData::validate // invalid choice data", tags) {
         choice_data.attribute_name = "spells_added_to_spell_list";
         choice_data.group_names = {"armor", "weapons"};
         choice_data.amount = 3;
+        REQUIRE_NOTHROW(errors = choice_data.validate());
+        REQUIRE_NOTHROW(errors += choice_data.validate_relations(content));
+        REQUIRE_FALSE(errors.ok());
+    }
+
+    SECTION("Provided group names where they are prohibited") {
+        choice_data.attribute_name = "saving_throw_proficiencies";
+        choice_data.group_names = {"some made-up group"};
+        choice_data.amount = 2;
+        REQUIRE_NOTHROW(errors = choice_data.validate());
+        REQUIRE_NOTHROW(errors += choice_data.validate_relations(content));
+        REQUIRE_FALSE(errors.ok());
+
+        choice_data.attribute_name = "skill_proficiencies";
+        choice_data.group_names = {"some made-up group", "another made-up group"};
+        choice_data.amount = 3;
+        REQUIRE_NOTHROW(errors = choice_data.validate());
+        REQUIRE_NOTHROW(errors += choice_data.validate_relations(content));
+        REQUIRE_FALSE(errors.ok());
+
+        choice_data.attribute_name = "effects";
+        choice_data.group_names = {"a totally new made-up group"};
+        choice_data.amount = 1;
+        REQUIRE_NOTHROW(errors = choice_data.validate());
+        REQUIRE_NOTHROW(errors += choice_data.validate_relations(content));
+        REQUIRE_FALSE(errors.ok());
+    }
+
+    SECTION("Cannot have spells for cantrips and vice versa") {
+        choice_data.attribute_name = "cantrips_free";
+        choice_data.group_names = {"Wizard spells"};
+        choice_data.amount = 1;
+        REQUIRE_NOTHROW(errors = choice_data.validate());
+        REQUIRE_NOTHROW(errors += choice_data.validate_relations(content));
+        REQUIRE_FALSE(errors.ok());
+
+        choice_data.attribute_name = "spells_added_to_spell_list";
+        choice_data.group_names = {"Wizard cantrips"};
+        choice_data.amount = 1;
         REQUIRE_NOTHROW(errors = choice_data.validate());
         REQUIRE_NOTHROW(errors += choice_data.validate_relations(content));
         REQUIRE_FALSE(errors.ok());

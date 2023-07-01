@@ -3,15 +3,19 @@
 
 #include <dnd_config.hpp>
 
+#include <memory>
+#include <set>
 #include <string>
 #include <vector>
 
+#include <core/content_filters/content_filter.hpp>
 #include <core/errors/errors.hpp>
+#include <core/models/effect_holder/choice/choice_rules.hpp>
 #include <core/validation/effect_holder/choice/choice_data.hpp>
 
 namespace dnd {
 
-class ContentHolder;
+class Content;
 class EffectHolderData;
 
 class Choice {
@@ -23,7 +27,7 @@ public:
      * @return the constructed choice
      * @throws dnd::invalid_data if the data is invalid or is incompatible with the given content
      */
-    static Choice create(ChoiceData&& data, const ContentHolder& content);
+    static Choice create(ChoiceData&& data, const Content& content);
 
     const std::string& get_attribute_name() const noexcept;
     int get_amount() const noexcept;
@@ -33,17 +37,19 @@ public:
      * @param content the content to use for the selection
      * @return the possible values that could be selected for this choice as strings
      */
-    std::vector<std::string> possible_values(const ContentHolder& content) const;
+    std::set<std::string> possible_values(const Content& content) const;
 private:
     Choice(
-        std::string&& attribute_name, int amount, std::vector<std::string>&& group_names,
-        std::vector<std::string>&& explicit_choices
+        ChoiceType type, std::vector<std::unique_ptr<ContentFilter>>&& filters, std::string&& attribute_name,
+        int amount, std::vector<std::string>&& group_names, std::vector<std::string>&& explicit_choices
     ) noexcept;
 
+    ChoiceType type;
     std::string attribute_name;
     int amount;
     std::vector<std::string> group_names;
     std::vector<std::string> explicit_choices;
+    std::vector<std::unique_ptr<ContentFilter>> filters;
 };
 
 } // namespace dnd

@@ -15,10 +15,12 @@ namespace dnd {
  */
 class Groups {
 public:
-    /**
-     * @brief The constructor adds abilities and skills as string groups.
-     */
-    Groups();
+    Groups() = default;
+    Groups(const Groups&) = delete;
+    Groups& operator=(const Groups&) = delete;
+    Groups(Groups&&) = default;
+    Groups& operator=(Groups&&) = default;
+
     /**
      * @brief Get the values of a group
      * @param group_name the name of the group

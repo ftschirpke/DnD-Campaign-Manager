@@ -2,11 +2,13 @@
 
 #include "minimal_testing_content.hpp"
 
+#include <cassert>
 #include <string>
 #include <utility>
 
 #include <core/content.hpp>
 #include <core/models/spell/spell.hpp>
+#include <core/validation/character_class/character_class_data.hpp>
 #include <core/validation/spell/spell_data.hpp>
 #include <core/validation/validation_data_mock.hpp>
 
@@ -34,6 +36,8 @@ static void add_spells(dnd::Content& content) {
     spell.range = "120 feet";
     spell.duration = "Concentration, up to 1 minute";
     spell.classes = {"Bard", "Sorcerer", "Wizard"};
+    assert(spell.validate().ok());
+    assert(spell.validate_relations(content).ok());
     content.add_spell(dnd::Spell::create(std::move(spell)));
 
     dnd::SpellData spell2;
@@ -44,6 +48,8 @@ static void add_spells(dnd::Content& content) {
     spell2.range = "150 feet";
     spell2.duration = "Instantaneous";
     spell2.classes = {"Sorcerer", "Wizard"};
+    assert(spell2.validate().ok());
+    assert(spell2.validate_relations(content).ok());
     content.add_spell(dnd::Spell::create(std::move(spell2)));
 
     dnd::SpellData spell3;
@@ -54,7 +60,25 @@ static void add_spells(dnd::Content& content) {
     spell3.range = "Touch";
     spell3.duration = "Instantaneous";
     spell3.classes = {"Bard", "Cleric", "Druid", "Paladin", "Ranger"};
+    assert(spell3.validate().ok());
+    assert(spell3.validate_relations(content).ok());
     content.add_spell(dnd::Spell::create(std::move(spell3)));
+}
+
+static void add_classes(dnd::Content& content) {
+    dnd::CharacterClassData class_data;
+    set_valid_mock_values(class_data, "Wizard");
+    class_data.spellcasting_data.is_spellcaster = true;
+    class_data.spellcasting_data.ability = "INT";
+    class_data.spellcasting_data.is_spells_known_type = true;
+    auto& feature_data = class_data.features_data.emplace_back();
+    set_valid_mock_values(feature_data, "Example Feature");
+    class_data.subclass_feature_name = "Example Feature";
+    class_data.hit_dice_data.str = "d6";
+    class_data.important_levels_data.asi_levels = {4, 8, 12, 16, 19};
+    assert(class_data.validate().ok());
+    assert(class_data.validate_relations(content).ok());
+    content.add_character_class(dnd::CharacterClass::create(std::move(class_data), content));
 }
 
 dnd::Content dnd::minimal_testing_content() {
@@ -62,6 +86,7 @@ dnd::Content dnd::minimal_testing_content() {
 
     add_groups(content);
     add_spells(content);
+    add_classes(content);
 
     return content;
 }

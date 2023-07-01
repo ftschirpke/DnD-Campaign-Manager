@@ -15,22 +15,6 @@
 #include <core/basic_mechanics/skills.hpp>
 #include <core/utils/string_manipulation.hpp>
 
-dnd::Groups::Groups() {
-    members["abilities"] = std::set<std::string>(ability_cstrings_inorder.begin(), ability_cstrings_inorder.end());
-
-    std::string lowercase_skill;
-    for (const auto& [skill, _] : skill_abilities) {
-        lowercase_skill = string_lowercase_copy(skill);
-
-        size_t idx = lowercase_skill.find('_');
-        while (idx != std::string::npos) {
-            lowercase_skill[idx] = ' ';
-            idx = lowercase_skill.find('_');
-        }
-        members["skills"].insert(lowercase_skill);
-    }
-}
-
 std::set<std::string> dnd::Groups::get_group(const std::string& group_name) const {
     if (!is_group(group_name)) {
         return {};
@@ -85,7 +69,15 @@ bool dnd::Groups::is_subgroup(const std::string& subgroup_name, const std::strin
     if (!subgroups.contains(group_name)) {
         return false;
     }
-    return subgroups.at(group_name).contains(subgroup_name);
+    if (subgroups.at(group_name).contains(subgroup_name)) {
+        return true;
+    }
+    for (const auto& subgroup : subgroups.at(group_name)) {
+        if (is_subgroup(subgroup_name, subgroup)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool dnd::Groups::is_part_of_group(const std::string& name, const std::string& group_name) const {
