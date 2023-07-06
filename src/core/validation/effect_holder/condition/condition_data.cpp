@@ -12,8 +12,8 @@
 #include <core/validation/validation_data.hpp>
 #include <core/validation/validation_subdata.hpp>
 
-static constexpr const char*
-    condition_regex_cstr = "[A-Z][_A-Z0-9]+ (==|!=|>=|<=|>|<) ([A-Z][_A-Z0-9]+|-?\\d+(\\.\\d\\d?)?|true|false)";
+static constexpr const char* condition_regex_cstr = "[A-Z][_A-Z0-9]+ ((==|!=|>=|<=|>|<) "
+                                                    "([A-Z][_A-Z0-9]+|-?\\d+(\\.\\d\\d?)?|)|== true|== false)";
 
 dnd::ConditionData::ConditionData(const dnd::ValidationData* parent) noexcept : ValidationSubdata(parent) {}
 

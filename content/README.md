@@ -281,7 +281,7 @@ The `PARAMETER` can be a number e.g. `-1`, `2`, `-2.5` or `34`, but floating poi
 Lastly, the `PARAMETER` can also be another attribute. In that case the value for the given attribute is retrieved and used for the calculation. Here, you can choose one of the mutable attributes above, or one of the hard-coded immutable ones:
 ```
 // immutable attributes:
-HAS_ARMOR_ON, HAS_SPELLCASTING
+ARMOR_ON, HAS_SPELLCASTING
 LEVEL, XP
 ```
 
