@@ -12,7 +12,7 @@
 static constexpr const char* tags = "[core][validation][effect_holder]";
 
 TEST_CASE("dnd::ChoiceData::validate // valid choice data", tags) {
-    dnd::ValidationDataMock parent;
+    dndtest::ValidationDataMock parent;
     dnd::ChoiceData choice_data(&parent);
     dnd::Content content = dnd::minimal_testing_content();
     dnd::Errors errors;
@@ -96,7 +96,7 @@ TEST_CASE("dnd::ChoiceData::validate // valid choice data", tags) {
 }
 
 TEST_CASE("dnd::ChoiceData::validate // invalid choice data", tags) {
-    dnd::ValidationDataMock parent;
+    dndtest::ValidationDataMock parent;
     dnd::ChoiceData choice_data(&parent);
     dnd::Content content = dnd::minimal_testing_content();
     dnd::Errors errors;

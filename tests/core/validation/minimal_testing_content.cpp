@@ -29,7 +29,7 @@ static void add_groups(dnd::Content& content) {
 
 static void add_spells(dnd::Content& content) {
     dnd::SpellData spell;
-    set_valid_mock_values(spell, "Dancing Lights");
+    dndtest::set_valid_mock_values(spell, "Dancing Lights");
     spell.components_data.str = "V, S, M (a bit of phosphorus or wychwood, or a glowworm)";
     spell.type_data.str = "Evocation cantrip";
     spell.casting_time = "1 action";
@@ -41,7 +41,7 @@ static void add_spells(dnd::Content& content) {
     content.add_spell(dnd::Spell::create(std::move(spell)));
 
     dnd::SpellData spell2;
-    set_valid_mock_values(spell2, "Fireball");
+    dndtest::set_valid_mock_values(spell2, "Fireball");
     spell2.components_data.str = "V, S, M (a tiny ball of bat guano and sulfur)";
     spell2.type_data.str = "3rd-level Evocation";
     spell2.casting_time = "1 action";
@@ -53,7 +53,7 @@ static void add_spells(dnd::Content& content) {
     content.add_spell(dnd::Spell::create(std::move(spell2)));
 
     dnd::SpellData spell3;
-    set_valid_mock_values(spell3, "Cure Wounds");
+    dndtest::set_valid_mock_values(spell3, "Cure Wounds");
     spell3.components_data.str = "V, S";
     spell3.type_data.str = "1st-level Evocation";
     spell3.casting_time = "1 action";
@@ -67,12 +67,12 @@ static void add_spells(dnd::Content& content) {
 
 static void add_classes(dnd::Content& content) {
     dnd::CharacterClassData class_data;
-    set_valid_mock_values(class_data, "Wizard");
+    dndtest::set_valid_mock_values(class_data, "Wizard");
     class_data.spellcasting_data.is_spellcaster = true;
     class_data.spellcasting_data.ability = "INT";
     class_data.spellcasting_data.is_spells_known_type = true;
     auto& feature_data = class_data.features_data.emplace_back();
-    set_valid_mock_values(feature_data, "Example Feature");
+    dndtest::set_valid_mock_values(feature_data, "Example Feature");
     class_data.subclass_feature_name = "Example Feature";
     class_data.hit_dice_data.str = "d6";
     class_data.important_levels_data.asi_levels = {4, 8, 12, 16, 19};

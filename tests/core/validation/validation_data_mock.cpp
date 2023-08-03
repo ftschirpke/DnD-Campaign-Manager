@@ -9,7 +9,7 @@
 
 #include <core/validation/validation_data.hpp>
 
-void dnd::set_valid_mock_values(ValidationData& data, const char* data_name) {
+void dndtest::set_valid_mock_values(dnd::ValidationData& data, const char* data_name) {
     if (data_name == nullptr) {
         data.name = "Name";
         data.description = "Description";
@@ -20,6 +20,6 @@ void dnd::set_valid_mock_values(ValidationData& data, const char* data_name) {
     data.source_path = std::filesystem::path(DND_MOCK_DIRECTORY) / "dummy_files" / "file1.json";
 }
 
-std::unique_ptr<dnd::ValidationData> dnd::ValidationDataMock::pack() const {
+std::unique_ptr<dnd::ValidationData> dndtest::ValidationDataMock::pack() const {
     return std::make_unique<ValidationDataMock>(*this);
 }

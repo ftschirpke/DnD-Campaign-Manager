@@ -1,21 +1,41 @@
 #include <dnd_config.hpp>
 
-#include <core/validation/spell/spell_data.hpp>
+#include <core/validation/spell/spell_components_data.hpp>
+
+#include <cassert>
 
 #include <catch2/catch_test_macros.hpp>
 
+#include <core/validation/spell/spell_data.hpp>
+#include <core/validation/spell/spell_type_data.hpp>
 #include <core/validation/validation_data_mock.hpp>
 
 static constexpr const char* tags = "[core][validation][spell]";
 
+static constexpr const char* fixed_components = "V, S, M (a bit of this and a bit of that)";
+static constexpr const char* fixed_type = "Evocation cantrip";
+
+static bool validate_fixed_values() {
+    dndtest::ValidationDataMock parent;
+    dnd::SpellComponentsData components_data(&parent);
+    components_data.str = fixed_components;
+    dnd::SpellTypeData type_data(&parent);
+    type_data.str = fixed_type;
+    assert(components_data.validate().ok());
+    assert(type_data.validate().ok());
+    return components_data.validate().ok() && type_data.validate().ok();
+}
+
 static void set_valid_components_and_type(dnd::SpellData& data) {
-    data.components_data.str = "V, S, M (a bit of this and a bit of that)";
-    data.type_data.str = "Evocation cantrip";
+    static bool fixed_values_valid = validate_fixed_values();
+    assert(fixed_values_valid);
+    data.components_data.str = fixed_components;
+    data.type_data.str = fixed_type;
 }
 
 TEST_CASE("dnd::SpellData::validate // valid spells", tags) {
     dnd::SpellData data;
-    set_valid_mock_values(data, "Spell");
+    dndtest::set_valid_mock_values(data, "Spell");
     set_valid_components_and_type(data);
     dnd::Errors errors;
 
@@ -41,7 +61,7 @@ TEST_CASE("dnd::SpellData::validate // valid spells", tags) {
 
 TEST_CASE("dnd::SpellData::validate // invalid spells", tags) {
     dnd::SpellData data;
-    set_valid_mock_values(data, "Spell");
+    dndtest::set_valid_mock_values(data, "Spell");
     set_valid_components_and_type(data);
     dnd::Errors errors;
 

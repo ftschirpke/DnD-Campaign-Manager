@@ -10,7 +10,7 @@
 static constexpr const char* tags = "[core][validation][effect_holder]";
 
 TEST_CASE("dnd::ConditionData::validate // valid conditions", tags) {
-    dnd::ValidationDataMock parent;
+    dndtest::ValidationDataMock parent;
     dnd::ConditionData condition_data(&parent);
     dnd::Errors errors;
 
@@ -78,7 +78,7 @@ TEST_CASE("dnd::ConditionData::validate // valid conditions", tags) {
 }
 
 TEST_CASE("dnd::ConditionData::validate // invalid conditions", tags) {
-    dnd::ValidationDataMock parent;
+    dndtest::ValidationDataMock parent;
     dnd::ConditionData condition_data(&parent);
     dnd::Errors errors;
 

@@ -11,7 +11,7 @@ static constexpr const char* tags = "[core][validation][item]";
 
 TEST_CASE("dnd::ItemData::validate", tags) {
     dnd::ItemData item_data;
-    set_valid_mock_values(item_data, "Item");
+    dndtest::set_valid_mock_values(item_data, "Item");
     item_data.requires_attunement = false;
 
     dnd::Errors errors;

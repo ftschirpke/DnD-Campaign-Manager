@@ -23,7 +23,7 @@ static constexpr std::array<const char*, 9> spell_levels = {"1st", "2nd", "3rd",
                                                             "6th", "7th", "8th", "9th"};
 
 TEST_CASE("dnd::SpellTypeData::validate // valid spell type", tags) {
-    dnd::ValidationDataMock parent;
+    dndtest::ValidationDataMock parent;
     dnd::SpellTypeData data(&parent);
     dnd::Errors errors;
     SECTION("cantrips") {
@@ -50,7 +50,7 @@ TEST_CASE("dnd::SpellTypeData::validate // valid spell type", tags) {
 }
 
 TEST_CASE("dnd::SpellTypeData::validate // invalid spell type", tags) {
-    dnd::ValidationDataMock parent;
+    dndtest::ValidationDataMock parent;
     dnd::SpellTypeData data(&parent);
     dnd::Errors errors;
     SECTION("other formats than standard D&D format not allowed") {

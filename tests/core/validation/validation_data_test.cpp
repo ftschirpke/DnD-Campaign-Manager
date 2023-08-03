@@ -14,7 +14,7 @@
 static constexpr const char* tags = "[core][validation]";
 
 TEST_CASE("dnd::ValidationData::validate", tags) {
-    dnd::ValidationDataMock data;
+    dndtest::ValidationDataMock data;
     const std::filesystem::path dummy_path = std::filesystem::path(DND_MOCK_DIRECTORY) / "dummy_files" / "file1.json";
 
     dnd::Errors errors;

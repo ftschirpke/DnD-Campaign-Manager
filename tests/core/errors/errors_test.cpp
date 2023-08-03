@@ -13,7 +13,7 @@ static constexpr const char* tags = "[core][errors]";
 
 TEST_CASE("dnd::Errors // Construction and Getter Methods", tags) {
     dnd::Errors errors;
-    const dnd::ValidationDataMock validation_data;
+    const dndtest::ValidationDataMock validation_data;
 
     SECTION("Initial state") {
         REQUIRE(errors.ok());
@@ -94,7 +94,7 @@ TEST_CASE("dnd::Errors // Construction and Getter Methods", tags) {
 
 TEST_CASE("dnd::Errors::ok", tags) {
     dnd::Errors errors;
-    const dnd::ValidationDataMock validation_data;
+    const dndtest::ValidationDataMock validation_data;
 
     SECTION("No errors") { REQUIRE(errors.ok()); }
 

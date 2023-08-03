@@ -11,7 +11,7 @@
 static constexpr const char* tags = "[core][validation][spell]";
 
 TEST_CASE("dnd::SpellComponentsData::validate // valid components", tags) {
-    dnd::ValidationDataMock parent;
+    dndtest::ValidationDataMock parent;
     dnd::SpellComponentsData data(&parent);
     dnd::Errors errors;
 
@@ -55,7 +55,7 @@ TEST_CASE("dnd::SpellComponentsData::validate // valid components", tags) {
 }
 
 TEST_CASE("dnd::SpellComponentsData::validate // invalid components", tags) {
-    dnd::ValidationDataMock parent;
+    dndtest::ValidationDataMock parent;
     dnd::SpellComponentsData data(&parent);
     dnd::Errors errors;
 
