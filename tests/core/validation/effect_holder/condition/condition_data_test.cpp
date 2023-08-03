@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include <core\validation\effect_holder\condition\condition_data.hpp>
+#include <core/validation/effect_holder/condition/condition_data.hpp>
 
 #include <catch2/catch_test_macros.hpp>
 

@@ -55,6 +55,7 @@ public:
      * @return the names of everything that matches the filter
      */
     // virtual std::vector<std::string> get_matching(const Content& content) const = 0;
+    // TODO: decide whether to keep this
 protected:
     static bool matches_string(const std::string& str, StringFilterType type, const std::string& filter) noexcept;
     static bool matches_int(int number, NumberFilterType type, int filter) noexcept;

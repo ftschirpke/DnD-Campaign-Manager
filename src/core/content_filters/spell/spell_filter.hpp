@@ -44,6 +44,7 @@ public:
      * @return the names of all spells that match the filter
      */
     // std::vector<std::string> get_matching(const Content& content) const override;
+    // TODO: decide whether to keep this
 private:
     BoolFilterType verbal_component_filter_type;
     BoolFilterType somatic_component_filter_type;
