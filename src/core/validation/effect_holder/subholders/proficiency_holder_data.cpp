@@ -8,6 +8,8 @@
 
 #include <fmt/format.h>
 
+#include <core/basic_mechanics/abilities.hpp>
+#include <core/basic_mechanics/skills.hpp>
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
@@ -40,6 +42,25 @@ dnd::Errors dnd::ProficiencyHolderData::validate() const {
     errors += string_set_validate(saving_throws, parent, "Saving throws");
     errors += string_set_validate(languages, parent, "Languages");
     errors += string_set_validate(senses, parent, "Senses");
+
+    for (const auto& skill : skills) {
+        if (!dnd::is_skill(skill)) {
+            errors.add_validation_error(
+                dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                fmt::format("Skill proficiencies contain '{}' which is not a valid skill.", skill)
+            );
+        }
+    }
+    for (const auto& saving_throw_ability : saving_throws) {
+        if (!dnd::is_ability(saving_throw_ability)) {
+            errors.add_validation_error(
+                dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                fmt::format(
+                    "Saving throw proficiencies contain '{}' which is not a valid ability.", saving_throw_ability
+                )
+            );
+        }
+    }
     return errors;
 }
 
@@ -65,9 +86,8 @@ dnd::Errors dnd::ProficiencyHolderData::validate_relations(const dnd::Content& c
     errors += string_group_set_validate_relations(armor, parent, "armor", "armor", content);
     errors += string_group_set_validate_relations(weapons, parent, "weapons", "weapons", content);
     errors += string_group_set_validate_relations(tools, parent, "tools", "tools", content);
-    errors += string_group_set_validate_relations(skills, parent, "skills", "skills", content);
-    errors += string_group_set_validate_relations(saving_throws, parent, "saving_throws", "abilities", content);
     errors += string_group_set_validate_relations(languages, parent, "languages", "languages", content);
+    errors += string_group_set_validate_relations(senses, parent, "senses", "senses", content);
     return errors;
 }
 
