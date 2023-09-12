@@ -25,6 +25,8 @@ static void add_groups(dnd::Content& content) {
     content.add_group_members("medium armor", {"hide", "chain shirt"});
     content.add_group_members("heavy armor", {"ring mail", "chain mail"});
     content.add_group_members("languages", {"Common", "Dwarvish", "Elvish"});
+    content.add_group_members("tools", {"thieves' tools", "disguise kit"});
+    content.add_group_members("senses", {"Darkvision", "Blindsight", "Truesight"});
 }
 
 static void add_spells(dnd::Content& content) {
