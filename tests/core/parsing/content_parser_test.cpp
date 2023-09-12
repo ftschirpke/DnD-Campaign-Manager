@@ -7,5 +7,5 @@
 TEST_CASE("dnd::ContentParser::parse // providing invalid directory to parser") {
     dnd::ContentParser parser;
     dnd::ParsingResult result = parser.parse("/this/directory/doesnt/exist", "example_campaign");
-    REQUIRE(!result.errors.ok());
+    REQUIRE_FALSE(result.errors.ok());
 }
