@@ -13,8 +13,8 @@
 #include <core/validation/validation_subdata.hpp>
 
 static constexpr const char*
-    effect_regex_cstr = "[A-Z][_A-Z0-9]+ (earliest|early|normal|late|latest) ((add|mult|div|set|max|min) "
-                        "([A-Z][_A-Z0-9]+|-?\\d+(\\.\\d\\d?)?)|(set (false|true)))";
+    effect_regex_cstr = "[A-Z][_A-Z0-9]+ (earliest|early|normal|late|latest) ((add|sub|mult|div|set|max|min) "
+                        "([A-Z][_A-Z0-9]+|-?\\d+(\\.[1-9]|\\.\\d[1-9])?)|(set (false|true)))";
 
 dnd::EffectData::EffectData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
 
@@ -25,6 +25,11 @@ dnd::Errors dnd::EffectData::validate() const {
     if (!std::regex_match(effect_str, effect_regex)) {
         errors.add_validation_error(
             ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent, fmt::format("Invalid effect \"{}\"", effect_str)
+        );
+    } else if (effect_str.ends_with("div 0")) {
+        errors.add_validation_error(
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+            fmt::format("Division by zero in effect \"{}\"", effect_str)
         );
     }
     return errors;
