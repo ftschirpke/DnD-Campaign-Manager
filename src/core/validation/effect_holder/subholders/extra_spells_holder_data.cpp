@@ -52,6 +52,10 @@ static dnd::Errors spells_set_validate_relations(
                 dnd::ValidationErrorCode::RELATION_NOT_FOUND, parent,
                 fmt::format("Spell '{}' does not exist.", spell_name)
             );
+        } else if (content.get_spells().get(spell_name).get_type().get_spell_level() == dnd::SpellLevel::CANTRIP) {
+            errors.add_validation_error(
+                dnd::ValidationErrorCode::INVALID_RELATION, parent, fmt::format("Spell '{}' is a cantrip.", spell_name)
+            );
         }
     }
     return errors;
