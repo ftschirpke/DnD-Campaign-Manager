@@ -14,7 +14,7 @@ static constexpr const char* tags = "[core][validation][effect_holder]";
 TEST_CASE("dnd::ChoiceData::validate // valid choice data", tags) {
     dndtest::ValidationDataMock parent;
     dnd::ChoiceData choice_data(&parent);
-    dnd::Content content = dnd::minimal_testing_content();
+    dnd::Content content = dndtest::minimal_testing_content();
     dnd::Errors errors;
 
     SECTION("attribute name implies group name") {
@@ -98,7 +98,7 @@ TEST_CASE("dnd::ChoiceData::validate // valid choice data", tags) {
 TEST_CASE("dnd::ChoiceData::validate // invalid choice data", tags) {
     dndtest::ValidationDataMock parent;
     dnd::ChoiceData choice_data(&parent);
-    dnd::Content content = dnd::minimal_testing_content();
+    dnd::Content content = dndtest::minimal_testing_content();
     dnd::Errors errors;
 
     SECTION("Empty attribute name") {

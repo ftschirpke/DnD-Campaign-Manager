@@ -81,8 +81,8 @@ static void add_classes(dnd::Content& content) {
     content.add_character_class(dnd::CharacterClass::create(std::move(class_data), content));
 }
 
-dnd::Content dnd::minimal_testing_content() {
-    Content content;
+dnd::Content dndtest::minimal_testing_content() {
+    dnd::Content content;
 
     add_groups(content);
     add_spells(content);
