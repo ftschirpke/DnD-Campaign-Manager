@@ -244,11 +244,11 @@ The `ATTRIBUTE` is the value the effect is changing.
 Below, I listed the hard-coded attributes that will always be there, but [you can also use and create your own](#custom-effects).
 ```
 // mutable attributes:
-MAXHP, AC, SPEED,
-STR,     DEX,     CON,     INT,     WIS,     CHA,
-STRMAX,  DEXMAX,  CONMAX,  INTMAX,  WISMAX,  CHAMAX,
-STRMOD,  DEXMOD,  CONMOD,  INTMOD,  WISMOD,  CHAMOD,
-STRSAVE, DEXSAVE, CONSAVE, INTSAVE, WISSAVE, CHASAVE
+MAX_HP, AC, SPEED,
+STR,      DEX,      CON,      INT,      WIS,      CHA,
+STR_MAX,  DEX_MAX,  CON_MAX,  INT_MAX,  WIS_MAX,  CHA_MAX,
+STR_MOD,  DEX_MOD,  CON_MOD,  INT_MOD,  WIS_MOD,  CHA_MOD,
+STR_SAVE, DEX_SAVE, CON_SAVE, INT_SAVE, WIS_SAVE, CHA_SAVE
 ACROBATICS,    ANIMAL_HANDLING, ARCANA,   ATHLETICS,
 DECEPTION,     HISTORY,         INSIGHT,  INTIMIDATION,
 INVESTIGATION, MEDICINE,        NATURE,   PERCEPTION,
@@ -291,7 +291,7 @@ Examples:
     "AC earliest set 12",           // set new default value for armor class to 12
     "SPEED normal add 1.5",         // increase speed by 1.5
     "AC normal add DEXMOD",         // add dexterity modifier to armor class
-    "MAXHP normal add LEVEL"        // add the character level to its armor class
+    "MAX_HP normal add LEVEL"        // add the character level to its armor class
 ]
 ```
 

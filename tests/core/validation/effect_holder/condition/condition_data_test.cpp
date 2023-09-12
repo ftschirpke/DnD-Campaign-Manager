@@ -121,7 +121,7 @@ TEST_CASE("dnd::ConditionData::validate // invalid conditions", tags) {
         REQUIRE_NOTHROW(errors = condition_data.validate());
         REQUIRE_FALSE(errors.ok());
 
-        condition_data.condition_str = "MAXHP < MY-VALUE_1";
+        condition_data.condition_str = "MAX_HP < MY-VALUE_1";
         REQUIRE_NOTHROW(errors = condition_data.validate());
         REQUIRE_FALSE(errors.ok());
     }
