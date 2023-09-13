@@ -39,6 +39,7 @@ Each character should be stored in a JSON file as a map (or "object") containing
 | Name | required? | format | description |
 |------|:---------:|:------:|-------------|
 | name | yes | string | name of the character |
+| description | yes | string | a (short) description |
 | class | yes | string | name of the class |
 | subclass | at certain levels | string | name of the subclass |
 | race | yes | string | name of the race |
@@ -56,6 +57,7 @@ Each race should be stored in a JSON file as a map (or "object"). The values pos
 | Name | required? | format | description |
 |------|:---------:|:------:|-------------|
 | name | yes | string | name of the race |
+| description | yes | string | a (short) description |
 | has_subraces | yes | boolean | describes whether subraces exist (true or false) |
 | features | no | [features](#features) map | racial features e.g. ability score increases or innate spellcasting abilities |
 
@@ -80,6 +82,7 @@ Similarly to races, each subrace should be stored in a JSON file as a map (or "o
 | Name | required? | format | description |
 |------|:---------:|:------:|-------------|
 | name | yes | string | name of the subrace |
+| description | yes | string | a (short) description |
 | race | yes | string | name of the race |
 | features | no | [features](#features) map | subrace features |
 
@@ -101,6 +104,7 @@ Each class should be stored in a JSON file as a map (or "object"). The required 
 | Name | required? | format | description |
 |------|:---------:|:------:|-------------|
 | name | yes | string | name of the class |
+| description | yes | string | a (short) description |
 | hit_dice | yes | string | string for hit dice i.e. "d6", "d8", "d10" or "d12" |
 | asi_levels | yes | array of integers | levels at which characters of this class get Ability Score Increases |
 | spellcasting | no | [spellcasting](#spellcasting) map | all information about spellcasting, if the class is a spellcasting class |
@@ -138,6 +142,7 @@ Similarly to classes, each subclass should be stored in a JSON file as a map (or
 | Name | required? | format | description |
 |------|:---------:|:------:|-------------|
 | name | yes | string | name of the subclass |
+| description | yes | string | a (short) description |
 | class | yes | string | name of the class |
 | spellcasting | no | [spellcasting](#spellcasting) map | all information about spellcasting, if the subclass is a spellcasting subclass |
 | features | no | [features](#features) map | subclass features |
