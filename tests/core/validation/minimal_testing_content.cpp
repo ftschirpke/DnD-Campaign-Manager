@@ -7,8 +7,11 @@
 #include <utility>
 
 #include <core/content.hpp>
+#include <core/models/character_class/character_class.hpp>
+#include <core/models/character_race/character_race.hpp>
 #include <core/models/spell/spell.hpp>
 #include <core/validation/character_class/character_class_data.hpp>
+#include <core/validation/character_race/character_race_data.hpp>
 #include <core/validation/spell/spell_data.hpp>
 #include <core/validation/validation_data_mock.hpp>
 
@@ -75,14 +78,25 @@ static void add_classes(dnd::Content& content) {
     class_data.spellcasting_data.is_spellcaster = true;
     class_data.spellcasting_data.ability = "INT";
     class_data.spellcasting_data.is_spells_known_type = true;
-    auto& feature_data = class_data.features_data.emplace_back();
-    dndtest::set_valid_mock_values(feature_data, "Example Feature");
-    class_data.subclass_feature_name = "Example Feature";
+    auto& feature_data = class_data.features_data.emplace_back(&class_data);
+    dndtest::set_valid_mock_values(feature_data, "Example Class Feature");
+    class_data.subclass_feature_name = "Example Class Feature";
     class_data.hit_dice_data.str = "d6";
     class_data.important_levels_data.asi_levels = {4, 8, 12, 16, 19};
     assert(class_data.validate().ok());
     assert(class_data.validate_relations(content).ok());
     content.add_character_class(dnd::CharacterClass::create(std::move(class_data), content));
+}
+
+static void add_races(dnd::Content& content) {
+    dnd::CharacterRaceData race_data;
+    dndtest::set_valid_mock_values(race_data, "Dwarf");
+    auto& feature_data = race_data.features_data.emplace_back(&race_data);
+    dndtest::set_valid_mock_values(feature_data, "Example Race Feature");
+    race_data.subraces = true;
+    assert(race_data.validate().ok());
+    assert(race_data.validate_relations(content).ok());
+    content.add_character_race(dnd::CharacterRace::create(std::move(race_data), content));
 }
 
 dnd::Content dndtest::minimal_testing_content() {
@@ -91,6 +105,7 @@ dnd::Content dndtest::minimal_testing_content() {
     add_groups(content);
     add_spells(content);
     add_classes(content);
+    add_races(content);
 
     return content;
 }

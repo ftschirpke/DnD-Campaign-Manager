@@ -6,6 +6,7 @@ target_sources(${DND_TESTS}
 )
 
 add_subdirectory(basic_mechanics)
+add_subdirectory(character_race)
 add_subdirectory(effect_holder)
 add_subdirectory(feature)
 add_subdirectory(item)
