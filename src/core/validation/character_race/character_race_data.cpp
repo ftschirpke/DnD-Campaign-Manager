@@ -26,7 +26,7 @@ dnd::Errors dnd::CharacterRaceData::validate() const {
         if (unique_feature_names.contains(feature_data.name)) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
-                fmt::format("Character class has duplicate feature \"{}\".", feature_data.name)
+                fmt::format("Character race has duplicate feature \"{}\".", feature_data.name)
             );
         } else {
             unique_feature_names.insert(feature_data.name);
@@ -42,9 +42,14 @@ dnd::Errors dnd::CharacterRaceData::validate() const {
 
 dnd::Errors dnd::CharacterRaceData::validate_relations(const Content& content) const {
     Errors errors;
+    if (content.get_character_races().contains(name)) {
+        errors.add_validation_error(
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, fmt::format("Race has duplicate name \"{}\".", name)
+        );
+    }
     for (const auto& feature_data : features_data) {
         errors += feature_data.validate_relations(content);
-        if (content.get_features().contains(name)) {
+        if (content.get_features().contains(feature_data.name)) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
                 fmt::format("Feature has duplicate name \"{}\".", name)
