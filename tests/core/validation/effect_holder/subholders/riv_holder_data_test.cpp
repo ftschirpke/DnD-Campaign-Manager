@@ -8,8 +8,6 @@
 #include <core/validation/minimal_testing_content.hpp>
 #include <core/validation/validation_data_mock.hpp>
 
-#include <iostream>
-
 static constexpr const char* tags = "[core][validation][effect_holder]";
 
 TEST_CASE("dnd::RIVHolderData::validate and ::validate_relations", tags) {

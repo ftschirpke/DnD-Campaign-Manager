@@ -3,7 +3,6 @@
 #include <core/validation/validation_data.hpp>
 
 #include <filesystem>
-#include <iostream>
 #include <string>
 
 #include <catch2/catch_test_macros.hpp>
