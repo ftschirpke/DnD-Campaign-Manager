@@ -47,7 +47,7 @@ static dnd::Errors string_group_set_validate_relations(
         if (!content.get_groups().is_part_of_group(str_item, group_name)) {
             errors.add_validation_error(
                 dnd::ValidationErrorCode::RELATION_NOT_FOUND, parent,
-                fmt::format("No '{}' ({}) exists in the {} group.", str_item, set_name, group_name)
+                fmt::format("Invalid value in {}: '{}' is not part of the {} group.", str_item, set_name, group_name)
             );
         }
     }
