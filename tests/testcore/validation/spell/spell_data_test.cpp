@@ -8,7 +8,7 @@
 
 #include <core/validation/spell/spell_data.hpp>
 #include <core/validation/spell/spell_type_data.hpp>
-#include <core/validation/validation_data_mock.hpp>
+#include <testcore/validation/validation_data_mock.hpp>
 
 static constexpr const char* tags = "[core][validation][spell]";
 

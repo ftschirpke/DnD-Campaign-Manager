@@ -13,7 +13,7 @@
 #include <core/validation/character_class/character_class_data.hpp>
 #include <core/validation/character_race/character_race_data.hpp>
 #include <core/validation/spell/spell_data.hpp>
-#include <core/validation/validation_data_mock.hpp>
+#include <testcore/validation/validation_data_mock.hpp>
 
 static void add_groups(dnd::Content& content) {
     content.set_subgroups("weapons", {"simple weapons", "martial weapons"});

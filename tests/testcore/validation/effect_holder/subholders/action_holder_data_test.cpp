@@ -5,7 +5,7 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include <core/errors/errors.hpp>
-#include <core/validation/validation_data_mock.hpp>
+#include <testcore/validation/validation_data_mock.hpp>
 
 static constexpr const char* tags = "[core][validation][effect_holder]";
 
