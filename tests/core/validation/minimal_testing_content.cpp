@@ -27,6 +27,8 @@ static void add_groups(dnd::Content& content) {
     content.add_group_members("languages", {"Common", "Dwarvish", "Elvish"});
     content.add_group_members("tools", {"thieves' tools", "disguise kit"});
     content.add_group_members("senses", {"Darkvision", "Blindsight", "Truesight"});
+    content.add_group_members("conditions", {"blinded", "charmed", "deafened"});
+    content.add_group_members("damage types", {"bludgeoning", "piercing", "slashing"});
 }
 
 static void add_spells(dnd::Content& content) {

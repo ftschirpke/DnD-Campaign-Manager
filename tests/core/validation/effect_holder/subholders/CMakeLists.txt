@@ -3,4 +3,5 @@ target_sources(${DND_TESTS}
     action_holder_data_test.cpp
     extra_spells_holder_data_test.cpp
     proficiency_holder_data_test.cpp
+    riv_holder_data_test.cpp
 )
