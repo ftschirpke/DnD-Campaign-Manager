@@ -6,10 +6,10 @@
 
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
-#include <core/validation/character_class/character_class_data.hpp>
 #include <core/validation/validation_data.hpp>
+#include <core/validation/validation_subdata.hpp>
 
-dnd::ImportantLevelsData::ImportantLevelsData(const CharacterClassData* parent) noexcept : ValidationSubdata(parent) {}
+dnd::ImportantLevelsData::ImportantLevelsData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
 
 dnd::Errors dnd::ImportantLevelsData::validate() const {
     Errors errors;

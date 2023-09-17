@@ -7,15 +7,14 @@
 #include <vector>
 
 #include <core/errors/errors.hpp>
+#include <core/validation/validation_data.hpp>
 #include <core/validation/validation_subdata.hpp>
 
 namespace dnd {
 
-class CharacterClassData;
-
 class ImportantLevelsData : public ValidationSubdata {
 public:
-    ImportantLevelsData(const CharacterClassData* parent) noexcept;
+    ImportantLevelsData(const ValidationData* parent) noexcept;
     std::strong_ordering operator<=>(const ImportantLevelsData&) const noexcept = default;
     /**
      * @brief Validates the data
