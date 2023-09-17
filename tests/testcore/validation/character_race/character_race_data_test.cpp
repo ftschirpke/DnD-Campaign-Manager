@@ -13,7 +13,7 @@
 
 static constexpr const char* tags = "[core][validation][character_race]";
 
-TEST_CASE("dnd::CharacterRaceData::validate and ::validate_relations // invalid race data", tags) {
+TEST_CASE("dnd::CharacterRaceData::validate and ::validate_relations // valid race data", tags) {
     dnd::CharacterRaceData data;
     dndtest::set_valid_mock_values(data, "Race");
     dnd::Content content = dndtest::minimal_testing_content();
@@ -42,7 +42,7 @@ TEST_CASE("dnd::CharacterRaceData::validate and ::validate_relations // invalid 
     }
 }
 
-TEST_CASE("dnd::CharacterRaceData::validate", tags) {
+TEST_CASE("dnd::CharacterRaceData::validate // invalid race data", tags) {
     dnd::CharacterRaceData data;
     dndtest::set_valid_mock_values(data, "Race");
     dnd::Errors errors;
@@ -66,7 +66,7 @@ TEST_CASE("dnd::CharacterRaceData::validate", tags) {
     }
 }
 
-TEST_CASE("dnd::CharacterRaceData::validate_relations", tags) {
+TEST_CASE("dnd::CharacterRaceData::validate_relations // invalid race data relations", tags) {
     dnd::CharacterRaceData data;
     dndtest::set_valid_mock_values(data, "Race");
     dnd::Content content = dndtest::minimal_testing_content();
