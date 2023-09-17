@@ -10,10 +10,10 @@
 
 #include <core/basic_mechanics/abilities.hpp>
 #include <core/errors/errors.hpp>
-#include <core/validation/character_class/character_class_data.hpp>
+#include <core/validation/validation_data.hpp>
 #include <core/validation/validation_subdata.hpp>
 
-dnd::SpellcastingData::SpellcastingData(const CharacterClassData* parent) noexcept : ValidationSubdata(parent) {
+dnd::SpellcastingData::SpellcastingData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {
     for (int& val : spells_known) {
         val = 0;
     }

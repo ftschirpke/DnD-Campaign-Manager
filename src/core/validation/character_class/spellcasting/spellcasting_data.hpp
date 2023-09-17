@@ -7,6 +7,7 @@
 #include <string>
 
 #include <core/errors/errors.hpp>
+#include <core/validation/validation_data.hpp>
 #include <core/validation/validation_subdata.hpp>
 
 namespace dnd {
@@ -15,7 +16,7 @@ class CharacterClassData;
 
 class SpellcastingData : public ValidationSubdata {
 public:
-    SpellcastingData(const CharacterClassData* parent) noexcept;
+    SpellcastingData(const ValidationData* parent) noexcept;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation
