@@ -2,7 +2,7 @@
     "name": "Fighter",
     "description": "A master of martial combat, skilled with a variety of weapons and armor",
     "hit_dice": "d10",
-    "asi_levels": [4, 6, 8, 12, 14, 16, 19],
+    "feat_levels": [4, 6, 8, 12, 14, 16, 19],
     "subclass_feature": "Martial Archetype",
     "features": {
         "Fighter Base": {

@@ -2,7 +2,7 @@
     "name": "Bard",
     "description": "An inspiring magician whose power echoes the music of creation",
     "hit_dice": "d8",
-    "asi_levels": [4, 8, 12, 16, 19],
+    "feat_levels": [4, 8, 12, 16, 19],
     "spellcasting": {
         "ability": "CHA",
         "ritual_casting": true,

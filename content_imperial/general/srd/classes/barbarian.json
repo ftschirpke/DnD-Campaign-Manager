@@ -2,7 +2,7 @@
     "name": "Barbarian",
     "description": "A fierce warrior of primitive background who can enter a battle rage",
     "hit_dice": "d12",
-    "asi_levels": [4, 8, 12, 16, 19],
+    "feat_levels": [4, 8, 12, 16, 19],
     "subclass_feature": "Primal Path",
     "features": {
         "Barbarian Base": {

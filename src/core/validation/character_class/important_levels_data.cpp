@@ -2,6 +2,7 @@
 
 #include "important_levels_data.hpp"
 
+#include <algorithm>
 #include <vector>
 
 #include <core/errors/errors.hpp>
@@ -13,19 +14,17 @@ dnd::ImportantLevelsData::ImportantLevelsData(const ValidationData* parent) noex
 
 dnd::Errors dnd::ImportantLevelsData::validate() const {
     Errors errors;
-    for (auto asi_level : asi_levels) {
-        if (asi_level <= 0 || asi_level > 20) {
-            errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
-                "ASI (ability score improvement) levels must all be between 1 and 20 (inclusive)."
-            );
-            break;
-        }
-    }
-    if (asi_levels.empty()) {
+    if (feat_levels.empty()) {
         errors.add_validation_error(
             ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
             "Character class has no ability score improvement levels."
+        );
+        return errors;
+    }
+    if (*feat_levels.begin() <= 0 || *(--feat_levels.end()) > 20) {
+        errors.add_validation_error(
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+            "Feat levels must all be between 1 and 20 (inclusive)."
         );
     }
     return errors;

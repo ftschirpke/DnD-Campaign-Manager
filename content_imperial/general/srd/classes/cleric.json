@@ -2,7 +2,7 @@
     "name": "Cleric",
     "description": "A priestly champion who wields divine magic in service of a higher power",
     "hit_dice": "d8",
-    "asi_levels": [4, 8, 12, 16, 19],
+    "feat_levels": [4, 8, 12, 16, 19],
     "spellcasting": {
         "ability": "WIS",
         "ritual_casting": true,

@@ -2,7 +2,7 @@
     "name": "Wizard",
     "description": "A scholarly magic-user capable of manipulating the structures of reality.",
     "hit_dice": "d6",
-    "asi_levels": [4, 8, 12, 16, 19],
+    "feat_levels": [4, 8, 12, 16, 19],
     "spellcasting": {
         "ability": "INT",
         "ritual_casting": true,

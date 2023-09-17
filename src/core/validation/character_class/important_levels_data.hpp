@@ -4,7 +4,7 @@
 #include <dnd_config.hpp>
 
 #include <compare>
-#include <vector>
+#include <set>
 
 #include <core/errors/errors.hpp>
 #include <core/validation/validation_data.hpp>
@@ -22,7 +22,7 @@ public:
      */
     virtual Errors validate() const override;
 
-    std::vector<int> asi_levels;
+    std::set<int> feat_levels;
 };
 
 } // namespace dnd

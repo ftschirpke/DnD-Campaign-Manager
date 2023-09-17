@@ -124,18 +124,18 @@ void dnd::DisplayVisitor::visit(const CharacterClass* character_class_ptr) {
     source(character_class_ptr);
     label("Hit Die:");
     ImGui::Text("%s", dice_to_string(character_class_ptr->get_hit_dice()).c_str());
-    label("ASI Levels:");
-    std::stringstream asi_sstr;
+    label("Feat Levels:");
+    std::stringstream feat_sstr;
     bool first = true;
-    for (auto asi_level : character_class_ptr->get_important_levels().get_asi_levels()) {
+    for (auto feat_level : character_class_ptr->get_important_levels().get_feat_levels()) {
         if (first) {
             first = false;
         } else {
-            asi_sstr << ", ";
+            feat_sstr << ", ";
         }
-        asi_sstr << asi_level;
+        feat_sstr << feat_level;
     }
-    ImGui::Text("%s", asi_sstr.str().c_str());
+    ImGui::Text("%s", feat_sstr.str().c_str());
     label("Subclass Level:");
     ImGui::Text("%d", character_class_ptr->get_important_levels().get_subclass_level());
     label("Features:");

@@ -2,6 +2,8 @@
 
 #include "important_levels.hpp"
 
+#include <algorithm>
+#include <set>
 #include <utility>
 #include <vector>
 
@@ -18,12 +20,12 @@ dnd::ImportantLevels dnd::ImportantLevels::create(dnd::ImportantLevelsData&& dat
     if (!data.validate().ok()) {
         throw dnd::invalid_data("Cannot create important levels object from invalid data.");
     }
-    return ImportantLevels(std::move(data.asi_levels), subclass_level);
+    return ImportantLevels(std::move(data.feat_levels), subclass_level);
 }
 
-const std::vector<int>& dnd::ImportantLevels::get_asi_levels() const noexcept { return asi_levels; }
+const std::set<int>& dnd::ImportantLevels::get_feat_levels() const noexcept { return feat_levels; }
 
 int dnd::ImportantLevels::get_subclass_level() const noexcept { return subclass_level; }
 
-dnd::ImportantLevels::ImportantLevels(std::vector<int>&& asi_levels, int subclass_level) noexcept
-    : asi_levels(std::move(asi_levels)), subclass_level(subclass_level) {}
+dnd::ImportantLevels::ImportantLevels(std::set<int>&& feat_levels, int subclass_level) noexcept
+    : feat_levels(std::move(feat_levels)), subclass_level(subclass_level) {}

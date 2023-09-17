@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <set>
 #include <vector>
 
 #include <core/validation/character_class/important_levels_data.hpp>
@@ -21,19 +22,19 @@ public:
     static ImportantLevels create(ImportantLevelsData&& data, int subclass_level);
 
     /**
-     * @brief Returns the ASI (ability score improvement) levels
-     * @return the ASI levels
+     * @brief Returns the feat levels
+     * @return the feat levels
      */
-    const std::vector<int>& get_asi_levels() const noexcept;
+    const std::set<int>& get_feat_levels() const noexcept;
     /**
      * @brief Returns the subclass level
      * @return the subclass level
      */
     int get_subclass_level() const noexcept;
 private:
-    ImportantLevels(std::vector<int>&& asi_levels, int subclass_level) noexcept;
+    ImportantLevels(std::set<int>&& feat_levels, int subclass_level) noexcept;
 
-    std::vector<int> asi_levels;
+    std::set<int> feat_levels;
     int subclass_level;
 };
 

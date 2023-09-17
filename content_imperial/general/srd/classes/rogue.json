@@ -2,7 +2,7 @@
     "name": "Rogue",
     "description": "A scoundrel who uses stealth and trickery to overcome obstacles and enemies",
     "hit_dice": "d8",
-    "asi_levels": [4, 8, 10, 12, 16, 19],
+    "feat_levels": [4, 8, 10, 12, 16, 19],
     "subclass_feature": "Roguish Archetype",
     "features": {
         "Rogue Base": {

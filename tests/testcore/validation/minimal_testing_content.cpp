@@ -82,7 +82,7 @@ static void add_classes(dnd::Content& content) {
     dndtest::set_valid_mock_values(feature_data, "Example Class Feature");
     class_data.subclass_feature_name = "Example Class Feature";
     class_data.hit_dice_data.str = "d6";
-    class_data.important_levels_data.asi_levels = {4, 8, 12, 16, 19};
+    class_data.important_levels_data.feat_levels = {4, 8, 12, 16, 19};
     assert(class_data.validate().ok());
     assert(class_data.validate_relations(content).ok());
     content.add_character_class(dnd::CharacterClass::create(std::move(class_data), content));

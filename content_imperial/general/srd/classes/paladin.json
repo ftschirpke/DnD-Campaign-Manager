@@ -2,7 +2,7 @@
     "name": "Paladin",
     "description": "A holy warrior bound to a sacred oath",
     "hit_dice": "d10",
-    "asi_levels": [4, 8, 12, 16, 19],
+    "feat_levels": [4, 8, 12, 16, 19],
     "spellcasting": {
         "ability": "CHA",
         "ritual_casting": false,

@@ -106,7 +106,7 @@ Each class should be stored in a JSON file as a map (or "object"). The required 
 | name | yes | string | name of the class |
 | description | yes | string | a (short) description |
 | hit_dice | yes | string | string for hit dice i.e. "d6", "d8", "d10" or "d12" |
-| asi_levels | yes | array of integers | levels at which characters of this class get Ability Score Increases |
+| feat_levels | yes | array of integers | levels at which characters of this class get feats or Ability Score Increases |
 | spellcasting | no | [spellcasting](#spellcasting) map | all information about spellcasting, if the class is a spellcasting class |
 | features | yes | [features](#features) map | class features <ul><li>there needs to be exactly one feature that has the key-value pair `"subclass": true` (this feature should just be a feature describing that from a certain level you can choose a subclass, usually level 1, 2 or 3)</li><li>usually, there is also a feature describing hit dice and proficiencies for armor, weapons, saving throws and skills</li></ul> |
 

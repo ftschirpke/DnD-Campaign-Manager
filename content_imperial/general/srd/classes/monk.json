@@ -2,7 +2,7 @@
     "name": "Monk",
     "description": "A master of martial arts, harnessing the power of the body in pursuit of physical and spiritual perfection",
     "hit_dice": "d8",
-    "asi_levels": [4, 8, 12, 16, 19],
+    "feat_levels": [4, 8, 12, 16, 19],
     "subclass_feature": "Monastic Tradition",
     "features": {
         "Monk Base": {

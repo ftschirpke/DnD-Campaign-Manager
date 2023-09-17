@@ -2,7 +2,7 @@
     "name": "Ranger",
     "description": "A warrior who uses martial prowess and nature magic to combat threats on the edges of civilization",
     "hit_dice": "d10",
-    "asi_levels": [4, 8, 12, 16, 19],
+    "feat_levels": [4, 8, 12, 16, 19],
     "spellcasting": {
         "ability": "WIS",
         "ritual_casting": false,
