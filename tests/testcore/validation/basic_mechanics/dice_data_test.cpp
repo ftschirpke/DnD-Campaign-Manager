@@ -11,7 +11,43 @@ TEST_CASE("dnd::DiceData", tags) {
 
     dnd::Errors errors;
     SECTION("Valid dice") {
+        data.str = "d4";
+        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE(errors.ok());
+
+        data.str = "D4";
+        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE(errors.ok());
+
         data.str = "d6";
+        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE(errors.ok());
+
+        data.str = "D6";
+        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE(errors.ok());
+
+        data.str = "d8";
+        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE(errors.ok());
+
+        data.str = "D8";
+        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE(errors.ok());
+
+        data.str = "d10";
+        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE(errors.ok());
+
+        data.str = "D10";
+        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE(errors.ok());
+
+        data.str = "d12";
+        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE(errors.ok());
+
+        data.str = "D12";
         REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE(errors.ok());
 
@@ -19,17 +55,32 @@ TEST_CASE("dnd::DiceData", tags) {
         REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE(errors.ok());
 
+        data.str = "D20";
+        REQUIRE_NOTHROW(errors = data.validate());
+
         data.str = "d100";
+        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE(errors.ok());
+
+        data.str = "D100";
         REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE(errors.ok());
     }
 
     SECTION("Invalid dice") {
-        data.str = "d0";
+        data.str = "d04";
+        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE_FALSE(errors.ok());
+
+        data.str = "D14";
         REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_FALSE(errors.ok());
 
         data.str = "d-1";
+        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE_FALSE(errors.ok());
+
+        data.str = "D010";
         REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_FALSE(errors.ok());
 
