@@ -6,7 +6,7 @@
 
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
-#include <testcore/validation/minimal_testing_content.hpp>
+#include <testcore/minimal_testing_content.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
 static constexpr const char* tags = "[core][validation][effect_holder]";

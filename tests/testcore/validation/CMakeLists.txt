@@ -1,6 +1,5 @@
 target_sources(${DND_TESTS}
     PRIVATE
-    minimal_testing_content.cpp
     validation_data_mock.cpp
     validation_data_test.cpp
 )

@@ -1,3 +1,8 @@
+target_sources(${DND_TESTS}
+    PRIVATE
+    minimal_testing_content.cpp
+)
+
 add_subdirectory(basic_mechanics)
 add_subdirectory(errors)
 add_subdirectory(output)
