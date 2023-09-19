@@ -11,7 +11,6 @@
 static constexpr const char* tags = "[core][validation][character_subrace]";
 
 TEST_CASE("dnd::CharacterSubraceData::validate and ::validate_relations // valid subrace data", tags) {
-    dndtest::ValidationDataMock parent;
     dnd::CharacterSubraceData data;
     dndtest::set_valid_mock_values(data, "Subrace");
     dnd::Content content = dndtest::minimal_testing_content();
@@ -96,7 +95,7 @@ TEST_CASE("dnd::CharacterSubraceData::validate_relations // invalid subrace data
     }
 
     SECTION("a race with the given race name must exist") {
-        data.race_name = "Non-existent race";
+        data.race_name = "Nonexistent race";
         REQUIRE_NOTHROW(errors = data.validate_relations(content));
         REQUIRE_FALSE(errors.ok());
     }
