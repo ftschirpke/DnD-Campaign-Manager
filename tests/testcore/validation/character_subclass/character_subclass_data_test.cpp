@@ -13,6 +13,7 @@ static constexpr const char* tags = "[core][validation][character_subclass]";
 TEST_CASE("dnd::CharacterSubclassData::validate and ::validate_relations // valid subclass data", tags) {
     dnd::CharacterSubclassData data;
     dndtest::set_valid_mock_values(data, "Subclass");
+    data.spellcasting_data.is_spellcaster = false;
     dnd::Content content = dndtest::minimal_testing_content();
     dnd::Errors errors;
 
@@ -42,7 +43,16 @@ TEST_CASE("dnd::CharacterSubclassData::validate and ::validate_relations // vali
 TEST_CASE("dnd::CharacterSubclassData::validate // invalid subclass data", tags) {
     dnd::CharacterSubclassData data;
     dndtest::set_valid_mock_values(data, "Subclass");
+    data.spellcasting_data.is_spellcaster = false;
     dnd::Errors errors;
+
+    SECTION("subclass without class is invalid") {
+        data.class_name = "";
+        auto& feature_data = data.features_data.emplace_back(&data);
+        dndtest::set_valid_mock_values(feature_data, "Feature");
+        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE_FALSE(errors.ok());
+    }
 
     SECTION("subclass without features is invalid") {
         data.class_name = "Wizard";
@@ -72,6 +82,7 @@ TEST_CASE("dnd::CharacterSubclassData::validate // invalid subclass data", tags)
 TEST_CASE("dnd::CharacterSubclassData::validate_relations // invalid subclass data relations", tags) {
     dnd::CharacterSubclassData data;
     dndtest::set_valid_mock_values(data, "Subclass");
+    data.spellcasting_data.is_spellcaster = false;
     auto& valid_feature_data = data.features_data.emplace_back(&data);
     dndtest::set_valid_mock_values(valid_feature_data, "Valid Feature");
     dnd::Content content = dndtest::minimal_testing_content();
@@ -96,6 +107,15 @@ TEST_CASE("dnd::CharacterSubclassData::validate_relations // invalid subclass da
 
     SECTION("a class with the given class name must exist") {
         data.class_name = "Nonexistent Class";
+        REQUIRE_NOTHROW(errors = data.validate_relations(content));
+        REQUIRE_FALSE(errors.ok());
+    }
+
+    SECTION("subclass cannot have spellcasting if class already has") {
+        data.class_name = "Wizard";
+        data.spellcasting_data.is_spellcaster = true;
+        data.spellcasting_data.ability = "INT";
+        data.spellcasting_data.is_spells_known_type = true;
         REQUIRE_NOTHROW(errors = data.validate_relations(content));
         REQUIRE_FALSE(errors.ok());
     }

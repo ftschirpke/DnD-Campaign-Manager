@@ -44,6 +44,14 @@ TEST_CASE("dnd::CharacterSubraceData::validate // invalid subrace data", tags) {
     dndtest::set_valid_mock_values(data, "Subrace");
     dnd::Errors errors;
 
+    SECTION("subrace without race is invalid") {
+        data.race_name = "";
+        auto& feature_data = data.features_data.emplace_back(&data);
+        dndtest::set_valid_mock_values(feature_data, "Feature");
+        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE_FALSE(errors.ok());
+    }
+
     SECTION("subrace without features is invalid") {
         data.race_name = "Dwarf";
         REQUIRE_NOTHROW(errors = data.validate());
