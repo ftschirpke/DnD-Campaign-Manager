@@ -15,6 +15,9 @@
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/validation/feature/feature_data.hpp>
 
+dnd::CharacterSubclassData::CharacterSubclassData() noexcept
+    : ValidationData(), spellcasting_data(this), features_data(), class_name() {}
+
 std::unique_ptr<dnd::ValidationData> dnd::CharacterSubclassData::pack() const {
     return std::make_unique<CharacterSubclassData>(*this);
 }

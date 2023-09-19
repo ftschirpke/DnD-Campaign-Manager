@@ -33,6 +33,30 @@ dnd::Errors dnd::CharacterSubclassParser::parse() {
     errors += parse_required_attribute(json, "description", data.description);
     data.source_path = get_filepath();
 
+    data.spellcasting_data.is_spellcaster = json.contains("spellcasting");
+    if (data.spellcasting_data.is_spellcaster) {
+        nlohmann::ordered_json& spellcasting_json = json["spellcasting"];
+        errors += parse_required_attribute(spellcasting_json, "ability", data.spellcasting_data.ability);
+        errors += parse_required_attribute(spellcasting_json, "ritual_casting", data.spellcasting_data.ritual_casting);
+
+        errors += parse_optional_attribute(
+            spellcasting_json, "preparation_caster", data.spellcasting_data.preparation_spellcasting_type
+        );
+        data.spellcasting_data.is_spells_known_type = spellcasting_json.contains("spells_known");
+        errors += parse_optional_attribute(spellcasting_json, "spells_known", data.spellcasting_data.spells_known);
+
+        errors += parse_optional_attribute(spellcasting_json, "cantrips_known", data.spellcasting_data.cantrips_known);
+        errors += parse_optional_attribute(spellcasting_json, "level1_slots", data.spellcasting_data.spell_slots[0]);
+        errors += parse_optional_attribute(spellcasting_json, "level2_slots", data.spellcasting_data.spell_slots[1]);
+        errors += parse_optional_attribute(spellcasting_json, "level3_slots", data.spellcasting_data.spell_slots[2]);
+        errors += parse_optional_attribute(spellcasting_json, "level4_slots", data.spellcasting_data.spell_slots[3]);
+        errors += parse_optional_attribute(spellcasting_json, "level5_slots", data.spellcasting_data.spell_slots[4]);
+        errors += parse_optional_attribute(spellcasting_json, "level6_slots", data.spellcasting_data.spell_slots[5]);
+        errors += parse_optional_attribute(spellcasting_json, "level7_slots", data.spellcasting_data.spell_slots[6]);
+        errors += parse_optional_attribute(spellcasting_json, "level8_slots", data.spellcasting_data.spell_slots[7]);
+        errors += parse_optional_attribute(spellcasting_json, "level9_slots", data.spellcasting_data.spell_slots[8]);
+    }
+
     errors += parse_required_attribute(json, "class", data.class_name);
 
     if (json.contains("features")) {

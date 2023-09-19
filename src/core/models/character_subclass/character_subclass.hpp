@@ -4,10 +4,12 @@
 #include <dnd_config.hpp>
 
 #include <filesystem>
+#include <memory>
 #include <string>
 #include <vector>
 
 #include <core/models/character_class/character_class.hpp>
+#include <core/models/character_class/spellcasting/spellcasting.hpp>
 #include <core/models/feature_holder/feature_holder.hpp>
 #include <core/validation/character_subclass/character_subclass_data.hpp>
 
@@ -42,10 +44,12 @@ public:
 private:
     CharacterSubclass(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path,
-        std::vector<Feature>&& features, const CharacterClass* cls
+        std::vector<Feature>&& features, const CharacterClass* cls,
+        std::unique_ptr<Spellcasting>&& spellcasting = nullptr
     ) noexcept;
 
     const CharacterClass* cls;
+    std::unique_ptr<Spellcasting> spellcasting;
 };
 
 } // namespace dnd
