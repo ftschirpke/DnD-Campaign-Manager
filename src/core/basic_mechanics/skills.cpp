@@ -20,17 +20,23 @@ static constexpr std::array<std::pair<std::string_view, std::string_view>, 18> s
 
 bool dnd::is_skill(const std::string& skill) noexcept {
     for (const auto& skill_ability_pair : skill_abilities) {
+        std::string_view skill_to_check = skill_ability_pair.first;
+        if (skill.size() != skill_to_check.size()) {
+            continue;
+        }
         bool equal = true;
         size_t i = 0;
-        while (equal && i < skill.size() && skill_ability_pair.first[i] != '\0') {
-            if (skill[i] == ' ' && skill_ability_pair.first[i] != '_') {
-                equal = false;
-            } else if (char_to_uppercase(skill[i]) != skill_ability_pair.first[i]) {
+        while (equal && i < skill.size()) {
+            if (skill[i] == ' ') {
+                if (skill_to_check[i] != '_' && skill_to_check[i] != ' ') {
+                    equal = false;
+                }
+            } else if (char_to_uppercase(skill[i]) != skill_to_check[i]) {
                 equal = false;
             }
             ++i;
         }
-        if (equal) {
+        if (equal && i == skill.size()) {
             return true;
         }
     }
