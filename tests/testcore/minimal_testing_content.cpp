@@ -9,6 +9,7 @@
 #include <core/content.hpp>
 #include <core/models/character_class/character_class.hpp>
 #include <core/models/character_race/character_race.hpp>
+#include <core/models/character_subclass/character_subclass.hpp>
 #include <core/models/character_subrace/character_subrace.hpp>
 #include <core/models/spell/spell.hpp>
 #include <core/validation/character_class/character_class_data.hpp>
@@ -87,6 +88,15 @@ static void add_classes(dnd::Content& content) {
     assert(class_data.validate().ok());
     assert(class_data.validate_relations(content).ok());
     content.add_character_class(dnd::CharacterClass::create(std::move(class_data), content));
+
+    dnd::CharacterSubclassData subclass_data;
+    dndtest::set_valid_mock_values(subclass_data, "Abjuration Wizard");
+    auto& feature_data3 = subclass_data.features_data.emplace_back(&subclass_data);
+    dndtest::set_valid_mock_values(feature_data3, "Example Subclass Feature");
+    subclass_data.class_name = "Wizard";
+    assert(subclass_data.validate().ok());
+    assert(subclass_data.validate_relations(content).ok());
+    content.add_character_subclass(dnd::CharacterSubclass::create(std::move(subclass_data), content));
 }
 
 static void add_races(dnd::Content& content) {
