@@ -81,6 +81,9 @@ bool dnd::Groups::is_subgroup(const std::string& subgroup_name, const std::strin
 }
 
 bool dnd::Groups::is_part_of_group(const std::string& name, const std::string& group_name) const {
+    if (!is_group(group_name)) {
+        return false;
+    }
     if (members.at(group_name).contains(name)) {
         return true;
     }
