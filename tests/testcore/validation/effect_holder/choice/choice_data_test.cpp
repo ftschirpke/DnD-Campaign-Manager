@@ -11,7 +11,7 @@
 
 static constexpr const char* tags = "[core][validation][effect_holder]";
 
-TEST_CASE("dnd::ChoiceData::validate // valid choice data", tags) {
+TEST_CASE("dnd::ChoiceData::validate and ::validate_relations // valid choice data", tags) {
     dndtest::ValidationDataMock parent;
     dnd::ChoiceData choice_data(&parent);
     dnd::Content content = dndtest::minimal_testing_content();
@@ -98,14 +98,12 @@ TEST_CASE("dnd::ChoiceData::validate // valid choice data", tags) {
 TEST_CASE("dnd::ChoiceData::validate // invalid choice data", tags) {
     dndtest::ValidationDataMock parent;
     dnd::ChoiceData choice_data(&parent);
-    dnd::Content content = dndtest::minimal_testing_content();
     dnd::Errors errors;
 
     SECTION("Empty attribute name") {
         choice_data.attribute_name = "";
         choice_data.amount = 2;
         REQUIRE_NOTHROW(errors = choice_data.validate());
-        REQUIRE_NOTHROW(errors += choice_data.validate_relations(content));
         REQUIRE_FALSE(errors.ok());
     }
 
@@ -113,12 +111,10 @@ TEST_CASE("dnd::ChoiceData::validate // invalid choice data", tags) {
         choice_data.attribute_name = "languages";
         choice_data.amount = 0;
         REQUIRE_NOTHROW(errors = choice_data.validate());
-        REQUIRE_NOTHROW(errors += choice_data.validate_relations(content));
         REQUIRE_FALSE(errors.ok());
 
         choice_data.amount = -1;
         REQUIRE_NOTHROW(errors = choice_data.validate());
-        REQUIRE_NOTHROW(errors += choice_data.validate_relations(content));
         REQUIRE_FALSE(errors.ok());
     }
 
@@ -126,9 +122,55 @@ TEST_CASE("dnd::ChoiceData::validate // invalid choice data", tags) {
         choice_data.attribute_name = "invalid";
         choice_data.amount = 2;
         REQUIRE_NOTHROW(errors = choice_data.validate());
-        REQUIRE_NOTHROW(errors += choice_data.validate_relations(content));
         REQUIRE_FALSE(errors.ok());
     }
+
+    SECTION("Provided group names where they are prohibited") {
+        choice_data.attribute_name = "saving_throw_proficiencies";
+        choice_data.group_names = {"some made-up group"};
+        choice_data.amount = 2;
+        REQUIRE_NOTHROW(errors = choice_data.validate());
+        REQUIRE_FALSE(errors.ok());
+
+        choice_data.attribute_name = "skill_proficiencies";
+        choice_data.group_names = {"some made-up group", "another made-up group"};
+        choice_data.amount = 3;
+        REQUIRE_NOTHROW(errors = choice_data.validate());
+        REQUIRE_FALSE(errors.ok());
+
+        choice_data.attribute_name = "effects";
+        choice_data.group_names = {"a totally new made-up group"};
+        choice_data.amount = 1;
+        REQUIRE_NOTHROW(errors = choice_data.validate());
+        REQUIRE_FALSE(errors.ok());
+    }
+
+    SECTION("Provided group names where they are prohibited") {
+        choice_data.attribute_name = "saving_throw_proficiencies";
+        choice_data.group_names = {"some made-up group"};
+        choice_data.amount = 2;
+        REQUIRE_NOTHROW(errors = choice_data.validate());
+        REQUIRE_FALSE(errors.ok());
+
+        choice_data.attribute_name = "skill_proficiencies";
+        choice_data.group_names = {"some made-up group", "another made-up group"};
+        choice_data.amount = 3;
+        REQUIRE_NOTHROW(errors = choice_data.validate());
+        REQUIRE_FALSE(errors.ok());
+
+        choice_data.attribute_name = "effects";
+        choice_data.group_names = {"a totally new made-up group"};
+        choice_data.amount = 1;
+        REQUIRE_NOTHROW(errors = choice_data.validate());
+        REQUIRE_FALSE(errors.ok());
+    }
+}
+
+TEST_CASE("dnd::ChoiceData::validate_relations // invalid choice data relations", tags) {
+    dndtest::ValidationDataMock parent;
+    dnd::ChoiceData choice_data(&parent);
+    dnd::Content content = dndtest::minimal_testing_content();
+    dnd::Errors errors;
 
     SECTION("Invalid choices for attribute") {
         choice_data.attribute_name = "languages";
@@ -150,38 +192,13 @@ TEST_CASE("dnd::ChoiceData::validate // invalid choice data", tags) {
         choice_data.attribute_name = "armor_proficiencies";
         choice_data.group_names = {"light armor", "invalid"};
         choice_data.amount = 1;
-        REQUIRE_NOTHROW(errors = choice_data.validate());
-        REQUIRE_NOTHROW(errors += choice_data.validate_relations(content));
+        REQUIRE_NOTHROW(errors = choice_data.validate_relations(content));
         REQUIRE_FALSE(errors.ok());
 
         choice_data.attribute_name = "spells_added_to_spell_list";
         choice_data.group_names = {"armor", "weapons"};
         choice_data.amount = 3;
-        REQUIRE_NOTHROW(errors = choice_data.validate());
-        REQUIRE_NOTHROW(errors += choice_data.validate_relations(content));
-        REQUIRE_FALSE(errors.ok());
-    }
-
-    SECTION("Provided group names where they are prohibited") {
-        choice_data.attribute_name = "saving_throw_proficiencies";
-        choice_data.group_names = {"some made-up group"};
-        choice_data.amount = 2;
-        REQUIRE_NOTHROW(errors = choice_data.validate());
-        REQUIRE_NOTHROW(errors += choice_data.validate_relations(content));
-        REQUIRE_FALSE(errors.ok());
-
-        choice_data.attribute_name = "skill_proficiencies";
-        choice_data.group_names = {"some made-up group", "another made-up group"};
-        choice_data.amount = 3;
-        REQUIRE_NOTHROW(errors = choice_data.validate());
-        REQUIRE_NOTHROW(errors += choice_data.validate_relations(content));
-        REQUIRE_FALSE(errors.ok());
-
-        choice_data.attribute_name = "effects";
-        choice_data.group_names = {"a totally new made-up group"};
-        choice_data.amount = 1;
-        REQUIRE_NOTHROW(errors = choice_data.validate());
-        REQUIRE_NOTHROW(errors += choice_data.validate_relations(content));
+        REQUIRE_NOTHROW(errors = choice_data.validate_relations(content));
         REQUIRE_FALSE(errors.ok());
     }
 
@@ -189,15 +206,13 @@ TEST_CASE("dnd::ChoiceData::validate // invalid choice data", tags) {
         choice_data.attribute_name = "cantrips_free";
         choice_data.group_names = {"Wizard spells"};
         choice_data.amount = 1;
-        REQUIRE_NOTHROW(errors = choice_data.validate());
-        REQUIRE_NOTHROW(errors += choice_data.validate_relations(content));
+        REQUIRE_NOTHROW(errors = choice_data.validate_relations(content));
         REQUIRE_FALSE(errors.ok());
 
         choice_data.attribute_name = "spells_added_to_spell_list";
         choice_data.group_names = {"Wizard cantrips"};
         choice_data.amount = 1;
-        REQUIRE_NOTHROW(errors = choice_data.validate());
-        REQUIRE_NOTHROW(errors += choice_data.validate_relations(content));
+        REQUIRE_NOTHROW(errors = choice_data.validate_relations(content));
         REQUIRE_FALSE(errors.ok());
     }
 }
