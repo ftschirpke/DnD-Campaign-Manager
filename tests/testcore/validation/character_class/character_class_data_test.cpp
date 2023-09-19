@@ -16,6 +16,7 @@ TEST_CASE("dnd::CharacterClassData::validate and ::validate_relations // valid c
     dndtest::set_valid_mock_values(data, "Class");
     data.hit_dice_data.str = "d6";
     data.important_levels_data.feat_levels = {4, 8, 12, 16, 19};
+    data.spellcasting_data.is_spellcaster = false;
     dnd::Content content = dndtest::minimal_testing_content();
     dnd::Errors errors;
 
