@@ -9,6 +9,7 @@
 #include <core/content.hpp>
 #include <core/models/character_class/character_class.hpp>
 #include <core/models/character_race/character_race.hpp>
+#include <core/models/character_subrace/character_subrace.hpp>
 #include <core/models/spell/spell.hpp>
 #include <core/validation/character_class/character_class_data.hpp>
 #include <core/validation/character_race/character_race_data.hpp>
@@ -89,14 +90,32 @@ static void add_classes(dnd::Content& content) {
 }
 
 static void add_races(dnd::Content& content) {
-    dnd::CharacterRaceData race_data;
-    dndtest::set_valid_mock_values(race_data, "Dwarf");
-    auto& feature_data = race_data.features_data.emplace_back(&race_data);
-    dndtest::set_valid_mock_values(feature_data, "Example Race Feature");
-    race_data.subraces = true;
-    assert(race_data.validate().ok());
-    assert(race_data.validate_relations(content).ok());
-    content.add_character_race(dnd::CharacterRace::create(std::move(race_data), content));
+    dnd::CharacterRaceData race_data1;
+    dndtest::set_valid_mock_values(race_data1, "Dwarf");
+    auto& feature_data1 = race_data1.features_data.emplace_back(&race_data1);
+    dndtest::set_valid_mock_values(feature_data1, "Example Race Feature");
+    race_data1.subraces = true;
+    assert(race_data1.validate().ok());
+    assert(race_data1.validate_relations(content).ok());
+    content.add_character_race(dnd::CharacterRace::create(std::move(race_data1), content));
+
+    dnd::CharacterRaceData race_data2;
+    dndtest::set_valid_mock_values(race_data2, "Human");
+    auto& feature_data2 = race_data2.features_data.emplace_back(&race_data2);
+    dndtest::set_valid_mock_values(feature_data2, "Example Race Feature 2");
+    race_data2.subraces = false;
+    assert(race_data2.validate().ok());
+    assert(race_data2.validate_relations(content).ok());
+    content.add_character_race(dnd::CharacterRace::create(std::move(race_data2), content));
+
+    dnd::CharacterSubraceData subrace_data;
+    dndtest::set_valid_mock_values(subrace_data, "Hill Dwarf");
+    auto& feature_data3 = subrace_data.features_data.emplace_back(&subrace_data);
+    dndtest::set_valid_mock_values(feature_data3, "Example Subrace Feature");
+    subrace_data.race_name = "Dwarf";
+    assert(subrace_data.validate().ok());
+    assert(subrace_data.validate_relations(content).ok());
+    content.add_character_subrace(dnd::CharacterSubrace::create(std::move(subrace_data), content));
 }
 
 dnd::Content dndtest::minimal_testing_content() {
