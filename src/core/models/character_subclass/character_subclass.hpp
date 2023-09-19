@@ -34,6 +34,7 @@ public:
     CharacterSubclass(CharacterSubclass&&) = default;
     CharacterSubclass& operator=(CharacterSubclass&&) = default;
 
+    bool has_spellcasting() const noexcept;
     const CharacterClass* get_class() const noexcept;
 
     /**

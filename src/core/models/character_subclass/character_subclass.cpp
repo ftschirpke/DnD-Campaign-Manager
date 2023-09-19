@@ -35,6 +35,8 @@ dnd::CharacterSubclass dnd::CharacterSubclass::create(dnd::CharacterSubclassData
     );
 }
 
+bool dnd::CharacterSubclass::has_spellcasting() const noexcept { return spellcasting != nullptr; }
+
 const dnd::CharacterClass* dnd::CharacterSubclass::get_class() const noexcept { return cls; }
 
 void dnd::CharacterSubclass::accept(dnd::ContentVisitor* visitor) const { visitor->visit(this); }
