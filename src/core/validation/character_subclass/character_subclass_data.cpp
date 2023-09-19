@@ -41,6 +41,12 @@ dnd::Errors dnd::CharacterSubclassData::validate() const {
             ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Character subclass has no features."
         );
     }
+    if (class_name.empty()) {
+        errors.add_validation_error(
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Character subclass has no class name."
+        );
+    }
+    errors += spellcasting_data.validate();
     return errors;
 }
 
@@ -65,6 +71,15 @@ dnd::Errors dnd::CharacterSubclassData::validate_relations(const Content& conten
             ValidationErrorCode::RELATION_NOT_FOUND, this,
             fmt::format("Character class '{}' does not exist.", class_name)
         );
+    } else if (spellcasting_data.is_spellcaster && content.get_character_classes().get(class_name).has_spellcasting()) {
+        errors.add_validation_error(
+            ValidationErrorCode::INVALID_RELATION, this,
+            fmt::format(
+                "Character class '{}' has spellcasting. Its subclass '{}' cannot have spellcasting as well.",
+                class_name, name
+            )
+        );
     }
+    errors += spellcasting_data.validate_relations(content);
     return errors;
 }

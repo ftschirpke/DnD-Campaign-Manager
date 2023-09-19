@@ -91,6 +91,7 @@ static void add_classes(dnd::Content& content) {
 
     dnd::CharacterSubclassData subclass_data;
     dndtest::set_valid_mock_values(subclass_data, "Abjuration Wizard");
+    subclass_data.spellcasting_data.is_spellcaster = false;
     auto& feature_data3 = subclass_data.features_data.emplace_back(&subclass_data);
     dndtest::set_valid_mock_values(feature_data3, "Example Subclass Feature");
     subclass_data.class_name = "Wizard";

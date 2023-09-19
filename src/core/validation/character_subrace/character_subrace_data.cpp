@@ -38,6 +38,11 @@ dnd::Errors dnd::CharacterSubraceData::validate() const {
             ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Character subrace has no features."
         );
     }
+    if (race_name.empty()) {
+        errors.add_validation_error(
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Character subrace has no race name."
+        );
+    }
     return errors;
 }
 
