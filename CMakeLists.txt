@@ -50,8 +50,8 @@ if(CCACHE_PROGRAM)
     set_property(GLOBAL PROPERTY CMAKE_CXX_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
 endif()
 
-set (DND_ASSET_DIRECTORY ${CMAKE_SOURCE_DIR}/assets)
-set (DND_MOCK_DIRECTORY ${CMAKE_SOURCE_DIR}/mock)
+set(DND_ASSET_DIRECTORY ${CMAKE_SOURCE_DIR}/assets)
+set(DND_MOCK_DIRECTORY ${CMAKE_SOURCE_DIR}/mock)
 
 # ------------------------------------------------------------------------------
 # DND core library
