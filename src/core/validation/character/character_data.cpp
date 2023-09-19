@@ -79,6 +79,7 @@ dnd::Errors dnd::CharacterData::validate_relations(const dnd::Content& content) 
     }
 
     errors += base_ability_scores_data.validate_relations(content);
+    errors += character_basis_data.validate_relations(content);
 
     if (!character_basis_data.class_name.empty()
         && content.get_character_classes().contains(character_basis_data.class_name)) {
