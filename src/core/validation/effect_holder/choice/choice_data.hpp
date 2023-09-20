@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <string>
 #include <vector>
 
@@ -12,9 +13,12 @@
 
 namespace dnd {
 
+enum class ChoiceType;
+
 class ChoiceData : public ValidationSubdata {
 public:
     ChoiceData(const ValidationData* parent) noexcept;
+    std::strong_ordering operator<=>(const ChoiceData&) const noexcept = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation
@@ -25,7 +29,13 @@ public:
      * @param content the content holder to validate the relations against
      * @return the errors that occured during validation
      */
-    virtual Errors validate_relations(const ContentHolder& content) const override;
+    virtual Errors validate_relations(const Content& content) const override;
+
+    /**
+     * @brief Determines the type of the choice
+     * @return the type of the choice
+     */
+    ChoiceType determine_type() const;
 
     std::string attribute_name;
     int amount;

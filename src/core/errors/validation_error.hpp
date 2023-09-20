@@ -42,7 +42,6 @@ private:
     std::string error_message;
 };
 
-
 } // namespace dnd
 
 #endif // VALIDATION_ERROR_HPP_

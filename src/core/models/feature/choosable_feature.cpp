@@ -5,8 +5,8 @@
 #include <memory>
 #include <vector>
 
+#include <core/content.hpp>
 #include <core/content_visitors/content_visitor.hpp>
-#include <core/controllers/content_holder.hpp>
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/effect_holder/condition/condition.hpp>
@@ -14,9 +14,7 @@
 #include <core/models/feature/feature.hpp>
 #include <core/validation/feature/choosable_feature_data.hpp>
 
-dnd::ChoosableFeature dnd::ChoosableFeature::create(
-    dnd::ChoosableFeatureData&& data, const dnd::ContentHolder& content
-) {
+dnd::ChoosableFeature dnd::ChoosableFeature::create(dnd::ChoosableFeatureData&& data, const dnd::Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create choosable feature from invalid data");
     }

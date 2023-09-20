@@ -6,7 +6,7 @@
 #include <filesystem>
 #include <string>
 
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/errors/errors.hpp>
 
 namespace dnd {
@@ -21,7 +21,7 @@ struct ParsingResult {
     ParsingResult(ParsingResult&&) = default;
     ParsingResult& operator=(ParsingResult&&) = default;
 
-    ContentHolder content;
+    Content content;
     Errors errors;
     std::filesystem::path content_path;
     std::string campaign_directory_name;
@@ -39,8 +39,6 @@ public:
      * @return a struct containing the parsed content, errors and further information
      */
     ParsingResult parse(const std::filesystem::path& content_path, const std::string& campaign_dir_name);
-protected:
-private:
 };
 
 } // namespace dnd

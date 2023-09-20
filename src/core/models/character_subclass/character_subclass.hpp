@@ -4,16 +4,18 @@
 #include <dnd_config.hpp>
 
 #include <filesystem>
+#include <memory>
 #include <string>
 #include <vector>
 
 #include <core/models/character_class/character_class.hpp>
+#include <core/models/character_class/spellcasting/spellcasting.hpp>
 #include <core/models/feature_holder/feature_holder.hpp>
 #include <core/validation/character_subclass/character_subclass_data.hpp>
 
 namespace dnd {
 
-class ContentHolder;
+class Content;
 class ContentVisitor;
 
 class CharacterSubclass : public FeatureHolder {
@@ -25,13 +27,14 @@ public:
      * @return the constructed character subclass
      * @throws dnd::invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static CharacterSubclass create(CharacterSubclassData&& data, const ContentHolder& content);
+    static CharacterSubclass create(CharacterSubclassData&& data, const Content& content);
 
     CharacterSubclass(const CharacterSubclass&) = delete;
     CharacterSubclass& operator=(const CharacterSubclass&) = delete;
     CharacterSubclass(CharacterSubclass&&) = default;
     CharacterSubclass& operator=(CharacterSubclass&&) = default;
 
+    bool has_spellcasting() const noexcept;
     const CharacterClass* get_class() const noexcept;
 
     /**
@@ -42,10 +45,12 @@ public:
 private:
     CharacterSubclass(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path,
-        std::vector<Feature>&& features, const CharacterClass* cls
+        std::vector<Feature>&& features, const CharacterClass* cls,
+        std::unique_ptr<Spellcasting>&& spellcasting = nullptr
     ) noexcept;
 
     const CharacterClass* cls;
+    std::unique_ptr<Spellcasting> spellcasting;
 };
 
 } // namespace dnd

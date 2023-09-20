@@ -100,13 +100,13 @@ dnd::SpellType dnd::SpellType::create(dnd::SpellTypeData&& type_data) {
 }
 
 dnd::SpellType::SpellType(dnd::SpellLevel spell_level, dnd::MagicSchool magic_school, bool is_ritual) noexcept
-    : spell_level(spell_level), magic_school(magic_school), is_ritual(is_ritual) {}
+    : spell_level(spell_level), magic_school(magic_school), ritual(is_ritual) {}
 
 dnd::SpellLevel dnd::SpellType::get_spell_level() const noexcept { return spell_level; }
 
 dnd::MagicSchool dnd::SpellType::get_magic_school() const noexcept { return magic_school; }
 
-bool dnd::SpellType::get_is_ritual() const noexcept { return is_ritual; }
+bool dnd::SpellType::is_ritual() const noexcept { return ritual; }
 
 int dnd::SpellType::get_spell_level_int() const { return static_cast<int>(spell_level); }
 

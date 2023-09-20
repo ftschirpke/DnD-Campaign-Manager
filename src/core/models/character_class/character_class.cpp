@@ -13,8 +13,8 @@
 
 #include <core/basic_mechanics/dice.hpp>
 #include <core/basic_mechanics/dice_factory.hpp>
+#include <core/content.hpp>
 #include <core/content_visitors/content_visitor.hpp>
-#include <core/controllers/content_holder.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
@@ -41,7 +41,7 @@ static int determine_subclass_level(const dnd::FeatureData& subclass_feature_dat
     return 1;
 }
 
-dnd::CharacterClass dnd::CharacterClass::create(dnd::CharacterClassData&& data, const dnd::ContentHolder& content) {
+dnd::CharacterClass dnd::CharacterClass::create(dnd::CharacterClassData&& data, const dnd::Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create character class from invalid data.");
     }

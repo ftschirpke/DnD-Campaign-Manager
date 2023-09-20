@@ -4,7 +4,7 @@
 
 #include <core/validation/validation_data.hpp>
 
-dnd::Errors dnd::ValidationSubdata::validate_relations(const ContentHolder& content) const {
+dnd::Errors dnd::ValidationSubdata::validate_relations(const Content& content) const {
     DND_UNUSED(content);
     return Errors();
 }

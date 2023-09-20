@@ -7,7 +7,7 @@
 
 #include <fmt/format.h>
 
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/validation/validation_subdata.hpp>
@@ -40,21 +40,21 @@ dnd::Errors dnd::RIVHolderData::validate() const {
 
 static dnd::Errors string_group_set_validate_relations(
     const std::set<std::string>& string_group_set, const dnd::ValidationData* parent, const char* set_name,
-    const char* group_name, const dnd::ContentHolder& content
+    const char* group_name, const dnd::Content& content
 ) {
     dnd::Errors errors;
     for (const auto& str_item : string_group_set) {
         if (!content.get_groups().is_part_of_group(str_item, group_name)) {
             errors.add_validation_error(
                 dnd::ValidationErrorCode::RELATION_NOT_FOUND, parent,
-                fmt::format("No '{}' ({}) exists in the {} group.", str_item, set_name, group_name)
+                fmt::format("Invalid value in {}: '{}' is not part of the {} group.", str_item, set_name, group_name)
             );
         }
     }
     return errors;
 }
 
-dnd::Errors dnd::RIVHolderData::validate_relations(const dnd::ContentHolder& content) const {
+dnd::Errors dnd::RIVHolderData::validate_relations(const dnd::Content& content) const {
     Errors errors;
     errors += string_group_set_validate_relations(
         damage_resistances, parent, "damage resistances", "damage types", content

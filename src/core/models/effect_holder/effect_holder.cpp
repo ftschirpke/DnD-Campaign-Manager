@@ -25,7 +25,7 @@
 #include <core/validation/effect_holder/subholders/proficiency_holder_data.hpp>
 #include <core/validation/effect_holder/subholders/riv_holder_data.hpp>
 
-dnd::EffectHolder dnd::EffectHolder::create(dnd::EffectHolderData&& data, const dnd::ContentHolder& content) {
+dnd::EffectHolder dnd::EffectHolder::create(dnd::EffectHolderData&& data, const dnd::Content& content) {
     if (!data.validate().ok()) {
         throw dnd::invalid_data("Cannot create effect holder from invalid data.");
     }

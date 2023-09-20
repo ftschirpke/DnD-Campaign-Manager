@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <memory>
 #include <vector>
 
@@ -14,6 +15,7 @@ namespace dnd {
 
 class CharacterRaceData : public ValidationData {
 public:
+    std::strong_ordering operator<=>(const CharacterRaceData&) const noexcept = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation
@@ -29,7 +31,7 @@ public:
      * @param content the content holder to validate the relations against
      * @return the errors that occured during validation
      */
-    virtual Errors validate_relations(const ContentHolder& content) const override;
+    virtual Errors validate_relations(const Content& content) const override;
 
     std::vector<FeatureData> features_data;
     bool subraces;

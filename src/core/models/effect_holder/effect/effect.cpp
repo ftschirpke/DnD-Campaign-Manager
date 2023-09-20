@@ -10,8 +10,9 @@
 #include <unordered_map>
 #include <utility>
 
-static constexpr std::array<std::pair<const char*, int (*)(int, int)>, 6> mathematical_operations = {
+static constexpr std::array<std::pair<const char*, int (*)(int, int)>, 7> mathematical_operations = {
     std::pair("add", [](int a, int b) { return a + b; }),
+    std::pair("sub", [](int a, int b) { return a - b; }),
     std::pair("mult", [](int a, int b) { return static_cast<int>(a * b / 100.0f); }),
     {
         "div",

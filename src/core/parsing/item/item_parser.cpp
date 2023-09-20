@@ -11,7 +11,7 @@
 #include <fmt/format.h>
 #include <nlohmann/json.hpp>
 
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
 #include <core/models/item/item.hpp>
@@ -54,7 +54,7 @@ dnd::Errors dnd::ItemParser::parse() {
 
 bool dnd::ItemParser::continue_after_errors() const noexcept { return true; }
 
-dnd::Errors dnd::ItemParser::validate(const dnd::ContentHolder& content) const {
+dnd::Errors dnd::ItemParser::validate(const dnd::Content& content) const {
     Errors errors;
     assert(items_in_file == item_data.size());
     item_data_valid.resize(items_in_file, false);
@@ -67,7 +67,7 @@ dnd::Errors dnd::ItemParser::validate(const dnd::ContentHolder& content) const {
     return errors;
 }
 
-void dnd::ItemParser::save_result(dnd::ContentHolder& content) {
+void dnd::ItemParser::save_result(dnd::Content& content) {
     assert(items_in_file == item_data_valid.size());
     assert(items_in_file == item_data.size());
     for (size_t i = 0; i < items_in_file; ++i) {

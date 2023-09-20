@@ -23,6 +23,30 @@ dnd::Errors dnd::ActionHolderData::validate() const {
             );
         }
     }
+    for (const auto& [bonus_action_name, bonus_action_description] : bonus_actions) {
+        if (bonus_action_name.empty()) {
+            errors.add_validation_error(
+                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent, "Bonus action name cannot be empty"
+            );
+        }
+        if (bonus_action_description.empty()) {
+            errors.add_validation_error(
+                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent, "Bonus action description cannot be empty"
+            );
+        }
+    }
+    for (const auto& [reaction_name, reaction_description] : reactions) {
+        if (reaction_name.empty()) {
+            errors.add_validation_error(
+                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent, "Reaction name cannot be empty"
+            );
+        }
+        if (reaction_description.empty()) {
+            errors.add_validation_error(
+                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent, "Reaction description cannot be empty"
+            );
+        }
+    }
     return errors;
 }
 

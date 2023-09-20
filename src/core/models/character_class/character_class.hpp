@@ -17,7 +17,7 @@
 
 namespace dnd {
 
-class ContentHolder;
+class Content;
 class ContentVisitor;
 
 class CharacterClass : public FeatureHolder {
@@ -29,7 +29,7 @@ public:
      * @return the constructed character class
      * @throws dnd::invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static CharacterClass create(CharacterClassData&& data, const ContentHolder& content);
+    static CharacterClass create(CharacterClassData&& data, const Content& content);
 
     CharacterClass(const CharacterClass&) = delete;
     CharacterClass& operator=(const CharacterClass&) = delete;

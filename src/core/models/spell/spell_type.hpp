@@ -94,7 +94,7 @@ public:
 
     SpellLevel get_spell_level() const noexcept;
     MagicSchool get_magic_school() const noexcept;
-    bool get_is_ritual() const noexcept;
+    bool is_ritual() const noexcept;
 
     /**
      * @brief Returns the spell level as an integer (0 for cantrips, 1 for level 1 spells, etc.)
@@ -122,7 +122,7 @@ public:
 private:
     SpellLevel spell_level;
     MagicSchool magic_school;
-    bool is_ritual;
+    bool ritual;
 };
 
 } // namespace dnd

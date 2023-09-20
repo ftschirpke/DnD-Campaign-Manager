@@ -9,7 +9,7 @@
 #include <fmt/format.h>
 
 #include <core/basic_mechanics/dice.hpp>
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/models/character_class/character_class.hpp>
@@ -48,7 +48,7 @@ dnd::Errors dnd::CharacterData::validate() const {
 }
 
 std::vector<const dnd::FeatureHolder*> get_feature_holders(
-    const dnd::CharacterBasisData& basis, const dnd::ContentHolder& content
+    const dnd::CharacterBasisData& basis, const dnd::Content& content
 ) {
     std::vector<const dnd::FeatureHolder*> feature_holders;
     if (content.get_character_races().contains(basis.race_name)) {
@@ -66,7 +66,7 @@ std::vector<const dnd::FeatureHolder*> get_feature_holders(
     return feature_holders;
 }
 
-dnd::Errors dnd::CharacterData::validate_relations(const dnd::ContentHolder& content) const {
+dnd::Errors dnd::CharacterData::validate_relations(const dnd::Content& content) const {
     Errors errors;
     for (const auto& feature_data : features_data) {
         errors += feature_data.validate_relations(content);
@@ -79,6 +79,7 @@ dnd::Errors dnd::CharacterData::validate_relations(const dnd::ContentHolder& con
     }
 
     errors += base_ability_scores_data.validate_relations(content);
+    errors += character_basis_data.validate_relations(content);
 
     if (!character_basis_data.class_name.empty()
         && content.get_character_classes().contains(character_basis_data.class_name)) {

@@ -10,7 +10,7 @@
 
 namespace dnd {
 
-class ContentHolder;
+class Content;
 
 /**
  * @brief This class holds a creature's resistances, immunities, and vulnerabilities.
@@ -24,7 +24,7 @@ public:
      * @return the constructed RIVHolder
      * @throws dnd::invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static RIVHolder create(RIVHolderData&& data, const ContentHolder& content);
+    static RIVHolder create(RIVHolderData&& data, const Content& content);
 
     const std::vector<std::string>& get_damage_resistances() const noexcept;
     const std::vector<std::string>& get_damage_immunities() const noexcept;

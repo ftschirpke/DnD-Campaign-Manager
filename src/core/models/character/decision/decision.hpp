@@ -8,7 +8,7 @@
 
 namespace dnd {
 
-class ContentHolder;
+class Content;
 
 /**
  * @brief A class that represents a character's decision for a certain choice required or provided by a feature
@@ -22,7 +22,7 @@ public:
      * @return the constructed decision
      * @throws dnd::invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static Decision create(DecisionData&& data, const ContentHolder& content);
+    static Decision create(DecisionData&& data, const Content& content);
 
     Decision(const Decision&) = delete;
     Decision& operator=(const Decision&) = delete;

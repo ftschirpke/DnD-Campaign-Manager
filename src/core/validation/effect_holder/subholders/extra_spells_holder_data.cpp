@@ -7,7 +7,7 @@
 
 #include <fmt/format.h>
 
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/models/spell/spell.hpp>
@@ -42,7 +42,7 @@ dnd::Errors dnd::ExtraSpellsHolderData::validate() const {
 }
 
 static dnd::Errors spells_set_validate_relations(
-    const std::set<std::string>& spells, const dnd::ValidationData* parent, const dnd::ContentHolder& content
+    const std::set<std::string>& spells, const dnd::ValidationData* parent, const dnd::Content& content
 ) {
     dnd::Errors errors;
 
@@ -52,12 +52,16 @@ static dnd::Errors spells_set_validate_relations(
                 dnd::ValidationErrorCode::RELATION_NOT_FOUND, parent,
                 fmt::format("Spell '{}' does not exist.", spell_name)
             );
+        } else if (content.get_spells().get(spell_name).get_type().get_spell_level() == dnd::SpellLevel::CANTRIP) {
+            errors.add_validation_error(
+                dnd::ValidationErrorCode::INVALID_RELATION, parent, fmt::format("Spell '{}' is a cantrip.", spell_name)
+            );
         }
     }
     return errors;
 }
 
-dnd::Errors dnd::ExtraSpellsHolderData::validate_relations(const ContentHolder& content) const {
+dnd::Errors dnd::ExtraSpellsHolderData::validate_relations(const Content& content) const {
     Errors errors;
     for (const auto& cantrip_name : free_cantrips) {
         if (!content.get_spells().contains(cantrip_name)) {

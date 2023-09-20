@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <map>
 #include <string>
 #include <vector>
@@ -18,6 +19,7 @@ class EffectHolder;
 class DecisionData : public ValidationSubdata {
 public:
     DecisionData(const CharacterData* parent, const EffectHolder* target) noexcept;
+    std::strong_ordering operator<=>(const DecisionData&) const noexcept = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation
@@ -28,7 +30,7 @@ public:
      * @param content the content holder to validate the relations against
      * @return the errors that occured during validation
      */
-    virtual Errors validate_relations(const ContentHolder& content) const override;
+    virtual Errors validate_relations(const Content& content) const override;
 
     const CharacterData* get_character_data() const noexcept;
     const EffectHolder* get_target() const noexcept;

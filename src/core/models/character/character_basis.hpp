@@ -10,7 +10,7 @@
 
 namespace dnd {
 
-class ContentHolder;
+class Content;
 class CharacterRace;
 class CharacterSubrace;
 class CharacterClass;
@@ -25,7 +25,7 @@ public:
      * @return the constructed CharacterBasis object
      * @throws dnd::invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static CharacterBasis create(CharacterBasisData&& data, const ContentHolder& content);
+    static CharacterBasis create(CharacterBasisData&& data, const Content& content);
 
     const CharacterRace* get_race() const noexcept;
     const CharacterSubrace* get_subrace() const noexcept;

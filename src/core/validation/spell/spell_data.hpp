@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <memory>
 #include <set>
 #include <string>
@@ -17,6 +18,7 @@ namespace dnd {
 class SpellData : public ValidationData {
 public:
     SpellData() noexcept;
+    std::strong_ordering operator<=>(const SpellData&) const noexcept = default;
     /**
      * @brief Packs the data into a ValidationData unique pointer
      * @return the packed data

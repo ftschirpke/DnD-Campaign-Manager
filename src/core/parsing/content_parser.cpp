@@ -11,7 +11,7 @@
 #include <fmt/format.h>
 #include <nlohmann/json.hpp>
 
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
 #include <core/errors/validation_error.hpp>
@@ -43,11 +43,10 @@ enum class ParsingType {
 
 
 static dnd::Errors parse_all_of_type(
-    ParsingType type, dnd::ContentHolder& content,
-    const std::vector<std::filesystem::directory_entry>& content_directories
+    ParsingType type, dnd::Content& content, const std::vector<std::filesystem::directory_entry>& content_directories
 );
 static dnd::Errors parse_string_groups(
-    dnd::ContentHolder& content, const std::vector<std::filesystem::directory_entry>& content_directories
+    dnd::Content& content, const std::vector<std::filesystem::directory_entry>& content_directories
 );
 
 
@@ -132,7 +131,7 @@ dnd::ParsingResult dnd::ContentParser::parse(
     return result;
 }
 
-static dnd::Errors parse_file(dnd::ContentHolder& content, dnd::FileParser&& parser) {
+static dnd::Errors parse_file(dnd::Content& content, dnd::FileParser&& parser) {
     dnd::Errors errors;
     bool successful = true;
     try {
@@ -171,9 +170,7 @@ static dnd::Errors parse_file(dnd::ContentHolder& content, dnd::FileParser&& par
     return errors;
 }
 
-static dnd::Errors parse_file_of_type(
-    const std::filesystem::path& file, dnd::ContentHolder& content, ParsingType type
-) {
+static dnd::Errors parse_file_of_type(const std::filesystem::path& file, dnd::Content& content, ParsingType type) {
     switch (type) {
         case ParsingType::CHARACTER:
             return parse_file(content, dnd::CharacterParser(file));
@@ -222,8 +219,7 @@ static const char* type_directory_name(ParsingType type) {
 }
 
 static dnd::Errors parse_all_of_type(
-    ParsingType type, dnd::ContentHolder& content,
-    const std::vector<std::filesystem::directory_entry>& content_directories
+    ParsingType type, dnd::Content& content, const std::vector<std::filesystem::directory_entry>& content_directories
 ) {
     dnd::Errors errors;
 
@@ -256,7 +252,7 @@ static dnd::Errors parse_all_of_type(
 }
 
 static dnd::Errors parse_string_groups(
-    dnd::ContentHolder& content, const std::vector<std::filesystem::directory_entry>& content_directories
+    dnd::Content& content, const std::vector<std::filesystem::directory_entry>& content_directories
 ) {
     dnd::Errors errors;
     for (const auto& dir : content_directories) {

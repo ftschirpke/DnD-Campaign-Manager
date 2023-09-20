@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <memory>
 #include <string>
 
@@ -12,6 +13,7 @@ namespace dnd {
 
 class ItemData : public ValidationData {
 public:
+    std::strong_ordering operator<=>(const ItemData&) const noexcept = default;
     /**
      * @brief Packs the data into a ValidationData unique pointer
      * @return the packed data

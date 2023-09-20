@@ -39,6 +39,7 @@ Each character should be stored in a JSON file as a map (or "object") containing
 | Name | required? | format | description |
 |------|:---------:|:------:|-------------|
 | name | yes | string | name of the character |
+| description | yes | string | a (short) description |
 | class | yes | string | name of the class |
 | subclass | at certain levels | string | name of the subclass |
 | race | yes | string | name of the race |
@@ -56,6 +57,7 @@ Each race should be stored in a JSON file as a map (or "object"). The values pos
 | Name | required? | format | description |
 |------|:---------:|:------:|-------------|
 | name | yes | string | name of the race |
+| description | yes | string | a (short) description |
 | has_subraces | yes | boolean | describes whether subraces exist (true or false) |
 | features | no | [features](#features) map | racial features e.g. ability score increases or innate spellcasting abilities |
 
@@ -80,6 +82,7 @@ Similarly to races, each subrace should be stored in a JSON file as a map (or "o
 | Name | required? | format | description |
 |------|:---------:|:------:|-------------|
 | name | yes | string | name of the subrace |
+| description | yes | string | a (short) description |
 | race | yes | string | name of the race |
 | features | no | [features](#features) map | subrace features |
 
@@ -101,8 +104,9 @@ Each class should be stored in a JSON file as a map (or "object"). The required 
 | Name | required? | format | description |
 |------|:---------:|:------:|-------------|
 | name | yes | string | name of the class |
+| description | yes | string | a (short) description |
 | hit_dice | yes | string | string for hit dice i.e. "d6", "d8", "d10" or "d12" |
-| asi_levels | yes | array of integers | levels at which characters of this class get Ability Score Increases |
+| feat_levels | yes | array of integers | levels at which characters of this class get feats or Ability Score Increases |
 | spellcasting | no | [spellcasting](#spellcasting) map | all information about spellcasting, if the class is a spellcasting class |
 | features | yes | [features](#features) map | class features <ul><li>there needs to be exactly one feature that has the key-value pair `"subclass": true` (this feature should just be a feature describing that from a certain level you can choose a subclass, usually level 1, 2 or 3)</li><li>usually, there is also a feature describing hit dice and proficiencies for armor, weapons, saving throws and skills</li></ul> |
 
@@ -138,6 +142,7 @@ Similarly to classes, each subclass should be stored in a JSON file as a map (or
 | Name | required? | format | description |
 |------|:---------:|:------:|-------------|
 | name | yes | string | name of the subclass |
+| description | yes | string | a (short) description |
 | class | yes | string | name of the class |
 | spellcasting | no | [spellcasting](#spellcasting) map | all information about spellcasting, if the subclass is a spellcasting subclass |
 | features | no | [features](#features) map | subclass features |
@@ -222,13 +227,13 @@ Each feature is represented as a key-value pair where the key is the name of the
 | savingthrow_proficiencies | no | array of strings | saving throw proficiencies this feature provides |
 | skill_proficiencies | no | array of strings | skill proficiencies this feature provides |
 | cantrips_free | no | array of strings | cantrips that do not count against the number of cantrips known |
-| spells_at_will | no | array of strings | spells that you can cast at will i.e. without expending a spell slot or material components |
-| spells_innate | no | array of strings | spells that you can cast once a day (or rather once between two long rests) **without** expending a spell slot<ul><li>examples: innate spellcasting such as Tiefling's Infernal Legacy</li></ul> |
-| spells_free_once_a_day | no | array of strings | spells that you can cast once a day (or rather once between two long rests) **with** expending a spell slot<ul><li>examples: eldritch invocations</li></ul> |
-| spells_known | no | array of strings | spells that are added to your spell list and you know them / you always have them prepared <ul><li>these spells do not count to the number of spells you know</li><li>examples: Cleric's domain spells, Paladin's oath spells</li></ul> |
+| spells_at_will | no | array of strings | non-cantrip spells that you can cast at will i.e. without expending a spell slot or material components |
+| spells_innate | no | array of strings | non-cantrip spells that you can cast once a day (or rather once between two long rests) **without** expending a spell slot<ul><li>examples: innate spellcasting such as Tiefling's Infernal Legacy</li></ul> |
+| spells_free_once_a_day | no | array of strings | non-cantrip spells that you can cast once a day (or rather once between two long rests) **with** expending a spell slot<ul><li>examples: eldritch invocations</li></ul> |
+| spells_known | no | array of strings | non-cantrip spells that are added to your spell list and you know them / you always have them prepared <ul><li>these spells do not count to the number of spells you know</li><li>examples: Cleric's domain spells, Paladin's oath spells</li></ul> |
 | spells_always_prepared | no | array of strings | a synonym for "spells_known"<ul><li>It doesn't matter whether you write "spells_known" or "spells_always_prepared", the tool will treat them the same and will know what to do with the spells, this is just for convenience and readability</li></ul> |
-| spells_known_included | no | array of strings | spells that are added to your spell list and you know them / you always have them prepared <ul><li> **BUT** these spells **do** count to the number of spells you know / the number of spells you can prepare</li><li>you probably will not ever need this, but the Bard's "Magical Secrets" require this</li></ul> |
-| spells_added_to_spell_list | no | array of strings | spells that are added to your spell list <ul><li>you **do not need to do this manually for any of the above**, so just use this if these spells are **only** added to your spell list</li><li>examples: Druid's circle spells, Warlock's patron spells</li></ul> |
+| spells_known_included | no | array of strings | non-cantrip spells that are added to your spell list and you know them / you always have them prepared <ul><li> **BUT** these spells **do** count to the number of spells you know / the number of spells you can prepare</li><li>you probably will not ever need this, but the Bard's "Magical Secrets" require this</li></ul> |
+| spells_added_to_spell_list | no | array of strings | non-cantrip spells that are added to your spell list <ul><li>you **do not need to do this manually for any of the above**, so just use this if these spells are **only** added to your spell list</li><li>examples: Druid's circle spells, Warlock's patron spells</li></ul> |
 | actions | no | string-string map | map of actions (key: expressive name, value: short description) which this feature allows |
 | bonus_actions | no | string-string map | map of bonus actions (key: expressive name, value: short description) which this feature allows |
 | reactions | no | string-string map | map of reactions (key: expressive name, value: short description) which this feature allows |
@@ -244,11 +249,11 @@ The `ATTRIBUTE` is the value the effect is changing.
 Below, I listed the hard-coded attributes that will always be there, but [you can also use and create your own](#custom-effects).
 ```
 // mutable attributes:
-MAXHP, AC, SPEED,
-STR,     DEX,     CON,     INT,     WIS,     CHA,
-STRMAX,  DEXMAX,  CONMAX,  INTMAX,  WISMAX,  CHAMAX,
-STRMOD,  DEXMOD,  CONMOD,  INTMOD,  WISMOD,  CHAMOD,
-STRSAVE, DEXSAVE, CONSAVE, INTSAVE, WISSAVE, CHASAVE
+MAX_HP, AC, SPEED,
+STR,      DEX,      CON,      INT,      WIS,      CHA,
+STR_MAX,  DEX_MAX,  CON_MAX,  INT_MAX,  WIS_MAX,  CHA_MAX,
+STR_MOD,  DEX_MOD,  CON_MOD,  INT_MOD,  WIS_MOD,  CHA_MOD,
+STR_SAVE, DEX_SAVE, CON_SAVE, INT_SAVE, WIS_SAVE, CHA_SAVE
 ACROBATICS,    ANIMAL_HANDLING, ARCANA,   ATHLETICS,
 DECEPTION,     HISTORY,         INSIGHT,  INTIMIDATION,
 INVESTIGATION, MEDICINE,        NATURE,   PERCEPTION,
@@ -281,7 +286,7 @@ The `PARAMETER` can be a number e.g. `-1`, `2`, `-2.5` or `34`, but floating poi
 Lastly, the `PARAMETER` can also be another attribute. In that case the value for the given attribute is retrieved and used for the calculation. Here, you can choose one of the mutable attributes above, or one of the hard-coded immutable ones:
 ```
 // immutable attributes:
-HAS_ARMOR_ON, HAS_SPELLCASTING
+ARMOR_ON, HAS_SPELLCASTING
 LEVEL, XP
 ```
 
@@ -291,7 +296,7 @@ Examples:
     "AC earliest set 12",           // set new default value for armor class to 12
     "SPEED normal add 1.5",         // increase speed by 1.5
     "AC normal add DEXMOD",         // add dexterity modifier to armor class
-    "MAXHP normal add LEVEL"        // add the character level to its armor class
+    "MAX_HP normal add LEVEL"        // add the character level to its armor class
 ]
 ```
 

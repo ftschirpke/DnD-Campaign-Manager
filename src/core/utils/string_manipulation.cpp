@@ -34,8 +34,7 @@ void dnd::snake_case_to_spaced_words(std::string& str) {
         if (c == '_') {
             c = ' ';
             first_in_word = true;
-        }
-        if (first_in_word) {
+        } else if (first_in_word) {
             c = char_to_uppercase(c);
             first_in_word = false;
         }

@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <string>
 
 #include <core/errors/errors.hpp>
@@ -11,11 +12,12 @@
 
 namespace dnd {
 
-class ContentHolder;
+class Content;
 
 class CharacterBasisData : public ValidationSubdata {
 public:
     CharacterBasisData(const ValidationData* parent) noexcept;
+    std::strong_ordering operator<=>(const CharacterBasisData&) const noexcept = default;
     /**
      * @brief Validates the data
      * @return the errors that occured during validation
@@ -26,7 +28,7 @@ public:
      * @param content the content holder to validate the relations against
      * @return the errors that occured during validation
      */
-    virtual Errors validate_relations(const ContentHolder& content) const override;
+    virtual Errors validate_relations(const Content& content) const override;
 
     std::string race_name;
     std::string subrace_name;

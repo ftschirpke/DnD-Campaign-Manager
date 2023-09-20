@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <memory>
 #include <string>
 #include <vector>
@@ -16,11 +17,12 @@
 
 namespace dnd {
 
-class ContentHolder;
+class Content;
 
 class CharacterClassData : public ValidationData {
 public:
     CharacterClassData() noexcept;
+    std::strong_ordering operator<=>(const CharacterClassData&) const noexcept = default;
     /**
      * @brief Packs the data into a ValidationData unique pointer
      * @return the packed data
@@ -36,7 +38,7 @@ public:
      * @param content the content holder to validate the relations against
      * @return the errors that occured during validation
      */
-    virtual Errors validate_relations(const ContentHolder& content) const override;
+    virtual Errors validate_relations(const Content& content) const override;
 
     SpellcastingData spellcasting_data;
     std::vector<FeatureData> features_data;

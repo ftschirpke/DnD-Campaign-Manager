@@ -3,13 +3,14 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <filesystem>
 #include <memory>
 #include <string>
 
 namespace dnd {
 
-class ContentHolder;
+class Content;
 class Errors;
 
 /**
@@ -18,6 +19,7 @@ class Errors;
 class ValidationData {
 public:
     virtual ~ValidationData() = default;
+    std::strong_ordering operator<=>(const ValidationData&) const = default;
     /**
      * @brief Packs the data into a ValidationData unique pointer
      * @return the packed data
@@ -33,7 +35,7 @@ public:
      * @param content the content holder to validate the relations against
      * @return the errors that occured during validation
      */
-    virtual Errors validate_relations(const ContentHolder& content) const;
+    virtual Errors validate_relations(const Content& content) const;
 
     std::string name;
     std::string description;

@@ -9,7 +9,7 @@
 
 #include <fmt/format.h>
 
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/validation/basic_mechanics/dice_data.hpp>
@@ -64,11 +64,16 @@ dnd::Errors dnd::CharacterClassData::validate() const {
     return errors;
 }
 
-dnd::Errors dnd::CharacterClassData::validate_relations(const dnd::ContentHolder& content) const {
+dnd::Errors dnd::CharacterClassData::validate_relations(const dnd::Content& content) const {
     Errors errors;
+    if (content.get_character_classes().contains(name)) {
+        errors.add_validation_error(
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, fmt::format("Class has duplicate name \"{}\".", name)
+        );
+    }
     for (const auto& feature_data : features_data) {
         errors += feature_data.validate_relations(content);
-        if (content.get_features().contains(name)) {
+        if (content.get_features().contains(feature_data.name)) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
                 fmt::format("Feature has duplicate name \"{}\".", name)

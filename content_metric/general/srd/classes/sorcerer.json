@@ -2,7 +2,7 @@
     "name": "Sorcerer",
     "description": "A spellcaster who draws on inherent magic from a gift or bloodline",
     "hit_dice": "d6",
-    "asi_levels": [4, 8, 12, 16, 19],
+    "feat_levels": [4, 8, 12, 16, 19],
     "spellcasting": {
         "ability": "CHA",
         "ritual_casting": false,

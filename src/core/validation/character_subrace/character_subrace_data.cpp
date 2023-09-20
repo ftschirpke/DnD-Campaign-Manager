@@ -9,7 +9,7 @@
 
 #include <fmt/format.h>
 
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
@@ -38,14 +38,24 @@ dnd::Errors dnd::CharacterSubraceData::validate() const {
             ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Character subrace has no features."
         );
     }
+    if (race_name.empty()) {
+        errors.add_validation_error(
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Character subrace has no race name."
+        );
+    }
     return errors;
 }
 
-dnd::Errors dnd::CharacterSubraceData::validate_relations(const ContentHolder& content) const {
+dnd::Errors dnd::CharacterSubraceData::validate_relations(const Content& content) const {
     Errors errors;
+    if (content.get_character_subraces().contains(name)) {
+        errors.add_validation_error(
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, fmt::format("Subrace has duplicate name \"{}\".", name)
+        );
+    }
     for (const auto& feature_data : features_data) {
         errors += feature_data.validate_relations(content);
-        if (content.get_features().contains(name)) {
+        if (content.get_features().contains(feature_data.name)) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
                 fmt::format("Feature has duplicate name \"{}\".", name)

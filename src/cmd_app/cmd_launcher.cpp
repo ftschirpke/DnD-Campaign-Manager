@@ -13,7 +13,7 @@
 #include <cxxopts.hpp>
 
 #include <cmd_app/output/command_line_output.hpp>
-#include <core/controllers/content_holder.hpp>
+#include <core/content.hpp>
 #include <core/models/feature/choosable_feature.hpp>
 #include <core/models/feature/feature.hpp>
 #include <core/models/item/item.hpp>
@@ -74,7 +74,7 @@ int dnd::launch(int argc, char** argv) {
         }
         ContentParser parser;
         ParsingResult result = parser.parse(content_path, campaign_dir_name);
-        ContentHolder content = std::move(result.content);
+        Content content = std::move(result.content);
         output->text(content.status());
 
         DND_MEASURE_SCOPE("Main execution scope without parsing");
@@ -97,7 +97,7 @@ int dnd::launch(int argc, char** argv) {
 }
 
 static std::vector<const dnd::Spell*> search_spells(
-    const std::string& search, dnd::ContentHolder& content, dnd::Output* output
+    const std::string& search, dnd::Content& content, dnd::Output* output
 ) {
     size_t i = 0;
     std::unordered_set<const dnd::Spell*> matched_spells = content.get_spells().prefix_get(search);
@@ -119,7 +119,7 @@ static std::vector<const dnd::Spell*> search_spells(
 }
 
 static std::vector<const dnd::Item*> search_items(
-    const std::string& search, dnd::ContentHolder& content, dnd::Output* output
+    const std::string& search, dnd::Content& content, dnd::Output* output
 ) {
     size_t i = 0;
     std::unordered_set<const dnd::Item*> matched_items = content.get_items().prefix_get(search);
@@ -141,7 +141,7 @@ static std::vector<const dnd::Item*> search_items(
 }
 
 static std::vector<const dnd::Feature*> search_features(
-    const std::string& search, dnd::ContentHolder& content, dnd::Output* output
+    const std::string& search, dnd::Content& content, dnd::Output* output
 ) {
     size_t i = 0;
     std::unordered_set<const dnd::Feature*> matched_features = content.get_features().prefix_get(search);
@@ -163,7 +163,7 @@ static std::vector<const dnd::Feature*> search_features(
 }
 
 static std::map<std::string, std::vector<const dnd::ChoosableFeature*>> search_choosables(
-    const std::string& search, dnd::ContentHolder& content, dnd::Output* output
+    const std::string& search, dnd::Content& content, dnd::Output* output
 ) {
     size_t i = 0;
     std::map<std::string, std::vector<const dnd::ChoosableFeature*>> choosables_in_order;
@@ -195,7 +195,7 @@ static std::map<std::string, std::vector<const dnd::ChoosableFeature*>> search_c
     return choosables_in_order;
 }
 
-bool dnd::content_search(dnd::ContentHolder& content, dnd::Output* output) {
+bool dnd::content_search(dnd::Content& content, dnd::Output* output) {
     std::string search;
     output->prompt_input("----------------------------------------\nSearch:", search);
     output->text("");
