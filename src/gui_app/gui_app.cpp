@@ -305,9 +305,8 @@ void dnd::GUIApp::render_overview_window() {
                 );
             }
         }
-        ImGui::EndChild();
     }
-
+    ImGui::EndChild();
 
     ImGui::End();
 }
@@ -452,8 +451,9 @@ void dnd::GUIApp::render_search_window() {
                 }
             }
         }
-        ImGui::EndChild();
     }
+    ImGui::EndChild();
+
     ImGui::End();
 }
 
