@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include "cmd_launcher.hpp"
+#include "cli_launcher.hpp"
 
 #include <algorithm>
 #include <filesystem>
@@ -12,7 +12,7 @@
 
 #include <cxxopts.hpp>
 
-#include <cmd_app/output/command_line_output.hpp>
+#include <cli_app/output/command_line_output.hpp>
 #include <core/content.hpp>
 #include <core/models/feature/choosable_feature.hpp>
 #include <core/models/feature/feature.hpp>

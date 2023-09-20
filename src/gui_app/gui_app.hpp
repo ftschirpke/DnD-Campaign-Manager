@@ -12,8 +12,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include <imgui/imfilebrowser.h>
 #include <imgui/imgui.h>
+#include <imgui_filebrowser/imfilebrowser.h>
 
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>

@@ -8,7 +8,7 @@ on:
 
 env:
   BUILD_TYPE: Release
-  DND_CMD_APP_TARGET: dndmanager_cmd
+  DND_CLI_APP_TARGET: dndmanager_cmd
 
 jobs:
   build:
@@ -19,20 +19,20 @@ jobs:
       matrix:
         config:
         - {
-            name: "BUILD: CMD - Windows Latest MSVC",
+            name: "BUILD: CLI - Windows Latest MSVC",
             os: windows-latest,
             cc: "cl", cxx: "cl",
             environment_script: "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvars64.bat",
             install_command: "choco"
           }
         - {
-            name: "BUILD: CMD - Ubuntu Latest GCC",
+            name: "BUILD: CLI - Ubuntu Latest GCC",
             os: ubuntu-latest,
             cc: "gcc", cxx: "g++",
             install_command: "sudo apt-get -y"
           }
         - {
-            name: "BUILD: CMD - macOS Latest Clang",
+            name: "BUILD: CLI - macOS Latest Clang",
             os: macos-latest,
             cc: "clang", cxx: "clang++",
             install_command: "brew"
@@ -57,9 +57,9 @@ jobs:
       uses: actions/cache@v3
       with:
         path: .ccache
-        key: ${{ matrix.config.name }}-ccache-${{ env.DND_CMD_APP_TARGET }}-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
+        key: ${{ matrix.config.name }}-ccache-${{ env.DND_CLI_APP_TARGET }}-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
         restore-keys: |
-          ${{ matrix.config.name }}-ccache-${{ env.DND_CMD_APP_TARGET }}-
+          ${{ matrix.config.name }}-ccache-${{ env.DND_CLI_APP_TARGET }}-
           ${{ matrix.config.name }}-
 
     - name: Initialize CodeQL (ubuntu only)
@@ -147,7 +147,7 @@ jobs:
         execute_process(COMMAND ccache -z)
 
         execute_process(
-          COMMAND cmake --build build --target ${{ env.DND_CMD_APP_TARGET }}
+          COMMAND cmake --build build --target ${{ env.DND_CLI_APP_TARGET }}
           RESULT_VARIABLE result
           OUTPUT_VARIABLE output
           ERROR_VARIABLE output
@@ -178,11 +178,11 @@ jobs:
     - name: Run Application with Imperial Data
       working-directory: ${{ github.workspace }}
       shell: bash
-      run: ./build/${{ env.DND_CMD_APP_TARGET }} -c example_campaign -d content_imperial -t
+      run: ./build/${{ env.DND_CLI_APP_TARGET }} -c example_campaign -d content_imperial -t
 
     - name: Run Application with Metric Data
       working-directory: ${{ github.workspace }}
       shell: bash
-      run: ./build/${{ env.DND_CMD_APP_TARGET }} -c example_campaign -d content_metric -t
+      run: ./build/${{ env.DND_CLI_APP_TARGET }} -c example_campaign -d content_metric -t
 
 
