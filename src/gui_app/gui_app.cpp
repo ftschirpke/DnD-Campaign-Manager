@@ -13,10 +13,10 @@
 #include <vector>
 
 #include <fmt/format.h>
-#include <imgui/imfilebrowser.h>
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
-#include <imgui/imgui_stdlib.h>
+#include <imgui/misc/cpp/imgui_stdlib.h>
+#include <imgui_filebrowser/imfilebrowser.h>
 #include <nlohmann/json.hpp>
 
 #include <core/content.hpp>

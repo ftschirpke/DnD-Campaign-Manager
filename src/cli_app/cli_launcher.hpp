@@ -1,5 +1,5 @@
-#ifndef CMD_LAUNCHER_HPP_
-#define CMD_LAUNCHER_HPP_
+#ifndef CLI_LAUNCHER_HPP_
+#define CLI_LAUNCHER_HPP_
 
 #include <core/content.hpp>
 #include <core/output/output.hpp>
@@ -11,4 +11,4 @@ bool content_search(Content& content, Output* output);
 
 } // namespace dnd
 
-#endif // CMD_LAUNCHER_HPP_
+#endif // CLI_LAUNCHER_HPP_
