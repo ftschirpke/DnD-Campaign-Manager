@@ -21,16 +21,10 @@ static bool validate_fixed_values() {
     components_data.str = fixed_components;
     dnd::SpellTypeData type_data(&parent);
     type_data.str = fixed_type;
-    assert(components_data.validate().ok());
-    assert(type_data.validate().ok());
     return components_data.validate().ok() && type_data.validate().ok();
 }
 
 static void set_valid_components_and_type(dnd::SpellData& data) {
-#if DND_DEBUG
-    static bool fixed_values_valid = validate_fixed_values();
-    assert(fixed_values_valid);
-#endif
     data.components_data.str = fixed_components;
     data.type_data.str = fixed_type;
 }
@@ -38,6 +32,7 @@ static void set_valid_components_and_type(dnd::SpellData& data) {
 TEST_CASE("dnd::SpellData::validate // valid spells", tags) {
     dnd::SpellData data;
     dndtest::set_valid_mock_values(data, "Spell");
+    REQUIRE(validate_fixed_values());
     set_valid_components_and_type(data);
     dnd::Errors errors;
 
