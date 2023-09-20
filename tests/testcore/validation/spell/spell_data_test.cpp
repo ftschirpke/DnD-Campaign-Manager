@@ -27,8 +27,10 @@ static bool validate_fixed_values() {
 }
 
 static void set_valid_components_and_type(dnd::SpellData& data) {
+#if DND_DEBUG
     static bool fixed_values_valid = validate_fixed_values();
     assert(fixed_values_valid);
+#endif
     data.components_data.str = fixed_components;
     data.type_data.str = fixed_type;
 }

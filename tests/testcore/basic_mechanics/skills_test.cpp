@@ -6,7 +6,7 @@
 
 static constexpr const char* tags = "[core][basic_mechanics][skills]";
 
-TEST_CASE("dnd::is_skill // valid uppercase underscore") {
+TEST_CASE("dnd::is_skill // valid uppercase underscore", tags) {
     REQUIRE(dnd::is_skill("ACROBATICS"));
     REQUIRE(dnd::is_skill("ANIMAL_HANDLING"));
     REQUIRE(dnd::is_skill("ARCANA"));
@@ -27,7 +27,7 @@ TEST_CASE("dnd::is_skill // valid uppercase underscore") {
     REQUIRE(dnd::is_skill("SURVIVAL"));
 }
 
-TEST_CASE("dnd::is_skill // valid lowercase") {
+TEST_CASE("dnd::is_skill // valid lowercase", tags) {
     REQUIRE(dnd::is_skill("acrobatics"));
     REQUIRE(dnd::is_skill("animal handling"));
     REQUIRE(dnd::is_skill("animal_handling"));
@@ -50,7 +50,7 @@ TEST_CASE("dnd::is_skill // valid lowercase") {
     REQUIRE(dnd::is_skill("survival"));
 }
 
-TEST_CASE("dnd::is_skill // invalid") {
+TEST_CASE("dnd::is_skill // invalid", tags) {
     SECTION("not a skill") {
         REQUIRE_FALSE(dnd::is_skill(""));
         REQUIRE_FALSE(dnd::is_skill("not a skill"));
@@ -70,7 +70,7 @@ TEST_CASE("dnd::is_skill // invalid") {
         REQUIRE_FALSE(dnd::is_skill("charisma"));
     }
 
-    SECTION("wrong formatting") {
+    SECTION("wrong formatting", tags) {
         REQUIRE_FALSE(dnd::is_skill("acro"));
         REQUIRE_FALSE(dnd::is_skill("athl"));
         REQUIRE_FALSE(dnd::is_skill("animal-handling"));
