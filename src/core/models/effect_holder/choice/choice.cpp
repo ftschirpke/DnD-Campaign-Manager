@@ -9,6 +9,8 @@
 #include <utility>
 #include <vector>
 
+#include <core/basic_mechanics/abilities.hpp>
+#include <core/basic_mechanics/skills.hpp>
 #include <core/content.hpp>
 #include <core/content_filters/content_filter.hpp>
 #include <core/content_filters/spell/spell_filter.hpp>
@@ -142,13 +144,47 @@ int dnd::Choice::get_amount() const noexcept { return amount; }
 
 std::set<std::string> dnd::Choice::possible_values(const dnd::Content& content) const {
     std::set<std::string> possible_values;
-    for (const auto& explicit_choice : explicit_choices) {
-        possible_values.emplace(explicit_choice);
-    }
-    for (const std::string& group_name : group_names) {
-        for (const std::string& group_member : content.get_groups().get_group(group_name)) {
-            possible_values.emplace(group_member);
-        }
+    switch (type) {
+        case ChoiceType::ABILITY:
+            for (const auto& ability : ability_cstrings_inorder) {
+                possible_values.emplace(ability);
+            }
+            break;
+        case ChoiceType::SKILL:
+            for (const auto& skill : get_skills()) {
+                possible_values.emplace(skill);
+            };
+            break;
+        case ChoiceType::STRING:
+            for (const std::string& group_name : group_names) {
+                for (const std::string& group_member : content.get_groups().get_group(group_name)) {
+                    possible_values.emplace(group_member);
+                }
+            };
+            [[fallthrough]];
+        case ChoiceType::EFFECT:
+            for (const auto& explicit_choice : explicit_choices) {
+                possible_values.emplace(explicit_choice);
+            };
+            break;
+        case ChoiceType::ITEM:
+            for (const auto& [_, item] : content.get_items().get_all()) {
+                possible_values.emplace(item.get_name());
+            };
+            break;
+        case ChoiceType::SPELL:
+            // TODO: use the spell filters instead of this
+            for (const auto& [_, spell] : content.get_spells().get_all()) {
+                possible_values.emplace(spell.get_name());
+            };
+            break;
+        case ChoiceType::CHOOSABLE_FEATURE:
+            for (const auto& [_, choosable_feature] : content.get_choosable_features().get_all()) {
+                possible_values.emplace(choosable_feature.get_name());
+            };
+            break;
+        default:
+            break;
     }
     return possible_values;
 }

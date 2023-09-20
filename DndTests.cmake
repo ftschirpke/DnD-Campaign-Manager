@@ -8,7 +8,6 @@ target_include_directories(${DND_TESTS}
     ${CMAKE_SOURCE_DIR}/tests
     SYSTEM PRIVATE
     ${PROJECT_BINARY_DIR}/src
-    ${PROJECT_BINARY_D-filebrowserIR}/imgui
 )
 target_link_libraries(${DND_TESTS}
     PUBLIC
@@ -22,6 +21,6 @@ set_compiler_flags(${DND_TESTS})
 include(CTest)
 enable_testing()
 
-include(Catch.cmake)
+include(${catch2_SOURCE_DIR}/extras/Catch.cmake)
 
 catch_discover_tests(${DND_TESTS}) # include catch2 tests

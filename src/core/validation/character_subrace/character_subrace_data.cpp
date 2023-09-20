@@ -58,7 +58,7 @@ dnd::Errors dnd::CharacterSubraceData::validate_relations(const Content& content
         if (content.get_features().contains(feature_data.name)) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
-                fmt::format("Feature has duplicate name \"{}\".", name)
+                fmt::format("Feature has duplicate name \"{}\".", feature_data.name)
             );
         }
     }
