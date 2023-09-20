@@ -68,12 +68,18 @@ std::vector<const dnd::FeatureHolder*> get_feature_holders(
 
 dnd::Errors dnd::CharacterData::validate_relations(const dnd::Content& content) const {
     Errors errors;
+    if (content.get_characters().contains(name)) {
+        errors.add_validation_error(
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
+            fmt::format("Character has duplicate name \"{}\".", name)
+        );
+    }
     for (const auto& feature_data : features_data) {
         errors += feature_data.validate_relations(content);
-        if (content.get_features().contains(name)) {
+        if (content.get_features().contains(feature_data.name)) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
-                fmt::format("Feature has duplicate name \"{}\".", name)
+                fmt::format("Feature has duplicate name \"{}\".", feature_data.name)
             );
         }
     }
