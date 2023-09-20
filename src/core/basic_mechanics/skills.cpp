@@ -2,10 +2,13 @@
 
 #include "skills.hpp"
 
+#include <algorithm>
 #include <array>
+#include <map>
 #include <string>
 #include <string_view>
 #include <utility>
+#include <vector>
 
 #include <core/utils/char_manipulation.hpp>
 
@@ -41,4 +44,27 @@ bool dnd::is_skill(const std::string& skill) noexcept {
         }
     }
     return false;
+}
+
+std::vector<std::string> dnd::get_skills() noexcept {
+    std::vector<std::string> skills;
+    skills.reserve(skill_abilities.size());
+    for (const auto& skill_ability_pair : skill_abilities) {
+        std::string& skill_str = skills.emplace_back(skill_ability_pair.first);
+        std::transform(skill_str.begin(), skill_str.end(), skill_str.begin(), [](char c) {
+            if (c == '_') {
+                return ' ';
+            }
+            return char_to_lowercase(c);
+        });
+    }
+    return skills;
+}
+
+std::map<std::string, std::string> dnd::get_skill_ability_map() noexcept {
+    std::map<std::string, std::string> skill_ability_map;
+    for (const auto& skill_ability_pair : skill_abilities) {
+        skill_ability_map.emplace(skill_ability_pair.first, skill_ability_pair.second);
+    }
+    return skill_ability_map;
 }
