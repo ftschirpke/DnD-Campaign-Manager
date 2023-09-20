@@ -26,7 +26,7 @@ static dnd::CharacterData create_valid_character_data() {
     return character_data;
 }
 
-TEST_CASE("dnd::CharacterData::validate and ::validate_relations") {
+TEST_CASE("dnd::CharacterData::validate and ::validate_relations", tags) {
     dnd::CharacterData data = create_valid_character_data();
     dnd::Content content = dndtest::minimal_testing_content();
     dnd::Errors errors;
