@@ -49,6 +49,11 @@ public:
      */
     void add_end_word(T* end_word);
     /**
+     * @brief Returns the amount of successors of the node (including the node itself)
+     * @return the amount of successors
+     */
+    size_t count_successors() const;
+    /**
      * @brief Return a set of all successors of the node (including the node itself)
      * @return a set of pointers to all the successor nodes
      */
@@ -87,6 +92,15 @@ TrieNode<T>* TrieNode<T>::create_child(char c) {
 template <typename T>
 void TrieNode<T>::add_end_word(T* end_word) {
     end_words.push_back(end_word);
+}
+
+template <typename T>
+size_t TrieNode<T>::count_successors() const {
+    size_t count = 1;
+    for (const auto& [_, child] : children) {
+        count += child->count_successors();
+    }
+    return count;
 }
 
 template <typename T>
