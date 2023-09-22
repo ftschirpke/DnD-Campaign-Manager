@@ -117,6 +117,20 @@ void dnd::ContentSearch::remove_character_from_query() {
     assert(choosable_search_path.size() >= 1);
 }
 
+size_t dnd::ContentSearch::count_results() const {
+    size_t count = 0;
+    count += character_search_path.count_top_successors();
+    count += character_class_search_path.count_top_successors();
+    count += character_subclass_search_path.count_top_successors();
+    count += character_race_search_path.count_top_successors();
+    count += character_subrace_search_path.count_top_successors();
+    count += item_search_path.count_top_successors();
+    count += spell_search_path.count_top_successors();
+    count += feature_search_path.count_top_successors();
+    count += choosable_search_path.count_top_successors();
+    return count;
+}
+
 std::vector<const dnd::ContentPiece*> dnd::ContentSearch::get_results() const {
     std::vector<const ContentPiece*> results;
     results.reserve(100);
