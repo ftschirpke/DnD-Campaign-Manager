@@ -4,8 +4,6 @@
 
 #include <filesystem>
 #include <fstream>
-#include <future>
-#include <iostream>
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -64,6 +62,7 @@ void dnd::GUIApp::render() {
     if (show_demo_window) {
         ImGui::ShowDemoWindow(&show_demo_window);
     }
+    session.update();
 
     render_content_dir_selection();
     render_campaign_selection();
@@ -83,7 +82,9 @@ void dnd::GUIApp::render_content_dir_selection() {
     if (content_dir_dialog.HasSelected()) {
         content_dir_dialog.Close();
         bool valid = session.set_content_directory(content_dir_dialog.GetSelected());
-        if (!valid) {
+        if (valid) {
+            select_campaign = session.get_status() == SessionStatus::CAMPAIGN_SELECTION;
+        } else {
             ImGui::OpenPopup("Invalid content directory");
         }
     }
@@ -176,10 +177,6 @@ void dnd::GUIApp::render_overview_window() {
         }
     }
 
-    if (session.get_status() == SessionStatus::PARSING) {
-        ImGui::Text("Parsing...");
-    }
-
     ImGui::SeparatorText("Dev-Info");
     ImGui::Checkbox("Show Demo Window", &show_demo_window);
 
@@ -187,10 +184,21 @@ void dnd::GUIApp::render_overview_window() {
     ImGui::Text("Application average\n%.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
 
     ImGui::SeparatorText("Status");
-    if (session.get_content().empty()) {
-        ImGui::Text("No content loaded");
-    } else {
-        render_content_count_table(session.get_content());
+    switch (session.get_status()) {
+        case SessionStatus::CONTENT_DIR_SELECTION:
+            ImGui::Text("You need to select a content directory");
+            break;
+        case SessionStatus::CAMPAIGN_SELECTION:
+            ImGui::Text("You need to select a campaign");
+            break;
+        case SessionStatus::PARSING:
+            ImGui::Text("Parsing...");
+            break;
+        case SessionStatus::READY:
+            render_content_count_table(session.get_content());
+            break;
+        default:
+            break;
     }
 
     ImGui::SeparatorText("Errors");

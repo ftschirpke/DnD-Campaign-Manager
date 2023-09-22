@@ -2,6 +2,7 @@
 
 #include "session.hpp"
 
+#include <chrono>
 #include <filesystem>
 #include <fstream>
 #include <future>
@@ -194,7 +195,7 @@ void dnd::Session::open_search_result(size_t index) {
 
 void dnd::Session::update() {
     if (status == SessionStatus::PARSING) {
-        if (parsing_results.valid()) {
+        if (parsing_results.wait_for(std::chrono::microseconds(100)) == std::future_status::ready) {
             finish_parsing();
         }
     }
