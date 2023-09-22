@@ -161,8 +161,7 @@ bool dnd::Session::set_content_directory(const std::filesystem::path& new_conten
     if (content_directory == new_content_directory) {
         return !content_directory.empty();
     }
-    dnd::Errors errors = validate_content_directory(new_content_directory);
-    bool valid = errors.ok();
+    bool valid = validate_content_directory(new_content_directory).ok();
     if (valid) {
         content_directory = new_content_directory;
         campaign_name.clear();
