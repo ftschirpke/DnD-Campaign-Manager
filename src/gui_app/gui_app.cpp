@@ -42,7 +42,9 @@ dnd::GUIApp::GUIApp()
 
 void dnd::GUIApp::initialize() {
     content_dir_dialog.SetTitle("Select content directory");
+    content_dir_dialog.SetWindowSize(1200, 900);
     session.retrieve_last_session_values();
+    open_content_dir_dialog();
 
     switch (session.get_status()) {
         case SessionStatus::CONTENT_DIR_SELECTION:
@@ -77,6 +79,11 @@ void dnd::GUIApp::render() {
     }
 }
 
+void dnd::GUIApp::open_content_dir_dialog() {
+    content_dir_dialog.SetPwd(session.get_content_directory().parent_path());
+    content_dir_dialog.Open();
+}
+
 void dnd::GUIApp::render_content_dir_selection() {
     content_dir_dialog.Display();
     if (content_dir_dialog.HasSelected()) {
@@ -93,7 +100,7 @@ void dnd::GUIApp::render_content_dir_selection() {
         ImGui::Text("Selected directory: %s", content_dir_dialog.GetSelected().string().c_str());
         if (ImGui::Button("Select other directory")) {
             ImGui::CloseCurrentPopup();
-            content_dir_dialog.Open();
+            open_content_dir_dialog();
         }
         ImGui::EndPopup();
     }
@@ -114,7 +121,7 @@ void dnd::GUIApp::render_campaign_selection() {
         if (ImGui::Button("Select other directory")) {
             ImGui::CloseCurrentPopup();
             close = true;
-            content_dir_dialog.Open();
+            open_content_dir_dialog();
         }
         if (close || ImGui::Button("Cancel")) {
             ImGui::CloseCurrentPopup();
@@ -162,7 +169,7 @@ void dnd::GUIApp::render_overview_window() {
                                                                                   : "Change content directory";
 
     if (ImGui::Button(content_dir_button_text)) {
-        content_dir_dialog.Open();
+        open_content_dir_dialog();
     }
 
     if (!session.get_content_directory().empty()) {
@@ -242,7 +249,7 @@ void dnd::GUIApp::render_parsing_error_popup() {
         bool close = false;
         if (ImGui::Button("Select other directory")) {
             close = true;
-            content_dir_dialog.Open();
+            open_content_dir_dialog();
         }
         ImGui::SameLine();
         if (ImGui::Button("Select other campaign")) {

@@ -30,18 +30,15 @@ class GUIApp {
 public:
     GUIApp();
     /**
-     * @brief Renders one or multiple DearImGui windows displaying the content of the application.
-     */
-    void render();
-    /**
      * @brief Initializes the GUI elements of the application.
      */
     void initialize();
     /**
-     * @brief Cleans up the GUI elements of the application.
+     * @brief Renders one or multiple DearImGui windows displaying the content of the application.
      */
-    void clean_up();
+    void render();
 private:
+    void open_content_dir_dialog();
     void render_content_dir_selection();
     void render_campaign_selection();
     void render_overview_window();
