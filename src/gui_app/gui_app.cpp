@@ -280,8 +280,7 @@ void dnd::GUIApp::render_search_window() {
         session.set_search_query(search_query);
     }
     ImGui::Separator();
-    if (search_query.size() < 2) {
-        ImGui::Text("Enter at least 2 characters to search.");
+    if (search_query.empty()) {
         ImGui::End();
         return;
     }
