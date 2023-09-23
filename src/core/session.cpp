@@ -8,6 +8,7 @@
 #include <future>
 #include <string>
 
+#include <fmt/format.h>
 #include <nlohmann/json.hpp>
 
 #include <core/content.hpp>
@@ -16,13 +17,15 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/models/content_piece.hpp>
+#include <core/models/source_info.hpp>
 #include <core/parsing/content_parser.hpp>
 #include <core/searching/content_search.hpp>
+#include <core/utils/char_manipulation.hpp>
 
 dnd::Session::Session(const char* last_session_filename)
     : last_session_filename(last_session_filename), status(SessionStatus::CONTENT_DIR_SELECTION), content_directory(),
       campaign_name(), last_session_open_tabs(), search(), search_results(), search_result_count(0),
-      open_content_pieces(), search_result_strings(), error_messages(), parsing_results(), parser(), errors(),
+      open_content_pieces(), search_result_strings(), unknown_error_messages(), parsing_future(), parser(), errors(),
       content() {}
 
 dnd::Session::~Session() { save_session_values(); }
@@ -33,7 +36,17 @@ dnd::Content& dnd::Session::get_content() noexcept { return content; }
 
 const dnd::Errors& dnd::Session::get_errors() const noexcept { return errors; }
 
-const std::vector<std::string>& dnd::Session::get_error_messages() const { return error_messages; }
+const std::vector<std::string>& dnd::Session::get_unknown_error_messages() const noexcept {
+    return unknown_error_messages;
+}
+
+const std::vector<std::string>& dnd::Session::get_parsing_error_messages() const noexcept {
+    return parsing_error_messages;
+}
+
+const std::vector<std::string>& dnd::Session::get_validation_error_messages() const noexcept {
+    return validation_error_messages;
+}
 
 const std::string& dnd::Session::get_campaign_name() const noexcept { return campaign_name; }
 
@@ -42,6 +55,8 @@ const std::filesystem::path& dnd::Session::get_content_directory() const noexcep
 std::deque<const dnd::ContentPiece*>& dnd::Session::get_open_content_pieces() noexcept { return open_content_pieces; }
 
 size_t dnd::Session::get_search_result_count() const noexcept { return search_result_count; }
+
+bool dnd::Session::too_many_search_results() const noexcept { return search_result_count > max_search_results; }
 
 std::vector<std::string> dnd::Session::get_possible_campaign_names() const {
     if (content_directory.empty()) {
@@ -58,7 +73,9 @@ std::vector<std::string> dnd::Session::get_possible_campaign_names() const {
 }
 
 std::vector<std::string> dnd::Session::get_search_result_strings() const {
+    DND_MEASURE_FUNCTION();
     ListVisitor list_visitor;
+    list_visitor.reserve(search_result_count);
     if (search_result_count > max_search_results) {
         return {};
     }
@@ -117,7 +134,7 @@ void dnd::Session::save_session_values() {
     last_session_file.close();
 }
 
-void dnd::Session::clear_error_messages() { error_messages.clear(); }
+void dnd::Session::clear_unknown_error_messages() { unknown_error_messages.clear(); }
 
 bool dnd::Session::set_campaign_name(const std::string& new_campaign_name) {
     if (campaign_name == new_campaign_name) {
@@ -172,13 +189,53 @@ bool dnd::Session::set_content_directory(const std::filesystem::path& new_conten
     return valid;
 }
 
+// A comparator for content pieces that sorts them by name and prioritizes those whose name starts with a givencharacter
+class ContentPieceComparator {
+public:
+    explicit ContentPieceComparator(const std::string& search_query)
+        : query_length(search_query.size()), lower_query(dnd::string_lowercase_copy(search_query)),
+          upper_query(dnd::string_uppercase_copy(search_query)) {}
+
+    bool starts_with_search_query(const std::string& name) const {
+        size_t i = 0;
+        while (i < query_length) {
+            if (name[i] != lower_query[i] && name[i] != upper_query[i]) {
+                return false;
+            }
+            ++i;
+        }
+        return true;
+    }
+
+    bool operator()(const dnd::ContentPiece* a, const dnd::ContentPiece* b) const {
+        const std::string& a_name = a->get_name();
+        const std::string& b_name = b->get_name();
+        bool prioritize_a = starts_with_search_query(a_name);
+        bool prioritize_b = starts_with_search_query(b_name);
+        if (prioritize_a && !prioritize_b) {
+            return true;
+        }
+        if (!prioritize_a && prioritize_b) {
+            return false;
+        }
+        return a->get_name() < b->get_name();
+    }
+private:
+    size_t query_length;
+    std::string lower_query;
+    std::string upper_query;
+};
+
 void dnd::Session::set_search_query(const std::string& new_search_query) {
+    DND_MEASURE_FUNCTION();
     search->set_search_query(new_search_query);
-    search_result_count = search->count_results();
+    std::vector<const ContentPiece*> vec_search_results = search->get_results();
+    search_result_count = vec_search_results.size();
     if (search_result_count > max_search_results) {
         return;
     }
-    std::vector<const ContentPiece*> vec_search_results = search->get_sorted_results();
+    ContentPieceComparator comparator(new_search_query);
+    std::sort(vec_search_results.begin(), vec_search_results.end(), comparator);
     for (size_t i = 0; i < search_result_count; ++i) {
         search_results[i] = vec_search_results[i];
     }
@@ -193,27 +250,50 @@ void dnd::Session::open_search_result(size_t index) {
 }
 
 void dnd::Session::update() {
+    DND_MEASURE_FUNCTION();
     if (status == SessionStatus::PARSING) {
-        if (parsing_results.wait_for(std::chrono::microseconds(100)) == std::future_status::ready) {
+        if (parsing_future.wait_for(std::chrono::microseconds(1)) == std::future_status::ready) {
             finish_parsing();
         }
     }
 }
 
 void dnd::Session::start_parsing() {
-    parsing_results = std::async(std::launch::async, &ContentParser::parse, &parser, content_directory, campaign_name);
+    parsing_future = std::async(std::launch::async, &Session::parse_content, this);
     status = SessionStatus::PARSING;
+}
+
+void dnd::Session::parse_content() {
+    ParsingResult parsing_result = parser.parse(content_directory, campaign_name);
+    content = std::move(parsing_result.content);
+    errors = std::move(parsing_result.errors);
+    search = std::make_unique<ContentSearch>(content);
+    for (const ParsingError& error : errors.get_parsing_errors()) {
+        SourceInfo source_info(error.get_filepath());
+        parsing_error_messages.emplace_back(fmt::format(
+            "{} ({} - {} - {})", error.get_error_message(), source_info.get_source_group_name(),
+            source_info.get_source_type_name(), source_info.get_source_name()
+        ));
+    }
+    for (const ValidationError& error : errors.get_validation_errors()) {
+        if (error.get_validation_data() == nullptr) {
+            validation_error_messages.emplace_back(error.get_error_message());
+        } else {
+            SourceInfo source_info(error.get_validation_data()->source_path);
+            validation_error_messages.emplace_back(fmt::format(
+                "{} ({} - {} - {})", error.get_error_message(), source_info.get_source_group_name(),
+                source_info.get_source_type_name(), source_info.get_source_name()
+            ));
+        }
+    }
 }
 
 void dnd::Session::finish_parsing() {
     try {
-        ParsingResult parsing_result = parsing_results.get();
-        content = std::move(parsing_result.content);
-        errors = std::move(parsing_result.errors);
-        search = std::make_unique<ContentSearch>(content);
+        parsing_future.get();
         status = SessionStatus::READY;
     } catch (const std::exception& e) {
-        error_messages.push_back(e.what());
+        unknown_error_messages.push_back(e.what());
         status = SessionStatus::UNKNOWN_ERROR;
     }
 }

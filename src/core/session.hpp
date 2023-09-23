@@ -36,11 +36,14 @@ public:
     SessionStatus get_status() const noexcept;
     Content& get_content() noexcept;
     const Errors& get_errors() const noexcept;
-    const std::vector<std::string>& get_error_messages() const;
+    const std::vector<std::string>& get_unknown_error_messages() const noexcept;
+    const std::vector<std::string>& get_parsing_error_messages() const noexcept;
+    const std::vector<std::string>& get_validation_error_messages() const noexcept;
     const std::string& get_campaign_name() const noexcept;
     const std::filesystem::path& get_content_directory() const noexcept;
     std::deque<const ContentPiece*>& get_open_content_pieces() noexcept;
     size_t get_search_result_count() const noexcept;
+    bool too_many_search_results() const noexcept;
 
     /**
      * @brief Gets the list of possible campaign names.
@@ -62,9 +65,9 @@ public:
      */
     void save_session_values();
     /**
-     * @brief Clears the error messages.
+     * @brief Clears the unknown error messages.
      */
-    void clear_error_messages();
+    void clear_unknown_error_messages();
     /**
      * @brief If the provided campaign name is valid, sets the campaign name and starts parsing.
      * @param campaign_name the campaign name to set
@@ -91,10 +94,11 @@ public:
     void update();
 private:
     void start_parsing();
+    void parse_content();
     void finish_parsing();
     void open_last_session();
 
-    static constexpr int max_search_results = 100;
+    static constexpr int max_search_results = 500;
 
     const char* const last_session_filename;
 
@@ -106,14 +110,16 @@ private:
     std::unordered_map<std::string, std::vector<std::string>> last_session_open_tabs;
 
     std::unique_ptr<ContentSearch> search;
-    std::array<const ContentPiece*, 100> search_results;
+    std::array<const ContentPiece*, 500> search_results;
     size_t search_result_count;
     std::deque<const ContentPiece*> open_content_pieces;
-    std::array<std::string, 100> search_result_strings;
+    std::array<std::string, 500> search_result_strings;
 
-    std::vector<std::string> error_messages;
+    std::vector<std::string> unknown_error_messages;
+    std::vector<std::string> parsing_error_messages;
+    std::vector<std::string> validation_error_messages;
 
-    std::future<ParsingResult> parsing_results;
+    std::future<void> parsing_future;
     ContentParser parser;
     Errors errors;
     // the object holding all the DnD content relevant for the selected campaign

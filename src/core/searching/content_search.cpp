@@ -20,6 +20,7 @@
 #include <core/models/item/item.hpp>
 #include <core/models/spell/spell.hpp>
 #include <core/searching/trie.hpp>
+#include <core/utils/char_manipulation.hpp>
 
 dnd::ContentSearch::ContentSearch(const Content& content) {
     query.reserve(40);
@@ -67,7 +68,7 @@ void dnd::ContentSearch::set_search_query(const std::string& new_query) {
 
     assert(query.size() == new_query.size());
     for (size_t i = 0; i < query.size(); ++i) {
-        assert(query[i] == new_query[i]);
+        assert(query[i] == dnd::char_to_lowercase(new_query[i]));
     }
 }
 
@@ -78,6 +79,7 @@ void dnd::ContentSearch::clear_query() {
 }
 
 void dnd::ContentSearch::add_character_to_query(char c) {
+    c = dnd::char_to_lowercase(c);
     query.push_back(c);
 
     character_search_path.push_top_child(c);
@@ -117,23 +119,10 @@ void dnd::ContentSearch::remove_character_from_query() {
     assert(choosable_search_path.size() >= 1);
 }
 
-size_t dnd::ContentSearch::count_results() const {
-    size_t count = 0;
-    count += character_search_path.count_top_successors();
-    count += character_class_search_path.count_top_successors();
-    count += character_subclass_search_path.count_top_successors();
-    count += character_race_search_path.count_top_successors();
-    count += character_subrace_search_path.count_top_successors();
-    count += item_search_path.count_top_successors();
-    count += spell_search_path.count_top_successors();
-    count += feature_search_path.count_top_successors();
-    count += choosable_search_path.count_top_successors();
-    return count;
-}
-
 std::vector<const dnd::ContentPiece*> dnd::ContentSearch::get_results() const {
+    DND_MEASURE_FUNCTION();
     std::vector<const ContentPiece*> results;
-    results.reserve(100);
+    results.reserve(500);
 
     character_search_path.insert_top_successors_into(results);
     character_class_search_path.insert_top_successors_into(results);

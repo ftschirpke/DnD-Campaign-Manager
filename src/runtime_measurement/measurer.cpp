@@ -6,12 +6,15 @@
 #include <array>
 #include <chrono>
 #include <cstring>
+#include <filesystem>
 #include <fstream>
 #include <iomanip>
 #include <mutex>
 #include <string>
 #include <thread>
 #include <vector>
+
+#include <nlohmann/json.hpp>
 
 static constexpr std::array<const char*, 12> values_for_human_readable = {
     "int dnd::launch(int, char**)",
@@ -48,6 +51,11 @@ void dnd::Measurer::endSession() {
             thread_ids.emplace_back(measurement.at("tid"));
             measurement.at("tid") = next_id++;
         }
+    }
+
+    std::filesystem::path parent_dir = std::filesystem::path(session->filepath).parent_path();
+    if (!std::filesystem::exists(parent_dir)) {
+        std::filesystem::create_directory(parent_dir);
     }
 
     std::ofstream output_stream;

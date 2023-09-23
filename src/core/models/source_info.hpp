@@ -19,6 +19,11 @@ public:
      */
     const std::filesystem::path& get_source_path() const noexcept;
     /**
+     * @brief Returns a beautified version of path to the source file of the content piece
+     * @return the beautified version of source path
+     */
+    const std::string& get_beautified_source_path() const noexcept;
+    /**
      * @brief Returns whether the content piece is part of a source book
      * @return whether the content piece is part of a source book
      */
@@ -40,6 +45,7 @@ public:
     const std::string& get_source_name() const noexcept;
 private:
     std::filesystem::path source_path;
+    std::string beautified_source_path;
     bool source_book;
     std::string source_group_name;
     std::string source_type_name;

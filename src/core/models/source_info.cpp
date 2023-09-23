@@ -14,16 +14,31 @@ static std::string nth_parent_stem(const std::filesystem::path& path, int n) noe
 }
 
 dnd::SourceInfo::SourceInfo(const std::filesystem::path& source_path) noexcept
-    : source_path(source_path), source_book(nth_parent_stem(source_path, 3) == "general"),
+    : source_path(source_path), beautified_source_path(), source_book(nth_parent_stem(source_path, 3) == "general"),
       source_group_name(nth_parent_stem(source_path, 2)), source_type_name(nth_parent_stem(source_path, 1)),
-      source_name(source_path.stem().string()) {}
+      source_name(source_path.stem().string()) {
+    std::filesystem::path relative_path = std::filesystem::relative(
+        source_path, source_path.parent_path().parent_path()
+    );
+    relative_path.replace_extension();
+    beautified_source_path = relative_path.string();
+}
 
 dnd::SourceInfo::SourceInfo(std::filesystem::path&& source_path) noexcept
-    : source_path(std::move(source_path)), source_book(nth_parent_stem(this->source_path, 3) == "general"),
+    : source_path(std::move(source_path)), beautified_source_path(),
+      source_book(nth_parent_stem(this->source_path, 3) == "general"),
       source_group_name(nth_parent_stem(this->source_path, 2)), source_type_name(nth_parent_stem(this->source_path, 1)),
-      source_name(this->source_path.stem().string()) {}
+      source_name(this->source_path.stem().string()) {
+    std::filesystem::path relative_path = std::filesystem::relative(
+        source_path, source_path.parent_path().parent_path()
+    );
+    relative_path.replace_extension();
+    beautified_source_path = relative_path.string();
+}
 
 const std::filesystem::path& dnd::SourceInfo::get_source_path() const noexcept { return source_path; }
+
+const std::string& dnd::SourceInfo::get_beautified_source_path() const noexcept { return beautified_source_path; }
 
 bool dnd::SourceInfo::is_from_source_book() const noexcept { return source_book; }
 

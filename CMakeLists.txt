@@ -19,6 +19,7 @@ include(Compiler.cmake)
 # special directories
 set(DND_ASSET_DIRECTORY ${CMAKE_SOURCE_DIR}/assets)
 set(DND_MOCK_DIRECTORY ${CMAKE_SOURCE_DIR}/mock)
+set(DND_DEBUG_DIRECTORY ${CMAKE_SOURCE_DIR}/debug)
 
 # Dependency management
 include(Dependencies.cmake)
