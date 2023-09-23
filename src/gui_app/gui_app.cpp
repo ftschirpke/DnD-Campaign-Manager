@@ -44,11 +44,10 @@ void dnd::GUIApp::initialize() {
     content_dir_dialog.SetTitle("Select content directory");
     content_dir_dialog.SetWindowSize(1200, 900);
     session.retrieve_last_session_values();
-    open_content_dir_dialog();
 
     switch (session.get_status()) {
         case SessionStatus::CONTENT_DIR_SELECTION:
-            content_dir_dialog.Open();
+            open_content_dir_dialog();
             break;
         case SessionStatus::CAMPAIGN_SELECTION:
             select_campaign = true;
