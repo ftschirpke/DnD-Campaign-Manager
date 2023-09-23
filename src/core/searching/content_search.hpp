@@ -31,11 +31,6 @@ public:
      */
     void push_top_child(char c);
     /**
-     * @brief Return the amount of successors of the top node
-     * @return the amount of successors of the top node
-     */
-    size_t count_top_successors() const;
-    /**
      * @brief Insert the successors of the top node into a vector if such successors exist
      * @tparam S
      * @param vector the vector to insert the successors into
@@ -53,14 +48,6 @@ void SearchPath<T>::push_top_child(char c) {
     } else {
         this->push(this->top()->get_child(c));
     }
-}
-
-template <typename T>
-size_t SearchPath<T>::count_top_successors() const {
-    if (this->top() == nullptr) {
-        return 0;
-    }
-    return this->top()->count_successors();
 }
 
 template <typename T>

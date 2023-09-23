@@ -298,8 +298,8 @@ void dnd::GUIApp::render_search_window() {
     }
 
     if (ImGui::BeginChild("Search Results", ImVec2(-FLT_MIN, -FLT_MIN))) {
+        std::vector<std::string> search_result_strings = session.get_search_result_strings();
         for (size_t i = 0; i < search_result_count; ++i) {
-            std::vector<std::string> search_result_strings = session.get_search_result_strings();
             if (ImGui::Selectable(search_result_strings[i].c_str(), false)) {
                 session.open_search_result(i);
             }
