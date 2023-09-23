@@ -207,10 +207,12 @@ void ContentLibrary<TrieT, DataT>::save_in_trie(const std::string& name) {
 
     trie.insert(lower_name, content_piece_ptr);
     for (size_t i = 0; i < lower_name.size(); ++i) {
-        if (lower_name[i] == ' ' || lower_name[i] == '_' || lower_name[i] == '-' || lower_name[i] == '('
-            || lower_name[i] == ')') {
+        if (lower_name[i] == ' ' || lower_name[i] == '_' || lower_name[i] == '-') {
             std::string_view after_sep(lower_name.c_str() + i + 1, lower_name.size() - i - 1);
             trie.insert(after_sep, content_piece_ptr);
+        }
+        if (lower_name[i] == '(' || lower_name[i] == ':') {
+            break;
         }
     }
 }
