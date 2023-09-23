@@ -3,6 +3,8 @@
 #include "content_parser.hpp"
 
 #include <filesystem>
+#include <functional>
+#include <future>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -91,37 +93,48 @@ dnd::ParsingResult dnd::ContentParser::parse(
     }
     content_directories.emplace_back(content_path / campaign_dir_name);
 
+    auto content_ref = std::ref(result.content);
+    auto content_directories_ref = std::ref(content_directories);
     {
-        DND_MEASURE_SCOPE("Parsing string groups");
-        result.errors += parse_string_groups(result.content, content_directories);
+        DND_MEASURE_SCOPE("Parsing: string groups, spells");
+        std::future<Errors> string_group_future = std::async(
+            std::launch::async, parse_string_groups, content_ref, content_directories_ref
+        );
+        std::future<Errors> spell_future = std::async(
+            std::launch::async, parse_all_of_type, ParsingType::SPELL, content_ref, content_directories_ref
+        );
+        result.errors += string_group_future.get();
+        result.errors += spell_future.get();
     }
     {
-        DND_MEASURE_SCOPE("Parsing spells");
-        result.errors += parse_all_of_type(ParsingType::SPELL, result.content, content_directories);
+        DND_MEASURE_SCOPE("Parsing: items, choosable features, races, classes");
+        std::future<Errors> item_future = std::async(
+            std::launch::async, parse_all_of_type, ParsingType::ITEM, content_ref, content_directories_ref
+        );
+        std::future<Errors> choosable_future = std::async(
+            std::launch::async, parse_all_of_type, ParsingType::CHOOSABLES, content_ref, content_directories_ref
+        );
+        std::future<Errors> race_future = std::async(
+            std::launch::async, parse_all_of_type, ParsingType::RACE, content_ref, content_directories_ref
+        );
+        std::future<Errors> class_future = std::async(
+            std::launch::async, parse_all_of_type, ParsingType::CLASS, content_ref, content_directories_ref
+        );
+        result.errors += item_future.get();
+        result.errors += choosable_future.get();
+        result.errors += race_future.get();
+        result.errors += class_future.get();
     }
     {
-        DND_MEASURE_SCOPE("Parsing items");
-        result.errors += parse_all_of_type(ParsingType::ITEM, result.content, content_directories);
-    }
-    {
-        DND_MEASURE_SCOPE("Parsing choosable groups");
-        result.errors += parse_all_of_type(ParsingType::CHOOSABLES, result.content, content_directories);
-    }
-    {
-        DND_MEASURE_SCOPE("Parsing races");
-        result.errors += parse_all_of_type(ParsingType::RACE, result.content, content_directories);
-    }
-    {
-        DND_MEASURE_SCOPE("Parsing classes");
-        result.errors += parse_all_of_type(ParsingType::CLASS, result.content, content_directories);
-    }
-    {
-        DND_MEASURE_SCOPE("Parsing subraces");
-        result.errors += parse_all_of_type(ParsingType::SUBRACE, result.content, content_directories);
-    }
-    {
-        DND_MEASURE_SCOPE("Parsing subclasses");
-        result.errors += parse_all_of_type(ParsingType::SUBCLASS, result.content, content_directories);
+        DND_MEASURE_SCOPE("Parsing: subraces, subclasses");
+        std::future<Errors> subrace_future = std::async(
+            std::launch::async, parse_all_of_type, ParsingType::SUBRACE, content_ref, content_directories_ref
+        );
+        std::future<Errors> subclass_future = std::async(
+            std::launch::async, parse_all_of_type, ParsingType::SUBCLASS, content_ref, content_directories_ref
+        );
+        result.errors += subrace_future.get();
+        result.errors += subclass_future.get();
     }
     {
         DND_MEASURE_SCOPE("Parsing characters");
@@ -132,6 +145,7 @@ dnd::ParsingResult dnd::ContentParser::parse(
 }
 
 static dnd::Errors parse_file(dnd::Content& content, dnd::FileParser&& parser) {
+    DND_MEASURE_SCOPE(parser.get_filepath().string().c_str());
     dnd::Errors errors;
     bool successful = true;
     try {
@@ -221,6 +235,7 @@ static const char* type_directory_name(ParsingType type) {
 static dnd::Errors parse_all_of_type(
     ParsingType type, dnd::Content& content, const std::vector<std::filesystem::directory_entry>& content_directories
 ) {
+    DND_MEASURE_SCOPE(fmt::format("Parsing all: {}", type_directory_name(type)).c_str());
     dnd::Errors errors;
 
     const char* directory_name = type_directory_name(type);
@@ -254,6 +269,7 @@ static dnd::Errors parse_all_of_type(
 static dnd::Errors parse_string_groups(
     dnd::Content& content, const std::vector<std::filesystem::directory_entry>& content_directories
 ) {
+    DND_MEASURE_FUNCTION();
     dnd::Errors errors;
     for (const auto& dir : content_directories) {
         const std::filesystem::directory_entry groups_file(dir.path() / "groups.json");
