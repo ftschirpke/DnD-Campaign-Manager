@@ -46,8 +46,6 @@ private:
     void render_parsing_error_popup();
     void render_content_window();
 
-    static constexpr int max_search_results = 100;
-
     bool show_demo_window;
     bool select_campaign;
 

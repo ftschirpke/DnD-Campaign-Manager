@@ -44,6 +44,8 @@ std::deque<const dnd::ContentPiece*>& dnd::Session::get_open_content_pieces() no
 
 size_t dnd::Session::get_search_result_count() const noexcept { return search_result_count; }
 
+bool dnd::Session::too_many_search_results() const noexcept { return search_result_count > max_search_results; }
+
 std::vector<std::string> dnd::Session::get_possible_campaign_names() const {
     if (content_directory.empty()) {
         return {};

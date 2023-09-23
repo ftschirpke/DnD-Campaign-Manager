@@ -289,7 +289,7 @@ void dnd::GUIApp::render_search_window() {
         ImGui::End();
         return;
     }
-    if (search_result_count > 100) {
+    if (session.too_many_search_results()) {
         ImGui::Text("Too many results (%ld). Please refine your search.", search_result_count);
         ImGui::End();
         return;

@@ -41,6 +41,7 @@ public:
     const std::filesystem::path& get_content_directory() const noexcept;
     std::deque<const ContentPiece*>& get_open_content_pieces() noexcept;
     size_t get_search_result_count() const noexcept;
+    bool too_many_search_results() const noexcept;
 
     /**
      * @brief Gets the list of possible campaign names.
@@ -94,7 +95,7 @@ private:
     void finish_parsing();
     void open_last_session();
 
-    static constexpr int max_search_results = 100;
+    static constexpr int max_search_results = 30;
 
     const char* const last_session_filename;
 
@@ -106,10 +107,10 @@ private:
     std::unordered_map<std::string, std::vector<std::string>> last_session_open_tabs;
 
     std::unique_ptr<ContentSearch> search;
-    std::array<const ContentPiece*, 100> search_results;
+    std::array<const ContentPiece*, 30> search_results;
     size_t search_result_count;
     std::deque<const ContentPiece*> open_content_pieces;
-    std::array<std::string, 100> search_result_strings;
+    std::array<std::string, 30> search_result_strings;
 
     std::vector<std::string> error_messages;
 
