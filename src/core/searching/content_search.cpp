@@ -118,6 +118,7 @@ void dnd::ContentSearch::remove_character_from_query() {
 }
 
 std::vector<const dnd::ContentPiece*> dnd::ContentSearch::get_results() const {
+    DND_MEASURE_FUNCTION();
     std::vector<const ContentPiece*> results;
     results.reserve(100);
 

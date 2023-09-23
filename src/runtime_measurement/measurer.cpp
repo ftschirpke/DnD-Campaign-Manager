@@ -13,6 +13,8 @@
 #include <thread>
 #include <vector>
 
+#include <nlohmann/json.hpp>
+
 static constexpr std::array<const char*, 12> values_for_human_readable = {
     "int dnd::launch(int, char**)",
     "Main execution scope",

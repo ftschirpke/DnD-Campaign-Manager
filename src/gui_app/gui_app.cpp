@@ -58,6 +58,7 @@ void dnd::GUIApp::initialize() {
 }
 
 void dnd::GUIApp::render() {
+    DND_MEASURE_FUNCTION();
     ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
 
     if (show_demo_window) {
@@ -68,7 +69,7 @@ void dnd::GUIApp::render() {
     render_content_dir_selection();
     render_campaign_selection();
     render_overview_window();
-    if (!session.get_error_messages().empty()) {
+    if (!session.get_unknown_error_messages().empty()) {
         render_parsing_error_popup();
     }
 
@@ -84,6 +85,7 @@ void dnd::GUIApp::open_content_dir_dialog() {
 }
 
 void dnd::GUIApp::render_content_dir_selection() {
+    DND_MEASURE_FUNCTION();
     content_dir_dialog.Display();
     if (content_dir_dialog.HasSelected()) {
         content_dir_dialog.Close();
@@ -106,6 +108,7 @@ void dnd::GUIApp::render_content_dir_selection() {
 }
 
 void dnd::GUIApp::render_campaign_selection() {
+    DND_MEASURE_FUNCTION();
     if (select_campaign) {
         ImGui::OpenPopup("Select campaign");
     }
@@ -155,6 +158,7 @@ static void render_content_count_table(const dnd::Content& content) {
 }
 
 void dnd::GUIApp::render_overview_window() {
+    DND_MEASURE_FUNCTION();
     ImGui::Begin("Overview");
 
     ImGui::SeparatorText("Content selection");
@@ -206,42 +210,32 @@ void dnd::GUIApp::render_overview_window() {
         default:
             break;
     }
-
-    ImGui::SeparatorText("Errors");
-    if (ImGui::BeginChild("Error list")) {
-        for (const std::string& message : session.get_error_messages()) {
-            ImGui::TextWrapped("%s", message.c_str());
-        }
-        ImGui::SeparatorText("Parsing errors");
-        for (const ParsingError& error : session.get_errors().get_parsing_errors()) {
-            SourceInfo source_info(error.get_filepath());
-            ImGui::TextWrapped(
-                "%s (%s - %s - %s)", error.get_error_message().c_str(), source_info.get_source_group_name().c_str(),
-                source_info.get_source_type_name().c_str(), source_info.get_source_name().c_str()
-            );
-        }
-        ImGui::SeparatorText("Validation errors");
-        for (const ValidationError& error : session.get_errors().get_validation_errors()) {
-            if (error.get_validation_data() == nullptr) {
-                ImGui::TextWrapped("%s", error.get_error_message().c_str());
-            } else {
-                SourceInfo source_info(error.get_validation_data()->source_path);
-                ImGui::TextWrapped(
-                    "%s (%s - %s - %s)", error.get_error_message().c_str(), source_info.get_source_group_name().c_str(),
-                    source_info.get_source_type_name().c_str(), source_info.get_source_name().c_str()
-                );
+    {
+        DND_MEASURE_SCOPE("List errors in overview window");
+        ImGui::SeparatorText("Errors");
+        if (ImGui::BeginChild("Error list")) {
+            for (const std::string& message : session.get_unknown_error_messages()) {
+                ImGui::TextWrapped("%s", message.c_str());
+            }
+            ImGui::SeparatorText("Parsing errors");
+            for (const std::string& message : session.get_parsing_error_messages()) {
+                ImGui::TextWrapped("%s", message.c_str());
+            }
+            ImGui::SeparatorText("Validation errors");
+            for (const std::string& message : session.get_validation_error_messages()) {
+                ImGui::TextWrapped("%s", message.c_str());
             }
         }
+        ImGui::EndChild();
     }
-    ImGui::EndChild();
-
     ImGui::End();
 }
 
 void dnd::GUIApp::render_parsing_error_popup() {
+    DND_MEASURE_FUNCTION();
     ImGui::OpenPopup("Error");
     if (ImGui::BeginPopupModal("Error", nullptr, error_popup_options)) {
-        for (const std::string& message : session.get_error_messages()) {
+        for (const std::string& message : session.get_unknown_error_messages()) {
             ImGui::TextWrapped("%s", message.c_str());
             ImGui::Separator();
         }
@@ -265,7 +259,7 @@ void dnd::GUIApp::render_parsing_error_popup() {
             close = true;
         }
         if (close) {
-            session.clear_error_messages();
+            session.clear_unknown_error_messages();
             ImGui::CloseCurrentPopup();
         }
         ImGui::EndPopup();
@@ -273,6 +267,7 @@ void dnd::GUIApp::render_parsing_error_popup() {
 }
 
 void dnd::GUIApp::render_search_window() {
+    DND_MEASURE_FUNCTION();
     ImGui::Begin("Search");
 
     if (ImGui::InputText("Search", &search_query, ImGuiInputTextFlags_EscapeClearsAll, nullptr, nullptr)) {
@@ -309,6 +304,7 @@ void dnd::GUIApp::render_search_window() {
 }
 
 void dnd::GUIApp::render_content_window() {
+    DND_MEASURE_FUNCTION();
     ImGui::Begin("Content");
     ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_AutoSelectNewTabs | ImGuiTabBarFlags_Reorderable;
     if (ImGui::BeginTabBar("Content Tabs", tab_bar_flags)) {
