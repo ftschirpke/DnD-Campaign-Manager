@@ -19,6 +19,10 @@
 #include <core/models/item/item.hpp>
 #include <core/models/spell/spell.hpp>
 
+void dnd::ListVisitor::reserve(size_t size) { string_list.reserve(size); }
+
+std::vector<std::string> dnd::ListVisitor::get_list() { return std::move(string_list); }
+
 void dnd::ListVisitor::visit(const Character* character_ptr) {
     string_list.emplace_back(fmt::format(
         "{} [CHARACTER] : Level {} {} {}", character_ptr->get_name(), character_ptr->get_progression().get_level(),
@@ -58,19 +62,13 @@ void dnd::ListVisitor::visit(const Spell* spell_ptr) {
 }
 
 void dnd::ListVisitor::visit(const Feature* feature_ptr) {
-    std::filesystem::path feature_path = std::filesystem::relative(
-        feature_ptr->get_source_info().get_source_path(),
-        feature_ptr->get_source_info().get_source_path().parent_path().parent_path()
-    );
-    feature_path.replace_extension("");
-    string_list.emplace_back(fmt::format("{} [FEATURE] : {}", feature_ptr->get_name(), feature_path.string()));
+    string_list.emplace_back(fmt::format(
+        "{} [FEATURE] : {}", feature_ptr->get_name(), feature_ptr->get_source_info().get_beautified_source_path()
+    ));
 }
 
 void dnd::ListVisitor::visit(const ChoosableFeature* choosable_ptr) {
-    std::filesystem::path choosable_path = std::filesystem::relative(
-        choosable_ptr->get_source_info().get_source_path(),
-        choosable_ptr->get_source_info().get_source_path().parent_path().parent_path()
-    );
-    choosable_path.replace_extension("");
-    string_list.emplace_back(fmt::format("{} [CHOOSABLE] : {}", choosable_ptr->get_name(), choosable_path.string()));
+    string_list.emplace_back(fmt::format(
+        "{} [CHOOSABLE] : {}", choosable_ptr->get_name(), choosable_ptr->get_source_info().get_beautified_source_path()
+    ));
 }

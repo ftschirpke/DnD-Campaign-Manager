@@ -26,6 +26,11 @@ namespace dnd {
 class ListVisitor : public ContentVisitor {
 public:
     /**
+     * @brief Reserve space for the list
+     * @param size the size to reserve
+     */
+    void reserve(size_t size);
+    /**
      * @brief Return a vector of list-suitable strings
      * @return the vector of strings
      */
@@ -43,7 +48,6 @@ private:
     std::vector<std::string> string_list;
 };
 
-inline std::vector<std::string> ListVisitor::get_list() { return std::move(string_list); }
 
 } // namespace dnd
 
