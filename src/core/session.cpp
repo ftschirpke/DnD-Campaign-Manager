@@ -176,16 +176,26 @@ bool dnd::Session::set_content_directory(const std::filesystem::path& new_conten
 // A comparator for content pieces that sorts them by name and prioritizes those whose name starts with a givencharacter
 class ContentPieceComparator {
 public:
-    explicit ContentPieceComparator(char leading_character)
-        : leading_character(dnd::char_to_lowercase(leading_character)) {}
-    bool starts_with_leading_character(const std::string& name) const {
-        return name[0] == leading_character || name[0] == dnd::char_to_uppercase(leading_character);
+    explicit ContentPieceComparator(const std::string& search_query)
+        : query_length(search_query.size()), lower_query(dnd::string_lowercase_copy(search_query)),
+          upper_query(dnd::string_uppercase_copy(search_query)) {}
+
+    bool starts_with_search_query(const std::string& name) const {
+        size_t i = 0;
+        while (i < query_length) {
+            if (name[i] != lower_query[i] && name[i] != upper_query[i]) {
+                return false;
+            }
+            ++i;
+        }
+        return true;
     }
+
     bool operator()(const dnd::ContentPiece* a, const dnd::ContentPiece* b) const {
         const std::string& a_name = a->get_name();
         const std::string& b_name = b->get_name();
-        bool prioritize_a = starts_with_leading_character(a_name);
-        bool prioritize_b = starts_with_leading_character(b_name);
+        bool prioritize_a = starts_with_search_query(a_name);
+        bool prioritize_b = starts_with_search_query(b_name);
         if (prioritize_a && !prioritize_b) {
             return true;
         }
@@ -195,7 +205,9 @@ public:
         return a->get_name() < b->get_name();
     }
 private:
-    char leading_character;
+    size_t query_length;
+    std::string lower_query;
+    std::string upper_query;
 };
 
 void dnd::Session::set_search_query(const std::string& new_search_query) {
@@ -205,7 +217,7 @@ void dnd::Session::set_search_query(const std::string& new_search_query) {
     if (search_result_count > max_search_results) {
         return;
     }
-    ContentPieceComparator comparator(new_search_query[0]);
+    ContentPieceComparator comparator(new_search_query);
     std::sort(vec_search_results.begin(), vec_search_results.end(), comparator);
     for (size_t i = 0; i < search_result_count; ++i) {
         search_results[i] = vec_search_results[i];
