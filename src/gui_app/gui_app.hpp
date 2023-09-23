@@ -17,7 +17,7 @@
 
 #include <core/content.hpp>
 #include <core/models/content_piece.hpp>
-#include <core/searching/trie_content_search.hpp>
+#include <core/searching/trie_search/trie_content_search.hpp>
 #include <core/session.hpp>
 #include <gui_app/content_visitors/display_visitor.hpp>
 

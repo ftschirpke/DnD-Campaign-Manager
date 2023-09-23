@@ -19,7 +19,7 @@
 #include <core/models/feature/feature.hpp>
 #include <core/models/item/item.hpp>
 #include <core/models/spell/spell.hpp>
-#include <core/searching/trie.hpp>
+#include <core/searching/trie_search/trie.hpp>
 #include <core/utils/char_manipulation.hpp>
 
 dnd::TrieContentSearch::TrieContentSearch(const Content& content) {

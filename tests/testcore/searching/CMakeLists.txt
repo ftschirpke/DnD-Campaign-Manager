@@ -1,4 +1,1 @@
-target_sources(${DND_TESTS}
-    PRIVATE
-    trie_test.cpp
-)
+add_subdirectory(trie_search)

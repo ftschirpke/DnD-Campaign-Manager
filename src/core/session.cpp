@@ -19,7 +19,7 @@
 #include <core/models/content_piece.hpp>
 #include <core/models/source_info.hpp>
 #include <core/parsing/content_parser.hpp>
-#include <core/searching/trie_content_search.hpp>
+#include <core/searching/trie_search/trie_content_search.hpp>
 #include <core/utils/char_manipulation.hpp>
 
 dnd::Session::Session(const char* last_session_filename)

@@ -16,7 +16,7 @@
 #include <core/errors/errors.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/parsing/content_parser.hpp>
-#include <core/searching/trie_content_search.hpp>
+#include <core/searching/trie_search/trie_content_search.hpp>
 
 namespace dnd {
 

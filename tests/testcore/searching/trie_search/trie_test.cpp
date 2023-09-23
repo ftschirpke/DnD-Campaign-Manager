@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include <core/searching/trie.hpp>
+#include <core/searching/trie_search/trie.hpp>
 
 #include <unordered_set>
 
