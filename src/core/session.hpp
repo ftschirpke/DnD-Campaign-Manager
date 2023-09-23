@@ -98,7 +98,7 @@ private:
     void finish_parsing();
     void open_last_session();
 
-    static constexpr int max_search_results = 30;
+    static constexpr int max_search_results = 500;
 
     const char* const last_session_filename;
 
@@ -110,10 +110,10 @@ private:
     std::unordered_map<std::string, std::vector<std::string>> last_session_open_tabs;
 
     std::unique_ptr<ContentSearch> search;
-    std::array<const ContentPiece*, 30> search_results;
+    std::array<const ContentPiece*, 500> search_results;
     size_t search_result_count;
     std::deque<const ContentPiece*> open_content_pieces;
-    std::array<std::string, 30> search_result_strings;
+    std::array<std::string, 500> search_result_strings;
 
     std::vector<std::string> unknown_error_messages;
     std::vector<std::string> parsing_error_messages;
