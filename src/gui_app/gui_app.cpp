@@ -17,14 +17,7 @@
 #include <imgui_filebrowser/imfilebrowser.h>
 
 #include <core/content.hpp>
-#include <core/errors/errors.hpp>
-#include <core/errors/parsing_error.hpp>
-#include <core/errors/validation_error.hpp>
-#include <core/models/feature/feature.hpp>
-#include <core/models/item/item.hpp>
-#include <core/models/source_info.hpp>
-#include <core/models/spell/spell.hpp>
-#include <core/searching/content_search.hpp>
+#include <core/models/content_piece.hpp>
 #include <core/session.hpp>
 #include <core/utils/string_manipulation.hpp>
 #include <gui_app/content_visitors/display_visitor.hpp>

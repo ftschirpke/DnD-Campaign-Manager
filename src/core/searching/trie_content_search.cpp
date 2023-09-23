@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include "content_search.hpp"
+#include "trie_content_search.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -22,7 +22,7 @@
 #include <core/searching/trie.hpp>
 #include <core/utils/char_manipulation.hpp>
 
-dnd::ContentSearch::ContentSearch(const Content& content) {
+dnd::TrieContentSearch::TrieContentSearch(const Content& content) {
     query.reserve(40);
     character_search_path.push(content.get_characters().get_trie_root());
     character_class_search_path.push(content.get_character_classes().get_trie_root());
@@ -35,14 +35,14 @@ dnd::ContentSearch::ContentSearch(const Content& content) {
     choosable_search_path.push(content.get_choosable_features().get_trie_root());
 }
 
-dnd::ContentSearch::ContentSearch(const dnd::Content& content, const std::string& initial_query)
-    : ContentSearch(content) {
+dnd::TrieContentSearch::TrieContentSearch(const dnd::Content& content, const std::string& initial_query)
+    : TrieContentSearch(content) {
     for (char c : initial_query) {
         add_character_to_query(c);
     }
 }
 
-void dnd::ContentSearch::set_search_query(const std::string& new_query) {
+void dnd::TrieContentSearch::set_search_query(const std::string& new_query) {
     if (new_query.empty()) {
         clear_query();
         return;
@@ -72,13 +72,13 @@ void dnd::ContentSearch::set_search_query(const std::string& new_query) {
     }
 }
 
-void dnd::ContentSearch::clear_query() {
+void dnd::TrieContentSearch::clear_query() {
     while (!query.empty()) {
         remove_character_from_query();
     }
 }
 
-void dnd::ContentSearch::add_character_to_query(char c) {
+void dnd::TrieContentSearch::add_character_to_query(char c) {
     c = dnd::char_to_lowercase(c);
     query.push_back(c);
 
@@ -93,7 +93,7 @@ void dnd::ContentSearch::add_character_to_query(char c) {
     choosable_search_path.push_top_child(c);
 }
 
-void dnd::ContentSearch::remove_character_from_query() {
+void dnd::TrieContentSearch::remove_character_from_query() {
     if (query.empty()) {
         return;
     }
@@ -119,7 +119,7 @@ void dnd::ContentSearch::remove_character_from_query() {
     assert(choosable_search_path.size() >= 1);
 }
 
-std::vector<const dnd::ContentPiece*> dnd::ContentSearch::get_results() const {
+std::vector<const dnd::ContentPiece*> dnd::TrieContentSearch::get_results() const {
     DND_MEASURE_FUNCTION();
     std::vector<const ContentPiece*> results;
     results.reserve(500);
@@ -137,7 +137,7 @@ std::vector<const dnd::ContentPiece*> dnd::ContentSearch::get_results() const {
     return results;
 }
 
-std::vector<const dnd::ContentPiece*> dnd::ContentSearch::get_sorted_results() const {
+std::vector<const dnd::ContentPiece*> dnd::TrieContentSearch::get_sorted_results() const {
     std::vector<const dnd::ContentPiece*> results = get_results();
     std::sort(results.begin(), results.end(), [](const ContentPiece* a, const ContentPiece* b) {
         return a->get_name() < b->get_name();

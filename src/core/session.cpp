@@ -19,7 +19,7 @@
 #include <core/models/content_piece.hpp>
 #include <core/models/source_info.hpp>
 #include <core/parsing/content_parser.hpp>
-#include <core/searching/content_search.hpp>
+#include <core/searching/trie_content_search.hpp>
 #include <core/utils/char_manipulation.hpp>
 
 dnd::Session::Session(const char* last_session_filename)
@@ -267,7 +267,7 @@ void dnd::Session::parse_content() {
     ParsingResult parsing_result = parser.parse(content_directory, campaign_name);
     content = std::move(parsing_result.content);
     errors = std::move(parsing_result.errors);
-    search = std::make_unique<ContentSearch>(content);
+    search = std::make_unique<TrieContentSearch>(content);
     for (const ParsingError& error : errors.get_parsing_errors()) {
         SourceInfo source_info(error.get_filepath());
         parsing_error_messages.emplace_back(fmt::format(

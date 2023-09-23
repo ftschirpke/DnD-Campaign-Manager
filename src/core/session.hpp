@@ -16,7 +16,7 @@
 #include <core/errors/errors.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/parsing/content_parser.hpp>
-#include <core/searching/content_search.hpp>
+#include <core/searching/trie_content_search.hpp>
 
 namespace dnd {
 
@@ -109,7 +109,7 @@ private:
 
     std::unordered_map<std::string, std::vector<std::string>> last_session_open_tabs;
 
-    std::unique_ptr<ContentSearch> search;
+    std::unique_ptr<TrieContentSearch> search;
     std::array<const ContentPiece*, 500> search_results;
     size_t search_result_count;
     std::deque<const ContentPiece*> open_content_pieces;

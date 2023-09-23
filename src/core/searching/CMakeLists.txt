@@ -1,4 +1,4 @@
 target_sources(${DND_CORE}
     PRIVATE
-    content_search.cpp
+    trie_content_search.cpp
 )

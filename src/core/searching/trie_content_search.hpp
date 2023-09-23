@@ -1,5 +1,5 @@
-#ifndef CONTENT_SEARCH_HPP_
-#define CONTENT_SEARCH_HPP_
+#ifndef TRIE_CONTENT_SEARCH_HPP_
+#define TRIE_CONTENT_SEARCH_HPP_
 
 #include <dnd_config.hpp>
 
@@ -23,7 +23,7 @@
 namespace dnd {
 
 template <typename T>
-class SearchPath : public std::stack<const TrieNode<T>*> {
+class TrieSearchPath : public std::stack<const TrieNode<T>*> {
 public:
     /**
      * @brief Push the child of the top node onto the stack if it exists (otherwise push nullptr)
@@ -42,7 +42,7 @@ public:
 };
 
 template <typename T>
-void SearchPath<T>::push_top_child(char c) {
+void TrieSearchPath<T>::push_top_child(char c) {
     if (this->top() == nullptr) {
         this->push(nullptr);
     } else {
@@ -53,7 +53,7 @@ void SearchPath<T>::push_top_child(char c) {
 template <typename T>
 template <typename S>
 requires std::derived_from<T, S>
-bool SearchPath<T>::insert_top_successors_into(std::vector<S*>& vec) const {
+bool TrieSearchPath<T>::insert_top_successors_into(std::vector<S*>& vec) const {
     if (this->top() == nullptr) {
         return false;
     }
@@ -69,19 +69,19 @@ bool SearchPath<T>::insert_top_successors_into(std::vector<S*>& vec) const {
 /**
  * @brief A class representing a content search query
  */
-class ContentSearch {
+class TrieContentSearch {
 public:
     /**
      * @brief Initialize the search with the content holder that should be searched
      * @param content_holder the content holder to search
      */
-    ContentSearch(const Content& content_holder);
+    TrieContentSearch(const Content& content_holder);
     /**
      * @brief Initialize the search with the content holder that should be searched and an initial query
      * @param content_holder the content holder to search
      * @param initial_query the initial search query
      */
-    ContentSearch(const Content& content_holder, const std::string& initial_query);
+    TrieContentSearch(const Content& content_holder, const std::string& initial_query);
     /**
      * @brief Set the search query
      * @param query the search query
@@ -112,18 +112,18 @@ public:
     std::vector<const ContentPiece*> get_sorted_results() const;
 private:
     std::vector<char> query;
-    SearchPath<Character> character_search_path;
-    SearchPath<const CharacterClass> character_class_search_path;
-    SearchPath<const CharacterSubclass> character_subclass_search_path;
-    SearchPath<const CharacterRace> character_race_search_path;
-    SearchPath<const CharacterSubrace> character_subrace_search_path;
-    SearchPath<const Item> item_search_path;
-    SearchPath<const Spell> spell_search_path;
-    SearchPath<const Feature> feature_search_path;
-    SearchPath<const ChoosableFeature> choosable_search_path;
+    TrieSearchPath<Character> character_search_path;
+    TrieSearchPath<const CharacterClass> character_class_search_path;
+    TrieSearchPath<const CharacterSubclass> character_subclass_search_path;
+    TrieSearchPath<const CharacterRace> character_race_search_path;
+    TrieSearchPath<const CharacterSubrace> character_subrace_search_path;
+    TrieSearchPath<const Item> item_search_path;
+    TrieSearchPath<const Spell> spell_search_path;
+    TrieSearchPath<const Feature> feature_search_path;
+    TrieSearchPath<const ChoosableFeature> choosable_search_path;
 };
 
 
 } // namespace dnd
 
-#endif // CONTENT_SEARCH_HPP_
+#endif // TRIE_CONTENT_SEARCH_HPP_
