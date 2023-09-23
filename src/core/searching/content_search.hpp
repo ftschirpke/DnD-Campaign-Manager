@@ -101,11 +101,6 @@ public:
      */
     void remove_character_from_query();
     /**
-     * @brief Return the amount of search results
-     * @return the amount of search results
-     */
-    size_t count_results() const;
-    /**
      * @brief Get the search results
      * @return the results for the current search query
      */
