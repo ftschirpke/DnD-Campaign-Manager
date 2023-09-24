@@ -1,3 +1,5 @@
+.cache/*
+
 # IDE specific ignores
 .vs/*
 .vscode/*
