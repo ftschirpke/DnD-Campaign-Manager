@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <array>
 #include <stack>
 #include <string>
 #include <unordered_map>
@@ -61,12 +62,7 @@ public:
      * @brief Get the search results
      * @return the results for the current search query
      */
-    std::vector<const ContentPiece*> get_results() const;
-    /**
-     * @brief Get the search results sorted by name
-     * @return the results for the current search query sorted by name
-     */
-    std::vector<const ContentPiece*> get_sorted_results() const;
+    std::vector<const ContentPiece*> get_results(const std::array<bool, 9>& options) const;
 private:
     std::vector<char> query;
     TrieSearchPath<Character> character_search_path;

@@ -29,7 +29,9 @@ static const ImGuiWindowFlags error_popup_options = ImGuiWindowFlags_AlwaysAutoR
 
 dnd::GUIApp::GUIApp()
     : show_demo_window(false), select_campaign(false), session(), content_dir_dialog(content_dir_dialog_options),
-      last_session_open_tabs(), forced_next_selection(nullptr), display_visitor() {
+      last_session_open_tabs(), trie_search_query(), trie_search_options(), forced_next_selection(nullptr),
+      display_visitor() {
+    trie_search_options.fill(true);
     ImGui::GetIO().IniFilename = imgui_ini_filename;
 }
 
@@ -67,7 +69,7 @@ void dnd::GUIApp::render() {
     }
 
     if (!session.get_content().empty()) {
-        render_search_window();
+        render_trie_search_window();
         render_content_window();
     }
 }
@@ -259,15 +261,49 @@ void dnd::GUIApp::render_parsing_error_popup() {
     }
 }
 
-void dnd::GUIApp::render_search_window() {
-    DND_MEASURE_FUNCTION();
-    ImGui::Begin("Search");
+static void trie_search_option_line(size_t index, const char* const name, std::array<bool, 9>& options) {
+    const char* only_button_label = fmt::format("Only##{}", index).c_str();
+    if (ImGui::Button(only_button_label)) {
+        options.fill(false);
+        options[index] = true;
+    }
+    ImGui::SameLine();
+    ImGui::Checkbox(name, &options[index]);
+}
 
-    if (ImGui::InputText("Search", &search_query, ImGuiInputTextFlags_EscapeClearsAll, nullptr, nullptr)) {
-        session.set_search_query(search_query);
+void dnd::GUIApp::render_trie_search_window() {
+    DND_MEASURE_FUNCTION();
+    ImGui::Begin("Simple Search");
+
+    bool search_changed = false;
+    if (ImGui::InputText("Search", &trie_search_query, ImGuiInputTextFlags_EscapeClearsAll, nullptr, nullptr)) {
+        search_changed = true;
+    }
+    const std::array<bool, 9> old_trie_search_options = trie_search_options;
+    if (ImGui::TreeNode("Search options")) {
+        if (ImGui::Button("All", ImVec2(200, 0))) {
+            trie_search_options.fill(true);
+        }
+        trie_search_option_line(0, "Characters", trie_search_options);
+        trie_search_option_line(1, "Races", trie_search_options);
+        trie_search_option_line(3, "Subraces", trie_search_options);
+        trie_search_option_line(2, "Classes", trie_search_options);
+        trie_search_option_line(4, "Subclasses", trie_search_options);
+        trie_search_option_line(5, "Items", trie_search_options);
+        trie_search_option_line(6, "Spells", trie_search_options);
+        trie_search_option_line(7, "Features", trie_search_options);
+        trie_search_option_line(8, "Choosables", trie_search_options);
+        ImGui::TreePop();
+    }
+    if (old_trie_search_options != trie_search_options) {
+        search_changed = true;
+    }
+
+    if (search_changed) {
+        session.set_trie_search(trie_search_query, trie_search_options);
     }
     ImGui::Separator();
-    if (search_query.empty()) {
+    if (trie_search_query.empty()) {
         ImGui::End();
         return;
     }
@@ -284,10 +320,10 @@ void dnd::GUIApp::render_search_window() {
     }
 
     if (ImGui::BeginChild("Search Results", ImVec2(-FLT_MIN, -FLT_MIN))) {
-        std::vector<std::string> search_result_strings = session.get_search_result_strings();
+        std::vector<std::string> search_result_strings = session.get_trie_search_result_strings();
         for (size_t i = 0; i < search_result_count; ++i) {
             if (ImGui::Selectable(search_result_strings[i].c_str(), false)) {
-                session.open_search_result(i);
+                session.open_trie_search_result(i);
             }
         }
     }

@@ -54,7 +54,7 @@ public:
      * @brief Returns a list of strings representing the search results.
      * @return the list of strings representing the search results
      */
-    std::vector<std::string> get_search_result_strings() const;
+    std::vector<std::string> get_trie_search_result_strings() const;
 
     /**
      * @brief Retrieves the last session values from a file, if it exists.
@@ -81,15 +81,15 @@ public:
      */
     bool set_content_directory(const std::filesystem::path& content_directory);
     /**
-     * @brief Sets the search query to the provided string.
+     * @brief Sets the search query for the trie search to the provided string.
      * @param new_query the new search query
      */
-    void set_search_query(const std::string& new_query);
+    void set_trie_search(const std::string& search_query, const std::array<bool, 9>& search_options);
     /**
-     * @brief Tries to open a content piece in the search result by index.
+     * @brief Tries to open a content piece in the trie search result by index.
      * @param index the index of the content piece to open
      */
-    void open_search_result(size_t index);
+    void open_trie_search_result(size_t index);
 
     void update();
 private:
@@ -109,11 +109,11 @@ private:
 
     std::unordered_map<std::string, std::vector<std::string>> last_session_open_tabs;
 
-    std::unique_ptr<TrieContentSearch> search;
-    std::array<const ContentPiece*, 500> search_results;
-    size_t search_result_count;
+    std::unique_ptr<TrieContentSearch> trie_search;
+    std::array<const ContentPiece*, 500> trie_search_results;
+    size_t trie_search_result_count;
     std::deque<const ContentPiece*> open_content_pieces;
-    std::array<std::string, 500> search_result_strings;
+    std::array<std::string, 500> trie_search_result_strings;
 
     std::vector<std::string> unknown_error_messages;
     std::vector<std::string> parsing_error_messages;

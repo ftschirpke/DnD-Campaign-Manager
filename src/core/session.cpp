@@ -24,9 +24,9 @@
 
 dnd::Session::Session(const char* last_session_filename)
     : last_session_filename(last_session_filename), status(SessionStatus::CONTENT_DIR_SELECTION), content_directory(),
-      campaign_name(), last_session_open_tabs(), search(), search_results(), search_result_count(0),
-      open_content_pieces(), search_result_strings(), unknown_error_messages(), parsing_future(), parser(), errors(),
-      content() {}
+      campaign_name(), last_session_open_tabs(), trie_search(), trie_search_results(), trie_search_result_count(0),
+      open_content_pieces(), trie_search_result_strings(), unknown_error_messages(), parsing_future(), parser(),
+      errors(), content() {}
 
 dnd::Session::~Session() { save_session_values(); }
 
@@ -54,9 +54,9 @@ const std::filesystem::path& dnd::Session::get_content_directory() const noexcep
 
 std::deque<const dnd::ContentPiece*>& dnd::Session::get_open_content_pieces() noexcept { return open_content_pieces; }
 
-size_t dnd::Session::get_search_result_count() const noexcept { return search_result_count; }
+size_t dnd::Session::get_search_result_count() const noexcept { return trie_search_result_count; }
 
-bool dnd::Session::too_many_search_results() const noexcept { return search_result_count > max_search_results; }
+bool dnd::Session::too_many_search_results() const noexcept { return trie_search_result_count > max_search_results; }
 
 std::vector<std::string> dnd::Session::get_possible_campaign_names() const {
     if (content_directory.empty()) {
@@ -72,15 +72,15 @@ std::vector<std::string> dnd::Session::get_possible_campaign_names() const {
     return campaign_names;
 }
 
-std::vector<std::string> dnd::Session::get_search_result_strings() const {
+std::vector<std::string> dnd::Session::get_trie_search_result_strings() const {
     DND_MEASURE_FUNCTION();
     ListVisitor list_visitor;
-    list_visitor.reserve(search_result_count);
-    if (search_result_count > max_search_results) {
+    list_visitor.reserve(trie_search_result_count);
+    if (trie_search_result_count > max_search_results) {
         return {};
     }
-    for (size_t i = 0; i < search_result_count; ++i) {
-        search_results[i]->accept(&list_visitor);
+    for (size_t i = 0; i < trie_search_result_count; ++i) {
+        trie_search_results[i]->accept(&list_visitor);
     }
     return list_visitor.get_list();
 }
@@ -226,26 +226,26 @@ private:
     std::string upper_query;
 };
 
-void dnd::Session::set_search_query(const std::string& new_search_query) {
+void dnd::Session::set_trie_search(const std::string& search_query, const std::array<bool, 9>& search_options) {
     DND_MEASURE_FUNCTION();
-    search->set_search_query(new_search_query);
-    std::vector<const ContentPiece*> vec_search_results = search->get_results();
-    search_result_count = vec_search_results.size();
-    if (search_result_count > max_search_results) {
+    trie_search->set_search_query(search_query);
+    std::vector<const ContentPiece*> vec_search_results = trie_search->get_results(search_options);
+    trie_search_result_count = vec_search_results.size();
+    if (trie_search_result_count > max_search_results) {
         return;
     }
-    ContentPieceComparator comparator(new_search_query);
+    ContentPieceComparator comparator(search_query);
     std::sort(vec_search_results.begin(), vec_search_results.end(), comparator);
-    for (size_t i = 0; i < search_result_count; ++i) {
-        search_results[i] = vec_search_results[i];
+    for (size_t i = 0; i < trie_search_result_count; ++i) {
+        trie_search_results[i] = vec_search_results[i];
     }
 }
 
-void dnd::Session::open_search_result(size_t index) {
-    if (index >= search_result_count) {
+void dnd::Session::open_trie_search_result(size_t index) {
+    if (index >= trie_search_result_count) {
         return;
     }
-    const ContentPiece* content_piece = search_results[index];
+    const ContentPiece* content_piece = trie_search_results[index];
     open_content_pieces.push_back(content_piece);
 }
 
@@ -267,7 +267,7 @@ void dnd::Session::parse_content() {
     ParsingResult parsing_result = parser.parse(content_directory, campaign_name);
     content = std::move(parsing_result.content);
     errors = std::move(parsing_result.errors);
-    search = std::make_unique<TrieContentSearch>(content);
+    trie_search = std::make_unique<TrieContentSearch>(content);
     for (const ParsingError& error : errors.get_parsing_errors()) {
         SourceInfo source_info(error.get_filepath());
         parsing_error_messages.emplace_back(fmt::format(

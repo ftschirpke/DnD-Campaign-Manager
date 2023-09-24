@@ -42,7 +42,7 @@ private:
     void render_content_dir_selection();
     void render_campaign_selection();
     void render_overview_window();
-    void render_search_window();
+    void render_trie_search_window();
     void render_parsing_error_popup();
     void render_content_window();
 
@@ -55,7 +55,8 @@ private:
     ImGui::FileBrowser content_dir_dialog;
 
     std::unordered_map<std::string, std::vector<std::string>> last_session_open_tabs;
-    std::string search_query;
+    std::string trie_search_query;
+    std::array<bool, 9> trie_search_options;
 
     const ContentPiece* forced_next_selection;
 

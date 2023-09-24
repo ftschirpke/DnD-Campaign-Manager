@@ -3,6 +3,7 @@
 #include "trie_content_search.hpp"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <stack>
 #include <string>
@@ -119,28 +120,38 @@ void dnd::TrieContentSearch::remove_character_from_query() {
     assert(choosable_search_path.size() >= 1);
 }
 
-std::vector<const dnd::ContentPiece*> dnd::TrieContentSearch::get_results() const {
+std::vector<const dnd::ContentPiece*> dnd::TrieContentSearch::get_results(const std::array<bool, 9>& options) const {
     DND_MEASURE_FUNCTION();
     std::vector<const ContentPiece*> results;
     results.reserve(500);
 
-    character_search_path.insert_top_successors_into(results);
-    character_class_search_path.insert_top_successors_into(results);
-    character_subclass_search_path.insert_top_successors_into(results);
-    character_race_search_path.insert_top_successors_into(results);
-    character_subrace_search_path.insert_top_successors_into(results);
-    item_search_path.insert_top_successors_into(results);
-    spell_search_path.insert_top_successors_into(results);
-    feature_search_path.insert_top_successors_into(results);
-    choosable_search_path.insert_top_successors_into(results);
+    if (options[0]) {
+        character_search_path.insert_top_successors_into(results);
+    }
+    if (options[1]) {
+        character_race_search_path.insert_top_successors_into(results);
+    }
+    if (options[2]) {
+        character_class_search_path.insert_top_successors_into(results);
+    }
+    if (options[3]) {
+        character_subrace_search_path.insert_top_successors_into(results);
+    }
+    if (options[4]) {
+        character_subclass_search_path.insert_top_successors_into(results);
+    }
+    if (options[5]) {
+        item_search_path.insert_top_successors_into(results);
+    }
+    if (options[6]) {
+        spell_search_path.insert_top_successors_into(results);
+    }
+    if (options[7]) {
+        feature_search_path.insert_top_successors_into(results);
+    }
+    if (options[8]) {
+        choosable_search_path.insert_top_successors_into(results);
+    }
 
-    return results;
-}
-
-std::vector<const dnd::ContentPiece*> dnd::TrieContentSearch::get_sorted_results() const {
-    std::vector<const dnd::ContentPiece*> results = get_results();
-    std::sort(results.begin(), results.end(), [](const ContentPiece* a, const ContentPiece* b) {
-        return a->get_name() < b->get_name();
-    });
     return results;
 }
