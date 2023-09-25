@@ -2,54 +2,31 @@
 
 #include "gui_app.hpp"
 
-#include <filesystem>
-#include <fstream>
-#include <memory>
 #include <string>
-#include <unordered_map>
-#include <unordered_set>
-#include <vector>
 
-#include <fmt/format.h>
 #include <imgui/imgui.h>
-#include <imgui/imgui_internal.h>
-#include <imgui/misc/cpp/imgui_stdlib.h>
-#include <imgui_filebrowser/imfilebrowser.h>
 
 #include <core/content.hpp>
-#include <core/models/content_piece.hpp>
 #include <core/session.hpp>
 #include <core/utils/string_manipulation.hpp>
-#include <gui_app/content_visitors/display_visitor.hpp>
+#include <gui_app/windows/content_selection.hpp>
+#include <gui_app/windows/content_window.hpp>
+#include <gui_app/windows/error_messages_window.hpp>
+#include <gui_app/windows/trie_search_window.hpp>
 
 static const char* const imgui_ini_filename = "imgui.ini";
 
-static const ImGuiFileBrowserFlags content_dir_dialog_options = ImGuiFileBrowserFlags_SelectDirectory;
 static const ImGuiWindowFlags error_popup_options = ImGuiWindowFlags_AlwaysAutoResize;
 
 dnd::GUIApp::GUIApp()
-    : show_demo_window(false), select_campaign(false), session(), content_dir_dialog(content_dir_dialog_options),
-      last_session_open_tabs(), trie_search_query(), trie_search_options(), forced_next_selection(nullptr),
-      display_visitor() {
-    trie_search_options.fill(true);
+    : show_demo_window(false), session(), content_selection(session), content_window(session),
+      error_messages_window(session), trie_search_window(session) {
     ImGui::GetIO().IniFilename = imgui_ini_filename;
 }
 
 void dnd::GUIApp::initialize() {
-    content_dir_dialog.SetTitle("Select content directory");
-    content_dir_dialog.SetWindowSize(1200, 900);
     session.retrieve_last_session_values();
-
-    switch (session.get_status()) {
-        case SessionStatus::CONTENT_DIR_SELECTION:
-            open_content_dir_dialog();
-            break;
-        case SessionStatus::CAMPAIGN_SELECTION:
-            select_campaign = true;
-            break;
-        default:
-            break;
-    }
+    content_selection.initialize();
 }
 
 void dnd::GUIApp::render() {
@@ -61,70 +38,18 @@ void dnd::GUIApp::render() {
     }
     session.update();
 
-    render_content_dir_selection();
-    render_campaign_selection();
     render_overview_window();
+    content_selection.render();
+
     if (!session.get_unknown_error_messages().empty()) {
         render_parsing_error_popup();
     }
 
-    if (!session.get_content().empty()) {
-        render_trie_search_window();
-        render_content_window();
-    }
-}
+    error_messages_window.render();
 
-void dnd::GUIApp::open_content_dir_dialog() {
-    content_dir_dialog.SetPwd(session.get_content_directory().parent_path());
-    content_dir_dialog.Open();
-}
-
-void dnd::GUIApp::render_content_dir_selection() {
-    DND_MEASURE_FUNCTION();
-    content_dir_dialog.Display();
-    if (content_dir_dialog.HasSelected()) {
-        content_dir_dialog.Close();
-        bool valid = session.set_content_directory(content_dir_dialog.GetSelected());
-        if (valid) {
-            select_campaign = session.get_status() == SessionStatus::CAMPAIGN_SELECTION;
-        } else {
-            ImGui::OpenPopup("Invalid content directory");
-        }
-    }
-
-    if (ImGui::BeginPopupModal("Invalid content directory", nullptr, error_popup_options)) {
-        ImGui::Text("Selected directory: %s", content_dir_dialog.GetSelected().string().c_str());
-        if (ImGui::Button("Select other directory")) {
-            ImGui::CloseCurrentPopup();
-            open_content_dir_dialog();
-        }
-        ImGui::EndPopup();
-    }
-}
-
-void dnd::GUIApp::render_campaign_selection() {
-    DND_MEASURE_FUNCTION();
-    if (select_campaign) {
-        ImGui::OpenPopup("Select campaign");
-    }
-    if (ImGui::BeginPopupModal("Select campaign")) {
-        bool close = false;
-        for (const std::string& possible_campaign_name : session.get_possible_campaign_names()) {
-            if (ImGui::Button(possible_campaign_name.c_str())) {
-                close = session.set_campaign_name(possible_campaign_name);
-            }
-        }
-        ImGui::Separator();
-        if (ImGui::Button("Select other directory")) {
-            ImGui::CloseCurrentPopup();
-            close = true;
-            open_content_dir_dialog();
-        }
-        if (close || ImGui::Button("Cancel")) {
-            ImGui::CloseCurrentPopup();
-            select_campaign = false;
-        }
-        ImGui::EndPopup();
+    if (session.get_status() == SessionStatus::READY) {
+        trie_search_window.render();
+        content_window.render();
     }
 }
 
@@ -167,7 +92,7 @@ void dnd::GUIApp::render_overview_window() {
                                                                                   : "Change content directory";
 
     if (ImGui::Button(content_dir_button_text)) {
-        open_content_dir_dialog();
+        content_selection.select_content_directory();
     }
 
     if (!session.get_content_directory().empty()) {
@@ -178,7 +103,7 @@ void dnd::GUIApp::render_overview_window() {
         const char* campaign_button_text = session.get_campaign_name().empty() ? "Select campaign" : "Change campaign";
 
         if (ImGui::Button(campaign_button_text)) {
-            select_campaign = true;
+            content_selection.select_campaign();
         }
     }
 
@@ -205,24 +130,6 @@ void dnd::GUIApp::render_overview_window() {
         default:
             break;
     }
-    {
-        DND_MEASURE_SCOPE("List errors in overview window");
-        ImGui::SeparatorText("Errors");
-        if (ImGui::BeginChild("Error list")) {
-            for (const std::string& message : session.get_unknown_error_messages()) {
-                ImGui::TextWrapped("%s", message.c_str());
-            }
-            ImGui::SeparatorText("Parsing errors");
-            for (const std::string& message : session.get_parsing_error_messages()) {
-                ImGui::TextWrapped("%s", message.c_str());
-            }
-            ImGui::SeparatorText("Validation errors");
-            for (const std::string& message : session.get_validation_error_messages()) {
-                ImGui::TextWrapped("%s", message.c_str());
-            }
-        }
-        ImGui::EndChild();
-    }
     ImGui::End();
 }
 
@@ -237,12 +144,12 @@ void dnd::GUIApp::render_parsing_error_popup() {
         bool close = false;
         if (ImGui::Button("Select other directory")) {
             close = true;
-            open_content_dir_dialog();
+            content_selection.select_content_directory();
         }
         ImGui::SameLine();
         if (ImGui::Button("Select other campaign")) {
             close = true;
-            select_campaign = true;
+            content_selection.select_campaign();
         }
         ImGui::SameLine();
         if (ImGui::Button("Retry")) {
@@ -259,115 +166,4 @@ void dnd::GUIApp::render_parsing_error_popup() {
         }
         ImGui::EndPopup();
     }
-}
-
-static void trie_search_option_line(size_t index, const char* const name, std::array<bool, 9>& options) {
-    const char* only_button_label = fmt::format("Only##{}", index).c_str();
-    if (ImGui::Button(only_button_label)) {
-        options.fill(false);
-        options[index] = true;
-    }
-    ImGui::SameLine();
-    ImGui::Checkbox(name, &options[index]);
-}
-
-void dnd::GUIApp::render_trie_search_window() {
-    DND_MEASURE_FUNCTION();
-    ImGui::Begin("Simple Search");
-
-    bool search_changed = false;
-    if (ImGui::InputText("Search", &trie_search_query, ImGuiInputTextFlags_EscapeClearsAll, nullptr, nullptr)) {
-        search_changed = true;
-    }
-    const std::array<bool, 9> old_trie_search_options = trie_search_options;
-    if (ImGui::TreeNode("Search options")) {
-        if (ImGui::Button("All", ImVec2(200, 0))) {
-            trie_search_options.fill(true);
-        }
-        trie_search_option_line(0, "Characters", trie_search_options);
-        trie_search_option_line(1, "Races", trie_search_options);
-        trie_search_option_line(3, "Subraces", trie_search_options);
-        trie_search_option_line(2, "Classes", trie_search_options);
-        trie_search_option_line(4, "Subclasses", trie_search_options);
-        trie_search_option_line(5, "Items", trie_search_options);
-        trie_search_option_line(6, "Spells", trie_search_options);
-        trie_search_option_line(7, "Features", trie_search_options);
-        trie_search_option_line(8, "Choosables", trie_search_options);
-        ImGui::TreePop();
-    }
-    if (old_trie_search_options != trie_search_options) {
-        search_changed = true;
-    }
-
-    if (search_changed) {
-        session.set_trie_search(trie_search_query, trie_search_options);
-    }
-    ImGui::Separator();
-    if (trie_search_query.empty()) {
-        ImGui::End();
-        return;
-    }
-    size_t search_result_count = session.get_search_result_count();
-    if (search_result_count == 0) {
-        ImGui::Text("No results. Please broaden your search.");
-        ImGui::End();
-        return;
-    }
-    if (session.too_many_search_results()) {
-        ImGui::Text("Too many results (%ld). Please refine your search.", search_result_count);
-        ImGui::End();
-        return;
-    }
-
-    if (ImGui::BeginChild("Search Results", ImVec2(-FLT_MIN, -FLT_MIN))) {
-        std::vector<std::string> search_result_strings = session.get_trie_search_result_strings();
-        for (size_t i = 0; i < search_result_count; ++i) {
-            if (ImGui::Selectable(search_result_strings[i].c_str(), false)) {
-                session.open_trie_search_result(i);
-            }
-        }
-    }
-    ImGui::EndChild();
-
-    ImGui::End();
-}
-
-void dnd::GUIApp::render_content_window() {
-    DND_MEASURE_FUNCTION();
-    ImGui::Begin("Content");
-    ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_AutoSelectNewTabs | ImGuiTabBarFlags_Reorderable;
-    if (ImGui::BeginTabBar("Content Tabs", tab_bar_flags)) {
-        std::deque<const ContentPiece*>& open_content_pieces = session.get_open_content_pieces();
-        for (auto it = open_content_pieces.begin(); it != open_content_pieces.end();) {
-            bool open = true;
-            if (ImGui::BeginTabItem((*it)->get_name().c_str(), &open)) {
-                ImGui::SeparatorText((*it)->get_name().c_str());
-                (*it)->accept(&display_visitor);
-                ImGui::EndTabItem();
-            }
-            if (!open) {
-                it = open_content_pieces.erase(it);
-            } else {
-                ++it;
-            }
-        }
-        if (open_content_pieces.size()) {
-            if (ImGui::TabItemButton(" X ", ImGuiTabItemFlags_Trailing)) {
-                open_content_pieces.clear();
-            }
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Close all tabs");
-            }
-        }
-        if (forced_next_selection != nullptr) {
-            ImGuiTabBar* tab_bar = ImGui::GetCurrentTabBar();
-            ImGuiTabItem* tab_item = ImGui::TabBarFindTabByID(
-                tab_bar, ImGui::GetID(forced_next_selection->get_name().c_str())
-            );
-            ImGui::TabBarQueueFocus(tab_bar, tab_item);
-            forced_next_selection = nullptr;
-        }
-        ImGui::EndTabBar();
-    }
-    ImGui::End();
 }

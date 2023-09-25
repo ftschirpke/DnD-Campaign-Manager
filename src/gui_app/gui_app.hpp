@@ -3,23 +3,11 @@
 
 #include <dnd_config.hpp>
 
-#include <array>
-#include <deque>
-#include <filesystem>
-#include <future>
-#include <memory>
-#include <string>
-#include <unordered_map>
-#include <vector>
-
-#include <imgui/imgui.h>
-#include <imgui_filebrowser/imfilebrowser.h>
-
-#include <core/content.hpp>
-#include <core/models/content_piece.hpp>
-#include <core/searching/trie_search/trie_content_search.hpp>
 #include <core/session.hpp>
-#include <gui_app/content_visitors/display_visitor.hpp>
+#include <gui_app/windows/content_selection.hpp>
+#include <gui_app/windows/content_window.hpp>
+#include <gui_app/windows/error_messages_window.hpp>
+#include <gui_app/windows/trie_search_window.hpp>
 
 namespace dnd {
 
@@ -38,29 +26,17 @@ public:
      */
     void render();
 private:
-    void open_content_dir_dialog();
-    void render_content_dir_selection();
-    void render_campaign_selection();
     void render_overview_window();
-    void render_trie_search_window();
     void render_parsing_error_popup();
-    void render_content_window();
 
     bool show_demo_window;
-    bool select_campaign;
 
     Session session;
 
-    // the file dialog for selecting the content directory
-    ImGui::FileBrowser content_dir_dialog;
-
-    std::unordered_map<std::string, std::vector<std::string>> last_session_open_tabs;
-    std::string trie_search_query;
-    std::array<bool, 9> trie_search_options;
-
-    const ContentPiece* forced_next_selection;
-
-    DisplayVisitor display_visitor;
+    ContentSelection content_selection;
+    ContentWindow content_window;
+    ErrorMessagesWindow error_messages_window;
+    TrieSearchWindow trie_search_window;
 };
 
 } // namespace dnd
