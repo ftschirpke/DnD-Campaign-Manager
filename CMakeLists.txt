@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(DnD-Campaign-Manager
-    DESCRIPTION "A simple tool providing multiple features that are helpful for DMs managing their DnD5e-Campaigns."
+project(
+    DnD-Campaign-Manager
+    DESCRIPTION
+    "A simple tool providing multiple features that are helpful for DMs managing their DnD5e-Campaigns."
     LANGUAGES CXX
     VERSION 0.1.2
 )
