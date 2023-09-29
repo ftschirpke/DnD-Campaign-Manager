@@ -51,8 +51,8 @@ const dnd::StorageContentLibrary<const dnd::Spell>& dnd::Content::get_spells() c
 
 const dnd::ReferencingContentLibrary<const dnd::Feature>& dnd::Content::get_features() const { return features; }
 
-const dnd::StorageContentLibrary<const dnd::ChoosableFeature>& dnd::Content::get_choosable_features() const {
-    return choosable_features;
+const dnd::StorageContentLibrary<const dnd::Choosable>& dnd::Content::get_choosables() const {
+    return choosables;
 }
 
 void dnd::Content::set_subgroup(const std::string& group_name, const std::string& subgroup_name) {
@@ -130,10 +130,10 @@ bool dnd::Content::add_item(dnd::Item&& item) { return items.add(item.get_name()
 
 bool dnd::Content::add_spell(dnd::Spell&& spell) { return spells.add(spell.get_name(), std::move(spell)); }
 
-bool dnd::Content::add_choosable_feature(dnd::ChoosableFeature&& choosable_feature) {
-    const std::string name = choosable_feature.get_name();
-    const std::string type_name = choosable_feature.get_type();
-    if (choosable_features.add(name, std::move(choosable_feature))) {
+bool dnd::Content::add_choosable(dnd::Choosable&& choosable) {
+    const std::string name = choosable.get_name();
+    const std::string type_name = choosable.get_type();
+    if (choosables.add(name, std::move(choosable))) {
         groups.add(type_name, name);
         return true;
     }

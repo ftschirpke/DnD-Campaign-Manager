@@ -314,7 +314,7 @@ static dnd::Errors validate_relations_spell_choice(
     return errors;
 }
 
-static dnd::Errors validate_relations_choosable_feature_choice(
+static dnd::Errors validate_relations_choosable_choice(
     const dnd::ChoiceData& data, const dnd::ValidationData* parent, const dnd::Content& content
 ) {
     dnd::Errors errors;
@@ -322,7 +322,7 @@ static dnd::Errors validate_relations_choosable_feature_choice(
         if (explicit_choice.empty()) {
             continue;
         }
-        if (!content.get_choosable_features().contains(explicit_choice)) {
+        if (!content.get_choosables().contains(explicit_choice)) {
             errors.add_validation_error(
                 dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
                 fmt::format(
@@ -365,8 +365,8 @@ dnd::Errors dnd::ChoiceData::validate_relations(const Content& content) const {
         case ChoiceType::SPELL:
             errors += validate_relations_spell_choice(*this, parent, content);
             break;
-        case ChoiceType::CHOOSABLE_FEATURE:
-            errors += validate_relations_choosable_feature_choice(*this, parent, content);
+        case ChoiceType::CHOOSABLE:
+            errors += validate_relations_choosable_choice(*this, parent, content);
             break;
         default:
             break;

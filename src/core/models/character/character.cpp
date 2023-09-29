@@ -7,7 +7,7 @@
 #include <utility>
 #include <vector>
 
-#include <core/content_visitors/content_visitor.hpp>
+#include <core/visitors/content/content_visitor.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>

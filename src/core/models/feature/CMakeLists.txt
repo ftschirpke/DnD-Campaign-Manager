@@ -1,5 +1,5 @@
 target_sources(${DND_CORE}
     PRIVATE
-    choosable_feature.cpp
+    choosable.cpp
     feature.cpp
 )

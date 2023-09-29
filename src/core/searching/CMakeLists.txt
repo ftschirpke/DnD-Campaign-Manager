@@ -1,1 +1,2 @@
+add_subdirectory(content_filters)
 add_subdirectory(trie_search)

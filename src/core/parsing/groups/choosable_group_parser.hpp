@@ -8,9 +8,9 @@
 #include <vector>
 
 #include <core/errors/errors.hpp>
-#include <core/parsing/feature/choosable_feature_parser.hpp>
+#include <core/parsing/feature/choosable_parser.hpp>
 #include <core/parsing/file_parser.hpp>
-#include <core/validation/feature/choosable_feature_data.hpp>
+#include <core/validation/feature/choosable_data.hpp>
 
 namespace dnd {
 
@@ -39,10 +39,10 @@ public:
      */
     virtual void save_result(Content& content) override;
 protected:
-    ChoosableFeatureParser choosable_feature_parser;
+    ChoosableParser choosable_parser;
     std::string group_name;
-    std::vector<ChoosableFeatureData> data;
-    size_t choosable_features_in_file;
+    std::vector<ChoosableData> data;
+    size_t choosables_in_file;
     mutable std::vector<bool> feature_data_valid;
 };
 

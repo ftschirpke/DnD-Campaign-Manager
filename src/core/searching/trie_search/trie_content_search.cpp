@@ -16,7 +16,7 @@
 #include <core/models/character_subclass/character_subclass.hpp>
 #include <core/models/character_subrace/character_subrace.hpp>
 #include <core/models/content_piece.hpp>
-#include <core/models/feature/choosable_feature.hpp>
+#include <core/models/feature/choosable.hpp>
 #include <core/models/feature/feature.hpp>
 #include <core/models/item/item.hpp>
 #include <core/models/spell/spell.hpp>
@@ -33,7 +33,7 @@ dnd::TrieContentSearch::TrieContentSearch(const Content& content) {
     item_search_path.push(content.get_items().get_trie_root());
     spell_search_path.push(content.get_spells().get_trie_root());
     feature_search_path.push(content.get_features().get_trie_root());
-    choosable_search_path.push(content.get_choosable_features().get_trie_root());
+    choosable_search_path.push(content.get_choosables().get_trie_root());
 }
 
 dnd::TrieContentSearch::TrieContentSearch(const dnd::Content& content, const std::string& initial_query)

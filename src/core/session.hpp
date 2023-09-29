@@ -108,11 +108,11 @@ private:
     std::string campaign_name;
 
     std::unordered_map<std::string, std::vector<std::string>> last_session_open_tabs;
+    std::deque<const ContentPiece*> open_content_pieces;
 
     std::unique_ptr<TrieContentSearch> trie_search;
     std::array<const ContentPiece*, 500> trie_search_results;
     size_t trie_search_result_count;
-    std::deque<const ContentPiece*> open_content_pieces;
     std::array<std::string, 500> trie_search_result_strings;
 
     std::vector<std::string> unknown_error_messages;

@@ -6,8 +6,7 @@ target_sources(${DND_CORE}
 )
 
 add_subdirectory(basic_mechanics)
-add_subdirectory(content_visitors)
-add_subdirectory(content_filters)
+add_subdirectory(visitors)
 add_subdirectory(errors)
 add_subdirectory(exceptions)
 add_subdirectory(models)

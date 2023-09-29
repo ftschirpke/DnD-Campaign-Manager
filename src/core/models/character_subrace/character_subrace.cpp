@@ -8,7 +8,7 @@
 #include <vector>
 
 #include <core/content.hpp>
-#include <core/content_visitors/content_visitor.hpp>
+#include <core/visitors/content/content_visitor.hpp>
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/character_race/character_race.hpp>

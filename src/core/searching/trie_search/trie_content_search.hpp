@@ -15,7 +15,7 @@
 #include <core/models/character_subclass/character_subclass.hpp>
 #include <core/models/character_subrace/character_subrace.hpp>
 #include <core/models/content_piece.hpp>
-#include <core/models/feature/choosable_feature.hpp>
+#include <core/models/feature/choosable.hpp>
 #include <core/models/feature/feature.hpp>
 #include <core/models/item/item.hpp>
 #include <core/models/spell/spell.hpp>
@@ -30,16 +30,16 @@ namespace dnd {
 class TrieContentSearch {
 public:
     /**
-     * @brief Initialize the search with the content holder that should be searched
-     * @param content_holder the content holder to search
+     * @brief Initialize the search with the content that should be searched
+     * @param content the content to search
      */
-    TrieContentSearch(const Content& content_holder);
+    TrieContentSearch(const Content& content);
     /**
-     * @brief Initialize the search with the content holder that should be searched and an initial query
-     * @param content_holder the content holder to search
+     * @brief Initialize the search with the content that should be searched and an initial query
+     * @param content the content to search
      * @param initial_query the initial search query
      */
-    TrieContentSearch(const Content& content_holder, const std::string& initial_query);
+    TrieContentSearch(const Content& content, const std::string& initial_query);
     /**
      * @brief Set the search query
      * @param query the search query
@@ -73,7 +73,7 @@ private:
     TrieSearchPath<const Item> item_search_path;
     TrieSearchPath<const Spell> spell_search_path;
     TrieSearchPath<const Feature> feature_search_path;
-    TrieSearchPath<const ChoosableFeature> choosable_search_path;
+    TrieSearchPath<const Choosable> choosable_search_path;
 };
 
 
