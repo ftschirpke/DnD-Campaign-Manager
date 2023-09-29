@@ -5,9 +5,9 @@
 
 #include <set>
 
-#include <core/searching/content_filters/content_piece_filter.hpp>
 #include <core/models/spell/spell_components.hpp>
 #include <core/models/spell/spell_type.hpp>
+#include <core/searching/content_filters/content_piece_filter.hpp>
 
 namespace dnd {
 

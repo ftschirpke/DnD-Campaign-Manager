@@ -4,9 +4,9 @@
 
 #include <set>
 
-#include <core/searching/content_filters/content_piece_filter.hpp>
 #include <core/models/spell/spell.hpp>
 #include <core/models/spell/spell_components.hpp>
+#include <core/searching/content_filters/content_piece_filter.hpp>
 
 dnd::SpellFilter::SpellFilter() noexcept
     : ContentPieceFilter(), verbal_component_filter_type(BoolFilterType::NONE),

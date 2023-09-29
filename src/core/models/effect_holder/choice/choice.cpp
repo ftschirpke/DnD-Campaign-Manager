@@ -12,13 +12,13 @@
 #include <core/basic_mechanics/abilities.hpp>
 #include <core/basic_mechanics/skills.hpp>
 #include <core/content.hpp>
-#include <core/searching/content_filters/content_filter.hpp>
-#include <core/searching/content_filters/spell/spell_filter.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/effect_holder/choice/choice_rules.hpp>
 #include <core/models/spell/spell_type.hpp>
+#include <core/searching/content_filters/content_filter.hpp>
+#include <core/searching/content_filters/spell/spell_filter.hpp>
 #include <core/validation/effect_holder/choice/choice_data.hpp>
 
 

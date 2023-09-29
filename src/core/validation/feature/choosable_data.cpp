@@ -11,9 +11,7 @@
 
 dnd::ChoosableData::ChoosableData() noexcept : FeatureData(this) {}
 
-std::unique_ptr<dnd::ValidationData> dnd::ChoosableData::pack() const {
-    return std::make_unique<ChoosableData>(*this);
-}
+std::unique_ptr<dnd::ValidationData> dnd::ChoosableData::pack() const { return std::make_unique<ChoosableData>(*this); }
 
 dnd::Errors dnd::ChoosableData::validate() const {
     Errors errors = FeatureData::validate();

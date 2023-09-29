@@ -7,12 +7,12 @@
 #include <string>
 #include <utility>
 
-#include <core/visitors/content/content_visitor.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/models/spell/spell_components.hpp>
 #include <core/models/spell/spell_type.hpp>
 #include <core/validation/spell/spell_data.hpp>
+#include <core/visitors/content/content_visitor.hpp>
 
 dnd::Spell dnd::Spell::create(dnd::SpellData&& spell_data) {
     if (!spell_data.validate().ok()) {

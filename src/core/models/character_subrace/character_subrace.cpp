@@ -8,11 +8,11 @@
 #include <vector>
 
 #include <core/content.hpp>
-#include <core/visitors/content/content_visitor.hpp>
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/character_race/character_race.hpp>
 #include <core/validation/character_subrace/character_subrace_data.hpp>
+#include <core/visitors/content/content_visitor.hpp>
 
 dnd::CharacterSubrace dnd::CharacterSubrace::create(dnd::CharacterSubraceData&& data, const dnd::Content& content) {
     if (!data.validate().ok()) {

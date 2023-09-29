@@ -3,7 +3,6 @@
 
 #include <dnd_config.hpp>
 
-#include <core/visitors/content/content_visitor.hpp>
 #include <core/models/character/character.hpp>
 #include <core/models/character_class/character_class.hpp>
 #include <core/models/character_race/character_race.hpp>
@@ -14,6 +13,7 @@
 #include <core/models/item/item.hpp>
 #include <core/models/spell/spell.hpp>
 #include <core/output/string_formatting/string_formatter.hpp>
+#include <core/visitors/content/content_visitor.hpp>
 #include <gui/string_formatting/display_format_visitor.hpp>
 
 namespace dnd {

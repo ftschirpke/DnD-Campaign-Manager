@@ -14,7 +14,6 @@
 #include <core/basic_mechanics/dice.hpp>
 #include <core/basic_mechanics/dice_factory.hpp>
 #include <core/content.hpp>
-#include <core/visitors/content/content_visitor.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
@@ -26,6 +25,7 @@
 #include <core/validation/effect_holder/condition/condition_data.hpp>
 #include <core/validation/effect_holder/effect_holder_data.hpp>
 #include <core/validation/feature/feature_data.hpp>
+#include <core/visitors/content/content_visitor.hpp>
 
 static constexpr const char* level_activation_regex_cstr = "CLASS_LEVEL >= [123456789]\\d?";
 

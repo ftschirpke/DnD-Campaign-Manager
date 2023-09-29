@@ -7,11 +7,11 @@
 #include <utility>
 #include <vector>
 
-#include <core/visitors/content/content_visitor.hpp>
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/models/effect_holder/effect_holder.hpp>
+#include <core/visitors/content/content_visitor.hpp>
 
 dnd::Feature dnd::Feature::create(dnd::FeatureData&& data, const dnd::Content& content) {
     if (!data.validate().ok()) {

@@ -51,9 +51,7 @@ const dnd::StorageContentLibrary<const dnd::Spell>& dnd::Content::get_spells() c
 
 const dnd::ReferencingContentLibrary<const dnd::Feature>& dnd::Content::get_features() const { return features; }
 
-const dnd::StorageContentLibrary<const dnd::Choosable>& dnd::Content::get_choosables() const {
-    return choosables;
-}
+const dnd::StorageContentLibrary<const dnd::Choosable>& dnd::Content::get_choosables() const { return choosables; }
 
 void dnd::Content::set_subgroup(const std::string& group_name, const std::string& subgroup_name) {
     groups.set_subgroup(group_name, subgroup_name);

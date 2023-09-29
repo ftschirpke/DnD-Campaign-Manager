@@ -6,13 +6,13 @@
 #include <vector>
 
 #include <core/content.hpp>
-#include <core/visitors/content/content_visitor.hpp>
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/effect_holder/condition/condition.hpp>
 #include <core/models/effect_holder/condition/condition_factory.hpp>
 #include <core/models/feature/feature.hpp>
 #include <core/validation/feature/choosable_data.hpp>
+#include <core/visitors/content/content_visitor.hpp>
 
 dnd::Choosable dnd::Choosable::create(dnd::ChoosableData&& data, const dnd::Content& content) {
     if (!data.validate().ok()) {

@@ -10,7 +10,6 @@
 #include <imgui/imgui.h>
 
 #include <core/basic_mechanics/dice.hpp>
-#include <core/visitors/content/content_visitor.hpp>
 #include <core/models/character/character.hpp>
 #include <core/models/character_class/character_class.hpp>
 #include <core/models/character_race/character_race.hpp>
@@ -24,6 +23,7 @@
 #include <core/models/spell/spell.hpp>
 #include <core/output/string_formatting/formats/format.hpp>
 #include <core/output/string_formatting/string_formatter.hpp>
+#include <core/visitors/content/content_visitor.hpp>
 
 static const ImVec2 cell_padding = ImVec2(5, 5);
 static const ImGuiTableFlags content_table_flags = ImGuiTableFlags_NoBordersInBodyUntilResize;

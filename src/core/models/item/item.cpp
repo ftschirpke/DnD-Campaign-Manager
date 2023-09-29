@@ -6,10 +6,10 @@
 #include <string>
 #include <utility>
 
-#include <core/visitors/content/content_visitor.hpp>
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/content_piece.hpp>
+#include <core/visitors/content/content_visitor.hpp>
 
 dnd::Item dnd::Item::create(ItemData&& item_data) {
     if (!item_data.validate().ok()) {
