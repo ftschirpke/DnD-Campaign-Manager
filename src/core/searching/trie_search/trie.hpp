@@ -4,112 +4,14 @@
 #include <dnd_config.hpp>
 
 #include <cassert>
-#include <map>
 #include <memory>
-#include <ranges>
-#include <stack>
-#include <string>
+#include <string_view>
 #include <unordered_set>
 #include <vector>
 
+#include <core/searching/trie_search/trie_node.hpp>
+
 namespace dnd {
-
-/**
- * @brief A node of a trie data structure that stores a character and a map to its children
- * @tparam T the type of data associated with the end of a word
- */
-template <typename T>
-class TrieNode {
-public:
-    /**
-     * @brief Get the children of this node
-     * @return the map of children
-     */
-    const std::map<char, std::unique_ptr<TrieNode<T>>>& get_children() const;
-    /**
-     * @brief Get the child node for the given character if it exists
-     * @param c the character to get the child node for
-     * @return pointer to child node if it exists, else nullptr
-     */
-    TrieNode<T>* get_child(char c) const;
-    /**
-     * @brief Get the data associated with the end of a word
-     * @return the data
-     */
-    const std::vector<T*>& get_end_words() const;
-    /**
-     * @brief Create an empty child node for the given character
-     * @param c the given character
-     * @return a pointer to the created node
-     */
-    TrieNode<T>* create_child(char c);
-    /**
-     * @brief Add a piece of data associated with the end of a word
-     * @param end_word the data
-     */
-    void add_end_word(T* end_word);
-    /**
-     * @brief Return a set of all successors of the node (including the node itself)
-     * @return a set of pointers to all the successor nodes
-     */
-    std::unordered_set<T*> successors() const;
-private:
-    // the children of this node in the trie
-    std::map<char, std::unique_ptr<TrieNode<T>>> children;
-    // a pointer to the data associated with the end of a word
-    std::vector<T*> end_words;
-};
-
-template <typename T>
-const std::map<char, std::unique_ptr<TrieNode<T>>>& TrieNode<T>::get_children() const {
-    return children;
-}
-
-template <typename T>
-TrieNode<T>* TrieNode<T>::get_child(char c) const {
-    if (children.contains(c)) {
-        return children.at(c).get();
-    }
-    return nullptr;
-}
-
-template <typename T>
-const std::vector<T*>& TrieNode<T>::get_end_words() const {
-    return end_words;
-}
-
-template <typename T>
-TrieNode<T>* TrieNode<T>::create_child(char c) {
-    children[c] = std::make_unique<TrieNode<T>>();
-    return children.at(c).get();
-}
-
-template <typename T>
-void TrieNode<T>::add_end_word(T* end_word) {
-    end_words.push_back(end_word);
-}
-
-template <typename T>
-std::unordered_set<T*> TrieNode<T>::successors() const {
-    std::unordered_set<T*> successors;
-    std::stack<const TrieNode<T>*> node_stack;
-    node_stack.push(this);
-
-    while (!node_stack.empty()) {
-        const TrieNode<T>* current_node = node_stack.top();
-        assert(current_node != nullptr);
-        node_stack.pop();
-
-        const std::vector<T*>& current_end_words = current_node->get_end_words();
-        if (!current_end_words.empty()) {
-            successors.insert(current_end_words.begin(), current_end_words.end());
-        }
-        for (auto it = current_node->get_children().crbegin(); it != current_node->get_children().crend(); ++it) {
-            node_stack.push(it->second.get());
-        }
-    }
-    return successors;
-}
 
 /**
  * @brief A trie data structure that stores strings and associated data
@@ -124,25 +26,25 @@ public:
     Trie();
     /**
      * @brief Inserts a word into the trie with the given data (by reference).
-     * @param word the string to insert
+     * @param word the string to insert (as string_view)
      * @param data the data to associate with the end of the word
      */
     void insert(std::string_view word, T& data);
     /**
      * @brief Inserts a word into the trie with the given data (as a pointer).
-     * @param word the string to insert
+     * @param word the string to insert (as string_view)
      * @param data the data to associate with the end of the word
      */
     void insert(std::string_view word, T* data);
     /**
      * @brief Searches the trie for a word and returns the associated data if it exists.
-     * @param word the string to search for
+     * @param word the string to search for (as string_view)
      * @return a pointer to the associated data if the word exists in the trie, else nullptr
      */
     std::vector<T*> search(std::string_view word) const;
     /**
      * @brief Searches the trie for all words with the given prefix and returns the associated data in order
-     * @param prefix the prefix to search for
+     * @param prefix the prefix string to search for (as string_view)
      * @return a set of pointers to the associated data of all words with the given prefix
      */
     std::unordered_set<T*> search_prefix(std::string_view prefix) const;

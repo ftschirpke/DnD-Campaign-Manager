@@ -3,6 +3,12 @@
 
 #include <dnd_config.hpp>
 
+#include <stack>
+#include <unordered_set>
+#include <vector>
+
+#include <core/searching/trie_search/trie_node.hpp>
+
 namespace dnd {
 
 template <typename T>
