@@ -43,7 +43,7 @@ const dnd::EffectHolder& dnd::Feature::get_main_part() const noexcept { return m
 
 const std::vector<dnd::EffectHolder>& dnd::Feature::get_other_parts() const noexcept { return other_parts; }
 
-void dnd::Feature::accept(dnd::ContentVisitor* visitor) const { visitor->visit(this); }
+void dnd::Feature::accept(dnd::ContentVisitor& visitor) const { visitor.visit(*this); }
 
 dnd::Feature::Feature(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, EffectHolder&& main_part,

@@ -53,7 +53,7 @@ const std::vector<std::unique_ptr<dnd::Condition>>& dnd::Choosable::get_prerequi
     return prerequisites;
 }
 
-void dnd::Choosable::accept(dnd::ContentVisitor* visitor) const { visitor->visit(this); }
+void dnd::Choosable::accept(dnd::ContentVisitor& visitor) const { visitor.visit(*this); }
 
 dnd::Choosable::Choosable(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& type,

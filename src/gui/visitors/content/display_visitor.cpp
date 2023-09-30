@@ -2,6 +2,7 @@
 
 #include "display_visitor.hpp"
 
+#include <cassert>
 #include <memory>
 #include <sstream>
 #include <string>
@@ -43,15 +44,15 @@ static void wrapped_label(const char* label) {
     ImGui::TableSetColumnIndex(1);
 }
 
-static void source(const dnd::ContentPiece* content_piece_ptr) {
+static void source(const dnd::ContentPiece& content_piece) {
     ImGui::TableNextRow();
     ImGui::TableSetColumnIndex(0);
     ImGui::Text("Source:");
     ImGui::TableSetColumnIndex(1);
     ImGui::TextWrapped(
-        "%s / %s / %s", content_piece_ptr->get_source_info().get_source_group_name().c_str(),
-        content_piece_ptr->get_source_info().get_source_type_name().c_str(),
-        content_piece_ptr->get_source_info().get_source_name().c_str()
+        "%s / %s / %s", content_piece.get_source_info().get_source_group_name().c_str(),
+        content_piece.get_source_info().get_source_type_name().c_str(),
+        content_piece.get_source_info().get_source_name().c_str()
     );
     ImGui::TableNextRow();
     ImGui::TableSetColumnIndex(0);
@@ -60,8 +61,8 @@ static void source(const dnd::ContentPiece* content_piece_ptr) {
     ImGui::Separator();
 }
 
-static void begin_content_table(const dnd::ContentPiece* content_piece_ptr) {
-    std::string table_id = content_piece_ptr->get_name() + "_table";
+static void begin_content_table(const dnd::ContentPiece& content_piece) {
+    std::string table_id = content_piece.get_name() + "_table";
     ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, cell_padding);
     ImGui::BeginTable(table_id.c_str(), 2, content_table_flags);
     ImGui::TableSetupColumn("Labels", ImGuiTableColumnFlags_WidthFixed, first_column_width);
@@ -73,61 +74,67 @@ static void end_content_table() {
     ImGui::PopStyleVar();
 }
 
-void dnd::DisplayVisitor::visit(const Character* character_ptr) {
-    begin_content_table(character_ptr);
+void dnd::DisplayVisitor::visit(const Character& character) {
+    begin_content_table(character);
 
     label("Type:");
     ImGui::Text("Character");
-    source(character_ptr);
+    source(character);
     label("Level:");
-    ImGui::Text("%d", character_ptr->get_progression().get_level());
+    ImGui::Text("%d", character.get_progression().get_level());
     label("XP:");
-    ImGui::Text("%d", character_ptr->get_progression().get_xp());
+    ImGui::Text("%d", character.get_progression().get_xp());
 
     // TODO: display stats (again)
 
     label("Race:");
-    if (ImGui::CollapsingHeader(character_ptr->get_basis().get_race()->get_name().c_str())) {
-        visit(character_ptr->get_basis().get_race());
+    const CharacterRace* race_ptr = character.get_basis().get_race();
+    assert(race_ptr != nullptr);
+    if (ImGui::CollapsingHeader(race_ptr->get_name().c_str())) {
+        visit(*race_ptr);
     }
 
-    if (character_ptr->get_basis().get_subrace() != nullptr) {
+    const CharacterSubrace* const subrace_ptr = character.get_basis().get_subrace();
+    if (subrace_ptr != nullptr) {
         label("Subrace:");
-        if (ImGui::CollapsingHeader(character_ptr->get_basis().get_subrace()->get_name().c_str())) {
-            visit(character_ptr->get_basis().get_subrace());
+        if (ImGui::CollapsingHeader(character.get_basis().get_subrace()->get_name().c_str())) {
+            visit(*subrace_ptr);
         }
     }
 
     label("Class:");
-    if (ImGui::CollapsingHeader(character_ptr->get_basis().get_class()->get_name().c_str())) {
-        visit(character_ptr->get_basis().get_class());
+    const CharacterClass* const class_ptr = character.get_basis().get_class();
+    assert(class_ptr != nullptr);
+    if (ImGui::CollapsingHeader(class_ptr->get_name().c_str())) {
+        visit(*class_ptr);
     }
 
-    if (character_ptr->get_basis().get_subclass() != nullptr) {
+    const CharacterSubclass* const subclass_ptr = character.get_basis().get_subclass();
+    if (subclass_ptr != nullptr) {
         label("Subclass:");
-        if (ImGui::CollapsingHeader(character_ptr->get_basis().get_subclass()->get_name().c_str())) {
-            visit(character_ptr->get_basis().get_subclass());
+        if (ImGui::CollapsingHeader(character.get_basis().get_subclass()->get_name().c_str())) {
+            visit(*subclass_ptr);
         }
     }
 
     label("Features:");
-    list_features(character_ptr);
+    list_features(character);
 
     end_content_table();
 }
 
-void dnd::DisplayVisitor::visit(const CharacterClass* character_class_ptr) {
-    begin_content_table(character_class_ptr);
+void dnd::DisplayVisitor::visit(const CharacterClass& character_class) {
+    begin_content_table(character_class);
 
     label("Type:");
     ImGui::Text("Class");
-    source(character_class_ptr);
+    source(character_class);
     label("Hit Die:");
-    ImGui::Text("%s", dice_to_string(character_class_ptr->get_hit_dice()).c_str());
+    ImGui::Text("%s", dice_to_string(character_class.get_hit_dice()).c_str());
     label("Feat Levels:");
     std::stringstream feat_sstr;
     bool first = true;
-    for (auto feat_level : character_class_ptr->get_important_levels().get_feat_levels()) {
+    for (auto feat_level : character_class.get_important_levels().get_feat_levels()) {
         if (first) {
             first = false;
         } else {
@@ -137,118 +144,118 @@ void dnd::DisplayVisitor::visit(const CharacterClass* character_class_ptr) {
     }
     ImGui::Text("%s", feat_sstr.str().c_str());
     label("Subclass Level:");
-    ImGui::Text("%d", character_class_ptr->get_important_levels().get_subclass_level());
+    ImGui::Text("%d", character_class.get_important_levels().get_subclass_level());
     label("Features:");
-    list_features(character_class_ptr);
+    list_features(character_class);
 
     end_content_table();
 }
 
-void dnd::DisplayVisitor::visit(const CharacterSubclass* character_subclass_ptr) {
-    begin_content_table(character_subclass_ptr);
+void dnd::DisplayVisitor::visit(const CharacterSubclass& character_subclass) {
+    begin_content_table(character_subclass);
 
     label("Type:");
     ImGui::Text("Subclass");
-    source(character_subclass_ptr);
+    source(character_subclass);
     label("Class name:");
-    ImGui::Text("%s", character_subclass_ptr->get_class()->get_name().c_str());
+    ImGui::Text("%s", character_subclass.get_class()->get_name().c_str());
     label("Features:");
-    list_features(character_subclass_ptr);
+    list_features(character_subclass);
 
     end_content_table();
 }
 
-void dnd::DisplayVisitor::visit(const CharacterRace* character_race_ptr) {
-    begin_content_table(character_race_ptr);
+void dnd::DisplayVisitor::visit(const CharacterRace& character_race) {
+    begin_content_table(character_race);
 
     label("Type:");
     ImGui::Text("Race");
-    source(character_race_ptr);
-    const char* has_subraces_cstr = character_race_ptr->has_subraces() ? "yes" : "no";
+    source(character_race);
+    const char* has_subraces_cstr = character_race.has_subraces() ? "yes" : "no";
     label("Has Subraces:");
     ImGui::Text("%s", has_subraces_cstr);
     label("Features:");
-    list_features(character_race_ptr);
+    list_features(character_race);
 
     end_content_table();
 }
 
-void dnd::DisplayVisitor::visit(const CharacterSubrace* character_subrace_ptr) {
-    begin_content_table(character_subrace_ptr);
+void dnd::DisplayVisitor::visit(const CharacterSubrace& character_subrace) {
+    begin_content_table(character_subrace);
 
     label("Type:");
     ImGui::Text("Subrace");
-    source(character_subrace_ptr);
+    source(character_subrace);
     label("Race name:");
-    ImGui::Text("%s", character_subrace_ptr->get_race()->get_name().c_str());
+    ImGui::Text("%s", character_subrace.get_race()->get_name().c_str());
     label("Features:");
-    list_features(character_subrace_ptr);
+    list_features(character_subrace);
 
     end_content_table();
 }
 
-void dnd::DisplayVisitor::visit(const Item* item_ptr) {
-    begin_content_table(item_ptr);
+void dnd::DisplayVisitor::visit(const Item& item) {
+    begin_content_table(item);
 
     label("Type:");
     ImGui::Text("Item");
-    source(item_ptr);
+    source(item);
     label("Attunement");
-    const char* attunement = item_ptr->requires_attunement() ? "required" : "not required";
+    const char* attunement = item.requires_attunement() ? "required" : "not required";
     ImGui::Text("%s", attunement);
     label("Description:");
-    display_formatted_text(item_ptr->get_description());
-    if (!item_ptr->get_cosmetic_description().empty()) {
+    display_formatted_text(item.get_description());
+    if (!item.get_cosmetic_description().empty()) {
         wrapped_label("Cosmetic Description:");
-        display_formatted_text(item_ptr->get_cosmetic_description());
+        display_formatted_text(item.get_cosmetic_description());
     }
 
     end_content_table();
 }
 
-void dnd::DisplayVisitor::visit(const Spell* spell_ptr) {
-    begin_content_table(spell_ptr);
+void dnd::DisplayVisitor::visit(const Spell& spell) {
+    begin_content_table(spell);
 
     label("Type:");
     ImGui::Text("Spell");
-    source(spell_ptr);
+    source(spell);
     label("Spell Type:");
-    ImGui::Text("%s", spell_ptr->get_type().str().c_str());
+    ImGui::Text("%s", spell.get_type().str().c_str());
     label("Casting Time:");
-    ImGui::Text("%s", spell_ptr->get_casting_time().c_str());
+    ImGui::Text("%s", spell.get_casting_time().c_str());
     label("Range:");
-    ImGui::Text("%s", spell_ptr->get_range().c_str());
+    ImGui::Text("%s", spell.get_range().c_str());
     label("Components:");
-    ImGui::TextWrapped("%s", spell_ptr->get_components().str().c_str());
+    ImGui::TextWrapped("%s", spell.get_components().str().c_str());
     label("Duration:");
-    ImGui::Text("%s", spell_ptr->get_duration().c_str());
+    ImGui::Text("%s", spell.get_duration().c_str());
 
     label("Description:");
-    display_formatted_text(spell_ptr->get_description());
+    display_formatted_text(spell.get_description());
 
     end_content_table();
 }
 
-void dnd::DisplayVisitor::visit(const Feature* feature_ptr) {
-    begin_content_table(feature_ptr);
+void dnd::DisplayVisitor::visit(const Feature& feature) {
+    begin_content_table(feature);
 
     label("Type:");
     ImGui::Text("Feature");
-    source(feature_ptr);
+    source(feature);
     label("Description:");
-    display_formatted_text(feature_ptr->get_description());
+    display_formatted_text(feature.get_description());
 
     end_content_table();
 }
 
-void dnd::DisplayVisitor::visit(const Choosable* choosable_ptr) {
-    begin_content_table(choosable_ptr);
+void dnd::DisplayVisitor::visit(const Choosable& choosable) {
+    begin_content_table(choosable);
 
     label("Type:");
-    ImGui::Text("Choosable Feature - %s", choosable_ptr->get_type().c_str());
-    source(choosable_ptr);
+    ImGui::Text("Choosable Feature - %s", choosable.get_type().c_str());
+    source(choosable);
     label("Description:");
-    display_formatted_text(choosable_ptr->get_description());
+    display_formatted_text(choosable.get_description());
 
     end_content_table();
 }
@@ -260,16 +267,16 @@ void dnd::DisplayVisitor::display_formatted_text(const std::string& formatted_te
     }
 }
 
-void dnd::DisplayVisitor::list_features(const dnd::FeatureHolder* feature_holder_ptr) {
-    if (feature_holder_ptr->get_features().empty()) {
+void dnd::DisplayVisitor::list_features(const FeatureHolder& feature_holder) {
+    if (feature_holder.get_features().empty()) {
         ImGui::Text("None");
         return;
     }
-    for (const dnd::Feature& feature : feature_holder_ptr->get_features()) {
+    for (const Feature& feature : feature_holder.get_features()) {
         ImGui::Separator();
         if (ImGui::TreeNode(feature.get_name().c_str())) {
             ImGui::Separator();
-            visit(&feature);
+            visit(feature);
             ImGui::TreePop();
         }
     }

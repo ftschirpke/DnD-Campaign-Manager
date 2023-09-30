@@ -33,7 +33,7 @@ dnd::CharacterRace dnd::CharacterRace::create(dnd::CharacterRaceData&& data, con
 
 bool dnd::CharacterRace::has_subraces() const noexcept { return subraces; }
 
-void dnd::CharacterRace::accept(dnd::ContentVisitor* visitor) const { visitor->visit(this); }
+void dnd::CharacterRace::accept(dnd::ContentVisitor& visitor) const { visitor.visit(*this); }
 
 dnd::CharacterRace::CharacterRace(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::vector<Feature>&& features,

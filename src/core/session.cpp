@@ -80,7 +80,7 @@ std::vector<std::string> dnd::Session::get_trie_search_result_strings() const {
         return {};
     }
     for (size_t i = 0; i < trie_search_result_count; ++i) {
-        trie_search_results[i]->accept(&list_content_visitor);
+        trie_search_results[i]->accept(list_content_visitor);
     }
     return list_content_visitor.get_list();
 }
@@ -125,7 +125,7 @@ void dnd::Session::save_session_values() {
 
     CollectOpenTabsVisitor collect_open_tabs_visitor;
     for (const auto open_content_piece : open_content_pieces) {
-        open_content_piece->accept(&collect_open_tabs_visitor);
+        open_content_piece->accept(collect_open_tabs_visitor);
     }
     last_session["open_tabs"] = collect_open_tabs_visitor.get_open_tabs();
 

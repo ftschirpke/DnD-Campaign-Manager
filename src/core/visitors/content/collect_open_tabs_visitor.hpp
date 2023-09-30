@@ -28,15 +28,15 @@ public:
      * @return the json object
      */
     nlohmann::json get_open_tabs();
-    virtual void visit(const Character* character_ptr) override;
-    virtual void visit(const CharacterClass* character_class_ptr) override;
-    virtual void visit(const CharacterSubclass* character_subclass_ptr) override;
-    virtual void visit(const CharacterRace* character_race_ptr) override;
-    virtual void visit(const CharacterSubrace* character_subrace_ptr) override;
-    virtual void visit(const Item* item_ptr) override;
-    virtual void visit(const Spell* spell_ptr) override;
-    virtual void visit(const Feature* feature_ptr) override;
-    virtual void visit(const Choosable* choosable_ptr) override;
+    virtual void visit(const Character& character) override;
+    virtual void visit(const CharacterClass& character_class) override;
+    virtual void visit(const CharacterSubclass& character_subclass) override;
+    virtual void visit(const CharacterRace& character_race) override;
+    virtual void visit(const CharacterSubrace& character_subrace) override;
+    virtual void visit(const Item& item) override;
+    virtual void visit(const Spell& spell) override;
+    virtual void visit(const Feature& feature) override;
+    virtual void visit(const Choosable& choosable) override;
 private:
     nlohmann::json open_tabs_json;
 };
