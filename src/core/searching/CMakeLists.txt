@@ -1,2 +1,3 @@
+add_subdirectory(advanced_search)
 add_subdirectory(content_filters)
 add_subdirectory(fuzzy_search)
