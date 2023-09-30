@@ -9,12 +9,12 @@
 #include <vector>
 
 #include <core/content.hpp>
-#include <core/content_visitors/content_visitor.hpp>
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/character_class/spellcasting/spellcasting_factory.hpp>
 #include <core/models/character_race/character_race.hpp>
 #include <core/validation/character_subclass/character_subclass_data.hpp>
+#include <core/visitors/content/content_visitor.hpp>
 
 dnd::CharacterSubclass dnd::CharacterSubclass::create(dnd::CharacterSubclassData&& data, const dnd::Content& content) {
     if (!data.validate().ok()) {
@@ -39,7 +39,7 @@ bool dnd::CharacterSubclass::has_spellcasting() const noexcept { return spellcas
 
 const dnd::CharacterClass* dnd::CharacterSubclass::get_class() const noexcept { return cls; }
 
-void dnd::CharacterSubclass::accept(dnd::ContentVisitor* visitor) const { visitor->visit(this); }
+void dnd::CharacterSubclass::accept(dnd::ContentVisitor& visitor) const { visitor.visit(*this); }
 
 dnd::CharacterSubclass::CharacterSubclass(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::vector<Feature>&& features,

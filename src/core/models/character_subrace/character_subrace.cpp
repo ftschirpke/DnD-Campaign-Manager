@@ -8,11 +8,11 @@
 #include <vector>
 
 #include <core/content.hpp>
-#include <core/content_visitors/content_visitor.hpp>
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/character_race/character_race.hpp>
 #include <core/validation/character_subrace/character_subrace_data.hpp>
+#include <core/visitors/content/content_visitor.hpp>
 
 dnd::CharacterSubrace dnd::CharacterSubrace::create(dnd::CharacterSubraceData&& data, const dnd::Content& content) {
     if (!data.validate().ok()) {
@@ -34,7 +34,7 @@ dnd::CharacterSubrace dnd::CharacterSubrace::create(dnd::CharacterSubraceData&& 
 
 const dnd::CharacterRace* dnd::CharacterSubrace::get_race() const noexcept { return race; }
 
-void dnd::CharacterSubrace::accept(dnd::ContentVisitor* visitor) const { visitor->visit(this); }
+void dnd::CharacterSubrace::accept(dnd::ContentVisitor& visitor) const { visitor.visit(*this); }
 
 dnd::CharacterSubrace::CharacterSubrace(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::vector<Feature>&& features,

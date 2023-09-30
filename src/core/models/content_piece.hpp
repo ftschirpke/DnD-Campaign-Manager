@@ -21,9 +21,9 @@ public:
     virtual ~ContentPiece() = default;
     /**
      * @brief Accepts a visitor
-     * @param visitor pointer to the visitor
+     * @param visitor reference to the visitor
      */
-    virtual void accept(ContentVisitor* visitor) const = 0;
+    virtual void accept(ContentVisitor& visitor) const = 0;
     /**
      * @brief Returns the name of the content piece
      * @return name of the content piece

@@ -1,6 +1,9 @@
+.cache/*
+
 # IDE specific ignores
 .vs/*
 .vscode/*
+.cache/*
 CMakeSettings.json
 
 # output specific ignores

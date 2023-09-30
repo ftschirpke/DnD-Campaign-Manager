@@ -6,10 +6,10 @@
 #include <string>
 #include <utility>
 
-#include <core/content_visitors/content_visitor.hpp>
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/content_piece.hpp>
+#include <core/visitors/content/content_visitor.hpp>
 
 dnd::Item dnd::Item::create(ItemData&& item_data) {
     if (!item_data.validate().ok()) {
@@ -25,7 +25,7 @@ const std::string& dnd::Item::get_cosmetic_description() const noexcept { return
 
 bool dnd::Item::requires_attunement() const noexcept { return attunement; }
 
-void dnd::Item::accept(ContentVisitor* visitor) const { visitor->visit(this); }
+void dnd::Item::accept(ContentVisitor& visitor) const { visitor.visit(*this); }
 
 dnd::Item::Item(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path,

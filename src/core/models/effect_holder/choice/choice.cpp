@@ -12,13 +12,13 @@
 #include <core/basic_mechanics/abilities.hpp>
 #include <core/basic_mechanics/skills.hpp>
 #include <core/content.hpp>
-#include <core/content_filters/content_filter.hpp>
-#include <core/content_filters/spell/spell_filter.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/effect_holder/choice/choice_rules.hpp>
 #include <core/models/spell/spell_type.hpp>
+#include <core/searching/content_filters/content_filter.hpp>
+#include <core/searching/content_filters/spell/spell_filter.hpp>
 #include <core/validation/effect_holder/choice/choice_data.hpp>
 
 
@@ -126,7 +126,7 @@ dnd::Choice dnd::Choice::create(dnd::ChoiceData&& data, const dnd::Content& cont
         case ChoiceType::SPELL:
             filters = spell_filters(data);
             break;
-        case ChoiceType::CHOOSABLE_FEATURE:
+        case ChoiceType::CHOOSABLE:
             break;
         default:
             throw invalid_data("Cannot create choice from invalid data.");
@@ -178,9 +178,9 @@ std::set<std::string> dnd::Choice::possible_values(const dnd::Content& content) 
                 possible_values.emplace(spell.get_name());
             };
             break;
-        case ChoiceType::CHOOSABLE_FEATURE:
-            for (const auto& [_, choosable_feature] : content.get_choosable_features().get_all()) {
-                possible_values.emplace(choosable_feature.get_name());
+        case ChoiceType::CHOOSABLE:
+            for (const auto& [_, choosable] : content.get_choosables().get_all()) {
+                possible_values.emplace(choosable.get_name());
             };
             break;
         default:

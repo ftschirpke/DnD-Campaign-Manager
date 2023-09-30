@@ -7,7 +7,7 @@
 
 #include <fmt/core.h>
 
-#include <core/models/feature/choosable_feature.hpp>
+#include <core/models/feature/choosable.hpp>
 #include <core/models/feature/feature.hpp>
 #include <core/models/item/item.hpp>
 #include <core/models/spell/spell.hpp>
@@ -74,7 +74,7 @@ public:
      * @brief Display a choosable
      * @param choosable a pointer to the choosable
      */
-    virtual void display(const ChoosableFeature* choosable) = 0;
+    virtual void display(const Choosable* choosable) = 0;
     /**
      * @brief Ask user for input
      * @param prompt_msg the message asking for input

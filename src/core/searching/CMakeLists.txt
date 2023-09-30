@@ -1,4 +1,2 @@
-target_sources(${DND_CORE}
-    PRIVATE
-    content_search.cpp
-)
+add_subdirectory(content_filters)
+add_subdirectory(trie_search)

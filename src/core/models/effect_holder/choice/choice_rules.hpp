@@ -17,7 +17,7 @@ enum class ChoiceType {
     EFFECT,
     ITEM,
     SPELL,
-    CHOOSABLE_FEATURE,
+    CHOOSABLE,
 };
 
 /**

@@ -8,9 +8,9 @@
 #include <string>
 #include <vector>
 
-#include <core/content_filters/content_filter.hpp>
 #include <core/errors/errors.hpp>
 #include <core/models/effect_holder/choice/choice_rules.hpp>
+#include <core/searching/content_filters/content_filter.hpp>
 #include <core/validation/effect_holder/choice/choice_data.hpp>
 
 namespace dnd {

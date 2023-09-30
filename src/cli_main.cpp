@@ -2,7 +2,7 @@
 
 #include <filesystem>
 
-#include <cli_app/cli_launcher.hpp>
+#include <cli/cli_launcher.hpp>
 
 int main(int argc, char** argv) {
     DND_START_MEASURING_SESSION(

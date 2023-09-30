@@ -40,9 +40,9 @@ public:
 
     /**
      * @brief Accepts a visitor
-     * @param visitor pointer to the visitor
+     * @param visitor reference to the visitor
      */
-    virtual void accept(ContentVisitor* visitor) const override;
+    virtual void accept(ContentVisitor& visitor) const override;
 protected:
     /**
      * @brief Constructs a feature

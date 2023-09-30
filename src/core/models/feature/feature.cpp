@@ -7,11 +7,11 @@
 #include <utility>
 #include <vector>
 
-#include <core/content_visitors/content_visitor.hpp>
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/models/effect_holder/effect_holder.hpp>
+#include <core/visitors/content/content_visitor.hpp>
 
 dnd::Feature dnd::Feature::create(dnd::FeatureData&& data, const dnd::Content& content) {
     if (!data.validate().ok()) {
@@ -43,7 +43,7 @@ const dnd::EffectHolder& dnd::Feature::get_main_part() const noexcept { return m
 
 const std::vector<dnd::EffectHolder>& dnd::Feature::get_other_parts() const noexcept { return other_parts; }
 
-void dnd::Feature::accept(dnd::ContentVisitor* visitor) const { visitor->visit(this); }
+void dnd::Feature::accept(dnd::ContentVisitor& visitor) const { visitor.visit(*this); }
 
 dnd::Feature::Feature(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, EffectHolder&& main_part,

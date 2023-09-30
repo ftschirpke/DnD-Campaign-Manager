@@ -39,9 +39,9 @@ public:
 
     /**
      * @brief Accepts a visitor
-     * @param visitor pointer to the visitor
+     * @param visitor reference to the visitor
      */
-    virtual void accept(ContentVisitor* visitor) const override final;
+    virtual void accept(ContentVisitor& visitor) const override final;
 private:
     CharacterSubclass(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path,

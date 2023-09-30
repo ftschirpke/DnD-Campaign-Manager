@@ -7,7 +7,6 @@
 #include <utility>
 #include <vector>
 
-#include <core/content_visitors/content_visitor.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
@@ -20,6 +19,7 @@
 #include <core/models/character_subrace/character_subrace.hpp>
 #include <core/models/feature/feature.hpp>
 #include <core/validation/character/character_data.hpp>
+#include <core/visitors/content/content_visitor.hpp>
 
 dnd::Character dnd::Character::create(dnd::CharacterData&& data, const Content& content) {
     if (!data.validate().ok()) {
@@ -56,7 +56,7 @@ const dnd::CharacterBasis& dnd::Character::get_basis() const noexcept { return b
 
 const dnd::Progression& dnd::Character::get_progression() const noexcept { return progression; }
 
-void dnd::Character::accept(dnd::ContentVisitor* visitor) const { visitor->visit(this); }
+void dnd::Character::accept(dnd::ContentVisitor& visitor) const { visitor.visit(*this); }
 
 dnd::Character::Character(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path,

@@ -7,12 +7,12 @@
 #include <string>
 #include <utility>
 
-#include <core/content_visitors/content_visitor.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/models/spell/spell_components.hpp>
 #include <core/models/spell/spell_type.hpp>
 #include <core/validation/spell/spell_data.hpp>
+#include <core/visitors/content/content_visitor.hpp>
 
 dnd::Spell dnd::Spell::create(dnd::SpellData&& spell_data) {
     if (!spell_data.validate().ok()) {
@@ -41,7 +41,7 @@ const std::string& dnd::Spell::get_duration() const noexcept { return duration; 
 
 const std::set<std::string>& dnd::Spell::get_classes() const noexcept { return classes; }
 
-void dnd::Spell::accept(dnd::ContentVisitor* visitor) const { visitor->visit(this); }
+void dnd::Spell::accept(dnd::ContentVisitor& visitor) const { visitor.visit(*this); }
 
 dnd::Spell::Spell(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, SpellComponents&& components,

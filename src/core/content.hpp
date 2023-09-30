@@ -13,7 +13,7 @@
 #include <core/models/character_race/character_race.hpp>
 #include <core/models/character_subclass/character_subclass.hpp>
 #include <core/models/character_subrace/character_subrace.hpp>
-#include <core/models/feature/choosable_feature.hpp>
+#include <core/models/feature/choosable.hpp>
 #include <core/models/feature/feature.hpp>
 #include <core/models/item/item.hpp>
 #include <core/models/spell/spell.hpp>
@@ -45,7 +45,7 @@ public:
     const StorageContentLibrary<const Item>& get_items() const;
     const StorageContentLibrary<const Spell>& get_spells() const;
     const ReferencingContentLibrary<const Feature>& get_features() const;
-    const StorageContentLibrary<const ChoosableFeature>& get_choosable_features() const;
+    const StorageContentLibrary<const Choosable>& get_choosables() const;
 
     void set_subgroup(const std::string& group_name, const std::string& subgroup_name);
     void set_subgroups(const std::string& group_name, std::set<std::string>&& subgroups);
@@ -59,7 +59,7 @@ public:
     bool add_character_subrace(CharacterSubrace&& character_subrace);
     bool add_item(Item&& item);
     bool add_spell(Spell&& spell);
-    bool add_choosable_feature(ChoosableFeature&& choosable_feature);
+    bool add_choosable(Choosable&& choosable);
 private:
     Groups groups;
     StorageContentLibrary<Character> characters;
@@ -71,7 +71,7 @@ private:
     StorageContentLibrary<const Spell> spells;
 
     ReferencingContentLibrary<const Feature> features;
-    StorageContentLibrary<const ChoosableFeature> choosable_features;
+    StorageContentLibrary<const Choosable> choosables;
 };
 
 } // namespace dnd
