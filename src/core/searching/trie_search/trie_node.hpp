@@ -3,7 +3,6 @@
 
 #include <cassert>
 #include <map>
-#include <memory>
 #include <stack>
 #include <unordered_set>
 #include <vector>
@@ -21,13 +20,19 @@ public:
      * @brief Get the children of this node
      * @return the map of children
      */
-    const std::map<char, std::unique_ptr<TrieNode<T>>>& get_children() const;
+    const std::map<char, TrieNode<T>>& get_children() const;
     /**
      * @brief Get the child node for the given character if it exists
      * @param c the character to get the child node for
      * @return pointer to child node if it exists, else nullptr
      */
-    TrieNode<T>* get_child(char c) const;
+    TrieNode<T>* get_child(char c);
+    /**
+     * @brief Get the child node for the given character if it exists
+     * @param c the character to get the child node for
+     * @return pointer to child node if it exists, else nullptr
+     */
+    const TrieNode<T>* get_child(char c) const;
     /**
      * @brief Get the data associated with the end of a word
      * @return the data
@@ -51,20 +56,28 @@ public:
     std::unordered_set<T*> successors() const;
 private:
     // the children of this node in the trie
-    std::map<char, std::unique_ptr<TrieNode<T>>> children;
+    std::map<char, TrieNode<T>> children;
     // a pointer to the data associated with the end of a word
     std::vector<T*> end_words;
 };
 
 template <typename T>
-const std::map<char, std::unique_ptr<TrieNode<T>>>& TrieNode<T>::get_children() const {
+const std::map<char, TrieNode<T>>& TrieNode<T>::get_children() const {
     return children;
 }
 
 template <typename T>
-TrieNode<T>* TrieNode<T>::get_child(char c) const {
+TrieNode<T>* TrieNode<T>::get_child(char c) {
     if (children.contains(c)) {
-        return children.at(c).get();
+        return &children.at(c);
+    }
+    return nullptr;
+}
+
+template <typename T>
+const TrieNode<T>* TrieNode<T>::get_child(char c) const {
+    if (children.contains(c)) {
+        return &children.at(c);
     }
     return nullptr;
 }
@@ -76,8 +89,8 @@ const std::vector<T*>& TrieNode<T>::get_end_words() const {
 
 template <typename T>
 TrieNode<T>* TrieNode<T>::create_child(char c) {
-    children[c] = std::make_unique<TrieNode<T>>();
-    return children.at(c).get();
+    children[c] = TrieNode<T>();
+    return &children.at(c);
 }
 
 template <typename T>
@@ -101,7 +114,7 @@ std::unordered_set<T*> TrieNode<T>::successors() const {
             successors.insert(current_end_words.begin(), current_end_words.end());
         }
         for (auto it = current_node->get_children().crbegin(); it != current_node->get_children().crend(); ++it) {
-            node_stack.push(it->second.get());
+            node_stack.push(&it->second);
         }
     }
     return successors;
