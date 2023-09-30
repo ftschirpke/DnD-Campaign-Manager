@@ -24,7 +24,7 @@ public:
      */
     const std::string& get_beautified_source_path() const noexcept;
     /**
-     * @brief Returns whether the content piece is part of a source book
+     * @brief Returns whether the content piece is part of a source book opposed to being campaign specific
      * @return whether the content piece is part of a source book
      */
     bool is_from_source_book() const noexcept;
