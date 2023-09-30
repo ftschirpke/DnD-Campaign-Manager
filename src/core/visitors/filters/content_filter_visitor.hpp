@@ -18,17 +18,18 @@ class FeatureFilter;
 class ChoosableFilter;
 
 class ContentFilterVisitor {
+public:
     virtual ~ContentFilterVisitor() = default;
-    virtual void visit(const ContentPieceFilter* content_piece_filter_ptr) = 0;
-    virtual void visit(const CharacterFilter* character_filter_ptr) = 0;
-    virtual void visit(const CharacterClassFilter* character_class_filter_ptr) = 0;
-    virtual void visit(const CharacterSubclassFilter* character_subclass_filter_ptr) = 0;
-    virtual void visit(const CharacterRaceFilter* character_race_filter_ptr) = 0;
-    virtual void visit(const CharacterSubraceFilter* character_subrace_filter_ptr) = 0;
-    virtual void visit(const ItemFilter* item_filter_ptr) = 0;
-    virtual void visit(const SpellFilter* spell_filter_ptr) = 0;
-    virtual void visit(const FeatureFilter* feature_filter_ptr) = 0;
-    virtual void visit(const ChoosableFilter* choosable_filter_ptr) = 0;
+    virtual void visit(const ContentPieceFilter& content_piece_filter) = 0;
+    virtual void visit(const CharacterFilter& character_filter) = 0;
+    virtual void visit(const CharacterClassFilter& character_class_filter) = 0;
+    virtual void visit(const CharacterSubclassFilter& character_subclass_filter) = 0;
+    virtual void visit(const CharacterRaceFilter& character_race_filter) = 0;
+    virtual void visit(const CharacterSubraceFilter& character_subrace_filter) = 0;
+    virtual void visit(const ItemFilter& item_filter) = 0;
+    virtual void visit(const SpellFilter& spell_filter) = 0;
+    virtual void visit(const FeatureFilter& feature_filter) = 0;
+    virtual void visit(const ChoosableFilter& choosable_filter) = 0;
 };
 
 } // namespace dnd

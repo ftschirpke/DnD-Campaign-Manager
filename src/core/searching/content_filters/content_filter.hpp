@@ -7,6 +7,8 @@
 #include <string>
 #include <vector>
 
+#include <core/visitors/filters/content_filter_visitor.hpp>
+
 namespace dnd {
 
 enum class StringFilterType {
@@ -46,6 +48,11 @@ enum class SelectionFilterType {
 class ContentFilter {
 public:
     virtual ~ContentFilter() = default;
+    /**
+     * @brief Accepts a visitor to perform an operation on the filter.
+     * @param visitor reference to the visitor
+     */
+    virtual void accept(ContentFilterVisitor& visitor) = 0;
 protected:
     static bool matches_string(const std::string& str, StringFilterType type, const std::string& filter) noexcept;
     static bool matches_int(int number, NumberFilterType type, int filter) noexcept;

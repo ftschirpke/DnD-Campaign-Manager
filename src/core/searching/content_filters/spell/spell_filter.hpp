@@ -16,6 +16,11 @@ class Spell;
 class SpellFilter : public ContentPieceFilter {
 public:
     SpellFilter() noexcept;
+    /**
+     * @brief Accepts a visitor to perform an operation on the filter.
+     * @param visitor reference to the visitor
+     */
+    virtual void accept(ContentFilterVisitor& visitor) override;
 
     void set_verbal_component_filter(BoolFilterType type) noexcept;
     void remove_verbal_component_filter() noexcept;

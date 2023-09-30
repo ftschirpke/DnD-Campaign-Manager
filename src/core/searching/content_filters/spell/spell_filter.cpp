@@ -15,6 +15,8 @@ dnd::SpellFilter::SpellFilter() noexcept
       magic_school_filter_type(SelectionFilterType::NONE), ritual_filter_type(BoolFilterType::NONE),
       classes_filter_type(SelectionFilterType::NONE) {}
 
+void dnd::SpellFilter::accept(ContentFilterVisitor& visitor) { visitor.visit(*this); }
+
 void dnd::SpellFilter::set_verbal_component_filter(BoolFilterType type) noexcept {
     verbal_component_filter_type = type;
 }
