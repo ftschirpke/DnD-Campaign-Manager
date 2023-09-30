@@ -34,13 +34,15 @@ static std::unique_ptr<dnd::ContentFilter> create_cantrip_filter(const std::stri
     if (!std::regex_match(group_name, match, cantrip_filter_regex)) {
         throw dnd::invalid_data("Cannot create choice filter from invalid group name.");
     }
-    if (!match[2].str().empty()) {
+    const std::string spell_level = match[2].str();
+    if (!spell_level.empty()) {
         cantrip_filter.set_magic_school_filter(
-            dnd::SelectionFilterType::IS_IN, {dnd::magic_school_from_name(match[2].str())}
+            dnd::SelectionFilterType::IS_IN, {dnd::magic_school_from_name(spell_level)}
         );
     }
-    if (!match[4].str().empty()) {
-        cantrip_filter.set_classes_filter(dnd::SelectionFilterType::IS_IN, {match[4].str()});
+    const std::string spell_class_name = match[4].str();
+    if (!spell_class_name.empty()) {
+        cantrip_filter.set_classes_filter(dnd::SelectionFilterType::IS_IN, {spell_class_name});
     }
     return std::make_unique<dnd::SpellFilter>(std::move(cantrip_filter));
 }
@@ -57,24 +59,27 @@ static std::unique_ptr<dnd::ContentFilter> create_spell_filter(const std::string
     if (!std::regex_match(group_name, match, spell_filter_regex)) {
         throw dnd::invalid_data("Cannot create choice filter from invalid group name.");
     }
-    if (match[2].str().empty()) {
+    const std::string spell_level = match[2].str();
+    if (spell_level.empty()) {
         spell_filter.set_level_filter(dnd::NumberFilterType::GREATER_THAN, 0);
-    } else if (match[2].str() == "1st") {
+    } else if (spell_level == "1st") {
         spell_filter.set_level_filter(dnd::NumberFilterType::EQUAL, 1);
-    } else if (match[2].str() == "2nd") {
+    } else if (spell_level == "2nd") {
         spell_filter.set_level_filter(dnd::NumberFilterType::EQUAL, 2);
-    } else if (match[2].str() == "3rd") {
+    } else if (spell_level == "3rd") {
         spell_filter.set_level_filter(dnd::NumberFilterType::EQUAL, 3);
     } else {
-        spell_filter.set_level_filter(dnd::NumberFilterType::EQUAL, std::stoi(match[2].str().substr(0, 1)));
+        spell_filter.set_level_filter(dnd::NumberFilterType::EQUAL, spell_level[0] - '0');
     }
-    if (!match[4].str().empty()) {
+    const std::string spell_school_name = match[4].str();
+    if (!spell_school_name.empty()) {
         spell_filter.set_magic_school_filter(
-            dnd::SelectionFilterType::IS_IN, {dnd::magic_school_from_name(match[4].str())}
+            dnd::SelectionFilterType::IS_IN, {dnd::magic_school_from_name(spell_school_name)}
         );
     }
-    if (!match[6].str().empty()) {
-        spell_filter.set_classes_filter(dnd::SelectionFilterType::IS_IN, {match[6].str()});
+    const std::string spell_class_name = match[6].str();
+    if (!spell_class_name.empty()) {
+        spell_filter.set_classes_filter(dnd::SelectionFilterType::IS_IN, {spell_class_name});
     }
     return std::make_unique<dnd::SpellFilter>(std::move(spell_filter));
 }
