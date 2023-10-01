@@ -14,9 +14,9 @@ namespace dnd {
 /**
  * @brief Class for the main GUI application allowing content management and rendering.
  */
-class GUIApp {
+class GuiApp {
 public:
-    GUIApp();
+    GuiApp();
     /**
      * @brief Initializes the GUI elements of the application.
      */

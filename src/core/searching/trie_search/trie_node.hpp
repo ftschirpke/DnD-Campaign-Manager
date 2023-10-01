@@ -4,7 +4,6 @@
 #include <cassert>
 #include <map>
 #include <stack>
-#include <unordered_set>
 #include <vector>
 
 namespace dnd {
@@ -37,7 +36,7 @@ public:
      * @brief Get the data associated with the end of a word
      * @return the data
      */
-    const std::vector<T*>& get_end_words() const;
+    const std::vector<const T*>& get_end_words() const;
     /**
      * @brief Create an empty child node for the given character
      * @param c the given character
@@ -48,17 +47,17 @@ public:
      * @brief Add a piece of data associated with the end of a word
      * @param end_word the data
      */
-    void add_end_word(T* end_word);
+    void add_end_word(const T* end_word);
     /**
      * @brief Return a set of all successors of the node (including the node itself)
      * @return a set of pointers to all the successor nodes
      */
-    std::unordered_set<T*> successors() const;
+    std::vector<const T*> successors() const;
 private:
     // the children of this node in the trie
     std::map<char, TrieNode<T>> children;
     // a pointer to the data associated with the end of a word
-    std::vector<T*> end_words;
+    std::vector<const T*> end_words;
 };
 
 template <typename T>
@@ -83,7 +82,7 @@ const TrieNode<T>* TrieNode<T>::get_child(char c) const {
 }
 
 template <typename T>
-const std::vector<T*>& TrieNode<T>::get_end_words() const {
+const std::vector<const T*>& TrieNode<T>::get_end_words() const {
     return end_words;
 }
 
@@ -94,13 +93,13 @@ TrieNode<T>* TrieNode<T>::create_child(char c) {
 }
 
 template <typename T>
-void TrieNode<T>::add_end_word(T* end_word) {
+void TrieNode<T>::add_end_word(const T* end_word) {
     end_words.push_back(end_word);
 }
 
 template <typename T>
-std::unordered_set<T*> TrieNode<T>::successors() const {
-    std::unordered_set<T*> successors;
+std::vector<const T*> TrieNode<T>::successors() const {
+    std::vector<const T*> successors;
     std::stack<const TrieNode<T>*> node_stack;
     node_stack.push(this);
 
@@ -109,9 +108,9 @@ std::unordered_set<T*> TrieNode<T>::successors() const {
         assert(current_node != nullptr);
         node_stack.pop();
 
-        const std::vector<T*>& current_end_words = current_node->get_end_words();
+        const std::vector<const T*>& current_end_words = current_node->get_end_words();
         if (!current_end_words.empty()) {
-            successors.insert(current_end_words.begin(), current_end_words.end());
+            successors.insert(successors.end(), current_end_words.cbegin(), current_end_words.cend());
         }
         for (auto it = current_node->get_children().crbegin(); it != current_node->get_children().crend(); ++it) {
             node_stack.push(&it->second);

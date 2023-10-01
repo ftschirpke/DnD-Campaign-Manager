@@ -18,7 +18,7 @@
 #include <core/models/source_info.hpp>
 #include <core/parsing/content_parser.hpp>
 #include <core/searching/trie_search/trie_content_search.hpp>
-#include <core/utils/char_manipulation.hpp>
+#include <core/utils/string_manipulation.hpp>
 #include <core/visitors/content/collect_open_tabs_visitor.hpp>
 #include <core/visitors/content/list_content_visitor.hpp>
 
@@ -136,18 +136,28 @@ void dnd::Session::save_session_values() {
 
 void dnd::Session::clear_unknown_error_messages() { unknown_error_messages.clear(); }
 
-bool dnd::Session::set_campaign_name(const std::string& new_campaign_name) {
+dnd::Errors dnd::Session::set_campaign_name(const std::string& new_campaign_name) {
+    Errors errors;
     if (campaign_name == new_campaign_name) {
-        return !campaign_name.empty();
+        if (campaign_name.empty()) {
+            errors.add_validation_error(
+                dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, nullptr, "The campaign name is empty."
+            );
+        }
+        return errors;
     }
     std::vector<std::string> possible_names = get_possible_campaign_names();
     if (std::find(possible_names.begin(), possible_names.end(), new_campaign_name) == possible_names.end()) {
-        return false;
+        errors.add_validation_error(
+            dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, nullptr,
+            fmt::format("The campaign name \"{}\" is not valid.", new_campaign_name)
+        );
+        return errors;
     }
     campaign_name = new_campaign_name;
     status = SessionStatus::PARSING;
     start_parsing();
-    return true;
+    return errors;
 }
 
 static dnd::Errors validate_content_directory(const std::filesystem::path& content_directory) {
@@ -174,19 +184,25 @@ static dnd::Errors validate_content_directory(const std::filesystem::path& conte
     return errors;
 }
 
-bool dnd::Session::set_content_directory(const std::filesystem::path& new_content_directory) {
+dnd::Errors dnd::Session::set_content_directory(const std::filesystem::path& new_content_directory) {
+    Errors errors;
     if (content_directory == new_content_directory) {
-        return !content_directory.empty();
+        if (content_directory.empty()) {
+            errors.add_validation_error(
+                dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, nullptr, "The content directory is empty."
+            );
+        }
+        return errors;
     }
-    bool valid = validate_content_directory(new_content_directory).ok();
-    if (valid) {
+    errors = validate_content_directory(new_content_directory);
+    if (errors.ok()) {
         content_directory = new_content_directory;
         campaign_name.clear();
         status = SessionStatus::CAMPAIGN_SELECTION;
     } else {
         status = SessionStatus::CONTENT_DIR_SELECTION;
     }
-    return valid;
+    return errors;
 }
 
 // A comparator for content pieces that sorts them by name and prioritizes those whose name starts with a givencharacter
@@ -336,7 +352,7 @@ void dnd::Session::open_last_session() {
     }
     for (const std::string& feature_to_open : last_session_open_tabs["features"]) {
         if (content.get_features().contains(feature_to_open)) {
-            open_content_pieces.push_back(content.get_features().get(feature_to_open));
+            open_content_pieces.push_back(&content.get_features().get(feature_to_open));
         }
     }
     for (const std::string& choosable_to_open : last_session_open_tabs["choosables"]) {

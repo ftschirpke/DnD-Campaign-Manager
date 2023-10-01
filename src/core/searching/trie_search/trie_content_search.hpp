@@ -66,14 +66,14 @@ public:
 private:
     std::vector<char> query;
     TrieSearchPath<Character> character_search_path;
-    TrieSearchPath<const CharacterClass> character_class_search_path;
-    TrieSearchPath<const CharacterSubclass> character_subclass_search_path;
-    TrieSearchPath<const CharacterRace> character_race_search_path;
-    TrieSearchPath<const CharacterSubrace> character_subrace_search_path;
-    TrieSearchPath<const Item> item_search_path;
-    TrieSearchPath<const Spell> spell_search_path;
-    TrieSearchPath<const Feature> feature_search_path;
-    TrieSearchPath<const Choosable> choosable_search_path;
+    TrieSearchPath<CharacterClass> character_class_search_path;
+    TrieSearchPath<CharacterSubclass> character_subclass_search_path;
+    TrieSearchPath<CharacterRace> character_race_search_path;
+    TrieSearchPath<CharacterSubrace> character_subrace_search_path;
+    TrieSearchPath<Item> item_search_path;
+    TrieSearchPath<Spell> spell_search_path;
+    TrieSearchPath<Feature> feature_search_path;
+    TrieSearchPath<Choosable> choosable_search_path;
 };
 
 

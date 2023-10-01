@@ -173,18 +173,18 @@ std::set<std::string> dnd::Choice::possible_values(const dnd::Content& content) 
             };
             break;
         case ChoiceType::ITEM:
-            for (const auto& [_, item] : content.get_items().get_all()) {
+            for (const Item& item : content.get_items().get_all()) {
                 possible_values.emplace(item.get_name());
             };
             break;
         case ChoiceType::SPELL:
             // TODO: use the spell filters instead of this
-            for (const auto& [_, spell] : content.get_spells().get_all()) {
+            for (const Spell& spell : content.get_spells().get_all()) {
                 possible_values.emplace(spell.get_name());
             };
             break;
         case ChoiceType::CHOOSABLE:
-            for (const auto& [_, choosable] : content.get_choosables().get_all()) {
+            for (const Choosable& choosable : content.get_choosables().get_all()) {
                 possible_values.emplace(choosable.get_name());
             };
             break;

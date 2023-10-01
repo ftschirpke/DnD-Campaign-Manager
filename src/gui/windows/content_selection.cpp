@@ -5,6 +5,7 @@
 #include <imgui/imgui.h>
 #include <imgui_filebrowser/imfilebrowser.h>
 
+#include <core/errors/errors.hpp>
 #include <core/session.hpp>
 
 static constexpr ImGuiFileBrowserFlags file_dialog_flags = ImGuiFileBrowserFlags_SelectDirectory
@@ -54,7 +55,7 @@ void dnd::ContentSelection::render_content_dir_selection() {
     content_dir_dialog.Display();
     if (content_dir_dialog.HasSelected()) {
         content_dir_dialog.Close();
-        bool valid = session.set_content_directory(content_dir_dialog.GetSelected());
+        bool valid = session.set_content_directory(content_dir_dialog.GetSelected()).ok();
         if (!valid) {
             ImGui::OpenPopup("Invalid content directory");
         }
@@ -79,7 +80,7 @@ void dnd::ContentSelection::render_campaign_selection() {
         bool close = false;
         for (const std::string& possible_campaign_name : session.get_possible_campaign_names()) {
             if (ImGui::Button(possible_campaign_name.c_str())) {
-                close = session.set_campaign_name(possible_campaign_name);
+                close = session.set_campaign_name(possible_campaign_name).ok();
             }
         }
         ImGui::Separator();

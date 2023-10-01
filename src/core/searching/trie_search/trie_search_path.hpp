@@ -46,11 +46,11 @@ bool TrieSearchPath<T>::insert_top_successors_into(std::vector<S*>& vec) const {
     if (this->top() == nullptr) {
         return false;
     }
-    std::unordered_set<T*> successors_set = this->top()->successors();
-    if (successors_set.empty()) {
+    std::vector<const T*> successors = this->top()->successors();
+    if (successors.empty()) {
         return false;
     }
-    vec.insert(vec.end(), successors_set.begin(), successors_set.end());
+    vec.insert(vec.end(), successors.begin(), successors.end());
     return true;
 }
 

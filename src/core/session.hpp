@@ -73,13 +73,13 @@ public:
      * @param campaign_name the campaign name to set
      * @return "true" if the campaign name is valid, "false" otherwise
      */
-    bool set_campaign_name(const std::string& campaign_name);
+    Errors set_campaign_name(const std::string& campaign_name);
     /**
      * @brief If the provided content directory is valid, sets the content directory and starts campaign selection.
      * @param content_directory the content directory to set
      * @return "true" if the content directory is valid, "false" otherwise
      */
-    bool set_content_directory(const std::filesystem::path& content_directory);
+    Errors set_content_directory(const std::filesystem::path& content_directory);
     /**
      * @brief Sets the search query for the trie search to the provided string.
      * @param new_query the new search query

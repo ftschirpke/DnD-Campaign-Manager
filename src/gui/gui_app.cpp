@@ -18,18 +18,18 @@ static const char* const imgui_ini_filename = "imgui.ini";
 
 static const ImGuiWindowFlags error_popup_options = ImGuiWindowFlags_AlwaysAutoResize;
 
-dnd::GUIApp::GUIApp()
+dnd::GuiApp::GuiApp()
     : show_demo_window(false), session(), content_selection(session), content_window(session),
       error_messages_window(session), trie_search_window(session) {
     ImGui::GetIO().IniFilename = imgui_ini_filename;
 }
 
-void dnd::GUIApp::initialize() {
+void dnd::GuiApp::initialize() {
     session.retrieve_last_session_values();
     content_selection.initialize();
 }
 
-void dnd::GUIApp::render() {
+void dnd::GuiApp::render() {
     DND_MEASURE_FUNCTION();
     ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
 
@@ -77,7 +77,7 @@ static void render_content_count_table(const dnd::Content& content) {
     display_size("Choosables", content.get_choosables().size(), w);
 }
 
-void dnd::GUIApp::render_overview_window() {
+void dnd::GuiApp::render_overview_window() {
     DND_MEASURE_FUNCTION();
     ImGui::Begin("Overview");
 
@@ -133,7 +133,7 @@ void dnd::GUIApp::render_overview_window() {
     ImGui::End();
 }
 
-void dnd::GUIApp::render_parsing_error_popup() {
+void dnd::GuiApp::render_parsing_error_popup() {
     DND_MEASURE_FUNCTION();
     ImGui::OpenPopup("Error");
     if (ImGui::BeginPopupModal("Error", nullptr, error_popup_options)) {

@@ -3,35 +3,18 @@
 
 #include <dnd_config.hpp>
 
-#include <algorithm>
-#include <cctype>
-#include <filesystem>
 #include <string>
-#include <string_view>
-#include <type_traits>
-#include <unordered_map>
-#include <unordered_set>
 #include <vector>
 
-#include <iostream>
-
-#include <core/models/content_piece.hpp>
-#include <core/searching/trie_search/trie.hpp>
-#include <core/utils/string_manipulation.hpp>
+#include <core/searching/trie_search/trie_node.hpp>
 
 namespace dnd {
 
-template <typename TrieT, typename DataT>
-concept ContentLibraryTypes = ContentPieceType<TrieT>
-                              && std::is_same_v<TrieT, typename std::remove_pointer<DataT>::type>;
-
 /**
- * @brief A library of content pieces
- * @tparam TrieT the trie type to use for searching
- * @tparam DataT the data type to use for retrieving content pieces
+ * @brief An interface for a content library manages content pieces
+ * @tparam T the type of the content pieces
  */
-template <typename TrieT, typename DataT>
-requires ContentLibraryTypes<TrieT, DataT>
+template <typename T>
 class ContentLibrary {
 public:
     /**
@@ -39,189 +22,37 @@ public:
      * @param name the name
      * @return "true" if such a piece of content exists, "false" otherwise
      */
-    bool contains(const std::string& name) const;
+    virtual bool contains(const std::string& name) const = 0;
     /**
      * @brief Returns whether the content library is empty
      * @return "true" if the content library is empty, "false" otherwise
      */
-    bool empty() const;
+    virtual bool empty() const = 0;
     /**
-     * @brief Get the amount of content pieces stored
+     * @brief Get the amount of content pieces in the library
      * @return the amount
      */
-    size_t size() const;
+    virtual size_t size() const = 0;
     /**
-     * @brief Get content piece by its name
-     * @return reference to the piece of content if it exists
-     * @throws std::out_of_range if the piece of content does not exist
-     */
-    DataT& get(const std::string& name);
-    /**
-     * @brief Get content piece by its name
+     * @brief Get content piece by its index
+     * @param index the index of the piece of content
      * @return constant reference to the piece of content if it exists
      * @throws std::out_of_range if the piece of content does not exist
      */
-    const DataT& get(const std::string& name) const;
+    virtual const T& get(size_t index) const = 0;
     /**
-     * @brief Get all pieces of content matching a given prefix
-     * @param prefix the prefix to the name (or the prefix to one word of the whole name)
-     * @return all pieces of content matching the prefix (empty if none such piece exists)
-     */
-    std::unordered_set<TrieT*> prefix_get(const std::string& prefix) const;
-    /**
-     * @brief Get all pieces of content matching a given prefix in order
-     * @param prefix the prefix to the name (or the prefix to one word of the whole name)
-     * @return all pieces of content matching the prefix in order (empty if none such piece exists)
-     */
-    std::vector<TrieT*> sorted_prefix_get(const std::string& prefix) const;
-    /**
-     * @brief Get all pieces of content
-     * @return the map containing the pieces of content
-     */
-    const std::unordered_map<std::string, DataT>& get_all() const;
-    /**
-     * @brief Add a content piece if no piece of content with the same name exists
+     * @brief Get content piece by its name
      * @param name the name of the piece of content
-     * @param new_content_piece the new piece of content
-     * @return "true" if piece was added, "false" if name already exists
+     * @return constant reference to the piece of content if it exists
+     * @throws std::out_of_range if the piece of content does not exist
      */
-    bool add(const std::string& name, typename std::remove_const<DataT>::type&& new_content_piece);
+    virtual const T& get(const std::string& name) const = 0;
     /**
-     * @brief Add a content piece if no piece of content with the same name exists
-     * @param name the name of the piece of content
-     * @param new_content_piece the new piece of content
-     * @return "true" if piece was added, "false" if name already exists
+     * @brief Get the root of the trie
+     * @return a pointer to the root of the trie
      */
-    bool add(const std::string& name, const DataT& new_content_piece);
-    /**
-     * @brief Get the root of the search trie
-     * @return a pointer the root node
-     */
-    const TrieNode<TrieT>* get_trie_root() const;
-protected:
-    /**
-     * @brief Saves a piece of content that already exists in the data-map into the trie under multiple names
-     * @param name the full name of the piece of content
-     */
-    void save_in_trie(const std::string& name);
-
-    std::unordered_map<std::string, DataT> data;
-    Trie<TrieT> trie;
+    virtual const TrieNode<T>* get_trie_root() const = 0;
 };
-
-/**
- * @brief A content library that stores the content pieces directly.
- * @tparam T the type of the content pieces being stored
- */
-template <typename T>
-using StorageContentLibrary = ContentLibrary<T, T>;
-
-/**
- * @brief A content library that stores pointers to the content pieces, which are stored elsewhere.
- * @tparam T the type of the content pieces being referenced
- */
-template <typename T>
-using ReferencingContentLibrary = ContentLibrary<T, T*>;
-
-
-template <typename TrieT, typename DataT>
-requires ContentLibraryTypes<TrieT, DataT>
-inline bool ContentLibrary<TrieT, DataT>::contains(const std::string& name) const {
-    return data.contains(name);
-}
-
-template <typename TrieT, typename DataT>
-requires ContentLibraryTypes<TrieT, DataT>
-inline bool ContentLibrary<TrieT, DataT>::empty() const {
-    return data.empty();
-}
-
-template <typename TrieT, typename DataT>
-requires ContentLibraryTypes<TrieT, DataT>
-inline size_t ContentLibrary<TrieT, DataT>::size() const {
-    return data.size();
-}
-
-template <typename TrieT, typename DataT>
-requires ContentLibraryTypes<TrieT, DataT>
-inline DataT& ContentLibrary<TrieT, DataT>::get(const std::string& name) {
-    return data.at(name);
-}
-
-template <typename TrieT, typename DataT>
-requires ContentLibraryTypes<TrieT, DataT>
-inline const DataT& ContentLibrary<TrieT, DataT>::get(const std::string& name) const {
-    return data.at(name);
-}
-
-template <typename TrieT, typename DataT>
-requires ContentLibraryTypes<TrieT, DataT>
-inline std::unordered_set<TrieT*> ContentLibrary<TrieT, DataT>::prefix_get(const std::string& prefix) const {
-    return trie.search_prefix(prefix);
-}
-
-template <typename TrieT, typename DataT>
-requires ContentLibraryTypes<TrieT, DataT>
-inline std::vector<TrieT*> ContentLibrary<TrieT, DataT>::sorted_prefix_get(const std::string& prefix) const {
-    std::unordered_set<TrieT*> unsorted_result = prefix_get(prefix);
-    std::vector<TrieT*> result(unsorted_result.begin(), unsorted_result.end());
-    std::sort(result.begin(), result.end(), [](TrieT* a, TrieT* b) { return a->name < b->name; });
-    return result;
-}
-
-template <typename TrieT, typename DataT>
-requires ContentLibraryTypes<TrieT, DataT>
-inline const std::unordered_map<std::string, DataT>& ContentLibrary<TrieT, DataT>::get_all() const {
-    return data;
-}
-
-template <typename TrieT, typename DataT>
-requires ContentLibraryTypes<TrieT, DataT>
-inline bool ContentLibrary<TrieT, DataT>::add(
-    const std::string& name, typename std::remove_const<DataT>::type&& new_content_piece
-) {
-    if (contains(name)) {
-        return false;
-    }
-    data.emplace(name, std::move(new_content_piece));
-    save_in_trie(name);
-    return true;
-}
-
-template <typename TrieT, typename DataT>
-requires ContentLibraryTypes<TrieT, DataT>
-inline bool ContentLibrary<TrieT, DataT>::add(const std::string& name, const DataT& new_content_piece) {
-    if (contains(name)) {
-        return false;
-    }
-    data.emplace(name, new_content_piece);
-    save_in_trie(name);
-    return true;
-}
-
-template <typename TrieT, typename DataT>
-requires ContentLibraryTypes<TrieT, DataT>
-void ContentLibrary<TrieT, DataT>::save_in_trie(const std::string& name) {
-    DataT& content_piece_ptr = data.at(name);
-    std::string lower_name = string_lowercase_copy(name);
-
-    trie.insert(lower_name, content_piece_ptr);
-    for (size_t i = 0; i < lower_name.size(); ++i) {
-        if (lower_name[i] == ' ' || lower_name[i] == '_' || lower_name[i] == '-') {
-            std::string_view after_sep(lower_name.c_str() + i + 1, lower_name.size() - i - 1);
-            trie.insert(after_sep, content_piece_ptr);
-        }
-        if (lower_name[i] == '(' || lower_name[i] == ':') {
-            break;
-        }
-    }
-}
-
-template <typename TrieT, typename DataT>
-requires ContentLibraryTypes<TrieT, DataT>
-const TrieNode<TrieT>* ContentLibrary<TrieT, DataT>::get_trie_root() const {
-    return trie.get_root();
-}
 
 } // namespace dnd
 
