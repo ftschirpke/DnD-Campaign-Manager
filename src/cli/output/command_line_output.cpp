@@ -15,5 +15,5 @@ void dnd::CommandLineOutput::error(std::string_view error_msg) { std::cerr << er
 
 void dnd::CommandLineOutput::prompt_input(std::string_view prompt_msg, std::string& out) {
     std::cout << prompt_msg << '\n';
-    std::cin >> out;
+    std::getline(std::cin, out);
 }

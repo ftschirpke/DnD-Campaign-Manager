@@ -32,7 +32,7 @@ void dnd::CliApp::initialize(
         std::string content_dir_str;
         std::filesystem::path content_dir;
         while (!errors.ok()) {
-            output.prompt_input("Enter a valid content directory:", content_dir_str);
+            output.prompt_input("\nEnter a valid content directory:", content_dir_str);
             content_dir = std::filesystem::path(content_dir_str);
             errors = session.set_content_directory(content_dir);
             if (!errors.ok()) {
@@ -55,7 +55,7 @@ void dnd::CliApp::initialize(
         }
         std::string campaign_name_str;
         while (!errors.ok()) {
-            output.prompt_input("Enter a valid campaign name:", campaign_name_str);
+            output.prompt_input("\nEnter a valid campaign name:", campaign_name_str);
             errors = session.set_campaign_name(campaign_name_str);
             if (!errors.ok()) {
                 output.formatted_error("Invalid campaign name: {}", campaign_name_str);
@@ -66,8 +66,8 @@ void dnd::CliApp::initialize(
         }
     }
 
-    output.formatted_text("Content directory:       {}", content_directory.string());
-    output.formatted_text("Campaign directory name: {}", campaign_name);
+    output.formatted_text("Content directory: {}", session.get_content_directory().string());
+    output.formatted_text("Campaign name:     {}", session.get_campaign_name());
     assert(session.get_status() == SessionStatus::PARSING);
     output.text("Parsing...");
     while (session.get_status() == SessionStatus::PARSING) {
@@ -86,10 +86,12 @@ void dnd::CliApp::start() {
     while (true) {
         output.text(separator);
         output.text("What do you wanna do?");
-        output.text("[S]earch content by name\n[L]ist all content of a type\n[V]iew open content pieces\ne[X]it");
-        output.prompt_input("", command_input);
-        while (command_input.size() == 0) {
-            output.prompt_input("", command_input);
+        output.prompt_input(
+            "[S]earch content by name\n[L]ist all content of a type\n[V]iew open content pieces\n(Press Enter to exit)",
+            command_input
+        );
+        if (command_input.empty()) {
+            return;
         }
         char command = dnd::char_to_uppercase(command_input[0]);
         switch (command) {
@@ -115,8 +117,12 @@ constexpr std::array<bool, 9> search_options = {true, true, true, true, true, tr
 
 void dnd::CliApp::search_content_by_name() {
     std::string search_query = "?";
-    while (!search_query.empty()) {
-        output.prompt_input("Search (leave empty to exit):", search_query);
+    while (true) {
+        output.text(separator);
+        output.prompt_input("Search (Press Enter to exit):", search_query);
+        if (search_query.empty()) {
+            return;
+        }
         session.set_trie_search(search_query, search_options);
         std::vector<std::string> results = session.get_trie_search_result_strings();
         if (results.empty()) {
@@ -127,7 +133,7 @@ void dnd::CliApp::search_content_by_name() {
             }
             std::string index_str;
             output.prompt_input(
-                "Enter the index of the content piece you want to open (leave empty for new search):", index_str
+                "Enter the index of the content piece you want to open (Press Enter for new search):", index_str
             );
             if (index_str.empty()) {
                 continue;
@@ -154,7 +160,8 @@ void dnd::CliApp::search_content_by_name() {
 
 void dnd::CliApp::list_all_content_of_a_type() {
     std::string type_str = "?";
-    while (!type_str.empty()) {
+    while (true) {
+        output.text(separator);
         output.text("[0] Characters");
         output.text("[1] Classes");
         output.text("[2] Subclasses");
@@ -164,7 +171,10 @@ void dnd::CliApp::list_all_content_of_a_type() {
         output.text("[6] Items");
         output.text("[7] Features");
         output.text("[8] Choosables");
-        output.prompt_input("Type (leave empty to exit):", type_str);
+        output.prompt_input("Type (Press Enter to exit):", type_str);
+        if (type_str.empty()) {
+            return;
+        }
         int type = std::stoi(type_str);
         if (type < 0 || type > 8) {
             output.error("Invalid type.");
@@ -228,12 +238,12 @@ void dnd::CliApp::list_all_content_of_a_type() {
             output.text("No results.");
             continue;
         }
-        for (const std::string& line : list) {
-            output.formatted_text("{:>4} -- {}", line);
+        for (size_t i = 0; i < list.size(); ++i) {
+            output.formatted_text("{:>4} -- {}", i, list[i]);
         }
         std::string index_str;
         output.prompt_input(
-            "Enter the index of the content piece you want to open (leave empty for new search):", index_str
+            "Enter the index of the content piece you want to open (Press Enter for new search):", index_str
         );
         if (index_str.empty()) {
             return;
@@ -280,7 +290,7 @@ void dnd::CliApp::list_all_content_of_a_type() {
 
 void dnd::CliApp::view_open_content_pieces() {
     std::string index_str = "?";
-    while (!index_str.empty()) {
+    while (true) {
         std::deque<const ContentPiece*>& open_content_pieces = session.get_open_content_pieces();
         if (open_content_pieces.empty()) {
             output.text("No open content pieces.");
@@ -289,7 +299,7 @@ void dnd::CliApp::view_open_content_pieces() {
         for (size_t i = 0; i < open_content_pieces.size(); ++i) {
             output.formatted_text("{:>4} -- {}", i, open_content_pieces[i]->get_name());
         }
-        output.prompt_input("Enter the index of the content piece you want to open (leave empty to exit):", index_str);
+        output.prompt_input("Enter the index of the content piece you want to open (Press Enter to exit):", index_str);
         if (index_str.empty()) {
             return;
         }
@@ -303,6 +313,7 @@ void dnd::CliApp::view_open_content_pieces() {
 }
 
 void dnd::CliApp::display_content_piece(const ContentPiece* content_piece) {
+    output.text(separator);
     output.text(content_piece->get_name());
-    output.text("TODO");
+    output.text("TODO"); // TODO: implement content visitor for displaying content pieces using CommandLineOutput
 }
