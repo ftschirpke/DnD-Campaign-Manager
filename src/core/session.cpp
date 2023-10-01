@@ -137,27 +137,27 @@ void dnd::Session::save_session_values() {
 void dnd::Session::clear_unknown_error_messages() { unknown_error_messages.clear(); }
 
 dnd::Errors dnd::Session::set_campaign_name(const std::string& new_campaign_name) {
-    Errors errors;
+    Errors campaign_errors;
     if (campaign_name == new_campaign_name) {
         if (campaign_name.empty()) {
-            errors.add_validation_error(
+            campaign_errors.add_validation_error(
                 dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, nullptr, "The campaign name is empty."
             );
         }
-        return errors;
+        return campaign_errors;
     }
     std::vector<std::string> possible_names = get_possible_campaign_names();
     if (std::find(possible_names.begin(), possible_names.end(), new_campaign_name) == possible_names.end()) {
-        errors.add_validation_error(
+        campaign_errors.add_validation_error(
             dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, nullptr,
             fmt::format("The campaign name \"{}\" is not valid.", new_campaign_name)
         );
-        return errors;
+        return campaign_errors;
     }
     campaign_name = new_campaign_name;
     status = SessionStatus::PARSING;
     start_parsing();
-    return errors;
+    return campaign_errors;
 }
 
 static dnd::Errors validate_content_directory(const std::filesystem::path& content_directory) {
@@ -185,16 +185,16 @@ static dnd::Errors validate_content_directory(const std::filesystem::path& conte
 }
 
 dnd::Errors dnd::Session::set_content_directory(const std::filesystem::path& new_content_directory) {
-    Errors errors;
+    Errors content_dir_errors;
     if (content_directory == new_content_directory) {
         if (content_directory.empty()) {
-            errors.add_validation_error(
+            content_dir_errors.add_validation_error(
                 dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, nullptr, "The content directory is empty."
             );
         }
-        return errors;
+        return content_dir_errors;
     }
-    errors = validate_content_directory(new_content_directory);
+    content_dir_errors = validate_content_directory(new_content_directory);
     if (errors.ok()) {
         content_directory = new_content_directory;
         campaign_name.clear();
@@ -202,7 +202,7 @@ dnd::Errors dnd::Session::set_content_directory(const std::filesystem::path& new
     } else {
         status = SessionStatus::CONTENT_DIR_SELECTION;
     }
-    return errors;
+    return content_dir_errors;
 }
 
 // A comparator for content pieces that sorts them by name and prioritizes those whose name starts with a givencharacter
