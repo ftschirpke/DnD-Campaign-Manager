@@ -17,21 +17,57 @@ constexpr const char* separator = "---------------------------------------------
 
 dnd::CliApp::CliApp() : session("last_cli_session.ini"), output() {}
 
-void dnd::CliApp::initialize(const std::filesystem::path& content_directory, const std::string& campaign_name) {
+void dnd::CliApp::initialize(
+    const std::filesystem::path& content_directory, const std::string& campaign_name, bool testrun
+) {
     Errors errors = session.set_content_directory(content_directory);
     if (!errors.ok()) {
+        output.formatted_error("Invalid content directory: {}", content_directory.string());
         for (const ValidationError& e : errors.get_validation_errors()) {
             output.error(e.get_error_message());
         }
-        throw std::invalid_argument("Invalid content directory.");
+        if (testrun) {
+            throw std::invalid_argument("Invalid content directory.");
+        }
+        std::string content_dir_str;
+        std::filesystem::path content_dir;
+        while (!errors.ok()) {
+            output.prompt_input("Enter a valid content directory:", content_dir_str);
+            content_dir = std::filesystem::path(content_dir_str);
+            errors = session.set_content_directory(content_dir);
+            if (!errors.ok()) {
+                output.formatted_error("Invalid content directory: {}", content_dir.string());
+                for (const ValidationError& e : errors.get_validation_errors()) {
+                    output.error(e.get_error_message());
+                }
+            }
+        }
     }
+
     errors = session.set_campaign_name(campaign_name);
     if (!errors.ok()) {
+        output.formatted_error("Invalid campaign name: {}", campaign_name);
         for (const ValidationError& e : errors.get_validation_errors()) {
             output.error(e.get_error_message());
         }
-        throw std::invalid_argument("Invalid campaign name.");
+        if (testrun) {
+            throw std::invalid_argument("Invalid campaign name.");
+        }
+        std::string campaign_name_str;
+        while (!errors.ok()) {
+            output.prompt_input("Enter a valid campaign name:", campaign_name_str);
+            errors = session.set_campaign_name(campaign_name_str);
+            if (!errors.ok()) {
+                output.formatted_error("Invalid campaign name: {}", campaign_name_str);
+                for (const ValidationError& e : errors.get_validation_errors()) {
+                    output.error(e.get_error_message());
+                }
+            }
+        }
     }
+
+    output.formatted_text("Content directory:       {}", content_directory.string());
+    output.formatted_text("Campaign directory name: {}", campaign_name);
     assert(session.get_status() == SessionStatus::PARSING);
     output.text("Parsing...");
     while (session.get_status() == SessionStatus::PARSING) {

@@ -30,9 +30,11 @@ int dnd::launch(int argc, char** argv) {
 
     cxxopts::Options options(DND_CAMPAIGN_MANAGER_NAME, DND_CAMPAIGN_MANAGER_DESCRIPTION);
 
-    options.add_options()("c,campaign", "Name of campaign directory", cxxopts::value<std::string>())(
+    options.add_options()("c,campaign", "Name of campaign directory",
+        cxxopts::value<std::string>()->default_value("")
+    )(
         "d,directory", "Content directory",
-        cxxopts::value<std::string>()->default_value((cur_path / "content").string())
+        cxxopts::value<std::string>()->default_value(cur_path.string())
     )("t,testrun", "App starts and does not wait for input")("v,version", "Print version")("h,help", "Print usage");
 
     cxxopts::ParseResult args;
@@ -55,29 +57,20 @@ int dnd::launch(int argc, char** argv) {
         return 0;
     }
 
-    if (args.count("campaign") != 1) {
-        output.error("Error: Please provide exactly one campaign directory.");
-        return -1;
-    }
-    if (args.count("directory") > 1) {
-        output.error("Error: Please provide only one directory.\n");
-        return -1;
-    }
+    bool testrun = args.count("testrun") > 0;
 
     try {
         DND_MEASURE_SCOPE("Main execution scope");
         const std::filesystem::path content_path(args["directory"].as<std::string>());
         const std::string campaign_dir_name = args["campaign"].as<std::string>();
-        output.formatted_text("Content directory:       {}", content_path.string());
-        output.formatted_text("Campaign directory name: {}", campaign_dir_name);
 
         CliApp app;
-        app.initialize(content_path, campaign_dir_name);
+        app.initialize(content_path, campaign_dir_name, testrun);
 
         {
             DND_MEASURE_SCOPE("Main execution scope without parsing");
 
-            if (args.count("testrun")) {
+            if (testrun) {
                 return 0;
             }
 

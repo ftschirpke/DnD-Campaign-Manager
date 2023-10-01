@@ -17,7 +17,7 @@ public:
     /**
      * @brief Initializes the application.
      */
-    void initialize(const std::filesystem::path& content_directory, const std::string& campaign_name);
+    void initialize(const std::filesystem::path& content_directory, const std::string& campaign_name, bool testrun);
     /**
      * @brief Starts the application.
      */
