@@ -11,6 +11,7 @@
 
 #include <core/content_library.hpp>
 #include <core/searching/trie_search/trie.hpp>
+#include <core/utils/string_manipulation.hpp>
 
 namespace dnd {
 
@@ -74,6 +75,7 @@ private:
         size_t last_result_index = 0;
         void search(const std::vector<const T*>& sorted_data, const std::string& name_query);
     };
+    void save_in_trie(const T* content_piece);
 
     std::vector<const T*> sorted_data;
     Trie<T> trie;
@@ -113,6 +115,22 @@ void ReferencingContentLibrary<T>::BinarySearch::search(
     }
     last_result_found = false;
     last_result_index = lower;
+}
+
+template <typename T>
+void ReferencingContentLibrary<T>::save_in_trie(const T* content_piece) {
+    std::string lower_name = dnd::string_lowercase_copy(content_piece->get_name());
+
+    trie.insert(content_piece->get_name(), content_piece);
+    for (size_t i = 0; i < lower_name.size(); ++i) {
+        if (lower_name[i] == ' ' || lower_name[i] == '_' || lower_name[i] == '-') {
+            std::string_view after_sep(lower_name.c_str() + i + 1, lower_name.size() - i - 1);
+            trie.insert(after_sep, content_piece);
+        }
+        if (lower_name[i] == '(') { // do not include parentheses in trie
+            break;
+        }
+    }
 }
 
 template <typename T>

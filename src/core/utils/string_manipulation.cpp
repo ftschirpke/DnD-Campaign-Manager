@@ -8,23 +8,23 @@
 
 #include <core/utils/char_manipulation.hpp>
 
-void dnd::string_to_lowercase(std::string& str) {
+void dnd::string_lowercase_inplace(std::string& str) {
     std::transform(str.begin(), str.end(), str.begin(), uchar_to_lowercase);
 }
 
-void dnd::string_to_uppercase(std::string& str) {
+void dnd::string_uppercase_inplace(std::string& str) {
     std::transform(str.begin(), str.end(), str.begin(), uchar_to_uppercase);
 }
 
 std::string dnd::string_lowercase_copy(const std::string& str) {
     std::string lower_str = str;
-    string_to_lowercase(lower_str);
+    string_lowercase_inplace(lower_str);
     return lower_str;
 }
 
 std::string dnd::string_uppercase_copy(const std::string& str) {
     std::string upper_str = str;
-    string_to_uppercase(upper_str);
+    string_uppercase_inplace(upper_str);
     return upper_str;
 }
 

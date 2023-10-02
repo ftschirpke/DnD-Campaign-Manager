@@ -7,6 +7,7 @@
 #include <string>
 
 #include <cli/output/command_line_output.hpp>
+#include <cli/visitors/content/display_visitor.hpp>
 #include <core/session.hpp>
 
 namespace dnd {
@@ -30,6 +31,7 @@ private:
 
     Session session;
     CommandLineOutput output;
+    DisplayVisitor display_visitor;
 };
 
 } // namespace dnd

@@ -34,7 +34,7 @@ int dnd::launch(int argc, char** argv) {
         cxxopts::value<std::string>()->default_value("")
     )(
         "d,directory", "Content directory",
-        cxxopts::value<std::string>()->default_value(cur_path.string())
+        cxxopts::value<std::string>()->default_value((cur_path / "content").string())
     )("t,testrun", "App starts and does not wait for input")("v,version", "Print version")("h,help", "Print usage");
 
     cxxopts::ParseResult args;

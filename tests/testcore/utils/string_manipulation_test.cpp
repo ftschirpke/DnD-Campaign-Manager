@@ -9,12 +9,12 @@
 
 static constexpr const char* tags = "[core][utils]";
 
-TEST_CASE("dnd::string_to_lowercase", tags) {
+TEST_CASE("dnd::string_lowercase_inplace", tags) {
     SECTION("Lowercase string") {
         std::string str1 = "hello world!";
         std::string str2 = "testing lowercase";
-        dnd::string_to_lowercase(str1);
-        dnd::string_to_lowercase(str2);
+        dnd::string_lowercase_inplace(str1);
+        dnd::string_lowercase_inplace(str2);
         REQUIRE(str1 == "hello world!");
         REQUIRE(str2 == "testing lowercase");
     }
@@ -22,8 +22,8 @@ TEST_CASE("dnd::string_to_lowercase", tags) {
     SECTION("Uppercase string") {
         std::string str1 = "HELLO WORLD!";
         std::string str2 = "TESTING UPPERCASE";
-        dnd::string_to_lowercase(str1);
-        dnd::string_to_lowercase(str2);
+        dnd::string_lowercase_inplace(str1);
+        dnd::string_lowercase_inplace(str2);
         REQUIRE(str1 == "hello world!");
         REQUIRE(str2 == "testing uppercase");
     }
@@ -31,25 +31,25 @@ TEST_CASE("dnd::string_to_lowercase", tags) {
     SECTION("Mixed case string") {
         std::string str1 = "Hello World!";
         std::string str2 = "MixED CaSe StRinG";
-        dnd::string_to_lowercase(str1);
-        dnd::string_to_lowercase(str2);
+        dnd::string_lowercase_inplace(str1);
+        dnd::string_lowercase_inplace(str2);
         REQUIRE(str1 == "hello world!");
         REQUIRE(str2 == "mixed case string");
     }
 
     SECTION("Empty string") {
         std::string str = "";
-        dnd::string_to_lowercase(str);
+        dnd::string_lowercase_inplace(str);
         REQUIRE(str == "");
     }
 }
 
-TEST_CASE("dnd::string_to_uppercase", tags) {
+TEST_CASE("dnd::string_uppercase_inplace", tags) {
     SECTION("Lowercase string") {
         std::string str1 = "hello world!";
         std::string str2 = "testing uppercase";
-        dnd::string_to_uppercase(str1);
-        dnd::string_to_uppercase(str2);
+        dnd::string_uppercase_inplace(str1);
+        dnd::string_uppercase_inplace(str2);
         REQUIRE(str1 == "HELLO WORLD!");
         REQUIRE(str2 == "TESTING UPPERCASE");
     }
@@ -57,8 +57,8 @@ TEST_CASE("dnd::string_to_uppercase", tags) {
     SECTION("Uppercase string") {
         std::string str1 = "HELLO WORLD!";
         std::string str2 = "TESTING UPPERCASE";
-        dnd::string_to_uppercase(str1);
-        dnd::string_to_uppercase(str2);
+        dnd::string_uppercase_inplace(str1);
+        dnd::string_uppercase_inplace(str2);
         REQUIRE(str1 == "HELLO WORLD!");
         REQUIRE(str2 == "TESTING UPPERCASE");
     }
@@ -66,15 +66,15 @@ TEST_CASE("dnd::string_to_uppercase", tags) {
     SECTION("Mixed case string") {
         std::string str1 = "Hello World!";
         std::string str2 = "MixED CaSe StRinG";
-        dnd::string_to_uppercase(str1);
-        dnd::string_to_uppercase(str2);
+        dnd::string_uppercase_inplace(str1);
+        dnd::string_uppercase_inplace(str2);
         REQUIRE(str1 == "HELLO WORLD!");
         REQUIRE(str2 == "MIXED CASE STRING");
     }
 
     SECTION("Empty string") {
         std::string str = "";
-        dnd::string_to_uppercase(str);
+        dnd::string_uppercase_inplace(str);
         REQUIRE(str == "");
     }
 }

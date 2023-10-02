@@ -14,6 +14,7 @@
 
 #include <core/content_library.hpp>
 #include <core/searching/trie_search/trie.hpp>
+#include <core/utils/string_manipulation.hpp>
 
 namespace dnd {
 
@@ -78,6 +79,8 @@ private:
         void search(const std::vector<T>& sorted_data, const std::string& name_query);
     };
 
+    void save_in_trie(const T& content_piece);
+
     std::vector<T> sorted_data;
     Trie<T> trie;
     mutable BinarySearch binary_search;
@@ -114,6 +117,22 @@ void StorageContentLibrary<T>::BinarySearch::search(const std::vector<T>& sorted
     }
     last_result_found = false;
     last_result_index = lower;
+}
+
+template <typename T>
+void StorageContentLibrary<T>::save_in_trie(const T& content_piece) {
+    std::string lower_name = dnd::string_lowercase_copy(content_piece.get_name());
+
+    trie.insert(content_piece.get_name(), &content_piece);
+    for (size_t i = 0; i < lower_name.size(); ++i) {
+        if (lower_name[i] == ' ' || lower_name[i] == '_' || lower_name[i] == '-') {
+            std::string_view after_sep(lower_name.c_str() + i + 1, lower_name.size() - i - 1);
+            trie.insert(after_sep, &content_piece);
+        }
+        if (lower_name[i] == '(') { // do not include parentheses in trie
+            break;
+        }
+    }
 }
 
 template <typename T>
@@ -163,6 +182,7 @@ bool StorageContentLibrary<T>::add(T&& content_piece) {
         auto insert_it = sorted_data.cbegin() + static_cast<long>(binary_search.last_result_index);
         sorted_data.insert(insert_it, std::move(content_piece));
     }
+    save_in_trie(sorted_data[binary_search.last_result_index]);
     binary_search.last_result_found = true; // allows for immediate access
     return true;
 }

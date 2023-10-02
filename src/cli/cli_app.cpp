@@ -6,6 +6,7 @@
 #include <stdexcept>
 
 #include <cli/output/command_line_output.hpp>
+#include <cli/visitors/content/display_visitor.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/models/character_race/character_race.hpp>
@@ -13,7 +14,7 @@
 #include <core/utils/char_manipulation.hpp>
 #include <core/visitors/content/list_content_visitor.hpp>
 
-constexpr const char* separator = "--------------------------------------------------------------------------------";
+constexpr const char* separator = "================================================================================";
 
 dnd::CliApp::CliApp() : session("last_cli_session.ini"), output() {}
 
@@ -126,6 +127,7 @@ void dnd::CliApp::search_content_by_name() {
         session.set_trie_search(search_query, search_options);
         std::vector<std::string> results = session.get_trie_search_result_strings();
         if (results.empty()) {
+            output.formatted_text("{}", session.get_search_result_count());
             output.text("No results.");
         } else {
             for (size_t i = 0; i < results.size(); ++i) {
@@ -314,6 +316,5 @@ void dnd::CliApp::view_open_content_pieces() {
 
 void dnd::CliApp::display_content_piece(const ContentPiece* content_piece) {
     output.text(separator);
-    output.text(content_piece->get_name());
-    output.text("TODO"); // TODO: implement content visitor for displaying content pieces using CommandLineOutput
+    content_piece->accept(display_visitor);
 }

@@ -11,13 +11,13 @@ namespace dnd {
  * @brief Transform a string to lowercase
  * @param str the string to transform
  */
-void string_to_lowercase(std::string& str);
+void string_lowercase_inplace(std::string& str);
 
 /**
  * @brief Transform a string to uppercase
  * @param str the string to transform
  */
-void string_to_uppercase(std::string& str);
+void string_uppercase_inplace(std::string& str);
 
 /**
  * @brief Create a lowercase copy of a string

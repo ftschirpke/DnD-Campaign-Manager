@@ -23,12 +23,6 @@ public:
      */
     Trie();
     /**
-     * @brief Inserts a word into the trie with the given data (by reference).
-     * @param word the string to insert (as string_view)
-     * @param data the data to associate with the end of the word
-     */
-    void insert(std::string_view word, const T& data);
-    /**
      * @brief Inserts a word into the trie with the given data (as a pointer).
      * @param word the string to insert (as string_view)
      * @param data the data to associate with the end of the word
@@ -46,11 +40,6 @@ private:
 
 template <typename T>
 Trie<T>::Trie() : root() {}
-
-template <typename T>
-inline void Trie<T>::insert(std::string_view word, const T& data) {
-    insert(word, &data);
-}
 
 template <typename T>
 void Trie<T>::insert(std::string_view word, const T* data) {
