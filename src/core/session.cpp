@@ -218,7 +218,9 @@ public:
             if (name[i] != lower_query[i] && name[i] != upper_query[i]) {
                 return false;
             }
-            ++i;
+            if (++i >= name.size()) {
+                return false;
+            }
         }
         return true;
     }

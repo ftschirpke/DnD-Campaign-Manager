@@ -121,7 +121,7 @@ template <typename T>
 void ReferencingContentLibrary<T>::save_in_trie(const T* content_piece) {
     std::string lower_name = dnd::string_lowercase_copy(content_piece->get_name());
 
-    trie.insert(content_piece->get_name(), content_piece);
+    trie.insert(lower_name, content_piece);
     for (size_t i = 0; i < lower_name.size(); ++i) {
         if (lower_name[i] == ' ' || lower_name[i] == '_' || lower_name[i] == '-') {
             std::string_view after_sep(lower_name.c_str() + i + 1, lower_name.size() - i - 1);
