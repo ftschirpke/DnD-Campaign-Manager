@@ -185,49 +185,47 @@ void dnd::CliApp::list_all_content_of_a_type() {
         ListContentVisitor visitor;
         switch (type) {
             case 0:
-                for (const Character& character : session.get_content().get_characters().get_all()) {
+                for (const auto& [_, character] : session.get_content().get_characters().get_all()) {
                     character.accept(visitor);
                 }
                 break;
             case 1:
-                for (const CharacterClass& character_class : session.get_content().get_character_classes().get_all()) {
+                for (const auto& [_, character_class] : session.get_content().get_character_classes().get_all()) {
                     character_class.accept(visitor);
                 }
                 break;
             case 2:
-                for (const CharacterSubclass& character_subclass :
-                     session.get_content().get_character_subclasses().get_all()) {
+                for (const auto& [_, character_subclass] : session.get_content().get_character_subclasses().get_all()) {
                     character_subclass.accept(visitor);
                 }
                 break;
             case 3:
-                for (const CharacterRace& character_race : session.get_content().get_character_races().get_all()) {
+                for (const auto& [_, character_race] : session.get_content().get_character_races().get_all()) {
                     character_race.accept(visitor);
                 }
                 break;
             case 4:
-                for (const CharacterSubrace& character_subrace :
-                     session.get_content().get_character_subraces().get_all()) {
+                for (const auto& [_, character_subrace] : session.get_content().get_character_subraces().get_all()) {
                     character_subrace.accept(visitor);
                 }
                 break;
             case 5:
-                for (const Spell& spell : session.get_content().get_spells().get_all()) {
+                for (const auto& [_, spell] : session.get_content().get_spells().get_all()) {
                     spell.accept(visitor);
                 }
                 break;
             case 6:
-                for (const Item& item : session.get_content().get_items().get_all()) {
+                for (const auto& [_, item] : session.get_content().get_items().get_all()) {
                     item.accept(visitor);
                 }
                 break;
             case 7:
-                for (const Feature* feature : session.get_content().get_features().get_all()) {
+                for (const auto& [_, feature] : session.get_content().get_features().get_all()) {
                     feature->accept(visitor);
                 }
                 break;
             case 8:
-                for (const Choosable& choosable : session.get_content().get_choosables().get_all()) {
+                for (const auto& [_, choosable] : session.get_content().get_choosables().get_all()) {
                     choosable.accept(visitor);
                 }
                 break;

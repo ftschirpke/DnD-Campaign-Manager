@@ -131,7 +131,7 @@ dnd::Errors dnd::CharacterData::validate_relations(const dnd::Content& content) 
     }
 
     std::vector<const EffectHolder*> effect_holders_with_choices;
-    for (const Feature* const feature : content.get_features().get_all()) {
+    for (const auto& [_, feature] : content.get_features().get_all()) {
         std::vector<const EffectHolder*> effect_holders = {&feature->get_main_part()};
         for (const EffectHolder& effect_holder : feature->get_other_parts()) {
             effect_holders.push_back(&effect_holder);

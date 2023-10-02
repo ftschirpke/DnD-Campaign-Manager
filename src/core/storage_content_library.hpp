@@ -9,8 +9,8 @@
 #include <cassert>
 #include <stdexcept>
 #include <string>
+#include <unordered_map>
 #include <utility>
-#include <vector>
 
 #include <core/content_library.hpp>
 #include <core/searching/trie_search/trie.hpp>
@@ -57,9 +57,9 @@ public:
     const T& get(const std::string& name) const override;
     /**
      * @brief Get all pieces of content
-     * @return vector of all pieces of content
+     * @return map of all pieces of content
      */
-    const std::vector<T>& get_all() const;
+    const std::unordered_map<std::string, T>& get_all() const;
     /**
      * @brief Add a piece of content to the library
      * @param content_piece the piece of content to add
@@ -72,52 +72,11 @@ public:
      */
     const TrieNode<T>* get_trie_root() const override;
 private:
-    struct BinarySearch {
-        std::string last_query = "";
-        bool last_result_found = false;
-        size_t last_result_index = 0;
-        void search(const std::vector<T>& sorted_data, const std::string& name_query);
-    };
-
     void save_in_trie(const T& content_piece);
 
-    std::vector<T> sorted_data;
+    std::unordered_map<std::string, T> data;
     Trie<T> trie;
-    mutable BinarySearch binary_search;
 };
-
-template <typename T>
-void StorageContentLibrary<T>::BinarySearch::search(const std::vector<T>& sorted_data, const std::string& name_query) {
-    if (name_query == last_query) {
-        return;
-    }
-    last_query = name_query;
-    if (sorted_data.empty()) {
-        last_result_found = false;
-        last_result_index = 0;
-        return;
-    }
-    size_t lower = 0;
-    size_t upper = sorted_data.size() - 1;
-    while (lower <= upper) {
-        size_t middle = (lower + upper) / 2;
-
-        if (sorted_data[middle].get_name() < name_query) {
-            lower = middle + 1;
-        } else if (name_query < sorted_data[middle].get_name()) {
-            if (middle == 0) {
-                break;
-            }
-            upper = middle - 1;
-        } else {
-            last_result_found = true;
-            last_result_index = middle;
-            return;
-        }
-    }
-    last_result_found = false;
-    last_result_index = lower;
-}
 
 template <typename T>
 void StorageContentLibrary<T>::save_in_trie(const T& content_piece) {
@@ -137,53 +96,42 @@ void StorageContentLibrary<T>::save_in_trie(const T& content_piece) {
 
 template <typename T>
 bool StorageContentLibrary<T>::contains(const std::string& name) const {
-    binary_search.search(sorted_data, name);
-    return binary_search.last_result_found;
+    return data.contains(name);
 }
 
 template <typename T>
 bool StorageContentLibrary<T>::empty() const {
-    return sorted_data.empty();
+    return data.empty();
 }
 
 template <typename T>
 size_t StorageContentLibrary<T>::size() const {
-    return sorted_data.size();
+    return data.size();
 }
 
 template <typename T>
 const T& StorageContentLibrary<T>::get(size_t index) const {
-    return sorted_data.at(index);
+    return std::next(data.begin(), static_cast<long>(index))->second;
 }
 
 template <typename T>
 const T& StorageContentLibrary<T>::get(const std::string& name) const {
-    binary_search.search(sorted_data, name);
-    if (!binary_search.last_result_found) {
-        throw std::out_of_range("No content piece with name \"" + name + "\" exists.");
-    }
-    return sorted_data[binary_search.last_result_index];
+    return data.at(name);
 }
 
 template <typename T>
-const std::vector<T>& StorageContentLibrary<T>::get_all() const {
-    return sorted_data;
+const std::unordered_map<std::string, T>& StorageContentLibrary<T>::get_all() const {
+    return data;
 }
 
 template <typename T>
 bool StorageContentLibrary<T>::add(T&& content_piece) {
-    binary_search.search(sorted_data, content_piece.get_name());
-    if (binary_search.last_result_found) {
+    const std::string name = content_piece.get_name();
+    if (contains(name)) {
         return false;
     }
-    if (binary_search.last_result_index == sorted_data.size()) {
-        sorted_data.emplace_back(std::move(content_piece));
-    } else {
-        auto insert_it = sorted_data.cbegin() + static_cast<long>(binary_search.last_result_index);
-        sorted_data.insert(insert_it, std::move(content_piece));
-    }
-    save_in_trie(sorted_data[binary_search.last_result_index]);
-    binary_search.last_result_found = true; // allows for immediate access
+    data.emplace(name, std::move(content_piece));
+    save_in_trie(data.at(name));
     return true;
 }
 
