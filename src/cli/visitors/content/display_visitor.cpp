@@ -3,6 +3,9 @@
 #include "display_visitor.hpp"
 
 #include <cassert>
+#include <string>
+
+#include <fmt/format.h>
 
 #include <cli/output/command_line_output.hpp>
 #include <core/basic_mechanics/dice.hpp>
@@ -74,17 +77,10 @@ void dnd::DisplayVisitor::visit(const dnd::CharacterClass& character_class) {
     display_source_info(output, character_class.get_source_info());
     output.formatted_text("Hit Die: {}", dice_to_string(character_class.get_hit_dice()));
 
-    std::stringstream feat_sstr;
-    bool first = true;
-    for (auto feat_level : character_class.get_important_levels().get_feat_levels()) {
-        if (first) {
-            first = false;
-        } else {
-            feat_sstr << ", ";
-        }
-        feat_sstr << feat_level;
-    }
-    output.formatted_text("Feat Levels: {}", feat_sstr.str());
+    std::string feat_level_str = fmt::format(
+        "{}", fmt::join(character_class.get_important_levels().get_feat_levels(), ", ")
+    );
+    output.formatted_text("Feat Levels: {}", feat_level_str);
     output.formatted_text("Subclass Level: {}", character_class.get_important_levels().get_subclass_level());
 
     list_features(output, character_class.get_features());
