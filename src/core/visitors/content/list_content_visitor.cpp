@@ -35,9 +35,9 @@ void dnd::ListContentVisitor::visit(const CharacterClass& character_class) {
 }
 
 void dnd::ListContentVisitor::visit(const CharacterSubclass& character_subclass) {
-    string_list.emplace_back(fmt::format(
-        "{} [{} SUBCLASS]", character_subclass.get_name(), character_subclass.get_class()->get_name()
-    ));
+    string_list.emplace_back(
+        fmt::format("{} [{} SUBCLASS]", character_subclass.get_name(), character_subclass.get_class()->get_name())
+    );
 }
 void dnd::ListContentVisitor::visit(const CharacterRace& character_race) {
     string_list.emplace_back(fmt::format("{} [RACE]", character_race.get_name()));
@@ -62,9 +62,9 @@ void dnd::ListContentVisitor::visit(const Spell& spell) {
 }
 
 void dnd::ListContentVisitor::visit(const Feature& feature) {
-    string_list.emplace_back(fmt::format(
-        "{} [FEATURE] : {}", feature.get_name(), feature.get_source_info().get_beautified_source_path()
-    ));
+    string_list.emplace_back(
+        fmt::format("{} [FEATURE] : {}", feature.get_name(), feature.get_source_info().get_beautified_source_path())
+    );
 }
 
 void dnd::ListContentVisitor::visit(const Choosable& choosable) {
