@@ -8,6 +8,7 @@
   - [Classes](#classes)
     - [Spellcasting](#spellcasting)
   - [Subclasses](#subclasses)
+  - [Items](#items)
   - [Spells](#spells)
   - [Features](#features)
   - [Effects](#effects)
@@ -191,10 +192,30 @@ An example of a minimal spell JSON file would be:
 }
 ```
 
-<!-- ## Items -->
-<!-- TODO -->
+## Items
+An item should be an entry in a JSON map (or "object"), where the key is the name of the item and the value is a map with the following values
+| Name | required? | format | description |
+|------|:---------:|:------:|-------------|
+| requires_attunement | yes | boolean | `true` if item requires attunement, `false` otherwise |
+| description | yes | string | description of what the item does and how it works |
+| cosmetic_description | no | string | description of other aspects of the item e.g. how it looks or its history |
+
+An example of a minimal item JSON file would be:
+
+```json
+{
+    "+1 Shortsword": {
+        "requires_attunement": false,
+        "description": "This shortsword gives a +1 bonus to attack and damage rolls.",
+        "cosmetic_description": "It looks like any other simple shortsword, it does not look special at all."
+    }
+}
+```
 
 <!-- ## Monsters -->
+<!-- TODO -->
+
+<!-- ## NPCs -->
 <!-- TODO -->
 
 ## Features
@@ -246,7 +267,7 @@ Effects are defined as a string of the following format:
 ATTRIBUTE time operation PARAMETER
 ```
 The `ATTRIBUTE` is the value the effect is changing.
-Below, I listed the hard-coded attributes that will always be there, but [you can also use and create your own](#custom-effects).
+Below, I listed the hard-coded attributes that will always be there, but [you can also use and create your own](#custom-attributes).
 ```
 // mutable attributes:
 MAX_HP, AC, SPEED,
@@ -296,7 +317,7 @@ Examples:
     "AC earliest set 12",           // set new default value for armor class to 12
     "SPEED normal add 1.5",         // increase speed by 1.5
     "AC normal add DEXMOD",         // add dexterity modifier to armor class
-    "MAX_HP normal add LEVEL"        // add the character level to its armor class
+    "MAX_HP normal add LEVEL"       // add the character level to its armor class
 ]
 ```
 
