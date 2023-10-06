@@ -24,9 +24,9 @@
 
 dnd::Session::Session(const char* last_session_filename)
     : last_session_filename(last_session_filename), status(SessionStatus::CONTENT_DIR_SELECTION), content_directory(),
-      campaign_name(), last_session_open_tabs(), open_content_pieces(), fuzzy_search(), fuzzy_search_results(),
-      fuzzy_search_result_count(0), fuzzy_search_result_strings(), unknown_error_messages(), parsing_future(), parser(),
-      errors(), content() {}
+      campaign_name(), last_session_open_tabs(), open_content_pieces(), selected_content_piece(), fuzzy_search(),
+      fuzzy_search_results(), fuzzy_search_result_count(0), fuzzy_search_result_strings(), unknown_error_messages(),
+      parsing_future(), parser(), errors(), content() {}
 
 dnd::Session::~Session() { save_session_values(); }
 
