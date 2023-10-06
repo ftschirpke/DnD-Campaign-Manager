@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include "trie_content_search.hpp"
+#include "fuzzy_content_search.hpp"
 
 #include <algorithm>
 #include <array>
@@ -22,7 +22,7 @@
 #include <core/models/spell/spell.hpp>
 #include <core/utils/char_manipulation.hpp>
 
-dnd::TrieContentSearch::TrieContentSearch(const Content& content) {
+dnd::FuzzyContentSearch::FuzzyContentSearch(const Content& content) {
     query.reserve(40);
     character_search_path.push(content.get_characters().get_trie_root());
     character_class_search_path.push(content.get_character_classes().get_trie_root());
@@ -35,14 +35,14 @@ dnd::TrieContentSearch::TrieContentSearch(const Content& content) {
     choosable_search_path.push(content.get_choosables().get_trie_root());
 }
 
-dnd::TrieContentSearch::TrieContentSearch(const dnd::Content& content, const std::string& initial_query)
-    : TrieContentSearch(content) {
+dnd::FuzzyContentSearch::FuzzyContentSearch(const dnd::Content& content, const std::string& initial_query)
+    : FuzzyContentSearch(content) {
     for (char c : initial_query) {
         add_character_to_query(c);
     }
 }
 
-void dnd::TrieContentSearch::set_search_query(const std::string& new_query) {
+void dnd::FuzzyContentSearch::set_search_query(const std::string& new_query) {
     if (new_query.empty()) {
         clear_query();
         return;
@@ -72,13 +72,13 @@ void dnd::TrieContentSearch::set_search_query(const std::string& new_query) {
     }
 }
 
-void dnd::TrieContentSearch::clear_query() {
+void dnd::FuzzyContentSearch::clear_query() {
     while (!query.empty()) {
         remove_character_from_query();
     }
 }
 
-void dnd::TrieContentSearch::add_character_to_query(char c) {
+void dnd::FuzzyContentSearch::add_character_to_query(char c) {
     c = dnd::char_to_lowercase(c);
     query.push_back(c);
 
@@ -93,7 +93,7 @@ void dnd::TrieContentSearch::add_character_to_query(char c) {
     choosable_search_path.push_top_child(c);
 }
 
-void dnd::TrieContentSearch::remove_character_from_query() {
+void dnd::FuzzyContentSearch::remove_character_from_query() {
     if (query.empty()) {
         return;
     }
@@ -119,7 +119,7 @@ void dnd::TrieContentSearch::remove_character_from_query() {
     assert(choosable_search_path.size() >= 1);
 }
 
-std::vector<const dnd::ContentPiece*> dnd::TrieContentSearch::get_results(const std::array<bool, 9>& options) const {
+std::vector<const dnd::ContentPiece*> dnd::FuzzyContentSearch::get_results(const std::array<bool, 9>& options) const {
     DND_MEASURE_FUNCTION();
     std::vector<const ContentPiece*> results;
     results.reserve(500);

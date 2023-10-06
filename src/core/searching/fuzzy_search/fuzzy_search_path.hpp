@@ -1,5 +1,5 @@
-#ifndef TRIE_SEARCH_PATH_HPP_
-#define TRIE_SEARCH_PATH_HPP_
+#ifndef FUZZY_SEARCH_PATH_HPP_
+#define FUZZY_SEARCH_PATH_HPP_
 
 #include <dnd_config.hpp>
 
@@ -7,12 +7,12 @@
 #include <unordered_set>
 #include <vector>
 
-#include <core/searching/trie_search/trie_node.hpp>
+#include <core/searching/fuzzy_search/trie_node.hpp>
 
 namespace dnd {
 
 template <typename T>
-class TrieSearchPath : public std::stack<const TrieNode<T>*> {
+class FuzzySearchPath : public std::stack<const TrieNode<T>*> {
 public:
     /**
      * @brief Push the child of the top node onto the stack if it exists (otherwise push nullptr)
@@ -31,7 +31,7 @@ public:
 };
 
 template <typename T>
-void TrieSearchPath<T>::push_top_child(char c) {
+void FuzzySearchPath<T>::push_top_child(char c) {
     if (this->top() == nullptr) {
         this->push(nullptr);
     } else {
@@ -42,7 +42,7 @@ void TrieSearchPath<T>::push_top_child(char c) {
 template <typename T>
 template <typename S>
 requires std::derived_from<T, S>
-bool TrieSearchPath<T>::insert_top_successors_into(std::vector<S*>& vec) const {
+bool FuzzySearchPath<T>::insert_top_successors_into(std::vector<S*>& vec) const {
     if (this->top() == nullptr) {
         return false;
     }
@@ -56,4 +56,4 @@ bool TrieSearchPath<T>::insert_top_successors_into(std::vector<S*>& vec) const {
 
 } // namespace dnd
 
-#endif // TRIE_SEARCH_PATH_HPP_
+#endif // FUZZY_SEARCH_PATH_HPP_

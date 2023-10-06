@@ -12,7 +12,7 @@
 #include <gui/windows/content_selection.hpp>
 #include <gui/windows/content_window.hpp>
 #include <gui/windows/error_messages_window.hpp>
-#include <gui/windows/trie_search_window.hpp>
+#include <gui/windows/fuzzy_search_window.hpp>
 
 static const char* const imgui_ini_filename = "imgui.ini";
 
@@ -20,7 +20,7 @@ static const ImGuiWindowFlags error_popup_options = ImGuiWindowFlags_AlwaysAutoR
 
 dnd::GuiApp::GuiApp()
     : show_demo_window(false), session(), content_selection(session), content_window(session),
-      error_messages_window(session), trie_search_window(session) {
+      error_messages_window(session), fuzzy_search_window(session) {
     ImGui::GetIO().IniFilename = imgui_ini_filename;
 }
 
@@ -48,7 +48,7 @@ void dnd::GuiApp::render() {
     error_messages_window.render();
 
     if (session.get_status() == SessionStatus::READY) {
-        trie_search_window.render();
+        fuzzy_search_window.render();
         content_window.render();
     }
 }

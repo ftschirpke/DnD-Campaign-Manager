@@ -124,10 +124,10 @@ void dnd::CliApp::search_content_by_name() {
         if (search_query.empty()) {
             return;
         }
-        session.set_trie_search(search_query, search_options);
-        std::vector<std::string> results = session.get_trie_search_result_strings();
+        session.set_fuzzy_search(search_query, search_options);
+        std::vector<std::string> results = session.get_fuzzy_search_result_strings();
         if (results.empty()) {
-            output.formatted_text("{}", session.get_search_result_count());
+            output.formatted_text("{}", session.get_fuzzy_search_result_count());
             output.text("No results.");
         } else {
             for (size_t i = 0; i < results.size(); ++i) {
@@ -145,7 +145,7 @@ void dnd::CliApp::search_content_by_name() {
                 output.error("Invalid index.");
                 continue;
             }
-            session.open_trie_search_result(index);
+            session.open_fuzzy_search_result(index);
             std::deque<const ContentPiece*>& open_content_pieces = session.get_open_content_pieces();
             const ContentPiece* new_content_piece = open_content_pieces.back();
             display_content_piece(new_content_piece);

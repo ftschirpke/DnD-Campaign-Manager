@@ -7,7 +7,7 @@
 #include <gui/windows/content_selection.hpp>
 #include <gui/windows/content_window.hpp>
 #include <gui/windows/error_messages_window.hpp>
-#include <gui/windows/trie_search_window.hpp>
+#include <gui/windows/fuzzy_search_window.hpp>
 
 namespace dnd {
 
@@ -36,7 +36,7 @@ private:
     ContentSelection content_selection;
     ContentWindow content_window;
     ErrorMessagesWindow error_messages_window;
-    TrieSearchWindow trie_search_window;
+    FuzzySearchWindow fuzzy_search_window;
 };
 
 } // namespace dnd

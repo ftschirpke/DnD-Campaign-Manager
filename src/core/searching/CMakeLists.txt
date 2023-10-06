@@ -1,2 +1,2 @@
 add_subdirectory(content_filters)
-add_subdirectory(trie_search)
+add_subdirectory(fuzzy_search)

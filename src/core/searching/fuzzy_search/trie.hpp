@@ -7,7 +7,7 @@
 #include <string_view>
 #include <vector>
 
-#include <core/searching/trie_search/trie_node.hpp>
+#include <core/searching/fuzzy_search/trie_node.hpp>
 
 namespace dnd {
 

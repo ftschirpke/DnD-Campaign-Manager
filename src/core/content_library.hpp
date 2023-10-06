@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-#include <core/searching/trie_search/trie_node.hpp>
+#include <core/searching/fuzzy_search/trie_node.hpp>
 
 namespace dnd {
 
@@ -48,8 +48,8 @@ public:
      */
     virtual const T& get(const std::string& name) const = 0;
     /**
-     * @brief Get the root of the trie
-     * @return a pointer to the root of the trie
+     * @brief Get the root of the fuzzy
+     * @return a pointer to the root of the fuzzy
      */
     virtual const TrieNode<T>* get_trie_root() const = 0;
 };

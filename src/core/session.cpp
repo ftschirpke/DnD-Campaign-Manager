@@ -17,15 +17,15 @@
 #include <core/models/content_piece.hpp>
 #include <core/models/source_info.hpp>
 #include <core/parsing/content_parser.hpp>
-#include <core/searching/trie_search/trie_content_search.hpp>
+#include <core/searching/fuzzy_search/fuzzy_content_search.hpp>
 #include <core/utils/string_manipulation.hpp>
 #include <core/visitors/content/collect_open_tabs_visitor.hpp>
 #include <core/visitors/content/list_content_visitor.hpp>
 
 dnd::Session::Session(const char* last_session_filename)
     : last_session_filename(last_session_filename), status(SessionStatus::CONTENT_DIR_SELECTION), content_directory(),
-      campaign_name(), last_session_open_tabs(), open_content_pieces(), trie_search(), trie_search_results(),
-      trie_search_result_count(0), trie_search_result_strings(), unknown_error_messages(), parsing_future(), parser(),
+      campaign_name(), last_session_open_tabs(), open_content_pieces(), fuzzy_search(), fuzzy_search_results(),
+      fuzzy_search_result_count(0), fuzzy_search_result_strings(), unknown_error_messages(), parsing_future(), parser(),
       errors(), content() {}
 
 dnd::Session::~Session() { save_session_values(); }
@@ -54,9 +54,17 @@ const std::filesystem::path& dnd::Session::get_content_directory() const noexcep
 
 std::deque<const dnd::ContentPiece*>& dnd::Session::get_open_content_pieces() noexcept { return open_content_pieces; }
 
-size_t dnd::Session::get_search_result_count() const noexcept { return trie_search_result_count; }
+const dnd::ContentPiece* dnd::Session::get_selected_content_piece() noexcept {
+    const ContentPiece* rv = selected_content_piece;
+    selected_content_piece = nullptr;
+    return rv;
+}
 
-bool dnd::Session::too_many_search_results() const noexcept { return trie_search_result_count > max_search_results; }
+size_t dnd::Session::get_fuzzy_search_result_count() const noexcept { return fuzzy_search_result_count; }
+
+bool dnd::Session::too_many_fuzzy_search_results() const noexcept {
+    return fuzzy_search_result_count > max_search_results;
+}
 
 std::vector<std::string> dnd::Session::get_possible_campaign_names() const {
     if (content_directory.empty()) {
@@ -72,15 +80,15 @@ std::vector<std::string> dnd::Session::get_possible_campaign_names() const {
     return campaign_names;
 }
 
-std::vector<std::string> dnd::Session::get_trie_search_result_strings() const {
+std::vector<std::string> dnd::Session::get_fuzzy_search_result_strings() const {
     DND_MEASURE_FUNCTION();
     ListContentVisitor list_content_visitor;
-    list_content_visitor.reserve(trie_search_result_count);
-    if (trie_search_result_count > max_search_results) {
+    list_content_visitor.reserve(fuzzy_search_result_count);
+    if (fuzzy_search_result_count > max_search_results) {
         return {};
     }
-    for (size_t i = 0; i < trie_search_result_count; ++i) {
-        trie_search_results[i]->accept(list_content_visitor);
+    for (size_t i = 0; i < fuzzy_search_result_count; ++i) {
+        fuzzy_search_results[i]->accept(list_content_visitor);
     }
     return list_content_visitor.get_list();
 }
@@ -244,27 +252,26 @@ private:
     std::string upper_query;
 };
 
-void dnd::Session::set_trie_search(const std::string& search_query, const std::array<bool, 9>& search_options) {
+void dnd::Session::set_fuzzy_search(const std::string& search_query, const std::array<bool, 9>& search_options) {
     DND_MEASURE_FUNCTION();
-    trie_search->set_search_query(search_query);
-    std::vector<const ContentPiece*> vec_search_results = trie_search->get_results(search_options);
-    trie_search_result_count = vec_search_results.size();
-    if (trie_search_result_count > max_search_results) {
+    fuzzy_search->set_search_query(search_query);
+    std::vector<const ContentPiece*> vec_search_results = fuzzy_search->get_results(search_options);
+    fuzzy_search_result_count = vec_search_results.size();
+    if (fuzzy_search_result_count > max_search_results) {
         return;
     }
     ContentPieceComparator comparator(search_query);
     std::sort(vec_search_results.begin(), vec_search_results.end(), comparator);
-    for (size_t i = 0; i < trie_search_result_count; ++i) {
-        trie_search_results[i] = vec_search_results[i];
+    for (size_t i = 0; i < fuzzy_search_result_count; ++i) {
+        fuzzy_search_results[i] = vec_search_results[i];
     }
 }
 
-void dnd::Session::open_trie_search_result(size_t index) {
-    if (index >= trie_search_result_count) {
+void dnd::Session::open_fuzzy_search_result(size_t index) {
+    if (index >= fuzzy_search_result_count) {
         return;
     }
-    const ContentPiece* content_piece = trie_search_results[index];
-    open_content_pieces.push_back(content_piece);
+    open_content_piece(fuzzy_search_results[index]);
 }
 
 void dnd::Session::update() {
@@ -285,7 +292,7 @@ void dnd::Session::parse_content() {
     ParsingResult parsing_result = parser.parse(content_directory, campaign_name);
     content = std::move(parsing_result.content);
     errors = std::move(parsing_result.errors);
-    trie_search = std::make_unique<TrieContentSearch>(content);
+    fuzzy_search = std::make_unique<FuzzyContentSearch>(content);
     for (const ParsingError& error : errors.get_parsing_errors()) {
         SourceInfo source_info(error.get_filepath());
         parsing_error_messages.emplace_back(fmt::format(
@@ -362,4 +369,11 @@ void dnd::Session::open_last_session() {
             open_content_pieces.push_back(&content.get_choosables().get(choosable_to_open));
         }
     }
+}
+
+void dnd::Session::open_content_piece(const ContentPiece* content_piece) {
+    if (std::find(open_content_pieces.begin(), open_content_pieces.end(), content_piece) == open_content_pieces.end()) {
+        open_content_pieces.push_back(content_piece);
+    }
+    selected_content_piece = content_piece;
 }
