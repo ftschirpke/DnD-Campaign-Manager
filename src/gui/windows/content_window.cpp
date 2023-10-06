@@ -6,8 +6,7 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
 
-dnd::ContentWindow::ContentWindow(Session& session)
-    : session(session), forced_next_selection(nullptr), display_visitor() {}
+dnd::ContentWindow::ContentWindow(Session& session) : session(session), display_visitor() {}
 
 void dnd::ContentWindow::render() {
     DND_MEASURE_FUNCTION();

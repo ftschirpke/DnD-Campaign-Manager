@@ -21,7 +21,6 @@ public:
     void render();
 private:
     Session& session;
-    const ContentPiece* forced_next_selection;
     DisplayVisitor display_visitor;
 };
 
