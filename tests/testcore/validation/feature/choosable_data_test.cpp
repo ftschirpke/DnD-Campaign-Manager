@@ -23,11 +23,6 @@ TEST_CASE("dnd::ChoosableFeatureData::validate", tags) {
 
         data.type = "eldritch invocation";
         REQUIRE_NOTHROW(errors = data.validate());
-        const auto& val_errors = errors.get_validation_errors();
-        std::cout << val_errors.size() << std::endl;
-        for (const auto& error : val_errors) {
-            std::cout << error.get_error_message() << std::endl;
-        }
         REQUIRE_NOTHROW(errors += data.validate_relations(content));
         REQUIRE(errors.ok());
     }

@@ -3,66 +3,68 @@
 
 #include <dnd_config.hpp>
 
-#include <core/models/feature/choosable.hpp>
-#include <core/models/feature/feature.hpp>
-#include <core/models/item/item.hpp>
-#include <core/models/spell/spell.hpp>
-#include <core/output/output.hpp>
+#include <fmt/format.h>
 
 namespace dnd {
 
 /**
  * @brief A class for displaying things on the command line.
  */
-class CommandLineOutput : public Output {
+class CommandLineOutput {
 public:
     /**
      * @brief Display a c-style string
      * @param text the c-style string to display
      */
-    virtual void text(const char* text) override;
+    void text(const char* text);
     /**
      * @brief Display a string
      * @param text the string to display
      */
-    virtual void text(std::string_view text) override;
+    void text(std::string_view text);
+    /**
+     * @brief Display a formatted text in the style of the fmt library.
+     * @tparam ...T the types of the formatting arguments
+     * @param fmt the formatting string
+     * @param ...args the formatting arguments
+     */
+    template <typename... T>
+    void formatted_text(std::string_view fmt, const T&... args);
     /**
      * @brief Display a c-style error message
      * @param error_msg the c-style error message
      */
-    virtual void error(const char* error_msg) override;
+    void error(const char* error_msg);
     /**
      * @brief Display a error message
      * @param error_msg the error message
      */
-    virtual void error(std::string_view error_msg) override;
+    void error(std::string_view error_msg);
     /**
-     * @brief Display an item
-     * @param item a pointer to the item
+     * @brief Display a formatted error message in the style of the fmt library.
+     * @tparam ...T the types of the formatting arguments
+     * @param fmt the formatting string
+     * @param ...args the formatting arguments
      */
-    virtual void display(const Item* item) override;
-    /**
-     * @brief Display a spell
-     * @param spell a pointer to the spell
-     */
-    virtual void display(const Spell* spell) override;
-    /**
-     * @brief Display a feature
-     * @param feature a pointer to the feature
-     */
-    virtual void display(const Feature* feature) override;
-    /**
-     * @brief Display a choosable
-     * @param choosable a pointer to the choosable
-     */
-    virtual void display(const Choosable* choosable) override;
+    template <typename... T>
+    void formatted_error(std::string_view fmt, const T&... args);
     /**
      * @brief Ask user for input
      * @param prompt_msg the message asking for input
      * @param out the string to write the users input to
      */
-    virtual void prompt_input(std::string_view prompt_msg, std::string& out) override;
+    void prompt_input(std::string_view prompt_msg, std::string& out);
 };
+
+template <typename... T>
+void CommandLineOutput::formatted_text(std::string_view fmt, const T&... args) {
+    text(fmt::vformat(fmt, fmt::make_format_args(std::forward<const T&>(args)...)));
+}
+
+template <typename... T>
+void CommandLineOutput::formatted_error(std::string_view fmt, const T&... args) {
+    error(fmt::vformat(fmt, fmt::make_format_args(std::forward<const T&>(args)...)));
+}
 
 } // namespace dnd
 

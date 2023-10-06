@@ -1,5 +1,5 @@
-#ifndef TRIE_CONTENT_SEARCH_HPP_
-#define TRIE_CONTENT_SEARCH_HPP_
+#ifndef FUZZY_CONTENT_SEARCH_HPP_
+#define FUZZY_CONTENT_SEARCH_HPP_
 
 #include <dnd_config.hpp>
 
@@ -19,27 +19,27 @@
 #include <core/models/feature/feature.hpp>
 #include <core/models/item/item.hpp>
 #include <core/models/spell/spell.hpp>
-#include <core/searching/trie_search/trie.hpp>
-#include <core/searching/trie_search/trie_search_path.hpp>
+#include <core/searching/fuzzy_search/fuzzy_search_path.hpp>
+#include <core/searching/fuzzy_search/trie.hpp>
 
 namespace dnd {
 
 /**
  * @brief A class representing a content search query
  */
-class TrieContentSearch {
+class FuzzyContentSearch {
 public:
     /**
      * @brief Initialize the search with the content that should be searched
      * @param content the content to search
      */
-    TrieContentSearch(const Content& content);
+    FuzzyContentSearch(const Content& content);
     /**
      * @brief Initialize the search with the content that should be searched and an initial query
      * @param content the content to search
      * @param initial_query the initial search query
      */
-    TrieContentSearch(const Content& content, const std::string& initial_query);
+    FuzzyContentSearch(const Content& content, const std::string& initial_query);
     /**
      * @brief Set the search query
      * @param query the search query
@@ -65,18 +65,18 @@ public:
     std::vector<const ContentPiece*> get_results(const std::array<bool, 9>& options) const;
 private:
     std::vector<char> query;
-    TrieSearchPath<Character> character_search_path;
-    TrieSearchPath<const CharacterClass> character_class_search_path;
-    TrieSearchPath<const CharacterSubclass> character_subclass_search_path;
-    TrieSearchPath<const CharacterRace> character_race_search_path;
-    TrieSearchPath<const CharacterSubrace> character_subrace_search_path;
-    TrieSearchPath<const Item> item_search_path;
-    TrieSearchPath<const Spell> spell_search_path;
-    TrieSearchPath<const Feature> feature_search_path;
-    TrieSearchPath<const Choosable> choosable_search_path;
+    FuzzySearchPath<Character> character_search_path;
+    FuzzySearchPath<CharacterClass> character_class_search_path;
+    FuzzySearchPath<CharacterSubclass> character_subclass_search_path;
+    FuzzySearchPath<CharacterRace> character_race_search_path;
+    FuzzySearchPath<CharacterSubrace> character_subrace_search_path;
+    FuzzySearchPath<Item> item_search_path;
+    FuzzySearchPath<Spell> spell_search_path;
+    FuzzySearchPath<Feature> feature_search_path;
+    FuzzySearchPath<Choosable> choosable_search_path;
 };
 
 
 } // namespace dnd
 
-#endif // TRIE_CONTENT_SEARCH_HPP_
+#endif // FUZZY_CONTENT_SEARCH_HPP_

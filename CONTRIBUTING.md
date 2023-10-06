@@ -22,7 +22,8 @@ I would be happy to clarify and explain my ideas. I am also open to any ideas to
 
 ## Requirements
 
-You only need a C++ compiler and [CMake](https://cmake.org/) to build the project.
+You need a C++ compiler and [CMake](https://cmake.org/) to build the project.
+Additionally, you need to have X11 installed. On Windows and MacOS it is installed by default, on Linux distributions you might to install it yourself.
 
 ## Format
 
@@ -154,6 +155,7 @@ As explained [above](#includes), implementation files should include everything 
 
 In Implementation files, there should be no namespace-block.
 Instead, write `dnd::MyClass::my_function` when implementing a function "my_function" of the class "MyClass" which was defined inside this code base (therefore being in the "dnd" namespace).
+
 ## Commit types
 
 - feat: The new feature you're adding to a particular application

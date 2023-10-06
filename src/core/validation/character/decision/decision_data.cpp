@@ -45,9 +45,9 @@ dnd::Errors dnd::DecisionData::validate() const {
     return errors;
 }
 
-bool feature_is_in(const dnd::Feature* feature_to_find, const dnd::FeatureHolder& feature_holder) {
-    for (const auto& feature : feature_holder.get_features()) {
-        if (&feature == feature_to_find) {
+bool feature_is_in(const dnd::Feature& feature_to_find, const dnd::FeatureHolder& feature_holder) {
+    for (const dnd::Feature& feature : feature_holder.get_features()) {
+        if (&feature == &feature_to_find) {
             return true;
         }
     }
@@ -100,11 +100,11 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
         return errors;
     }
 
-    const Feature* linked_feature = content.get_features().get(feature_name);
+    const Feature& linked_feature = content.get_features().get(feature_name);
 
-    if (&linked_feature->get_main_part() != target) {
+    if (&linked_feature.get_main_part() != target) {
         bool target_found_in_feature = false;
-        for (const auto& part : linked_feature->get_other_parts()) {
+        for (const auto& part : linked_feature.get_other_parts()) {
             if (&part == target) {
                 target_found_in_feature = true;
                 break;

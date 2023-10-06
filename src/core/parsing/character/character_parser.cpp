@@ -84,7 +84,7 @@ void dnd::CharacterParser::set_context(const dnd::Content& content) {
     for (auto& decision_data : data.decisions_data) {
         const Feature* feature;
         if (content.get_features().contains(decision_data.feature_name)) {
-            feature = content.get_features().get(decision_data.feature_name);
+            feature = &content.get_features().get(decision_data.feature_name);
         } else if (content.get_choosables().contains(decision_data.feature_name)) {
             feature = &content.get_choosables().get(decision_data.feature_name);
         } else {

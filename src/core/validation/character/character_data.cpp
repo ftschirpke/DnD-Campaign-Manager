@@ -4,6 +4,7 @@
 
 #include <array>
 #include <memory>
+#include <unordered_set>
 #include <vector>
 
 #include <fmt/format.h>
@@ -14,6 +15,9 @@
 #include <core/errors/validation_error.hpp>
 #include <core/models/character_class/character_class.hpp>
 #include <core/models/character_race/character_race.hpp>
+#include <core/models/effect_holder/effect_holder.hpp>
+#include <core/models/feature/feature.hpp>
+#include <core/referencing_content_library.hpp>
 #include <core/validation/character/progression_data.hpp>
 #include <core/validation/feature/feature_data.hpp>
 #include <core/validation/validation_data.hpp>

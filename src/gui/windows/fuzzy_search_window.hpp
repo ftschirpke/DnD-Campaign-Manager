@@ -1,5 +1,5 @@
-#ifndef TRIE_SEARCH_WINDOW_HPP_
-#define TRIE_SEARCH_WINDOW_HPP_
+#ifndef FUZZY_SEARCH_WINDOW_HPP_
+#define FUZZY_SEARCH_WINDOW_HPP_
 
 #include <dnd_config.hpp>
 
@@ -11,11 +11,11 @@
 namespace dnd {
 
 /**
- * @brief A window of the GUI displaying the trie search (or simple search).
+ * @brief A window of the GUI displaying the fuzzy search (or simple search).
  */
-class TrieSearchWindow {
+class FuzzySearchWindow {
 public:
-    TrieSearchWindow(Session& session);
+    FuzzySearchWindow(Session& session);
     /**
      * @brief Renders the window.
      */
@@ -28,4 +28,4 @@ private:
 
 } // namespace dnd
 
-#endif // TRIE_SEARCH_WINDOW_HPP_
+#endif // FUZZY_SEARCH_WINDOW_HPP_

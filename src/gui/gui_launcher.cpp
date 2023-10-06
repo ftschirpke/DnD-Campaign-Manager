@@ -132,7 +132,7 @@ int dnd::launch() {
     setup_font();
 
     {
-        GUIApp app;
+        GuiApp app;
         app.initialize();
 
         while (!glfwWindowShouldClose(window)) {

@@ -6,7 +6,6 @@
 #include <string>
 #include <unordered_map>
 
-#include <core/content_library.hpp>
 #include <core/groups.hpp>
 #include <core/models/character/character.hpp>
 #include <core/models/character_class/character_class.hpp>
@@ -17,6 +16,8 @@
 #include <core/models/feature/feature.hpp>
 #include <core/models/item/item.hpp>
 #include <core/models/spell/spell.hpp>
+#include <core/referencing_content_library.hpp>
+#include <core/storage_content_library.hpp>
 
 namespace dnd {
 
@@ -38,14 +39,14 @@ public:
 
     const Groups& get_groups() const;
     const StorageContentLibrary<Character>& get_characters() const;
-    const StorageContentLibrary<const CharacterClass>& get_character_classes() const;
-    const StorageContentLibrary<const CharacterSubclass>& get_character_subclasses() const;
-    const StorageContentLibrary<const CharacterRace>& get_character_races() const;
-    const StorageContentLibrary<const CharacterSubrace>& get_character_subraces() const;
-    const StorageContentLibrary<const Item>& get_items() const;
-    const StorageContentLibrary<const Spell>& get_spells() const;
-    const ReferencingContentLibrary<const Feature>& get_features() const;
-    const StorageContentLibrary<const Choosable>& get_choosables() const;
+    const StorageContentLibrary<CharacterClass>& get_character_classes() const;
+    const StorageContentLibrary<CharacterSubclass>& get_character_subclasses() const;
+    const StorageContentLibrary<CharacterRace>& get_character_races() const;
+    const StorageContentLibrary<CharacterSubrace>& get_character_subraces() const;
+    const StorageContentLibrary<Item>& get_items() const;
+    const StorageContentLibrary<Spell>& get_spells() const;
+    const ReferencingContentLibrary<Feature>& get_features() const;
+    const StorageContentLibrary<Choosable>& get_choosables() const;
 
     void set_subgroup(const std::string& group_name, const std::string& subgroup_name);
     void set_subgroups(const std::string& group_name, std::set<std::string>&& subgroups);
@@ -63,15 +64,15 @@ public:
 private:
     Groups groups;
     StorageContentLibrary<Character> characters;
-    StorageContentLibrary<const CharacterClass> character_classes;
-    StorageContentLibrary<const CharacterSubclass> character_subclasses;
-    StorageContentLibrary<const CharacterRace> character_races;
-    StorageContentLibrary<const CharacterSubrace> character_subraces;
-    StorageContentLibrary<const Item> items;
-    StorageContentLibrary<const Spell> spells;
+    StorageContentLibrary<CharacterClass> character_classes;
+    StorageContentLibrary<CharacterSubclass> character_subclasses;
+    StorageContentLibrary<CharacterRace> character_races;
+    StorageContentLibrary<CharacterSubrace> character_subraces;
+    StorageContentLibrary<Item> items;
+    StorageContentLibrary<Spell> spells;
 
-    ReferencingContentLibrary<const Feature> features;
-    StorageContentLibrary<const Choosable> choosables;
+    ReferencingContentLibrary<Feature> features;
+    StorageContentLibrary<Choosable> choosables;
 };
 
 } // namespace dnd

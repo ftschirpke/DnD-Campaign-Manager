@@ -94,7 +94,7 @@ dnd::SpellType dnd::SpellType::create(dnd::SpellTypeData&& type_data) {
             magic_school_str = type_data.str.substr(i, type_data.str.size() - i);
         }
     }
-    string_to_lowercase(magic_school_str);
+    string_lowercase_inplace(magic_school_str);
     magic_school = magic_school_from_name(magic_school_str);
     return SpellType(level, magic_school, is_ritual);
 }

@@ -1,11 +1,12 @@
 #include <dnd_config.hpp>
 
 #include "content_window.hpp"
+#include "gui/visitors/content/display_visitor.hpp"
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
 
-dnd::ContentWindow::ContentWindow(Session& session) : session(session) {}
+dnd::ContentWindow::ContentWindow(Session& session) : session(session), display_visitor() {}
 
 void dnd::ContentWindow::render() {
     DND_MEASURE_FUNCTION();
@@ -34,13 +35,14 @@ void dnd::ContentWindow::render() {
                 ImGui::SetTooltip("Close all tabs");
             }
         }
-        if (forced_next_selection != nullptr) {
+        const ContentPiece* selected_content_piece = session.get_selected_content_piece();
+        if (selected_content_piece != nullptr) {
             ImGuiTabBar* tab_bar = ImGui::GetCurrentTabBar();
             ImGuiTabItem* tab_item = ImGui::TabBarFindTabByID(
-                tab_bar, ImGui::GetID(forced_next_selection->get_name().c_str())
+                tab_bar, ImGui::GetID(selected_content_piece->get_name().c_str())
             );
             ImGui::TabBarQueueFocus(tab_bar, tab_item);
-            forced_next_selection = nullptr;
+            selected_content_piece = nullptr;
         }
         ImGui::EndTabBar();
     }
