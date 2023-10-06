@@ -29,7 +29,7 @@ public:
      * @param ...args the formatting arguments
      */
     template <typename... T>
-    void formatted_text(std::string_view fmt, T&&... args);
+    void formatted_text(std::string_view fmt, const T&... args);
     /**
      * @brief Display a c-style error message
      * @param error_msg the c-style error message
@@ -47,7 +47,7 @@ public:
      * @param ...args the formatting arguments
      */
     template <typename... T>
-    void formatted_error(std::string_view fmt, T&&... args);
+    void formatted_error(std::string_view fmt, const T&... args);
     /**
      * @brief Ask user for input
      * @param prompt_msg the message asking for input
@@ -57,13 +57,13 @@ public:
 };
 
 template <typename... T>
-void CommandLineOutput::formatted_text(std::string_view fmt, T&&... args) {
-    text(fmt::vformat(fmt, fmt::make_format_args(std::forward<T>(args)...)));
+void CommandLineOutput::formatted_text(std::string_view fmt, const T&... args) {
+    text(fmt::vformat(fmt, fmt::make_format_args(std::forward<const T&>(args)...)));
 }
 
 template <typename... T>
-void CommandLineOutput::formatted_error(std::string_view fmt, T&&... args) {
-    error(fmt::vformat(fmt, fmt::make_format_args(std::forward<T>(args)...)));
+void CommandLineOutput::formatted_error(std::string_view fmt, const T&... args) {
+    error(fmt::vformat(fmt, fmt::make_format_args(std::forward<const T&>(args)...)));
 }
 
 } // namespace dnd
