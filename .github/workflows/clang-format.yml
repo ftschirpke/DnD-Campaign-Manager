@@ -14,8 +14,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Install clang-format-15
-      run: sudo apt install -y clang-format-15
+    - name: Install clang-format-17
+      run: |
+        wget https://apt.llvm.org/llvm.sh
+        sudo bash llvm.sh 17 all
+        clang-format-17 --version
 
     - name: Check format of C++ files
       working-directory: ${{ github.workspace }}
