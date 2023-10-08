@@ -8,6 +8,7 @@
 #include <string>
 
 #include <core/models/content_piece.hpp>
+#include <core/models/source_info.hpp>
 #include <core/models/spell/spell_components.hpp>
 #include <core/models/spell/spell_type.hpp>
 #include <core/validation/spell/spell_data.hpp>
@@ -26,6 +27,9 @@ public:
      */
     static Spell create(SpellData&& spell_data);
 
+    const std::string& get_name() const noexcept override;
+    const std::string& get_description() const noexcept override;
+    const SourceInfo& get_source_info() const noexcept override;
     const SpellComponents& get_components() const noexcept;
     const SpellType& get_type() const noexcept;
     const std::string& get_casting_time() const noexcept;
@@ -45,6 +49,9 @@ private:
         std::string&& duration, std::set<std::string>&& classes
     ) noexcept;
 
+    std::string name;
+    std::string description;
+    SourceInfo source_info;
     SpellComponents components;
     SpellType type;
     std::string casting_time;

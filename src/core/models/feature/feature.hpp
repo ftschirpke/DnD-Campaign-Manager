@@ -9,6 +9,7 @@
 
 #include <core/models/content_piece.hpp>
 #include <core/models/effect_holder/effect_holder.hpp>
+#include <core/models/source_info.hpp>
 #include <core/validation/feature/feature_data.hpp>
 
 namespace dnd {
@@ -35,6 +36,9 @@ public:
     Feature(Feature&&) = default;
     Feature& operator=(Feature&&) = default;
 
+    const std::string& get_name() const noexcept override;
+    const std::string& get_description() const noexcept override;
+    const SourceInfo& get_source_info() const noexcept override;
     const dnd::EffectHolder& get_main_part() const noexcept;
     const std::vector<dnd::EffectHolder>& get_other_parts() const noexcept;
 
@@ -56,6 +60,9 @@ protected:
         std::vector<EffectHolder>&& other_parts = {}
     ) noexcept;
 private:
+    std::string name;
+    std::string description;
+    SourceInfo source_info;
     EffectHolder main_part;
     std::vector<EffectHolder> other_parts;
 };
