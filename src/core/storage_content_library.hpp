@@ -13,6 +13,7 @@
 #include <utility>
 
 #include <core/content_library.hpp>
+#include <core/models/content_piece.hpp>
 #include <core/searching/fuzzy_search/trie.hpp>
 #include <core/utils/string_manipulation.hpp>
 
@@ -23,6 +24,7 @@ namespace dnd {
  * @tparam T the type of the content pieces being stored
  */
 template <typename T>
+requires isContentPieceType<T>
 class StorageContentLibrary : public ContentLibrary<T> {
 public:
     /**
@@ -79,6 +81,7 @@ private:
 };
 
 template <typename T>
+requires isContentPieceType<T>
 void StorageContentLibrary<T>::save_in_fuzzy(const T& content_piece) {
     std::string lower_name = dnd::string_lowercase_copy(content_piece.get_name());
 
@@ -95,36 +98,43 @@ void StorageContentLibrary<T>::save_in_fuzzy(const T& content_piece) {
 }
 
 template <typename T>
+requires isContentPieceType<T>
 bool StorageContentLibrary<T>::contains(const std::string& name) const {
     return data.contains(name);
 }
 
 template <typename T>
+requires isContentPieceType<T>
 bool StorageContentLibrary<T>::empty() const {
     return data.empty();
 }
 
 template <typename T>
+requires isContentPieceType<T>
 size_t StorageContentLibrary<T>::size() const {
     return data.size();
 }
 
 template <typename T>
+requires isContentPieceType<T>
 const T& StorageContentLibrary<T>::get(size_t index) const {
     return std::next(data.begin(), static_cast<long>(index))->second;
 }
 
 template <typename T>
+requires isContentPieceType<T>
 const T& StorageContentLibrary<T>::get(const std::string& name) const {
     return data.at(name);
 }
 
 template <typename T>
+requires isContentPieceType<T>
 const std::unordered_map<std::string, T>& StorageContentLibrary<T>::get_all() const {
     return data;
 }
 
 template <typename T>
+requires isContentPieceType<T>
 bool StorageContentLibrary<T>::add(T&& content_piece) {
     const std::string name = content_piece.get_name();
     if (contains(name)) {
@@ -136,6 +146,7 @@ bool StorageContentLibrary<T>::add(T&& content_piece) {
 }
 
 template <typename T>
+requires isContentPieceType<T>
 const TrieNode<T>* StorageContentLibrary<T>::get_trie_root() const {
     return trie.get_root();
 }
