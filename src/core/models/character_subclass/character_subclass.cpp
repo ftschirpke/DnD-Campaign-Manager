@@ -13,6 +13,7 @@
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/character_class/spellcasting/spellcasting_factory.hpp>
 #include <core/models/character_race/character_race.hpp>
+#include <core/models/source_info.hpp>
 #include <core/validation/character_subclass/character_subclass_data.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
@@ -35,6 +36,14 @@ dnd::CharacterSubclass dnd::CharacterSubclass::create(dnd::CharacterSubclassData
     );
 }
 
+const std::string& dnd::CharacterSubclass::get_name() const noexcept { return name; }
+
+const std::string& dnd::CharacterSubclass::get_description() const noexcept { return description; }
+
+const dnd::SourceInfo& dnd::CharacterSubclass::get_source_info() const noexcept { return source_info; }
+
+const std::vector<dnd::Feature>& dnd::CharacterSubclass::get_features() const noexcept { return features; }
+
 bool dnd::CharacterSubclass::has_spellcasting() const noexcept { return spellcasting != nullptr; }
 
 const dnd::CharacterClass* dnd::CharacterSubclass::get_class() const noexcept { return cls; }
@@ -45,5 +54,5 @@ dnd::CharacterSubclass::CharacterSubclass(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::vector<Feature>&& features,
     const CharacterClass* cls, std::unique_ptr<Spellcasting>&& spellcasting
 ) noexcept
-    : FeatureHolder(std::move(name), std::move(description), std::move(source_path), std::move(features)), cls(cls),
-      spellcasting(std::move(spellcasting)) {}
+    : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
+      features(std::move(features)), cls(cls), spellcasting(std::move(spellcasting)) {}

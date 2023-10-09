@@ -8,7 +8,9 @@
 #include <vector>
 
 #include <core/models/character_race/character_race.hpp>
-#include <core/models/feature_holder/feature_holder.hpp>
+#include <core/models/content_piece.hpp>
+#include <core/models/feature/feature.hpp>
+#include <core/models/source_info.hpp>
 #include <core/validation/character_subrace/character_subrace_data.hpp>
 
 namespace dnd {
@@ -16,7 +18,7 @@ namespace dnd {
 class Content;
 class ContentVisitor;
 
-class CharacterSubrace : public FeatureHolder {
+class CharacterSubrace : public ContentPiece {
 public:
     /**
      * @brief Constructs a character subrace from the given data and content
@@ -32,6 +34,10 @@ public:
     CharacterSubrace(CharacterSubrace&&) = default;
     CharacterSubrace& operator=(CharacterSubrace&&) = default;
 
+    const std::string& get_name() const noexcept override;
+    const std::string& get_description() const noexcept override;
+    const SourceInfo& get_source_info() const noexcept override;
+    const std::vector<Feature>& get_features() const noexcept;
     const CharacterRace* get_race() const noexcept;
 
     /**
@@ -45,6 +51,10 @@ private:
         std::vector<Feature>&& features, const CharacterRace* race
     ) noexcept;
 
+    std::string name;
+    std::string description;
+    SourceInfo source_info;
+    std::vector<Feature> features;
     const CharacterRace* race;
 };
 

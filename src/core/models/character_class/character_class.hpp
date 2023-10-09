@@ -11,8 +11,9 @@
 #include <core/basic_mechanics/dice.hpp>
 #include <core/models/character_class/important_levels.hpp>
 #include <core/models/character_class/spellcasting/spellcasting.hpp>
+#include <core/models/content_piece.hpp>
 #include <core/models/feature/feature.hpp>
-#include <core/models/feature_holder/feature_holder.hpp>
+#include <core/models/source_info.hpp>
 #include <core/validation/character_class/character_class_data.hpp>
 
 namespace dnd {
@@ -20,7 +21,7 @@ namespace dnd {
 class Content;
 class ContentVisitor;
 
-class CharacterClass : public FeatureHolder {
+class CharacterClass : public ContentPiece {
 public:
     /**
      * @brief Constructs a character class from the given data and content
@@ -36,6 +37,10 @@ public:
     CharacterClass(CharacterClass&&) = default;
     CharacterClass& operator=(CharacterClass&&) = default;
 
+    const std::string& get_name() const noexcept override;
+    const std::string& get_description() const noexcept override;
+    const SourceInfo& get_source_info() const noexcept override;
+    const std::vector<Feature>& get_features() const noexcept;
     bool has_spellcasting() const noexcept;
     const Spellcasting* get_spellcasting() const noexcept;
     const Feature* get_subclass_feature() const noexcept;
@@ -54,6 +59,10 @@ private:
         ImportantLevels&& important_levels, std::unique_ptr<Spellcasting>&& spellcasting = nullptr
     ) noexcept;
 
+    std::string name;
+    std::string description;
+    SourceInfo source_info;
+    std::vector<Feature> features;
     std::unique_ptr<Spellcasting> spellcasting;
     const Feature* subclass_feature;
     Dice hit_dice;

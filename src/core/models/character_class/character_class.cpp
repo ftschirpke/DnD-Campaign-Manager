@@ -20,7 +20,7 @@
 #include <core/models/character_class/important_levels.hpp>
 #include <core/models/character_class/spellcasting/spellcasting_factory.hpp>
 #include <core/models/feature/feature.hpp>
-#include <core/models/feature_holder/feature_holder.hpp>
+#include <core/models/source_info.hpp>
 #include <core/validation/character_class/character_class_data.hpp>
 #include <core/validation/effect_holder/condition/condition_data.hpp>
 #include <core/validation/effect_holder/effect_holder_data.hpp>
@@ -76,6 +76,14 @@ dnd::CharacterClass dnd::CharacterClass::create(dnd::CharacterClassData&& data, 
     );
 }
 
+const std::string& dnd::CharacterClass::get_name() const noexcept { return name; }
+
+const std::string& dnd::CharacterClass::get_description() const noexcept { return description; }
+
+const dnd::SourceInfo& dnd::CharacterClass::get_source_info() const noexcept { return source_info; }
+
+const std::vector<dnd::Feature>& dnd::CharacterClass::get_features() const noexcept { return features; }
+
 bool dnd::CharacterClass::has_spellcasting() const noexcept { return spellcasting != nullptr; }
 
 const dnd::Spellcasting* dnd::CharacterClass::get_spellcasting() const noexcept { return spellcasting.get(); }
@@ -93,6 +101,6 @@ dnd::CharacterClass::CharacterClass(
     std::vector<dnd::Feature>&& features, const dnd::Feature* subclass_feature, dnd::Dice hit_dice,
     dnd::ImportantLevels&& important_levels, std::unique_ptr<dnd::Spellcasting>&& spellcasting
 ) noexcept
-    : FeatureHolder(std::move(name), std::move(description), std::move(source_path), std::move(features)),
-      spellcasting(std::move(spellcasting)), subclass_feature(subclass_feature), hit_dice(std::move(hit_dice)),
-      important_levels(std::move(important_levels)) {}
+    : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
+      features(std::move(features)), spellcasting(std::move(spellcasting)), subclass_feature(subclass_feature),
+      hit_dice(std::move(hit_dice)), important_levels(std::move(important_levels)) {}

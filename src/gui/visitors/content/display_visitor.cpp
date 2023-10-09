@@ -19,7 +19,6 @@
 #include <core/models/content_piece.hpp>
 #include <core/models/feature/choosable.hpp>
 #include <core/models/feature/feature.hpp>
-#include <core/models/feature_holder/feature_holder.hpp>
 #include <core/models/item/item.hpp>
 #include <core/models/spell/spell.hpp>
 #include <core/output/string_formatting/formats/format.hpp>
@@ -27,8 +26,13 @@
 #include <core/visitors/content/content_visitor.hpp>
 
 static const ImVec2 cell_padding = ImVec2(5, 5);
-static const ImGuiTableFlags content_table_flags = ImGuiTableFlags_NoBordersInBodyUntilResize;
+static constexpr ImGuiTableFlags content_table_flags = ImGuiTableFlags_NoBordersInBodyUntilResize;
 static const float first_column_width = 150;
+
+static constexpr ImGuiTableFlags table_flags = ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg
+                                               | ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_NoHostExtendX;
+
+dnd::DisplayVisitor::DisplayVisitor() noexcept : display_format_visitor(table_flags), string_formatter(false) {}
 
 static void label(const char* label) {
     ImGui::TableNextRow();
@@ -118,7 +122,7 @@ void dnd::DisplayVisitor::visit(const Character& character) {
     }
 
     label("Features:");
-    list_features(character);
+    list_features(character.get_features());
 
     end_content_table();
 }
@@ -139,7 +143,7 @@ void dnd::DisplayVisitor::visit(const CharacterClass& character_class) {
     label("Subclass Level:");
     ImGui::Text("%d", character_class.get_important_levels().get_subclass_level());
     label("Features:");
-    list_features(character_class);
+    list_features(character_class.get_features());
 
     end_content_table();
 }
@@ -153,7 +157,7 @@ void dnd::DisplayVisitor::visit(const CharacterSubclass& character_subclass) {
     label("Class name:");
     ImGui::Text("%s", character_subclass.get_class()->get_name().c_str());
     label("Features:");
-    list_features(character_subclass);
+    list_features(character_subclass.get_features());
 
     end_content_table();
 }
@@ -168,7 +172,7 @@ void dnd::DisplayVisitor::visit(const CharacterRace& character_race) {
     label("Has Subraces:");
     ImGui::Text("%s", has_subraces_cstr);
     label("Features:");
-    list_features(character_race);
+    list_features(character_race.get_features());
 
     end_content_table();
 }
@@ -182,7 +186,7 @@ void dnd::DisplayVisitor::visit(const CharacterSubrace& character_subrace) {
     label("Race name:");
     ImGui::Text("%s", character_subrace.get_race()->get_name().c_str());
     label("Features:");
-    list_features(character_subrace);
+    list_features(character_subrace.get_features());
 
     end_content_table();
 }
@@ -260,12 +264,12 @@ void dnd::DisplayVisitor::display_formatted_text(const std::string& formatted_te
     }
 }
 
-void dnd::DisplayVisitor::list_features(const FeatureHolder& feature_holder) {
-    if (feature_holder.get_features().empty()) {
+void dnd::DisplayVisitor::list_features(const std::vector<Feature>& features) {
+    if (features.empty()) {
         ImGui::Text("None");
         return;
     }
-    for (const Feature& feature : feature_holder.get_features()) {
+    for (const Feature& feature : features) {
         ImGui::Separator();
         if (ImGui::TreeNode(feature.get_name().c_str())) {
             ImGui::Separator();

@@ -35,16 +35,11 @@ public:
     virtual void visit(const Choosable& choosable) override;
 private:
     void display_formatted_text(const std::string& formatted_text);
-    void list_features(const FeatureHolder& feature_holder);
+    void list_features(const std::vector<Feature>& feature_holder);
 
     DisplayFormatVisitor display_format_visitor;
     StringFormatter string_formatter;
-
-    static constexpr ImGuiTableFlags table_flags = ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg
-                                                   | ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_NoHostExtendX;
 };
-
-inline DisplayVisitor::DisplayVisitor() noexcept : display_format_visitor(table_flags), string_formatter(false) {}
 
 } // namespace dnd
 

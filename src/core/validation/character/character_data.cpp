@@ -51,25 +51,6 @@ dnd::Errors dnd::CharacterData::validate() const {
     return errors;
 }
 
-std::vector<const dnd::FeatureHolder*> get_feature_holders(
-    const dnd::CharacterBasisData& basis, const dnd::Content& content
-) {
-    std::vector<const dnd::FeatureHolder*> feature_holders;
-    if (content.get_character_races().contains(basis.race_name)) {
-        feature_holders.push_back(&content.get_character_races().get(basis.race_name));
-    }
-    if (content.get_character_subraces().contains(basis.subrace_name)) {
-        feature_holders.push_back(&content.get_character_subraces().get(basis.subrace_name));
-    }
-    if (content.get_character_classes().contains(basis.class_name)) {
-        feature_holders.push_back(&content.get_character_classes().get(basis.class_name));
-    }
-    if (content.get_character_subclasses().contains(basis.subclass_name)) {
-        feature_holders.push_back(&content.get_character_subclasses().get(basis.subclass_name));
-    }
-    return feature_holders;
-}
-
 dnd::Errors dnd::CharacterData::validate_relations(const dnd::Content& content) const {
     Errors errors;
     if (content.get_characters().contains(name)) {
