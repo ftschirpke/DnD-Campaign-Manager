@@ -28,22 +28,9 @@ dnd::Choosable dnd::Choosable::create(dnd::ChoosableData&& data, const dnd::Cont
     }
 
     EffectHolder main_part = EffectHolder::create(std::move(data.main_part_data), content);
-    if (data.other_parts_data.empty()) {
-        return Choosable(
-            std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.type),
-            std::move(prerequisites), std::move(main_part)
-        );
-    }
-
-    std::vector<EffectHolder> other_parts;
-    other_parts.reserve(data.other_parts_data.size());
-    for (auto& other_part_data : data.other_parts_data) {
-        other_parts.emplace_back(EffectHolder::create(std::move(other_part_data), content));
-    }
-
     return Choosable(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.type),
-        std::move(prerequisites), std::move(main_part), std::move(other_parts)
+        std::move(prerequisites), std::move(main_part)
     );
 }
 
@@ -57,10 +44,7 @@ void dnd::Choosable::accept(dnd::ContentVisitor& visitor) const { visitor.visit(
 
 dnd::Choosable::Choosable(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& type,
-    std::vector<std::unique_ptr<Condition>>&& prerequisites, EffectHolder&& main_part,
-    std::vector<EffectHolder>&& other_parts
+    std::vector<std::unique_ptr<Condition>>&& prerequisites, EffectHolder&& main_part
 ) noexcept
-    : Feature(
-        std::move(name), std::move(description), std::move(source_path), std::move(main_part), std::move(other_parts)
-    ),
-      type(type), prerequisites(std::move(prerequisites)) {}
+    : Feature(std::move(name), std::move(description), std::move(source_path), std::move(main_part)), type(type),
+      prerequisites(std::move(prerequisites)) {}

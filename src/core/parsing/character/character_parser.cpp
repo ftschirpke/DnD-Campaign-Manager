@@ -95,9 +95,12 @@ void dnd::CharacterParser::set_context(const dnd::Content& content) {
         if (!feature->get_main_part().get_choices().empty()) {
             effect_holders_with_choices.emplace_back(&feature->get_main_part());
         }
-        for (const auto& effect_holder : feature->get_other_parts()) {
-            if (!effect_holder.get_choices().empty()) {
-                effect_holders_with_choices.emplace_back(&effect_holder);
+        const ClassFeature* class_feature = dynamic_cast<const ClassFeature*>(feature); // TODO: temporary
+        if (class_feature != nullptr) {
+            for (const auto& effect_holder : class_feature->get_higher_level_parts()) {
+                if (!effect_holder.get_choices().empty()) {
+                    effect_holders_with_choices.emplace_back(&effect_holder);
+                }
             }
         }
         for (const EffectHolder* effect_holder : effect_holders_with_choices) {

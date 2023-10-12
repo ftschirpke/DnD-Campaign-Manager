@@ -28,22 +28,6 @@ enum class EffectTime {
  */
 class Effect {
 public:
-    /**
-     * @brief Constructs an Effect with the attribute it affects, its execution time, and the name of the operation.
-     * CAREFUL: if the operation is not found, the construction doesn't fail
-     * @param affected_attribute the name of the attribute whose calculation is affected by this effect
-     * @param time the time at which this effect should be applied in the order of execution
-     * @param operation_name the name of the mathematical operation that is performed when applying this effect
-     */
-    Effect(const std::string& affected_attribute, EffectTime time, const std::string& operation_name) noexcept;
-    /**
-     * @brief Constructs an Effect with the attribute it affects, its execution time, and the name of the operation.
-     * CAREFUL: if the operation is not found, the construction doesn't fail
-     * @param affected_attribute the name of the attribute whose calculation is affected by this effect
-     * @param time the time at which this effect should be applied in the order of execution
-     * @param operation_name the name of the mathematical operation that is performed when applying this effect
-     */
-    Effect(std::string_view affected_attribute, EffectTime time, std::string_view operation_name) noexcept;
     virtual ~Effect() noexcept = default;
     /**
      * @brief Applies the effect to a character's attributes given the attributes and constants of the character
@@ -65,6 +49,23 @@ public:
      */
     EffectTime get_time() const noexcept;
 protected:
+    /**
+     * @brief Constructs an Effect with the attribute it affects, its execution time, and the name of the operation.
+     * CAREFUL: if the operation is not found, the construction doesn't fail
+     * @param affected_attribute the name of the attribute whose calculation is affected by this effect
+     * @param time the time at which this effect should be applied in the order of execution
+     * @param operation_name the name of the mathematical operation that is performed when applying this effect
+     */
+    Effect(const std::string& affected_attribute, EffectTime time, const std::string& operation_name) noexcept;
+    /**
+     * @brief Constructs an Effect with the attribute it affects, its execution time, and the name of the operation.
+     * CAREFUL: if the operation is not found, the construction doesn't fail
+     * @param affected_attribute the name of the attribute whose calculation is affected by this effect
+     * @param time the time at which this effect should be applied in the order of execution
+     * @param operation_name the name of the mathematical operation that is performed when applying this effect
+     */
+    Effect(std::string_view affected_attribute, EffectTime time, std::string_view operation_name) noexcept;
+
     std::string affected_attribute;
     std::function<int(int, int)> mathematical_operation;
 private:

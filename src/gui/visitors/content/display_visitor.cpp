@@ -18,6 +18,7 @@
 #include <core/models/character_subrace/character_subrace.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/models/feature/choosable.hpp>
+#include <core/models/feature/class_feature.hpp>
 #include <core/models/feature/feature.hpp>
 #include <core/models/item/item.hpp>
 #include <core/models/spell/spell.hpp>
@@ -270,6 +271,23 @@ void dnd::DisplayVisitor::list_features(const std::vector<Feature>& features) {
         return;
     }
     for (const Feature& feature : features) {
+        ImGui::Separator();
+        if (ImGui::TreeNode(feature.get_name().c_str())) {
+            ImGui::Separator();
+            visit(feature);
+            ImGui::TreePop();
+        }
+    }
+    ImGui::Separator();
+}
+
+// TODO: do I need this?
+void dnd::DisplayVisitor::list_features(const std::vector<ClassFeature>& features) {
+    if (features.empty()) {
+        ImGui::Text("None");
+        return;
+    }
+    for (const ClassFeature& feature : features) {
         ImGui::Separator();
         if (ImGui::TreeNode(feature.get_name().c_str())) {
             ImGui::Separator();

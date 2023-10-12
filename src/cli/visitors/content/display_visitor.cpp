@@ -43,6 +43,20 @@ static void list_features(dnd::CommandLineOutput& output, const std::vector<dnd:
     }
 }
 
+// TODO: do I need this?
+static void list_features(dnd::CommandLineOutput& output, const std::vector<dnd::ClassFeature>& features) {
+    if (features.empty()) {
+        return;
+    }
+    output.text("Features:");
+    for (const dnd::Feature& feature : features) {
+        output.text(separator);
+        output.text(feature.get_name());
+        output.text("Description:");
+        output.text(feature.get_description());
+    }
+}
+
 void dnd::DisplayVisitor::visit(const dnd::Character& character) {
     output.text(character.get_name());
     output.text("Type: Character");

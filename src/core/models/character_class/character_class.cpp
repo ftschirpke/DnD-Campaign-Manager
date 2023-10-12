@@ -19,7 +19,7 @@
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/character_class/important_levels.hpp>
 #include <core/models/character_class/spellcasting/spellcasting_factory.hpp>
-#include <core/models/feature/feature.hpp>
+#include <core/models/feature/class_feature.hpp>
 #include <core/models/source_info.hpp>
 #include <core/validation/character_class/character_class_data.hpp>
 #include <core/validation/effect_holder/condition/condition_data.hpp>
@@ -50,17 +50,17 @@ dnd::CharacterClass dnd::CharacterClass::create(dnd::CharacterClassData&& data, 
     }
 
     int subclass_level = -1;
-    const Feature* subclass_feature = nullptr;
+    const ClassFeature* subclass_feature = nullptr;
 
-    std::vector<Feature> features;
+    std::vector<ClassFeature> features;
     features.reserve(data.features_data.size());
     for (auto& feature_data : data.features_data) {
         if (feature_data.name == data.subclass_feature_name) {
             subclass_level = determine_subclass_level(feature_data);
-            features.emplace_back(Feature::create(std::move(feature_data), content));
+            features.emplace_back(ClassFeature::create(std::move(feature_data), content));
             subclass_feature = &features.back();
         } else {
-            features.emplace_back(Feature::create(std::move(feature_data), content));
+            features.emplace_back(ClassFeature::create(std::move(feature_data), content));
         }
     }
     assert(subclass_level != -1);
@@ -82,13 +82,13 @@ const std::string& dnd::CharacterClass::get_description() const noexcept { retur
 
 const dnd::SourceInfo& dnd::CharacterClass::get_source_info() const noexcept { return source_info; }
 
-const std::vector<dnd::Feature>& dnd::CharacterClass::get_features() const noexcept { return features; }
+const std::vector<dnd::ClassFeature>& dnd::CharacterClass::get_features() const noexcept { return features; }
 
 bool dnd::CharacterClass::has_spellcasting() const noexcept { return spellcasting != nullptr; }
 
 const dnd::Spellcasting* dnd::CharacterClass::get_spellcasting() const noexcept { return spellcasting.get(); }
 
-const dnd::Feature* dnd::CharacterClass::get_subclass_feature() const noexcept { return subclass_feature; }
+const dnd::ClassFeature* dnd::CharacterClass::get_subclass_feature() const noexcept { return subclass_feature; }
 
 const dnd::Dice& dnd::CharacterClass::get_hit_dice() const noexcept { return hit_dice; }
 
@@ -98,7 +98,7 @@ void dnd::CharacterClass::accept(dnd::ContentVisitor& visitor) const { visitor.v
 
 dnd::CharacterClass::CharacterClass(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path,
-    std::vector<dnd::Feature>&& features, const dnd::Feature* subclass_feature, dnd::Dice hit_dice,
+    std::vector<dnd::ClassFeature>&& features, const dnd::ClassFeature* subclass_feature, dnd::Dice hit_dice,
     dnd::ImportantLevels&& important_levels, std::unique_ptr<dnd::Spellcasting>&& spellcasting
 ) noexcept
     : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),

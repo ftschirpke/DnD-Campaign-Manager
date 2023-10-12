@@ -9,6 +9,7 @@
 #include <core/models/character_subclass/character_subclass.hpp>
 #include <core/models/character_subrace/character_subrace.hpp>
 #include <core/models/feature/choosable.hpp>
+#include <core/models/feature/class_feature.hpp>
 #include <core/models/feature/feature.hpp>
 #include <core/models/item/item.hpp>
 #include <core/models/spell/spell.hpp>
@@ -36,6 +37,7 @@ public:
 private:
     void display_formatted_text(const std::string& formatted_text);
     void list_features(const std::vector<Feature>& feature_holder);
+    void list_features(const std::vector<ClassFeature>& feature_holder);
 
     DisplayFormatVisitor display_format_visitor;
     StringFormatter string_formatter;

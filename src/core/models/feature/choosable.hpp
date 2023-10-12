@@ -52,12 +52,10 @@ private:
      * @param source_path the path to the source file of the feature
      * @param prerequisites the prerequisites needed before picking the feature is possible
      * @param main_part the main part of the feature
-     * @param other_parts the other parts of the feature
      */
     Choosable(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& type,
-        std::vector<std::unique_ptr<Condition>>&& prerequisites, EffectHolder&& main_part,
-        std::vector<EffectHolder>&& other_parts = {}
+        std::vector<std::unique_ptr<Condition>>&& prerequisites, EffectHolder&& main_part
     ) noexcept;
 
     std::string type;
