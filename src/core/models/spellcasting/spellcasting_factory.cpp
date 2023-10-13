@@ -10,10 +10,10 @@
 #include <core/basic_mechanics/abilities.hpp>
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
-#include <core/models/character_class/spellcasting/preparation_spellcasting.hpp>
-#include <core/models/character_class/spellcasting/spellcasting.hpp>
-#include <core/models/character_class/spellcasting/spells_known_spellcasting.hpp>
-#include <core/validation/character_class/spellcasting/spellcasting_data.hpp>
+#include <core/models/spellcasting/preparation_spellcasting.hpp>
+#include <core/models/spellcasting/spellcasting.hpp>
+#include <core/models/spellcasting/spells_known_spellcasting.hpp>
+#include <core/validation/spellcasting/spellcasting_data.hpp>
 
 std::unique_ptr<dnd::Spellcasting> dnd::create_spellcasting(dnd::SpellcastingData&& data) {
     if (!data.validate().ok()) {

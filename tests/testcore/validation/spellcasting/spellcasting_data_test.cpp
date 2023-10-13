@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include <core/validation/character_class/spellcasting/spellcasting_data.hpp>
+#include <core/validation/spellcasting/spellcasting_data.hpp>
 
 #include <catch2/catch_test_macros.hpp>
 

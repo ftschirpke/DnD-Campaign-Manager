@@ -16,7 +16,7 @@
 #include <core/parsing/feature/feature_parser.hpp>
 #include <core/parsing/file_parser.hpp>
 #include <core/validation/character_class/character_class_data.hpp>
-#include <core/validation/character_class/spellcasting/spellcasting_data.hpp>
+#include <core/validation/spellcasting/spellcasting_data.hpp>
 
 dnd::CharacterClassParser::CharacterClassParser(const std::filesystem::path& filepath) noexcept
     : FileParser(filepath), feature_parser(filepath), data() {}

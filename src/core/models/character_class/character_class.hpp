@@ -10,7 +10,7 @@
 
 #include <core/basic_mechanics/dice.hpp>
 #include <core/models/character_class/important_levels.hpp>
-#include <core/models/character_class/spellcasting/spellcasting.hpp>
+#include <core/models/spellcasting/spellcasting.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/models/feature/class_feature.hpp>
 #include <core/models/source_info.hpp>

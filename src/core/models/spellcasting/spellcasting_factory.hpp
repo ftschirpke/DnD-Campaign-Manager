@@ -5,10 +5,10 @@
 
 #include <memory>
 
-#include <core/models/character_class/spellcasting/preparation_spellcasting.hpp>
-#include <core/models/character_class/spellcasting/spellcasting.hpp>
-#include <core/models/character_class/spellcasting/spells_known_spellcasting.hpp>
-#include <core/validation/character_class/spellcasting/spellcasting_data.hpp>
+#include <core/models/spellcasting/preparation_spellcasting.hpp>
+#include <core/models/spellcasting/spellcasting.hpp>
+#include <core/models/spellcasting/spells_known_spellcasting.hpp>
+#include <core/validation/spellcasting/spellcasting_data.hpp>
 
 namespace dnd {
 

@@ -14,7 +14,7 @@
 #include <core/errors/validation_error.hpp>
 #include <core/validation/basic_mechanics/dice_data.hpp>
 #include <core/validation/character_class/important_levels_data.hpp>
-#include <core/validation/character_class/spellcasting/spellcasting_data.hpp>
+#include <core/validation/spellcasting/spellcasting_data.hpp>
 #include <core/validation/feature/feature_data.hpp>
 #include <core/validation/validation_data.hpp>
 

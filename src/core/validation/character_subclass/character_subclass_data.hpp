@@ -8,7 +8,7 @@
 #include <vector>
 
 #include <core/errors/errors.hpp>
-#include <core/validation/character_class/spellcasting/spellcasting_data.hpp>
+#include <core/validation/spellcasting/spellcasting_data.hpp>
 #include <core/validation/feature/feature_data.hpp>
 #include <core/validation/validation_data.hpp>
 

@@ -6,7 +6,7 @@
 #include <utility>
 
 #include <core/basic_mechanics/abilities.hpp>
-#include <core/models/character_class/spellcasting/spellcasting.hpp>
+#include <core/models/spellcasting/spellcasting.hpp>
 
 int dnd::SpellsKnownSpellcasting::get_spells_known(int level) const noexcept {
     if (level < 1 || level > 20) {

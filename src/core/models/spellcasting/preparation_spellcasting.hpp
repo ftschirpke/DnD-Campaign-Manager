@@ -5,7 +5,7 @@
 
 #include <core/basic_mechanics/abilities.hpp>
 #include <core/models/character/ability_scores.hpp>
-#include <core/models/character_class/spellcasting/spellcasting.hpp>
+#include <core/models/spellcasting/spellcasting.hpp>
 
 namespace dnd {
 
