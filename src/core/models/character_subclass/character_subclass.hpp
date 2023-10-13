@@ -9,10 +9,10 @@
 #include <vector>
 
 #include <core/models/character_class/character_class.hpp>
-#include <core/models/spellcasting/spellcasting.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/models/feature/class_feature.hpp>
 #include <core/models/source_info.hpp>
+#include <core/models/spellcasting/spellcasting.hpp>
 #include <core/validation/character_subclass/character_subclass_data.hpp>
 
 namespace dnd {
@@ -41,6 +41,7 @@ public:
     const SourceInfo& get_source_info() const noexcept override;
     const std::vector<ClassFeature>& get_features() const noexcept;
     bool has_spellcasting() const noexcept;
+    const Spellcasting* get_spellcasting() const noexcept;
     const CharacterClass* get_class() const noexcept;
 
     /**

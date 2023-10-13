@@ -11,10 +11,10 @@
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
-#include <core/models/spellcasting/spellcasting_factory.hpp>
 #include <core/models/character_race/character_race.hpp>
 #include <core/models/feature/class_feature.hpp>
 #include <core/models/source_info.hpp>
+#include <core/models/spellcasting/spellcasting_factory.hpp>
 #include <core/validation/character_subclass/character_subclass_data.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
@@ -46,6 +46,8 @@ const dnd::SourceInfo& dnd::CharacterSubclass::get_source_info() const noexcept 
 const std::vector<dnd::ClassFeature>& dnd::CharacterSubclass::get_features() const noexcept { return features; }
 
 bool dnd::CharacterSubclass::has_spellcasting() const noexcept { return spellcasting != nullptr; }
+
+const dnd::Spellcasting* dnd::CharacterSubclass::get_spellcasting() const noexcept { return spellcasting.get(); }
 
 const dnd::CharacterClass* dnd::CharacterSubclass::get_class() const noexcept { return cls; }
 
