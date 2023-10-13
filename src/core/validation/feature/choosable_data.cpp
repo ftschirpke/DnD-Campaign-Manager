@@ -6,7 +6,7 @@
 
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
-#include <core/validation/effect_holder/condition/condition_data.hpp>
+#include <core/validation/effects/condition/condition_data.hpp>
 #include <core/validation/feature/feature_data.hpp>
 
 dnd::ChoosableData::ChoosableData() noexcept : FeatureData(this) {}

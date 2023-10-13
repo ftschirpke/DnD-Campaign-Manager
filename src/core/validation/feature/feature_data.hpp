@@ -7,7 +7,7 @@
 #include <memory>
 
 #include <core/errors/errors.hpp>
-#include <core/validation/effect_holder/effect_holder_data.hpp>
+#include <core/validation/effects/effects_data.hpp>
 #include <core/validation/validation_data.hpp>
 
 namespace dnd {
@@ -35,8 +35,8 @@ public:
 
     const ValidationData* get_parent() const noexcept;
 
-    EffectHolderData main_part_data;
-    std::vector<EffectHolderData> other_parts_data;
+    EffectsData main_part_data;
+    std::vector<EffectsData> other_parts_data;
 private:
     const ValidationData* parent;
 };

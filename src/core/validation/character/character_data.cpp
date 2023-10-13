@@ -15,7 +15,7 @@
 #include <core/errors/validation_error.hpp>
 #include <core/models/character_class/character_class.hpp>
 #include <core/models/character_race/character_race.hpp>
-#include <core/models/effect_holder/effect_holder.hpp>
+#include <core/models/effects/effects.hpp>
 #include <core/models/feature/feature.hpp>
 #include <core/referencing_content_library.hpp>
 #include <core/validation/character/progression_data.hpp>
@@ -111,18 +111,18 @@ dnd::Errors dnd::CharacterData::validate_relations(const dnd::Content& content) 
         errors += decision_data.validate_relations(content);
     }
 
-    std::vector<const EffectHolder*> effect_holders_with_choices;
+    std::vector<const Effects*> effects_with_choices;
     for (const auto& [_, feature] : content.get_features().get_all()) {
-        std::vector<const EffectHolder*> effect_holders = {&feature->get_main_part()};
+        std::vector<const Effects*> effects = {&feature->get_main_part()};
         const ClassFeature* class_feature = dynamic_cast<const ClassFeature*>(feature);
         if (class_feature != nullptr) {
-            for (const EffectHolder& effect_holder : class_feature->get_higher_level_parts()) {
-                effect_holders.push_back(&effect_holder);
+            for (const Effects& effects : class_feature->get_higher_level_parts()) {
+                effects.push_back(&effects);
             }
         }
-        for (const EffectHolder* effect_holder : effect_holders) {
-            if (!effect_holder->get_choices().empty()) {
-                effect_holders_with_choices.push_back(effect_holder);
+        for (const Effects* effects : effects) {
+            if (!effects->get_choices().empty()) {
+                effects_with_choices.push_back(effects);
             }
         }
     }

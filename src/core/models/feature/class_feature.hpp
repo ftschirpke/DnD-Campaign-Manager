@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-#include <core/models/effect_holder/effect_holder.hpp>
+#include <core/models/effects/effects.hpp>
 #include <core/models/feature/feature.hpp>
 #include <core/models/source_info.hpp>
 #include <core/validation/feature/feature_data.hpp>
@@ -38,7 +38,7 @@ public:
     ClassFeature& operator=(ClassFeature&&) = default;
 
     int get_level() const noexcept;
-    const std::vector<dnd::EffectHolder>& get_higher_level_parts() const noexcept;
+    const std::vector<dnd::Effects>& get_higher_level_parts() const noexcept;
 
     /**
      * @brief Accepts a visitor
@@ -55,11 +55,11 @@ protected:
      */
     ClassFeature(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path, int level,
-        EffectHolder&& main_part, std::vector<EffectHolder>&& higher_level_parts = {}
+        Effects&& main_part, std::vector<Effects>&& higher_level_parts = {}
     ) noexcept;
 private:
     int level;
-    std::vector<EffectHolder> higher_level_parts;
+    std::vector<Effects> higher_level_parts;
 };
 
 } // namespace dnd

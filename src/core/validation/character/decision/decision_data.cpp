@@ -12,13 +12,13 @@
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
-#include <core/models/effect_holder/choice/choice.hpp>
-#include <core/models/effect_holder/effect_holder.hpp>
+#include <core/models/effects/choice/choice.hpp>
+#include <core/models/effects/effects.hpp>
 #include <core/models/feature/feature.hpp>
 #include <core/validation/character/character_data.hpp>
-#include <core/validation/effect_holder/effect_holder_data.hpp>
+#include <core/validation/effects/effects_data.hpp>
 
-dnd::DecisionData::DecisionData(const dnd::CharacterData* parent, const dnd::EffectHolder* target) noexcept
+dnd::DecisionData::DecisionData(const dnd::CharacterData* parent, const dnd::Effects* target) noexcept
     : ValidationSubdata(parent), selections(), character_data(parent), target(target) {}
 
 dnd::Errors dnd::DecisionData::validate() const {
@@ -174,6 +174,6 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
 
 const dnd::CharacterData* dnd::DecisionData::get_character_data() const noexcept { return character_data; }
 
-const dnd::EffectHolder* dnd::DecisionData::get_target() const noexcept { return target; }
+const dnd::Effects* dnd::DecisionData::get_target() const noexcept { return target; }
 
-void dnd::DecisionData::set_target(const dnd::EffectHolder* new_target) noexcept { target = new_target; }
+void dnd::DecisionData::set_target(const dnd::Effects* new_target) noexcept { target = new_target; }

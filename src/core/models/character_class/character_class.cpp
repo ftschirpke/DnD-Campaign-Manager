@@ -22,8 +22,8 @@
 #include <core/models/feature/class_feature.hpp>
 #include <core/models/source_info.hpp>
 #include <core/validation/character_class/character_class_data.hpp>
-#include <core/validation/effect_holder/condition/condition_data.hpp>
-#include <core/validation/effect_holder/effect_holder_data.hpp>
+#include <core/validation/effects/condition/condition_data.hpp>
+#include <core/validation/effects/effects_data.hpp>
 #include <core/validation/feature/feature_data.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 

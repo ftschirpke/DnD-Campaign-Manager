@@ -12,7 +12,7 @@
 #include <core/errors/parsing_error.hpp>
 #include <core/parsing/feature/feature_parser.hpp>
 #include <core/parsing/parser.hpp>
-#include <core/validation/effect_holder/condition/condition_data.hpp>
+#include <core/validation/effects/condition/condition_data.hpp>
 #include <core/validation/feature/choosable_data.hpp>
 
 dnd::ChoosableParser::ChoosableParser(const std::filesystem::path& filepath) noexcept

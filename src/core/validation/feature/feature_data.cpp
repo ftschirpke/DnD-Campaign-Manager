@@ -5,7 +5,7 @@
 #include <memory>
 
 #include <core/errors/errors.hpp>
-#include <core/validation/effect_holder/effect_holder_data.hpp>
+#include <core/validation/effects/effects_data.hpp>
 #include <core/validation/validation_data.hpp>
 
 dnd::FeatureData::FeatureData(const ValidationData* parent) noexcept

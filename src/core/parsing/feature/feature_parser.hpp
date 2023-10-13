@@ -9,7 +9,7 @@
 #include <nlohmann/json.hpp>
 
 #include <core/errors/errors.hpp>
-#include <core/parsing/effect_holder/effect_holder_parser.hpp>
+#include <core/parsing/effects/effects_parser.hpp>
 #include <core/parsing/parser.hpp>
 #include <core/validation/feature/feature_data.hpp>
 #include <core/validation/validation_data.hpp>
@@ -35,7 +35,7 @@ public:
     Errors parse_multiple(nlohmann::ordered_json&& json, std::vector<FeatureData>& data, const ValidationData* parent)
         const;
 private:
-    EffectHolderParser effect_holder_parser;
+    EffectsParser effects_parser;
 };
 
 } // namespace dnd

@@ -80,7 +80,7 @@ dnd::Errors dnd::CharacterParser::parse() {
 }
 
 void dnd::CharacterParser::set_context(const dnd::Content& content) {
-    std::set<const EffectHolder*> processed_effect_holders;
+    std::set<const Effects*> processed_effects;
     for (auto& decision_data : data.decisions_data) {
         const Feature* feature;
         if (content.get_features().contains(decision_data.feature_name)) {
@@ -91,24 +91,24 @@ void dnd::CharacterParser::set_context(const dnd::Content& content) {
             decision_data.set_target(nullptr);
             continue;
         }
-        std::vector<const EffectHolder*> effect_holders_with_choices;
+        std::vector<const Effects*> effects_with_choices;
         if (!feature->get_main_part().get_choices().empty()) {
-            effect_holders_with_choices.emplace_back(&feature->get_main_part());
+            effects_with_choices.emplace_back(&feature->get_main_part());
         }
         const ClassFeature* class_feature = dynamic_cast<const ClassFeature*>(feature); // TODO: temporary
         if (class_feature != nullptr) {
-            for (const auto& effect_holder : class_feature->get_higher_level_parts()) {
-                if (!effect_holder.get_choices().empty()) {
-                    effect_holders_with_choices.emplace_back(&effect_holder);
+            for (const auto& effects : class_feature->get_higher_level_parts()) {
+                if (!effects.get_choices().empty()) {
+                    effects_with_choices.emplace_back(&effects);
                 }
             }
         }
-        for (const EffectHolder* effect_holder : effect_holders_with_choices) {
-            if (processed_effect_holders.contains(effect_holder)) {
+        for (const Effects* effects : effects_with_choices) {
+            if (processed_effects.contains(effects)) {
                 continue;
             }
-            decision_data.set_target(effect_holder);
-            processed_effect_holders.emplace(effect_holder);
+            decision_data.set_target(effects);
+            processed_effects.emplace(effects);
         }
     }
 }

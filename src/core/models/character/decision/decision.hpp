@@ -3,7 +3,7 @@
 
 #include <dnd_config.hpp>
 
-#include <core/models/effect_holder/effect_holder.hpp>
+#include <core/models/effects/effects.hpp>
 #include <core/validation/character/decision/decision_data.hpp>
 
 namespace dnd {
@@ -29,13 +29,21 @@ public:
     Decision(Decision&&) = default;
     Decision& operator=(Decision&&) = default;
 
-    const EffectHolder* get_target() const noexcept;
-    const EffectHolder& get_effects() const noexcept;
+    /**
+     * @brief Returns the target of the decision i.e. the choice that the decision is for
+     * @return the target of the decision
+     */
+    const Effects* get_target() const noexcept;
+    /**
+     * @brief Returns the effects of the decision
+     * @return the effects of the decision
+     */
+    const Effects& get_effects() const noexcept;
 private:
-    Decision(const EffectHolder* target, EffectHolder effects) noexcept;
+    Decision(const Effects* target, Effects effects) noexcept;
 
-    const EffectHolder* target;
-    EffectHolder effects;
+    const Effects* target;
+    Effects effects;
 };
 
 } // namespace dnd

@@ -11,7 +11,7 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
-#include <core/models/effect_holder/effect_holder.hpp>
+#include <core/models/effects/effects.hpp>
 #include <core/models/feature/feature.hpp>
 #include <core/validation/character/decision/decision_data.hpp>
 
@@ -26,11 +26,11 @@ dnd::Decision dnd::Decision::create(dnd::DecisionData&& data, const dnd::Content
     if (!data.validate_relations(content).ok()) {
         throw dnd::invalid_data("Decision data is incompatible with the given content.");
     }
-    EffectHolderData res_data(data.get_character_data());
-    for (const auto& effect_str : data.selections["effects"]) {
-        EffectData effect_data(data.get_character_data());
-        effect_data.effect_str = effect_str;
-        res_data.effects_data.emplace_back(std::move(effect_data));
+    EffectsData res_data(data.get_character_data());
+    for (const auto& stat_change_str : data.selections["effects"]) {
+        StatChangeData stat_change_data(data.get_character_data());
+        stat_change_data.stat_change_str = stat_change_str;
+        res_data.stat_changes_data.emplace_back(std::move(stat_change_data));
     }
 
     ins(res_data.extra_spells_holder_data.free_cantrips, std::move(data.selections["cantrips_free"]));
@@ -56,12 +56,12 @@ dnd::Decision dnd::Decision::create(dnd::DecisionData&& data, const dnd::Content
     ins(res_data.riv_holder_data.damage_vulnerabilities, std::move(data.selections["damage_vulnerabilities"]));
     ins(res_data.riv_holder_data.condition_immunities, std::move(data.selections["condition_immunities"]));
 
-    return Decision(data.get_target(), EffectHolder::create(std::move(res_data), content));
+    return Decision(data.get_target(), Effects::create(std::move(res_data), content));
 }
 
-const dnd::EffectHolder* dnd::Decision::get_target() const noexcept { return target; }
+const dnd::Effects* dnd::Decision::get_target() const noexcept { return target; }
 
-const dnd::EffectHolder& dnd::Decision::get_effects() const noexcept { return effects; }
+const dnd::Effects& dnd::Decision::get_effects() const noexcept { return effects; }
 
-dnd::Decision::Decision(const dnd::EffectHolder* target, dnd::EffectHolder effects) noexcept
+dnd::Decision::Decision(const dnd::Effects* target, dnd::Effects effects) noexcept
     : target(target), effects(std::move(effects)) {}

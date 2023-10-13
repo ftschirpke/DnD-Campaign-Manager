@@ -8,8 +8,8 @@
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
-#include <core/models/effect_holder/condition/condition.hpp>
-#include <core/models/effect_holder/condition/condition_factory.hpp>
+#include <core/models/effects/condition/condition.hpp>
+#include <core/models/effects/condition/condition_factory.hpp>
 #include <core/models/feature/feature.hpp>
 #include <core/validation/feature/choosable_data.hpp>
 #include <core/visitors/content/content_visitor.hpp>
@@ -27,7 +27,7 @@ dnd::Choosable dnd::Choosable::create(dnd::ChoosableData&& data, const dnd::Cont
         prerequisites.emplace_back(create_condition(std::move(prerequisite_data)));
     }
 
-    EffectHolder main_part = EffectHolder::create(std::move(data.main_part_data), content);
+    Effects main_part = Effects::create(std::move(data.main_part_data), content);
     return Choosable(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.type),
         std::move(prerequisites), std::move(main_part)
@@ -44,7 +44,7 @@ void dnd::Choosable::accept(dnd::ContentVisitor& visitor) const { visitor.visit(
 
 dnd::Choosable::Choosable(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& type,
-    std::vector<std::unique_ptr<Condition>>&& prerequisites, EffectHolder&& main_part
+    std::vector<std::unique_ptr<Condition>>&& prerequisites, Effects&& main_part
 ) noexcept
     : Feature(std::move(name), std::move(description), std::move(source_path), std::move(main_part)), type(type),
       prerequisites(std::move(prerequisites)) {}

@@ -7,7 +7,7 @@
 #include <memory>
 #include <vector>
 
-#include <core/validation/effect_holder/condition/condition_data.hpp>
+#include <core/validation/effects/condition/condition_data.hpp>
 #include <core/validation/feature/feature_data.hpp>
 
 namespace dnd {

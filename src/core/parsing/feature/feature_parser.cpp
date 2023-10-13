@@ -9,14 +9,14 @@
 
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
-#include <core/parsing/effect_holder/effect_holder_parser.hpp>
+#include <core/parsing/effects/effects_parser.hpp>
 #include <core/parsing/parser.hpp>
-#include <core/validation/effect_holder/effect_holder_data.hpp>
+#include <core/validation/effects/effects_data.hpp>
 #include <core/validation/feature/feature_data.hpp>
 #include <core/validation/validation_data.hpp>
 
 dnd::FeatureParser::FeatureParser(const std::filesystem::path& filepath) noexcept
-    : Parser(filepath), effect_holder_parser(filepath) {}
+    : Parser(filepath), effects_parser(filepath) {}
 
 dnd::Errors dnd::FeatureParser::parse(nlohmann::ordered_json&& json, FeatureData& data) const {
     Errors errors;
@@ -34,8 +34,8 @@ dnd::Errors dnd::FeatureParser::parse(nlohmann::ordered_json&& json, FeatureData
     if (json.contains("multi")) {
         if (json["multi"].is_array()) {
             for (auto& part : json["multi"]) {
-                EffectHolderData& effect_holder_data = data.other_parts_data.emplace_back(data.get_parent());
-                errors += effect_holder_parser.parse(std::move(part), effect_holder_data);
+                EffectsData& effects_data = data.other_parts_data.emplace_back(data.get_parent());
+                errors += effects_parser.parse(std::move(part), effects_data);
             }
         } else {
             errors.add_parsing_error(
@@ -44,7 +44,7 @@ dnd::Errors dnd::FeatureParser::parse(nlohmann::ordered_json&& json, FeatureData
         }
         json.erase("multi");
     }
-    errors += effect_holder_parser.parse(std::move(json), data.main_part_data);
+    errors += effects_parser.parse(std::move(json), data.main_part_data);
     return errors;
 }
 

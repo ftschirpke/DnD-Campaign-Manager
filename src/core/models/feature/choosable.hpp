@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-#include <core/models/effect_holder/condition/condition.hpp>
+#include <core/models/effects/condition/condition.hpp>
 #include <core/models/feature/feature.hpp>
 #include <core/validation/feature/choosable_data.hpp>
 
@@ -55,7 +55,7 @@ private:
      */
     Choosable(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& type,
-        std::vector<std::unique_ptr<Condition>>&& prerequisites, EffectHolder&& main_part
+        std::vector<std::unique_ptr<Condition>>&& prerequisites, Effects&& main_part
     ) noexcept;
 
     std::string type;
