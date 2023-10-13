@@ -14,6 +14,7 @@
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/validation/feature/feature_data.hpp>
+#include <core/validation/spellcasting/spellcasting_data.hpp>
 
 dnd::CharacterSubclassData::CharacterSubclassData() noexcept
     : ValidationData(), spellcasting_data(this), features_data(), class_name() {}
