@@ -31,7 +31,7 @@ static constexpr const char* level_activation_regex_cstr = "CLASS_LEVEL >= [1234
 
 static int determine_subclass_level(const dnd::FeatureData& subclass_feature_data) {
     static const std::regex level_activation_regex(level_activation_regex_cstr);
-    const std::vector<dnd::ConditionData>& activation_conditions = subclass_feature_data.main_part_data
+    const std::vector<dnd::ConditionData>& activation_conditions = subclass_feature_data.main_effects_data
                                                                        .activation_conditions_data;
     for (const dnd::ConditionData& condition_data : activation_conditions) {
         if (std::regex_match(condition_data.condition_str, level_activation_regex)) {

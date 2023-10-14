@@ -1,0 +1,24 @@
+#ifndef EFFECTS_PROVIDER_HPP_
+#define EFFECTS_PROVIDER_HPP_
+
+#include <dnd_config.hpp>
+
+#include <vector>
+
+namespace dnd {
+
+class Effects;
+
+/**
+ * @brief Interface for classes that provide effects e.g. features.
+ */
+class EffectsProvider {
+public:
+    virtual ~EffectsProvider() = default;
+    virtual const Effects& get_main_effects() const noexcept = 0;
+    virtual std::vector<const Effects*> get_all_effects() const = 0;
+};
+
+} // namespace dnd
+
+#endif // EFFECTS_PROVIDER_HPP_

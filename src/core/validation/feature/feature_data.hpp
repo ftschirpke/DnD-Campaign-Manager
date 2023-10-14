@@ -4,6 +4,7 @@
 #include <dnd_config.hpp>
 
 #include <compare>
+#include <map>
 #include <memory>
 
 #include <core/errors/errors.hpp>
@@ -35,8 +36,8 @@ public:
 
     const ValidationData* get_parent() const noexcept;
 
-    EffectsData main_part_data;
-    std::vector<EffectsData> other_parts_data;
+    EffectsData main_effects_data;
+    std::map<int, EffectsData> higher_level_effects_data;
 private:
     const ValidationData* parent;
 };

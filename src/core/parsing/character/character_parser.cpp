@@ -82,22 +82,22 @@ dnd::Errors dnd::CharacterParser::parse() {
 void dnd::CharacterParser::set_context(const dnd::Content& content) {
     std::set<const Effects*> processed_effects;
     for (auto& decision_data : data.decisions_data) {
-        const Feature* feature;
+        const EffectsProvider* effects_provider;
         if (content.get_features().contains(decision_data.feature_name)) {
-            feature = &content.get_features().get(decision_data.feature_name);
+            effects_provider = &content.get_features().get(decision_data.feature_name);
         } else if (content.get_choosables().contains(decision_data.feature_name)) {
-            feature = &content.get_choosables().get(decision_data.feature_name);
+            effects_provider = &content.get_choosables().get(decision_data.feature_name);
         } else {
             decision_data.set_target(nullptr);
             continue;
         }
         std::vector<const Effects*> effects_with_choices;
-        if (!feature->get_main_part().get_choices().empty()) {
-            effects_with_choices.emplace_back(&feature->get_main_part());
+        if (!effects_provider->get_main_effects().get_choices().empty()) {
+            effects_with_choices.emplace_back(&effects_provider->get_main_effects());
         }
-        const ClassFeature* class_feature = dynamic_cast<const ClassFeature*>(feature); // TODO: temporary
+        const ClassFeature* class_feature = dynamic_cast<const ClassFeature*>(effects_provider); // TODO: temporary
         if (class_feature != nullptr) {
-            for (const auto& effects : class_feature->get_higher_level_parts()) {
+            for (const auto& [_, effects] : class_feature->get_higher_level_effects()) {
                 if (!effects.get_choices().empty()) {
                     effects_with_choices.emplace_back(&effects);
                 }

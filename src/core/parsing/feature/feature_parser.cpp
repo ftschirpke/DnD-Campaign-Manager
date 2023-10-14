@@ -31,20 +31,41 @@ dnd::Errors dnd::FeatureParser::parse(nlohmann::ordered_json&& json, FeatureData
     json.erase("description");
     data.source_path = get_filepath();
 
-    if (json.contains("multi")) {
-        if (json["multi"].is_array()) {
-            for (auto& part : json["multi"]) {
-                EffectsData& effects_data = data.other_parts_data.emplace_back(data.get_parent());
-                errors += effects_parser.parse(std::move(part), effects_data);
+    if (json.contains("higher_levels")) {
+        if (json["higher_levels"].is_object()) {
+            auto not_a_digit = [](unsigned char c) { return !std::isdigit(c); };
+            for (auto& [level_str, effects] : json["higher_levels"].items()) {
+                if (std::any_of(level_str.begin(), level_str.end(), not_a_digit)) {
+                    errors.add_parsing_error(
+                        ParsingErrorCode::INVALID_ATTRIBUTE_TYPE, get_filepath(),
+                        "The feature json's \"higher_levels\"'s key, which should be the level at which the effect "
+                        "activates, is not a number."
+                    );
+                    continue;
+                }
+                int level = std::stoi(level_str);
+                auto [inserted_pair_it, was_inserted] = data.higher_level_effects_data.emplace(
+                    level, EffectsData(data.get_parent())
+                );
+                if (!was_inserted) {
+                    errors.add_parsing_error(
+                        ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(),
+                        "The feature json's \"higher_levels\"'s key, which should be the level at which the effect "
+                        "activates, is not unique."
+                    );
+                    continue;
+                }
+                errors += effects_parser.parse(std::move(effects), inserted_pair_it->second);
             }
         } else {
             errors.add_parsing_error(
-                ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(), "The feature json's \"multi\" is not an array."
+                ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(),
+                "The feature json's \"higher_levels\" is not an object."
             );
         }
-        json.erase("multi");
+        json.erase("higher_levels");
     }
-    errors += effects_parser.parse(std::move(json), data.main_part_data);
+    errors += effects_parser.parse(std::move(json), data.main_effects_data);
     return errors;
 }
 

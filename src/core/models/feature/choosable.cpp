@@ -27,11 +27,23 @@ dnd::Choosable dnd::Choosable::create(dnd::ChoosableData&& data, const dnd::Cont
         prerequisites.emplace_back(create_condition(std::move(prerequisite_data)));
     }
 
-    Effects main_part = Effects::create(std::move(data.main_part_data), content);
+    Effects main_part = Effects::create(std::move(data.main_effects_data), content);
     return Choosable(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.type),
         std::move(prerequisites), std::move(main_part)
     );
+}
+
+const std::string& dnd::Choosable::get_name() const noexcept { return name; }
+
+const std::string& dnd::Choosable::get_description() const noexcept { return description; }
+
+const dnd::SourceInfo& dnd::Choosable::get_source_info() const noexcept { return source_info; }
+
+const dnd::Effects& dnd::Choosable::get_main_effects() const noexcept { return main_effects; }
+
+std::vector<const dnd::Effects*> dnd::Choosable::get_all_effects() const {
+    return std::vector<const Effects*>{&main_effects};
 }
 
 const std::string& dnd::Choosable::get_type() const noexcept { return type; }
@@ -44,7 +56,7 @@ void dnd::Choosable::accept(dnd::ContentVisitor& visitor) const { visitor.visit(
 
 dnd::Choosable::Choosable(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& type,
-    std::vector<std::unique_ptr<Condition>>&& prerequisites, Effects&& main_part
+    std::vector<std::unique_ptr<Condition>>&& prerequisites, Effects&& main_effects
 ) noexcept
-    : Feature(std::move(name), std::move(description), std::move(source_path), std::move(main_part)), type(type),
-      prerequisites(std::move(prerequisites)) {}
+    : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
+      main_effects(std::move(main_effects)), type(type), prerequisites(std::move(prerequisites)) {}

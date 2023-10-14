@@ -22,7 +22,7 @@ dnd::Feature dnd::Feature::create(dnd::FeatureData&& data, const dnd::Content& c
         throw invalid_data("Feature data is incompatible with the given content.");
     }
 
-    Effects main_part = Effects::create(std::move(data.main_part_data), content);
+    Effects main_part = Effects::create(std::move(data.main_effects_data), content);
     return Feature(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(main_part)
     );
@@ -34,12 +34,16 @@ const std::string& dnd::Feature::get_description() const noexcept { return descr
 
 const dnd::SourceInfo& dnd::Feature::get_source_info() const noexcept { return source_info; }
 
-const dnd::Effects& dnd::Feature::get_main_part() const noexcept { return main_part; }
+const dnd::Effects& dnd::Feature::get_main_effects() const noexcept { return main_effects; }
+
+std::vector<const dnd::Effects*> dnd::Feature::get_all_effects() const {
+    return std::vector<const Effects*>{&main_effects};
+}
 
 void dnd::Feature::accept(dnd::ContentVisitor& visitor) const { visitor.visit(*this); }
 
 dnd::Feature::Feature(
-    std::string&& name, std::string&& description, std::filesystem::path&& source_path, Effects&& main_part
+    std::string&& name, std::string&& description, std::filesystem::path&& source_path, Effects&& main_effects
 ) noexcept
     : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
-      main_part(std::move(main_part)) {}
+      main_effects(std::move(main_effects)) {}

@@ -5,6 +5,7 @@
 
 #include <filesystem>
 #include <functional>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -37,8 +38,9 @@ public:
     ClassFeature(ClassFeature&&) = default;
     ClassFeature& operator=(ClassFeature&&) = default;
 
+    std::vector<const Effects*> get_all_effects() const override;
     int get_level() const noexcept;
-    const std::vector<dnd::Effects>& get_higher_level_parts() const noexcept;
+    const std::map<int, dnd::Effects>& get_higher_level_effects() const noexcept;
 
     /**
      * @brief Accepts a visitor
@@ -49,17 +51,18 @@ protected:
     /**
      * @brief Constructs a feature
      * @param name the name of the feature
+     * @param description the description of the feature
      * @param source_path the path to the source file of the feature
-     * @param main_part the main part of the feature
-     * @param higher_level_parts the higher level parts of the feature
+     * @param main_effects the main effects of the feature
+     * @param higher_level_effects the higher level effects of the feature
      */
     ClassFeature(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path, int level,
-        Effects&& main_part, std::vector<Effects>&& higher_level_parts = {}
+        Effects&& main_effects, std::map<int, Effects>&& higher_level_parts = {}
     ) noexcept;
 private:
     int level;
-    std::vector<Effects> higher_level_parts;
+    std::map<int, Effects> higher_level_effects;
 };
 
 } // namespace dnd

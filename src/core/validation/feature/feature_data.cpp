@@ -9,23 +9,23 @@
 #include <core/validation/validation_data.hpp>
 
 dnd::FeatureData::FeatureData(const ValidationData* parent) noexcept
-    : ValidationData(), main_part_data(parent == nullptr ? this : parent), parent(parent) {}
+    : ValidationData(), main_effects_data(parent == nullptr ? this : parent), parent(parent) {}
 
 std::unique_ptr<dnd::ValidationData> dnd::FeatureData::pack() const { return std::make_unique<FeatureData>(*this); }
 
 dnd::Errors dnd::FeatureData::validate() const {
     Errors errors = ValidationData::validate();
-    errors += main_part_data.validate();
-    for (const auto& other_part_data : other_parts_data) {
-        errors += other_part_data.validate();
+    errors += main_effects_data.validate();
+    for (const auto& [_, effects_data] : higher_level_effects_data) {
+        errors += effects_data.validate();
     }
     return errors;
 }
 
 dnd::Errors dnd::FeatureData::validate_relations(const Content& content) const {
-    Errors errors = main_part_data.validate_relations(content);
-    for (const auto& other_part_data : other_parts_data) {
-        errors += other_part_data.validate_relations(content);
+    Errors errors = main_effects_data.validate_relations(content);
+    for (const auto& [_, effects_data] : higher_level_effects_data) {
+        errors += effects_data.validate_relations(content);
     }
     return errors;
 }

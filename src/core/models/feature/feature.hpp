@@ -9,6 +9,7 @@
 
 #include <core/models/content_piece.hpp>
 #include <core/models/effects/effects.hpp>
+#include <core/models/feature/effects_provider.hpp>
 #include <core/models/source_info.hpp>
 #include <core/validation/feature/feature_data.hpp>
 
@@ -18,9 +19,9 @@ class Content;
 class ContentVisitor;
 
 /**
- * @brief A class representing a simple feature.
+ * @brief A class representing a simple feature provided by a class, subclass, race, subrace, or character.
  */
-class Feature : public ContentPiece {
+class Feature : public ContentPiece, public EffectsProvider {
 public:
     /**
      * @brief Constructs a feature from the given data and content
@@ -39,7 +40,8 @@ public:
     const std::string& get_name() const noexcept override;
     const std::string& get_description() const noexcept override;
     const SourceInfo& get_source_info() const noexcept override;
-    const dnd::Effects& get_main_part() const noexcept;
+    const Effects& get_main_effects() const noexcept override;
+    std::vector<const Effects*> get_all_effects() const override;
 
     /**
      * @brief Accepts a visitor
@@ -50,17 +52,18 @@ protected:
     /**
      * @brief Constructs a feature
      * @param name the name of the feature
+     * @param description the description of the feature
      * @param source_path the path to the source file of the feature
-     * @param main_part the main part of the feature
+     * @param main_effects the main effects of the feature
      */
     Feature(
-        std::string&& name, std::string&& description, std::filesystem::path&& source_path, Effects&& main_part
+        std::string&& name, std::string&& description, std::filesystem::path&& source_path, Effects&& main_effects
     ) noexcept;
 private:
     std::string name;
     std::string description;
     SourceInfo source_info;
-    Effects main_part;
+    Effects main_effects;
 };
 
 } // namespace dnd

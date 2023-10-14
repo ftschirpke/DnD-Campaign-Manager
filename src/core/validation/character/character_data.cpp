@@ -113,13 +113,7 @@ dnd::Errors dnd::CharacterData::validate_relations(const dnd::Content& content) 
 
     std::vector<const Effects*> effects_with_choices;
     for (const auto& [_, feature] : content.get_features().get_all()) {
-        std::vector<const Effects*> all_effects = {&feature->get_main_part()};
-        const ClassFeature* class_feature = dynamic_cast<const ClassFeature*>(feature);
-        if (class_feature != nullptr) {
-            for (const Effects& effects : class_feature->get_higher_level_parts()) {
-                all_effects.push_back(&effects);
-            }
-        }
+        std::vector<const Effects*> all_effects = feature->get_all_effects();
         for (const Effects* effects : all_effects) {
             if (!effects->get_choices().empty()) {
                 effects_with_choices.push_back(effects);
