@@ -51,7 +51,9 @@ Each character should be stored in a JSON file as a map (or "object") containing
 | hit_dice_rolls | yes | array of integers | hit dice rolls on level-ups for hit points **without any modifiers applied** (should have one value for each level) <ul><li>**be aware:** if you are using the rule that on level 1 everyone gets the maximum value of the hit die as HP, you still have to provide that value in this array</li></ul> |
 | features | no | [features](#features) map | character-specific features |
 
-<!-- TODO: choices -->
+### Choices
+Not documented yet.
+<!-- TODO -->
 
 ## Races
 Each race should be stored in a JSON file as a map (or "object"). The values possible values are:
@@ -212,10 +214,12 @@ An example of a minimal item JSON file would be:
 }
 ```
 
-<!-- ## Monsters -->
+## Monsters
+Not implemented yet.
 <!-- TODO -->
 
-<!-- ## NPCs -->
+## NPCs
+Not implemented yet.
 <!-- TODO -->
 
 ## Features
