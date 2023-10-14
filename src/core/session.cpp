@@ -203,7 +203,7 @@ dnd::Errors dnd::Session::set_content_directory(const std::filesystem::path& new
         return content_dir_errors;
     }
     content_dir_errors = validate_content_directory(new_content_directory);
-    if (errors.ok()) {
+    if (content_dir_errors.ok()) {
         content_directory = new_content_directory;
         campaign_name.clear();
         status = SessionStatus::CAMPAIGN_SELECTION;
