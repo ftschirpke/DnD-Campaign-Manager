@@ -9,9 +9,9 @@
 
 #include <core/models/content_piece.hpp>
 #include <core/models/effects/effects.hpp>
-#include <core/models/feature/effects_provider.hpp>
+#include <core/models/effects_provider/effects_provider.hpp>
 #include <core/models/source_info.hpp>
-#include <core/validation/feature/feature_data.hpp>
+#include <core/validation/effects_provider/feature_data.hpp>
 
 namespace dnd {
 

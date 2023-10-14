@@ -12,7 +12,7 @@
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/effects/effects.hpp>
-#include <core/models/feature/feature.hpp>
+#include <core/models/effects_provider/feature.hpp>
 #include <core/validation/character/decision/decision_data.hpp>
 
 void ins(std::set<std::string>& set, std::vector<std::string>&& vec) {

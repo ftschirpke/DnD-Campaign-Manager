@@ -14,7 +14,7 @@
 #include <core/errors/validation_error.hpp>
 #include <core/models/effects/choice/choice.hpp>
 #include <core/models/effects/effects.hpp>
-#include <core/models/feature/feature.hpp>
+#include <core/models/effects_provider/feature.hpp>
 #include <core/validation/character/character_data.hpp>
 #include <core/validation/effects/effects_data.hpp>
 

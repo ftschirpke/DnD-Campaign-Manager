@@ -5,7 +5,7 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include <core/errors/errors.hpp>
-#include <core/validation/feature/feature_data.hpp>
+#include <core/validation/effects_provider/feature_data.hpp>
 #include <testcore/minimal_testing_content.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 

@@ -8,7 +8,7 @@
 #include <vector>
 
 #include <core/models/content_piece.hpp>
-#include <core/models/feature/feature.hpp>
+#include <core/models/effects_provider/feature.hpp>
 #include <core/models/source_info.hpp>
 #include <core/validation/character_race/character_race_data.hpp>
 

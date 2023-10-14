@@ -9,7 +9,7 @@
 
 #include <core/models/character_race/character_race.hpp>
 #include <core/models/content_piece.hpp>
-#include <core/models/feature/feature.hpp>
+#include <core/models/effects_provider/feature.hpp>
 #include <core/models/source_info.hpp>
 #include <core/validation/character_subrace/character_subrace_data.hpp>
 

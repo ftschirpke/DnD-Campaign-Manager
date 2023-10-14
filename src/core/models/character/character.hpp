@@ -15,7 +15,7 @@
 #include <core/models/character_subclass/character_subclass.hpp>
 #include <core/models/character_subrace/character_subrace.hpp>
 #include <core/models/content_piece.hpp>
-#include <core/models/feature/feature.hpp>
+#include <core/models/effects_provider/feature.hpp>
 #include <core/models/source_info.hpp>
 #include <core/validation/character/character_data.hpp>
 

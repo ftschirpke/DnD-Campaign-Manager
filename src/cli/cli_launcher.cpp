@@ -16,8 +16,8 @@
 #include <cli/cli_app.hpp>
 #include <cli/output/command_line_output.hpp>
 #include <core/content.hpp>
-#include <core/models/feature/choosable.hpp>
-#include <core/models/feature/feature.hpp>
+#include <core/models/effects_provider/choosable.hpp>
+#include <core/models/effects_provider/feature.hpp>
 #include <core/models/item/item.hpp>
 #include <core/models/spell/spell.hpp>
 #include <core/parsing/content_parser.hpp>

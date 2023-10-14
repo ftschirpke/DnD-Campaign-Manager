@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include <core/validation/feature/choosable_data.hpp>
+#include <core/validation/effects_provider/choosable_data.hpp>
 
 #include <catch2/catch_test_macros.hpp>
 

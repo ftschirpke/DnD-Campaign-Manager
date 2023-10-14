@@ -14,8 +14,8 @@
 #include <core/models/character_race/character_race.hpp>
 #include <core/models/character_subclass/character_subclass.hpp>
 #include <core/models/character_subrace/character_subrace.hpp>
-#include <core/models/feature/choosable.hpp>
-#include <core/models/feature/feature.hpp>
+#include <core/models/effects_provider/choosable.hpp>
+#include <core/models/effects_provider/feature.hpp>
 #include <core/models/item/item.hpp>
 #include <core/models/source_info.hpp>
 #include <core/models/spell/spell.hpp>

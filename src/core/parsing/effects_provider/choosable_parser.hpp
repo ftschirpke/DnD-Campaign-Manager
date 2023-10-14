@@ -9,9 +9,9 @@
 #include <nlohmann/json.hpp>
 
 #include <core/errors/errors.hpp>
-#include <core/parsing/feature/feature_parser.hpp>
+#include <core/parsing/effects_provider/feature_parser.hpp>
 #include <core/parsing/parser.hpp>
-#include <core/validation/feature/choosable_data.hpp>
+#include <core/validation/effects_provider/choosable_data.hpp>
 
 namespace dnd {
 

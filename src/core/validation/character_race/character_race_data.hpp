@@ -8,7 +8,7 @@
 #include <vector>
 
 #include <core/errors/errors.hpp>
-#include <core/validation/feature/feature_data.hpp>
+#include <core/validation/effects_provider/feature_data.hpp>
 #include <core/validation/validation_data.hpp>
 
 namespace dnd {

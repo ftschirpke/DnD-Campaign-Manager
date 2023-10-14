@@ -18,13 +18,13 @@
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/character_class/important_levels.hpp>
-#include <core/models/feature/class_feature.hpp>
+#include <core/models/effects_provider/class_feature.hpp>
 #include <core/models/source_info.hpp>
 #include <core/models/spellcasting/spellcasting_factory.hpp>
 #include <core/validation/character_class/character_class_data.hpp>
 #include <core/validation/effects/condition/condition_data.hpp>
 #include <core/validation/effects/effects_data.hpp>
-#include <core/validation/feature/feature_data.hpp>
+#include <core/validation/effects_provider/feature_data.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
 static constexpr const char* level_activation_regex_cstr = "CLASS_LEVEL >= [123456789]\\d?";

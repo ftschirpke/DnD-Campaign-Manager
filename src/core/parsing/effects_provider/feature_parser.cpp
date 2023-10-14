@@ -12,7 +12,7 @@
 #include <core/parsing/effects/effects_parser.hpp>
 #include <core/parsing/parser.hpp>
 #include <core/validation/effects/effects_data.hpp>
-#include <core/validation/feature/feature_data.hpp>
+#include <core/validation/effects_provider/feature_data.hpp>
 #include <core/validation/validation_data.hpp>
 
 dnd::FeatureParser::FeatureParser(const std::filesystem::path& filepath) noexcept

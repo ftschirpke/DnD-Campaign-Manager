@@ -13,8 +13,8 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
 #include <core/models/character/character.hpp>
-#include <core/models/feature/feature.hpp>
-#include <core/parsing/feature/feature_parser.hpp>
+#include <core/models/effects_provider/feature.hpp>
+#include <core/parsing/effects_provider/feature_parser.hpp>
 #include <core/parsing/file_parser.hpp>
 #include <core/validation/character/character_data.hpp>
 #include <core/validation/character/decision/decision_data.hpp>

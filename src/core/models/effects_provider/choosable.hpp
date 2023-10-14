@@ -9,9 +9,9 @@
 #include <vector>
 
 #include <core/models/effects/condition/condition.hpp>
-#include <core/models/feature/effects_provider.hpp>
-#include <core/models/feature/feature.hpp>
-#include <core/validation/feature/choosable_data.hpp>
+#include <core/models/effects_provider/effects_provider.hpp>
+#include <core/models/effects_provider/feature.hpp>
+#include <core/validation/effects_provider/choosable_data.hpp>
 
 namespace dnd {
 

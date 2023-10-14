@@ -10,8 +10,8 @@
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/effects/condition/condition.hpp>
 #include <core/models/effects/condition/condition_factory.hpp>
-#include <core/models/feature/feature.hpp>
-#include <core/validation/feature/choosable_data.hpp>
+#include <core/models/effects_provider/feature.hpp>
+#include <core/validation/effects_provider/choosable_data.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
 dnd::Choosable dnd::Choosable::create(dnd::ChoosableData&& data, const dnd::Content& content) {

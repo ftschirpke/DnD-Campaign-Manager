@@ -13,7 +13,7 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
 #include <core/models/character_race/character_race.hpp>
-#include <core/parsing/feature/feature_parser.hpp>
+#include <core/parsing/effects_provider/feature_parser.hpp>
 #include <core/parsing/file_parser.hpp>
 #include <core/validation/character_race/character_race_data.hpp>
 
