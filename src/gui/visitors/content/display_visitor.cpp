@@ -79,6 +79,23 @@ static void end_content_table() {
     ImGui::PopStyleVar();
 }
 
+template <typename T>
+static void list_features(dnd::DisplayVisitor& visitor, const std::vector<T>& features) {
+    if (features.empty()) {
+        ImGui::Text("None");
+        return;
+    }
+    for (const T& feature : features) {
+        ImGui::Separator();
+        if (ImGui::TreeNode(feature.get_name().c_str())) {
+            ImGui::Separator();
+            visitor.visit(feature);
+            ImGui::TreePop();
+        }
+    }
+    ImGui::Separator();
+}
+
 void dnd::DisplayVisitor::visit(const Character& character) {
     begin_content_table(character);
 
@@ -123,7 +140,7 @@ void dnd::DisplayVisitor::visit(const Character& character) {
     }
 
     label("Features:");
-    list_features(character.get_features());
+    list_features<Feature>(*this, character.get_features());
 
     end_content_table();
 }
@@ -144,7 +161,7 @@ void dnd::DisplayVisitor::visit(const CharacterClass& character_class) {
     label("Subclass Level:");
     ImGui::Text("%d", character_class.get_important_levels().get_subclass_level());
     label("Features:");
-    list_features(character_class.get_features());
+    list_features<ClassFeature>(*this, character_class.get_features());
 
     end_content_table();
 }
@@ -158,7 +175,7 @@ void dnd::DisplayVisitor::visit(const CharacterSubclass& character_subclass) {
     label("Class name:");
     ImGui::Text("%s", character_subclass.get_class()->get_name().c_str());
     label("Features:");
-    list_features(character_subclass.get_features());
+    list_features<ClassFeature>(*this, character_subclass.get_features());
 
     end_content_table();
 }
@@ -173,7 +190,7 @@ void dnd::DisplayVisitor::visit(const CharacterRace& character_race) {
     label("Has Subraces:");
     ImGui::Text("%s", has_subraces_cstr);
     label("Features:");
-    list_features(character_race.get_features());
+    list_features<Feature>(*this, character_race.get_features());
 
     end_content_table();
 }
@@ -187,7 +204,7 @@ void dnd::DisplayVisitor::visit(const CharacterSubrace& character_subrace) {
     label("Race name:");
     ImGui::Text("%s", character_subrace.get_race()->get_name().c_str());
     label("Features:");
-    list_features(character_subrace.get_features());
+    list_features<Feature>(*this, character_subrace.get_features());
 
     end_content_table();
 }
@@ -261,39 +278,6 @@ void dnd::DisplayVisitor::visit(const Choosable& choosable) {
 void dnd::DisplayVisitor::display_formatted_text(const std::string& formatted_text) {
     std::vector<std::unique_ptr<Format>> text_formats = string_formatter.parse_formats(formatted_text);
     for (auto it = text_formats.begin(); it != text_formats.end(); ++it) {
-        (*it)->accept(&display_format_visitor);
+        (*it)->accept(display_format_visitor);
     }
-}
-
-void dnd::DisplayVisitor::list_features(const std::vector<Feature>& features) {
-    if (features.empty()) {
-        ImGui::Text("None");
-        return;
-    }
-    for (const Feature& feature : features) {
-        ImGui::Separator();
-        if (ImGui::TreeNode(feature.get_name().c_str())) {
-            ImGui::Separator();
-            visit(feature);
-            ImGui::TreePop();
-        }
-    }
-    ImGui::Separator();
-}
-
-// TODO: do I need this?
-void dnd::DisplayVisitor::list_features(const std::vector<ClassFeature>& features) {
-    if (features.empty()) {
-        ImGui::Text("None");
-        return;
-    }
-    for (const ClassFeature& feature : features) {
-        ImGui::Separator();
-        if (ImGui::TreeNode(feature.get_name().c_str())) {
-            ImGui::Separator();
-            visit(feature);
-            ImGui::TreePop();
-        }
-    }
-    ImGui::Separator();
 }

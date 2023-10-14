@@ -9,7 +9,6 @@
 #include <core/models/character_subclass/character_subclass.hpp>
 #include <core/models/character_subrace/character_subrace.hpp>
 #include <core/models/effects_provider/choosable.hpp>
-#include <core/models/effects_provider/class_feature.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/item/item.hpp>
 #include <core/models/spell/spell.hpp>
@@ -36,8 +35,6 @@ public:
     virtual void visit(const Choosable& choosable) override;
 private:
     void display_formatted_text(const std::string& formatted_text);
-    void list_features(const std::vector<Feature>& feature_holder);
-    void list_features(const std::vector<ClassFeature>& feature_holder);
 
     DisplayFormatVisitor display_format_visitor;
     StringFormatter string_formatter;

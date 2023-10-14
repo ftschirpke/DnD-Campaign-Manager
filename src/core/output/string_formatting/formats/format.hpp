@@ -10,7 +10,7 @@ namespace dnd {
 class Format {
 public:
     virtual ~Format() = default;
-    virtual void accept(FormatVisitor* visitor) = 0;
+    virtual void accept(const FormatVisitor& visitor) const = 0;
 };
 
 } // namespace dnd

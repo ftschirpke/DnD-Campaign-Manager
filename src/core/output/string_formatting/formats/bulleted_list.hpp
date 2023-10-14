@@ -17,7 +17,7 @@ public:
      * @brief Accept a format visitor
      * @param visitor a pointer to the format visitor
      */
-    virtual void accept(FormatVisitor* visitor);
+    virtual void accept(const FormatVisitor& visitor) const override;
     /**
      * @brief Add an item to the list
      * @param item the item to add
@@ -27,14 +27,6 @@ public:
 private:
     std::vector<std::string_view> items;
 };
-
-inline BulletedList::BulletedList() noexcept : items({}) {}
-
-inline void BulletedList::accept(FormatVisitor* visitor) { visitor->visit(this); }
-
-inline void BulletedList::add_item(std::string_view item) { items.push_back(item); }
-
-inline std::vector<std::string_view> BulletedList::get_items() const noexcept { return items; }
 
 } // namespace dnd
 
