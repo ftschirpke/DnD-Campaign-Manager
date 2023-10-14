@@ -91,20 +91,9 @@ void dnd::CharacterParser::set_context(const dnd::Content& content) {
             decision_data.set_target(nullptr);
             continue;
         }
-        std::vector<const Effects*> effects_with_choices;
-        if (!effects_provider->get_main_effects().get_choices().empty()) {
-            effects_with_choices.emplace_back(&effects_provider->get_main_effects());
-        }
-        const ClassFeature* class_feature = dynamic_cast<const ClassFeature*>(effects_provider); // TODO: temporary
-        if (class_feature != nullptr) {
-            for (const auto& [_, effects] : class_feature->get_higher_level_effects()) {
-                if (!effects.get_choices().empty()) {
-                    effects_with_choices.emplace_back(&effects);
-                }
-            }
-        }
+        std::vector<const Effects*> effects_with_choices = effects_provider->get_all_effects();
         for (const Effects* effects : effects_with_choices) {
-            if (processed_effects.contains(effects)) {
+            if (effects->get_choices().empty() || processed_effects.contains(effects)) {
                 continue;
             }
             decision_data.set_target(effects);
