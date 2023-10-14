@@ -32,26 +32,18 @@ dnd::Errors dnd::FeatureParser::parse(nlohmann::ordered_json&& json, FeatureData
     data.source_path = get_filepath();
 
     if (json.contains("higher_levels")) {
-        if (json["higher_levels"].is_object()) {
-            auto not_a_digit = [](unsigned char c) { return !std::isdigit(c); };
-            for (auto& [level_str, effects] : json["higher_levels"].items()) {
-                if (std::any_of(level_str.begin(), level_str.end(), not_a_digit)) {
-                    errors.add_parsing_error(
-                        ParsingErrorCode::INVALID_ATTRIBUTE_TYPE, get_filepath(),
-                        "The feature json's \"higher_levels\"'s key, which should be the level at which the effect "
-                        "activates, is not a number."
-                    );
-                    continue;
-                }
-                int level = std::stoi(level_str);
+        if (json["higher_levels"].is_array()) {
+            for (auto& effects : json["higher_levels"]) {
+                int level;
+                errors += parse_required_attribute(effects, "level", level);
                 auto [inserted_pair_it, was_inserted] = data.higher_level_effects_data.emplace(
                     level, EffectsData(data.get_parent())
                 );
                 if (!was_inserted) {
                     errors.add_parsing_error(
                         ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(),
-                        "The feature json's \"higher_levels\"'s key, which should be the level at which the effect "
-                        "activates, is not unique."
+                        "The feature json's \"higher_levels\" contains multiple effects for the same level. Consider "
+                        "merging them if that was intended."
                     );
                     continue;
                 }
@@ -60,7 +52,7 @@ dnd::Errors dnd::FeatureParser::parse(nlohmann::ordered_json&& json, FeatureData
         } else {
             errors.add_parsing_error(
                 ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(),
-                "The feature json's \"higher_levels\" is not an object."
+                "The feature json's \"higher_levels\" is not an array."
             );
         }
         json.erase("higher_levels");
