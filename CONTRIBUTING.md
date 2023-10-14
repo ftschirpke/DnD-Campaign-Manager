@@ -122,7 +122,7 @@ An example:
 #include <string>
 #include <vector>
 
-#include <nlohann/json.hpp>
+#include <nlohmann/json.hpp>
 
 #include <models/my_class.hpp>
 #include <models/another_class.hpp>
