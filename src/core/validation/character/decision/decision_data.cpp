@@ -12,13 +12,13 @@
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
-#include <core/models/effect_holder/choice/choice.hpp>
-#include <core/models/effect_holder/effect_holder.hpp>
-#include <core/models/feature_holder/feature_holder.hpp>
+#include <core/models/effects/choice/choice.hpp>
+#include <core/models/effects/effects.hpp>
+#include <core/models/effects_provider/feature.hpp>
 #include <core/validation/character/character_data.hpp>
-#include <core/validation/effect_holder/effect_holder_data.hpp>
+#include <core/validation/effects/effects_data.hpp>
 
-dnd::DecisionData::DecisionData(const dnd::CharacterData* parent, const dnd::EffectHolder* target) noexcept
+dnd::DecisionData::DecisionData(const dnd::CharacterData* parent, const dnd::Effects* target) noexcept
     : ValidationSubdata(parent), selections(), character_data(parent), target(target) {}
 
 dnd::Errors dnd::DecisionData::validate() const {
@@ -45,8 +45,17 @@ dnd::Errors dnd::DecisionData::validate() const {
     return errors;
 }
 
-bool feature_is_in(const dnd::Feature& feature_to_find, const dnd::FeatureHolder& feature_holder) {
-    for (const dnd::Feature& feature : feature_holder.get_features()) {
+static bool class_feature_is_in(const dnd::Feature& feature_to_find, const std::vector<dnd::ClassFeature>& features) {
+    for (const dnd::ClassFeature& feature : features) {
+        if (&feature == &feature_to_find) {
+            return true;
+        }
+    }
+    return false;
+}
+
+static bool feature_is_in(const dnd::Feature& feature_to_find, const std::vector<dnd::Feature>& features) {
+    for (const dnd::Feature& feature : features) {
         if (&feature == &feature_to_find) {
             return true;
         }
@@ -101,47 +110,43 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
     }
 
     const Feature& linked_feature = content.get_features().get(feature_name);
+    std::vector<const Effects*> effects_with_choices = linked_feature.get_all_effects();
 
-    if (&linked_feature.get_main_part() != target) {
-        bool target_found_in_feature = false;
-        for (const auto& part : linked_feature.get_other_parts()) {
-            if (&part == target) {
-                target_found_in_feature = true;
-                break;
-            }
+    bool target_found_in_feature = false;
+    for (const Effects* effects : effects_with_choices) {
+        if (effects == target) {
+            target_found_in_feature = true;
+            break;
         }
-        if (!target_found_in_feature) {
-            errors.add_validation_error(
-                ValidationErrorCode::RELATION_NOT_FOUND, parent,
-                "Decision cannot be linked to any of the feature's parts."
-            );
-        }
+    }
+    if (!target_found_in_feature) {
+        errors.add_validation_error(
+            ValidationErrorCode::RELATION_NOT_FOUND, parent, "Decision cannot be linked to any of the feature's parts."
+        );
     }
 
     bool feature_found = false;
     if (character_data != nullptr) {
-        if (content.get_character_races().contains(character_data->character_basis_data.race_name)) {
+        const std::string& race_name = character_data->character_basis_data.race_name;
+        if (content.get_character_races().contains(race_name)) {
+            feature_found = feature_is_in(linked_feature, content.get_character_races().get(race_name).get_features());
+        }
+        const std::string& subrace_name = character_data->character_basis_data.subrace_name;
+        if (!feature_found && content.get_character_subraces().contains(subrace_name)) {
             feature_found = feature_is_in(
-                linked_feature, content.get_character_races().get(character_data->character_basis_data.race_name)
+                linked_feature, content.get_character_subraces().get(subrace_name).get_features()
             );
         }
-        if (!feature_found
-            && content.get_character_subraces().contains(character_data->character_basis_data.subrace_name)) {
-            feature_found = feature_is_in(
-                linked_feature, content.get_character_subraces().get(character_data->character_basis_data.subrace_name)
+        const std::string& class_name = character_data->character_basis_data.class_name;
+        if (!feature_found && content.get_character_classes().contains(class_name)) {
+            feature_found = class_feature_is_in(
+                linked_feature, content.get_character_classes().get(class_name).get_features()
             );
         }
-        if (!feature_found
-            && content.get_character_classes().contains(character_data->character_basis_data.class_name)) {
-            feature_found = feature_is_in(
-                linked_feature, content.get_character_classes().get(character_data->character_basis_data.class_name)
-            );
-        }
-        if (!feature_found
-            && content.get_character_subclasses().contains(character_data->character_basis_data.subclass_name)) {
-            feature_found = feature_is_in(
-                linked_feature,
-                content.get_character_subclasses().get(character_data->character_basis_data.subclass_name)
+        const std::string& subclass_name = character_data->character_basis_data.subclass_name;
+        if (!feature_found && content.get_character_subclasses().contains(subclass_name)) {
+            feature_found = class_feature_is_in(
+                linked_feature, content.get_character_subclasses().get(subclass_name).get_features()
             );
         }
     }
@@ -156,6 +161,6 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
 
 const dnd::CharacterData* dnd::DecisionData::get_character_data() const noexcept { return character_data; }
 
-const dnd::EffectHolder* dnd::DecisionData::get_target() const noexcept { return target; }
+const dnd::Effects* dnd::DecisionData::get_target() const noexcept { return target; }
 
-void dnd::DecisionData::set_target(const dnd::EffectHolder* new_target) noexcept { target = new_target; }
+void dnd::DecisionData::set_target(const dnd::Effects* new_target) noexcept { target = new_target; }

@@ -12,9 +12,9 @@ class Table;
 class FormatVisitor {
 public:
     virtual ~FormatVisitor() = default;
-    virtual void visit(BulletedList* bulleted_list) = 0;
-    virtual void visit(Paragraph* paragraph) = 0;
-    virtual void visit(Table* table) = 0;
+    virtual void visit(const BulletedList& bulleted_list) const = 0;
+    virtual void visit(const Paragraph& paragraph) const = 0;
+    virtual void visit(const Table& table) const = 0;
 };
 
 } // namespace dnd

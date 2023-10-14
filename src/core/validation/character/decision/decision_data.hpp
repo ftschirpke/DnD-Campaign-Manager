@@ -14,11 +14,11 @@
 namespace dnd {
 
 class CharacterData;
-class EffectHolder;
+class Effects;
 
 class DecisionData : public ValidationSubdata {
 public:
-    DecisionData(const CharacterData* parent, const EffectHolder* target) noexcept;
+    DecisionData(const CharacterData* parent, const Effects* target) noexcept;
     std::strong_ordering operator<=>(const DecisionData&) const noexcept = default;
     /**
      * @brief Validates the data
@@ -33,15 +33,15 @@ public:
     virtual Errors validate_relations(const Content& content) const override;
 
     const CharacterData* get_character_data() const noexcept;
-    const EffectHolder* get_target() const noexcept;
+    const Effects* get_target() const noexcept;
 
-    void set_target(const EffectHolder* new_target) noexcept;
+    void set_target(const Effects* new_target) noexcept;
 
     std::string feature_name;
     std::map<std::string, std::vector<std::string>> selections;
 private:
     const CharacterData* character_data;
-    const EffectHolder* target;
+    const Effects* target;
 };
 
 } // namespace dnd

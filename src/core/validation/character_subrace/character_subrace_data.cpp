@@ -13,7 +13,7 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
-#include <core/validation/feature/feature_data.hpp>
+#include <core/validation/effects_provider/feature_data.hpp>
 
 std::unique_ptr<dnd::ValidationData> dnd::CharacterSubraceData::pack() const {
     return std::make_unique<CharacterSubraceData>(*this);

@@ -3,7 +3,9 @@
 #include "display_visitor.hpp"
 
 #include <cassert>
+#include <memory>
 #include <string>
+#include <vector>
 
 #include <fmt/format.h>
 
@@ -14,11 +16,13 @@
 #include <core/models/character_race/character_race.hpp>
 #include <core/models/character_subclass/character_subclass.hpp>
 #include <core/models/character_subrace/character_subrace.hpp>
-#include <core/models/feature/choosable.hpp>
-#include <core/models/feature/feature.hpp>
+#include <core/models/effects_provider/choosable.hpp>
+#include <core/models/effects_provider/feature.hpp>
 #include <core/models/item/item.hpp>
 #include <core/models/source_info.hpp>
 #include <core/models/spell/spell.hpp>
+#include <core/output/string_formatting/formats/format.hpp>
+#include <core/output/string_formatting/string_formatter.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
 constexpr const char* separator = "--------------------------------------------------------------------------------";
@@ -30,7 +34,17 @@ static void display_source_info(dnd::CommandLineOutput& output, const dnd::Sourc
     );
 }
 
-static void list_features(dnd::CommandLineOutput& output, const std::vector<dnd::Feature>& features) {
+static void format_text(const std::string& text) {
+    static dnd::DisplayFormatVisitor display_format_visitor;
+    static dnd::StringFormatter string_formatter(false);
+    std::vector<std::unique_ptr<dnd::Format>> formats = string_formatter.parse_formats(text);
+    for (const auto& format : formats) {
+        format->accept(display_format_visitor);
+    }
+}
+
+template <typename T>
+static void list_features(dnd::CommandLineOutput& output, const std::vector<T>& features) {
     if (features.empty()) {
         return;
     }
@@ -39,7 +53,7 @@ static void list_features(dnd::CommandLineOutput& output, const std::vector<dnd:
         output.text(separator);
         output.text(feature.get_name());
         output.text("Description:");
-        output.text(feature.get_description());
+        format_text(feature.get_description());
     }
 }
 
@@ -68,7 +82,7 @@ void dnd::DisplayVisitor::visit(const dnd::Character& character) {
         output.formatted_text("Subclass: {}", subclass_ptr->get_name());
     }
 
-    list_features(output, character.get_features());
+    list_features<Feature>(output, character.get_features());
 }
 
 void dnd::DisplayVisitor::visit(const dnd::CharacterClass& character_class) {
@@ -83,7 +97,7 @@ void dnd::DisplayVisitor::visit(const dnd::CharacterClass& character_class) {
     output.formatted_text("Feat Levels: {}", feat_level_str);
     output.formatted_text("Subclass Level: {}", character_class.get_important_levels().get_subclass_level());
 
-    list_features(output, character_class.get_features());
+    list_features<ClassFeature>(output, character_class.get_features());
 }
 
 void dnd::DisplayVisitor::visit(const CharacterSubclass& character_subclass) {
@@ -92,7 +106,7 @@ void dnd::DisplayVisitor::visit(const CharacterSubclass& character_subclass) {
     display_source_info(output, character_subclass.get_source_info());
     output.formatted_text("Class name:", character_subclass.get_class()->get_name());
 
-    list_features(output, character_subclass.get_features());
+    list_features<ClassFeature>(output, character_subclass.get_features());
 }
 
 void dnd::DisplayVisitor::visit(const CharacterRace& character_race) {
@@ -102,7 +116,7 @@ void dnd::DisplayVisitor::visit(const CharacterRace& character_race) {
     const char* has_subraces_cstr = character_race.has_subraces() ? "yes" : "no";
     output.formatted_text("Has Subraces: {}", has_subraces_cstr);
 
-    list_features(output, character_race.get_features());
+    list_features<Feature>(output, character_race.get_features());
 }
 
 void dnd::DisplayVisitor::visit(const CharacterSubrace& character_subrace) {
@@ -111,7 +125,7 @@ void dnd::DisplayVisitor::visit(const CharacterSubrace& character_subrace) {
     display_source_info(output, character_subrace.get_source_info());
     output.formatted_text("Race name: {}", character_subrace.get_race()->get_name());
 
-    list_features(output, character_subrace.get_features());
+    list_features<Feature>(output, character_subrace.get_features());
 }
 
 void dnd::DisplayVisitor::visit(const Item& item) {
@@ -121,10 +135,10 @@ void dnd::DisplayVisitor::visit(const Item& item) {
     const char* attunement = item.requires_attunement() ? "required" : "not required";
     output.formatted_text("Attunement {}", attunement);
     output.text("Description:");
-    output.text(item.get_description());
+    format_text(item.get_description());
     if (!item.get_cosmetic_description().empty()) {
         output.text("Cosmetic Description:");
-        output.text(item.get_cosmetic_description());
+        format_text(item.get_cosmetic_description());
     }
 }
 
@@ -139,7 +153,7 @@ void dnd::DisplayVisitor::visit(const Spell& spell) {
     output.formatted_text("Duration: {}", spell.get_duration());
 
     output.text("Description:");
-    output.text(spell.get_description());
+    format_text(spell.get_description());
 }
 
 void dnd::DisplayVisitor::visit(const Feature& feature) {
@@ -147,7 +161,7 @@ void dnd::DisplayVisitor::visit(const Feature& feature) {
     output.text("Type: Feature");
     display_source_info(output, feature.get_source_info());
     output.text("Description:");
-    output.text(feature.get_description());
+    format_text(feature.get_description());
 }
 
 void dnd::DisplayVisitor::visit(const Choosable& choosable) {
@@ -155,5 +169,5 @@ void dnd::DisplayVisitor::visit(const Choosable& choosable) {
     output.formatted_text("Type: Choosable Feature - %s", choosable.get_type());
     display_source_info(output, choosable.get_source_info());
     output.text("Description:");
-    output.text(choosable.get_description());
+    format_text(choosable.get_description());
 }

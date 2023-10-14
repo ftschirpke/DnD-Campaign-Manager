@@ -13,15 +13,19 @@ namespace dnd {
 class CommandLineOutput {
 public:
     /**
+     * @brief Display a newline
+     */
+    void newline() const;
+    /**
      * @brief Display a c-style string
      * @param text the c-style string to display
      */
-    void text(const char* text);
+    void text(const char* text) const;
     /**
      * @brief Display a string
      * @param text the string to display
      */
-    void text(std::string_view text);
+    void text(std::string_view text) const;
     /**
      * @brief Display a formatted text in the style of the fmt library.
      * @tparam ...T the types of the formatting arguments
@@ -29,17 +33,17 @@ public:
      * @param ...args the formatting arguments
      */
     template <typename... T>
-    void formatted_text(std::string_view fmt, const T&... args);
+    void formatted_text(std::string_view fmt, const T&... args) const;
     /**
      * @brief Display a c-style error message
      * @param error_msg the c-style error message
      */
-    void error(const char* error_msg);
+    void error(const char* error_msg) const;
     /**
      * @brief Display a error message
      * @param error_msg the error message
      */
-    void error(std::string_view error_msg);
+    void error(std::string_view error_msg) const;
     /**
      * @brief Display a formatted error message in the style of the fmt library.
      * @tparam ...T the types of the formatting arguments
@@ -47,22 +51,22 @@ public:
      * @param ...args the formatting arguments
      */
     template <typename... T>
-    void formatted_error(std::string_view fmt, const T&... args);
+    void formatted_error(std::string_view fmt, const T&... args) const;
     /**
      * @brief Ask user for input
      * @param prompt_msg the message asking for input
      * @param out the string to write the users input to
      */
-    void prompt_input(std::string_view prompt_msg, std::string& out);
+    void prompt_input(std::string_view prompt_msg, std::string& out) const;
 };
 
 template <typename... T>
-void CommandLineOutput::formatted_text(std::string_view fmt, const T&... args) {
+void CommandLineOutput::formatted_text(std::string_view fmt, const T&... args) const {
     text(fmt::vformat(fmt, fmt::make_format_args(std::forward<const T&>(args)...)));
 }
 
 template <typename... T>
-void CommandLineOutput::formatted_error(std::string_view fmt, const T&... args) {
+void CommandLineOutput::formatted_error(std::string_view fmt, const T&... args) const {
     error(fmt::vformat(fmt, fmt::make_format_args(std::forward<const T&>(args)...)));
 }
 

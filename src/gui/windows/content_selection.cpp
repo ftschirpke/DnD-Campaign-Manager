@@ -59,6 +59,9 @@ void dnd::ContentSelection::render_content_dir_selection() {
         if (!valid) {
             ImGui::OpenPopup("Invalid content directory");
         }
+        if (valid && session.get_status() == SessionStatus::CAMPAIGN_SELECTION) {
+            is_selecting_campaign = true;
+        }
     }
 
     if (ImGui::BeginPopupModal("Invalid content directory", nullptr, error_popup_options)) {

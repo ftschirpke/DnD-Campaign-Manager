@@ -11,6 +11,8 @@
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/character_race/character_race.hpp>
+#include <core/models/effects_provider/feature.hpp>
+#include <core/models/source_info.hpp>
 #include <core/validation/character_subrace/character_subrace_data.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
@@ -32,6 +34,14 @@ dnd::CharacterSubrace dnd::CharacterSubrace::create(dnd::CharacterSubraceData&& 
     );
 }
 
+const std::string& dnd::CharacterSubrace::get_name() const noexcept { return name; }
+
+const std::string& dnd::CharacterSubrace::get_description() const noexcept { return description; }
+
+const dnd::SourceInfo& dnd::CharacterSubrace::get_source_info() const noexcept { return source_info; }
+
+const std::vector<dnd::Feature>& dnd::CharacterSubrace::get_features() const noexcept { return features; }
+
 const dnd::CharacterRace* dnd::CharacterSubrace::get_race() const noexcept { return race; }
 
 void dnd::CharacterSubrace::accept(dnd::ContentVisitor& visitor) const { visitor.visit(*this); }
@@ -40,4 +50,5 @@ dnd::CharacterSubrace::CharacterSubrace(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::vector<Feature>&& features,
     const CharacterRace* race
 ) noexcept
-    : FeatureHolder(std::move(name), std::move(description), std::move(source_path), std::move(features)), race(race) {}
+    : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
+      features(std::move(features)), race(race) {}

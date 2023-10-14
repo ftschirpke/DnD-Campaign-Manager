@@ -11,23 +11,35 @@
   - [Items](#items)
   - [Spells](#spells)
   - [Features](#features)
-  - [Effects](#effects)
+  - [Stat Changes](#stat-changes)
     - [Custom Attributes](#custom-attributes)
   - [Groups](#groups)
   - [Anything unclear?](#anything-unclear)
 
 This directory is where you store all your content i.e. definitions of classes, races, spells, items, and monsters.
 
-Everything that applies to all of your campaigns, such as the SRD classes and races is placed in the `general` directory. Whereas everything related to the campaign itself is placed within its own folder for the campaign.
+Everything that applies to all of your campaigns, such as the SRD classes and races is placed in the `general` directory.
+Whereas everything related to the campaign itself is placed within its own folder for the campaign.
 
-As an example, the content from SRD is formatted in this way. These examples are located in the [`content_imperial/general/srd`](../content_imperial/general/srd/) and [`content_metric/general/srd`](../content_metric/general/srd/) directories. **Be aware:** They are just an example, all rights belong to WotC, and as an example, they are not guaranteed to be correct, complete, or up-to-date.
+As an example, the content from SRD is formatted in this way. These examples are located in the
+[`content_imperial/general/srd`](../content_imperial/general/srd/) and
+[`content_metric/general/srd`](../content_metric/general/srd/) directories.
+**Be aware:** They are just an example, all rights belong to WotC, and as an example,
+they are not guaranteed to be correct, complete, or up-to-date.
 
-Furthermore, a few further examples using the SRD content are provided in the `example_campaign` directories ([imperial](../content_imperial/example_campaign/) or [metric](../content_metric/example_campaign/)). These directories should also show you, how you can create content for your own campaign and how to place it in a directory so that the DnD-Campaign-Manager can use it.
+Furthermore, a few further examples using the SRD content are provided in the `example_campaign` directories
+([imperial](../content_imperial/example_campaign/) or [metric](../content_metric/example_campaign/)).
+These directories should also show you, how you can create content for your own campaign and how to place it in 
+a directory so that the DnD-Campaign-Manager can use it.
 
-Within the [`content_imperial`](../content_imperial/) directory, you can find the original content using imperial units. I did my best to convert all imperial units into metric units. You can find this adapted content in the [`content_metric`](../content_metric/) directory.
+Within the [`content_imperial`](../content_imperial/) directory, you can find the original content using imperial units.
+I did my best to convert all imperial units into metric units. You can find this adapted content in the
+[`content_metric`](../content_metric/) directory.
 
-By default, the DnD-Campaign-Manager parses all content from a directory called `content` in the location where you are starting the tool.
-Therefore, when your content is located somewhere else, remember to provide the directory name to the executable using `-d path/to/dir`.
+By default, the DnD-Campaign-Manager parses all content from a directory called `content` in the location where
+you are starting the tool.
+Therefore, when your content is located somewhere else, remember to provide the directory name to the executable
+using `-d path/to/dir`.
 
 # Formatting Content
 
@@ -51,7 +63,9 @@ Each character should be stored in a JSON file as a map (or "object") containing
 | hit_dice_rolls | yes | array of integers | hit dice rolls on level-ups for hit points **without any modifiers applied** (should have one value for each level) <ul><li>**be aware:** if you are using the rule that on level 1 everyone gets the maximum value of the hit die as HP, you still have to provide that value in this array</li></ul> |
 | features | no | [features](#features) map | character-specific features |
 
-<!-- TODO: choices -->
+### Choices
+Not documented yet.
+<!-- TODO -->
 
 ## Races
 Each race should be stored in a JSON file as a map (or "object"). The values possible values are:
@@ -71,7 +85,7 @@ Example of a race with only one feature:
         {
             "Ability Score Increase (Example Race)": {
                 "description": "Your Wisdom and Charisma scores both increase by 1.",
-                "effects": ["WIS normal add 1", "CHA normal add 1"]
+                "stat_changes": ["WIS normal add 1", "CHA normal add 1"]
             }
         }
     ]
@@ -111,7 +125,9 @@ Each class should be stored in a JSON file as a map (or "object"). The required 
 | spellcasting | no | [spellcasting](#spellcasting) map | all information about spellcasting, if the class is a spellcasting class |
 | features | yes | [features](#features) map | class features <ul><li>there needs to be exactly one feature that has the key-value pair `"subclass": true` (this feature should just be a feature describing that from a certain level you can choose a subclass, usually level 1, 2 or 3)</li><li>usually, there is also a feature describing hit dice and proficiencies for armor, weapons, saving throws and skills</li></ul> |
 
-Example of a class without a proficiency feature (for more information on proficiency features, have a look at the examples provided in the [`content_imperial`](../content_imperial/general/srd/classes/) and [`content_metric`](../content_metric/general/srd/classes/) directories):
+Example of a class without a proficiency feature (for more information on proficiency features,
+have a look at the examples provided in the [`content_imperial`](../content_imperial/general/srd/classes/) and
+[`content_metric`](../content_metric/general/srd/classes/) directories):
 ```json
 {
     "name": "Example Class",
@@ -119,15 +135,17 @@ Example of a class without a proficiency feature (for more information on profic
     "features": {
         "Special": {
             "description": "At 4th level, you chooose a subclass.",
-            "activation": "CLASS_LEVEL >= 4",
+            "level": 4,
             "subclass": true
         }
     }
 }
 ```
+<!-- TODO: when implemented, fix this -->
 
 ### Spellcasting
-Some classes allow spellcasting. In that case, you have to provide the key "spellcasting" to the map. And the value mapped to "spellcasting" is another map with (some of) the following values:
+Some classes allow spellcasting. In that case, you have to provide the key "spellcasting" to the map.
+And the value mapped to "spellcasting" is another map with (some of) the following values:
 | Name | required? | format | description |
 |------|:---------:|:------:|-------------|
 | ability | yes | string | one of the abilities "STR", "DEX", "CON", "INT", "WIS", "CHA" |
@@ -156,7 +174,7 @@ Example of a subclass with one feature:
     "features": {
         "Do Stuff": {
             "description": "Starting when you choose this subclass at 4th level, you can do stuff as an action.",
-            "activation": "CLASS_LEVEL >= 4",
+            "level": 4,
             "actions": {"Do Stuff": "You can do stuff"}
         }
     }
@@ -164,7 +182,8 @@ Example of a subclass with one feature:
 ```
 
 ## Spells
-A spell should be an entry in a JSON map (or "object"), where the key is the name of the spell and the value is a map with exactly six entries (any further entries will not be parsed).
+A spell should be an entry in a JSON map (or "object"), where the key is the name of the spell and 
+the value is a map with exactly six entries (any further entries will not be parsed).
 These should be
 | Name | required? | format | description |
 |------|:---------:|:------:|-------------|
@@ -175,7 +194,8 @@ These should be
 | duration | yes | string | duration of the spell |
 | description | yes | string | description of what the spell does and how it works |
 
-It is expected that all of the values are formatted in the typical D&D fashion, but especially the "level_type" and "components" **must be** in the typical format e.g. "2nd-level transmutation" or "V, M (a bit of fur)" respectively.
+It is expected that all of the values are formatted in the typical D&D fashion, but especially the "level_type" and
+"components" **must be** in the typical format e.g. "2nd-level transmutation" or "V, M (a bit of fur)" respectively.
 
 An example of a minimal spell JSON file would be:
 
@@ -193,7 +213,8 @@ An example of a minimal spell JSON file would be:
 ```
 
 ## Items
-An item should be an entry in a JSON map (or "object"), where the key is the name of the item and the value is a map with the following values
+An item should be an entry in a JSON map (or "object"), where the key is the name of the item and 
+the value is a map with the following values
 | Name | required? | format | description |
 |------|:---------:|:------:|-------------|
 | requires_attunement | yes | boolean | `true` if item requires attunement, `false` otherwise |
@@ -212,14 +233,17 @@ An example of a minimal item JSON file would be:
 }
 ```
 
-<!-- ## Monsters -->
+## Monsters
+Not implemented yet.
 <!-- TODO -->
 
-<!-- ## NPCs -->
+## NPCs
+Not implemented yet.
 <!-- TODO -->
 
 ## Features
-Races, subraces, classes, subclasses and characters can all have features. In the JSON files, the features are formatted as a map inside a larger map.
+Races, subraces, classes, subclasses and characters can all have features.
+In the JSON files, the features are formatted as a map inside a larger map.
 ```jsonc
 {
     // ...
@@ -229,13 +253,16 @@ Races, subraces, classes, subclasses and characters can all have features. In th
     // ...
 }
 ```
-Each feature is represented as a key-value pair where the key is the name of the feature and the value is another JSON map containing the following values:
+Each feature is represented as a key-value pair where the key is the name of the feature and the value is another 
+JSON map containing the following values:
 
 | Name | required? | format | description |
 |------|:---------:|:------:|-------------|
-| description | yes | string | a human-readable description of the feature|
-| effects | no | array of [effects](#effects) | effect are applied to the creature (these are parsed by the DnD-Campaign Manager tool and then used in calculations) |
-| activation | no | string | a machine-readable description of when this feature activates, the most common version of class features activating at a certain class level: `"activation": "CLASS_LEVEL >= 3"` |
+| description | yes | string | a human-readable description of the feature  |
+| higher_levels | no | array of description-less features | the parts of the feature that activate at higher levels |
+| level | if in (sub)class | integer | the level at which the feature activates |
+| stat_changes | no | array of [stat changes](#stat-changes) | effect are applied to the creature (these are parsed by the DnD-Campaign Manager tool and then used in calculations) |
+| activation | no | string | a machine-readable description of when this feature activates |
 | activations | no | array of strings | If you want to provide multiple activations per feature, which all have to be true, you can put multiple of them into an array. Please provide either "activation", "activations", or neither of them **but not both**. |
 | damage_resistances | no | array of strings | damage resistances this feature gives you |
 | damage_immunities | no | array of strings | damage immunities this feature gives you |
@@ -259,15 +286,19 @@ Each feature is represented as a key-value pair where the key is the name of the
 | bonus_actions | no | string-string map | map of bonus actions (key: expressive name, value: short description) which this feature allows |
 | reactions | no | string-string map | map of reactions (key: expressive name, value: short description) which this feature allows |
 
-Try to keep the descriptions for your actions, bonus action, and reactions as short as possible. They should just be short and descriptive, reminding the reader of what the action/bonus action/reaction does. For the full explanation, you can always read the feature's description which should be complete and impossible to misunderstand.
+Try to keep the descriptions for your actions, bonus action, and reactions as short as possible.
+They should just be short and descriptive, reminding the reader of what the action/bonus action/reaction does.
+For the full explanation, you can always read the feature's description which should be complete and
+impossible to misunderstand.
 
-## Effects
-Effects are defined as a string of the following format:
+## Stat Changes
+Stat changes are defined as a string of the following format:
 ```
 ATTRIBUTE time operation PARAMETER
 ```
 The `ATTRIBUTE` is the value the effect is changing.
-Below, I listed the hard-coded attributes that will always be there, but [you can also use and create your own](#custom-attributes).
+Below, I listed the hard-coded attributes that will always be there, but
+[you can also use and create your own](#custom-attributes).
 ```
 // mutable attributes:
 MAX_HP, AC, SPEED,
@@ -291,8 +322,8 @@ The `time` describes how early in the calculation this effect should be applied.
 The `operation` is the operation that should be applied to the attribute.
 At the moment the following values are supported:
 
-|operation|description|parameter limitations|
-|---------|-----------|---------------------|
+| operation | description | parameter limitations |
+|-----------|-------------|-----------------------|
 | add | add the parameter value to the attribute value | booleans not allowed |
 | mult | multiply the attribute value with the parameter value | booleans not allowed |
 | div | divide the attribute value by the parameter value | booleans not allowed |
@@ -300,11 +331,15 @@ At the moment the following values are supported:
 | max | set the attribute value to the maximum of the parameter value and its previous value | booleans not allowed |
 | min | set the attribute value to the minimum of the parameter value and its previous value | booleans not allowed |
 
-The `PARAMETER` can be a number e.g. `-1`, `2`, `-2.5` or `34`, but floating point numbers may only have up to 2 decimal places.
+The `PARAMETER` can be a number e.g. `-1`, `2`, `-2.5` or `34`, but floating point numbers may only have
+up to 2 decimal places.
 
-`PARAMETER` can also be a boolean value (i.e. `true` or `false`) but in that case only the `set` operation is allowed (see table above).
+`PARAMETER` can also be a boolean value (i.e. `true` or `false`) but in that case only the `set` operation is allowed
+(see table above).
 
-Lastly, the `PARAMETER` can also be another attribute. In that case the value for the given attribute is retrieved and used for the calculation. Here, you can choose one of the mutable attributes above, or one of the hard-coded immutable ones:
+Lastly, the `PARAMETER` can also be another attribute. In that case the value for the given attribute is retrieved
+and used for the calculation.
+Here, you can choose one of the mutable attributes above, or one of the hard-coded immutable ones:
 ```
 // immutable attributes:
 ARMOR_ON, HAS_SPELLCASTING
@@ -324,8 +359,10 @@ Examples:
 ### Custom Attributes
 Declaring your custom attributes allows you to create even more complex effects.
 A custom attribute is created the first time you use it as the `ATTRIBUTE` part of an effect.
-It is recommended to `set` the attribute to a value first, otherwise it will be initialized with the value `0` (or `false`) by default.
-After it has been created, you can manipulate the value as any other attribute and recombine it with existing attributes to implement effects like the Monk's Unarmored Defense:
+It is recommended to `set` the attribute to a value first, otherwise it will be initialized with the value `0`
+(or `false`) by default.
+After it has been created, you can manipulate the value as any other attribute and recombine it with existing
+attributes to implement effects like the Monk's Unarmored Defense:
 ```jsonc
 "effects": [
     "UNARMORED_DEFENSE_MONK earliest set 10",
@@ -334,14 +371,18 @@ After it has been created, you can manipulate the value as any other attribute a
     "AC latest max UNARMORED_DEFENSE_MONK"
 ]
 ```
-Custom attributes are a nice way to keep each effect's calculations separate and only combine them when and how it is intended.
+Custom attributes are a nice way to keep each effect's calculations separate and only combine them when
+and how it is intended.
 
 ## Groups
 Groups define any kind of related things, that you might want to put into a group for the tool to use.
 
 There are two ways of defining groups and subgroups.
 
-You can define groups and subgroups explicitly in a `groups.json` file using maps and arrays. You should use this for things like musical instruments for example, where you want a selection (usually of strings), but the selection itself does not have any calculation consequences. Only the group or subgroup might have consequences (e.g. having a shield or having medium armor vs. having light armor).
+You can define groups and subgroups explicitly in a `groups.json` file using maps and arrays.
+You should use this for things like musical instruments for example, where you want a selection (usually of strings),
+but the selection itself does not have any calculation consequences. Only the group or subgroup might have consequences
+(e.g. having a shield or having medium armor vs. having light armor).
 
 An example:
 ```jsonc
@@ -371,21 +412,29 @@ An example:
 }
 ```
 
-You can also define groups implicitly by creating a file `groups/group_name.json`. Thereby you implicitly define a group with the file name (underscores converted to spaces). And in the file, you define the members of this group. You should use this for things like eldritch invocations, where the (sub)group members can be far more complicated than simple strings and selecting one of them can have a large impact.
+You can also define groups implicitly by creating a file `groups/group_name.json`.
+Thereby you implicitly define a group with the file name (underscores converted to spaces).
+And in the file, you define the members of this group. You should use this for things like eldritch invocations where
+the (sub)group members can be far more complicated than simple strings and selecting one of them can have a large impact.
 
-Because such choices are usually very similar to features that a class or race would grant. Group members are formatted and parsed like [features](#features) except that activations are replaced by prerequisites.
+Because such choices are usually very similar to features that a class or race would grant.
+Group members are formatted and parsed like [features](#features) except that activations are replaced by prerequisites.
 (see one of the `general/srd/groups/` directories for examples)
 
 <!-- TODO: give more information on that -->
 
-If you find that this way of formatting and parsing such groups and their members is not sufficient for your needs, please let me know.
+If you find that this way of formatting and parsing such groups and their members is not sufficient for your needs,
+please let me know.
 
 
 ## Anything unclear?
 
-If something about the formatting of the content is not clear, please have a look at the Open Game Content examples (in [imperial units](../content_imperial/) or [metric units](../content_metric/)), hopefully, that helps.
+If something about the formatting of the content is not clear, please have a look at the Open Game Content examples
+(in [imperial units](../content_imperial/) or [metric units](../content_metric/)), hopefully, that helps.
 
-If you are comfortable reading C++ code, another possibility would be to have a look at the test cases for the particular content type you are having problems with e.g. the `spell_parser_test.cpp`.
+If you are comfortable reading C++ code, another possibility would be to have a look at the test cases for the
+particular content type you are having problems with e.g. the `spell_parser_test.cpp`.
 
-**Either way**, do not hesitate to create an issue, I am happy to help. And if you can point out where this explanation is incomplete or unclear, I have the opportunity to improve it for future readers.
+**Either way**, do not hesitate to create an issue, I am happy to help. And if you can point out where this explanation
+is incomplete or unclear, I have the opportunity to improve it for future readers.
 

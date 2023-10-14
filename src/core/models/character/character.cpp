@@ -17,7 +17,8 @@
 #include <core/models/character_race/character_race.hpp>
 #include <core/models/character_subclass/character_subclass.hpp>
 #include <core/models/character_subrace/character_subrace.hpp>
-#include <core/models/feature/feature.hpp>
+#include <core/models/effects_provider/feature.hpp>
+#include <core/models/source_info.hpp>
 #include <core/validation/character/character_data.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
@@ -50,6 +51,14 @@ dnd::Character dnd::Character::create(dnd::CharacterData&& data, const Content& 
     );
 }
 
+const std::string& dnd::Character::get_name() const noexcept { return name; }
+
+const std::string& dnd::Character::get_description() const noexcept { return description; }
+
+const dnd::SourceInfo& dnd::Character::get_source_info() const noexcept { return source_info; }
+
+const std::vector<dnd::Feature>& dnd::Character::get_features() const noexcept { return features; }
+
 const dnd::AbilityScores& dnd::Character::get_base_ability_scores() const noexcept { return base_ability_scores; }
 
 const dnd::CharacterBasis& dnd::Character::get_basis() const noexcept { return basis; }
@@ -63,6 +72,6 @@ dnd::Character::Character(
     std::vector<dnd::Feature>&& features, dnd::AbilityScores&& base_ability_scores, dnd::CharacterBasis&& basis,
     dnd::Progression&& progression, std::vector<dnd::Decision>&& decisions
 ) noexcept
-    : FeatureHolder(std::move(name), std::move(description), std::move(source_path), std::move(features)),
-      base_ability_scores(std::move(base_ability_scores)), basis(std::move(basis)), progression(std::move(progression)),
-      decisions(std::move(decisions)) {}
+    : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
+      features(std::move(features)), base_ability_scores(std::move(base_ability_scores)), basis(std::move(basis)),
+      progression(std::move(progression)), decisions(std::move(decisions)) {}

@@ -13,12 +13,12 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
 #include <core/models/character_subclass/character_subclass.hpp>
-#include <core/parsing/feature/feature_parser.hpp>
+#include <core/parsing/effects_provider/class_feature_parser.hpp>
 #include <core/parsing/file_parser.hpp>
 #include <core/validation/character_class/character_class_data.hpp>
 
 dnd::CharacterSubclassParser::CharacterSubclassParser(const std::filesystem::path& filepath) noexcept
-    : FileParser(filepath), feature_parser(filepath), data() {}
+    : FileParser(filepath), class_feature_parser(filepath), data() {}
 
 dnd::Errors dnd::CharacterSubclassParser::parse() {
     Errors errors;
@@ -60,7 +60,7 @@ dnd::Errors dnd::CharacterSubclassParser::parse() {
     errors += parse_required_attribute(json, "class", data.class_name);
 
     if (json.contains("features")) {
-        errors += feature_parser.parse_multiple(std::move(json["features"]), data.features_data, &data);
+        errors += class_feature_parser.parse_multiple(std::move(json["features"]), data.features_data, &data);
     } else {
         errors.add_parsing_error(
             ParsingErrorCode::MISSING_ATTRIBUTE, get_filepath(), "Character subclass has no features."

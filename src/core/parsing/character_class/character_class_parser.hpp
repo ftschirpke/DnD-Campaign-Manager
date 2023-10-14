@@ -8,7 +8,7 @@
 #include <nlohmann/json.hpp>
 
 #include <core/errors/errors.hpp>
-#include <core/parsing/feature/feature_parser.hpp>
+#include <core/parsing/effects_provider/class_feature_parser.hpp>
 #include <core/parsing/file_parser.hpp>
 #include <core/validation/character_class/character_class_data.hpp>
 
@@ -34,7 +34,7 @@ public:
      */
     virtual void save_result(Content& content) override;
 private:
-    FeatureParser feature_parser;
+    ClassFeatureParser class_feature_parser;
     CharacterClassData data;
 };
 

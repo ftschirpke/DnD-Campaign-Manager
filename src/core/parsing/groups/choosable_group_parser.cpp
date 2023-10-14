@@ -9,11 +9,11 @@
 
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
-#include <core/models/feature/choosable.hpp>
-#include <core/parsing/feature/choosable_parser.hpp>
+#include <core/models/effects_provider/choosable.hpp>
+#include <core/parsing/effects_provider/choosable_parser.hpp>
 #include <core/parsing/file_parser.hpp>
 #include <core/utils/string_manipulation.hpp>
-#include <core/validation/feature/choosable_data.hpp>
+#include <core/validation/effects_provider/choosable_data.hpp>
 
 dnd::ChoosableGroupParser::ChoosableGroupParser(const std::filesystem::path& filepath) noexcept
     : FileParser(filepath), choosable_parser(filepath) {}

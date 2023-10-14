@@ -44,19 +44,6 @@ bool dnd::CharacterBasis::has_subrace() const noexcept { return subrace != nullp
 
 bool dnd::CharacterBasis::has_subclass() const noexcept { return subclass != nullptr; }
 
-std::vector<const dnd::FeatureHolder*> dnd::CharacterBasis::get_feature_holders() const {
-    std::vector<const FeatureHolder*> feature_holders;
-    feature_holders.push_back(race);
-    if (has_subrace()) {
-        feature_holders.push_back(subrace);
-    }
-    feature_holders.push_back(cls);
-    if (has_subclass()) {
-        feature_holders.push_back(subclass);
-    }
-    return feature_holders;
-}
-
 dnd::CharacterBasis::CharacterBasis(
     const CharacterRace* race, const CharacterSubrace* subrace, const CharacterClass* cls,
     const CharacterSubclass* subclass

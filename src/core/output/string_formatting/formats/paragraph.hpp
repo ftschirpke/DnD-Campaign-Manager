@@ -5,6 +5,7 @@
 
 #include <string_view>
 
+#include <core/output/string_formatting/format_visitor.hpp>
 #include <core/output/string_formatting/formats/format.hpp>
 
 namespace dnd {
@@ -21,22 +22,13 @@ public:
      * @brief Accept a format visitor
      * @param visitor a pointer to the format visitor
      */
-    virtual void accept(FormatVisitor* visitor);
+    virtual void accept(const FormatVisitor& visitor) const override;
     std::string_view get_text() const noexcept;
     bool get_empty_line_after() const noexcept;
 private:
     std::string_view text;
     bool empty_line_after;
 };
-
-inline Paragraph::Paragraph(std::string_view text, bool empty_line_after) noexcept
-    : text(text), empty_line_after(empty_line_after) {}
-
-inline void Paragraph::accept(FormatVisitor* visitor) { visitor->visit(this); }
-
-inline std::string_view Paragraph::get_text() const noexcept { return text; }
-
-inline bool Paragraph::get_empty_line_after() const noexcept { return empty_line_after; }
 
 } // namespace dnd
 

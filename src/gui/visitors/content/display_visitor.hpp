@@ -8,8 +8,8 @@
 #include <core/models/character_race/character_race.hpp>
 #include <core/models/character_subclass/character_subclass.hpp>
 #include <core/models/character_subrace/character_subrace.hpp>
-#include <core/models/feature/choosable.hpp>
-#include <core/models/feature/feature.hpp>
+#include <core/models/effects_provider/choosable.hpp>
+#include <core/models/effects_provider/feature.hpp>
 #include <core/models/item/item.hpp>
 #include <core/models/spell/spell.hpp>
 #include <core/output/string_formatting/string_formatter.hpp>
@@ -23,7 +23,6 @@ namespace dnd {
  */
 class DisplayVisitor : public ContentVisitor {
 public:
-    DisplayVisitor() noexcept;
     virtual void visit(const Character& character) override;
     virtual void visit(const CharacterClass& character_class) override;
     virtual void visit(const CharacterSubclass& character_subclass) override;
@@ -33,18 +32,7 @@ public:
     virtual void visit(const Spell& spell) override;
     virtual void visit(const Feature& feature) override;
     virtual void visit(const Choosable& choosable) override;
-private:
-    void display_formatted_text(const std::string& formatted_text);
-    void list_features(const FeatureHolder& feature_holder);
-
-    DisplayFormatVisitor display_format_visitor;
-    StringFormatter string_formatter;
-
-    static constexpr ImGuiTableFlags table_flags = ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg
-                                                   | ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_NoHostExtendX;
 };
-
-inline DisplayVisitor::DisplayVisitor() noexcept : display_format_visitor(table_flags), string_formatter(false) {}
 
 } // namespace dnd
 

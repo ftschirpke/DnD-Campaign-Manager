@@ -13,8 +13,8 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
 #include <core/models/character/character.hpp>
-#include <core/models/feature/feature.hpp>
-#include <core/parsing/feature/feature_parser.hpp>
+#include <core/models/effects_provider/feature.hpp>
+#include <core/parsing/effects_provider/feature_parser.hpp>
 #include <core/parsing/file_parser.hpp>
 #include <core/validation/character/character_data.hpp>
 #include <core/validation/character/decision/decision_data.hpp>
@@ -80,32 +80,24 @@ dnd::Errors dnd::CharacterParser::parse() {
 }
 
 void dnd::CharacterParser::set_context(const dnd::Content& content) {
-    std::set<const EffectHolder*> processed_effect_holders;
+    std::set<const Effects*> processed_effects;
     for (auto& decision_data : data.decisions_data) {
-        const Feature* feature;
+        const EffectsProvider* effects_provider;
         if (content.get_features().contains(decision_data.feature_name)) {
-            feature = &content.get_features().get(decision_data.feature_name);
+            effects_provider = &content.get_features().get(decision_data.feature_name);
         } else if (content.get_choosables().contains(decision_data.feature_name)) {
-            feature = &content.get_choosables().get(decision_data.feature_name);
+            effects_provider = &content.get_choosables().get(decision_data.feature_name);
         } else {
             decision_data.set_target(nullptr);
             continue;
         }
-        std::vector<const EffectHolder*> effect_holders_with_choices;
-        if (!feature->get_main_part().get_choices().empty()) {
-            effect_holders_with_choices.emplace_back(&feature->get_main_part());
-        }
-        for (const auto& effect_holder : feature->get_other_parts()) {
-            if (!effect_holder.get_choices().empty()) {
-                effect_holders_with_choices.emplace_back(&effect_holder);
-            }
-        }
-        for (const EffectHolder* effect_holder : effect_holders_with_choices) {
-            if (processed_effect_holders.contains(effect_holder)) {
+        std::vector<const Effects*> effects_with_choices = effects_provider->get_all_effects();
+        for (const Effects* effects : effects_with_choices) {
+            if (effects->get_choices().empty() || processed_effects.contains(effects)) {
                 continue;
             }
-            decision_data.set_target(effect_holder);
-            processed_effect_holders.emplace(effect_holder);
+            decision_data.set_target(effects);
+            processed_effects.emplace(effects);
         }
     }
 }

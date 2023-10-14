@@ -14,30 +14,32 @@
 #include <core/output/string_formatting/formats/paragraph.hpp>
 #include <core/output/string_formatting/formats/table.hpp>
 
-void dnd::DisplayFormatVisitor::visit(BulletedList* bulleted_list) {
-    for (const auto& element : bulleted_list->get_items()) {
+dnd::DisplayFormatVisitor::DisplayFormatVisitor(ImGuiTableFlags table_flags) : table_flags(table_flags) {}
+
+void dnd::DisplayFormatVisitor::visit(const BulletedList& bulleted_list) const {
+    for (const auto& element : bulleted_list.get_items()) {
         ImGui::Bullet();
         ImGui::TextWrapped("%s", std::string(element).c_str());
     }
 }
 
-void dnd::DisplayFormatVisitor::visit(Paragraph* paragraph) {
-    std::string_view text = paragraph->get_text();
+void dnd::DisplayFormatVisitor::visit(const Paragraph& paragraph) const {
+    std::string_view text = paragraph.get_text();
     ImGui::TextWrapped("%s", std::string(text).c_str());
-    if (paragraph->get_empty_line_after()) {
+    if (paragraph.get_empty_line_after()) {
         ImGui::Spacing();
     }
 }
 
-void dnd::DisplayFormatVisitor::visit(Table* table) {
-    std::vector<std::vector<std::string_view>> rows = table->get_rows();
+void dnd::DisplayFormatVisitor::visit(const Table& table) const {
+    std::vector<std::vector<std::string_view>> rows = table.get_rows();
     if (rows.empty() || rows[0].empty()) {
         return;
     }
     std::string table_id = fmt::format(
-        "r{}_c{}_{}_{}", rows.size(), table->get_num_columns(), rows[0][0], rows.back().back()
+        "r{}_c{}_{}_{}", rows.size(), table.get_num_columns(), rows[0][0], rows.back().back()
     );
-    if (ImGui::BeginTable(table_id.c_str(), static_cast<int>(table->get_num_columns()), table_flags)) {
+    if (ImGui::BeginTable(table_id.c_str(), static_cast<int>(table.get_num_columns()), table_flags)) {
         bool is_first = true;
         for (const auto& row : rows) {
             if (!is_first) {

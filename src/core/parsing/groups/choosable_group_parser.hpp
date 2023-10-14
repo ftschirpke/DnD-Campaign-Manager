@@ -8,9 +8,9 @@
 #include <vector>
 
 #include <core/errors/errors.hpp>
-#include <core/parsing/feature/choosable_parser.hpp>
+#include <core/parsing/effects_provider/choosable_parser.hpp>
 #include <core/parsing/file_parser.hpp>
-#include <core/validation/feature/choosable_data.hpp>
+#include <core/validation/effects_provider/choosable_data.hpp>
 
 namespace dnd {
 

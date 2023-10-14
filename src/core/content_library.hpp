@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 
+#include <core/models/content_piece.hpp>
 #include <core/searching/fuzzy_search/trie_node.hpp>
 
 namespace dnd {
@@ -15,6 +16,7 @@ namespace dnd {
  * @tparam T the type of the content pieces
  */
 template <typename T>
+requires isContentPieceType<T>
 class ContentLibrary {
 public:
     /**

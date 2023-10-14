@@ -20,6 +20,7 @@ namespace dnd {
  * @tparam T the type of the content pieces being referenced
  */
 template <typename T>
+requires isContentPieceType<T>
 class ReferencingContentLibrary : public ContentLibrary<T> {
 public:
     /**
@@ -77,6 +78,7 @@ private:
 
 
 template <typename T>
+requires isContentPieceType<T>
 void ReferencingContentLibrary<T>::save_in_fuzzy(const T* content_piece) {
     std::string lower_name = dnd::string_lowercase_copy(content_piece->get_name());
 
@@ -93,36 +95,43 @@ void ReferencingContentLibrary<T>::save_in_fuzzy(const T* content_piece) {
 }
 
 template <typename T>
+requires isContentPieceType<T>
 bool ReferencingContentLibrary<T>::contains(const std::string& name) const {
     return data.contains(name);
 }
 
 template <typename T>
+requires isContentPieceType<T>
 bool ReferencingContentLibrary<T>::empty() const {
     return data.empty();
 }
 
 template <typename T>
+requires isContentPieceType<T>
 size_t ReferencingContentLibrary<T>::size() const {
     return data.size();
 }
 
 template <typename T>
+requires isContentPieceType<T>
 const T& ReferencingContentLibrary<T>::get(size_t index) const {
     return *std::next(data.begin(), static_cast<long>(index))->second;
 }
 
 template <typename T>
+requires isContentPieceType<T>
 const T& ReferencingContentLibrary<T>::get(const std::string& name) const {
     return *data.at(name);
 }
 
 template <typename T>
+requires isContentPieceType<T>
 const std::unordered_map<std::string, const T*>& ReferencingContentLibrary<T>::get_all() const {
     return data;
 }
 
 template <typename T>
+requires isContentPieceType<T>
 bool ReferencingContentLibrary<T>::add(const T& content_piece) {
     const std::string name = content_piece.get_name();
     if (contains(name)) {
@@ -134,6 +143,7 @@ bool ReferencingContentLibrary<T>::add(const T& content_piece) {
 }
 
 template <typename T>
+requires isContentPieceType<T>
 const TrieNode<T>* ReferencingContentLibrary<T>::get_trie_root() const {
     return trie.get_root();
 }
