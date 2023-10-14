@@ -2,6 +2,9 @@
 #define DISPLAY_VISITOR_HPP_
 
 #include <cli/output/command_line_output.hpp>
+#include <cli/string_formatting/display_format_visitor.hpp>
+#include <core/output/string_formatting/format_visitor.hpp>
+#include <core/output/string_formatting/string_formatter.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
 namespace dnd {

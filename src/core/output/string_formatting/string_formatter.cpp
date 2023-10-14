@@ -13,6 +13,9 @@
 #include <core/output/string_formatting/formats/table.hpp>
 #include <core/utils/string_manipulation.hpp>
 
+dnd::StringFormatter::StringFormatter(bool ignore_double_newline) noexcept
+    : ignore_double_newline(ignore_double_newline) {}
+
 std::vector<std::unique_ptr<dnd::Format>> dnd::StringFormatter::parse_formats(const std::string& text) const {
     std::vector<std::unique_ptr<dnd::Format>> formats;
 

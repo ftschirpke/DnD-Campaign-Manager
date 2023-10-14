@@ -23,7 +23,6 @@ namespace dnd {
  */
 class DisplayVisitor : public ContentVisitor {
 public:
-    DisplayVisitor() noexcept;
     virtual void visit(const Character& character) override;
     virtual void visit(const CharacterClass& character_class) override;
     virtual void visit(const CharacterSubclass& character_subclass) override;
@@ -33,11 +32,6 @@ public:
     virtual void visit(const Spell& spell) override;
     virtual void visit(const Feature& feature) override;
     virtual void visit(const Choosable& choosable) override;
-private:
-    void display_formatted_text(const std::string& formatted_text);
-
-    DisplayFormatVisitor display_format_visitor;
-    StringFormatter string_formatter;
 };
 
 } // namespace dnd

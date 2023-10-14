@@ -3,7 +3,9 @@
 #include "display_visitor.hpp"
 
 #include <cassert>
+#include <memory>
 #include <string>
+#include <vector>
 
 #include <fmt/format.h>
 
@@ -19,6 +21,8 @@
 #include <core/models/item/item.hpp>
 #include <core/models/source_info.hpp>
 #include <core/models/spell/spell.hpp>
+#include <core/output/string_formatting/formats/format.hpp>
+#include <core/output/string_formatting/string_formatter.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
 constexpr const char* separator = "--------------------------------------------------------------------------------";
@@ -28,6 +32,15 @@ static void display_source_info(dnd::CommandLineOutput& output, const dnd::Sourc
         "Source: {} / {} / {}", source_info.get_source_group_name(), source_info.get_source_type_name(),
         source_info.get_source_name()
     );
+}
+
+static void format_text(const std::string& text) {
+    static dnd::DisplayFormatVisitor display_format_visitor;
+    static dnd::StringFormatter string_formatter(false);
+    std::vector<std::unique_ptr<dnd::Format>> formats = string_formatter.parse_formats(text);
+    for (const auto& format : formats) {
+        format->accept(display_format_visitor);
+    }
 }
 
 template <typename T>
@@ -40,7 +53,7 @@ static void list_features(dnd::CommandLineOutput& output, const std::vector<T>& 
         output.text(separator);
         output.text(feature.get_name());
         output.text("Description:");
-        output.text(feature.get_description());
+        format_text(feature.get_description());
     }
 }
 
@@ -122,10 +135,10 @@ void dnd::DisplayVisitor::visit(const Item& item) {
     const char* attunement = item.requires_attunement() ? "required" : "not required";
     output.formatted_text("Attunement {}", attunement);
     output.text("Description:");
-    output.text(item.get_description());
+    format_text(item.get_description());
     if (!item.get_cosmetic_description().empty()) {
         output.text("Cosmetic Description:");
-        output.text(item.get_cosmetic_description());
+        format_text(item.get_cosmetic_description());
     }
 }
 
@@ -140,7 +153,7 @@ void dnd::DisplayVisitor::visit(const Spell& spell) {
     output.formatted_text("Duration: {}", spell.get_duration());
 
     output.text("Description:");
-    output.text(spell.get_description());
+    format_text(spell.get_description());
 }
 
 void dnd::DisplayVisitor::visit(const Feature& feature) {
@@ -148,7 +161,7 @@ void dnd::DisplayVisitor::visit(const Feature& feature) {
     output.text("Type: Feature");
     display_source_info(output, feature.get_source_info());
     output.text("Description:");
-    output.text(feature.get_description());
+    format_text(feature.get_description());
 }
 
 void dnd::DisplayVisitor::visit(const Choosable& choosable) {
@@ -156,5 +169,5 @@ void dnd::DisplayVisitor::visit(const Choosable& choosable) {
     output.formatted_text("Type: Choosable Feature - %s", choosable.get_type());
     display_source_info(output, choosable.get_source_info());
     output.text("Description:");
-    output.text(choosable.get_description());
+    format_text(choosable.get_description());
 }

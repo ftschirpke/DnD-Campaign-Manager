@@ -33,8 +33,6 @@ static const float first_column_width = 150;
 static constexpr ImGuiTableFlags table_flags = ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg
                                                | ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_NoHostExtendX;
 
-dnd::DisplayVisitor::DisplayVisitor() noexcept : display_format_visitor(table_flags), string_formatter(false) {}
-
 static void label(const char* label) {
     ImGui::TableNextRow();
     ImGui::TableSetColumnIndex(0);
@@ -77,6 +75,15 @@ static void begin_content_table(const dnd::ContentPiece& content_piece) {
 static void end_content_table() {
     ImGui::EndTable();
     ImGui::PopStyleVar();
+}
+
+static void display_formatted_text(const std::string& formatted_text) {
+    static dnd::DisplayFormatVisitor display_format_visitor(table_flags);
+    static dnd::StringFormatter string_formatter(false);
+    std::vector<std::unique_ptr<dnd::Format>> text_formats = string_formatter.parse_formats(formatted_text);
+    for (auto it = text_formats.begin(); it != text_formats.end(); ++it) {
+        (*it)->accept(display_format_visitor);
+    }
 }
 
 template <typename T>
@@ -273,11 +280,4 @@ void dnd::DisplayVisitor::visit(const Choosable& choosable) {
     display_formatted_text(choosable.get_description());
 
     end_content_table();
-}
-
-void dnd::DisplayVisitor::display_formatted_text(const std::string& formatted_text) {
-    std::vector<std::unique_ptr<Format>> text_formats = string_formatter.parse_formats(formatted_text);
-    for (auto it = text_formats.begin(); it != text_formats.end(); ++it) {
-        (*it)->accept(display_format_visitor);
-    }
 }
