@@ -11,7 +11,7 @@
 #include <core/errors/errors.hpp>
 #include <core/validation/basic_mechanics/dice_data.hpp>
 #include <core/validation/character_class/important_levels_data.hpp>
-#include <core/validation/effects_provider/feature_data.hpp>
+#include <core/validation/effects_provider/class_feature_data.hpp>
 #include <core/validation/spellcasting/spellcasting_data.hpp>
 #include <core/validation/validation_data.hpp>
 
@@ -41,7 +41,7 @@ public:
     virtual Errors validate_relations(const Content& content) const override;
 
     SpellcastingData spellcasting_data;
-    std::vector<FeatureData> features_data;
+    std::vector<ClassFeatureData> features_data;
     std::string subclass_feature_name;
     DiceData hit_dice_data;
     ImportantLevelsData important_levels_data;

@@ -8,7 +8,7 @@
 #include <vector>
 
 #include <core/errors/errors.hpp>
-#include <core/validation/effects_provider/feature_data.hpp>
+#include <core/validation/effects_provider/class_feature_data.hpp>
 #include <core/validation/spellcasting/spellcasting_data.hpp>
 #include <core/validation/validation_data.hpp>
 
@@ -36,7 +36,7 @@ public:
     virtual Errors validate_relations(const Content& content) const override;
 
     SpellcastingData spellcasting_data;
-    std::vector<FeatureData> features_data;
+    std::vector<ClassFeatureData> features_data;
     std::string class_name;
 };
 

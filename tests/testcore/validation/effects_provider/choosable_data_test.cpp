@@ -8,7 +8,7 @@
 #include <testcore/minimal_testing_content.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
-static constexpr const char* tags = "[core][validation][feature]";
+static constexpr const char* tags = "[core][validation][effects_provider]";
 
 TEST_CASE("dnd::ChoosableFeatureData::validate", tags) {
     dnd::ChoosableData data;

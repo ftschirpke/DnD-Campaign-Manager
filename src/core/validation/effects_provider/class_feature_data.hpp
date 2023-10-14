@@ -1,5 +1,5 @@
-#ifndef FEATURE_DATA_HPP_
-#define FEATURE_DATA_HPP_
+#ifndef CLASS_FEATURE_DATA_HPP_
+#define CLASS_FEATURE_DATA_HPP_
 
 #include <dnd_config.hpp>
 
@@ -9,14 +9,14 @@
 
 #include <core/errors/errors.hpp>
 #include <core/validation/effects/effects_data.hpp>
-#include <core/validation/validation_data.hpp>
+#include <core/validation/effects_provider/feature_data.hpp>
 
 namespace dnd {
 
-class FeatureData : public ValidationData {
+class ClassFeatureData : public FeatureData {
 public:
-    explicit FeatureData(const ValidationData* parent = nullptr) noexcept;
-    std::strong_ordering operator<=>(const FeatureData&) const noexcept = default;
+    explicit ClassFeatureData(const ValidationData* parent = nullptr) noexcept;
+    std::strong_ordering operator<=>(const ClassFeatureData&) const noexcept = default;
     /**
      * @brief Packs the data into a ValidationData unique pointer
      * @return the packed data
@@ -34,13 +34,10 @@ public:
      */
     virtual Errors validate_relations(const Content& content) const override;
 
-    const ValidationData* get_parent() const noexcept;
-
-    EffectsData main_effects_data;
-private:
-    const ValidationData* parent;
+    int level;
+    std::map<int, EffectsData> higher_level_effects_data;
 };
 
 } // namespace dnd
 
-#endif // FEATURE_DATA_HPP_
+#endif // CLASS_FEATURE_DATA_HPP_

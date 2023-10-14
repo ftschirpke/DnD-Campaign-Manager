@@ -31,32 +31,6 @@ dnd::Errors dnd::FeatureParser::parse(nlohmann::ordered_json&& json, FeatureData
     json.erase("description");
     data.source_path = get_filepath();
 
-    if (json.contains("higher_levels")) {
-        if (json["higher_levels"].is_array()) {
-            for (auto& effects : json["higher_levels"]) {
-                int level;
-                errors += parse_required_attribute(effects, "level", level);
-                auto [inserted_pair_it, was_inserted] = data.higher_level_effects_data.emplace(
-                    level, EffectsData(data.get_parent())
-                );
-                if (!was_inserted) {
-                    errors.add_parsing_error(
-                        ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(),
-                        "The feature json's \"higher_levels\" contains multiple effects for the same level. Consider "
-                        "merging them if that was intended."
-                    );
-                    continue;
-                }
-                errors += effects_parser.parse(std::move(effects), inserted_pair_it->second);
-            }
-        } else {
-            errors.add_parsing_error(
-                ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(),
-                "The feature json's \"higher_levels\" is not an array."
-            );
-        }
-        json.erase("higher_levels");
-    }
     errors += effects_parser.parse(std::move(json), data.main_effects_data);
     return errors;
 }
