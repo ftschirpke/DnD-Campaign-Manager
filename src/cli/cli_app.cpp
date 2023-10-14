@@ -105,7 +105,7 @@ void dnd::CliApp::start() {
                 list_all_content_of_a_type();
                 break;
             case 'V':
-                output.error("Not implemented yet."); // TODO
+                view_open_content_pieces();
                 break;
             default:
                 output.error("Unknown command.");
@@ -131,18 +131,18 @@ void dnd::CliApp::search_content_by_name() {
             output.text("No results.");
         } else {
             for (size_t i = 0; i < results.size(); ++i) {
-                output.formatted_text("{:>4} -- {}", i, results[i]);
+                output.formatted_text("{:>4} -- {}", i + 1, results[i]);
             }
             std::string index_str;
             output.prompt_input(
-                "Enter the index of the content piece you want to open (Press Enter for new search):", index_str
+                "Enter the number for the content piece you want to open (Press Enter for new search):", index_str
             );
             if (index_str.empty()) {
                 continue;
             }
-            size_t index = std::stoul(index_str);
+            size_t index = std::stoul(index_str) - 1;
             if (index >= results.size()) {
-                output.error("Invalid index.");
+                output.error("Invalid number.");
                 continue;
             }
             session.open_fuzzy_search_result(index);
@@ -239,16 +239,16 @@ void dnd::CliApp::list_all_content_of_a_type() {
             continue;
         }
         for (size_t i = 0; i < list.size(); ++i) {
-            output.formatted_text("{:>4} -- {}", i, list[i]);
+            output.formatted_text("{:>4} -- {}", i + 1, list[i]);
         }
         std::string index_str;
         output.prompt_input(
-            "Enter the index of the content piece you want to open (Press Enter for new search):", index_str
+            "Enter the number for the content piece you want to open (Press Enter for new search):", index_str
         );
         if (index_str.empty()) {
             return;
         }
-        size_t index = std::stoul(index_str);
+        size_t index = std::stoul(index_str) - 1;
         if (index >= list.size()) {
             output.error("Invalid index.");
             continue;
@@ -297,13 +297,15 @@ void dnd::CliApp::view_open_content_pieces() {
             return;
         }
         for (size_t i = 0; i < open_content_pieces.size(); ++i) {
-            output.formatted_text("{:>4} -- {}", i, open_content_pieces[i]->get_name());
+            output.formatted_text("{:>4} -- {}", i + 1, open_content_pieces[i]->get_name());
         }
-        output.prompt_input("Enter the index of the content piece you want to open (Press Enter to exit):", index_str);
+        output.prompt_input(
+            "Enter the number for the content piece you want to open (Press Enter to exit):", index_str
+        );
         if (index_str.empty()) {
             return;
         }
-        size_t index = std::stoul(index_str);
+        size_t index = std::stoul(index_str) - 1;
         if (index >= open_content_pieces.size()) {
             output.error("Invalid index.");
             continue;
@@ -315,4 +317,5 @@ void dnd::CliApp::view_open_content_pieces() {
 void dnd::CliApp::display_content_piece(const ContentPiece* content_piece) {
     output.text(separator);
     content_piece->accept(display_visitor);
+    output.text(separator);
 }
