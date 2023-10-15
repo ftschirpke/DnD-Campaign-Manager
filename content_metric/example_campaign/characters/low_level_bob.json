@@ -2,6 +2,7 @@
     "name": "Bob",
     "description": "A low-level example character.",
     "class": "Barbarian",
+    "subclass": "Path of the Berserker",
     "race": "Dwarf",
     "subrace": "Hill Dwarf",
     "base_ability_scores": [15, 12, 14, 10, 8, 13],

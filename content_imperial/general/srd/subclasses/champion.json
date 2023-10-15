@@ -5,19 +5,19 @@
     "features": {
         "Improved Critical": {
             "description": "Beginning when you choose this archetype at 3rd level, your weapon attacks score a critical hit on a roll of 19 or 20.",
-            "activation": "CLASS_LEVEL >= 3"
+            "level": 3
         },
         "Remarkable Athlete": {
             "description": "Starting at 7th level, you can add half your proficiency bonus (round up) to any Strength, Dexterity, or Constitution check you make that doesn't already use your proficiency bonus.\n\nIn addition, when you make a running long jump, the distance you can cover increases by a number of feet equal to your Strength modifier.",
-           "activation": "CLASS_LEVEL >= 7"
+           "level": 7
         },
         "Superior Critical": {
             "description": "Starting at 15th level, your weapon attacks score a critical hit on a roll of 18-20.",
-           "activation": "CLASS_LEVEL >= 15"
+           "level": 15
         },
         "Survivor": {
             "description": "At 18th level, you attain the pinnacle of resilience in battle. At the start of each of your turns, you regain hit points equal to 5 + your Constitution modifier if you have no more than half of your hit points left. You don't gain this benefit if you have 0 hit points.",
-            "activation": "CLASS_LEVEL >= 18"
+            "level": 18
         }
     }
 }

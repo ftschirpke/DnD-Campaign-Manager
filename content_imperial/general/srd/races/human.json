@@ -5,7 +5,7 @@
     "features": {
         "Ability Score Increase (Human)": {
             "description": "Your ability scores each increase by 1.",
-            "effects": [
+            "stat_changes": [
                 "STR normal add 1", "DEX normal add 1", "CON normal add 1",
                 "INT normal add 1", "WIS normal add 1", "CHA normal add 1"
             ]
@@ -18,7 +18,7 @@
         },
         "Speed of a Human": {
             "description": "Your base walking speed is 30 feet.",
-            "effects": [
+            "stat_changes": [
                 "SPEED earliest max 30"
             ]
         },

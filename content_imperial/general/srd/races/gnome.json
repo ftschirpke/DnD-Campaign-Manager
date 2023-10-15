@@ -14,14 +14,14 @@
         },
         "Speed of a Gnome": {
             "description": "Your base walking speed is 25 feet.",
-            "effects": [
+            "stat_changes": [
                 "SPEED earliest max 25"
             ]
         },
         "Darkvision of a Gnome": {
             "description": "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
             "senses": [
-                "Darkvision (60 feet)"
+                "Darkvision"
             ]
         },
         "Languages of a Gnome": {

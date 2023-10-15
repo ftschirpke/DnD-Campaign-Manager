@@ -5,7 +5,7 @@
     "features": {
         "Ability Score Increase (Dwarf)": {
             "description": "Your Constitution score increases by 2.",
-            "effects": [
+            "stat_changes": [
                 "CON normal add 2"
             ]
         },
@@ -17,14 +17,14 @@
         },
         "Speed of a Dwarf": {
             "description": "Your base walking speed is 25 feet. Your speed is not reduced by wearing heavy armor.",
-            "effects": [
+            "stat_changes": [
                 "SPEED earliest max 25"
             ]
         },
         "Darkvision of a Dwarf": {
             "description": "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
             "senses": [
-                "Darkvision (60 feet)"
+                "Darkvision"
             ]
         },
         "Tool Proficiency of a Dwarf": {

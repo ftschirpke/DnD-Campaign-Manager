@@ -5,7 +5,7 @@
     "features": {
         "Ability Score Increase (Mountain Dwarf)": {
             "description": "Your Strength score increases by 2.",
-            "effects": [
+            "stat_changes": [
                 "STR normal add 2"
             ]
         },

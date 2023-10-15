@@ -3850,5 +3850,18 @@
         "duration": "Instantaneous",
         "level_type": "6th-level conjuration",
         "range": "1.5m"
+    },
+    "Zone of Truth": {
+        "casting_time": "1 action",
+        "classes": [
+            "Bard",
+            "Cleric",
+            "Paladin"
+        ],
+        "components": "V, S",
+        "description": "You create a magical zone that guards against deception in a 4.5m-radius sphere centered on a point of your choice within range. Until the spell ends, a creature that enters the spell's area for the first time on a turn or starts its turn there must make a Charisma saving throw. On a failed save, a creature can't speak a deliberate lie while in the radius. You know whether each creature succeeds or fails on its saving throw.\n\nAn affected creature is aware of the spell and can thus avoid answering questions to which it would normally respond with a lie. Such creatures can be evasive in its answers as long as it remains within the boundaries of the truth.",
+        "duration": "10 minutes",
+        "level_type": "2nd-level enchantment",
+        "range": "18m"
     }
 }

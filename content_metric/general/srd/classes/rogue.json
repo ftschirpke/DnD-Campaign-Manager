@@ -30,46 +30,46 @@
         },
         "Cunning Action": {
             "description": "Starting at 2nd level, your quick thinking and agility allow you to move and act quickly. You can take a bonus action on each of your turns in combat. This action can be used only to take the Dash, Disengage, or Hide action.",
-            "activation": "CLASS_LEVEL >= 2",
+            "level": 2,
             "bonus_actions": {
                 "Cunning Action": "Take the Dash, Disengage, or Hide action as a bonus action."
             }
         },
         "Roguish Archetype": {
             "description": "At 3rd level, you choose an archetype that you emulate in the exercise of your rogue abilities. Your choice grants you features at 3rd level and then again at 9th, 13th, and 17th level.",
-            "activation": "CLASS_LEVEL >= 3"
+            "level": 3
         },
         "Uncanny Dodge": {
             "description": "Starting at 5th level, when an attacker that you can see hits you with an attack, you can use your reaction to halve the attack's damage against you.",
-            "activation": "CLASS_LEVEL >= 5",
+            "level": 5,
             "reactions": {
                 "Uncanny Dodge": "When an attacker that you can see hits you with an attack, you can halve the attack's damage against you."
             }
         },
         "Evasion (Rogue)": {
             "description": "Beginning at 7th level, you can nimbly dodge out of the way of certain area effects, such as a red dragon's fiery breath or an ice storm spell. When you are subjected to an effect that allows you to make a Dexterity saving throw to take only half damage, you instead take no damage if you succeed on the saving throw, and only half damage if you fail.",
-            "activation": "CLASS_LEVEL >= 7"
+            "level": 7
         },
         "Reliable Talent": {
             "description": "By 11th level, you have refined your chosen skills until they approach perfection. Whenever you make an ability check that lets you add your proficiency bonus, you can treat a d20 roll of 9 or lower as a 10.",
-            "activation": "CLASS_LEVEL >= 11"
+            "level": 11
         },
         "Blindsense": {
             "description": "Starting at 14th level, if you are able to hear, you are aware of the location of any hidden or invisible creature within 3m of you.",
-            "activation": "CLASS_LEVEL >= 14"
+            "level": 14
         },
         "Slippery Mind": {
             "description": "By 15th level, you have acquired greater mental strength. You gain proficiency in Wisdom saving throws.",
-            "activation": "CLASS_LEVEL >= 15",
+            "level": 15,
             "saving_throw_proficiencies": ["WIS"]
         },
         "Elusive": {
             "description": "Beginning at 18th level, you are so evasive that attackers rarely gain the upper hand against you. No attack roll has advantage against you while you aren't incapacitated.",
-            "activation": "CLASS_LEVEL >= 18"
+            "level": 18
         },
         "Stroke of Luck": {
             "description": "At 20th level, you have an uncanny knack for succeeding when you need to. If your attack misses a target within range, you can turn the miss into a hit. Alternatively, if you fail an ability check, you can treat the d20 roll as a 20.\n\nOnce you use this feature, you can't use it again until you finish a short or long rest.",
-            "activation": "CLASS_LEVEL >= 20"
+            "level": 20
         }
     }
 }

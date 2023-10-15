@@ -36,45 +36,45 @@
         },
         "Fighting Style (Ranger)": {
             "description": "At 2nd level, you adopt a particular style of fighting as your specialty. Choose one of the following options. You can't take a Fighting Style option more than once, even if you later get to choose again.\n\nArchery\nYou gain a +2 bonus to attack rolls you make with ranged weapons.\n\nDefense\nWhile you are wearing armor, you gain a +1 bonus to AC.\n\nDueling\nWhen you are wielding a melee weapon in one hand and no other weapons, you gain a +2 bonus to damage rolls with that weapon.\n\nTwo-Weapon Fighting\nWhen you engage in two-weapon fighting, you can add your ability modifier to the damage of the second attack.",
-            "activation": "CLASS_LEVEL >= 2"
+            "level": 2
         },
         "Ranger Archetype": {
             "description": "At 3rd level, you choose an archetype that you strive to emulate. Your choice grants you features at 3rd level and again at 7th, 11th, and 15th level.",
-            "activation": "CLASS_LEVEL >= 3"
+            "level": 3
         },
         "Primeval Awareness": {
             "description": "Beginning at 3rd level, you can use your action and expend one ranger spell slot to focus your awareness on the region around you. For 1 minute per level of the spell slot you expend, you can sense whether the following types of creatures are present within 1.6km of you (or within up to 10km if you are in your favored terrain): aberrations, celestials, dragons, elementals, fey, fiends, and undead. This feature doesn't reveal the creatures' location or number.",
-            "activation": "CLASS_LEVEL >= 3",
+            "level": 3,
             "actions": {
                 "Primeval Awareness": "You expend one ranger spell slot. For 1 minute per level of the spell slot you expend, you can sense whether the following types of creatures are present within 1.6km of you (or within up to 10km if you are in your favored terrain): aberrations, celestials, dragons, elementals, fey, fiends, and undead."
             }
         },
         "Extra Attack (Ranger)": {
             "description": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn.",
-            "activation": "CLASS_LEVEL >= 5"
+            "level": 5
         },
-        "Land's Stride": {
+        "Land's Stride (Ranger)": {
             "description": "Starting at 8th level, moving through nonmagical difficult terrain costs you no extra movement. You can also pass through nonmagical plants without being slowed by them and without taking damage from them if they have thorns, spines, or a similar hazard.\n\nIn addition, you have advantage on saving throws against plants that are magically created or manipulated to impede movement, such those created by the Entangle spell.",
-            "activation": "CLASS_LEVEL >= 8"
+            "level": 8
         },
         "Hide in Plain Sight": {
             "description": "Starting at 10th level, you can spend 1 minute creating camouflage for yourself. You must have access to fresh mud, dirt, plants, soot, and other naturally occurring materials with which to create your camouflage.\n\nOnce you are camouflaged in this way, you can try to hide by pressing yourself up against a solid surface, such as a tree or wall, that is at least as tall and wide as you are. You gain a +10 bonus to Dexterity (Stealth) checks as long as you remain there without moving or taking actions. Once you move or take an action or a reaction, you must camouflage yourself again to gain this benefit.",
-            "activation": "CLASS_LEVEL >= 10"
+            "level": 10
         },
         "Vanish": {
             "description": "Starting at 14th level, you can use the Hide action as a bonus action on your turn. Also, you can't be tracked by nonmagical means, unless you choose to leave a trail.",
-            "activation": "CLASS_LEVEL >= 14",
+            "level": 14,
             "bonus_actions": {
                 "Vanish": "You can use the Hide action as a bonus action."
             }
         },
         "Feral Senses": {
             "description": "At 18th level, you gain preternatural senses that help you fight creatures you can't see. When you attack a creature you can't see, your inability to see it doesn't impose disadvantage on your attack rolls against it.\n\nYou are also aware of the location of any invisible creature within 9m of you, provided that the creature isn't hidden from you and you aren't blinded or deafened.",
-            "activation": "CLASS_LEVEL >= 18"
+            "level": 18
         },
         "Foe Slayer": {
             "description": "At 20th level, you become an unparalleled hunter of your enemies. Once on each of your turns, you can add your Wisdom modifier to the attack roll or the damage roll of an attack you make against one of your favored enemies. You can choose to use this feature before or after the roll, but before any effects of the roll are applied.",
-            "activation": "CLASS_LEVEL >= 20"
+            "level": 20
         }
     }
 }

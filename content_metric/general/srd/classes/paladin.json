@@ -41,40 +41,40 @@
         },
         "Fighting Style (Paladin)": {
             "description": "At 2nd level, you adopt a style of fighting as your specialty. Choose one of the following options. You can't take a Fighting Style option more than once, even if you later get to choose again.\n\nDefense\nWhile you are wearing armor, you gain a +1 bonus to AC.\n\nDueling\nWhen you are wielding a melee weapon in one hand and no other weapons, you gain a +2 bonus to damage rolls with that weapon.\n\nGreat Weapon Fighting\nWhen you roll a 1 or 2 on a damage die for an attack you make with a melee weapon that you are wielding with two hands, you can reroll the die and must use the new roll. The weapon must have the two-handed or versatile property for you to gain this benefit.\n\nProtection\nWhen a creature you can see attacks a target other than you that is within 1.5m of you, you can use your reaction to impose disadvantage on the attack roll. You must be wielding a shield.",
-            "activation": "CLASS_LEVEL >= 2"
+            "level": 2
         },
         "Divine Smite": {
             "description": "Starting at 2nd level, when you hit a creature with a melee weapon attack, you can expend one spell slot to deal radiant damage to the target, in addition to the weapon's damage. The extra damage is 2d8 for a 1st-level spell slot, plus 1d8 for each spell level higher than 1st, to a maximum of 5d8. The damage increases by 1d8 if the target is an undead or a fiend, to a maximum of 6d8.",
-            "activation": "CLASS_LEVEL >= 2"
+            "level": 2
         },
         "Divine Health": {
             "description": "By 3rd level, the divine magic flowing through you makes you immune to disease.",
-            "activation": "CLASS_LEVEL >= 3"
+            "level": 3
         },
         "Sacred Oath": {
             "description": "When you reach 3rd level, you swear the oath that binds you as a paladin forever. Up to this time you have been in a preparatory stage, committed to the path but not yet sworn to it. Now you choose a Sacred Oath.\n\nYour choice grants you features at 3rd level and again at 7th, 15th, and 20th level. Those features include oath spells and the Channel Divinity feature.\n\nOath Spells\nEach oath has a list of associated spells. You gain access to these spells at the levels specified in the oath description. Once you gain access to an oath spell, you always have it prepared. Oath spells don't count against the number of spells you can prepare each day.\n\nIf you gain an oath spell that doesn't appear on the paladin spell list, the spell is nonetheless a paladin spell for you.\n\nChannel Divinity\nYour oath allows you to channel divine energy to fuel magical effects. Each Channel Divinity option provided by your oath explains how to use it.\n\nWhen you use your Channel Divinity, you choose which option to use. You must then finish a short or long rest to use your Channel Divinity again.\n\nSome Channel Divinity effects require saving throws. When you use such an effect from this class, the DC equals your paladin spell save DC.",
-            "activation": "CLASS_LEVEL >= 3"
+            "level": 3
         },
         "Extra Attack (Paladin)": {
             "description": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn.",
-            "activation": "CLASS_LEVEL >= 5"
+            "level": 5
         },
         "Aura of Protection": {
             "description": "Starting at 6th level, whenever you or a friendly creature within 3m of you must make a saving throw, the creature gains a bonus to the saving throw equal to your Charisma modifier (with a minimum bonus of +1). You must be conscious to grant this bonus.\n\nAt 18th level, the range of this aura increases to 9m.",
-            "activation": "CLASS_LEVEL >= 6"
+            "level": 6
         },
         "Aura of Courage": {
             "description": "Starting at 10th level, you and friendly creatures within 3m of you can't be frightened while you are conscious.\n\nAt 18th level, the range of this aura increases to 9m.",
-            "activation": "CLASS_LEVEL >= 10",
+            "level": 10,
             "condition_immunities": ["frightened"]
         },
         "Improved Divine Smite": {
             "description": "By 11th level, you are so suffused with righteous might that all your melee weapon strikes carry divine power with them. Whenever you hit a creature with a melee weapon, the creature takes an extra 1d8 radiant damage.",
-            "activation": "CLASS_LEVEL >= 11"
+            "level": 11
         },
         "Cleansing Touch": {
             "description": "Beginning at 14th level, you can use your action to end one spell on yourself or on one willing creature that you touch.\n\nYou can use this feature a number of times equal to your Charisma modifier (a minimum of once). You regain expended uses when you finish a long rest.",
-            "activation": "CLASS_LEVEL >= 14",
+            "level": 14,
             "actions": {
                 "Cleansing Touch": "You end one spell on yourself or on one willing creature that you touch."
             }

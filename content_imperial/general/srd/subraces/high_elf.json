@@ -5,11 +5,11 @@
     "features": {
         "Ability Score Increase (High Elf)": {
             "description": "Your Intelligence score increases by 1.",
-            "effects": [
+            "stat_changes": [
                 "INT normal add 1"
             ]
         },
-        "Elf Weapon Training": {
+        "Elf Weapon Training (High Elf)": {
             "description": "You have proficiency with the longsword, shortsword, shortbow, and longbow.",
             "weapon_proficiencies": ["longsword", "shortsword", "shortbow", "longbow"]
         },

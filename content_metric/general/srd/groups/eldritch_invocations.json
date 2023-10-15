@@ -30,7 +30,7 @@
         "prerequisites": ["HAS_PACT Pact of the Tome"]
     },
     "Chains of Carceri": {
-        "description": "You can cast hold monster at will — targeting a celestial, fiend, or elemental — without expending a spell slot or material components. You must finish a long rest before you can use this invocation on the same creature again.",
+        "description": "You can cast hold monster at will - targeting a celestial, fiend, or elemental - without expending a spell slot or material components. You must finish a long rest before you can use this invocation on the same creature again.",
         "prerequisites": ["LEVEL >= 15", "HAS_PACT Pact of the Chain"]
     },
     "Devil's Sight": {
