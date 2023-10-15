@@ -14,7 +14,7 @@ enum class ChoiceType {
     ABILITY,
     SKILL,
     STRING,
-    EFFECT,
+    STAT_CHANGE,
     ITEM,
     SPELL,
     CHOOSABLE,

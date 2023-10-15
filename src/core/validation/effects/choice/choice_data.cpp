@@ -143,7 +143,7 @@ dnd::Errors dnd::ChoiceData::validate() const {
         case ChoiceType::SKILL:
             errors += validate_skill_choice(*this, parent);
             break;
-        case ChoiceType::EFFECT:
+        case ChoiceType::STAT_CHANGE:
             errors += validate_stat_change_choice(*this, parent);
             break;
         default:
