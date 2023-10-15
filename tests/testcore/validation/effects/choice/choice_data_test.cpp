@@ -61,7 +61,7 @@ TEST_CASE("dnd::ChoiceData::validate and ::validate_relations // valid choice da
     }
 
     SECTION("explicit choices") {
-        choice_data.attribute_name = "effects";
+        choice_data.attribute_name = "stat_changes";
         choice_data.explicit_choices = {"CHA normal add 2", "INT normal add 2"};
         choice_data.amount = 1;
         REQUIRE_NOTHROW(errors = choice_data.validate());
