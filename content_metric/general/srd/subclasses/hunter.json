@@ -5,19 +5,19 @@
     "features": {
         "Hunter's Prey": {
             "description": "At 3rd level, you gain one of the following features of your choice.\n\nColossus Slayer. Your tenacity can wear down the most potent foes. When you hit a creature with a weapon attack, the creature takes an extra 1d8 damage if it's below its hit point maximum. You can deal this extra damage only once per turn.\n\nGiant Killer. When a Large or larger creature within 1.5m of you hits or misses you with an attack, you can use your reaction to attack that creature immediately after its attack, provided that you can see the creature.\n\nHorde Breaker. Once on each of your turns when you make a weapon attack, you can make another attack with the same weapon against a different creature that is within 1.5m of the original target and within range of your weapon.",
-            "activation": "CLASS_LEVEL >= 3"
+            "level": 3
         },
         "Defensive Tactics": {
             "description": "At 7th level, you gain one of the following features of your choice.\n\nEscape the Horde. Opportunity attacks against you are made with disadvantage.\n\nMultiattack Defense. When a creature hits you with an attack, you gain a +4 bonus to AC against all subsequent attacks made by that creature for the rest of the turn.\n\nSteel Will. You have advantage on saving throws against being frightened.",
-            "activation": "CLASS_LEVEL >= 7"
+            "level": 7
         },
         "Multiattack": {
             "description": "At 11th level, you gain one of the following features of your choice.\n\nVolley. You can use your action to make a ranged attack against any number of creatures within 3m of a point you can see within your weapon's range. You must have ammunition for each target, as normal, and you make a separate attack roll for each target.\n\nWhirlwind Attack. You can use your action to make a melee attack against any number of creatures within 1.5m of you, with a separate attack roll for each target.",
-            "activation": "CLASS_LEVEL >= 11"
+            "level": 11
         },
         "Superior Hunter's Defense": {
             "description": "At 15th level, you gain one of the following features of your choice.\n\nEvasion. When you are subjected to an effect, such as a red dragon's fiery breath or a lightning bolt spell, that allows you to make a Dexterity saving throw to take only half damage, you instead take no damage if you succeed on the saving throw, and only half damage if you fail.\n\nStand Against the Tide. When a hostile creature misses you with a melee attack, you can use your reaction to force that creature to repeat the same attack against another creature (other than itself) of your choice.\n\nUncanny Dodge. When an attacker that you can see hits you with an attack, you can use your reaction to halve the attack's damage against you.",
-            "activation": "CLASS_LEVEL >= 15"
+            "level": 15
         }
     }
 }
