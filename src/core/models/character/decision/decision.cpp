@@ -27,7 +27,7 @@ dnd::Decision dnd::Decision::create(dnd::DecisionData&& data, const dnd::Content
         throw dnd::invalid_data("Decision data is incompatible with the given content.");
     }
     EffectsData res_data(data.get_character_data());
-    for (const auto& stat_change_str : data.selections["effects"]) {
+    for (const auto& stat_change_str : data.selections["stat_changes"]) {
         StatChangeData stat_change_data(data.get_character_data());
         stat_change_data.stat_change_str = stat_change_str;
         res_data.stat_changes_data.emplace_back(std::move(stat_change_data));
