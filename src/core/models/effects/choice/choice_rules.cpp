@@ -9,7 +9,7 @@
 #include <utility>
 
 static constexpr std::array<std::pair<std::string_view, dnd::ChoiceType>, 22> valid_attribute_names = {
-    std::pair("effects", dnd::ChoiceType::EFFECT),
+    std::pair("stat_changes", dnd::ChoiceType::STAT_CHANGE),
     std::pair("cantrips_free", dnd::ChoiceType::SPELL),
     std::pair("spells_at_will", dnd::ChoiceType::SPELL),
     std::pair("spells_innate", dnd::ChoiceType::SPELL),
