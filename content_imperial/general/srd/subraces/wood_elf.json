@@ -7,7 +7,7 @@
             "description": "Your Wisdom score increases by 1.",
             "effects": ["WIS normal add 1"]
         },
-        "Elf Weapon Training": {
+        "Elf Weapon Training (Wood Elf)": {
             "description": "You have proficiency with the longsword, shortsword, shortbow, and longbow.",
             "weapon_proficiencies": ["longsword", "shortsword", "shortbow", "longbow"]
         },

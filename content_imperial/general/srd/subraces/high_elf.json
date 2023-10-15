@@ -9,7 +9,7 @@
                 "INT normal add 1"
             ]
         },
-        "Elf Weapon Training": {
+        "Elf Weapon Training (High Elf)": {
             "description": "You have proficiency with the longsword, shortsword, shortbow, and longbow.",
             "weapon_proficiencies": ["longsword", "shortsword", "shortbow", "longbow"]
         },
