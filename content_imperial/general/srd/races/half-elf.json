@@ -5,11 +5,11 @@
     "features": {
         "Ability Score Increase (Half-Elf)": {
             "description": "Your Charisma score increases by 2, and two other ability scores of your choice increase by 1.",
-            "effects": [
+            "stat_changes": [
                 "CHA normal add 2"
             ],
             "choose": {
-                "effects": {
+                "stat_changes": {
                     "amount": 2,
                     "choices": ["STR normal add 1", "DEX normal add 1", "CON normal add 1", "INT normal add 1", "WIS normal add 1"]
                 }
@@ -23,7 +23,7 @@
         },
         "Speed of a Half-Elf": {
             "description": "Your base walking speed is 30 feet.",
-            "effects": [
+            "stat_changes": [
                 "SPEED earliest max 30"
             ]
         },

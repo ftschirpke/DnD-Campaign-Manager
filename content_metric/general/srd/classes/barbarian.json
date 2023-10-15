@@ -26,7 +26,7 @@
         "Unarmored Defense (Barbarian)": {
             "description": "While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. You can use a shield and still gain this benefit.",
             "activation": "ARMOR_ON == false",
-            "effects": [
+            "stat_changes": [
                 "UNARMORED_DEFENSE_BARB earliest set 10",
                 "UNARMORED_DEFENSE_BARB normal add DEXMOD",
                 "UNARMORED_DEFENSE_BARB normal add CONMOD",
@@ -48,7 +48,7 @@
         "Fast Movement": {
             "description": "Starting at 5th level, your speed increases by 3m while you aren't wearing heavy armor.",
             "activations": ["CLASS_LEVEL >= 5", "ARMOR_ON == false"],
-            "effects": [
+            "stat_changes": [
                 "SPEED normal add 3"
             ]
         },
@@ -75,7 +75,7 @@
         "Primal Champion": {
             "description": "At 20th level, you embody the power of the wilds. Your Strength and Constitution scores increase by 4. Your maximum for those scores is now 24.",
             "level": 20,
-            "effects": [
+            "stat_changes": [
                 "STRMAX earliest max 24", "CONMAX earliest max 24",
                 "STR normal add 4", "CON normal add 4"
             ]

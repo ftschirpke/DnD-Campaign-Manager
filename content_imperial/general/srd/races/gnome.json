@@ -14,7 +14,7 @@
         },
         "Speed of a Gnome": {
             "description": "Your base walking speed is 25 feet.",
-            "effects": [
+            "stat_changes": [
                 "SPEED earliest max 25"
             ]
         },

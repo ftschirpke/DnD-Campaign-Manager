@@ -5,7 +5,7 @@
     "features": {
         "Ability Score Increase (Halfling)": {
             "description": "Your Dexterity score increases by 2.",
-            "effects": [
+            "stat_changes": [
                 "DEX normal add 2"
             ]
         },
@@ -17,7 +17,7 @@
         },
         "Speed of a Halfling": {
             "description": "Your base walking speed is 7.5m.",
-            "effects": [
+            "stat_changes": [
                 "SPEED earliest max 7.5"
             ]
         },

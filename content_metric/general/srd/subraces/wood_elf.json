@@ -5,7 +5,7 @@
     "features": {
         "Ability Score Increase (Wood Elf)": {
             "description": "Your Wisdom score increases by 1.",
-            "effects": ["WIS normal add 1"]
+            "stat_changes": ["WIS normal add 1"]
         },
         "Elf Weapon Training (Wood Elf)": {
             "description": "You have proficiency with the longsword, shortsword, shortbow, and longbow.",
@@ -13,7 +13,7 @@
         },
         "Fleet of Foot": {
             "description": "Your base walking speed increases to 10.5m.",
-            "effects": [
+            "stat_changes": [
                 "SPEED earliest max 10.5"
             ]
         },

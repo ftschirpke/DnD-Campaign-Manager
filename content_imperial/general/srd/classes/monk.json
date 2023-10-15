@@ -23,7 +23,7 @@
         "Unarmored Defense (Monk)": {
             "description": "Beginning at 1st level, while you are wearing no armor and not wielding a shield, your AC equals 10 + your Dexterity modifier + your Wisdom modifier.",
             "activation": "ARMOR_ON == false",
-            "effects": [
+            "stat_changes": [
                 "UNARMORED_DEFENSE_MONK earliest set 10",
                 "UNARMORED_DEFENSE_MONK normal add DEXMOD",
                 "UNARMORED_DEFENSE_MONK normal add WISMOD",
@@ -45,7 +45,7 @@
         "Unarmored Movement": {
             "description": "Starting at 2nd level, your speed increases by 10 feet while you are not wearing armor or wielding a shield. This bonus increases when you reach certain monk levels. It changes to 15 ft. at level 6, 20 ft. at level 10, 25 ft. at level 14, and 30ft. at level 18.\n\nAt 9th level, you gain the ability to move along vertical surfaces and across liquids on your turn without falling during the move.",
             "activation": "ARMOR_ON == false",
-            "effects": [
+            "stat_changes": [
                 "SPEED normal add 10"
             ]
         },

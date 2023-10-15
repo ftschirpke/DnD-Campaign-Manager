@@ -5,7 +5,7 @@
     "features": {
         "Ability Score Increase (High Elf)": {
             "description": "Your Intelligence score increases by 1.",
-            "effects": [
+            "stat_changes": [
                 "INT normal add 1"
             ]
         },

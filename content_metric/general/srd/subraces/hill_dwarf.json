@@ -5,13 +5,13 @@
     "features": {
         "Ability Score Increase (Hill Dwarf)": {
             "description": "Your Wisdom score increases by 1.",
-            "effects": [
+            "stat_changes": [
                 "WIS normal add 1"
             ]
         },
         "Dwarven Toughness": {
             "description": "Your hit point maximum increases by 1, and it increases by 1 every time you gain a level.",
-            "effects": [
+            "stat_changes": [
                 "MAXHP normal add LEVEL"
             ]
         }
