@@ -12,7 +12,7 @@
         "Dwarven Toughness": {
             "description": "Your hit point maximum increases by 1, and it increases by 1 every time you gain a level.",
             "effects": [
-                "MAX_HP normal add LEVEL"
+                "MAXHP normal add LEVEL"
             ]
         }
     }
