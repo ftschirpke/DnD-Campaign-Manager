@@ -117,14 +117,14 @@ dnd::Choice dnd::Choice::create(dnd::ChoiceData&& data, const dnd::Content& cont
 
     ChoiceType type = choice_type_for_attribute_name(data.attribute_name);
     std::vector<std::unique_ptr<ContentFilter>> filters;
-    switch (type) {
+    switch (type) { // TODO: complete this switch
         case ChoiceType::ABILITY:
             break;
         case ChoiceType::SKILL:
             break;
         case ChoiceType::STRING:
             break;
-        case ChoiceType::EFFECT:
+        case ChoiceType::STAT_CHANGE:
             break;
         case ChoiceType::ITEM:
             break;
@@ -167,7 +167,7 @@ std::set<std::string> dnd::Choice::possible_values(const dnd::Content& content) 
                 }
             };
             [[fallthrough]];
-        case ChoiceType::EFFECT:
+        case ChoiceType::STAT_CHANGE:
             for (const auto& explicit_choice : explicit_choices) {
                 possible_values.emplace(explicit_choice);
             };
