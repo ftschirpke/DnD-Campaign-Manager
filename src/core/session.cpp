@@ -1,5 +1,6 @@
 #include <dnd_config.hpp>
 
+#include "core/searching/advanced_search/advanced_content_search.hpp"
 #include "session.hpp"
 
 #include <chrono>
@@ -24,9 +25,9 @@
 
 dnd::Session::Session(const char* last_session_filename)
     : last_session_filename(last_session_filename), status(SessionStatus::CONTENT_DIR_SELECTION), content_directory(),
-      campaign_name(), last_session_open_tabs(), open_content_pieces(), selected_content_piece(), fuzzy_search(),
-      fuzzy_search_results(), fuzzy_search_result_count(0), fuzzy_search_result_strings(), unknown_error_messages(),
-      parsing_future(), parser(), errors(), content() {}
+      campaign_name(), parsing_future(), parser(), errors(), content(), last_session_open_tabs(), open_content_pieces(),
+      selected_content_piece(), fuzzy_search(), fuzzy_search_results(), fuzzy_search_result_count(0),
+      fuzzy_search_result_strings(), advanced_search(content), unknown_error_messages() {}
 
 dnd::Session::~Session() { save_session_values(); }
 
@@ -273,6 +274,12 @@ void dnd::Session::open_fuzzy_search_result(size_t index) {
     }
     open_content_piece(fuzzy_search_results[index]);
 }
+
+void dnd::Session::add_advanced_search_filter(std::unique_ptr<ContentFilter> filter) {
+    advanced_search.add_filter(std::move(filter));
+}
+
+std::vector<dnd::ContentFilter*> dnd::Session::get_advanced_search_filters() { return advanced_search.get_filters(); }
 
 void dnd::Session::update() {
     DND_MEASURE_FUNCTION();

@@ -16,6 +16,7 @@
 #include <core/errors/errors.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/parsing/content_parser.hpp>
+#include <core/searching/advanced_search/advanced_content_search.hpp>
 #include <core/searching/fuzzy_search/fuzzy_content_search.hpp>
 
 namespace dnd {
@@ -138,6 +139,16 @@ public:
      * @param index the index of the content piece to open
      */
     void open_fuzzy_search_result(size_t index);
+    /**
+     * @brief Add a content filter to the advanced search.
+     * @param filter the filter to add
+     */
+    void add_advanced_search_filter(std::unique_ptr<ContentFilter> filter);
+    /**
+     * @brief Get all the content filters in the advanced search
+     * @return a vector containing points to all the content filters in the advanced search
+     */
+    std::vector<ContentFilter*> get_advanced_search_filters();
 
     void update();
 private:
@@ -156,6 +167,12 @@ private:
     std::filesystem::path content_directory;
     std::string campaign_name;
 
+    std::future<void> parsing_future;
+    ContentParser parser;
+    Errors errors;
+    // the object holding all the DnD content relevant for the selected campaign
+    Content content;
+
     std::unordered_map<std::string, std::vector<std::string>> last_session_open_tabs;
     std::deque<const ContentPiece*> open_content_pieces;
     const ContentPiece* selected_content_piece;
@@ -165,15 +182,11 @@ private:
     size_t fuzzy_search_result_count;
     std::array<std::string, 500> fuzzy_search_result_strings;
 
+    AdvancedContentSearch advanced_search;
+
     std::vector<std::string> unknown_error_messages;
     std::vector<std::string> parsing_error_messages;
     std::vector<std::string> validation_error_messages;
-
-    std::future<void> parsing_future;
-    ContentParser parser;
-    Errors errors;
-    // the object holding all the DnD content relevant for the selected campaign
-    Content content;
 };
 
 } // namespace dnd

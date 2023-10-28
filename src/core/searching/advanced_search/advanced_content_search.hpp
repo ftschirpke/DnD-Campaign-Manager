@@ -22,6 +22,11 @@ public:
      */
     AdvancedContentSearch(const Content& content) noexcept;
     /**
+     * @brief Add a content filter to the search
+     * @param filter the filter to add
+     */
+    void add_filter(std::unique_ptr<ContentFilter> filter);
+    /**
      * @brief Get all the content filters in the search
      * @return a vector containing points to all the content filters
      */
