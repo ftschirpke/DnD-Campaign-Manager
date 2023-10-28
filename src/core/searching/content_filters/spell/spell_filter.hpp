@@ -3,11 +3,15 @@
 
 #include <dnd_config.hpp>
 
-#include <set>
+#include <string>
+#include <vector>
 
 #include <core/models/spell/spell_components.hpp>
 #include <core/models/spell/spell_type.hpp>
+#include <core/searching/content_filters/bool_filtering.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
+#include <core/searching/content_filters/number_filtering.hpp>
+#include <core/searching/content_filters/selection_filtering.hpp>
 
 namespace dnd {
 
@@ -30,11 +34,17 @@ public:
     void remove_material_component_filter() noexcept;
     void set_level_filter(NumberFilterType type, int level) noexcept;
     void remove_level_filter() noexcept;
-    void set_magic_school_filter(SelectionFilterType type, std::set<MagicSchool> magic_schools) noexcept;
+    void set_magic_school_filter(SelectionFilterType type, std::vector<MagicSchool> magic_schools) noexcept;
     void remove_magic_school_filter() noexcept;
     void set_ritual_filter(BoolFilterType type) noexcept;
     void remove_ritual_filter() noexcept;
-    void set_classes_filter(SelectionFilterType type, std::set<std::string> classes) noexcept;
+    void set_casting_time_filter(StringFilterType type, const std::string& casting_time) noexcept;
+    void remove_casting_time_filter() noexcept;
+    void set_range_filter(StringFilterType type, const std::string& range) noexcept;
+    void remove_range_filter() noexcept;
+    void set_duration_filter(StringFilterType type, const std::string& duration) noexcept;
+    void remove_duration_filter() noexcept;
+    void set_classes_filter(SelectionFilterType type, std::vector<std::string> classes) noexcept;
     void remove_classes_filter() noexcept;
 
     /**
@@ -43,13 +53,6 @@ public:
      * @return "true" if the spell matches the filter, "false" otherwise
      */
     bool matches(const Spell& spell) const noexcept;
-    /**
-     * @brief Get all the names of all spells that match the filter from a given selection of content
-     * @param content the content to filter
-     * @return the names of all spells that match the filter
-     */
-    // std::vector<std::string> get_matching(const Content& content) const override;
-    // TODO: decide whether to keep this
 private:
     BoolFilterType verbal_component_filter_type;
     BoolFilterType somatic_component_filter_type;
@@ -57,10 +60,16 @@ private:
     NumberFilterType level_filter_type;
     int level_filter_level;
     SelectionFilterType magic_school_filter_type;
-    std::set<MagicSchool> magic_school_filter_magic_schools;
+    std::vector<MagicSchool> magic_school_filter_magic_schools;
     BoolFilterType ritual_filter_type;
+    StringFilterType casting_time_filter_type;
+    std::string casting_time_filter;
+    StringFilterType range_filter_type;
+    std::string range_filter;
+    StringFilterType duration_filter_type;
+    std::string duration_filter;
     SelectionFilterType classes_filter_type;
-    std::set<std::string> classes_filter_classes;
+    std::vector<std::string> classes_filter_classes;
 };
 
 } // namespace dnd
