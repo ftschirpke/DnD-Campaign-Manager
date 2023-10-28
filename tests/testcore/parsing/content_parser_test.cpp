@@ -1,3 +1,5 @@
+#include <dnd_config.hpp>
+
 #include <core/parsing/content_parser.hpp>
 
 #include <catch2/catch_test_macros.hpp>
