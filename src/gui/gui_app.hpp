@@ -4,6 +4,7 @@
 #include <dnd_config.hpp>
 
 #include <core/session.hpp>
+#include <gui/windows/advanced_search_window.hpp>
 #include <gui/windows/content_selection.hpp>
 #include <gui/windows/content_window.hpp>
 #include <gui/windows/error_messages_window.hpp>
@@ -37,6 +38,7 @@ private:
     ContentWindow content_window;
     ErrorMessagesWindow error_messages_window;
     FuzzySearchWindow fuzzy_search_window;
+    AdvancedSearchWindow advanced_search_window;
 };
 
 } // namespace dnd
