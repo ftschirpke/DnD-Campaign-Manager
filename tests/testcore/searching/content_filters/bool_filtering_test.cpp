@@ -4,7 +4,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-static constexpr const char* tags = "[core][validation][effects]";
+static constexpr const char* tags = "[core][searching][content_filters]";
 
 TEST_CASE("dnd::matches_bool // matching bools with bool filters", tags) {
     SECTION("matching NONE always returns true") {
