@@ -41,8 +41,6 @@ TEST_CASE("dnd::StringFormatter::parse_formats // simple bulleted list") {
     REQUIRE(dynamic_cast<dnd::BulletedList*>(formats[0].get()) != nullptr);
 }
 
-#include <iostream>
-
 TEST_CASE("dnd::StringFormatter::parse_formats // simple table") {
     dnd::StringFormatter formatter;
     std::string text = "Header 1|Header 2\nCell 1|Cell 2";

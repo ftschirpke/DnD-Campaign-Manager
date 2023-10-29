@@ -2,7 +2,6 @@
 
 #include "cli_app.hpp"
 
-#include <iostream>
 #include <stdexcept>
 
 #include <cli/output/command_line_output.hpp>

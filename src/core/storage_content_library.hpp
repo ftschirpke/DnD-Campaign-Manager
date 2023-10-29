@@ -3,8 +3,6 @@
 
 #include <dnd_config.hpp>
 
-#include <iostream>
-
 #include <algorithm>
 #include <cassert>
 #include <stdexcept>
