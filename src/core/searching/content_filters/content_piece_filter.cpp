@@ -3,55 +3,29 @@
 #include "content_piece_filter.hpp"
 
 #include <string>
+#include <variant>
 #include <vector>
 
 #include <core/models/content_piece.hpp>
-#include <core/searching/content_filters/bool_filtering.hpp>
-#include <core/searching/content_filters/string_filtering.hpp>
+#include <core/searching/content_filters/bool_filter.hpp>
+#include <core/searching/content_filters/string_filter.hpp>
+#include <core/visitors/filters/content_filter_visitor.hpp>
 
 dnd::ContentPieceFilter::ContentPieceFilter() noexcept
-    : ContentFilter(), name_filter_type(StringFilterType::NONE), name_filter(),
-      description_filter_type(StringFilterType::NONE), description_filter(),
-      is_sourcebook_filter_type(BoolFilterType::NONE) {}
+    : name_filter(StringFilter()), description_filter(), is_sourcebook_filter() {}
 
-void dnd::ContentPieceFilter::set_name_filter(StringFilterType type, const std::string& name) noexcept {
-    remove_name_selection_filter();
-    name_filter_type = type;
-    name_filter = name;
+dnd::NameFilterVariant& dnd::ContentPieceFilter::get_name_filter() noexcept { return name_filter; }
+
+dnd::StringFilter& dnd::ContentPieceFilter::get_description_filter() noexcept { return description_filter; }
+
+dnd::BoolFilter& dnd::ContentPieceFilter::get_is_sourcebook_filter() noexcept { return is_sourcebook_filter; }
+
+bool dnd::ContentPieceFilter::matches(const ContentPiece& content_piece) const noexcept {
+    return std::visit(
+               [&content_piece](const auto& filter) { return filter.matches(content_piece.get_name()); }, name_filter
+           )
+           && description_filter.matches(content_piece.get_description())
+           && is_sourcebook_filter.matches(content_piece.get_source_info().is_from_source_book());
 }
 
-void dnd::ContentPieceFilter::remove_name_filter() noexcept { name_filter_type = StringFilterType::NONE; }
-
-void dnd::ContentPieceFilter::set_name_selection_filter(
-    SelectionFilterType type, const std::vector<std::string>& names
-) noexcept {
-    remove_name_filter();
-    name_selection_filter_type = type;
-    name_selection_filter = names;
-}
-
-void dnd::ContentPieceFilter::remove_name_selection_filter() noexcept {
-    name_selection_filter_type = SelectionFilterType::NONE;
-}
-
-void dnd::ContentPieceFilter::set_description_filter(StringFilterType type, const std::string& description) noexcept {
-    description_filter_type = type;
-    description_filter = description;
-}
-
-void dnd::ContentPieceFilter::remove_description_filter() noexcept { description_filter_type = StringFilterType::NONE; }
-
-void dnd::ContentPieceFilter::set_is_sourcebook_filter(BoolFilterType type) noexcept {
-    is_sourcebook_filter_type = type;
-}
-
-void dnd::ContentPieceFilter::remove_is_sourcebook_filter() noexcept {
-    is_sourcebook_filter_type = BoolFilterType::NONE;
-}
-
-bool dnd::ContentPieceFilter::matches(const dnd::ContentPiece& content_piece) const noexcept {
-    return matches_string(content_piece.get_name(), name_filter_type, name_filter)
-           && matches_selection(content_piece.get_name(), name_selection_filter_type, name_selection_filter)
-           && matches_string(content_piece.get_description(), description_filter_type, description_filter)
-           && matches_bool(content_piece.get_source_info().is_from_source_book(), is_sourcebook_filter_type);
-}
+void dnd::ContentPieceFilter::accept(dnd::ContentFilterVisitor& visitor) { visitor.visit(*this); }

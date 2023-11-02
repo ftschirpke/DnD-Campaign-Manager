@@ -2,6 +2,7 @@
 #define ADVANCED_SEARCH_WINDOW_HPP_
 
 #include <dnd_config.hpp>
+#include <gui/visitors/filters/filter_setting_visitor.hpp>
 
 #include <core/session.hpp>
 
@@ -19,6 +20,7 @@ public:
     void render();
 private:
     Session& session;
+    FilterSettingVisitor filter_setting_visitor;
 };
 
 } // namespace dnd

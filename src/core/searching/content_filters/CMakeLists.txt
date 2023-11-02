@@ -1,9 +1,8 @@
 target_sources(${DND_CORE}
     PRIVATE
     content_piece_filter.cpp
-    bool_filtering.cpp
-    number_filtering.cpp
-    string_filtering.cpp
+    bool_filter.cpp
+    string_filter.cpp
 )
 
 add_subdirectory(spell)

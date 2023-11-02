@@ -8,10 +8,10 @@
 
 #include <core/models/spell/spell_components.hpp>
 #include <core/models/spell/spell_type.hpp>
-#include <core/searching/content_filters/bool_filtering.hpp>
+#include <core/searching/content_filters/bool_filter.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
-#include <core/searching/content_filters/number_filtering.hpp>
-#include <core/searching/content_filters/selection_filtering.hpp>
+#include <core/searching/content_filters/number_filter.hpp>
+#include <core/searching/content_filters/selection_filter.hpp>
 
 namespace dnd {
 
@@ -19,33 +19,16 @@ class Spell;
 
 class SpellFilter : public ContentPieceFilter {
 public:
-    SpellFilter() noexcept;
-    /**
-     * @brief Accepts a visitor to perform an operation on the filter.
-     * @param visitor reference to the visitor
-     */
-    virtual void accept(ContentFilterVisitor& visitor) override;
-
-    void set_verbal_component_filter(BoolFilterType type) noexcept;
-    void remove_verbal_component_filter() noexcept;
-    void set_somatic_component_filter(BoolFilterType type) noexcept;
-    void remove_somatic_component_filter() noexcept;
-    void set_material_component_filter(BoolFilterType type) noexcept;
-    void remove_material_component_filter() noexcept;
-    void set_level_filter(NumberFilterType type, int level) noexcept;
-    void remove_level_filter() noexcept;
-    void set_magic_school_filter(SelectionFilterType type, std::vector<MagicSchool> magic_schools) noexcept;
-    void remove_magic_school_filter() noexcept;
-    void set_ritual_filter(BoolFilterType type) noexcept;
-    void remove_ritual_filter() noexcept;
-    void set_casting_time_filter(StringFilterType type, const std::string& casting_time) noexcept;
-    void remove_casting_time_filter() noexcept;
-    void set_range_filter(StringFilterType type, const std::string& range) noexcept;
-    void remove_range_filter() noexcept;
-    void set_duration_filter(StringFilterType type, const std::string& duration) noexcept;
-    void remove_duration_filter() noexcept;
-    void set_classes_filter(SelectionFilterType type, std::vector<std::string> classes) noexcept;
-    void remove_classes_filter() noexcept;
+    BoolFilter& get_verbal_component_filter() noexcept;
+    BoolFilter& get_somatic_component_filter() noexcept;
+    BoolFilter& get_material_component_filter() noexcept;
+    NumberFilter<int>& get_level_filter() noexcept;
+    SelectionFilter<MagicSchool>& get_magic_school_filter() noexcept;
+    BoolFilter& get_ritual_filter() noexcept;
+    StringFilter& get_casting_time_filter() noexcept;
+    StringFilter& get_range_filter() noexcept;
+    StringFilter& get_duration_filter() noexcept;
+    SelectionFilter<std::string>& get_classes_filter() noexcept;
 
     /**
      * @brief Determines if a spell matches the filter
@@ -53,23 +36,23 @@ public:
      * @return "true" if the spell matches the filter, "false" otherwise
      */
     bool matches(const Spell& spell) const noexcept;
+
+    /**
+     * @brief Accepts a visitor to perform an operation on the filter.
+     * @param visitor reference to the visitor
+     */
+    void accept(ContentFilterVisitor& visitor) override;
 private:
-    BoolFilterType verbal_component_filter_type;
-    BoolFilterType somatic_component_filter_type;
-    BoolFilterType material_component_filter_type;
-    NumberFilterType level_filter_type;
-    int level_filter_level;
-    SelectionFilterType magic_school_filter_type;
-    std::vector<MagicSchool> magic_school_filter_magic_schools;
-    BoolFilterType ritual_filter_type;
-    StringFilterType casting_time_filter_type;
-    std::string casting_time_filter;
-    StringFilterType range_filter_type;
-    std::string range_filter;
-    StringFilterType duration_filter_type;
-    std::string duration_filter;
-    SelectionFilterType classes_filter_type;
-    std::vector<std::string> classes_filter_classes;
+    BoolFilter verbal_component_filter;
+    BoolFilter somatic_component_filter;
+    BoolFilter material_component_filter;
+    NumberFilter<int> level_filter;
+    SelectionFilter<MagicSchool> magic_school_filter;
+    BoolFilter ritual_filter;
+    StringFilter casting_time_filter;
+    StringFilter range_filter;
+    StringFilter duration_filter;
+    SelectionFilter<std::string> classes_filter;
 };
 
 } // namespace dnd
