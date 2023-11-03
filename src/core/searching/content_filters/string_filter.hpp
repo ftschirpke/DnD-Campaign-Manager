@@ -35,6 +35,11 @@ public:
      * @brief Get the value of the filter.
      * @return the value of the filter
      */
+    std::string& get_value() noexcept;
+    /**
+     * @brief Get the value of the filter.
+     * @return the value of the filter
+     */
     const std::string& get_value() const noexcept;
     /**
      * @brief Set the type of the filter.

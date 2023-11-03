@@ -29,15 +29,16 @@ void dnd::AdvancedSearchWindow::render() {
     std::vector<ContentFilter*> filters = session.get_advanced_search_filters();
 
     ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, cell_padding);
-    bool table_exists = ImGui::BeginTable("advanced_search_filters", 4, content_table_flags);
+    bool table_exists = ImGui::BeginTable("advanced_search_filters", 5, content_table_flags);
     if (!table_exists) {
         ImGui::PopStyleVar();
         ImGui::End();
         return;
     }
     ImGui::TableSetupColumn("Filter", ImGuiTableColumnFlags_WidthFixed, first_column_width);
-    ImGui::TableSetupColumn("Subfilter Value", ImGuiTableColumnFlags_WidthFixed, second_column_width);
+    ImGui::TableSetupColumn("Subfilter Name", ImGuiTableColumnFlags_WidthFixed, second_column_width);
     ImGui::TableSetupColumn("Subfilter Type", ImGuiTableColumnFlags_WidthFixed, third_column_width);
+    ImGui::TableSetupColumn("Subfilter Value", ImGuiTableColumnFlags_WidthFixed, third_column_width);
     ImGui::TableSetupColumn("Other");
     ImGui::TableNextRow();
 
@@ -55,6 +56,8 @@ void dnd::AdvancedSearchWindow::render() {
     ImGui::EndTable();
     ImGui::PopStyleVar();
 
+    if (ImGui::Button("Search")) {
+    }
 
     ImGui::End();
 }

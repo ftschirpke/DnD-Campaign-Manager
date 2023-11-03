@@ -8,6 +8,8 @@ dnd::StringFilter::StringFilter() noexcept : type(StringFilterType::NONE), value
 
 dnd::StringFilterType dnd::StringFilter::get_type() const noexcept { return type; }
 
+std::string& dnd::StringFilter::get_value() noexcept { return value; }
+
 const std::string& dnd::StringFilter::get_value() const noexcept { return value; }
 
 void dnd::StringFilter::set_type(StringFilterType type) noexcept { this->type = type; }
@@ -24,6 +26,11 @@ void dnd::StringFilter::set(StringFilterType type, const std::string& value) noe
 void dnd::StringFilter::set(StringFilterType type, std::string&& value) noexcept {
     set_type(type);
     set_value(std::move(value));
+}
+
+void dnd::StringFilter::clear() noexcept {
+    set_type(StringFilterType::NONE);
+    set_value("");
 }
 
 bool dnd::StringFilter::matches(const std::string& str) const noexcept {

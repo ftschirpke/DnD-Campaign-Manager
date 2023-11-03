@@ -9,6 +9,7 @@
 
 #include <fmt/format.h>
 #include <imgui/imgui.h>
+#include <imgui/misc/cpp/imgui_stdlib.h>
 
 #include <core/searching/content_filters/bool_filter.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
@@ -46,6 +47,7 @@ static constexpr std::array<std::pair<const char*, dnd::BoolFilterType>, 3> bool
 };
 
 static void visit_bool_filter(const char* name, dnd::BoolFilter& filter) {
+    DND_MEASURE_FUNCTION();
     dnd::BoolFilterType type = filter.get_type();
     if (type == dnd::BoolFilterType::NONE) {
         return;
@@ -68,7 +70,53 @@ static void visit_bool_filter(const char* name, dnd::BoolFilter& filter) {
         }
         ImGui::EndCombo();
     }
+    ImGui::TableSetColumnIndex(4);
+    if (ImGui::Button("Remove")) {
+        filter.clear();
+    }
+    ImGui::TableNextRow();
+}
+
+static constexpr std::array<std::pair<const char*, dnd::StringFilterType>, 9> string_filter_types = {
+    std::make_pair("None", dnd::StringFilterType::NONE),
+    std::make_pair("Equal", dnd::StringFilterType::EQUAL),
+    std::make_pair("Not Equal", dnd::StringFilterType::NOT_EQUAL),
+    std::make_pair("Contains", dnd::StringFilterType::CONTAINS),
+    std::make_pair("Not Contains", dnd::StringFilterType::NOT_CONTAINS),
+    std::make_pair("Starts With", dnd::StringFilterType::STARTS_WITH),
+    std::make_pair("Not Starts With", dnd::StringFilterType::NOT_STARTS_WITH),
+    std::make_pair("Ends With", dnd::StringFilterType::ENDS_WITH),
+    std::make_pair("Not Ends With", dnd::StringFilterType::NOT_ENDS_WITH),
+};
+
+static void visit_string_filter(const char* name, dnd::StringFilter& filter) {
+    DND_MEASURE_FUNCTION();
+    dnd::StringFilterType type = filter.get_type();
+    if (type == dnd::StringFilterType::NONE) {
+        return;
+    }
+    ImGui::TableSetColumnIndex(1);
+    ImGui::Text("%s", name);
+    ImGui::TableSetColumnIndex(2);
+    size_t idx = find_index(string_filter_types, type);
+    assert(idx < string_filter_types.size());
+    std::string label = fmt::format("##{}", name);
+    if (ImGui::BeginCombo(label.c_str(), string_filter_types[idx].first, combo_flags)) {
+        for (size_t i = 1; i < string_filter_types.size(); ++i) {
+            bool is_selected = idx == i;
+            if (ImGui::Selectable(string_filter_types[i].first, is_selected)) {
+                filter.set_type(string_filter_types[i].second);
+            }
+            if (is_selected) {
+                ImGui::SetItemDefaultFocus();
+            }
+        }
+        ImGui::EndCombo();
+    }
     ImGui::TableSetColumnIndex(3);
+    std::string value_label = fmt::format("##{} value", name);
+    ImGui::InputText(value_label.c_str(), &filter.get_value());
+    ImGui::TableSetColumnIndex(4);
     if (ImGui::Button("Remove")) {
         filter.clear();
     }
@@ -76,17 +124,45 @@ static void visit_bool_filter(const char* name, dnd::BoolFilter& filter) {
 }
 
 void dnd::FilterSettingVisitor::visit(dnd::ContentPieceFilter& content_piece_filter) {
+    DND_MEASURE_FUNCTION();
     ImGui::TableSetColumnIndex(0);
     ImGui::Text("Content Piece Filter");
     ImGui::TableSetColumnIndex(1);
+    switch (content_piece_filter.get_name_filter().index()) {
+        case 0:
+            visit_string_filter("Name", std::get<0>(content_piece_filter.get_name_filter()));
+            break;
+        case 1:
+            break;
+        default:
+            break;
+    }
+    visit_string_filter("Description", content_piece_filter.get_description_filter());
     visit_bool_filter("Is Sourcebook", content_piece_filter.get_is_sourcebook_filter());
+
     ImGui::TableSetColumnIndex(1);
-    if (ImGui::Button("Add Value Filter")) {
-        content_piece_filter.get_is_sourcebook_filter().set_type(dnd::BoolFilterType::IS_TRUE);
+    if (!content_piece_filter.has_all_filters() && ImGui::Button("Add Value Filter")) {
+        ImGui::OpenPopup("value_filter_popup");
+    }
+    if (ImGui::BeginPopup("value_filter_popup")) {
+        if (!content_piece_filter.has_name_filter() && ImGui::MenuItem("Name")) {
+            content_piece_filter.get_name_filter().emplace<dnd::StringFilter>().set_type(dnd::StringFilterType::EQUAL);
+            ImGui::CloseCurrentPopup();
+        }
+        if (!content_piece_filter.has_description_filter() && ImGui::MenuItem("Description")) {
+            content_piece_filter.get_description_filter().set_type(dnd::StringFilterType::CONTAINS);
+            ImGui::CloseCurrentPopup();
+        }
+        if (!content_piece_filter.has_is_sourcebook_filter() && ImGui::MenuItem("Is Sourcebook")) {
+            content_piece_filter.get_is_sourcebook_filter().set_type(dnd::BoolFilterType::IS_TRUE);
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
     }
 }
 
 void dnd::FilterSettingVisitor::visit(dnd::SpellFilter& spell_filter) {
+    DND_MEASURE_FUNCTION();
     visit_bool_filter("Verbal Component", spell_filter.get_verbal_component_filter());
     visit_bool_filter("Somatic Component", spell_filter.get_somatic_component_filter());
     visit_bool_filter("Material Component", spell_filter.get_material_component_filter());
