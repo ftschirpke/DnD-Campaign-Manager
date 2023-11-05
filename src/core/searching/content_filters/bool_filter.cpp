@@ -4,6 +4,8 @@
 
 dnd::BoolFilter::BoolFilter() noexcept : type(BoolFilterType::NONE) {}
 
+bool dnd::BoolFilter::is_set() const noexcept { return type != BoolFilterType::NONE; }
+
 dnd::BoolFilterType dnd::BoolFilter::get_type() const noexcept { return type; }
 
 void dnd::BoolFilter::set_type(BoolFilterType type) noexcept { this->type = type; }

@@ -17,21 +17,17 @@ dnd::ContentPieceFilter::ContentPieceFilter() noexcept
 bool dnd::ContentPieceFilter::has_name_filter() const noexcept {
     switch (name_filter.index()) {
         case 0:
-            return std::get<0>(name_filter).get_type() != StringFilterType::NONE;
+            return std::get<0>(name_filter).is_set();
         case 1:
-            return std::get<1>(name_filter).get_type() != SelectionFilterType::NONE;
+            return std::get<1>(name_filter).is_set();
         default:
             return false;
     }
 }
 
-bool dnd::ContentPieceFilter::has_description_filter() const noexcept {
-    return description_filter.get_type() != StringFilterType::NONE;
-}
+bool dnd::ContentPieceFilter::has_description_filter() const noexcept { return description_filter.is_set(); }
 
-bool dnd::ContentPieceFilter::has_is_sourcebook_filter() const noexcept {
-    return is_sourcebook_filter.get_type() != BoolFilterType::NONE;
-}
+bool dnd::ContentPieceFilter::has_is_sourcebook_filter() const noexcept { return is_sourcebook_filter.is_set(); }
 
 bool dnd::ContentPieceFilter::has_all_filters() const noexcept {
     return has_name_filter() && has_description_filter() && has_is_sourcebook_filter();
@@ -51,4 +47,8 @@ bool dnd::ContentPieceFilter::matches(const ContentPiece& content_piece) const n
            && is_sourcebook_filter.matches(content_piece.get_source_info().is_from_source_book());
 }
 
-void dnd::ContentPieceFilter::accept(dnd::ContentFilterVisitor& visitor) { visitor.visit(*this); }
+void dnd::ContentPieceFilter::clear() {
+    name_filter = StringFilter();
+    description_filter.clear();
+    is_sourcebook_filter.clear();
+}

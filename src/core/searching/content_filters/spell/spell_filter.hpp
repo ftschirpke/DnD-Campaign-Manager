@@ -19,6 +19,17 @@ class Spell;
 
 class SpellFilter : public ContentPieceFilter {
 public:
+    bool has_verbal_component_filter() const noexcept;
+    bool has_somatic_component_filter() const noexcept;
+    bool has_material_component_filter() const noexcept;
+    bool has_level_filter() const noexcept;
+    bool has_magic_school_filter() const noexcept;
+    bool has_ritual_filter() const noexcept;
+    bool has_casting_time_filter() const noexcept;
+    bool has_range_filter() const noexcept;
+    bool has_duration_filter() const noexcept;
+    bool has_classes_filter() const noexcept;
+
     BoolFilter& get_verbal_component_filter() noexcept;
     BoolFilter& get_somatic_component_filter() noexcept;
     BoolFilter& get_material_component_filter() noexcept;
@@ -38,10 +49,9 @@ public:
     bool matches(const Spell& spell) const noexcept;
 
     /**
-     * @brief Accepts a visitor to perform an operation on the filter.
-     * @param visitor reference to the visitor
+     * @brief Clears all filter settings
      */
-    void accept(ContentFilterVisitor& visitor) override;
+    void clear() override;
 private:
     BoolFilter verbal_component_filter;
     BoolFilter somatic_component_filter;

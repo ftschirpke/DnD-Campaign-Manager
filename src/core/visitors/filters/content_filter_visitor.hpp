@@ -17,6 +17,8 @@ class SpellFilter;
 class FeatureFilter;
 class ChoosableFilter;
 
+// TODO: deprecated?
+
 class ContentFilterVisitor {
 public:
     virtual ~ContentFilterVisitor() = default;

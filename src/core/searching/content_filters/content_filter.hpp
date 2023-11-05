@@ -14,10 +14,9 @@ class ContentFilter {
 public:
     virtual ~ContentFilter() = default;
     /**
-     * @brief Accepts a visitor to perform an operation on the filter.
-     * @param visitor reference to the visitor
+     * @brief Clears all filter settings
      */
-    virtual void accept(ContentFilterVisitor& visitor) = 0;
+    virtual void clear() = 0;
 };
 
 } // namespace dnd

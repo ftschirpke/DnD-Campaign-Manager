@@ -3,16 +3,19 @@
 
 #include <dnd_config.hpp>
 
-#include <memory>
-#include <vector>
+#include <variant>
 
 #include <core/content.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
+#include <core/searching/content_filters/content_piece_filter.hpp>
+#include <core/searching/content_filters/spell/spell_filter.hpp>
 
 namespace dnd {
 
+using ContentFilterVariant = std::variant<ContentPieceFilter, SpellFilter>;
+
 /**
- * @brief A class representing an advanced content search using content filters.
+ * @brief A class representing an advanced content search using a content filter.
  */
 class AdvancedContentSearch {
 public:
@@ -22,20 +25,26 @@ public:
      */
     AdvancedContentSearch(const Content& content) noexcept;
     /**
-     * @brief Add a content filter to the search
-     * @param filter the filter to add
+     * @brief Set the search filter
+     * @param new_filter the filter to set
      */
-    void add_filter(std::unique_ptr<ContentFilter> filter);
+    template <typename T>
+    void set_filter(T&& new_filter);
     /**
-     * @brief Get all the content filters in the search
-     * @return a vector containing points to all the content filters
+     * @brief Get the search filter
+     * @return the search filter
      */
-    std::vector<ContentFilter*> get_filters();
+    ContentFilterVariant& get_filter();
 private:
     const Content& content;
-    std::vector<std::unique_ptr<ContentFilter>> filters;
+    ContentFilterVariant filter;
 };
 
 } // namespace dnd
+
+template <typename T>
+void dnd::AdvancedContentSearch::set_filter(T&& new_filter) {
+    filter = std::move(new_filter);
+}
 
 #endif // ADVANCED_CONTENT_SEARCH_HPP_

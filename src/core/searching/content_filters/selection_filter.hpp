@@ -25,6 +25,12 @@ public:
     SelectionFilter() noexcept;
 
     /**
+     * @brief Determines if the filter is set.
+     * @return "true" if the filter is set, "false" otherwise
+     * @details A filter is set if the type is not "NONE".
+     */
+    bool is_set() const noexcept;
+    /**
      * @brief Get the type of the filter.
      * @return the type of the filter
      */
@@ -77,6 +83,11 @@ private:
 
 template <typename T>
 dnd::SelectionFilter<T>::SelectionFilter() noexcept : type(SelectionFilterType::NONE), values() {}
+
+template <typename T>
+bool dnd::SelectionFilter<T>::is_set() const noexcept {
+    return type != SelectionFilterType::NONE;
+}
 
 template <typename T>
 dnd::SelectionFilterType dnd::SelectionFilter<T>::get_type() const noexcept {

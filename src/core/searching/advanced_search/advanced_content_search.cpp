@@ -7,17 +7,9 @@
 
 #include <core/content.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
+#include <core/searching/content_filters/content_piece_filter.hpp>
 
-dnd::AdvancedContentSearch::AdvancedContentSearch(const Content& content) noexcept : content(content) {}
+dnd::AdvancedContentSearch::AdvancedContentSearch(const Content& content) noexcept
+    : content(content), filter(ContentPieceFilter()) {}
 
-void dnd::AdvancedContentSearch::add_filter(std::unique_ptr<ContentFilter> filter) {
-    filters.emplace_back(std::move(filter));
-}
-
-std::vector<dnd::ContentFilter*> dnd::AdvancedContentSearch::get_filters() {
-    std::vector<ContentFilter*> filter_ptrs;
-    for (auto& filter : filters) {
-        filter_ptrs.emplace_back(filter.get());
-    }
-    return filter_ptrs;
-}
+dnd::ContentFilterVariant& dnd::AdvancedContentSearch::get_filter() { return filter; }

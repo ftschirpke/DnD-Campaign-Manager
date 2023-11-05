@@ -28,6 +28,12 @@ public:
     NumberFilter() noexcept;
 
     /**
+     * @brief Determines if the filter is set.
+     * @return "true" if the filter is set, "false" otherwise
+     * @details A filter is set if the type is not "NONE".
+     */
+    bool is_set() const noexcept;
+    /**
      * @brief Get the type of the filter.
      * @return the type of the filter
      */
@@ -74,6 +80,12 @@ private:
 template <typename T>
 requires std::is_arithmetic_v<T>
 dnd::NumberFilter<T>::NumberFilter() noexcept : type(NumberFilterType::NONE), value(0) {}
+
+template <typename T>
+requires std::is_arithmetic_v<T>
+bool dnd::NumberFilter<T>::is_set() const noexcept {
+    return type != NumberFilterType::NONE;
+}
 
 template <typename T>
 requires std::is_arithmetic_v<T>

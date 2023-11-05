@@ -6,6 +6,8 @@
 
 dnd::StringFilter::StringFilter() noexcept : type(StringFilterType::NONE), value() {}
 
+bool dnd::StringFilter::is_set() const noexcept { return type != StringFilterType::NONE; }
+
 dnd::StringFilterType dnd::StringFilter::get_type() const noexcept { return type; }
 
 std::string& dnd::StringFilter::get_value() noexcept { return value; }

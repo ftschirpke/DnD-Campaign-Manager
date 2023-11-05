@@ -41,10 +41,9 @@ public:
     bool matches(const ContentPiece& content_piece) const noexcept;
 
     /**
-     * @brief Accepts a visitor to perform an operation on the filter.
-     * @param visitor reference to the visitor
+     * @brief Clears all filter settings
      */
-    void accept(ContentFilterVisitor& visitor) override;
+    void clear() override;
 private:
     NameFilterVariant name_filter;
     StringFilter description_filter;

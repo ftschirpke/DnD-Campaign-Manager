@@ -275,11 +275,11 @@ void dnd::Session::open_fuzzy_search_result(size_t index) {
     open_content_piece(fuzzy_search_results[index]);
 }
 
-void dnd::Session::add_advanced_search_filter(std::unique_ptr<ContentFilter> filter) {
-    advanced_search.add_filter(std::move(filter));
+void dnd::Session::set_advanced_search_filter(ContentFilterVariant&& filter) {
+    advanced_search.set_filter(std::move(filter));
 }
 
-std::vector<dnd::ContentFilter*> dnd::Session::get_advanced_search_filters() { return advanced_search.get_filters(); }
+dnd::ContentFilterVariant& dnd::Session::get_advanced_search_filter() { return advanced_search.get_filter(); }
 
 void dnd::Session::update() {
     DND_MEASURE_FUNCTION();

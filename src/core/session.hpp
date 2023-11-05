@@ -140,15 +140,15 @@ public:
      */
     void open_fuzzy_search_result(size_t index);
     /**
-     * @brief Add a content filter to the advanced search.
-     * @param filter the filter to add
+     * @brief Set the content filter set the advanced search.
+     * @param filter the filter to set
      */
-    void add_advanced_search_filter(std::unique_ptr<ContentFilter> filter);
+    void set_advanced_search_filter(ContentFilterVariant&& filter);
     /**
-     * @brief Get all the content filters in the advanced search
-     * @return a vector containing points to all the content filters in the advanced search
+     * @brief Get the filter used for the advanced search
+     * @return the filter used for the advanced search
      */
-    std::vector<ContentFilter*> get_advanced_search_filters();
+    ContentFilterVariant& get_advanced_search_filter();
 
     void update();
 private:
