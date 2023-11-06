@@ -100,10 +100,15 @@ public:
      */
     std::vector<std::string> get_possible_campaign_names() const;
     /**
-     * @brief Returns a list of strings representing the search results.
-     * @return the list of strings representing the search results
+     * @brief Returns a list of strings representing the fuzzy search results.
+     * @return the list of strings representing the fuzzy search results
      */
     std::vector<std::string> get_fuzzy_search_result_strings() const;
+    /**
+     * @brief Returns a list of strings representing the advanced search results.
+     * @return the list of strings representing the advanced search results
+     */
+    std::vector<std::string> get_advanced_search_result_strings() const;
 
     /**
      * @brief Refuzzyves the last session values from a file, if it exists.
@@ -135,10 +140,25 @@ public:
      */
     void set_fuzzy_search(const std::string& search_query, const std::array<bool, 9>& search_options);
     /**
-     * @brief Fuzzys to open a content piece in the fuzzy search result by index.
+     * @brief Tries to open a content piece in the fuzzy search result by index.
      * @param index the index of the content piece to open
      */
     void open_fuzzy_search_result(size_t index);
+    /**
+     * @brief Tries to open a content piece in the advanced search result by index.
+     * @param index the index of the content piece to open
+     */
+    void open_advanced_search_result(size_t index);
+    /**
+     * @brief Starts the advanced search applying the current filter.
+     */
+    void start_advanced_search();
+    /**
+     * @brief Determines if the advanced search is currently searching and updates the search results if the search just
+     * finished.
+     * @return "true" if the advanced search is currently searching, "false" otherwise
+     */
+    bool is_advanced_searching();
     /**
      * @brief Set the content filter set the advanced search.
      * @param filter the filter to set

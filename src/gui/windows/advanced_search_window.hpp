@@ -2,9 +2,12 @@
 #define ADVANCED_SEARCH_WINDOW_HPP_
 
 #include <dnd_config.hpp>
-#include <gui/visitors/filters/filter_setting_visitor.hpp>
+
+#include <string>
+#include <vector>
 
 #include <core/session.hpp>
+#include <gui/visitors/filters/filter_setting_visitor.hpp>
 
 namespace dnd {
 
@@ -21,6 +24,9 @@ public:
 private:
     Session& session;
     FilterSettingVisitor filter_setting_visitor;
+
+    bool started_searching;
+    std::vector<std::string> result_list;
 };
 
 } // namespace dnd

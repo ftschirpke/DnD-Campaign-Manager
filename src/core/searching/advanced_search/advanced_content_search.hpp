@@ -3,7 +3,9 @@
 
 #include <dnd_config.hpp>
 
+#include <future>
 #include <variant>
+#include <vector>
 
 #include <core/content.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
@@ -35,9 +37,28 @@ public:
      * @return the search filter
      */
     ContentFilterVariant& get_filter();
+    /**
+     * @brief Get the search results
+     * @return the search results
+     */
+    const std::vector<const ContentPiece*>& get_search_results() const noexcept;
+
+    /**
+     * @brief Start searching the content for matches to the current set filter.
+     */
+    void start_searching();
+    /**
+     * @brief Determines if the search is currently searching and updates the search results if the search just finished
+     * @return "true" if the search is currently searching, "false" otherwise
+     */
+    bool is_searching();
 private:
     const Content& content;
     ContentFilterVariant filter;
+
+    bool searching;
+    std::future<std::vector<const ContentPiece*>> search_future;
+    std::vector<const ContentPiece*> search_results;
 };
 
 } // namespace dnd

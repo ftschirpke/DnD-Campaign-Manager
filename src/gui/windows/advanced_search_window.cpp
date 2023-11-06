@@ -3,7 +3,9 @@
 #include "advanced_search_window.hpp"
 
 #include <cassert>
+#include <string>
 #include <variant>
+#include <vector>
 
 #include <imgui/imgui.h>
 
@@ -24,7 +26,8 @@ static constexpr std::array<const char*, 10> content_filter_names = {
     "Any", "Characters", "Classes", "Subclasses", "Races", "Subraces", "Items", "Spells", "Features", "Choosables",
 };
 
-dnd::AdvancedSearchWindow::AdvancedSearchWindow(Session& session) : session(session) {}
+dnd::AdvancedSearchWindow::AdvancedSearchWindow(Session& session)
+    : session(session), started_searching(), result_list() {}
 
 void dnd::AdvancedSearchWindow::render() {
     DND_MEASURE_FUNCTION();
@@ -105,9 +108,23 @@ void dnd::AdvancedSearchWindow::render() {
     ImGui::Separator();
     ImGui::Spacing();
     if (ImGui::Button("Search", ImVec2(first_column_button_width, 0))) {
+        session.start_advanced_search();
+        started_searching = true;
+    }
+    if (started_searching && !session.is_advanced_searching()) {
+        result_list = session.get_advanced_search_result_strings();
+        started_searching = false;
     }
     ImGui::Spacing();
     ImGui::Separator();
+
+    size_t i = 0;
+    for (const std::string& result : result_list) {
+        if (ImGui::Selectable(result.c_str(), false)) {
+            session.open_advanced_search_result(i);
+        }
+        ++i;
+    }
 
     ImGui::End();
 }

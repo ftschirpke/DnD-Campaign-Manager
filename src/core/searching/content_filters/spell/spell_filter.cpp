@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <vector>
 
+#include <core/content.hpp>
 #include <core/models/spell/spell.hpp>
 #include <core/models/spell/spell_components.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
@@ -65,6 +66,16 @@ bool dnd::SpellFilter::matches(const Spell& spell) const noexcept {
                spell.get_classes().begin(), spell.get_classes().end(),
                [this](const std::string& class_name) { return classes_filter.matches(class_name); }
            );
+}
+
+std::vector<const dnd::ContentPiece*> dnd::SpellFilter::all_matches(const Content& content) const {
+    std::vector<const ContentPiece*> matching_content_pieces;
+    for (const auto& [_, spell] : content.get_spells().get_all()) {
+        if (matches(spell)) {
+            matching_content_pieces.emplace_back(&spell);
+        }
+    }
+    return matching_content_pieces;
 }
 
 void dnd::SpellFilter::clear() {

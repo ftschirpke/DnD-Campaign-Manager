@@ -73,7 +73,8 @@ static void visit_bool_filter(const char* name, dnd::BoolFilter& filter) {
         ImGui::EndCombo();
     }
     ImGui::TableSetColumnIndex(4);
-    if (ImGui::Button("Remove")) {
+    std::string remove_label = fmt::format("Remove##{}", name);
+    if (ImGui::Button(remove_label.c_str())) {
         filter.clear();
     }
     ImGui::TableNextRow();
@@ -119,7 +120,8 @@ static void visit_string_filter(const char* name, dnd::StringFilter& filter) {
     std::string value_label = fmt::format("##{} value", name);
     ImGui::InputText(value_label.c_str(), &filter.get_value());
     ImGui::TableSetColumnIndex(4);
-    if (ImGui::Button("Remove")) {
+    std::string remove_label = fmt::format("Remove##{}", name);
+    if (ImGui::Button(remove_label.c_str())) {
         filter.clear();
     }
     ImGui::TableNextRow();
@@ -184,7 +186,8 @@ static void visit_number_filter(const char* name, dnd::NumberFilter<T>& filter) 
         filter.set_value(set_value);
     }
     ImGui::TableSetColumnIndex(4);
-    if (ImGui::Button("Remove")) {
+    std::string remove_label = fmt::format("Remove##{}", name);
+    if (ImGui::Button(remove_label.c_str())) {
         filter.clear();
     }
     ImGui::TableNextRow();
@@ -224,7 +227,8 @@ static void visit_selection_filter(const char* name, dnd::SelectionFilter<T>& fi
     ImGui::TableSetColumnIndex(3);
     ImGui::Text("Coming soon"); // TODO: Implement selection creation
     ImGui::TableSetColumnIndex(4);
-    if (ImGui::Button("Remove")) {
+    std::string remove_label = fmt::format("Remove##{}", name);
+    if (ImGui::Button(remove_label.c_str())) {
         filter.clear();
     }
     ImGui::TableNextRow();

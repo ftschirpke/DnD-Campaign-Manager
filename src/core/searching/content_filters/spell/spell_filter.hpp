@@ -49,6 +49,13 @@ public:
     bool matches(const Spell& spell) const noexcept;
 
     /**
+     * @brief Get all content pieces that match the filter
+     * @param content the content to search through
+     * @return a vector of pointers to the content pieces that match the filter
+     */
+    std::vector<const ContentPiece*> all_matches(const Content& content) const override;
+
+    /**
      * @brief Clears all filter settings
      */
     void clear() override;
