@@ -2,8 +2,8 @@
 A simple tool providing multiple features that are helpful for DMs managing their DnD5e campaigns.
 
 This tool is inspired by DnD management tools such as [D&D Beyond](https://www.dndbeyond.com/) and 
-[Foundry Virtual Tabletop](https://foundryvtt.com/).
-The goal of this tool is to provide similar functionality for managing characters, spells and monsters of
+[Foundry Virtual Tabletop](https://foundryvtt.com/) but is not supposed to be a VTT.
+Instead, the goal of this tool is to provide functionality for managing characters, spells and monsters of
 your DnD5e world while being lightweight and easy to use.
 
 This tool is supposed to be a simple cross-platform tool that allows:
