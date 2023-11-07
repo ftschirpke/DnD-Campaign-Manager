@@ -16,6 +16,7 @@
 #include <core/searching/content_filters/character_class/character_class_filter.hpp>
 #include <core/searching/content_filters/character_race/character_race_filter.hpp>
 #include <core/searching/content_filters/character_subclass/character_subclass_filter.hpp>
+#include <core/searching/content_filters/character_subrace/character_subrace_filter.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
 #include <core/searching/content_filters/selection_filter.hpp>
@@ -373,6 +374,21 @@ void dnd::FilterSettingVisitor::operator()(CharacterRaceFilter& race_filter) {
     if (ImGui::BeginPopup("value_filter_popup")) {
         content_piece_filter_menu_items(race_filter);
         bool_menu_item("Has Subraces", race_filter.has_subraces_filter, dnd::BoolFilterType::IS_TRUE);
+        ImGui::EndPopup();
+    }
+}
+
+void dnd::FilterSettingVisitor::operator()(CharacterSubraceFilter& subrace_filter) {
+    DND_MEASURE_FUNCTION();
+    ImGui::TableSetColumnIndex(1);
+    visit_content_piece_filter(subrace_filter);
+
+    ImGui::TableSetColumnIndex(1);
+    if (!subrace_filter.has_all_filters() && ImGui::Button("Add Value Filter")) {
+        ImGui::OpenPopup("value_filter_popup");
+    }
+    if (ImGui::BeginPopup("value_filter_popup")) {
+        content_piece_filter_menu_items(subrace_filter);
         ImGui::EndPopup();
     }
 }
