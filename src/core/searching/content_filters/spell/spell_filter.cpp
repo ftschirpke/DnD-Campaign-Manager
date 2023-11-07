@@ -10,47 +10,13 @@
 #include <core/models/spell/spell_components.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
 
-bool dnd::SpellFilter::has_verbal_component_filter() const noexcept { return verbal_component_filter.is_set(); }
-
-bool dnd::SpellFilter::has_somatic_component_filter() const noexcept { return somatic_component_filter.is_set(); }
-
-bool dnd::SpellFilter::has_material_component_filter() const noexcept { return material_component_filter.is_set(); }
-
-bool dnd::SpellFilter::has_level_filter() const noexcept { return level_filter.is_set(); }
-
-bool dnd::SpellFilter::has_magic_school_filter() const noexcept { return magic_school_filter.is_set(); }
-
-bool dnd::SpellFilter::has_ritual_filter() const noexcept { return ritual_filter.is_set(); }
-
-bool dnd::SpellFilter::has_casting_time_filter() const noexcept { return casting_time_filter.is_set(); }
-
-bool dnd::SpellFilter::has_range_filter() const noexcept { return range_filter.is_set(); }
-
-bool dnd::SpellFilter::has_duration_filter() const noexcept { return duration_filter.is_set(); }
-
-bool dnd::SpellFilter::has_classes_filter() const noexcept { return classes_filter.is_set(); }
-
-dnd::BoolFilter& dnd::SpellFilter::get_verbal_component_filter() noexcept { return verbal_component_filter; }
-
-dnd::BoolFilter& dnd::SpellFilter::get_somatic_component_filter() noexcept { return somatic_component_filter; }
-
-dnd::BoolFilter& dnd::SpellFilter::get_material_component_filter() noexcept { return material_component_filter; }
-
-dnd::NumberFilter<int>& dnd::SpellFilter::get_level_filter() noexcept { return level_filter; }
-
-dnd::SelectionFilter<dnd::MagicSchool>& dnd::SpellFilter::get_magic_school_filter() noexcept {
-    return magic_school_filter;
+bool dnd::SpellFilter::has_all_filters() const noexcept {
+    return ContentPieceFilter::has_all_filters() && verbal_component_filter.is_set()
+           && somatic_component_filter.is_set() && material_component_filter.is_set() && level_filter.is_set()
+           && magic_school_filter.is_set() && ritual_filter.is_set() && casting_time_filter.is_set()
+           && range_filter.is_set() && duration_filter.is_set() && classes_filter.is_set();
 }
 
-dnd::BoolFilter& dnd::SpellFilter::get_ritual_filter() noexcept { return ritual_filter; }
-
-dnd::StringFilter& dnd::SpellFilter::get_casting_time_filter() noexcept { return casting_time_filter; }
-
-dnd::StringFilter& dnd::SpellFilter::get_range_filter() noexcept { return range_filter; }
-
-dnd::StringFilter& dnd::SpellFilter::get_duration_filter() noexcept { return duration_filter; }
-
-dnd::SelectionFilter<std::string>& dnd::SpellFilter::get_classes_filter() noexcept { return classes_filter; }
 
 bool dnd::SpellFilter::matches(const Spell& spell) const noexcept {
     const SpellComponents& components = spell.get_components();

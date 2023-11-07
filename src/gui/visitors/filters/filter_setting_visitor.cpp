@@ -237,7 +237,7 @@ static void visit_selection_filter(const char* name, dnd::SelectionFilter<T>& fi
 void dnd::FilterSettingVisitor::operator()(dnd::ContentPieceFilter& content_piece_filter) {
     DND_MEASURE_FUNCTION();
     ImGui::TableSetColumnIndex(1);
-    NameFilterVariant& name_filter = content_piece_filter.get_name_filter();
+    NameFilterVariant& name_filter = content_piece_filter.name_filter;
     switch (name_filter.index()) {
         case 0:
             visit_string_filter("Name", std::get<0>(name_filter));
@@ -248,24 +248,27 @@ void dnd::FilterSettingVisitor::operator()(dnd::ContentPieceFilter& content_piec
         default:
             break;
     }
-    visit_string_filter("Description", content_piece_filter.get_description_filter());
-    visit_bool_filter("Is Sourcebook", content_piece_filter.get_is_sourcebook_filter());
+    visit_string_filter("Description", content_piece_filter.description_filter);
+    visit_bool_filter("Is Sourcebook", content_piece_filter.is_sourcebook_filter);
 
     ImGui::TableSetColumnIndex(1);
     if (!content_piece_filter.has_all_filters() && ImGui::Button("Add Value Filter")) {
         ImGui::OpenPopup("value_filter_popup");
     }
     if (ImGui::BeginPopup("value_filter_popup")) {
-        if (!content_piece_filter.has_name_filter() && ImGui::MenuItem("Name")) {
-            content_piece_filter.get_name_filter().emplace<dnd::StringFilter>().set_type(dnd::StringFilterType::EQUAL);
+        bool name_filter_set = std::visit(
+            [](const auto& filter) noexcept { return filter.is_set(); }, content_piece_filter.name_filter
+        );
+        if (!name_filter_set && ImGui::MenuItem("Name")) {
+            content_piece_filter.name_filter.emplace<dnd::StringFilter>().set_type(dnd::StringFilterType::EQUAL);
             ImGui::CloseCurrentPopup();
         }
-        if (!content_piece_filter.has_description_filter() && ImGui::MenuItem("Description")) {
-            content_piece_filter.get_description_filter().set_type(dnd::StringFilterType::CONTAINS);
+        if (!content_piece_filter.description_filter.is_set() && ImGui::MenuItem("Description")) {
+            content_piece_filter.description_filter.set_type(dnd::StringFilterType::CONTAINS);
             ImGui::CloseCurrentPopup();
         }
-        if (!content_piece_filter.has_is_sourcebook_filter() && ImGui::MenuItem("Is Sourcebook")) {
-            content_piece_filter.get_is_sourcebook_filter().set_type(dnd::BoolFilterType::IS_TRUE);
+        if (!content_piece_filter.is_sourcebook_filter.is_set() && ImGui::MenuItem("Is Sourcebook")) {
+            content_piece_filter.is_sourcebook_filter.set_type(dnd::BoolFilterType::IS_TRUE);
             ImGui::CloseCurrentPopup();
         }
         ImGui::EndPopup();
@@ -275,7 +278,7 @@ void dnd::FilterSettingVisitor::operator()(dnd::ContentPieceFilter& content_piec
 void dnd::FilterSettingVisitor::operator()(dnd::SpellFilter& spell_filter) {
     DND_MEASURE_FUNCTION();
     ImGui::TableSetColumnIndex(1);
-    NameFilterVariant& name_filter = spell_filter.get_name_filter();
+    NameFilterVariant& name_filter = spell_filter.name_filter;
     switch (name_filter.index()) {
         case 0:
             visit_string_filter("Name", std::get<0>(name_filter));
@@ -286,74 +289,77 @@ void dnd::FilterSettingVisitor::operator()(dnd::SpellFilter& spell_filter) {
         default:
             break;
     }
-    visit_string_filter("Description", spell_filter.get_description_filter());
-    visit_bool_filter("Is Sourcebook", spell_filter.get_is_sourcebook_filter());
-    visit_bool_filter("Verbal Component", spell_filter.get_verbal_component_filter());
-    visit_bool_filter("Somatic Component", spell_filter.get_somatic_component_filter());
-    visit_bool_filter("Material Component", spell_filter.get_material_component_filter());
-    visit_number_filter("Level", spell_filter.get_level_filter());
-    visit_selection_filter("Magic School", spell_filter.get_magic_school_filter());
-    visit_bool_filter("Ritual", spell_filter.get_ritual_filter());
-    visit_string_filter("Casting Time", spell_filter.get_casting_time_filter());
-    visit_string_filter("Range", spell_filter.get_range_filter());
-    visit_string_filter("Duration", spell_filter.get_duration_filter());
-    visit_selection_filter("Classes", spell_filter.get_classes_filter());
+    visit_string_filter("Description", spell_filter.description_filter);
+    visit_bool_filter("Is Sourcebook", spell_filter.is_sourcebook_filter);
+    visit_bool_filter("Verbal Component", spell_filter.verbal_component_filter);
+    visit_bool_filter("Somatic Component", spell_filter.somatic_component_filter);
+    visit_bool_filter("Material Component", spell_filter.material_component_filter);
+    visit_number_filter("Level", spell_filter.level_filter);
+    visit_selection_filter("Magic School", spell_filter.magic_school_filter);
+    visit_bool_filter("Ritual", spell_filter.ritual_filter);
+    visit_string_filter("Casting Time", spell_filter.casting_time_filter);
+    visit_string_filter("Range", spell_filter.range_filter);
+    visit_string_filter("Duration", spell_filter.duration_filter);
+    visit_selection_filter("Classes", spell_filter.classes_filter);
 
     ImGui::TableSetColumnIndex(1);
     if (!spell_filter.has_all_filters() && ImGui::Button("Add Value Filter")) {
         ImGui::OpenPopup("value_filter_popup");
     }
     if (ImGui::BeginPopup("value_filter_popup")) {
-        if (!spell_filter.has_name_filter() && ImGui::MenuItem("Name")) {
-            spell_filter.get_name_filter().emplace<dnd::StringFilter>().set_type(dnd::StringFilterType::EQUAL);
+        bool name_filter_set = std::visit(
+            [](const auto& filter) noexcept { return filter.is_set(); }, spell_filter.name_filter
+        );
+        if (!name_filter_set && ImGui::MenuItem("Name")) {
+            spell_filter.name_filter.emplace<dnd::StringFilter>().set_type(dnd::StringFilterType::EQUAL);
             ImGui::CloseCurrentPopup();
         }
-        if (!spell_filter.has_description_filter() && ImGui::MenuItem("Description")) {
-            spell_filter.get_description_filter().set_type(dnd::StringFilterType::CONTAINS);
+        if (!spell_filter.description_filter.is_set() && ImGui::MenuItem("Description")) {
+            spell_filter.description_filter.set_type(dnd::StringFilterType::CONTAINS);
             ImGui::CloseCurrentPopup();
         }
-        if (!spell_filter.has_is_sourcebook_filter() && ImGui::MenuItem("Is Sourcebook")) {
-            spell_filter.get_is_sourcebook_filter().set_type(dnd::BoolFilterType::IS_TRUE);
+        if (!spell_filter.is_sourcebook_filter.is_set() && ImGui::MenuItem("Is Sourcebook")) {
+            spell_filter.is_sourcebook_filter.set_type(dnd::BoolFilterType::IS_TRUE);
             ImGui::CloseCurrentPopup();
         }
-        if (!spell_filter.has_verbal_component_filter() && ImGui::MenuItem("Verbal Component")) {
-            spell_filter.get_verbal_component_filter().set_type(dnd::BoolFilterType::IS_TRUE);
+        if (!spell_filter.verbal_component_filter.is_set() && ImGui::MenuItem("Verbal Component")) {
+            spell_filter.verbal_component_filter.set_type(dnd::BoolFilterType::IS_TRUE);
             ImGui::CloseCurrentPopup();
         }
-        if (!spell_filter.has_somatic_component_filter() && ImGui::MenuItem("Somatic Component")) {
-            spell_filter.get_somatic_component_filter().set_type(dnd::BoolFilterType::IS_TRUE);
+        if (!spell_filter.somatic_component_filter.is_set() && ImGui::MenuItem("Somatic Component")) {
+            spell_filter.somatic_component_filter.set_type(dnd::BoolFilterType::IS_TRUE);
             ImGui::CloseCurrentPopup();
         }
-        if (!spell_filter.has_material_component_filter() && ImGui::MenuItem("Material Component")) {
-            spell_filter.get_material_component_filter().set_type(dnd::BoolFilterType::IS_TRUE);
+        if (!spell_filter.material_component_filter.is_set() && ImGui::MenuItem("Material Component")) {
+            spell_filter.material_component_filter.set_type(dnd::BoolFilterType::IS_TRUE);
             ImGui::CloseCurrentPopup();
         }
-        if (!spell_filter.has_level_filter() && ImGui::MenuItem("Level")) {
-            spell_filter.get_level_filter().set_type(dnd::NumberFilterType::EQUAL);
+        if (!spell_filter.level_filter.is_set() && ImGui::MenuItem("Level")) {
+            spell_filter.level_filter.set_type(dnd::NumberFilterType::EQUAL);
             ImGui::CloseCurrentPopup();
         }
-        if (!spell_filter.has_magic_school_filter() && ImGui::MenuItem("Magic School")) {
-            spell_filter.get_magic_school_filter().set_type(dnd::SelectionFilterType::IS_IN);
+        if (!spell_filter.magic_school_filter.is_set() && ImGui::MenuItem("Magic School")) {
+            spell_filter.magic_school_filter.set_type(dnd::SelectionFilterType::IS_IN);
             ImGui::CloseCurrentPopup();
         }
-        if (!spell_filter.has_ritual_filter() && ImGui::MenuItem("Ritual")) {
-            spell_filter.get_ritual_filter().set_type(dnd::BoolFilterType::IS_TRUE);
+        if (!spell_filter.ritual_filter.is_set() && ImGui::MenuItem("Ritual")) {
+            spell_filter.ritual_filter.set_type(dnd::BoolFilterType::IS_TRUE);
             ImGui::CloseCurrentPopup();
         }
-        if (!spell_filter.has_casting_time_filter() && ImGui::MenuItem("Casting Time")) {
-            spell_filter.get_casting_time_filter().set_type(dnd::StringFilterType::CONTAINS);
+        if (!spell_filter.casting_time_filter.is_set() && ImGui::MenuItem("Casting Time")) {
+            spell_filter.casting_time_filter.set_type(dnd::StringFilterType::CONTAINS);
             ImGui::CloseCurrentPopup();
         }
-        if (!spell_filter.has_range_filter() && ImGui::MenuItem("Range")) {
-            spell_filter.get_range_filter().set_type(dnd::StringFilterType::CONTAINS);
+        if (!spell_filter.range_filter.is_set() && ImGui::MenuItem("Range")) {
+            spell_filter.range_filter.set_type(dnd::StringFilterType::CONTAINS);
             ImGui::CloseCurrentPopup();
         }
-        if (!spell_filter.has_duration_filter() && ImGui::MenuItem("Duration")) {
-            spell_filter.get_duration_filter().set_type(dnd::StringFilterType::CONTAINS);
+        if (!spell_filter.duration_filter.is_set() && ImGui::MenuItem("Duration")) {
+            spell_filter.duration_filter.set_type(dnd::StringFilterType::CONTAINS);
             ImGui::CloseCurrentPopup();
         }
-        if (!spell_filter.has_classes_filter() && ImGui::MenuItem("Classes")) {
-            spell_filter.get_classes_filter().set_type(dnd::SelectionFilterType::IS_IN);
+        if (!spell_filter.classes_filter.is_set() && ImGui::MenuItem("Classes")) {
+            spell_filter.classes_filter.set_type(dnd::SelectionFilterType::IS_IN);
             ImGui::CloseCurrentPopup();
         }
         ImGui::EndPopup();

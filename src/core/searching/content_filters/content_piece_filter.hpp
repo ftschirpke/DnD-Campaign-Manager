@@ -24,14 +24,11 @@ class ContentPieceFilter : public ContentFilter {
 public:
     ContentPieceFilter() noexcept;
 
-    bool has_name_filter() const noexcept;
-    bool has_description_filter() const noexcept;
-    bool has_is_sourcebook_filter() const noexcept;
+    /**
+     * @brief Determines whether all filters are set
+     * @return "true" if all filters are set, "false" otherwise
+     */
     bool has_all_filters() const noexcept;
-
-    NameFilterVariant& get_name_filter() noexcept;
-    StringFilter& get_description_filter() noexcept;
-    BoolFilter& get_is_sourcebook_filter() noexcept;
 
     /**
      * @brief Determines whether a content piece matches the filter
@@ -51,7 +48,7 @@ public:
      * @brief Clears all filter settings
      */
     void clear() override;
-private:
+
     NameFilterVariant name_filter;
     StringFilter description_filter;
     BoolFilter is_sourcebook_filter;

@@ -15,30 +15,10 @@
 dnd::ContentPieceFilter::ContentPieceFilter() noexcept
     : name_filter(StringFilter()), description_filter(), is_sourcebook_filter() {}
 
-bool dnd::ContentPieceFilter::has_name_filter() const noexcept {
-    switch (name_filter.index()) {
-        case 0:
-            return std::get<0>(name_filter).is_set();
-        case 1:
-            return std::get<1>(name_filter).is_set();
-        default:
-            return false;
-    }
-}
-
-bool dnd::ContentPieceFilter::has_description_filter() const noexcept { return description_filter.is_set(); }
-
-bool dnd::ContentPieceFilter::has_is_sourcebook_filter() const noexcept { return is_sourcebook_filter.is_set(); }
-
 bool dnd::ContentPieceFilter::has_all_filters() const noexcept {
-    return has_name_filter() && has_description_filter() && has_is_sourcebook_filter();
+    return std::visit([](const auto& filter) noexcept { return filter.is_set(); }, name_filter)
+           && description_filter.is_set() && is_sourcebook_filter.is_set();
 }
-
-dnd::NameFilterVariant& dnd::ContentPieceFilter::get_name_filter() noexcept { return name_filter; }
-
-dnd::StringFilter& dnd::ContentPieceFilter::get_description_filter() noexcept { return description_filter; }
-
-dnd::BoolFilter& dnd::ContentPieceFilter::get_is_sourcebook_filter() noexcept { return is_sourcebook_filter; }
 
 bool dnd::ContentPieceFilter::matches(const ContentPiece& content_piece) const noexcept {
     return std::visit(

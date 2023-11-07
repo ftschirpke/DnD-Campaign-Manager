@@ -19,27 +19,11 @@ class Spell;
 
 class SpellFilter : public ContentPieceFilter {
 public:
-    bool has_verbal_component_filter() const noexcept;
-    bool has_somatic_component_filter() const noexcept;
-    bool has_material_component_filter() const noexcept;
-    bool has_level_filter() const noexcept;
-    bool has_magic_school_filter() const noexcept;
-    bool has_ritual_filter() const noexcept;
-    bool has_casting_time_filter() const noexcept;
-    bool has_range_filter() const noexcept;
-    bool has_duration_filter() const noexcept;
-    bool has_classes_filter() const noexcept;
-
-    BoolFilter& get_verbal_component_filter() noexcept;
-    BoolFilter& get_somatic_component_filter() noexcept;
-    BoolFilter& get_material_component_filter() noexcept;
-    NumberFilter<int>& get_level_filter() noexcept;
-    SelectionFilter<MagicSchool>& get_magic_school_filter() noexcept;
-    BoolFilter& get_ritual_filter() noexcept;
-    StringFilter& get_casting_time_filter() noexcept;
-    StringFilter& get_range_filter() noexcept;
-    StringFilter& get_duration_filter() noexcept;
-    SelectionFilter<std::string>& get_classes_filter() noexcept;
+    /**
+     * @brief Determines whether all filters are set
+     * @return "true" if all filters are set, "false" otherwise
+     */
+    bool has_all_filters() const noexcept;
 
     /**
      * @brief Determines if a spell matches the filter
@@ -59,7 +43,7 @@ public:
      * @brief Clears all filter settings
      */
     void clear() override;
-private:
+
     BoolFilter verbal_component_filter;
     BoolFilter somatic_component_filter;
     BoolFilter material_component_filter;
