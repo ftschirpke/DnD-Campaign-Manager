@@ -115,6 +115,10 @@ void dnd::AdvancedSearchWindow::render() {
         result_list = session.get_advanced_search_result_strings();
         started_searching = false;
     }
+    ImGui::SameLine();
+    if (ImGui::Button("Clear Results", ImVec2(first_column_button_width, 0))) {
+        result_list.clear();
+    }
     ImGui::Spacing();
     ImGui::Separator();
 
