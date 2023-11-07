@@ -17,8 +17,8 @@ public:
     void operator()(CharacterSubraceFilter& character_subrace_filter) override;
     void operator()(ItemFilter& item_filter) override;
     void operator()(SpellFilter& spell_filter) override;
-    /* void operator()(FeatureFilter& feature_filter) override; */
-    /* void operator()(ChoosableFilter& choosable_filter) override; */
+    void operator()(FeatureFilter& feature_filter) override;
+    void operator()(ChoosableFilter& choosable_filter) override;
 };
 
 } // namespace dnd

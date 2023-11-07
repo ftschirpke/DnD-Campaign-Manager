@@ -19,14 +19,12 @@
 #include <core/searching/content_filters/character_subrace/character_subrace_filter.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
+#include <core/searching/content_filters/effects_provider/choosable_filter.hpp>
+#include <core/searching/content_filters/effects_provider/feature_filter.hpp>
 #include <core/searching/content_filters/item/item_filter.hpp>
 #include <core/searching/content_filters/selection_filter.hpp>
 #include <core/searching/content_filters/spell/spell_filter.hpp>
 #include <core/visitors/filters/content_filter_visitor.hpp>
-
-// TODO: Implement the following:
-/* void operator()(const FeatureFilter& feature_filter) override; */
-/* void operator()(const ChoosableFilter& choosable_filter) override; */
 
 static constexpr ImGuiComboFlags combo_flags = ImGuiComboFlags_PopupAlignLeft;
 
@@ -444,6 +442,40 @@ void dnd::FilterSettingVisitor::operator()(SpellFilter& spell_filter) {
         string_menu_item("Range", spell_filter.range_filter, dnd::StringFilterType::CONTAINS);
         string_menu_item("Duration", spell_filter.duration_filter, dnd::StringFilterType::CONTAINS);
         selection_menu_item("Classes", spell_filter.classes_filter, dnd::SelectionFilterType::IS_IN);
+        ImGui::EndPopup();
+    }
+}
+
+void dnd::FilterSettingVisitor::operator()(FeatureFilter& feature_filter) {
+    DND_MEASURE_FUNCTION();
+    ImGui::TableSetColumnIndex(1);
+    visit_content_piece_filter(feature_filter);
+
+    ImGui::TableSetColumnIndex(1);
+    if (!feature_filter.has_all_filters() && ImGui::Button("Add Value Filter")) {
+        ImGui::OpenPopup("value_filter_popup");
+    }
+    if (ImGui::BeginPopup("value_filter_popup")) {
+        content_piece_filter_menu_items(feature_filter);
+        ImGui::EndPopup();
+    }
+}
+
+void dnd::FilterSettingVisitor::operator()(ChoosableFilter& choosable_filter) {
+    DND_MEASURE_FUNCTION();
+    ImGui::TableSetColumnIndex(1);
+    visit_content_piece_filter(choosable_filter);
+    visit_string_filter("Type", choosable_filter.type_filter);
+    visit_bool_filter("Has Prerequisites", choosable_filter.has_prerequisites_filter);
+
+    ImGui::TableSetColumnIndex(1);
+    if (!choosable_filter.has_all_filters() && ImGui::Button("Add Value Filter")) {
+        ImGui::OpenPopup("value_filter_popup");
+    }
+    if (ImGui::BeginPopup("value_filter_popup")) {
+        content_piece_filter_menu_items(choosable_filter);
+        string_menu_item("Type", choosable_filter.type_filter, dnd::StringFilterType::EQUAL);
+        bool_menu_item("Has Prerequisites", choosable_filter.has_prerequisites_filter, dnd::BoolFilterType::IS_TRUE);
         ImGui::EndPopup();
     }
 }

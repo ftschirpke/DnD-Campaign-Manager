@@ -15,6 +15,8 @@
 #include <core/searching/content_filters/character_subrace/character_subrace_filter.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
+#include <core/searching/content_filters/effects_provider/choosable_filter.hpp>
+#include <core/searching/content_filters/effects_provider/feature_filter.hpp>
 #include <core/searching/content_filters/item/item_filter.hpp>
 #include <core/searching/content_filters/spell/spell_filter.hpp>
 #include <core/visitors/filters/content_filter_visitor.hpp>
@@ -23,7 +25,7 @@ namespace dnd {
 
 using ContentFilterVariant = std::variant<
     ContentPieceFilter, CharacterFilter, CharacterClassFilter, CharacterSubclassFilter, CharacterRaceFilter,
-    CharacterSubraceFilter, ItemFilter, SpellFilter>;
+    CharacterSubraceFilter, ItemFilter, SpellFilter, FeatureFilter, ChoosableFilter>;
 
 /**
  * @brief A class representing an advanced content search using a content filter.
