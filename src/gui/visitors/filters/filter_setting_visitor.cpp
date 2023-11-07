@@ -1,6 +1,5 @@
 #include <dnd_config.hpp>
 
-#include "core/searching/content_filters/selection_filter.hpp"
 #include "filter_setting_visitor.hpp"
 
 #include <algorithm>
@@ -15,14 +14,15 @@
 #include <core/searching/content_filters/bool_filter.hpp>
 #include <core/searching/content_filters/character/character_filter.hpp>
 #include <core/searching/content_filters/character_class/character_class_filter.hpp>
+#include <core/searching/content_filters/character_race/character_race_filter.hpp>
 #include <core/searching/content_filters/character_subclass/character_subclass_filter.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
+#include <core/searching/content_filters/selection_filter.hpp>
 #include <core/searching/content_filters/spell/spell_filter.hpp>
 #include <core/visitors/filters/content_filter_visitor.hpp>
 
 // TODO: Implement the following:
-/* void operator()(const CharacterRaceFilter& character_race_filter) override; */
 /* void operator()(const CharacterSubraceFilter& character_subrace_filter) override; */
 /* void operator()(const ItemFilter& item_filter) override; */
 /* void operator()(const FeatureFilter& feature_filter) override; */
@@ -360,6 +360,22 @@ void dnd::FilterSettingVisitor::operator()(CharacterSubclassFilter& subclass_fil
     }
 }
 
+void dnd::FilterSettingVisitor::operator()(CharacterRaceFilter& race_filter) {
+    DND_MEASURE_FUNCTION();
+    ImGui::TableSetColumnIndex(1);
+    visit_content_piece_filter(race_filter);
+    visit_bool_filter("Has Subraces", race_filter.has_subraces_filter);
+
+    ImGui::TableSetColumnIndex(1);
+    if (!race_filter.has_all_filters() && ImGui::Button("Add Value Filter")) {
+        ImGui::OpenPopup("value_filter_popup");
+    }
+    if (ImGui::BeginPopup("value_filter_popup")) {
+        content_piece_filter_menu_items(race_filter);
+        bool_menu_item("Has Subraces", race_filter.has_subraces_filter, dnd::BoolFilterType::IS_TRUE);
+        ImGui::EndPopup();
+    }
+}
 
 void dnd::FilterSettingVisitor::operator()(SpellFilter& spell_filter) {
     DND_MEASURE_FUNCTION();

@@ -26,7 +26,7 @@ public:
     virtual void operator()(CharacterFilter& character_filter) = 0;
     virtual void operator()(CharacterClassFilter& character_class_filter) = 0;
     virtual void operator()(CharacterSubclassFilter& character_subclass_filter) = 0;
-    /* virtual void operator()(CharacterRaceFilter& character_race_filter) = 0; */
+    virtual void operator()(CharacterRaceFilter& character_race_filter) = 0;
     /* virtual void operator()(CharacterSubraceFilter& character_subrace_filter) = 0; */
     /* virtual void operator()(ItemFilter& item_filter) = 0; */
     virtual void operator()(SpellFilter& spell_filter) = 0;

@@ -11,6 +11,9 @@
 #include <imgui/imgui.h>
 
 #include <core/searching/content_filters/character/character_filter.hpp>
+#include <core/searching/content_filters/character_class/character_class_filter.hpp>
+#include <core/searching/content_filters/character_race/character_race_filter.hpp>
+#include <core/searching/content_filters/character_subclass/character_subclass_filter.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
 #include <core/searching/content_filters/spell/spell_filter.hpp>
@@ -81,6 +84,7 @@ void dnd::AdvancedSearchWindow::render() {
                 filter = CharacterSubclassFilter();
                 break;
             case 4:
+                filter = CharacterRaceFilter();
                 break;
             case 5:
                 break;
