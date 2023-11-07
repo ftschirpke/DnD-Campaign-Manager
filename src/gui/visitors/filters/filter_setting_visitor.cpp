@@ -14,14 +14,14 @@
 
 #include <core/searching/content_filters/bool_filter.hpp>
 #include <core/searching/content_filters/character/character_filter.hpp>
+#include <core/searching/content_filters/character_class/character_class_filter.hpp>
+#include <core/searching/content_filters/character_subclass/character_subclass_filter.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
 #include <core/searching/content_filters/spell/spell_filter.hpp>
 #include <core/visitors/filters/content_filter_visitor.hpp>
 
 // TODO: Implement the following:
-/* void operator()(const CharacterClassFilter& character_class_filter) override; */
-/* void operator()(const CharacterSubclassFilter& character_subclass_filter) override; */
 /* void operator()(const CharacterRaceFilter& character_race_filter) override; */
 /* void operator()(const CharacterSubraceFilter& character_subrace_filter) override; */
 /* void operator()(const ItemFilter& item_filter) override; */
@@ -325,6 +325,41 @@ void dnd::FilterSettingVisitor::operator()(CharacterFilter& character_filter) {
         ImGui::EndPopup();
     }
 }
+
+void dnd::FilterSettingVisitor::operator()(CharacterClassFilter& class_filter) {
+    DND_MEASURE_FUNCTION();
+    ImGui::TableSetColumnIndex(1);
+    visit_content_piece_filter(class_filter);
+    visit_bool_filter("Has Spellcasting", class_filter.has_spellcasting_filter);
+
+    ImGui::TableSetColumnIndex(1);
+    if (!class_filter.has_all_filters() && ImGui::Button("Add Value Filter")) {
+        ImGui::OpenPopup("value_filter_popup");
+    }
+    if (ImGui::BeginPopup("value_filter_popup")) {
+        content_piece_filter_menu_items(class_filter);
+        bool_menu_item("Has Spellcasting", class_filter.has_spellcasting_filter, dnd::BoolFilterType::IS_TRUE);
+        ImGui::EndPopup();
+    }
+}
+
+void dnd::FilterSettingVisitor::operator()(CharacterSubclassFilter& subclass_filter) {
+    DND_MEASURE_FUNCTION();
+    ImGui::TableSetColumnIndex(1);
+    visit_content_piece_filter(subclass_filter);
+    visit_bool_filter("Has Spellcasting", subclass_filter.has_spellcasting_filter);
+
+    ImGui::TableSetColumnIndex(1);
+    if (!subclass_filter.has_all_filters() && ImGui::Button("Add Value Filter")) {
+        ImGui::OpenPopup("value_filter_popup");
+    }
+    if (ImGui::BeginPopup("value_filter_popup")) {
+        content_piece_filter_menu_items(subclass_filter);
+        bool_menu_item("Has Spellcasting", subclass_filter.has_spellcasting_filter, dnd::BoolFilterType::IS_TRUE);
+        ImGui::EndPopup();
+    }
+}
+
 
 void dnd::FilterSettingVisitor::operator()(SpellFilter& spell_filter) {
     DND_MEASURE_FUNCTION();

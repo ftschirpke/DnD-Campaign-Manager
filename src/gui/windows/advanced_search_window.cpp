@@ -75,8 +75,10 @@ void dnd::AdvancedSearchWindow::render() {
                 filter = CharacterFilter();
                 break;
             case 2:
+                filter = CharacterClassFilter();
                 break;
             case 3:
+                filter = CharacterSubclassFilter();
                 break;
             case 4:
                 break;

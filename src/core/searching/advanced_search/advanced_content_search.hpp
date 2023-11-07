@@ -9,13 +9,17 @@
 
 #include <core/content.hpp>
 #include <core/searching/content_filters/character/character_filter.hpp>
+#include <core/searching/content_filters/character_class/character_class_filter.hpp>
+#include <core/searching/content_filters/character_subclass/character_subclass_filter.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
 #include <core/searching/content_filters/spell/spell_filter.hpp>
+#include <core/visitors/filters/content_filter_visitor.hpp>
 
 namespace dnd {
 
-using ContentFilterVariant = std::variant<ContentPieceFilter, CharacterFilter, SpellFilter>;
+using ContentFilterVariant = std::variant<
+    ContentPieceFilter, CharacterFilter, CharacterClassFilter, CharacterSubclassFilter, SpellFilter>;
 
 /**
  * @brief A class representing an advanced content search using a content filter.

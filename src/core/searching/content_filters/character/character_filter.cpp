@@ -6,6 +6,7 @@
 
 #include <core/content.hpp>
 #include <core/models/character/character.hpp>
+#include <core/models/content_piece.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
 
 bool dnd::CharacterFilter::has_all_filters() const noexcept {
