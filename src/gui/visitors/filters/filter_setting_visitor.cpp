@@ -19,13 +19,12 @@
 #include <core/searching/content_filters/character_subrace/character_subrace_filter.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
+#include <core/searching/content_filters/item/item_filter.hpp>
 #include <core/searching/content_filters/selection_filter.hpp>
 #include <core/searching/content_filters/spell/spell_filter.hpp>
 #include <core/visitors/filters/content_filter_visitor.hpp>
 
 // TODO: Implement the following:
-/* void operator()(const CharacterSubraceFilter& character_subrace_filter) override; */
-/* void operator()(const ItemFilter& item_filter) override; */
 /* void operator()(const FeatureFilter& feature_filter) override; */
 /* void operator()(const ChoosableFilter& choosable_filter) override; */
 
@@ -389,6 +388,27 @@ void dnd::FilterSettingVisitor::operator()(CharacterSubraceFilter& subrace_filte
     }
     if (ImGui::BeginPopup("value_filter_popup")) {
         content_piece_filter_menu_items(subrace_filter);
+        ImGui::EndPopup();
+    }
+}
+
+void dnd::FilterSettingVisitor::operator()(ItemFilter& item_filter) {
+    DND_MEASURE_FUNCTION();
+    ImGui::TableSetColumnIndex(1);
+    visit_content_piece_filter(item_filter);
+    visit_string_filter("Cosmetic Description", item_filter.cosmetic_description_filter);
+    visit_bool_filter("Requires Attunement", item_filter.attunement_filter);
+
+    ImGui::TableSetColumnIndex(1);
+    if (!item_filter.has_all_filters() && ImGui::Button("Add Value Filter")) {
+        ImGui::OpenPopup("value_filter_popup");
+    }
+    if (ImGui::BeginPopup("value_filter_popup")) {
+        content_piece_filter_menu_items(item_filter);
+        string_menu_item(
+            "Cosmetic Description", item_filter.cosmetic_description_filter, dnd::StringFilterType::CONTAINS
+        );
+        bool_menu_item("Requires Attunement", item_filter.attunement_filter, dnd::BoolFilterType::IS_TRUE);
         ImGui::EndPopup();
     }
 }

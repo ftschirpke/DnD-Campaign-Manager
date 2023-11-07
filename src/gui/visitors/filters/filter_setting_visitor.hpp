@@ -15,7 +15,7 @@ public:
     void operator()(CharacterSubclassFilter& character_subclass_filter) override;
     void operator()(CharacterRaceFilter& character_race_filter) override;
     void operator()(CharacterSubraceFilter& character_subrace_filter) override;
-    /* void operator()(ItemFilter& item_filter) override; */
+    void operator()(ItemFilter& item_filter) override;
     void operator()(SpellFilter& spell_filter) override;
     /* void operator()(FeatureFilter& feature_filter) override; */
     /* void operator()(ChoosableFilter& choosable_filter) override; */

@@ -17,6 +17,7 @@
 #include <core/searching/content_filters/character_subrace/character_subrace_filter.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
+#include <core/searching/content_filters/item/item_filter.hpp>
 #include <core/searching/content_filters/spell/spell_filter.hpp>
 #include <core/session.hpp>
 #include <gui/visitors/filters/filter_setting_visitor.hpp>
@@ -91,6 +92,7 @@ void dnd::AdvancedSearchWindow::render() {
                 filter = CharacterSubraceFilter();
                 break;
             case 6:
+                filter = ItemFilter();
                 break;
             case 7:
                 filter = SpellFilter();
