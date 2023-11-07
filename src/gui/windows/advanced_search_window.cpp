@@ -10,8 +10,10 @@
 
 #include <imgui/imgui.h>
 
+#include <core/searching/content_filters/character/character_filter.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
+#include <core/searching/content_filters/spell/spell_filter.hpp>
 #include <core/session.hpp>
 #include <gui/visitors/filters/filter_setting_visitor.hpp>
 
@@ -70,6 +72,7 @@ void dnd::AdvancedSearchWindow::render() {
                 filter = ContentPieceFilter();
                 break;
             case 1:
+                filter = CharacterFilter();
                 break;
             case 2:
                 break;

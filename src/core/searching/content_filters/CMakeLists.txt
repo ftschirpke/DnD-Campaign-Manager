@@ -5,4 +5,5 @@ target_sources(${DND_CORE}
     string_filter.cpp
 )
 
+add_subdirectory(character)
 add_subdirectory(spell)

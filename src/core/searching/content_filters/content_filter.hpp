@@ -20,6 +20,12 @@ public:
     virtual ~ContentFilter() = default;
 
     /**
+     * @brief Determines whether all filters are set
+     * @return "true" if all filters are set, "false" otherwise
+     */
+    virtual bool has_all_filters() const noexcept = 0;
+
+    /**
      * @brief Get all content pieces that match the filter
      * @param content the content to search through
      * @return a vector of pointers to the content pieces that match the filter

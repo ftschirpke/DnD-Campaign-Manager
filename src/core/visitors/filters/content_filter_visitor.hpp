@@ -22,16 +22,16 @@ class ChoosableFilter;
 class ContentFilterVisitor {
 public:
     virtual ~ContentFilterVisitor() = default;
-    virtual void visit(ContentPieceFilter& content_piece_filter) = 0;
-    /* virtual void visit(CharacterFilter& character_filter) = 0; */
-    /* virtual void visit(CharacterClassFilter& character_class_filter) = 0; */
-    /* virtual void visit(CharacterSubclassFilter& character_subclass_filter) = 0; */
-    /* virtual void visit(CharacterRaceFilter& character_race_filter) = 0; */
-    /* virtual void visit(CharacterSubraceFilter& character_subrace_filter) = 0; */
-    /* virtual void visit(ItemFilter& item_filter) = 0; */
-    virtual void visit(SpellFilter& spell_filter) = 0;
-    /* virtual void visit(FeatureFilter& feature_filter) = 0; */
-    /* virtual void visit(ChoosableFilter& choosable_filter) = 0; */
+    virtual void operator()(ContentPieceFilter& content_piece_filter) = 0;
+    virtual void operator()(CharacterFilter& character_filter) = 0;
+    /* virtual void operator()(CharacterClassFilter& character_class_filter) = 0; */
+    /* virtual void operator()(CharacterSubclassFilter& character_subclass_filter) = 0; */
+    /* virtual void operator()(CharacterRaceFilter& character_race_filter) = 0; */
+    /* virtual void operator()(CharacterSubraceFilter& character_subrace_filter) = 0; */
+    /* virtual void operator()(ItemFilter& item_filter) = 0; */
+    virtual void operator()(SpellFilter& spell_filter) = 0;
+    /* virtual void operator()(FeatureFilter& feature_filter) = 0; */
+    /* virtual void operator()(ChoosableFilter& choosable_filter) = 0; */
 };
 
 } // namespace dnd
