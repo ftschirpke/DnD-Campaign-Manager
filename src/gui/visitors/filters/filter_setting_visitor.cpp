@@ -206,7 +206,7 @@ static void visit_selection_filter(const char* name, dnd::SelectionFilter<T>& fi
     ImGui::Text("%s", name);
     ImGui::TableSetColumnIndex(2);
     size_t idx = find_index(selection_filter_types, type);
-    assert(idx < dnd::selection_filter_types.size());
+    assert(idx < selection_filter_types.size());
     std::string label = fmt::format("##{}", name);
     if (ImGui::BeginCombo(label.c_str(), selection_filter_types[idx].first, combo_flags)) {
         for (size_t i = 1; i < selection_filter_types.size(); ++i) {
