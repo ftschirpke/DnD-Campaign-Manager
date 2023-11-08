@@ -300,6 +300,7 @@ void dnd::FilterSettingVisitor::operator()(ContentPieceFilter& content_piece_fil
         ImGui::OpenPopup("value_filter_popup");
     }
     if (ImGui::BeginPopup("value_filter_popup")) {
+        DND_MEASURE_SCOPE("ContentPieceFilter - Add Value Filter Popup");
         content_piece_filter_menu_items(content_piece_filter);
         ImGui::EndPopup();
     }
@@ -317,6 +318,7 @@ void dnd::FilterSettingVisitor::operator()(CharacterFilter& character_filter) {
         ImGui::OpenPopup("value_filter_popup");
     }
     if (ImGui::BeginPopup("value_filter_popup")) {
+        DND_MEASURE_SCOPE("CharacterFilter - Add Value Filter Popup");
         content_piece_filter_menu_items(character_filter);
         number_menu_item("Level", character_filter.level_filter, dnd::NumberFilterType::EQUAL);
         number_menu_item("XP", character_filter.xp_filter, dnd::NumberFilterType::GREATER_THAN_OR_EQUAL);
@@ -335,6 +337,7 @@ void dnd::FilterSettingVisitor::operator()(CharacterClassFilter& class_filter) {
         ImGui::OpenPopup("value_filter_popup");
     }
     if (ImGui::BeginPopup("value_filter_popup")) {
+        DND_MEASURE_SCOPE("CharacterClassFilter - Add Value Filter Popup");
         content_piece_filter_menu_items(class_filter);
         bool_menu_item("Has Spellcasting", class_filter.has_spellcasting_filter, dnd::BoolFilterType::IS_TRUE);
         ImGui::EndPopup();
@@ -352,6 +355,7 @@ void dnd::FilterSettingVisitor::operator()(CharacterSubclassFilter& subclass_fil
         ImGui::OpenPopup("value_filter_popup");
     }
     if (ImGui::BeginPopup("value_filter_popup")) {
+        DND_MEASURE_SCOPE("CharacterSubclassFilter - Add Value Filter Popup");
         content_piece_filter_menu_items(subclass_filter);
         bool_menu_item("Has Spellcasting", subclass_filter.has_spellcasting_filter, dnd::BoolFilterType::IS_TRUE);
         ImGui::EndPopup();
@@ -369,6 +373,7 @@ void dnd::FilterSettingVisitor::operator()(CharacterRaceFilter& race_filter) {
         ImGui::OpenPopup("value_filter_popup");
     }
     if (ImGui::BeginPopup("value_filter_popup")) {
+        DND_MEASURE_SCOPE("CharacterRaceFilter - Add Value Filter Popup");
         content_piece_filter_menu_items(race_filter);
         bool_menu_item("Has Subraces", race_filter.has_subraces_filter, dnd::BoolFilterType::IS_TRUE);
         ImGui::EndPopup();
@@ -385,6 +390,7 @@ void dnd::FilterSettingVisitor::operator()(CharacterSubraceFilter& subrace_filte
         ImGui::OpenPopup("value_filter_popup");
     }
     if (ImGui::BeginPopup("value_filter_popup")) {
+        DND_MEASURE_SCOPE("CharacterSubraceFilter - Add Value Filter Popup");
         content_piece_filter_menu_items(subrace_filter);
         ImGui::EndPopup();
     }
@@ -402,6 +408,7 @@ void dnd::FilterSettingVisitor::operator()(ItemFilter& item_filter) {
         ImGui::OpenPopup("value_filter_popup");
     }
     if (ImGui::BeginPopup("value_filter_popup")) {
+        DND_MEASURE_SCOPE("ItemFilter - Add Value Filter Popup");
         content_piece_filter_menu_items(item_filter);
         string_menu_item(
             "Cosmetic Description", item_filter.cosmetic_description_filter, dnd::StringFilterType::CONTAINS
@@ -431,6 +438,7 @@ void dnd::FilterSettingVisitor::operator()(SpellFilter& spell_filter) {
         ImGui::OpenPopup("value_filter_popup");
     }
     if (ImGui::BeginPopup("value_filter_popup")) {
+        DND_MEASURE_SCOPE("SpellFilter - Add Value Filter Popup");
         content_piece_filter_menu_items(spell_filter);
         bool_menu_item("Verbal Component", spell_filter.verbal_component_filter, dnd::BoolFilterType::IS_TRUE);
         bool_menu_item("Somatic Component", spell_filter.somatic_component_filter, dnd::BoolFilterType::IS_TRUE);
@@ -456,6 +464,7 @@ void dnd::FilterSettingVisitor::operator()(FeatureFilter& feature_filter) {
         ImGui::OpenPopup("value_filter_popup");
     }
     if (ImGui::BeginPopup("value_filter_popup")) {
+        DND_MEASURE_SCOPE("FeatureFilter - Add Value Filter Popup");
         content_piece_filter_menu_items(feature_filter);
         ImGui::EndPopup();
     }
@@ -473,6 +482,7 @@ void dnd::FilterSettingVisitor::operator()(ChoosableFilter& choosable_filter) {
         ImGui::OpenPopup("value_filter_popup");
     }
     if (ImGui::BeginPopup("value_filter_popup")) {
+        DND_MEASURE_SCOPE("ChoosableFilter - Add Value Filter Popup");
         content_piece_filter_menu_items(choosable_filter);
         string_menu_item("Type", choosable_filter.type_filter, dnd::StringFilterType::EQUAL);
         bool_menu_item("Has Prerequisites", choosable_filter.has_prerequisites_filter, dnd::BoolFilterType::IS_TRUE);
