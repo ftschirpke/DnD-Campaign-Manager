@@ -8,9 +8,9 @@ bool dnd::BoolFilter::is_set() const noexcept { return type != BoolFilterType::N
 
 dnd::BoolFilterType dnd::BoolFilter::get_type() const noexcept { return type; }
 
-void dnd::BoolFilter::set_type(BoolFilterType type) noexcept { this->type = type; }
+void dnd::BoolFilter::set_type(BoolFilterType new_type) noexcept { type = new_type; }
 
-void dnd::BoolFilter::set(BoolFilterType type) noexcept { set_type(type); }
+void dnd::BoolFilter::set(BoolFilterType new_type) noexcept { set_type(new_type); }
 
 void dnd::BoolFilter::clear() noexcept { type = BoolFilterType::NONE; }
 

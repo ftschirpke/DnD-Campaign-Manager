@@ -31,14 +31,14 @@ public:
     BoolFilterType get_type() const noexcept;
     /**
      * @brief Set the type of the filter.
-     * @param type the type of the filter
+     * @param new_type the type of the filter
      */
-    void set_type(BoolFilterType type) noexcept;
+    void set_type(BoolFilterType new_type) noexcept;
     /**
      * @brief Set the filter.
-     * @param type the type of the filter
+     * @param new_type the type of the filter
      */
-    void set(BoolFilterType type) noexcept;
+    void set(BoolFilterType new_type) noexcept;
     /**
      * @brief Clears the filter.
      */

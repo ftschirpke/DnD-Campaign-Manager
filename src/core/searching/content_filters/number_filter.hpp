@@ -45,20 +45,20 @@ public:
     T get_value() const noexcept;
     /**
      * @brief Set the type of the filter.
-     * @param type the type of the filter
+     * @param new_type the type of the filter
      */
-    void set_type(NumberFilterType type) noexcept;
+    void set_type(NumberFilterType new_type) noexcept;
     /**
      * @brief Set the value of the filter.
-     * @param value the value of the filter
+     * @param new_value the value of the filter
      */
-    void set_value(T value) noexcept;
+    void set_value(T new_value) noexcept;
     /**
      * @brief Set the filter.
-     * @param type the type of the filter
-     * @param value the value of the filter
+     * @param new_type the type of the filter
+     * @param new_value the value of the filter
      */
-    void set(NumberFilterType type, T value) noexcept;
+    void set(NumberFilterType type, T new_value) noexcept;
     /**
      * @brief Clears the filter.
      */
@@ -101,21 +101,21 @@ T dnd::NumberFilter<T>::get_value() const noexcept {
 
 template <typename T>
 requires std::is_arithmetic_v<T>
-void dnd::NumberFilter<T>::set_type(NumberFilterType type) noexcept {
-    this->type = type;
+void dnd::NumberFilter<T>::set_type(NumberFilterType new_type) noexcept {
+    type = new_type;
 }
 
 template <typename T>
 requires std::is_arithmetic_v<T>
-void dnd::NumberFilter<T>::set_value(T value) noexcept {
-    this->value = value;
+void dnd::NumberFilter<T>::set_value(T new_value) noexcept {
+    value = new_value;
 }
 
 template <typename T>
 requires std::is_arithmetic_v<T>
-void dnd::NumberFilter<T>::set(NumberFilterType type, T value) noexcept {
-    set_type(type);
-    set_value(value);
+void dnd::NumberFilter<T>::set(NumberFilterType new_type, T new_value) noexcept {
+    set_type(new_type);
+    set_value(new_value);
 }
 
 template <typename T>

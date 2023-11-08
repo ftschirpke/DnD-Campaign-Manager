@@ -49,31 +49,31 @@ public:
     const std::string& get_value() const noexcept;
     /**
      * @brief Set the type of the filter.
-     * @param type the type of the filter
+     * @param new_type the type of the filter
      */
-    void set_type(StringFilterType type) noexcept;
+    void set_type(StringFilterType new_type) noexcept;
     /**
      * @brief Set the value of the filter.
-     * @param value the value of the filter
+     * @param new_value the value of the filter
      */
-    void set_value(const std::string& value) noexcept;
+    void set_value(const std::string& new_value) noexcept;
     /**
      * @brief Set the value of the filter.
-     * @param value the value of the filter
+     * @param new_value the value of the filter
      */
-    void set_value(std::string&& value) noexcept;
+    void set_value(std::string&& new_value) noexcept;
     /**
      * @brief Set the filter.
-     * @param type the type of the filter
-     * @param value the value of the filter
+     * @param new_type the type of the filter
+     * @param new_value the value of the filter
      */
-    void set(StringFilterType type, const std::string& value) noexcept;
+    void set(StringFilterType new_type, const std::string& new_value) noexcept;
     /**
      * @brief Set the filter.
-     * @param type the type of the filter
-     * @param value the value of the filter
+     * @param new_type the type of the filter
+     * @param new_value the value of the filter
      */
-    void set(StringFilterType type, std::string&& value) noexcept;
+    void set(StringFilterType new_type, std::string&& new_value) noexcept;
     /**
      * @brief Clears the filter.
      */

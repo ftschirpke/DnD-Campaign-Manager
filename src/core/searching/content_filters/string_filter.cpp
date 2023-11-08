@@ -14,20 +14,20 @@ std::string& dnd::StringFilter::get_value() noexcept { return value; }
 
 const std::string& dnd::StringFilter::get_value() const noexcept { return value; }
 
-void dnd::StringFilter::set_type(StringFilterType type) noexcept { this->type = type; }
+void dnd::StringFilter::set_type(StringFilterType new_type) noexcept { type = new_type; }
 
-void dnd::StringFilter::set_value(const std::string& value) noexcept { this->value = value; }
+void dnd::StringFilter::set_value(const std::string& new_value) noexcept { value = new_value; }
 
-void dnd::StringFilter::set_value(std::string&& value) noexcept { this->value = value; }
+void dnd::StringFilter::set_value(std::string&& new_value) noexcept { value = new_value; }
 
-void dnd::StringFilter::set(StringFilterType type, const std::string& value) noexcept {
-    set_type(type);
-    set_value(value);
+void dnd::StringFilter::set(StringFilterType new_type, const std::string& new_value) noexcept {
+    set_type(new_type);
+    set_value(new_value);
 }
 
-void dnd::StringFilter::set(StringFilterType type, std::string&& value) noexcept {
-    set_type(type);
-    set_value(std::move(value));
+void dnd::StringFilter::set(StringFilterType new_type, std::string&& new_value) noexcept {
+    set_type(new_type);
+    set_value(std::move(new_value));
 }
 
 void dnd::StringFilter::clear() noexcept {

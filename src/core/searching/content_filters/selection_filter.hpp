@@ -37,9 +37,9 @@ public:
     SelectionFilterType get_type() const noexcept;
     /**
      * @brief Set the type of the filter.
-     * @param type the type of the filter
+     * @param new_type the type of the filter
      */
-    void set_type(SelectionFilterType type) noexcept;
+    void set_type(SelectionFilterType new_type) noexcept;
     /**
      * @brief Set the values of the filter.
      * @param values the values of the filter
@@ -52,16 +52,16 @@ public:
     void set_values(std::vector<T>&& values) noexcept;
     /**
      * @brief Set the filter.
-     * @param type the type of the filter
+     * @param new_type the type of the filter
      * @param values the values of the filter
      */
-    void set(SelectionFilterType type, const std::vector<T>& values) noexcept;
+    void set(SelectionFilterType new_type, const std::vector<T>& values) noexcept;
     /**
      * @brief Set the filter.
-     * @param type the type of the filter
-     * @param values the values of the filter
+     * @param new_type the type of the filter
+     * @param new_values the values of the filter
      */
-    void set(SelectionFilterType type, std::vector<T>&& values) noexcept;
+    void set(SelectionFilterType new_type, std::vector<T>&& new_values) noexcept;
     /**
      * @brief Clears the filter.
      */
@@ -95,30 +95,30 @@ dnd::SelectionFilterType dnd::SelectionFilter<T>::get_type() const noexcept {
 }
 
 template <typename T>
-void dnd::SelectionFilter<T>::set_type(SelectionFilterType type) noexcept {
-    this->type = type;
+void dnd::SelectionFilter<T>::set_type(SelectionFilterType new_type) noexcept {
+    type = new_type;
 }
 
 template <typename T>
-void dnd::SelectionFilter<T>::set_values(const std::vector<T>& values) noexcept {
-    this->values = values;
+void dnd::SelectionFilter<T>::set_values(const std::vector<T>& new_values) noexcept {
+    values = new_values;
 }
 
 template <typename T>
-void dnd::SelectionFilter<T>::set_values(std::vector<T>&& values) noexcept {
-    this->values = std::move(values);
+void dnd::SelectionFilter<T>::set_values(std::vector<T>&& new_values) noexcept {
+    values = std::move(new_values);
 }
 
 template <typename T>
-void dnd::SelectionFilter<T>::set(SelectionFilterType type, const std::vector<T>& values) noexcept {
-    set_type(type);
-    set_values(values);
+void dnd::SelectionFilter<T>::set(SelectionFilterType new_type, const std::vector<T>& new_values) noexcept {
+    set_type(new_type);
+    set_values(new_values);
 }
 
 template <typename T>
-void dnd::SelectionFilter<T>::set(SelectionFilterType type, std::vector<T>&& values) noexcept {
-    set_type(type);
-    set_values(std::move(values));
+void dnd::SelectionFilter<T>::set(SelectionFilterType new_type, std::vector<T>&& new_values) noexcept {
+    set_type(new_type);
+    set_values(std::move(new_values));
 }
 
 template <typename T>
