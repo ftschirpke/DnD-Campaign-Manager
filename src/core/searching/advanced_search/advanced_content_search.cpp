@@ -22,9 +22,14 @@ const std::vector<const dnd::ContentPiece*>& dnd::AdvancedContentSearch::get_sea
 static std::vector<const dnd::ContentPiece*> search(
     const dnd::Content& content, dnd::ContentFilterVariant searching_filter
 ) {
-    return std::visit(
+    std::vector<const dnd::ContentPiece*> search_results = std::visit(
         [&content](const dnd::ContentFilter& filter) { return filter.all_matches(content); }, searching_filter
     );
+    std::sort(
+        search_results.begin(), search_results.end(),
+        [](const dnd::ContentPiece* lhs, const dnd::ContentPiece* rhs) { return lhs->get_name() < rhs->get_name(); }
+    );
+    return search_results;
 }
 
 void dnd::AdvancedContentSearch::start_searching() {

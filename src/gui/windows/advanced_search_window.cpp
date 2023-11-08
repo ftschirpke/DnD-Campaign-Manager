@@ -131,7 +131,6 @@ void dnd::AdvancedSearchWindow::render() {
     }
     if (started_searching && !session.is_advanced_searching()) {
         result_list = session.get_advanced_search_result_strings();
-        std::sort(result_list.begin(), result_list.end());
         started_searching = false;
     }
     ImGui::SameLine();
