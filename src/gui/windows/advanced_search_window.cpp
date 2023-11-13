@@ -74,7 +74,6 @@ void dnd::AdvancedSearchWindow::render() {
     }
     if (swap_to_idx != content_filter_names.size()) {
         switch (swap_to_idx) {
-            // TODO: Add all filters
             case 0:
                 filter = ContentPieceFilter();
                 break;

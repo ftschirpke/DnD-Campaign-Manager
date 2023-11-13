@@ -19,7 +19,6 @@
 #include <core/searching/content_filters/effects_provider/feature_filter.hpp>
 #include <core/searching/content_filters/item/item_filter.hpp>
 #include <core/searching/content_filters/spell/spell_filter.hpp>
-#include <core/visitors/filters/content_filter_visitor.hpp>
 
 namespace dnd {
 

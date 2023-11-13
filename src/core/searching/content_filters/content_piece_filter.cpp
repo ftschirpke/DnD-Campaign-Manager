@@ -10,7 +10,6 @@
 #include <core/models/content_piece.hpp>
 #include <core/searching/content_filters/bool_filter.hpp>
 #include <core/searching/content_filters/string_filter.hpp>
-#include <core/visitors/filters/content_filter_visitor.hpp>
 
 dnd::ContentPieceFilter::ContentPieceFilter() noexcept
     : name_filter(StringFilter()), description_filter(), is_sourcebook_filter() {}

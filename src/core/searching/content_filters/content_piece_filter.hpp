@@ -11,8 +11,6 @@
 #include <core/searching/content_filters/content_filter.hpp>
 #include <core/searching/content_filters/selection_filter.hpp>
 #include <core/searching/content_filters/string_filter.hpp>
-#include <core/visitors/filters/content_filter_visitor.hpp>
-
 
 namespace dnd {
 

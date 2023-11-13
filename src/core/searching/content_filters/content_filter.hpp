@@ -6,7 +6,6 @@
 #include <vector>
 
 #include <core/models/content_piece.hpp>
-#include <core/visitors/filters/content_filter_visitor.hpp>
 
 namespace dnd {
 
