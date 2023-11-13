@@ -23,7 +23,7 @@ public:
      * @brief Determines whether all filters are set
      * @return "true" if all filters are set, "false" otherwise
      */
-    bool has_all_filters() const noexcept;
+    bool has_all_filters() const noexcept override;
 
     /**
      * @brief Determines if a spell matches the filter
