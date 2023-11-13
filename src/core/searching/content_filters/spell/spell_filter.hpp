@@ -3,11 +3,15 @@
 
 #include <dnd_config.hpp>
 
-#include <set>
+#include <string>
+#include <vector>
 
 #include <core/models/spell/spell_components.hpp>
 #include <core/models/spell/spell_type.hpp>
+#include <core/searching/content_filters/bool_filter.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
+#include <core/searching/content_filters/number_filter.hpp>
+#include <core/searching/content_filters/selection_filter.hpp>
 
 namespace dnd {
 
@@ -15,27 +19,11 @@ class Spell;
 
 class SpellFilter : public ContentPieceFilter {
 public:
-    SpellFilter() noexcept;
     /**
-     * @brief Accepts a visitor to perform an operation on the filter.
-     * @param visitor reference to the visitor
+     * @brief Determines whether all filters are set
+     * @return "true" if all filters are set, "false" otherwise
      */
-    virtual void accept(ContentFilterVisitor& visitor) override;
-
-    void set_verbal_component_filter(BoolFilterType type) noexcept;
-    void remove_verbal_component_filter() noexcept;
-    void set_somatic_component_filter(BoolFilterType type) noexcept;
-    void remove_somatic_component_filter() noexcept;
-    void set_material_component_filter(BoolFilterType type) noexcept;
-    void remove_material_component_filter() noexcept;
-    void set_level_filter(NumberFilterType type, int level) noexcept;
-    void remove_level_filter() noexcept;
-    void set_magic_school_filter(SelectionFilterType type, std::set<MagicSchool> magic_schools) noexcept;
-    void remove_magic_school_filter() noexcept;
-    void set_ritual_filter(BoolFilterType type) noexcept;
-    void remove_ritual_filter() noexcept;
-    void set_classes_filter(SelectionFilterType type, std::set<std::string> classes) noexcept;
-    void remove_classes_filter() noexcept;
+    bool has_all_filters() const noexcept override;
 
     /**
      * @brief Determines if a spell matches the filter
@@ -43,24 +31,29 @@ public:
      * @return "true" if the spell matches the filter, "false" otherwise
      */
     bool matches(const Spell& spell) const noexcept;
+
     /**
-     * @brief Get all the names of all spells that match the filter from a given selection of content
-     * @param content the content to filter
-     * @return the names of all spells that match the filter
+     * @brief Get all content pieces that match the filter
+     * @param content the content to search through
+     * @return a vector of pointers to the content pieces that match the filter
      */
-    // std::vector<std::string> get_matching(const Content& content) const override;
-    // TODO: decide whether to keep this
-private:
-    BoolFilterType verbal_component_filter_type;
-    BoolFilterType somatic_component_filter_type;
-    BoolFilterType material_component_filter_type;
-    NumberFilterType level_filter_type;
-    int level_filter_level;
-    SelectionFilterType magic_school_filter_type;
-    std::set<MagicSchool> magic_school_filter_magic_schools;
-    BoolFilterType ritual_filter_type;
-    SelectionFilterType classes_filter_type;
-    std::set<std::string> classes_filter_classes;
+    std::vector<const ContentPiece*> all_matches(const Content& content) const override;
+
+    /**
+     * @brief Clears all filter settings
+     */
+    void clear() override;
+
+    BoolFilter verbal_component_filter;
+    BoolFilter somatic_component_filter;
+    BoolFilter material_component_filter;
+    NumberFilter<int> level_filter;
+    SelectionFilter<MagicSchool> magic_school_filter;
+    BoolFilter ritual_filter;
+    StringFilter casting_time_filter;
+    StringFilter range_filter;
+    StringFilter duration_filter;
+    SelectionFilter<std::string> classes_filter;
 };
 
 } // namespace dnd

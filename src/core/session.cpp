@@ -1,5 +1,6 @@
 #include <dnd_config.hpp>
 
+#include "core/searching/advanced_search/advanced_content_search.hpp"
 #include "session.hpp"
 
 #include <chrono>
@@ -24,9 +25,9 @@
 
 dnd::Session::Session(const char* last_session_filename)
     : last_session_filename(last_session_filename), status(SessionStatus::CONTENT_DIR_SELECTION), content_directory(),
-      campaign_name(), last_session_open_tabs(), open_content_pieces(), selected_content_piece(), fuzzy_search(),
-      fuzzy_search_results(), fuzzy_search_result_count(0), fuzzy_search_result_strings(), unknown_error_messages(),
-      parsing_future(), parser(), errors(), content() {}
+      campaign_name(), parsing_future(), parser(), errors(), content(), last_session_open_tabs(), open_content_pieces(),
+      selected_content_piece(), fuzzy_search(), fuzzy_search_results(), fuzzy_search_result_count(0),
+      fuzzy_search_result_strings(), advanced_search(content), unknown_error_messages() {}
 
 dnd::Session::~Session() { save_session_values(); }
 
@@ -89,6 +90,17 @@ std::vector<std::string> dnd::Session::get_fuzzy_search_result_strings() const {
     }
     for (size_t i = 0; i < fuzzy_search_result_count; ++i) {
         fuzzy_search_results[i]->accept(list_content_visitor);
+    }
+    return list_content_visitor.get_list();
+}
+
+std::vector<std::string> dnd::Session::get_advanced_search_result_strings() const {
+    DND_MEASURE_FUNCTION();
+    ListContentVisitor list_content_visitor;
+    const std::vector<const ContentPiece*>& advanced_search_results = advanced_search.get_search_results();
+    list_content_visitor.reserve(advanced_search_results.size());
+    for (const ContentPiece* content_piece : advanced_search_results) {
+        content_piece->accept(list_content_visitor);
     }
     return list_content_visitor.get_list();
 }
@@ -213,7 +225,8 @@ dnd::Errors dnd::Session::set_content_directory(const std::filesystem::path& new
     return content_dir_errors;
 }
 
-// A comparator for content pieces that sorts them by name and prioritizes those whose name starts with a givencharacter
+// A comparator for content pieces that sorts them by name and prioritizes those whose name starts with a
+// givencharacter
 class ContentPieceComparator {
 public:
     explicit ContentPieceComparator(const std::string& search_query)
@@ -273,6 +286,24 @@ void dnd::Session::open_fuzzy_search_result(size_t index) {
     }
     open_content_piece(fuzzy_search_results[index]);
 }
+
+void dnd::Session::open_advanced_search_result(size_t index) {
+    const std::vector<const ContentPiece*>& advanced_search_results = advanced_search.get_search_results();
+    if (index >= advanced_search_results.size()) {
+        return;
+    }
+    open_content_piece(advanced_search_results[index]);
+}
+
+void dnd::Session::start_advanced_search() { advanced_search.start_searching(); }
+
+bool dnd::Session::is_advanced_searching() { return advanced_search.is_searching(); }
+
+void dnd::Session::set_advanced_search_filter(ContentFilterVariant&& filter) {
+    advanced_search.set_filter(std::move(filter));
+}
+
+dnd::ContentFilterVariant& dnd::Session::get_advanced_search_filter() { return advanced_search.get_filter(); }
 
 void dnd::Session::update() {
     DND_MEASURE_FUNCTION();

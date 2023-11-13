@@ -16,6 +16,7 @@
 #include <core/errors/errors.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/parsing/content_parser.hpp>
+#include <core/searching/advanced_search/advanced_content_search.hpp>
 #include <core/searching/fuzzy_search/fuzzy_content_search.hpp>
 
 namespace dnd {
@@ -99,10 +100,15 @@ public:
      */
     std::vector<std::string> get_possible_campaign_names() const;
     /**
-     * @brief Returns a list of strings representing the search results.
-     * @return the list of strings representing the search results
+     * @brief Returns a list of strings representing the fuzzy search results.
+     * @return the list of strings representing the fuzzy search results
      */
     std::vector<std::string> get_fuzzy_search_result_strings() const;
+    /**
+     * @brief Returns a list of strings representing the advanced search results.
+     * @return the list of strings representing the advanced search results
+     */
+    std::vector<std::string> get_advanced_search_result_strings() const;
 
     /**
      * @brief Refuzzyves the last session values from a file, if it exists.
@@ -134,10 +140,35 @@ public:
      */
     void set_fuzzy_search(const std::string& search_query, const std::array<bool, 9>& search_options);
     /**
-     * @brief Fuzzys to open a content piece in the fuzzy search result by index.
+     * @brief Tries to open a content piece in the fuzzy search result by index.
      * @param index the index of the content piece to open
      */
     void open_fuzzy_search_result(size_t index);
+    /**
+     * @brief Tries to open a content piece in the advanced search result by index.
+     * @param index the index of the content piece to open
+     */
+    void open_advanced_search_result(size_t index);
+    /**
+     * @brief Starts the advanced search applying the current filter.
+     */
+    void start_advanced_search();
+    /**
+     * @brief Determines if the advanced search is currently searching and updates the search results if the search just
+     * finished.
+     * @return "true" if the advanced search is currently searching, "false" otherwise
+     */
+    bool is_advanced_searching();
+    /**
+     * @brief Set the content filter set the advanced search.
+     * @param filter the filter to set
+     */
+    void set_advanced_search_filter(ContentFilterVariant&& filter);
+    /**
+     * @brief Get the filter used for the advanced search
+     * @return the filter used for the advanced search
+     */
+    ContentFilterVariant& get_advanced_search_filter();
 
     void update();
 private:
@@ -156,6 +187,12 @@ private:
     std::filesystem::path content_directory;
     std::string campaign_name;
 
+    std::future<void> parsing_future;
+    ContentParser parser;
+    Errors errors;
+    // the object holding all the DnD content relevant for the selected campaign
+    Content content;
+
     std::unordered_map<std::string, std::vector<std::string>> last_session_open_tabs;
     std::deque<const ContentPiece*> open_content_pieces;
     const ContentPiece* selected_content_piece;
@@ -165,15 +202,11 @@ private:
     size_t fuzzy_search_result_count;
     std::array<std::string, 500> fuzzy_search_result_strings;
 
+    AdvancedContentSearch advanced_search;
+
     std::vector<std::string> unknown_error_messages;
     std::vector<std::string> parsing_error_messages;
     std::vector<std::string> validation_error_messages;
-
-    std::future<void> parsing_future;
-    ContentParser parser;
-    Errors errors;
-    // the object holding all the DnD content relevant for the selected campaign
-    Content content;
 };
 
 } // namespace dnd

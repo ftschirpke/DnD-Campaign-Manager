@@ -11,9 +11,14 @@ dnd::ContentWindow::ContentWindow(Session& session) : session(session), display_
 void dnd::ContentWindow::render() {
     DND_MEASURE_FUNCTION();
     ImGui::Begin("Content");
+    std::deque<const ContentPiece*>& open_content_pieces = session.get_open_content_pieces();
+    if (open_content_pieces.empty()) {
+        ImGui::Text("No content selected");
+        ImGui::End();
+        return;
+    }
     ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_AutoSelectNewTabs | ImGuiTabBarFlags_Reorderable;
     if (ImGui::BeginTabBar("Content Tabs", tab_bar_flags)) {
-        std::deque<const ContentPiece*>& open_content_pieces = session.get_open_content_pieces();
         for (auto it = open_content_pieces.begin(); it != open_content_pieces.end();) {
             bool open = true;
             if (ImGui::BeginTabItem((*it)->get_name().c_str(), &open)) {

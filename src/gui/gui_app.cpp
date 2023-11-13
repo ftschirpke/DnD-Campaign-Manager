@@ -20,7 +20,7 @@ static const ImGuiWindowFlags error_popup_options = ImGuiWindowFlags_AlwaysAutoR
 
 dnd::GuiApp::GuiApp()
     : show_demo_window(false), session(), content_selection(session), content_window(session),
-      error_messages_window(session), fuzzy_search_window(session) {
+      error_messages_window(session), fuzzy_search_window(session), advanced_search_window(session) {
     ImGui::GetIO().IniFilename = imgui_ini_filename;
 }
 
@@ -49,6 +49,7 @@ void dnd::GuiApp::render() {
 
     if (session.get_status() == SessionStatus::READY) {
         fuzzy_search_window.render();
+        advanced_search_window.render();
         content_window.render();
     }
 }

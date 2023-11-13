@@ -243,6 +243,9 @@ void dnd::DisplayVisitor::visit(const Spell& spell) {
     source(spell);
     label("Spell Type:");
     ImGui::Text("%s", spell.get_type().str().c_str());
+    label("Ritual:");
+    const char* ritual = spell.get_type().is_ritual() ? "yes" : "no";
+    ImGui::Text("%s", ritual);
     label("Casting Time:");
     ImGui::Text("%s", spell.get_casting_time().c_str());
     label("Range:");

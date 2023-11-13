@@ -70,7 +70,7 @@ public:
      */
     const TrieNode<T>* get_trie_root() const override;
 private:
-    void save_in_fuzzy(const T* content_piece);
+    void save_in_trie(const T* content_piece);
 
     std::unordered_map<std::string, const T*> data;
     Trie<T> trie;
@@ -79,7 +79,7 @@ private:
 
 template <typename T>
 requires isContentPieceType<T>
-void ReferencingContentLibrary<T>::save_in_fuzzy(const T* content_piece) {
+void ReferencingContentLibrary<T>::save_in_trie(const T* content_piece) {
     std::string lower_name = dnd::string_lowercase_copy(content_piece->get_name());
 
     trie.insert(lower_name, content_piece);
@@ -88,7 +88,7 @@ void ReferencingContentLibrary<T>::save_in_fuzzy(const T* content_piece) {
             std::string_view after_sep(lower_name.c_str() + i + 1, lower_name.size() - i - 1);
             trie.insert(after_sep, content_piece);
         }
-        if (lower_name[i] == '(') { // do not include parentheses in fuzzy
+        if (lower_name[i] == '(') { // do not include parentheses in trie
             break;
         }
     }
@@ -138,7 +138,7 @@ bool ReferencingContentLibrary<T>::add(const T& content_piece) {
         return false;
     }
     data.emplace(name, &content_piece);
-    save_in_fuzzy(&content_piece);
+    save_in_trie(&content_piece);
     return true;
 }
 
