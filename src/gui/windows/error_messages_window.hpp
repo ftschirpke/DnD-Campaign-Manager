@@ -9,15 +9,9 @@
 
 namespace dnd {
 
-/**
- * @brief A window of the GUI showing error messages.
- */
 class ErrorMessagesWindow {
 public:
     ErrorMessagesWindow(Session& session);
-    /**
-     * @brief Renders the error messages window.
-     */
     void render();
 private:
     Session& session;

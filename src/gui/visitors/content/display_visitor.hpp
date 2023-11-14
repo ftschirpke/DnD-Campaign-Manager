@@ -18,9 +18,6 @@
 
 namespace dnd {
 
-/**
- * @brief A visitor that displays the content using ImGui widgets
- */
 class DisplayVisitor : public ContentVisitor {
 public:
     virtual void visit(const Character& character) override;

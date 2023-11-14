@@ -17,9 +17,6 @@ namespace dnd {
 class AdvancedSearchWindow {
 public:
     AdvancedSearchWindow(Session& session);
-    /**
-     * @brief Renders the window.
-     */
     void render();
 private:
     Session& session;

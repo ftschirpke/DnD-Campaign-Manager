@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include "content_selection.hpp"
+#include "content_configuration_window.hpp"
 
 #include <imgui/imgui.h>
 #include <imgui_filebrowser/imfilebrowser.h>
@@ -13,16 +13,16 @@ static constexpr ImGuiFileBrowserFlags file_dialog_flags = ImGuiFileBrowserFlags
 
 static const ImGuiWindowFlags error_popup_options = ImGuiWindowFlags_AlwaysAutoResize;
 
-dnd::ContentSelection::ContentSelection(Session& session)
+dnd::ContentConfigurationWindow::ContentConfigurationWindow(Session& session)
     : session(session), content_dir_dialog(file_dialog_flags), is_selecting_campaign(false) {}
 
-void dnd::ContentSelection::initialize() {
+void dnd::ContentConfigurationWindow::initialize() {
     content_dir_dialog.SetTitle("Select content directory");
     content_dir_dialog.SetWindowSize(1200, 900);
 
     switch (session.get_status()) {
         case SessionStatus::CONTENT_DIR_SELECTION:
-            open_content_dir_dialog();
+            open_content_directory_selection();
             break;
         case SessionStatus::CAMPAIGN_SELECTION:
             is_selecting_campaign = true;
@@ -32,16 +32,7 @@ void dnd::ContentSelection::initialize() {
     }
 }
 
-void dnd::ContentSelection::select_content_directory() { open_content_dir_dialog(); }
-
-void dnd::ContentSelection::select_campaign() { is_selecting_campaign = true; }
-
-void dnd::ContentSelection::render() {
-    render_content_dir_selection();
-    render_campaign_selection();
-}
-
-void dnd::ContentSelection::open_content_dir_dialog() {
+void dnd::ContentConfigurationWindow::open_content_directory_selection() {
     if (content_dir_dialog.HasSelected()) {
         content_dir_dialog.SetPwd(content_dir_dialog.GetSelected().parent_path());
     } else {
@@ -50,7 +41,14 @@ void dnd::ContentSelection::open_content_dir_dialog() {
     content_dir_dialog.Open();
 }
 
-void dnd::ContentSelection::render_content_dir_selection() {
+void dnd::ContentConfigurationWindow::open_campaign_selection() { is_selecting_campaign = true; }
+
+void dnd::ContentConfigurationWindow::render() {
+    render_content_dir_selection();
+    render_campaign_selection();
+}
+
+void dnd::ContentConfigurationWindow::render_content_dir_selection() {
     DND_MEASURE_FUNCTION();
     content_dir_dialog.Display();
     if (content_dir_dialog.HasSelected()) {
@@ -68,13 +66,13 @@ void dnd::ContentSelection::render_content_dir_selection() {
         ImGui::Text("Selected directory: %s", content_dir_dialog.GetSelected().string().c_str());
         if (ImGui::Button("Select other directory")) {
             ImGui::CloseCurrentPopup();
-            open_content_dir_dialog();
+            open_content_directory_selection();
         }
         ImGui::EndPopup();
     }
 }
 
-void dnd::ContentSelection::render_campaign_selection() {
+void dnd::ContentConfigurationWindow::render_campaign_selection() {
     DND_MEASURE_FUNCTION();
     if (is_selecting_campaign) {
         ImGui::OpenPopup("Select campaign");
@@ -90,7 +88,7 @@ void dnd::ContentSelection::render_campaign_selection() {
         if (ImGui::Button("Select other directory")) {
             ImGui::CloseCurrentPopup();
             close = true;
-            open_content_dir_dialog();
+            open_content_directory_selection();
         }
         if (close || ImGui::Button("Cancel")) {
             ImGui::CloseCurrentPopup();

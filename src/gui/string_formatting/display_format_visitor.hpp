@@ -12,9 +12,6 @@
 
 namespace dnd {
 
-/**
- * @brief A visitor that displays the format elements using ImGui widgets
- */
 class DisplayFormatVisitor : public FormatVisitor {
 public:
     DisplayFormatVisitor(ImGuiTableFlags table_flags = 0);
