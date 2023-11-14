@@ -113,7 +113,7 @@ static void visit_string_filter(const char* name, dnd::StringFilter& filter) {
     }
     ImGui::TableSetColumnIndex(3);
     std::string value_label = fmt::format("##{} value", name);
-    ImGui::InputText(value_label.c_str(), &filter.get_value());
+    ImGui::InputText(value_label.c_str(), &filter.get_value_mutable());
     ImGui::TableSetColumnIndex(4);
     std::string remove_label = fmt::format("Remove##{}", name);
     if (ImGui::Button(remove_label.c_str())) {

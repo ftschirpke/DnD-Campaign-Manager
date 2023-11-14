@@ -20,7 +20,7 @@
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/item/item.hpp>
 #include <core/models/spell/spell.hpp>
-#include <core/parsing/content_parser.hpp>
+#include <core/parsing/content_parsing.hpp>
 #include <core/utils/string_manipulation.hpp>
 
 int dnd::launch(int argc, char** argv) {

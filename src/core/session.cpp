@@ -17,7 +17,7 @@
 #include <core/errors/validation_error.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/models/source_info.hpp>
-#include <core/parsing/content_parser.hpp>
+#include <core/parsing/content_parsing.hpp>
 #include <core/searching/fuzzy_search/fuzzy_content_search.hpp>
 #include <core/utils/string_manipulation.hpp>
 #include <core/visitors/content/collect_open_tabs_visitor.hpp>

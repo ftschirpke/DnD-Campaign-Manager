@@ -15,7 +15,7 @@
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/models/content_piece.hpp>
-#include <core/parsing/content_parser.hpp>
+#include <core/parsing/content_parsing.hpp>
 #include <core/searching/advanced_search/advanced_content_search.hpp>
 #include <core/searching/fuzzy_search/fuzzy_content_search.hpp>
 
