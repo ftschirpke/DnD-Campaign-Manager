@@ -32,11 +32,6 @@ public:
     const std::string& get_attribute_name() const noexcept;
     int get_amount() const noexcept;
 
-    /**
-     * @brief Returns the possible values that could be selected for the given content
-     * @param content the content to use for the selection
-     * @return the possible values that could be selected for this choice as strings
-     */
     std::set<std::string> possible_values(const Content& content) const;
 private:
     Choice(

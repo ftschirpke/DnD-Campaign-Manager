@@ -12,7 +12,8 @@
 namespace dnd {
 
 /**
- * @brief A class that represents a condition that compares two character values
+ * @brief A class that represents a condition that compares two character values (attributes or constants) using
+ * their identifiers
  */
 class IdentifierCondition : public Condition {
 public:

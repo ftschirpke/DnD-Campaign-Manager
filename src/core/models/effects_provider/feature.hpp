@@ -43,19 +43,8 @@ public:
     const Effects& get_main_effects() const noexcept override;
     std::vector<const Effects*> get_all_effects() const override;
 
-    /**
-     * @brief Accepts a visitor
-     * @param visitor reference to the visitor
-     */
     virtual void accept(ContentVisitor& visitor) const override;
 protected:
-    /**
-     * @brief Constructs a feature
-     * @param name the name of the feature
-     * @param description the description of the feature
-     * @param source_path the path to the source file of the feature
-     * @param main_effects the main effects of the feature
-     */
     Feature(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path, Effects&& main_effects
     ) noexcept;

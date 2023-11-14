@@ -40,10 +40,6 @@ public:
     const std::vector<Feature>& get_features() const noexcept;
     const CharacterRace* get_race() const noexcept;
 
-    /**
-     * @brief Accepts a visitor
-     * @param visitor reference to the visitor
-     */
     virtual void accept(ContentVisitor& visitor) const override final;
 private:
     CharacterSubrace(

@@ -23,12 +23,12 @@ enum class StatChangeTime {
     LATEST = 4
 };
 
-/**
- * @brief A class representing a change in a character's stats.
- */
 class StatChange {
 public:
     virtual ~StatChange() noexcept = default;
+
+    StatChangeTime get_time() const noexcept;
+
     /**
      * @brief Applies the stat change to a character's attributes given the attributes and constants of the character
      * @param attributes character attributes may be used for calculation and one of them will be changed
@@ -37,17 +37,6 @@ public:
     virtual void apply_to(
         std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const = 0;
-
-    /**
-     * @brief Returns the name of the attribute this stat change affects
-     * @return the name of the attribute this stat change affects
-     */
-    const std::string& get_affected_attribute() const noexcept;
-    /**
-     * @brief Returns the time at which this stat change should be applied in the order of execution
-     * @return the time at which this stat change should be applied in the order of execution
-     */
-    StatChangeTime get_time() const noexcept;
 protected:
     /**
      * @brief Constructs a stat change with the attribute it affects, its execution time, and the name of the operation.

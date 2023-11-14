@@ -11,6 +11,9 @@
 
 namespace dnd {
 
+/**
+ * @brief A stat change that uses a value identifier to find the value to use in the operation
+ */
 class IdentifierStatChange : public StatChange {
 public:
     /**

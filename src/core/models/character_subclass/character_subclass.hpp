@@ -44,10 +44,6 @@ public:
     const Spellcasting* get_spellcasting() const noexcept;
     const CharacterClass* get_class() const noexcept;
 
-    /**
-     * @brief Accepts a visitor
-     * @param visitor reference to the visitor
-     */
     virtual void accept(ContentVisitor& visitor) const override final;
 private:
     CharacterSubclass(
