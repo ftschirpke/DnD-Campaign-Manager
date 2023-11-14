@@ -16,18 +16,9 @@ namespace dnd {
  */
 bool is_skill(const std::string& skill) noexcept;
 
-/**
- * @brief Returns a vector of all skills
- * @return a vector of all skills
- */
-std::vector<std::string> get_skills() noexcept;
+std::vector<std::string> get_all_skills() noexcept;
 
-/**
- * @brief Returns all skills and their corresponding abilities as a map
- * @return the map of all skills and their corresponding abilities
- */
-std::map<std::string, std::string> get_skill_ability_map() noexcept;
-
+std::map<std::string, std::string> get_abilities_for_all_skills() noexcept;
 
 } // namespace dnd
 

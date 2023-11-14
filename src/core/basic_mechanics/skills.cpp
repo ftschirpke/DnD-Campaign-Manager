@@ -46,7 +46,7 @@ bool dnd::is_skill(const std::string& skill) noexcept {
     return false;
 }
 
-std::vector<std::string> dnd::get_skills() noexcept {
+std::vector<std::string> dnd::get_all_skills() noexcept {
     std::vector<std::string> skills;
     skills.reserve(skill_abilities.size());
     for (const auto& skill_ability_pair : skill_abilities) {
@@ -61,7 +61,7 @@ std::vector<std::string> dnd::get_skills() noexcept {
     return skills;
 }
 
-std::map<std::string, std::string> dnd::get_skill_ability_map() noexcept {
+std::map<std::string, std::string> dnd::get_abilities_for_all_skills() noexcept {
     std::map<std::string, std::string> skill_ability_map;
     for (const auto& skill_ability_pair : skill_abilities) {
         skill_ability_map.emplace(skill_ability_pair.first, skill_ability_pair.second);
