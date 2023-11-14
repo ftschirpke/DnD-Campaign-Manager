@@ -11,7 +11,7 @@
 #include <core/models/spell/spell.hpp>
 #include <core/validation/spell/spell_data.hpp>
 
-dnd::SpellParser::SpellParser(const std::filesystem::path& file_path) : FileParser(file_path) {}
+dnd::SpellParser::SpellParser(const std::filesystem::path& file_path) : FileParser(file_path, true) {}
 
 dnd::Errors dnd::SpellParser::parse() {
     Errors errors;
@@ -34,13 +34,13 @@ dnd::Errors dnd::SpellParser::parse() {
         SpellData data;
         data.name = spell_name;
         data.source_path = get_filepath();
-        spell_errors += parse_required_attribute(spell_json, "description", data.description);
-        spell_errors += parse_required_attribute(spell_json, "components", data.components_data.str);
-        spell_errors += parse_required_attribute(spell_json, "level_type", data.type_data.str);
-        spell_errors += parse_required_attribute(spell_json, "casting_time", data.casting_time);
-        spell_errors += parse_required_attribute(spell_json, "range", data.range);
-        spell_errors += parse_required_attribute(spell_json, "duration", data.duration);
-        spell_errors += parse_required_attribute(spell_json, "classes", data.classes);
+        spell_errors += parse_required_attribute_into(spell_json, "description", data.description);
+        spell_errors += parse_required_attribute_into(spell_json, "components", data.components_data.str);
+        spell_errors += parse_required_attribute_into(spell_json, "level_type", data.type_data.str);
+        spell_errors += parse_required_attribute_into(spell_json, "casting_time", data.casting_time);
+        spell_errors += parse_required_attribute_into(spell_json, "range", data.range);
+        spell_errors += parse_required_attribute_into(spell_json, "duration", data.duration);
+        spell_errors += parse_required_attribute_into(spell_json, "classes", data.classes);
         if (spell_errors.ok()) {
             spell_data.emplace_back(std::move(data));
         }
@@ -49,8 +49,6 @@ dnd::Errors dnd::SpellParser::parse() {
     spells_in_file = spell_data.size();
     return errors;
 }
-
-bool dnd::SpellParser::continue_after_errors() const noexcept { return true; }
 
 dnd::Errors dnd::SpellParser::validate(const dnd::Content& content) const {
     Errors errors;

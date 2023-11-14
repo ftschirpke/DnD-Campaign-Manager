@@ -14,7 +14,7 @@
 #include <core/errors/parsing_error.hpp>
 #include <core/errors/validation_error.hpp>
 
-dnd::StringGroupParser::StringGroupParser(const std::filesystem::path& file_path) : FileParser(file_path) {}
+dnd::StringGroupParser::StringGroupParser(const std::filesystem::path& file_path) : FileParser(file_path, false) {}
 
 dnd::Errors dnd::StringGroupParser::parse() {
     Errors errors;
@@ -32,7 +32,7 @@ dnd::Errors dnd::StringGroupParser::parse() {
                 "The group '__no_subgroup__' is not allowed in the root of the string group file."
             );
         } else if (value.is_array()) {
-            errors += parse_optional_attribute(json, key.c_str(), members[key]);
+            errors += parse_optional_attribute_into(json, key.c_str(), members[key]);
         } else if (value.is_object()) {
             errors += parse_subgroups(value, key);
         } else {
@@ -98,7 +98,7 @@ dnd::Errors dnd::StringGroupParser::parse_subgroups(nlohmann::ordered_json& sub_
         }
         if (value.is_array()) {
             std::set<std::string> values;
-            errors += parse_optional_attribute(sub_json, key.c_str(), values);
+            errors += parse_optional_attribute_into(sub_json, key.c_str(), values);
             if (key == "__no_subgroup__") {
                 members[parent].insert(std::make_move_iterator(values.begin()), std::make_move_iterator(values.end()));
             } else {

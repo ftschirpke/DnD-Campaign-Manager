@@ -27,11 +27,11 @@ dnd::Errors dnd::FeatureParser::parse(nlohmann::ordered_json&& json, FeatureData
         return errors;
     }
 
-    errors += parse_required_attribute(json, "description", data.description);
+    errors += parse_required_attribute_into(json, "description", data.description);
     json.erase("description");
     data.source_path = get_filepath();
 
-    errors += effects_parser.parse(std::move(json), data.main_effects_data);
+    errors += effects_parser.parse_into(std::move(json), data.main_effects_data);
     return errors;
 }
 

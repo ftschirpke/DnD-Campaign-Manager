@@ -36,11 +36,11 @@ dnd::Errors dnd::ChoosableParser::parse(nlohmann::ordered_json&& json, Choosable
         );
     } else if (has_prerequisite) {
         ConditionData& condition_data = data.prerequisites_data.emplace_back(&data);
-        errors += parse_optional_attribute(json, "prerequisite", condition_data.condition_str);
+        errors += parse_optional_attribute_into(json, "prerequisite", condition_data.condition_str);
         json.erase("prerequisite");
     } else if (has_prerequisites) {
         std::vector<std::string> prerequisite_conditions_strs;
-        errors += parse_optional_attribute(json, "prerequisites", prerequisite_conditions_strs);
+        errors += parse_optional_attribute_into(json, "prerequisites", prerequisite_conditions_strs);
         for (const auto& prerequisite_condition_str : prerequisite_conditions_strs) {
             ConditionData& condition_data = data.prerequisites_data.emplace_back(&data);
             condition_data.condition_str = prerequisite_condition_str;

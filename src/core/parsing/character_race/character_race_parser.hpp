@@ -17,21 +17,8 @@ namespace dnd {
 class CharacterRaceParser : public FileParser {
 public:
     explicit CharacterRaceParser(const std::filesystem::path& filepath) noexcept;
-    /**
-     * @brief Parses the json into race data
-     * @return the errors that occured while parsing
-     */
     virtual Errors parse() override;
-    /**
-     * @brief Validates the parsed race data using the given content
-     * @param content the content to validate against
-     * @return the errors that occured while validating
-     */
     virtual Errors validate(const Content& content) const override;
-    /**
-     * @brief Saves the parsed race data into the given content
-     * @param content the content to save the parsed race into
-     */
     virtual void save_result(Content& content) override;
 private:
     FeatureParser feature_parser;

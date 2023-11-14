@@ -16,7 +16,7 @@
 #include <core/validation/effects_provider/choosable_data.hpp>
 
 dnd::ChoosableGroupParser::ChoosableGroupParser(const std::filesystem::path& filepath) noexcept
-    : FileParser(filepath), choosable_parser(filepath) {}
+    : FileParser(filepath, true), choosable_parser(filepath) {}
 
 dnd::Errors dnd::ChoosableGroupParser::parse() {
     Errors errors;
@@ -42,7 +42,7 @@ dnd::Errors dnd::ChoosableGroupParser::parse() {
         Errors feature_errors;
         ChoosableData& feature_data = data.emplace_back();
         feature_data.name = feature_name;
-        feature_errors += choosable_parser.parse(std::move(feature_json), feature_data);
+        feature_errors += choosable_parser.parse_into(std::move(feature_json), feature_data);
         if (!feature_errors.ok()) {
             data.pop_back();
         }
@@ -51,8 +51,6 @@ dnd::Errors dnd::ChoosableGroupParser::parse() {
     choosables_in_file = data.size();
     return errors;
 }
-
-bool dnd::ChoosableGroupParser::continue_after_errors() const noexcept { return true; }
 
 dnd::Errors dnd::ChoosableGroupParser::validate(const dnd::Content& content) const {
     Errors errors;
