@@ -7,9 +7,6 @@ namespace dnd {
 
 class App {
 public:
-    /**
-     * @brief Run the application.
-     */
     void run();
 };
 

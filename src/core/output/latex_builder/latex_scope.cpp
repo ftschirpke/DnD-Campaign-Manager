@@ -11,8 +11,20 @@
 #include <core/output/latex_builder/latex_object.hpp>
 #include <core/output/latex_builder/latex_text.hpp>
 
+dnd::LatexScope::LatexScope() : enclosing_braces(true) {}
+
 dnd::LatexScope* dnd::LatexScope::no_enclosing_braces() {
     enclosing_braces = false;
+    return this;
+}
+
+dnd::LatexScope* dnd::LatexScope::add_line_break() {
+    add_text("")->add_line_break();
+    return this;
+}
+
+dnd::LatexScope* dnd::LatexScope::add_line_break(const std::string& spacing_argument) {
+    add_text("")->add_line_break(spacing_argument);
     return this;
 }
 
@@ -35,6 +47,10 @@ dnd::LatexCommand* dnd::LatexScope::add_command(const std::string& name) {
     LatexCommand* ptr = new_command.get();
     objects.emplace_back(std::move(new_command));
     return ptr;
+}
+
+dnd::LatexCommand* dnd::LatexScope::add_command(const std::string& name, const std::string& argument) {
+    return add_command(name)->add_brace_argument(argument);
 }
 
 dnd::LatexBeginEnd dnd::LatexScope::add_begin_end(const std::string& name) {

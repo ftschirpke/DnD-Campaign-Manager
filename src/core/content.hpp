@@ -26,13 +26,9 @@ namespace dnd {
  */
 class Content {
 public:
-    /**
-     * @brief Returns whether all storage libraries are empty
-     * @return "true" if nothing is stored inside the content holder, "false" otherwise
-     */
     bool empty() const;
     /**
-     * @brief Returns a string describing how much content this controller holds
+     * @brief Returns a string describing how many items this controller holds
      * @return a string describing the current status of the controller
      */
     std::string status() const;

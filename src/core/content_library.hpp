@@ -19,21 +19,8 @@ template <typename T>
 requires isContentPieceType<T>
 class ContentLibrary {
 public:
-    /**
-     * @brief Check whether piece of content with given name exists
-     * @param name the name
-     * @return "true" if such a piece of content exists, "false" otherwise
-     */
     virtual bool contains(const std::string& name) const = 0;
-    /**
-     * @brief Returns whether the content library is empty
-     * @return "true" if the content library is empty, "false" otherwise
-     */
     virtual bool empty() const = 0;
-    /**
-     * @brief Get the amount of content pieces in the library
-     * @return the amount
-     */
     virtual size_t size() const = 0;
     /**
      * @brief Get content piece by its index
@@ -50,8 +37,8 @@ public:
      */
     virtual const T& get(const std::string& name) const = 0;
     /**
-     * @brief Get the root of the fuzzy
-     * @return a pointer to the root of the fuzzy
+     * @brief Get the root of the fuzzy search trie
+     * @return a pointer to the root of the fuzzy search trie
      */
     virtual const TrieNode<T>* get_trie_root() const = 0;
 };
