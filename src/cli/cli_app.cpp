@@ -70,10 +70,13 @@ void dnd::CliApp::initialize(
     output.formatted_text("Campaign name:     {}", session.get_campaign_name());
     assert(session.get_status() == SessionStatus::PARSING);
     output.text("Parsing...");
-    while (session.get_status() == SessionStatus::PARSING) {
-        session.update();
+    while (!session.parsing_result_available()) {
     }
     if (session.get_status() == SessionStatus::UNKNOWN_ERROR) {
+        output.error("Unknown error occurred while parsing:");
+        for (const std::string& error_message : session.get_unknown_error_messages()) {
+            output.error(error_message);
+        }
         throw std::runtime_error("Unknown error occurred while parsing.");
     }
     assert(session.get_status() == SessionStatus::READY);

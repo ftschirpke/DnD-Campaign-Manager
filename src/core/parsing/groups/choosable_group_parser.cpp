@@ -28,7 +28,7 @@ dnd::Errors dnd::ChoosableGroupParser::parse() {
     }
 
     group_name = get_filepath().stem().string();
-    snake_case_to_spaced_words(group_name);
+    snake_case_to_capitalized_spaced_words(group_name);
 
     data.reserve(json.size());
     for (auto& [feature_name, feature_json] : json.items()) {
@@ -70,7 +70,7 @@ dnd::Errors dnd::ChoosableGroupParser::validate(const dnd::Content& content) con
 void dnd::ChoosableGroupParser::save_result(dnd::Content& content) {
     for (size_t i = 0; i < data.size(); ++i) {
         if (feature_data_valid[i]) {
-            snake_case_to_spaced_words(data[i].type);
+            snake_case_to_capitalized_spaced_words(data[i].type);
             content.add_choosable(Choosable::create(std::move(data[i]), content));
         }
     }

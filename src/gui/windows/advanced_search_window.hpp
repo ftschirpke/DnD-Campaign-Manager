@@ -11,9 +11,6 @@
 
 namespace dnd {
 
-/**
- * @brief A class representing a window for advanced searching.
- */
 class AdvancedSearchWindow {
 public:
     AdvancedSearchWindow(Session& session);
@@ -22,7 +19,6 @@ private:
     Session& session;
     FilterSettingVisitor filter_setting_visitor;
 
-    bool started_searching;
     std::vector<std::string> result_list;
 };
 

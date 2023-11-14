@@ -297,7 +297,15 @@ void dnd::Session::open_advanced_search_result(size_t index) {
 
 void dnd::Session::start_advanced_search() { advanced_search.start_searching(); }
 
-bool dnd::Session::is_advanced_searching() { return advanced_search.is_searching(); }
+bool dnd::Session::advanced_search_results_available() {
+    try {
+        return advanced_search.search_results_available();
+    } catch (const std::exception& e) {
+        unknown_error_messages.push_back(e.what());
+        status = SessionStatus::UNKNOWN_ERROR;
+        return false;
+    }
+}
 
 void dnd::Session::set_advanced_search_filter(ContentFilterVariant&& filter) {
     advanced_search.set_filter(std::move(filter));
@@ -305,13 +313,19 @@ void dnd::Session::set_advanced_search_filter(ContentFilterVariant&& filter) {
 
 dnd::ContentFilterVariant& dnd::Session::get_advanced_search_filter() { return advanced_search.get_filter(); }
 
-void dnd::Session::update() {
+bool dnd::Session::parsing_result_available() {
     DND_MEASURE_FUNCTION();
-    if (status == SessionStatus::PARSING) {
-        if (parsing_future.wait_for(std::chrono::microseconds(1)) == std::future_status::ready) {
-            finish_parsing();
+    if (status == SessionStatus::PARSING
+        && parsing_future.wait_for(std::chrono::nanoseconds(1)) == std::future_status::ready) {
+        try {
+            parsing_future.get();
+            status = SessionStatus::READY;
+        } catch (const std::exception& e) {
+            unknown_error_messages.push_back(e.what());
+            status = SessionStatus::UNKNOWN_ERROR;
         }
     }
+    return status == SessionStatus::READY;
 }
 
 void dnd::Session::start_parsing() {
@@ -341,16 +355,6 @@ void dnd::Session::parse_content() {
                 source_info.get_source_type_name(), source_info.get_source_name()
             ));
         }
-    }
-}
-
-void dnd::Session::finish_parsing() {
-    try {
-        parsing_future.get();
-        status = SessionStatus::READY;
-    } catch (const std::exception& e) {
-        unknown_error_messages.push_back(e.what());
-        status = SessionStatus::UNKNOWN_ERROR;
     }
 }
 

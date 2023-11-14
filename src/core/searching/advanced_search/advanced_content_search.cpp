@@ -7,6 +7,7 @@
 #include <vector>
 
 #include <core/content.hpp>
+#include <core/exceptions/async_exceptions.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
 
@@ -37,10 +38,10 @@ void dnd::AdvancedContentSearch::start_searching() {
     search_future = std::async(std::launch::async, search, std::ref(content), filter);
 }
 
-bool dnd::AdvancedContentSearch::is_searching() {
-    if (searching && search_future.wait_for(std::chrono::microseconds(1)) == std::future_status::ready) {
+bool dnd::AdvancedContentSearch::search_results_available() {
+    if (searching && search_future.wait_for(std::chrono::nanoseconds(1)) == std::future_status::ready) {
         searching = false;
         search_results = search_future.get();
     }
-    return searching;
+    return !searching;
 }

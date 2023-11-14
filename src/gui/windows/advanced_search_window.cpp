@@ -36,8 +36,7 @@ static constexpr std::array<const char*, 10> content_filter_names = {
     "Any", "Characters", "Classes", "Subclasses", "Races", "Subraces", "Items", "Spells", "Features", "Choosables",
 };
 
-dnd::AdvancedSearchWindow::AdvancedSearchWindow(Session& session)
-    : session(session), started_searching(), result_list() {}
+dnd::AdvancedSearchWindow::AdvancedSearchWindow(Session& session) : session(session), result_list() {}
 
 void dnd::AdvancedSearchWindow::render() {
     DND_MEASURE_FUNCTION();
@@ -126,11 +125,9 @@ void dnd::AdvancedSearchWindow::render() {
     ImGui::Spacing();
     if (ImGui::Button("Search", ImVec2(first_column_button_width, 0))) {
         session.start_advanced_search();
-        started_searching = true;
     }
-    if (started_searching && !session.is_advanced_searching()) {
+    if (session.advanced_search_results_available()) {
         result_list = session.get_advanced_search_result_strings();
-        started_searching = false;
     }
     ImGui::SameLine();
     if (ImGui::Button("Clear Results", ImVec2(first_column_button_width, 0))) {

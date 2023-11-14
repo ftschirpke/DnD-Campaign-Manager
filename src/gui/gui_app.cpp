@@ -36,7 +36,6 @@ void dnd::GuiApp::render() {
     if (show_demo_window) {
         ImGui::ShowDemoWindow(&show_demo_window);
     }
-    session.update();
 
     render_overview_window();
     content_configuration_window.render();
@@ -44,10 +43,9 @@ void dnd::GuiApp::render() {
     if (!session.get_unknown_error_messages().empty()) {
         render_parsing_error_popup();
     }
-
     error_messages_window.render();
 
-    if (session.get_status() == SessionStatus::READY) {
+    if (session.parsing_result_available()) {
         fuzzy_search_window.render();
         advanced_search_window.render();
         content_window.render();

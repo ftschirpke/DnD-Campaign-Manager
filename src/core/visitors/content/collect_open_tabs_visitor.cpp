@@ -2,6 +2,8 @@
 
 #include "collect_open_tabs_visitor.hpp"
 
+#include <utility>
+
 #include <nlohmann/json.hpp>
 
 #include <core/models/character/character.hpp>
@@ -14,6 +16,8 @@
 #include <core/models/item/item.hpp>
 #include <core/models/spell/spell.hpp>
 #include <core/visitors/content/content_visitor.hpp>
+
+nlohmann::json dnd::CollectOpenTabsVisitor::get_open_tabs() { return std::move(open_tabs_json); }
 
 void dnd::CollectOpenTabsVisitor::visit(const Character& character) {
     if (!open_tabs_json.contains("character")) {
