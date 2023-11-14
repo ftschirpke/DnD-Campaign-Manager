@@ -10,7 +10,7 @@ bool dnd::StringFilter::is_set() const noexcept { return type != StringFilterTyp
 
 dnd::StringFilterType dnd::StringFilter::get_type() const noexcept { return type; }
 
-std::string& dnd::StringFilter::get_value() noexcept { return value; }
+std::string& dnd::StringFilter::get_value_mutable() noexcept { return value; }
 
 const std::string& dnd::StringFilter::get_value() const noexcept { return value; }
 
