@@ -15,13 +15,7 @@ namespace dnd {
 class CliApp {
 public:
     CliApp();
-    /**
-     * @brief Initializes the application.
-     */
     void initialize(const std::filesystem::path& content_directory, const std::string& campaign_name, bool testrun);
-    /**
-     * @brief Starts the application.
-     */
     void start();
 private:
     void search_content_by_name();
