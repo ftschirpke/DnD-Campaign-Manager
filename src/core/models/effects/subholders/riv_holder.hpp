@@ -31,15 +31,7 @@ public:
     const std::vector<std::string>& get_damage_vulnerabilities() const noexcept;
     const std::vector<std::string>& get_condition_immunities() const noexcept;
 
-    /**
-     * @brief Returns whether the RIVHolder is empty
-     * @return "true" if the RIVHolder is empty, "false" otherwise
-     */
     bool empty() const;
-    /**
-     * @brief Merges the given RIVHolder into this one
-     * @param other the RIVHolder to merge into this one
-     */
     void merge(RIVHolder&& other);
 private:
     RIVHolder(

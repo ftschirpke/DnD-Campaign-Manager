@@ -20,20 +20,9 @@
 
 namespace dnd {
 
-/**
- * @brief A visitor for creating a list of content pieces (name and type for each)
- */
 class ListContentVisitor : public ContentVisitor {
 public:
-    /**
-     * @brief Reserve space for the list
-     * @param size the size to reserve
-     */
     void reserve(size_t size);
-    /**
-     * @brief Return a vector of list-suitable strings
-     * @return the vector of strings
-     */
     std::vector<std::string> get_list();
     virtual void visit(const Character& character) override;
     virtual void visit(const CharacterClass& character_class) override;

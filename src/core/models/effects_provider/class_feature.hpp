@@ -47,20 +47,12 @@ public:
      * @param visitor reference to the visitor
      */
     virtual void accept(ContentVisitor& visitor) const override;
-protected:
-    /**
-     * @brief Constructs a feature
-     * @param name the name of the feature
-     * @param description the description of the feature
-     * @param source_path the path to the source file of the feature
-     * @param main_effects the main effects of the feature
-     * @param higher_level_effects the higher level effects of the feature
-     */
+private:
     ClassFeature(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path, int level,
         Effects&& main_effects, std::map<int, Effects>&& higher_level_parts = {}
     ) noexcept;
-private:
+
     int level;
     std::map<int, Effects> higher_level_effects;
 };

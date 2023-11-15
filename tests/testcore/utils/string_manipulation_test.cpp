@@ -167,8 +167,8 @@ TEST_CASE("dnd::snake_case_to_spaced_words", tags) {
     SECTION("Single word snake_case") {
         std::string str1 = "hello_world";
         std::string str2 = "testing_snake_";
-        dnd::snake_case_to_spaced_words(str1);
-        dnd::snake_case_to_spaced_words(str2);
+        dnd::snake_case_to_capitalized_spaced_words(str1);
+        dnd::snake_case_to_capitalized_spaced_words(str2);
         REQUIRE(str1 == "Hello World");
         REQUIRE(str2 == "Testing Snake ");
     }
@@ -176,15 +176,15 @@ TEST_CASE("dnd::snake_case_to_spaced_words", tags) {
     SECTION("Multiple word snake_case") {
         std::string str1 = "another_example_string";
         std::string str2 = "_some_long_snake_case_phrase";
-        dnd::snake_case_to_spaced_words(str1);
-        dnd::snake_case_to_spaced_words(str2);
+        dnd::snake_case_to_capitalized_spaced_words(str1);
+        dnd::snake_case_to_capitalized_spaced_words(str2);
         REQUIRE(str1 == "Another Example String");
         REQUIRE(str2 == " Some Long Snake Case Phrase");
     }
 
     SECTION("Empty string") {
         std::string str = "";
-        dnd::snake_case_to_spaced_words(str);
+        dnd::snake_case_to_capitalized_spaced_words(str);
         REQUIRE(str == "");
     }
 }

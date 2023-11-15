@@ -16,10 +16,6 @@ class ConditionData : public ValidationSubdata {
 public:
     ConditionData(const ValidationData* parent) noexcept;
     std::strong_ordering operator<=>(const ConditionData&) const noexcept = default;
-    /**
-     * @brief Validates the data
-     * @return the errors that occured during validation
-     */
     virtual Errors validate() const override;
 
     std::string condition_str;

@@ -158,7 +158,7 @@ std::set<std::string> dnd::Choice::possible_values(const dnd::Content& content) 
             }
             break;
         case ChoiceType::SKILL:
-            for (const auto& skill : get_skills()) {
+            for (const auto& skill : get_all_skills()) {
                 possible_values.emplace(skill);
             };
             break;

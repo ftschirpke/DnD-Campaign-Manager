@@ -37,10 +37,6 @@ public:
     const std::string& get_duration() const noexcept;
     const std::set<std::string>& get_classes() const noexcept;
 
-    /**
-     * @brief Accepts a visitor
-     * @param visitor reference to the visitor
-     */
     virtual void accept(ContentVisitor& visitor) const override final;
 private:
     Spell(

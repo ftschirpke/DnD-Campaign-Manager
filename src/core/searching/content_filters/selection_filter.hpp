@@ -15,63 +15,19 @@ enum class SelectionFilterType {
     NONE,
 };
 
-/**
- * @brief A class representing a filter for selections.
- * @tparam T the type of the selection
- */
 template <typename T>
 class SelectionFilter {
 public:
     SelectionFilter() noexcept;
-
-    /**
-     * @brief Determines if the filter is set.
-     * @return "true" if the filter is set, "false" otherwise
-     * @details A filter is set if the type is not "NONE".
-     */
     bool is_set() const noexcept;
-    /**
-     * @brief Get the type of the filter.
-     * @return the type of the filter
-     */
     SelectionFilterType get_type() const noexcept;
-    /**
-     * @brief Set the type of the filter.
-     * @param new_type the type of the filter
-     */
+    const std::vector<T>& get_values() const noexcept;
     void set_type(SelectionFilterType new_type) noexcept;
-    /**
-     * @brief Set the values of the filter.
-     * @param values the values of the filter
-     */
     void set_values(const std::vector<T>& values) noexcept;
-    /**
-     * @brief Set the values of the filter.
-     * @param values the values of the filter
-     */
     void set_values(std::vector<T>&& values) noexcept;
-    /**
-     * @brief Set the filter.
-     * @param new_type the type of the filter
-     * @param values the values of the filter
-     */
     void set(SelectionFilterType new_type, const std::vector<T>& values) noexcept;
-    /**
-     * @brief Set the filter.
-     * @param new_type the type of the filter
-     * @param new_values the values of the filter
-     */
     void set(SelectionFilterType new_type, std::vector<T>&& new_values) noexcept;
-    /**
-     * @brief Clears the filter.
-     */
     void clear() noexcept;
-
-    /**
-     * @brief Determines if a selection matches the filter.
-     * @param selection the selection to check
-     * @return "true" if the selection matches the filter, "false" otherwise
-     */
     bool matches(const T& selection) const noexcept;
 private:
     SelectionFilterType type;
@@ -92,6 +48,11 @@ bool dnd::SelectionFilter<T>::is_set() const noexcept {
 template <typename T>
 dnd::SelectionFilterType dnd::SelectionFilter<T>::get_type() const noexcept {
     return type;
+}
+
+template <typename T>
+const std::vector<T>& dnd::SelectionFilter<T>::get_values() const noexcept {
+    return values;
 }
 
 template <typename T>

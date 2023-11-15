@@ -31,41 +31,22 @@ using ContentFilterVariant = std::variant<
  */
 class AdvancedContentSearch {
 public:
-    /**
-     * @brief Initialize the advanced search with the content that should be searched
-     * @param content the content to search
-     */
     AdvancedContentSearch(const Content& content) noexcept;
-    /**
-     * @brief Set the search filter
-     * @param new_filter the filter to set
-     */
     template <typename T>
     void set_filter(T&& new_filter);
-    /**
-     * @brief Get the search filter
-     * @return the search filter
-     */
     ContentFilterVariant& get_filter();
-    /**
-     * @brief Get the search results
-     * @return the search results
-     */
     const std::vector<const ContentPiece*>& get_search_results() const noexcept;
 
-    /**
-     * @brief Start searching the content for matches to the current set filter.
-     */
     void start_searching();
     /**
-     * @brief Determines if the search is currently searching and updates the search results if the search just finished
-     * @return "true" if the search is currently searching, "false" otherwise
+     * @brief Check if the search results are available and store them if they are
+     * @return true if the search results are available, false otherwise
+     * @throws std::exception if any exception is thrown by the search thread
      */
-    bool is_searching();
+    bool search_results_available();
 private:
     const Content& content;
     ContentFilterVariant filter;
-
     bool searching;
     std::future<std::vector<const ContentPiece*>> search_future;
     std::vector<const ContentPiece*> search_results;

@@ -48,10 +48,6 @@ public:
     const CharacterBasis& get_basis() const noexcept;
     const Progression& get_progression() const noexcept;
 
-    /**
-     * @brief Accepts a visitor
-     * @param visitor reference to the visitor
-     */
     virtual void accept(ContentVisitor& visitor) const override final;
 private:
     Character(

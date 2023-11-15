@@ -20,7 +20,7 @@
 #include <core/validation/character/decision/decision_data.hpp>
 
 dnd::CharacterParser::CharacterParser(const std::filesystem::path& filepath) noexcept
-    : FileParser(filepath), feature_parser(filepath) {}
+    : FileParser(filepath, false), feature_parser(filepath) {}
 
 dnd::Errors dnd::CharacterParser::parse() {
     Errors errors;
@@ -30,25 +30,25 @@ dnd::Errors dnd::CharacterParser::parse() {
         );
     }
 
-    errors += parse_required_attribute(json, "name", data.name);
-    errors += parse_required_attribute(json, "description", data.description);
+    errors += parse_required_attribute_into(json, "name", data.name);
+    errors += parse_required_attribute_into(json, "description", data.description);
     data.source_path = get_filepath();
 
-    errors += parse_required_attribute(json, "base_ability_scores", data.base_ability_scores_data.ability_scores);
-    errors += parse_required_attribute(json, "race", data.character_basis_data.race_name);
-    errors += parse_required_attribute(json, "class", data.character_basis_data.class_name);
-    errors += parse_optional_attribute(json, "subrace", data.character_basis_data.subrace_name);
-    errors += parse_optional_attribute(json, "subclass", data.character_basis_data.subclass_name);
+    errors += parse_required_attribute_into(json, "base_ability_scores", data.base_ability_scores_data.ability_scores);
+    errors += parse_required_attribute_into(json, "race", data.character_basis_data.race_name);
+    errors += parse_required_attribute_into(json, "class", data.character_basis_data.class_name);
+    errors += parse_optional_attribute_into(json, "subrace", data.character_basis_data.subrace_name);
+    errors += parse_optional_attribute_into(json, "subclass", data.character_basis_data.subclass_name);
 
     bool has_level = json.contains("level");
     bool has_xp = json.contains("xp");
     if (!has_level && !has_xp) {
         errors.add_parsing_error(ParsingErrorCode::MISSING_ATTRIBUTE, get_filepath(), "Character has no level or xp.");
     } else {
-        errors += parse_optional_attribute(json, "level", data.progression_data.level);
-        errors += parse_optional_attribute(json, "xp", data.progression_data.xp);
+        errors += parse_optional_attribute_into(json, "level", data.progression_data.level);
+        errors += parse_optional_attribute_into(json, "xp", data.progression_data.xp);
     }
-    errors += parse_required_attribute(json, "hit_dice_rolls", data.progression_data.hit_dice_rolls);
+    errors += parse_required_attribute_into(json, "hit_dice_rolls", data.progression_data.hit_dice_rolls);
 
     if (json.contains("decisions")) {
         if (!json["decisions"].is_object()) {
@@ -73,7 +73,7 @@ dnd::Errors dnd::CharacterParser::parse() {
     }
 
     if (json.contains("features")) {
-        errors += feature_parser.parse_multiple(std::move(json["features"]), data.features_data, &data);
+        errors += feature_parser.parse_multiple_into(std::move(json["features"]), data.features_data, &data);
     }
 
     return errors;
@@ -124,7 +124,7 @@ dnd::Errors dnd::CharacterParser::parse_decision(
     }
 
     for (auto& [key, _] : decision_json.items()) {
-        errors += parse_optional_attribute(decision_json, key.c_str(), decision_data.selections[key]);
+        errors += parse_optional_attribute_into(decision_json, key.c_str(), decision_data.selections[key]);
     }
 
     return errors;

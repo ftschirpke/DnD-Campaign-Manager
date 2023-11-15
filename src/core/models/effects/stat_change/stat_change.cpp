@@ -58,6 +58,4 @@ dnd::StatChange::StatChange(
     }
 }
 
-const std::string& dnd::StatChange::get_affected_attribute() const noexcept { return affected_attribute; }
-
 dnd::StatChangeTime dnd::StatChange::get_time() const noexcept { return time; }

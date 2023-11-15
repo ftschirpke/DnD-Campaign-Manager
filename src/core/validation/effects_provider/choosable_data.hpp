@@ -16,15 +16,7 @@ class ChoosableData : public FeatureData {
 public:
     ChoosableData() noexcept;
     std::strong_ordering operator<=>(const ChoosableData&) const noexcept = default;
-    /**
-     * @brief Packs the data into a ValidationData unique pointer
-     * @return the packed data
-     */
     virtual std::unique_ptr<ValidationData> pack() const override;
-    /**
-     * @brief Validates the data
-     * @return the errors that occured during validation
-     */
     virtual Errors validate() const override;
 
     std::string type;

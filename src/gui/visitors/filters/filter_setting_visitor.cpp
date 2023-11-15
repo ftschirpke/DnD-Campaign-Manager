@@ -113,7 +113,7 @@ static void visit_string_filter(const char* name, dnd::StringFilter& filter) {
     }
     ImGui::TableSetColumnIndex(3);
     std::string value_label = fmt::format("##{} value", name);
-    ImGui::InputText(value_label.c_str(), &filter.get_value());
+    ImGui::InputText(value_label.c_str(), &filter.get_value_mutable());
     ImGui::TableSetColumnIndex(4);
     std::string remove_label = fmt::format("Remove##{}", name);
     if (ImGui::Button(remove_label.c_str())) {
@@ -293,6 +293,7 @@ static void content_piece_filter_menu_items(dnd::ContentPieceFilter& content_pie
 void dnd::FilterSettingVisitor::operator()(ContentPieceFilter& content_piece_filter) {
     DND_MEASURE_FUNCTION();
     ImGui::TableSetColumnIndex(1);
+    visit_content_piece_filter(content_piece_filter);
 
     ImGui::TableSetColumnIndex(1);
     if (!content_piece_filter.has_all_filters() && ImGui::Button("Add Value Filter")) {

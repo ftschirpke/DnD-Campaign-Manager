@@ -9,7 +9,7 @@
 #include <core/content.hpp>
 #include <core/session.hpp>
 #include <core/utils/string_manipulation.hpp>
-#include <gui/windows/content_selection.hpp>
+#include <gui/windows/content_configuration_window.hpp>
 #include <gui/windows/content_window.hpp>
 #include <gui/windows/error_messages_window.hpp>
 #include <gui/windows/fuzzy_search_window.hpp>
@@ -19,14 +19,14 @@ static const char* const imgui_ini_filename = "imgui.ini";
 static const ImGuiWindowFlags error_popup_options = ImGuiWindowFlags_AlwaysAutoResize;
 
 dnd::GuiApp::GuiApp()
-    : show_demo_window(false), session(), content_selection(session), content_window(session),
+    : show_demo_window(false), session(), content_configuration_window(session), content_window(session),
       error_messages_window(session), fuzzy_search_window(session), advanced_search_window(session) {
     ImGui::GetIO().IniFilename = imgui_ini_filename;
 }
 
 void dnd::GuiApp::initialize() {
     session.retrieve_last_session_values();
-    content_selection.initialize();
+    content_configuration_window.initialize();
 }
 
 void dnd::GuiApp::render() {
@@ -36,18 +36,16 @@ void dnd::GuiApp::render() {
     if (show_demo_window) {
         ImGui::ShowDemoWindow(&show_demo_window);
     }
-    session.update();
 
     render_overview_window();
-    content_selection.render();
+    content_configuration_window.render();
 
     if (!session.get_unknown_error_messages().empty()) {
         render_parsing_error_popup();
     }
-
     error_messages_window.render();
 
-    if (session.get_status() == SessionStatus::READY) {
+    if (session.parsing_result_available()) {
         fuzzy_search_window.render();
         advanced_search_window.render();
         content_window.render();
@@ -93,7 +91,7 @@ void dnd::GuiApp::render_overview_window() {
                                                                                   : "Change content directory";
 
     if (ImGui::Button(content_dir_button_text)) {
-        content_selection.select_content_directory();
+        content_configuration_window.open_content_directory_selection();
     }
 
     if (!session.get_content_directory().empty()) {
@@ -104,7 +102,7 @@ void dnd::GuiApp::render_overview_window() {
         const char* campaign_button_text = session.get_campaign_name().empty() ? "Select campaign" : "Change campaign";
 
         if (ImGui::Button(campaign_button_text)) {
-            content_selection.select_campaign();
+            content_configuration_window.open_campaign_selection();
         }
     }
 
@@ -145,12 +143,12 @@ void dnd::GuiApp::render_parsing_error_popup() {
         bool close = false;
         if (ImGui::Button("Select other directory")) {
             close = true;
-            content_selection.select_content_directory();
+            content_configuration_window.open_content_directory_selection();
         }
         ImGui::SameLine();
         if (ImGui::Button("Select other campaign")) {
             close = true;
-            content_selection.select_campaign();
+            content_configuration_window.open_campaign_selection();
         }
         ImGui::SameLine();
         if (ImGui::Button("Retry")) {

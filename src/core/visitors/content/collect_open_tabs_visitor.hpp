@@ -18,15 +18,8 @@
 
 namespace dnd {
 
-/**
- * @brief A visitor that writes the names of all open tabs to a json object grouped by type.
- */
 class CollectOpenTabsVisitor : public ContentVisitor {
 public:
-    /**
-     * @brief Return a json object of open tabs
-     * @return the json object
-     */
     nlohmann::json get_open_tabs();
     virtual void visit(const Character& character) override;
     virtual void visit(const CharacterClass& character_class) override;
@@ -40,8 +33,6 @@ public:
 private:
     nlohmann::json open_tabs_json;
 };
-
-inline nlohmann::json CollectOpenTabsVisitor::get_open_tabs() { return std::move(open_tabs_json); }
 
 } // namespace dnd
 

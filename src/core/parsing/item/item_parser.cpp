@@ -17,7 +17,7 @@
 #include <core/models/item/item.hpp>
 #include <core/validation/item/item_data.hpp>
 
-dnd::ItemParser::ItemParser(const std::filesystem::path& file_path) : FileParser(file_path) {}
+dnd::ItemParser::ItemParser(const std::filesystem::path& file_path) : FileParser(file_path, true) {}
 
 dnd::Errors dnd::ItemParser::parse() {
     Errors errors;
@@ -40,9 +40,9 @@ dnd::Errors dnd::ItemParser::parse() {
         ItemData data;
         data.name = item_name;
         data.source_path = get_filepath();
-        item_errors += parse_required_attribute(item_json, "description", data.description);
-        item_errors += parse_required_attribute(item_json, "requires_attunement", data.requires_attunement);
-        item_errors += parse_optional_attribute(item_json, "cosmetic_description", data.cosmetic_description);
+        item_errors += parse_required_attribute_into(item_json, "description", data.description);
+        item_errors += parse_required_attribute_into(item_json, "requires_attunement", data.requires_attunement);
+        item_errors += parse_optional_attribute_into(item_json, "cosmetic_description", data.cosmetic_description);
         if (item_errors.ok()) {
             item_data.emplace_back(std::move(data));
         }
@@ -51,8 +51,6 @@ dnd::Errors dnd::ItemParser::parse() {
     items_in_file = item_data.size();
     return errors;
 }
-
-bool dnd::ItemParser::continue_after_errors() const noexcept { return true; }
 
 dnd::Errors dnd::ItemParser::validate(const dnd::Content& content) const {
     Errors errors;

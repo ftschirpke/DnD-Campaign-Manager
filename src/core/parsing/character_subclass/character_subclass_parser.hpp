@@ -17,21 +17,8 @@ namespace dnd {
 class CharacterSubclassParser : public FileParser {
 public:
     explicit CharacterSubclassParser(const std::filesystem::path& filepath) noexcept;
-    /**
-     * @brief Parses the json into subclass data
-     * @return the errors that occured while parsing
-     */
     virtual Errors parse() override;
-    /**
-     * @brief Validates the parsed subclass data using the given content
-     * @param content the content to validate against
-     * @return the errors that occured while validating
-     */
     virtual Errors validate(const Content& content) const override;
-    /**
-     * @brief Saves the parsed subclass data into the given content
-     * @param content the content to save the parsed subclass into
-     */
     virtual void save_result(Content& content) override;
 private:
     ClassFeatureParser class_feature_parser;

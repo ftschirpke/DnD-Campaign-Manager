@@ -47,10 +47,6 @@ public:
     const Dice& get_hit_dice() const noexcept;
     const ImportantLevels& get_important_levels() const noexcept;
 
-    /**
-     * @brief Accepts a visitor
-     * @param visitor reference to the visitor
-     */
     virtual void accept(ContentVisitor& visitor) const override final;
 private:
     CharacterClass(

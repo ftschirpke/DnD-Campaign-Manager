@@ -17,58 +17,18 @@ enum class NumberFilterType {
     NONE,
 };
 
-/**
- * @brief A class representing a filter for numbers.
- * @tparam T the type of the number
- */
 template <typename T>
 requires std::is_arithmetic_v<T>
 class NumberFilter {
 public:
     NumberFilter() noexcept;
-
-    /**
-     * @brief Determines if the filter is set.
-     * @return "true" if the filter is set, "false" otherwise
-     * @details A filter is set if the type is not "NONE".
-     */
     bool is_set() const noexcept;
-    /**
-     * @brief Get the type of the filter.
-     * @return the type of the filter
-     */
     NumberFilterType get_type() const noexcept;
-    /**
-     * @brief Get the value of the filter.
-     * @return the value of the filter
-     */
     T get_value() const noexcept;
-    /**
-     * @brief Set the type of the filter.
-     * @param new_type the type of the filter
-     */
     void set_type(NumberFilterType new_type) noexcept;
-    /**
-     * @brief Set the value of the filter.
-     * @param new_value the value of the filter
-     */
     void set_value(T new_value) noexcept;
-    /**
-     * @brief Set the filter.
-     * @param new_type the type of the filter
-     * @param new_value the value of the filter
-     */
     void set(NumberFilterType type, T new_value) noexcept;
-    /**
-     * @brief Clears the filter.
-     */
     void clear() noexcept;
-
-    /**
-     * @brief Determines if a boolean matches the filter.
-     * @param boolean the boolean to check
-     * @return "true" if the boolean matches the filter, "false" otherwise
-     */
     bool matches(T number) const noexcept;
 private:
     NumberFilterType type;

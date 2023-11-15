@@ -17,26 +17,20 @@ namespace dnd {
 class EffectsParser : public Parser {
 public:
     explicit EffectsParser(const std::filesystem::path& filepath) noexcept;
-    /**
-     * @brief Parses the data from the json into the data object
-     * @param json the json to parse
-     * @param data the data object to parse into
-     * @return the errors that occured during parsing
-     */
-    Errors parse(nlohmann::ordered_json&& json, EffectsData& data) const;
+    Errors parse_into(nlohmann::ordered_json&& json, EffectsData& data) const;
 private:
-    Errors parse_activation_conditions(
+    Errors parse_activation_conditions_into(
         nlohmann::ordered_json& json, std::vector<ConditionData>& data, const ValidationData* parent
     ) const;
-    Errors parse_choices(nlohmann::ordered_json& json, std::vector<ChoiceData>& data, const ValidationData* parent)
+    Errors parse_choices_into(nlohmann::ordered_json& json, std::vector<ChoiceData>& data, const ValidationData* parent)
         const;
-    Errors parse_stat_changes(
+    Errors parse_stat_changes_into(
         nlohmann::ordered_json& json, std::vector<StatChangeData>& data, const ValidationData* parent
     ) const;
-    Errors parse_action_holder(nlohmann::ordered_json& json, ActionHolderData& data) const;
-    Errors parse_extra_spells_holder(nlohmann::ordered_json& json, ExtraSpellsHolderData& data) const;
-    Errors parse_proficiency_holder(nlohmann::ordered_json& json, ProficiencyHolderData& data) const;
-    Errors parse_riv_holder(nlohmann::ordered_json& json, RIVHolderData& data) const;
+    Errors parse_action_holder_into(nlohmann::ordered_json& json, ActionHolderData& data) const;
+    Errors parse_extra_spells_holder_into(nlohmann::ordered_json& json, ExtraSpellsHolderData& data) const;
+    Errors parse_proficiency_holder_into(nlohmann::ordered_json& json, ProficiencyHolderData& data) const;
+    Errors parse_riv_holder_into(nlohmann::ordered_json& json, RIVHolderData& data) const;
 };
 
 } // namespace dnd

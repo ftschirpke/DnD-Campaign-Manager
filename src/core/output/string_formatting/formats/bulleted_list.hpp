@@ -13,17 +13,9 @@ namespace dnd {
 class BulletedList : public Format {
 public:
     explicit BulletedList() noexcept;
-    /**
-     * @brief Accept a format visitor
-     * @param visitor a pointer to the format visitor
-     */
-    virtual void accept(const FormatVisitor& visitor) const override;
-    /**
-     * @brief Add an item to the list
-     * @param item the item to add
-     */
     void add_item(std::string_view item);
     std::vector<std::string_view> get_items() const noexcept;
+    virtual void accept(const FormatVisitor& visitor) const override;
 private:
     std::vector<std::string_view> items;
 };

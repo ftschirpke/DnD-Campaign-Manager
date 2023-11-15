@@ -18,13 +18,9 @@ public:
      * @param empty_line_after whether to add an empty line after the paragraph
      */
     explicit Paragraph(std::string_view text, bool empty_line_after = false) noexcept;
-    /**
-     * @brief Accept a format visitor
-     * @param visitor a pointer to the format visitor
-     */
-    virtual void accept(const FormatVisitor& visitor) const override;
     std::string_view get_text() const noexcept;
     bool get_empty_line_after() const noexcept;
+    virtual void accept(const FormatVisitor& visitor) const override;
 private:
     std::string_view text;
     bool empty_line_after;

@@ -17,9 +17,6 @@ namespace dnd {
 class Content;
 class ContentVisitor;
 
-/**
- * @brief A class representing a character's race.
- */
 class CharacterRace : public ContentPiece {
 public:
     /**
@@ -42,10 +39,6 @@ public:
     const std::vector<Feature>& get_features() const noexcept;
     bool has_subraces() const noexcept;
 
-    /**
-     * @brief Accepts a visitor
-     * @param visitor reference to the visitor
-     */
     virtual void accept(ContentVisitor& visitor) const override final;
 private:
     CharacterRace(

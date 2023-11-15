@@ -47,20 +47,8 @@ public:
     const std::string& get_type() const noexcept;
     const std::vector<std::unique_ptr<Condition>>& get_prerequisites() const noexcept;
 
-    /**
-     * @brief Accepts a visitor
-     * @param visitor reference to the visitor
-     */
     virtual void accept(ContentVisitor& visitor) const override final;
 private:
-    /**
-     * @brief Constructs a choosable feature
-     * @param name the name of the feature
-     * @param source_path the path to the source file of the feature
-     * @param type the type of the choosable
-     * @param prerequisites the prerequisites needed before picking the feature is possible
-     * @param main_effects the main effects of the feature
-     */
     Choosable(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& type,
         std::vector<std::unique_ptr<Condition>>&& prerequisites, Effects&& main_effects

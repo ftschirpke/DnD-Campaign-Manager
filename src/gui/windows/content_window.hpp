@@ -15,9 +15,6 @@ namespace dnd {
 class ContentWindow {
 public:
     ContentWindow(Session& session);
-    /**
-     * @brief Renders the window.
-     */
     void render();
 private:
     Session& session;

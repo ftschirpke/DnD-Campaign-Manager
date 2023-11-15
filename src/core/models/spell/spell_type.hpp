@@ -10,9 +10,6 @@
 
 namespace dnd {
 
-/**
- * @brief An enum for the possible spell levels
- */
 enum class SpellLevel {
     CANTRIP = 0,
     LEVEL1 = 1,
@@ -26,9 +23,6 @@ enum class SpellLevel {
     LEVEL9 = 9,
 };
 
-/**
- * @brief An enum for the types of magic or so called magic schools
- */
 enum class MagicSchool {
     // abjuration - wards and defensive spells
     ABJURATION,
@@ -82,10 +76,6 @@ MagicSchool magic_school_from_name(const std::string& magic_school_name);
  */
 MagicSchool magic_school_from_name(std::string_view magic_school_name);
 
-/**
- * @brief A class representing the type of a spell (its spell level, magic school, and whether or not it can be
- * cast as a ritual)
- */
 class SpellType {
 public:
     static SpellType create(SpellTypeData&& type_data);
@@ -101,10 +91,6 @@ public:
      * @return the spell level as an integer
      */
     int get_spell_level_int() const;
-    /**
-     * @brief Returns the name of the magic school
-     * @return the name of the magic school
-     */
     std::string_view get_magic_school_name() const;
 
     /**

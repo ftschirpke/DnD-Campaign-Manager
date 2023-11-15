@@ -27,13 +27,13 @@ protected:
     /**
      * @brief Parses an optional attribute from a json and adding it into the output variable if it exists
      * @tparam T the type the attribute value is supposed to be
-     * @param json the json the attribute is supposed to be in
+     * @param json the json the attribute may be in
      * @param attribute_name the name of the attribute in the json
      * @param out the output to write the attribute value to
      * @return the errors that occured while parsing
      */
     template <typename T>
-    Errors parse_optional_attribute(const nlohmann::json& json, const char* attribute_name, T& out) const;
+    Errors parse_optional_attribute_into(const nlohmann::json& json, const char* attribute_name, T& out) const;
     /**
      * @brief Parses a required attribute from a json and adding it into the output variable
      * @tparam T the type the attribute value is supposed to be
@@ -43,9 +43,9 @@ protected:
      * @return the errors that occured while parsing
      */
     template <typename T>
-    Errors parse_required_attribute(const nlohmann::json& json, const char* attribute_name, T& out) const;
+    Errors parse_required_attribute_into(const nlohmann::json& json, const char* attribute_name, T& out) const;
 private:
-    std::filesystem::path filepath;
+    const std::filesystem::path& filepath;
 };
 
 template <typename T>
@@ -54,7 +54,7 @@ inline const char* type_name() {
 }
 
 template <typename T>
-Errors Parser::parse_optional_attribute(const nlohmann::json& json, const char* attribute_name, T& out) const {
+Errors Parser::parse_optional_attribute_into(const nlohmann::json& json, const char* attribute_name, T& out) const {
     assert(json.is_object());
     Errors errors;
     if (!json.contains(attribute_name)) {
@@ -66,14 +66,14 @@ Errors Parser::parse_optional_attribute(const nlohmann::json& json, const char* 
         DND_UNUSED(e);
         errors.add_parsing_error(
             ParsingErrorCode::INVALID_ATTRIBUTE_TYPE, filepath,
-            fmt::format("The attribute '{}' is of the wrong type, it should be a {}", attribute_name, type_name<T>())
+            fmt::format("The attribute '{}' is of the wrong type, it should be {}", attribute_name, type_name<T>())
         );
     }
     return errors;
 }
 
 template <typename T>
-Errors Parser::parse_required_attribute(const nlohmann::json& json, const char* attribute_name, T& out) const {
+Errors Parser::parse_required_attribute_into(const nlohmann::json& json, const char* attribute_name, T& out) const {
     assert(json.is_object());
     Errors errors;
     if (!json.contains(attribute_name)) {

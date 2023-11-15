@@ -10,10 +10,6 @@ namespace dnd {
 class LatexObject {
 public:
     virtual ~LatexObject() = default;
-    /**
-     * @brief Creates the LaTeX string for this object
-     * @return the LaTeX string
-     */
     virtual std::string str() const = 0;
 };
 

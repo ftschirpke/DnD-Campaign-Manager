@@ -16,21 +16,8 @@ class ProficiencyHolderData : public ValidationSubdata {
 public:
     ProficiencyHolderData(const ValidationData* parent) noexcept;
     std::strong_ordering operator<=>(const ProficiencyHolderData&) const noexcept = default;
-    /**
-     * @brief Validates the data
-     * @return the errors that occured during validation
-     */
     virtual Errors validate() const override;
-    /**
-     * @brief Validates the relations of the data to other content pieces with regard to a given content holder
-     * @param content the content holder to validate the relations against
-     * @return the errors that occured during validation
-     */
     virtual Errors validate_relations(const Content& content) const override;
-    /**
-     * @brief Checks if the proficiency holder is empty
-     * @return "true" if the proficiency holder is empty, "false" otherwise
-     */
     bool empty() const noexcept;
 
     // the types of armor the character is proficient with

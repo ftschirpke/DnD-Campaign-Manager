@@ -16,7 +16,7 @@
 #include <core/validation/effects_provider/choosable_data.hpp>
 
 dnd::ChoosableGroupParser::ChoosableGroupParser(const std::filesystem::path& filepath) noexcept
-    : FileParser(filepath), choosable_parser(filepath) {}
+    : FileParser(filepath, true), choosable_parser(filepath) {}
 
 dnd::Errors dnd::ChoosableGroupParser::parse() {
     Errors errors;
@@ -28,7 +28,7 @@ dnd::Errors dnd::ChoosableGroupParser::parse() {
     }
 
     group_name = get_filepath().stem().string();
-    snake_case_to_spaced_words(group_name);
+    snake_case_to_capitalized_spaced_words(group_name);
 
     data.reserve(json.size());
     for (auto& [feature_name, feature_json] : json.items()) {
@@ -42,7 +42,7 @@ dnd::Errors dnd::ChoosableGroupParser::parse() {
         Errors feature_errors;
         ChoosableData& feature_data = data.emplace_back();
         feature_data.name = feature_name;
-        feature_errors += choosable_parser.parse(std::move(feature_json), feature_data);
+        feature_errors += choosable_parser.parse_into(std::move(feature_json), feature_data);
         if (!feature_errors.ok()) {
             data.pop_back();
         }
@@ -51,8 +51,6 @@ dnd::Errors dnd::ChoosableGroupParser::parse() {
     choosables_in_file = data.size();
     return errors;
 }
-
-bool dnd::ChoosableGroupParser::continue_after_errors() const noexcept { return true; }
 
 dnd::Errors dnd::ChoosableGroupParser::validate(const dnd::Content& content) const {
     Errors errors;
@@ -70,7 +68,7 @@ dnd::Errors dnd::ChoosableGroupParser::validate(const dnd::Content& content) con
 void dnd::ChoosableGroupParser::save_result(dnd::Content& content) {
     for (size_t i = 0; i < data.size(); ++i) {
         if (feature_data_valid[i]) {
-            snake_case_to_spaced_words(data[i].type);
+            snake_case_to_capitalized_spaced_words(data[i].type);
             content.add_choosable(Choosable::create(std::move(data[i]), content));
         }
     }

@@ -23,21 +23,8 @@ template <typename T>
 requires isContentPieceType<T>
 class ReferencingContentLibrary : public ContentLibrary<T> {
 public:
-    /**
-     * @brief Check whether piece of content with given name exists
-     * @param name the name
-     * @return "true" if such a piece of content exists, "false" otherwise
-     */
     bool contains(const std::string& name) const override;
-    /**
-     * @brief Returns whether the content library is empty
-     * @return "true" if the content library is empty, "false" otherwise
-     */
     bool empty() const override;
-    /**
-     * @brief Get the amount of content pieces in the library
-     * @return the amount
-     */
     size_t size() const override;
     /**
      * @brief Get content piece by its index
@@ -53,10 +40,6 @@ public:
      * @throws std::out_of_range if the piece of content does not exist
      */
     const T& get(const std::string& name) const override;
-    /**
-     * @brief Get all pointers
-     * @return map of all pointers
-     */
     const std::unordered_map<std::string, const T*>& get_all() const;
     /**
      * @brief Add a pointer to a content piece to the library
@@ -65,8 +48,8 @@ public:
      */
     bool add(const T& content_piece);
     /**
-     * @brief Get the root of the fuzzy
-     * @return a pointer to the root of the fuzzy
+     * @brief Get the root of the fuzzy search trie
+     * @return a pointer to the root of the fuzzy search trie
      */
     const TrieNode<T>* get_trie_root() const override;
 private:

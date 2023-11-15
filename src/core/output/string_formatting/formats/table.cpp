@@ -9,12 +9,9 @@
 
 dnd::Table::Table() noexcept : num_columns(0), current_row(0), rows({{}}) {}
 
-void dnd::Table::accept(const FormatVisitor& visitor) const { visitor.visit(*this); }
-
 std::vector<std::vector<std::string_view>> dnd::Table::get_rows() const noexcept { return rows; }
 
 size_t dnd::Table::get_num_columns() const noexcept { return num_columns; }
-
 
 void dnd::Table::add_element(std::string_view element) {
     rows[current_row].push_back(element);
@@ -30,3 +27,5 @@ void dnd::Table::next_row() {
     rows.push_back({});
     ++current_row;
 }
+
+void dnd::Table::accept(const FormatVisitor& visitor) const { visitor.visit(*this); }

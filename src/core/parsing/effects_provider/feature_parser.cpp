@@ -18,7 +18,7 @@
 dnd::FeatureParser::FeatureParser(const std::filesystem::path& filepath) noexcept
     : Parser(filepath), effects_parser(filepath) {}
 
-dnd::Errors dnd::FeatureParser::parse(nlohmann::ordered_json&& json, FeatureData& data) const {
+dnd::Errors dnd::FeatureParser::parse_into(nlohmann::ordered_json&& json, FeatureData& data) const {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
@@ -27,15 +27,15 @@ dnd::Errors dnd::FeatureParser::parse(nlohmann::ordered_json&& json, FeatureData
         return errors;
     }
 
-    errors += parse_required_attribute(json, "description", data.description);
+    errors += parse_required_attribute_into(json, "description", data.description);
     json.erase("description");
     data.source_path = get_filepath();
 
-    errors += effects_parser.parse(std::move(json), data.main_effects_data);
+    errors += effects_parser.parse_into(std::move(json), data.main_effects_data);
     return errors;
 }
 
-dnd::Errors dnd::FeatureParser::parse_multiple(
+dnd::Errors dnd::FeatureParser::parse_multiple_into(
     nlohmann::ordered_json&& json, std::vector<FeatureData>& data, const dnd::ValidationData* parent
 ) const {
     Errors errors;
@@ -50,7 +50,7 @@ dnd::Errors dnd::FeatureParser::parse_multiple(
         FeatureData& feature_data = data.emplace_back(parent);
         feature_data.name = feature_name;
         feature_data.source_path = get_filepath();
-        errors += parse(std::move(feature_json), feature_data);
+        errors += parse_into(std::move(feature_json), feature_data);
     }
 
     return errors;

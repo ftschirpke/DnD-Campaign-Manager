@@ -19,14 +19,7 @@ public:
      * @param visitor a pointer to the format visitor
      */
     virtual void accept(const FormatVisitor& visitor) const override;
-    /**
-     * @brief Add an element to the current row
-     * @param element the element to add
-     */
     void add_element(std::string_view element);
-    /**
-     * @brief End the current row and start a new one
-     */
     void next_row();
     std::vector<std::vector<std::string_view>> get_rows() const noexcept;
     size_t get_num_columns() const noexcept;

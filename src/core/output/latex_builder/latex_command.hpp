@@ -14,22 +14,8 @@ class LatexCommand : virtual public LatexObject {
 public:
     LatexCommand(const std::string& name);
     virtual ~LatexCommand() = default;
-    /**
-     * @brief Adds an argument enclosed by braces to the command
-     * @param argument the argument
-     * @return the command
-     */
     LatexCommand* add_brace_argument(const std::string& argument);
-    /**
-     * @brief Adds and argument enclosed by brackets to the command
-     * @param argument the argument
-     * @return the command
-     */
     LatexCommand* add_bracket_argument(const std::string& argument);
-    /**
-     * @brief Creates the LaTeX string for this command
-     * @return the LaTeX string
-     */
     std::string str() const override;
 private:
     const std::string name;

@@ -21,30 +21,9 @@ class ContentPiece;
 class ContentPieceFilter : public ContentFilter {
 public:
     ContentPieceFilter() noexcept;
-
-    /**
-     * @brief Determines whether all filters are set
-     * @return "true" if all filters are set, "false" otherwise
-     */
     bool has_all_filters() const noexcept override;
-
-    /**
-     * @brief Determines whether a content piece matches the filter
-     * @param content the content piece to check
-     * @return "true" if the content piece matches the filter, "false" otherwise
-     */
     bool matches(const ContentPiece& content_piece) const noexcept;
-
-    /**
-     * @brief Get all content pieces that match the filter
-     * @param content the content to search through
-     * @return a vector of pointers to the content pieces that match the filter
-     */
     std::vector<const ContentPiece*> all_matches(const Content& content) const override;
-
-    /**
-     * @brief Clears all filter settings
-     */
     void clear() override;
 
     NameFilterVariant name_filter;

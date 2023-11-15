@@ -66,15 +66,7 @@ public:
      */
     const std::vector<const Spell*>& get_added_to_spell_list() const noexcept;
 
-    /**
-     * @brief Returns whether if the ExtraSpellsHolder is empty
-     * @return "true" if the ExtraSpellsHolder is empty, "false" otherwise
-     */
     bool empty() const;
-    /**
-     * @brief Merges the given ExtraSpellsHolder into this one
-     * @param other the ExtraSpellsHolder to merge into this one
-     */
     void merge(ExtraSpellsHolder&& other);
 private:
     ExtraSpellsHolder(

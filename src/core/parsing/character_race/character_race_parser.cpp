@@ -18,7 +18,7 @@
 #include <core/validation/character_race/character_race_data.hpp>
 
 dnd::CharacterRaceParser::CharacterRaceParser(const std::filesystem::path& filepath) noexcept
-    : FileParser(filepath), feature_parser(filepath), data() {}
+    : FileParser(filepath, false), feature_parser(filepath), data() {}
 
 dnd::Errors dnd::CharacterRaceParser::parse() {
     Errors errors;
@@ -29,14 +29,14 @@ dnd::Errors dnd::CharacterRaceParser::parse() {
         return errors;
     }
 
-    errors += parse_required_attribute(json, "name", data.name);
-    errors += parse_required_attribute(json, "description", data.description);
+    errors += parse_required_attribute_into(json, "name", data.name);
+    errors += parse_required_attribute_into(json, "description", data.description);
     data.source_path = get_filepath();
 
-    errors += parse_required_attribute(json, "has_subraces", data.subraces);
+    errors += parse_required_attribute_into(json, "has_subraces", data.subraces);
 
     if (json.contains("features")) {
-        errors += feature_parser.parse_multiple(std::move(json["features"]), data.features_data, &data);
+        errors += feature_parser.parse_multiple_into(std::move(json["features"]), data.features_data, &data);
     } else {
         errors.add_parsing_error(
             ParsingErrorCode::MISSING_ATTRIBUTE, get_filepath(), "Character race has no features."

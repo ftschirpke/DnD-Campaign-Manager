@@ -17,7 +17,7 @@
 #include <core/errors/validation_error.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/models/source_info.hpp>
-#include <core/parsing/content_parser.hpp>
+#include <core/parsing/content_parsing.hpp>
 #include <core/searching/fuzzy_search/fuzzy_content_search.hpp>
 #include <core/utils/string_manipulation.hpp>
 #include <core/visitors/content/collect_open_tabs_visitor.hpp>
@@ -25,7 +25,7 @@
 
 dnd::Session::Session(const char* last_session_filename)
     : last_session_filename(last_session_filename), status(SessionStatus::CONTENT_DIR_SELECTION), content_directory(),
-      campaign_name(), parsing_future(), parser(), errors(), content(), last_session_open_tabs(), open_content_pieces(),
+      campaign_name(), parsing_future(), errors(), content(), last_session_open_tabs(), open_content_pieces(),
       selected_content_piece(), fuzzy_search(), fuzzy_search_results(), fuzzy_search_result_count(0),
       fuzzy_search_result_strings(), advanced_search(content), unknown_error_messages() {}
 
@@ -297,7 +297,15 @@ void dnd::Session::open_advanced_search_result(size_t index) {
 
 void dnd::Session::start_advanced_search() { advanced_search.start_searching(); }
 
-bool dnd::Session::is_advanced_searching() { return advanced_search.is_searching(); }
+bool dnd::Session::advanced_search_results_available() {
+    try {
+        return advanced_search.search_results_available();
+    } catch (const std::exception& e) {
+        unknown_error_messages.push_back(e.what());
+        status = SessionStatus::UNKNOWN_ERROR;
+        return false;
+    }
+}
 
 void dnd::Session::set_advanced_search_filter(ContentFilterVariant&& filter) {
     advanced_search.set_filter(std::move(filter));
@@ -305,22 +313,28 @@ void dnd::Session::set_advanced_search_filter(ContentFilterVariant&& filter) {
 
 dnd::ContentFilterVariant& dnd::Session::get_advanced_search_filter() { return advanced_search.get_filter(); }
 
-void dnd::Session::update() {
+bool dnd::Session::parsing_result_available() {
     DND_MEASURE_FUNCTION();
-    if (status == SessionStatus::PARSING) {
-        if (parsing_future.wait_for(std::chrono::microseconds(1)) == std::future_status::ready) {
-            finish_parsing();
+    if (status == SessionStatus::PARSING
+        && parsing_future.wait_for(std::chrono::nanoseconds(1)) == std::future_status::ready) {
+        try {
+            parsing_future.get();
+            status = SessionStatus::READY;
+        } catch (const std::exception& e) {
+            unknown_error_messages.push_back(e.what());
+            status = SessionStatus::UNKNOWN_ERROR;
         }
     }
+    return status == SessionStatus::READY;
 }
 
 void dnd::Session::start_parsing() {
-    parsing_future = std::async(std::launch::async, &Session::parse_content, this);
+    parsing_future = std::async(std::launch::async, &Session::parse_content_and_initialize, this);
     status = SessionStatus::PARSING;
 }
 
-void dnd::Session::parse_content() {
-    ParsingResult parsing_result = parser.parse(content_directory, campaign_name);
+void dnd::Session::parse_content_and_initialize() {
+    ParsingResult parsing_result = parse_content(content_directory, campaign_name);
     content = std::move(parsing_result.content);
     errors = std::move(parsing_result.errors);
     fuzzy_search = std::make_unique<FuzzyContentSearch>(content);
@@ -341,16 +355,6 @@ void dnd::Session::parse_content() {
                 source_info.get_source_type_name(), source_info.get_source_name()
             ));
         }
-    }
-}
-
-void dnd::Session::finish_parsing() {
-    try {
-        parsing_future.get();
-        status = SessionStatus::READY;
-    } catch (const std::exception& e) {
-        unknown_error_messages.push_back(e.what());
-        status = SessionStatus::UNKNOWN_ERROR;
     }
 }
 

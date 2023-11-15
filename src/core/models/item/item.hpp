@@ -30,10 +30,6 @@ public:
     const std::string& get_cosmetic_description() const noexcept;
     bool requires_attunement() const noexcept;
 
-    /**
-     * @brief Accepts a visitor
-     * @param visitor reference to the visitor
-     */
     virtual void accept(ContentVisitor& visitor) const override final;
 private:
     Item(

@@ -18,26 +18,9 @@ namespace dnd {
 class CharacterParser : public FileParser {
 public:
     explicit CharacterParser(const std::filesystem::path& filepath) noexcept;
-    /**
-     * @brief Parses the json into character data
-     * @return the errors that occured while parsing
-     */
     virtual Errors parse() override;
-    /**
-     * @brief Sets the context for the character parser
-     * @param content the content to set the context to
-     */
     virtual void set_context(const Content& content) override;
-    /**
-     * @brief Validates the parsed character data using the given content
-     * @param content the content to validate against
-     * @return the errors that occured while validating
-     */
     virtual Errors validate(const Content& content) const override;
-    /**
-     * @brief Saves the parsed character data into the given content
-     * @param content the content to save the parsed character into
-     */
     virtual void save_result(Content& content) override;
 private:
     Errors parse_decision(nlohmann::ordered_json&& decision_json, DecisionData& decision_data) const;
