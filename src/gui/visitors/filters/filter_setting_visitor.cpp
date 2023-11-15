@@ -293,6 +293,7 @@ static void content_piece_filter_menu_items(dnd::ContentPieceFilter& content_pie
 void dnd::FilterSettingVisitor::operator()(ContentPieceFilter& content_piece_filter) {
     DND_MEASURE_FUNCTION();
     ImGui::TableSetColumnIndex(1);
+    visit_content_piece_filter(content_piece_filter);
 
     ImGui::TableSetColumnIndex(1);
     if (!content_piece_filter.has_all_filters() && ImGui::Button("Add Value Filter")) {
