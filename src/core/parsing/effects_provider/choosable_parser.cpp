@@ -18,7 +18,7 @@
 dnd::ChoosableParser::ChoosableParser(const std::filesystem::path& filepath) noexcept
     : Parser(filepath), feature_parser(filepath) {}
 
-dnd::Errors dnd::ChoosableParser::parse(nlohmann::ordered_json&& json, ChoosableData& data) const {
+dnd::Errors dnd::ChoosableParser::parse_into(nlohmann::ordered_json&& json, ChoosableData& data) const {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
@@ -50,7 +50,7 @@ dnd::Errors dnd::ChoosableParser::parse(nlohmann::ordered_json&& json, Choosable
 
     data.type = get_filepath().stem().string();
 
-    errors += feature_parser.parse(std::move(json), data);
+    errors += feature_parser.parse_into(std::move(json), data);
 
     return errors;
 }

@@ -7,7 +7,6 @@
 #include <vector>
 
 #include <core/content.hpp>
-#include <core/exceptions/async_exceptions.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
 

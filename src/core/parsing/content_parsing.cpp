@@ -52,9 +52,7 @@ static dnd::Errors parse_string_groups(
 );
 
 
-dnd::ParsingResult dnd::ContentParser::parse(
-    const std::filesystem::path& content_path, const std::string& campaign_dir_name
-) {
+dnd::ParsingResult dnd::parse_content(const std::filesystem::path& content_path, const std::string& campaign_dir_name) {
     DND_MEASURE_FUNCTION();
     ParsingResult result;
     result.content_path = content_path;

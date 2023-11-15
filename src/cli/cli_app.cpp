@@ -84,7 +84,7 @@ void dnd::CliApp::initialize(
     output.text("Ready.");
 }
 
-void dnd::CliApp::start() {
+void dnd::CliApp::run() {
     std::string command_input;
     while (true) {
         output.text(separator);

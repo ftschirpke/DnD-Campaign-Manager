@@ -25,7 +25,7 @@
 
 dnd::Session::Session(const char* last_session_filename)
     : last_session_filename(last_session_filename), status(SessionStatus::CONTENT_DIR_SELECTION), content_directory(),
-      campaign_name(), parsing_future(), parser(), errors(), content(), last_session_open_tabs(), open_content_pieces(),
+      campaign_name(), parsing_future(), errors(), content(), last_session_open_tabs(), open_content_pieces(),
       selected_content_piece(), fuzzy_search(), fuzzy_search_results(), fuzzy_search_result_count(0),
       fuzzy_search_result_strings(), advanced_search(content), unknown_error_messages() {}
 
@@ -329,12 +329,12 @@ bool dnd::Session::parsing_result_available() {
 }
 
 void dnd::Session::start_parsing() {
-    parsing_future = std::async(std::launch::async, &Session::parse_content, this);
+    parsing_future = std::async(std::launch::async, &Session::parse_content_and_initialize, this);
     status = SessionStatus::PARSING;
 }
 
-void dnd::Session::parse_content() {
-    ParsingResult parsing_result = parser.parse(content_directory, campaign_name);
+void dnd::Session::parse_content_and_initialize() {
+    ParsingResult parsing_result = parse_content(content_directory, campaign_name);
     content = std::move(parsing_result.content);
     errors = std::move(parsing_result.errors);
     fuzzy_search = std::make_unique<FuzzyContentSearch>(content);

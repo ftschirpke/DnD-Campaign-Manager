@@ -71,7 +71,7 @@ public:
     bool parsing_result_available();
 private:
     void start_parsing();
-    void parse_content();
+    void parse_content_and_initialize();
     void open_last_session();
     void open_content_piece(const ContentPiece* content_piece);
 
@@ -85,7 +85,6 @@ private:
     std::string campaign_name;
 
     std::future<void> parsing_future;
-    ContentParser parser;
     Errors errors;
     // the object holding all the DnD content relevant for the selected campaign
     Content content;

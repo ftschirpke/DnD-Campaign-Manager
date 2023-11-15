@@ -7,6 +7,8 @@
 #include "gui_launcher.hpp"
 
 #include <filesystem>
+#include <iostream>
+#include <stdexcept>
 
 #include <imgui/backends/imgui_impl_glfw.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
@@ -131,7 +133,7 @@ int dnd::launch() {
     setup_style();
     setup_font();
 
-    {
+    try {
         GuiApp app;
         app.initialize();
 
@@ -149,6 +151,11 @@ int dnd::launch() {
             render_platform_windows();
             glfwSwapBuffers(window);
         }
+    } catch (const std::exception& e) {
+        DND_UNUSED(e);
+        std::cerr << "An unhandled error occured: " << e.what() << std::endl;
+        clean_up(window);
+        return 1;
     }
 
     clean_up(window);

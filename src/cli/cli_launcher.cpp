@@ -74,7 +74,7 @@ int dnd::launch(int argc, char** argv) {
                 return 0;
             }
 
-            app.start();
+            app.run();
         }
     } catch (const std::exception& e) {
         output.formatted_error("Error: {}", e.what());

@@ -78,7 +78,7 @@ dnd::Errors dnd::ClassFeatureParser::parse_multiple_into(
         ClassFeatureData& class_feature_data = data.emplace_back(parent);
         class_feature_data.name = class_feature_name;
         class_feature_data.source_path = get_filepath();
-        errors += parse(std::move(class_feature_json), class_feature_data);
+        errors += parse_into(std::move(class_feature_json), class_feature_data);
     }
 
     return errors;
