@@ -20,16 +20,7 @@ class DecisionData : public ValidationSubdata {
 public:
     DecisionData(const CharacterData* parent, const Effects* target) noexcept;
     std::strong_ordering operator<=>(const DecisionData&) const noexcept = default;
-    /**
-     * @brief Validates the data
-     * @return the errors that occured during validation
-     */
     virtual Errors validate() const override;
-    /**
-     * @brief Validates the relations of the data to other content pieces with regard to a given content holder
-     * @param content the content holder to validate the relations against
-     * @return the errors that occured during validation
-     */
     virtual Errors validate_relations(const Content& content) const override;
 
     const CharacterData* get_character_data() const noexcept;

@@ -17,10 +17,6 @@ class CharacterClassData;
 class SpellcastingData : public ValidationSubdata {
 public:
     SpellcastingData(const ValidationData* parent) noexcept;
-    /**
-     * @brief Validates the data
-     * @return the errors that occured during validation
-     */
     virtual Errors validate() const override;
 
     bool is_spellcaster;

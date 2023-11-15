@@ -19,16 +19,7 @@ class SpellData : public ValidationData {
 public:
     SpellData() noexcept;
     std::strong_ordering operator<=>(const SpellData&) const noexcept = default;
-    /**
-     * @brief Packs the data into a ValidationData unique pointer
-     * @return the packed data
-     */
     virtual std::unique_ptr<ValidationData> pack() const override;
-
-    /**
-     * @brief Validates the data
-     * @return the errors that occured during validation
-     */
     virtual Errors validate() const override;
 
     SpellComponentsData components_data;

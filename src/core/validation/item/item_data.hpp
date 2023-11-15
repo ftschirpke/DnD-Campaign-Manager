@@ -14,10 +14,6 @@ namespace dnd {
 class ItemData : public ValidationData {
 public:
     std::strong_ordering operator<=>(const ItemData&) const noexcept = default;
-    /**
-     * @brief Packs the data into a ValidationData unique pointer
-     * @return the packed data
-     */
     virtual std::unique_ptr<ValidationData> pack() const override;
 
     std::string cosmetic_description;

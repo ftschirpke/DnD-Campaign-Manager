@@ -17,21 +17,8 @@ class ExtraSpellsHolderData : public ValidationSubdata {
 public:
     ExtraSpellsHolderData(const ValidationData* parent) noexcept;
     std::strong_ordering operator<=>(const ExtraSpellsHolderData&) const noexcept = default;
-    /**
-     * @brief Validates the data
-     * @return the errors that occured during validation
-     */
     virtual Errors validate() const override;
-    /**
-     * @brief Validates the relations of the data to other content pieces with regard to a given content holder
-     * @param content the content holder to validate the relations against
-     * @return the errors that occured during validation
-     */
     virtual Errors validate_relations(const Content& content) const override;
-    /**
-     * @brief Checks if the extra spells holder is empty
-     * @return "true" if the extra spells holder is empty, "false" otherwise
-     */
     bool empty() const noexcept;
 
     // cantrips that do not count against the number of cantrips known
