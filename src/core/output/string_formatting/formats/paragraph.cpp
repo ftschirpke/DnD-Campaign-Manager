@@ -13,4 +13,4 @@ std::string_view dnd::Paragraph::get_text() const noexcept { return text; }
 
 bool dnd::Paragraph::get_empty_line_after() const noexcept { return empty_line_after; }
 
-void dnd::Paragraph::accept(const FormatVisitor& visitor) const { visitor.visit(*this); }
+void dnd::Paragraph::accept(const FormatVisitor& visitor) const { visitor(*this); }

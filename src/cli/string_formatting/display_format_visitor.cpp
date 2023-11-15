@@ -12,20 +12,20 @@
 #include <core/output/string_formatting/formats/table.hpp>
 
 
-void dnd::DisplayFormatVisitor::visit(const BulletedList& bulleted_list) const {
+void dnd::DisplayFormatVisitor::operator()(const BulletedList& bulleted_list) const {
     for (const std::string_view& item : bulleted_list.get_items()) {
         output.formatted_text("- {}", item);
     }
 }
 
-void dnd::DisplayFormatVisitor::visit(const Paragraph& paragraph) const {
+void dnd::DisplayFormatVisitor::operator()(const Paragraph& paragraph) const {
     output.text(paragraph.get_text());
     if (paragraph.get_empty_line_after()) {
         output.newline();
     }
 }
 
-void dnd::DisplayFormatVisitor::visit(const Table& table) const {
+void dnd::DisplayFormatVisitor::operator()(const Table& table) const {
     size_t rows = table.get_rows().size();
     size_t cols = table.get_num_columns();
     std::vector<size_t> col_widths(cols, 0);

@@ -51,7 +51,7 @@ const dnd::Spellcasting* dnd::CharacterSubclass::get_spellcasting() const noexce
 
 const dnd::CharacterClass* dnd::CharacterSubclass::get_class() const noexcept { return cls; }
 
-void dnd::CharacterSubclass::accept(dnd::ContentVisitor& visitor) const { visitor.visit(*this); }
+void dnd::CharacterSubclass::accept(dnd::ContentVisitor& visitor) const { visitor(*this); }
 
 dnd::CharacterSubclass::CharacterSubclass(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path,

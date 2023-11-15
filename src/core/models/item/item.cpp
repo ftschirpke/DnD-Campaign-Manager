@@ -32,7 +32,7 @@ const std::string& dnd::Item::get_cosmetic_description() const noexcept { return
 
 bool dnd::Item::requires_attunement() const noexcept { return attunement; }
 
-void dnd::Item::accept(ContentVisitor& visitor) const { visitor.visit(*this); }
+void dnd::Item::accept(ContentVisitor& visitor) const { visitor(*this); }
 
 dnd::Item::Item(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path,

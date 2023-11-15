@@ -16,14 +16,14 @@
 
 dnd::DisplayFormatVisitor::DisplayFormatVisitor(ImGuiTableFlags table_flags) : table_flags(table_flags) {}
 
-void dnd::DisplayFormatVisitor::visit(const BulletedList& bulleted_list) const {
+void dnd::DisplayFormatVisitor::operator()(const BulletedList& bulleted_list) const {
     for (const auto& element : bulleted_list.get_items()) {
         ImGui::Bullet();
         ImGui::TextWrapped("%s", std::string(element).c_str());
     }
 }
 
-void dnd::DisplayFormatVisitor::visit(const Paragraph& paragraph) const {
+void dnd::DisplayFormatVisitor::operator()(const Paragraph& paragraph) const {
     std::string_view text = paragraph.get_text();
     ImGui::TextWrapped("%s", std::string(text).c_str());
     if (paragraph.get_empty_line_after()) {
@@ -31,7 +31,7 @@ void dnd::DisplayFormatVisitor::visit(const Paragraph& paragraph) const {
     }
 }
 
-void dnd::DisplayFormatVisitor::visit(const Table& table) const {
+void dnd::DisplayFormatVisitor::operator()(const Table& table) const {
     std::vector<std::vector<std::string_view>> rows = table.get_rows();
     if (rows.empty() || rows[0].empty()) {
         return;

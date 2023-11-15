@@ -57,7 +57,7 @@ static void list_features(dnd::CommandLineOutput& output, const std::vector<T>& 
     }
 }
 
-void dnd::DisplayVisitor::visit(const dnd::Character& character) {
+void dnd::DisplayVisitor::operator()(const dnd::Character& character) {
     output.text(character.get_name());
     output.text("Type: Character");
     display_source_info(output, character.get_source_info());
@@ -85,7 +85,7 @@ void dnd::DisplayVisitor::visit(const dnd::Character& character) {
     list_features<Feature>(output, character.get_features());
 }
 
-void dnd::DisplayVisitor::visit(const dnd::CharacterClass& character_class) {
+void dnd::DisplayVisitor::operator()(const dnd::CharacterClass& character_class) {
     output.text(character_class.get_name());
     output.text("Type: Class");
     display_source_info(output, character_class.get_source_info());
@@ -100,7 +100,7 @@ void dnd::DisplayVisitor::visit(const dnd::CharacterClass& character_class) {
     list_features<ClassFeature>(output, character_class.get_features());
 }
 
-void dnd::DisplayVisitor::visit(const CharacterSubclass& character_subclass) {
+void dnd::DisplayVisitor::operator()(const CharacterSubclass& character_subclass) {
     output.text(character_subclass.get_name());
     output.text("Type: Subclass");
     display_source_info(output, character_subclass.get_source_info());
@@ -109,7 +109,7 @@ void dnd::DisplayVisitor::visit(const CharacterSubclass& character_subclass) {
     list_features<ClassFeature>(output, character_subclass.get_features());
 }
 
-void dnd::DisplayVisitor::visit(const CharacterRace& character_race) {
+void dnd::DisplayVisitor::operator()(const CharacterRace& character_race) {
     output.text(character_race.get_name());
     output.text("Type: Race");
     display_source_info(output, character_race.get_source_info());
@@ -119,7 +119,7 @@ void dnd::DisplayVisitor::visit(const CharacterRace& character_race) {
     list_features<Feature>(output, character_race.get_features());
 }
 
-void dnd::DisplayVisitor::visit(const CharacterSubrace& character_subrace) {
+void dnd::DisplayVisitor::operator()(const CharacterSubrace& character_subrace) {
     output.text(character_subrace.get_name());
     output.text("Type: Subrace");
     display_source_info(output, character_subrace.get_source_info());
@@ -128,7 +128,7 @@ void dnd::DisplayVisitor::visit(const CharacterSubrace& character_subrace) {
     list_features<Feature>(output, character_subrace.get_features());
 }
 
-void dnd::DisplayVisitor::visit(const Item& item) {
+void dnd::DisplayVisitor::operator()(const Item& item) {
     output.text(item.get_name());
     output.text("Type: Item");
     display_source_info(output, item.get_source_info());
@@ -142,7 +142,7 @@ void dnd::DisplayVisitor::visit(const Item& item) {
     }
 }
 
-void dnd::DisplayVisitor::visit(const Spell& spell) {
+void dnd::DisplayVisitor::operator()(const Spell& spell) {
     output.text(spell.get_name());
     output.text("Type: Spell");
     display_source_info(output, spell.get_source_info());
@@ -156,7 +156,7 @@ void dnd::DisplayVisitor::visit(const Spell& spell) {
     format_text(spell.get_description());
 }
 
-void dnd::DisplayVisitor::visit(const Feature& feature) {
+void dnd::DisplayVisitor::operator()(const Feature& feature) {
     output.text(feature.get_name());
     output.text("Type: Feature");
     display_source_info(output, feature.get_source_info());
@@ -164,7 +164,7 @@ void dnd::DisplayVisitor::visit(const Feature& feature) {
     format_text(feature.get_description());
 }
 
-void dnd::DisplayVisitor::visit(const Choosable& choosable) {
+void dnd::DisplayVisitor::operator()(const Choosable& choosable) {
     output.text(choosable.get_name());
     output.formatted_text("Type: Choosable Feature - %s", choosable.get_type());
     display_source_info(output, choosable.get_source_info());

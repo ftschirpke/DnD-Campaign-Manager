@@ -94,7 +94,7 @@ const dnd::Dice& dnd::CharacterClass::get_hit_dice() const noexcept { return hit
 
 const dnd::ImportantLevels& dnd::CharacterClass::get_important_levels() const noexcept { return important_levels; }
 
-void dnd::CharacterClass::accept(dnd::ContentVisitor& visitor) const { visitor.visit(*this); }
+void dnd::CharacterClass::accept(dnd::ContentVisitor& visitor) const { visitor(*this); }
 
 dnd::CharacterClass::CharacterClass(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path,

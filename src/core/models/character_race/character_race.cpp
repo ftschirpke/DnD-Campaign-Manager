@@ -42,7 +42,7 @@ const std::vector<dnd::Feature>& dnd::CharacterRace::get_features() const noexce
 
 bool dnd::CharacterRace::has_subraces() const noexcept { return subraces; }
 
-void dnd::CharacterRace::accept(dnd::ContentVisitor& visitor) const { visitor.visit(*this); }
+void dnd::CharacterRace::accept(dnd::ContentVisitor& visitor) const { visitor(*this); }
 
 dnd::CharacterRace::CharacterRace(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::vector<Feature>&& features,

@@ -96,14 +96,14 @@ static void list_features(dnd::DisplayVisitor& visitor, const std::vector<T>& fe
         ImGui::Separator();
         if (ImGui::TreeNode(feature.get_name().c_str())) {
             ImGui::Separator();
-            visitor.visit(feature);
+            visitor(feature);
             ImGui::TreePop();
         }
     }
     ImGui::Separator();
 }
 
-void dnd::DisplayVisitor::visit(const Character& character) {
+void dnd::DisplayVisitor::operator()(const Character& character) {
     begin_content_table(character);
 
     label("Type:");
@@ -120,14 +120,14 @@ void dnd::DisplayVisitor::visit(const Character& character) {
     const CharacterRace* race_ptr = character.get_basis().get_race();
     assert(race_ptr != nullptr);
     if (ImGui::CollapsingHeader(race_ptr->get_name().c_str())) {
-        visit(*race_ptr);
+        operator()(*race_ptr);
     }
 
     const CharacterSubrace* const subrace_ptr = character.get_basis().get_subrace();
     if (subrace_ptr != nullptr) {
         label("Subrace:");
         if (ImGui::CollapsingHeader(character.get_basis().get_subrace()->get_name().c_str())) {
-            visit(*subrace_ptr);
+            operator()(*subrace_ptr);
         }
     }
 
@@ -135,14 +135,14 @@ void dnd::DisplayVisitor::visit(const Character& character) {
     const CharacterClass* const class_ptr = character.get_basis().get_class();
     assert(class_ptr != nullptr);
     if (ImGui::CollapsingHeader(class_ptr->get_name().c_str())) {
-        visit(*class_ptr);
+        operator()(*class_ptr);
     }
 
     const CharacterSubclass* const subclass_ptr = character.get_basis().get_subclass();
     if (subclass_ptr != nullptr) {
         label("Subclass:");
         if (ImGui::CollapsingHeader(character.get_basis().get_subclass()->get_name().c_str())) {
-            visit(*subclass_ptr);
+            operator()(*subclass_ptr);
         }
     }
 
@@ -152,7 +152,7 @@ void dnd::DisplayVisitor::visit(const Character& character) {
     end_content_table();
 }
 
-void dnd::DisplayVisitor::visit(const CharacterClass& character_class) {
+void dnd::DisplayVisitor::operator()(const CharacterClass& character_class) {
     begin_content_table(character_class);
 
     label("Type:");
@@ -173,7 +173,7 @@ void dnd::DisplayVisitor::visit(const CharacterClass& character_class) {
     end_content_table();
 }
 
-void dnd::DisplayVisitor::visit(const CharacterSubclass& character_subclass) {
+void dnd::DisplayVisitor::operator()(const CharacterSubclass& character_subclass) {
     begin_content_table(character_subclass);
 
     label("Type:");
@@ -187,7 +187,7 @@ void dnd::DisplayVisitor::visit(const CharacterSubclass& character_subclass) {
     end_content_table();
 }
 
-void dnd::DisplayVisitor::visit(const CharacterRace& character_race) {
+void dnd::DisplayVisitor::operator()(const CharacterRace& character_race) {
     begin_content_table(character_race);
 
     label("Type:");
@@ -202,7 +202,7 @@ void dnd::DisplayVisitor::visit(const CharacterRace& character_race) {
     end_content_table();
 }
 
-void dnd::DisplayVisitor::visit(const CharacterSubrace& character_subrace) {
+void dnd::DisplayVisitor::operator()(const CharacterSubrace& character_subrace) {
     begin_content_table(character_subrace);
 
     label("Type:");
@@ -216,7 +216,7 @@ void dnd::DisplayVisitor::visit(const CharacterSubrace& character_subrace) {
     end_content_table();
 }
 
-void dnd::DisplayVisitor::visit(const Item& item) {
+void dnd::DisplayVisitor::operator()(const Item& item) {
     begin_content_table(item);
 
     label("Type:");
@@ -235,7 +235,7 @@ void dnd::DisplayVisitor::visit(const Item& item) {
     end_content_table();
 }
 
-void dnd::DisplayVisitor::visit(const Spell& spell) {
+void dnd::DisplayVisitor::operator()(const Spell& spell) {
     begin_content_table(spell);
 
     label("Type:");
@@ -261,7 +261,7 @@ void dnd::DisplayVisitor::visit(const Spell& spell) {
     end_content_table();
 }
 
-void dnd::DisplayVisitor::visit(const Feature& feature) {
+void dnd::DisplayVisitor::operator()(const Feature& feature) {
     begin_content_table(feature);
 
     label("Type:");
@@ -273,7 +273,7 @@ void dnd::DisplayVisitor::visit(const Feature& feature) {
     end_content_table();
 }
 
-void dnd::DisplayVisitor::visit(const Choosable& choosable) {
+void dnd::DisplayVisitor::operator()(const Choosable& choosable) {
     begin_content_table(choosable);
 
     label("Type:");
