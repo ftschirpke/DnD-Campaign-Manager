@@ -24,15 +24,15 @@ class ListContentVisitor : public ContentVisitor {
 public:
     void reserve(size_t size);
     std::vector<std::string> get_list();
-    virtual void visit(const Character& character) override;
-    virtual void visit(const CharacterClass& character_class) override;
-    virtual void visit(const CharacterSubclass& character_subclass) override;
-    virtual void visit(const CharacterRace& character_race) override;
-    virtual void visit(const CharacterSubrace& character_subrace) override;
-    virtual void visit(const Item& item) override;
-    virtual void visit(const Spell& spell) override;
-    virtual void visit(const Feature& feature) override;
-    virtual void visit(const Choosable& choosable) override;
+    virtual void operator()(const Character& character) override;
+    virtual void operator()(const CharacterClass& character_class) override;
+    virtual void operator()(const CharacterSubclass& character_subclass) override;
+    virtual void operator()(const CharacterRace& character_race) override;
+    virtual void operator()(const CharacterSubrace& character_subrace) override;
+    virtual void operator()(const Item& item) override;
+    virtual void operator()(const Spell& spell) override;
+    virtual void operator()(const Feature& feature) override;
+    virtual void operator()(const Choosable& choosable) override;
 private:
     std::vector<std::string> string_list;
 };

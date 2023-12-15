@@ -48,7 +48,7 @@ public:
     const CharacterBasis& get_basis() const noexcept;
     const Progression& get_progression() const noexcept;
 
-    virtual void accept(ContentVisitor& visitor) const override final;
+    virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Character(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path,

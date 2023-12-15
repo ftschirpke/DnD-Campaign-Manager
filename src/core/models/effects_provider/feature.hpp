@@ -43,7 +43,7 @@ public:
     const Effects& get_main_effects() const noexcept override;
     std::vector<const Effects*> get_all_effects() const override;
 
-    virtual void accept(ContentVisitor& visitor) const override;
+    virtual void accept_visitor(ContentVisitor& visitor) const override;
 protected:
     Feature(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path, Effects&& main_effects

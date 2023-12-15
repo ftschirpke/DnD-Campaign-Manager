@@ -47,7 +47,7 @@ public:
     const Dice& get_hit_dice() const noexcept;
     const ImportantLevels& get_important_levels() const noexcept;
 
-    virtual void accept(ContentVisitor& visitor) const override final;
+    virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     CharacterClass(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path,

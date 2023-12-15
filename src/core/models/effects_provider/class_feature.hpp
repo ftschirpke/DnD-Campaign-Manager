@@ -46,7 +46,7 @@ public:
      * @brief Accepts a visitor
      * @param visitor reference to the visitor
      */
-    virtual void accept(ContentVisitor& visitor) const override;
+    virtual void accept_visitor(ContentVisitor& visitor) const override;
 private:
     ClassFeature(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path, int level,

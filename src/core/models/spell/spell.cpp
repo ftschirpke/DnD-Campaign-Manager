@@ -47,7 +47,7 @@ const std::string& dnd::Spell::get_duration() const noexcept { return duration; 
 
 const std::set<std::string>& dnd::Spell::get_classes() const noexcept { return classes; }
 
-void dnd::Spell::accept(dnd::ContentVisitor& visitor) const { visitor.visit(*this); }
+void dnd::Spell::accept_visitor(dnd::ContentVisitor& visitor) const { visitor(*this); }
 
 dnd::Spell::Spell(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, SpellComponents&& components,

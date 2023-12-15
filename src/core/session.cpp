@@ -89,7 +89,7 @@ std::vector<std::string> dnd::Session::get_fuzzy_search_result_strings() const {
         return {};
     }
     for (size_t i = 0; i < fuzzy_search_result_count; ++i) {
-        fuzzy_search_results[i]->accept(list_content_visitor);
+        fuzzy_search_results[i]->accept_visitor(list_content_visitor);
     }
     return list_content_visitor.get_list();
 }
@@ -100,7 +100,7 @@ std::vector<std::string> dnd::Session::get_advanced_search_result_strings() cons
     const std::vector<const ContentPiece*>& advanced_search_results = advanced_search.get_search_results();
     list_content_visitor.reserve(advanced_search_results.size());
     for (const ContentPiece* content_piece : advanced_search_results) {
-        content_piece->accept(list_content_visitor);
+        content_piece->accept_visitor(list_content_visitor);
     }
     return list_content_visitor.get_list();
 }
@@ -145,7 +145,7 @@ void dnd::Session::save_session_values() {
 
     CollectOpenTabsVisitor collect_open_tabs_visitor;
     for (const auto open_content_piece : open_content_pieces) {
-        open_content_piece->accept(collect_open_tabs_visitor);
+        open_content_piece->accept_visitor(collect_open_tabs_visitor);
     }
     last_session["open_tabs"] = collect_open_tabs_visitor.get_open_tabs();
 

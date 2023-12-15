@@ -58,7 +58,7 @@ const std::map<int, dnd::Effects>& dnd::ClassFeature::get_higher_level_effects()
     return higher_level_effects;
 }
 
-void dnd::ClassFeature::accept(dnd::ContentVisitor& visitor) const { visitor.visit(*this); }
+void dnd::ClassFeature::accept_visitor(dnd::ContentVisitor& visitor) const { visitor(*this); }
 
 dnd::ClassFeature::ClassFeature(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, int level,

@@ -15,9 +15,9 @@ namespace dnd {
 class DisplayFormatVisitor : public FormatVisitor {
 public:
     DisplayFormatVisitor(ImGuiTableFlags table_flags = 0);
-    virtual void visit(const BulletedList& bulleted_list) const override;
-    virtual void visit(const Paragraph& paragraph) const override;
-    virtual void visit(const Table& table) const override;
+    virtual void operator()(const BulletedList& bulleted_list) const override;
+    virtual void operator()(const Paragraph& paragraph) const override;
+    virtual void operator()(const Table& table) const override;
 private:
     ImGuiTableFlags table_flags;
 };

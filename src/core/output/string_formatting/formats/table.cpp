@@ -28,4 +28,4 @@ void dnd::Table::next_row() {
     ++current_row;
 }
 
-void dnd::Table::accept(const FormatVisitor& visitor) const { visitor.visit(*this); }
+void dnd::Table::accept(const FormatVisitor& visitor) const { visitor(*this); }

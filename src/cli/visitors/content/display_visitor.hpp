@@ -14,15 +14,15 @@ namespace dnd {
  */
 class DisplayVisitor : public ContentVisitor {
 public:
-    void visit(const Character& character) override;
-    void visit(const CharacterClass& character_class) override;
-    void visit(const CharacterSubclass& character_subclass) override;
-    void visit(const CharacterRace& character_race) override;
-    void visit(const CharacterSubrace& character_subrace) override;
-    void visit(const Item& item) override;
-    void visit(const Spell& spell) override;
-    void visit(const Feature& feature) override;
-    void visit(const Choosable& choosable) override;
+    void operator()(const Character& character) override;
+    void operator()(const CharacterClass& character_class) override;
+    void operator()(const CharacterSubclass& character_subclass) override;
+    void operator()(const CharacterRace& character_race) override;
+    void operator()(const CharacterSubrace& character_subrace) override;
+    void operator()(const Item& item) override;
+    void operator()(const Spell& spell) override;
+    void operator()(const Feature& feature) override;
+    void operator()(const Choosable& choosable) override;
 private:
     CommandLineOutput output;
 };
