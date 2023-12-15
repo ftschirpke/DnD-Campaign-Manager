@@ -20,10 +20,11 @@ void dnd::ContentWindow::render() {
     ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_AutoSelectNewTabs | ImGuiTabBarFlags_Reorderable;
     if (ImGui::BeginTabBar("Content Tabs", tab_bar_flags)) {
         for (auto it = open_content_pieces.begin(); it != open_content_pieces.end();) {
+            const ContentPiece* content_piece = *it;
             bool open = true;
-            if (ImGui::BeginTabItem((*it)->get_name().c_str(), &open)) {
-                ImGui::SeparatorText((*it)->get_name().c_str());
-                (*it)->accept_visitor(display_visitor);
+            if (ImGui::BeginTabItem(content_piece->get_name().c_str(), &open)) {
+                ImGui::SeparatorText(content_piece->get_name().c_str());
+                content_piece->accept_visitor(display_visitor);
                 ImGui::EndTabItem();
             }
             if (!open) {
