@@ -23,7 +23,7 @@ void dnd::ContentWindow::render() {
             bool open = true;
             if (ImGui::BeginTabItem((*it)->get_name().c_str(), &open)) {
                 ImGui::SeparatorText((*it)->get_name().c_str());
-                (*it)->accept(display_visitor);
+                (*it)->accept_visitor(display_visitor);
                 ImGui::EndTabItem();
             }
             if (!open) {

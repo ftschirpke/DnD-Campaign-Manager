@@ -40,7 +40,7 @@ std::vector<const dnd::Effects*> dnd::Feature::get_all_effects() const {
     return std::vector<const Effects*>{&main_effects};
 }
 
-void dnd::Feature::accept(dnd::ContentVisitor& visitor) const { visitor(*this); }
+void dnd::Feature::accept_visitor(dnd::ContentVisitor& visitor) const { visitor(*this); }
 
 dnd::Feature::Feature(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, Effects&& main_effects

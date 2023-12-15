@@ -37,7 +37,7 @@ public:
     const std::string& get_duration() const noexcept;
     const std::set<std::string>& get_classes() const noexcept;
 
-    virtual void accept(ContentVisitor& visitor) const override final;
+    virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Spell(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path,

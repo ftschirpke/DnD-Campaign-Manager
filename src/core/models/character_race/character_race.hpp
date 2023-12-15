@@ -39,7 +39,7 @@ public:
     const std::vector<Feature>& get_features() const noexcept;
     bool has_subraces() const noexcept;
 
-    virtual void accept(ContentVisitor& visitor) const override final;
+    virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     CharacterRace(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path,

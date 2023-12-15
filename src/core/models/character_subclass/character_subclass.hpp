@@ -44,7 +44,7 @@ public:
     const Spellcasting* get_spellcasting() const noexcept;
     const CharacterClass* get_class() const noexcept;
 
-    virtual void accept(ContentVisitor& visitor) const override final;
+    virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     CharacterSubclass(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path,

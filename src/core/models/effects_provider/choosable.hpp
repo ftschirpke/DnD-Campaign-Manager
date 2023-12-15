@@ -47,7 +47,7 @@ public:
     const std::string& get_type() const noexcept;
     const std::vector<std::unique_ptr<Condition>>& get_prerequisites() const noexcept;
 
-    virtual void accept(ContentVisitor& visitor) const override final;
+    virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Choosable(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& type,

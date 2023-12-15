@@ -188,47 +188,47 @@ void dnd::CliApp::list_all_content_of_a_type() {
         switch (type) {
             case 0:
                 for (const auto& [_, character] : session.get_content().get_characters().get_all()) {
-                    character.accept(visitor);
+                    character.accept_visitor(visitor);
                 }
                 break;
             case 1:
                 for (const auto& [_, character_class] : session.get_content().get_character_classes().get_all()) {
-                    character_class.accept(visitor);
+                    character_class.accept_visitor(visitor);
                 }
                 break;
             case 2:
                 for (const auto& [_, character_subclass] : session.get_content().get_character_subclasses().get_all()) {
-                    character_subclass.accept(visitor);
+                    character_subclass.accept_visitor(visitor);
                 }
                 break;
             case 3:
                 for (const auto& [_, character_race] : session.get_content().get_character_races().get_all()) {
-                    character_race.accept(visitor);
+                    character_race.accept_visitor(visitor);
                 }
                 break;
             case 4:
                 for (const auto& [_, character_subrace] : session.get_content().get_character_subraces().get_all()) {
-                    character_subrace.accept(visitor);
+                    character_subrace.accept_visitor(visitor);
                 }
                 break;
             case 5:
                 for (const auto& [_, spell] : session.get_content().get_spells().get_all()) {
-                    spell.accept(visitor);
+                    spell.accept_visitor(visitor);
                 }
                 break;
             case 6:
                 for (const auto& [_, item] : session.get_content().get_items().get_all()) {
-                    item.accept(visitor);
+                    item.accept_visitor(visitor);
                 }
                 break;
             case 7:
                 for (const auto& [_, feature] : session.get_content().get_features().get_all()) {
-                    feature->accept(visitor);
+                    feature->accept_visitor(visitor);
                 }
                 break;
             case 8:
                 for (const auto& [_, choosable] : session.get_content().get_choosables().get_all()) {
-                    choosable.accept(visitor);
+                    choosable.accept_visitor(visitor);
                 }
                 break;
             default:
@@ -318,6 +318,6 @@ void dnd::CliApp::view_open_content_pieces() {
 
 void dnd::CliApp::display_content_piece(const ContentPiece* content_piece) {
     output.text(separator);
-    content_piece->accept(display_visitor);
+    content_piece->accept_visitor(display_visitor);
     output.text(separator);
 }

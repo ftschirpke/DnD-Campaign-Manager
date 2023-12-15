@@ -65,7 +65,7 @@ const dnd::CharacterBasis& dnd::Character::get_basis() const noexcept { return b
 
 const dnd::Progression& dnd::Character::get_progression() const noexcept { return progression; }
 
-void dnd::Character::accept(dnd::ContentVisitor& visitor) const { visitor(*this); }
+void dnd::Character::accept_visitor(dnd::ContentVisitor& visitor) const { visitor(*this); }
 
 dnd::Character::Character(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path,
