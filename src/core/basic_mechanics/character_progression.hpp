@@ -20,6 +20,14 @@ int level_to_xp(int level);
  */
 int xp_to_level(int xp);
 
+/**
+ * @brief Returns the proficiency bonus for a character of the given level
+ * @param level the character level
+ * @return the proficiency bonus for a character of the given level
+ * @throws std::invalid_argument if the given level is not a valid character level i.e. not between 1 and 20 (inclusive)
+ */
+int proficiency_bonus_for_level(int level);
+
 } // namespace dnd
 
 #endif // CHARACTER_PROGRESSION_HPP_

@@ -7,6 +7,7 @@
 #include <utility>
 #include <vector>
 
+#include <core/basic_mechanics/character_progression.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
@@ -64,6 +65,10 @@ const dnd::AbilityScores& dnd::Character::get_base_ability_scores() const noexce
 const dnd::CharacterBasis& dnd::Character::get_basis() const noexcept { return basis; }
 
 const dnd::Progression& dnd::Character::get_progression() const noexcept { return progression; }
+
+int dnd::Character::get_proficiency_bonus() const noexcept {
+    return proficiency_bonus_for_level(progression.get_level());
+}
 
 void dnd::Character::accept_visitor(dnd::ContentVisitor& visitor) const { visitor(*this); }
 
