@@ -36,10 +36,6 @@ const dnd::SourceInfo& dnd::Feature::get_source_info() const noexcept { return s
 
 const dnd::Effects& dnd::Feature::get_main_effects() const noexcept { return main_effects; }
 
-std::vector<const dnd::Effects*> dnd::Feature::get_all_effects() const {
-    return std::vector<const Effects*>{&main_effects};
-}
-
 void dnd::Feature::accept_visitor(dnd::ContentVisitor& visitor) const { visitor(*this); }
 
 dnd::Feature::Feature(

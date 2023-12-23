@@ -41,7 +41,6 @@ public:
     const std::string& get_description() const noexcept override;
     const SourceInfo& get_source_info() const noexcept override;
     const Effects& get_main_effects() const noexcept override;
-    std::vector<const Effects*> get_all_effects() const override;
 
     virtual void accept_visitor(ContentVisitor& visitor) const override;
 protected:

@@ -38,7 +38,6 @@ public:
     ClassFeature(ClassFeature&&) = default;
     ClassFeature& operator=(ClassFeature&&) = default;
 
-    std::vector<const Effects*> get_all_effects() const override;
     int get_level() const noexcept;
     const std::map<int, dnd::Effects>& get_higher_level_effects() const noexcept;
 
