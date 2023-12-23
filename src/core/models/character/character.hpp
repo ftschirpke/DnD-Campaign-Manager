@@ -48,6 +48,8 @@ public:
     const CharacterBasis& get_basis() const noexcept;
     const Progression& get_progression() const noexcept;
 
+    int get_proficiency_bonus() const noexcept;
+
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Character(
