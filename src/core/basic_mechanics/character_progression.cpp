@@ -28,3 +28,12 @@ int dnd::xp_to_level(int xp) {
     }
     return 20;
 }
+
+// proficiency bonuses for levels 1-20
+// 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6
+int dnd::proficiency_bonus_for_level(int level) {
+    if (level < 1 || level > 20) {
+        throw std::invalid_argument("Level must be between 1 and 20 (inclusive).");
+    }
+    return 2 + (level - 1) / 4;
+}
