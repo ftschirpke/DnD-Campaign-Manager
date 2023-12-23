@@ -112,5 +112,7 @@ dnd::Errors dnd::CharacterData::validate_relations(const dnd::Content& content) 
         errors += decision_data.validate_relations(content);
     }
 
+    // TODO: recheck this function, the code that was here did nothing
+
     return errors;
 }

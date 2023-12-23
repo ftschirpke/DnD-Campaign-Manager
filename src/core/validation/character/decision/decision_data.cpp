@@ -109,16 +109,13 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
         return errors;
     }
 
-    const Feature& linked_feature = content.get_features().get(feature_name).value().get();
-    std::vector<const Effects*> effects_with_choices = linked_feature.get_all_effects();
-
-    bool target_found_in_feature = false;
-    for (const Effects* effects : effects_with_choices) {
-        if (effects == target) {
-            target_found_in_feature = true;
-            break;
-        }
-    }
+    // TODO: This needs to be redesigned.
+    // Currently, there is no way to link a decision to a higher level part of a class feature
+    // or any choosable that might have a choice.
+    // Idea: add a new library to the content for class features and search in each of the three libraries
+    const Feature& linked_feature = content.get_features().get(feature_name).value();
+    const Effects& effects = linked_feature.get_main_effects();
+    bool target_found_in_feature = &effects == target;
     if (!target_found_in_feature) {
         errors.add_validation_error(
             ValidationErrorCode::RELATION_NOT_FOUND, parent, "Decision cannot be linked to any of the feature's parts."
