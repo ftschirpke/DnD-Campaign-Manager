@@ -73,7 +73,7 @@ dnd::Errors dnd::CharacterClassData::validate_relations(const dnd::Content& cont
     }
     for (const auto& feature_data : features_data) {
         errors += feature_data.validate_relations(content);
-        if (content.get_features().contains(feature_data.name)) {
+        if (content.get_class_features().contains(feature_data.name)) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
                 fmt::format("Feature has duplicate name \"{}\".", feature_data.name)

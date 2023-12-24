@@ -28,27 +28,10 @@ public:
     bool contains(const std::string& name) const override;
     bool empty() const override;
     size_t size() const override;
-    /**
-     * @brief Get content piece by its index
-     * @param index the index of the piece of content
-     * @return constant reference to the piece of content if it exists
-     * @throws std::out_of_range if the piece of content does not exist
-     */
-    const T& get(size_t index) const override;
-    /**
-     * @brief Get content piece by its name
-     * @param name the name of the piece of content
-     * @return constant reference to the piece of content if it exists
-     * @throws std::out_of_range if the piece of content does not exist
-     */
-    const T& get(const std::string& name) const override;
+    std::optional<std::reference_wrapper<const T>> get(size_t index) const override;
+    std::optional<std::reference_wrapper<const T>> get(const std::string& name) const override;
     const std::unordered_map<std::string, T>& get_all() const;
-    /**
-     * @brief Add a piece of content to the library
-     * @param content_piece the piece of content to add
-     * @return "true" if the piece of content was added, "false" if a piece of content with the same name already exists
-     */
-    bool add(T&& content_piece);
+    std::optional<std::reference_wrapper<const T>> add(T&& content_piece);
     /**
      * @brief Get the root of the trie
      * @return a pointer to the root of the trie
@@ -98,14 +81,22 @@ size_t StorageContentLibrary<T>::size() const {
 
 template <typename T>
 requires isContentPieceType<T>
-const T& StorageContentLibrary<T>::get(size_t index) const {
-    return std::next(data.begin(), static_cast<long>(index))->second;
+std::optional<std::reference_wrapper<const T>> StorageContentLibrary<T>::get(size_t index) const {
+    if (index >= data.size()) {
+        return std::nullopt;
+    }
+    const T& element = std::next(data.begin(), static_cast<long>(index))->second;
+    return std::cref(element);
 }
 
 template <typename T>
 requires isContentPieceType<T>
-const T& StorageContentLibrary<T>::get(const std::string& name) const {
-    return data.at(name);
+std::optional<std::reference_wrapper<const T>> StorageContentLibrary<T>::get(const std::string& name) const {
+    auto iterator = data.find(name);
+    if (iterator == data.end()) {
+        return std::nullopt;
+    }
+    return std::cref(iterator->second);
 }
 
 template <typename T>
@@ -116,14 +107,15 @@ const std::unordered_map<std::string, T>& StorageContentLibrary<T>::get_all() co
 
 template <typename T>
 requires isContentPieceType<T>
-bool StorageContentLibrary<T>::add(T&& content_piece) {
+std::optional<std::reference_wrapper<const T>> StorageContentLibrary<T>::add(T&& content_piece) {
     const std::string name = content_piece.get_name();
-    if (contains(name)) {
-        return false;
+    auto [it, was_inserted] = data.emplace(name, std::move(content_piece));
+    if (was_inserted) {
+        save_in_trie(it->second);
+        return std::cref(it->second);
+    } else {
+        return std::nullopt;
     }
-    data.emplace(name, std::move(content_piece));
-    save_in_trie(data.at(name));
-    return true;
 }
 
 template <typename T>

@@ -61,7 +61,8 @@ dnd::Errors dnd::CharacterData::validate_relations(const dnd::Content& content) 
     }
     for (const auto& feature_data : features_data) {
         errors += feature_data.validate_relations(content);
-        if (content.get_features().contains(feature_data.name)) {
+        if (content.get_features().contains(feature_data.name)
+            || content.get_class_features().contains(feature_data.name)) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
                 fmt::format("Feature has duplicate name \"{}\".", feature_data.name)
@@ -72,9 +73,9 @@ dnd::Errors dnd::CharacterData::validate_relations(const dnd::Content& content) 
     errors += base_ability_scores_data.validate_relations(content);
     errors += character_basis_data.validate_relations(content);
 
-    if (!character_basis_data.class_name.empty()
-        && content.get_character_classes().contains(character_basis_data.class_name)) {
-        const CharacterClass& cls = content.get_character_classes().get(character_basis_data.class_name);
+    auto class_optional = content.get_character_classes().get(character_basis_data.class_name);
+    if (!character_basis_data.class_name.empty() && class_optional.has_value()) {
+        const CharacterClass& cls = class_optional.value();
         if (progression_data.level >= cls.get_important_levels().get_subclass_level()
             && character_basis_data.subclass_name.empty()) {
             errors.add_validation_error(
@@ -109,16 +110,6 @@ dnd::Errors dnd::CharacterData::validate_relations(const dnd::Content& content) 
 
     for (const auto& decision_data : decisions_data) {
         errors += decision_data.validate_relations(content);
-    }
-
-    std::vector<const Effects*> effects_with_choices;
-    for (const auto& [_, feature] : content.get_features().get_all()) {
-        std::vector<const Effects*> all_effects = feature->get_all_effects();
-        for (const Effects* effects : all_effects) {
-            if (!effects->get_choices().empty()) {
-                effects_with_choices.push_back(effects);
-            }
-        }
     }
 
     return errors;

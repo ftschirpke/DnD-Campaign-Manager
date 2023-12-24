@@ -223,7 +223,7 @@ void dnd::CliApp::list_all_content_of_a_type() {
                 break;
             case 7:
                 for (const auto& [_, feature] : session.get_content().get_features().get_all()) {
-                    feature->accept_visitor(visitor);
+                    feature.get().accept_visitor(visitor);
                 }
                 break;
             case 8:
@@ -257,31 +257,31 @@ void dnd::CliApp::list_all_content_of_a_type() {
         }
         switch (type) {
             case 0:
-                display_content_piece(&session.get_content().get_characters().get(index));
+                display_content_piece(&session.get_content().get_characters().get(index).value().get());
                 break;
             case 1:
-                display_content_piece(&session.get_content().get_character_classes().get(index));
+                display_content_piece(&session.get_content().get_character_classes().get(index).value().get());
                 break;
             case 2:
-                display_content_piece(&session.get_content().get_character_subclasses().get(index));
+                display_content_piece(&session.get_content().get_character_subclasses().get(index).value().get());
                 break;
             case 3:
-                display_content_piece(&session.get_content().get_character_races().get(index));
+                display_content_piece(&session.get_content().get_character_races().get(index).value().get());
                 break;
             case 4:
-                display_content_piece(&session.get_content().get_character_subraces().get(index));
+                display_content_piece(&session.get_content().get_character_subraces().get(index).value().get());
                 break;
             case 5:
-                display_content_piece(&session.get_content().get_spells().get(index));
+                display_content_piece(&session.get_content().get_spells().get(index).value().get());
                 break;
             case 6:
-                display_content_piece(&session.get_content().get_items().get(index));
+                display_content_piece(&session.get_content().get_items().get(index).value().get());
                 break;
             case 7:
-                display_content_piece(&session.get_content().get_features().get(index));
+                display_content_piece(&session.get_content().get_features().get(index).value().get());
                 break;
             case 8:
-                display_content_piece(&session.get_content().get_choosables().get(index));
+                display_content_piece(&session.get_content().get_choosables().get(index).value().get());
                 break;
             default:
                 output.error("Invalid type.");

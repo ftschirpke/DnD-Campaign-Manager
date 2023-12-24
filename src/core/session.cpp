@@ -360,48 +360,63 @@ void dnd::Session::parse_content_and_initialize() {
 
 void dnd::Session::open_last_session() {
     for (const std::string& character_to_open : last_session_open_tabs["characters"]) {
-        if (content.get_characters().contains(character_to_open)) {
-            open_content_pieces.push_back(&content.get_characters().get(character_to_open));
+        auto character = content.get_characters().get(character_to_open);
+        if (character.has_value()) {
+            open_content_pieces.push_back(&character.value().get());
         }
     }
     for (const std::string& character_class_to_open : last_session_open_tabs["character_classes"]) {
-        if (content.get_character_classes().contains(character_class_to_open)) {
-            open_content_pieces.push_back(&content.get_character_classes().get(character_class_to_open));
+        auto character_class = content.get_character_classes().get(character_class_to_open);
+        if (character_class.has_value()) {
+            open_content_pieces.push_back(&character_class.value().get());
         }
     }
     for (const std::string& character_subclass_to_open : last_session_open_tabs["character_subclasses"]) {
-        if (content.get_character_subclasses().contains(character_subclass_to_open)) {
-            open_content_pieces.push_back(&content.get_character_subclasses().get(character_subclass_to_open));
+        auto character_subclass = content.get_character_subclasses().get(character_subclass_to_open);
+        if (character_subclass.has_value()) {
+            open_content_pieces.push_back(&character_subclass.value().get());
         }
     }
     for (const std::string& character_race_to_open : last_session_open_tabs["character_races"]) {
-        if (content.get_character_races().contains(character_race_to_open)) {
-            open_content_pieces.push_back(&content.get_character_races().get(character_race_to_open));
+        auto character_race = content.get_character_races().get(character_race_to_open);
+        if (character_race.has_value()) {
+            open_content_pieces.push_back(&character_race.value().get());
         }
     }
     for (const std::string& character_subrace_to_open : last_session_open_tabs["character_subraces"]) {
-        if (content.get_character_subraces().contains(character_subrace_to_open)) {
-            open_content_pieces.push_back(&content.get_character_subraces().get(character_subrace_to_open));
+        auto character_subrace = content.get_character_subraces().get(character_subrace_to_open);
+        if (character_subrace.has_value()) {
+            open_content_pieces.push_back(&character_subrace.value().get());
         }
     }
     for (const std::string& item_to_open : last_session_open_tabs["items"]) {
-        if (content.get_items().contains(item_to_open)) {
-            open_content_pieces.push_back(&content.get_items().get(item_to_open));
+        auto item = content.get_items().get(item_to_open);
+        if (item.has_value()) {
+            open_content_pieces.push_back(&item.value().get());
         }
     }
     for (const std::string& spell_to_open : last_session_open_tabs["spells"]) {
-        if (content.get_spells().contains(spell_to_open)) {
-            open_content_pieces.push_back(&content.get_spells().get(spell_to_open));
+        auto spell = content.get_spells().get(spell_to_open);
+        if (spell.has_value()) {
+            open_content_pieces.push_back(&spell.value().get());
         }
     }
     for (const std::string& feature_to_open : last_session_open_tabs["features"]) {
-        if (content.get_features().contains(feature_to_open)) {
-            open_content_pieces.push_back(&content.get_features().get(feature_to_open));
+        auto feature = content.get_features().get(feature_to_open);
+        if (feature.has_value()) {
+            open_content_pieces.push_back(&feature.value().get());
+        }
+    }
+    for (const std::string& class_feature_to_open : last_session_open_tabs["class_features"]) {
+        auto class_feature = content.get_class_features().get(class_feature_to_open);
+        if (class_feature.has_value()) {
+            open_content_pieces.push_back(&class_feature.value().get());
         }
     }
     for (const std::string& choosable_to_open : last_session_open_tabs["choosables"]) {
-        if (content.get_choosables().contains(choosable_to_open)) {
-            open_content_pieces.push_back(&content.get_choosables().get(choosable_to_open));
+        auto choosable = content.get_choosables().get(choosable_to_open);
+        if (choosable.has_value()) {
+            open_content_pieces.push_back(&choosable.value().get());
         }
     }
 }

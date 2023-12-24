@@ -109,7 +109,7 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
         return errors;
     }
 
-    const Feature& linked_feature = content.get_features().get(feature_name);
+    const Feature& linked_feature = content.get_features().get(feature_name).value().get();
     std::vector<const Effects*> effects_with_choices = linked_feature.get_all_effects();
 
     bool target_found_in_feature = false;
@@ -128,26 +128,28 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
     bool feature_found = false;
     if (character_data != nullptr) {
         const std::string& race_name = character_data->character_basis_data.race_name;
-        if (content.get_character_races().contains(race_name)) {
-            feature_found = feature_is_in(linked_feature, content.get_character_races().get(race_name).get_features());
+        auto race_optional = content.get_character_races().get(race_name);
+        if (race_optional.has_value()) {
+            const CharacterRace& race = race_optional.value();
+            feature_found = feature_is_in(linked_feature, race.get_features());
         }
         const std::string& subrace_name = character_data->character_basis_data.subrace_name;
-        if (!feature_found && content.get_character_subraces().contains(subrace_name)) {
-            feature_found = feature_is_in(
-                linked_feature, content.get_character_subraces().get(subrace_name).get_features()
-            );
+        auto subrace_optional = content.get_character_subraces().get(subrace_name);
+        if (!feature_found && subrace_optional.has_value()) {
+            const CharacterSubrace& subrace = subrace_optional.value();
+            feature_found = feature_is_in(linked_feature, subrace.get_features());
         }
         const std::string& class_name = character_data->character_basis_data.class_name;
-        if (!feature_found && content.get_character_classes().contains(class_name)) {
-            feature_found = class_feature_is_in(
-                linked_feature, content.get_character_classes().get(class_name).get_features()
-            );
+        auto class_optional = content.get_character_classes().get(class_name);
+        if (!feature_found && class_optional.has_value()) {
+            const CharacterClass& cls = class_optional.value();
+            feature_found = class_feature_is_in(linked_feature, cls.get_features());
         }
         const std::string& subclass_name = character_data->character_basis_data.subclass_name;
+        auto subclass_optional = content.get_character_subclasses().get(subclass_name);
         if (!feature_found && content.get_character_subclasses().contains(subclass_name)) {
-            feature_found = class_feature_is_in(
-                linked_feature, content.get_character_subclasses().get(subclass_name).get_features()
-            );
+            const CharacterSubclass& subclass = subclass_optional.value();
+            feature_found = class_feature_is_in(linked_feature, subclass.get_features());
         }
     }
     if (!feature_found) {
