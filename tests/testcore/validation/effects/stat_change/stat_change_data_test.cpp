@@ -207,7 +207,11 @@ TEST_CASE("dnd::StatChangeData::validate // invalid effects", tags) {
         REQUIRE_NOTHROW(errors = stat_change_data.validate());
         REQUIRE_FALSE(errors.ok());
 
-        stat_change_data.stat_change_str = "MY_VALUE_5 latest div 0";
+        stat_change_data.stat_change_str = "MY_VALUE_5 latest mult 01";
+        REQUIRE_NOTHROW(errors = stat_change_data.validate());
+        REQUIRE_FALSE(errors.ok());
+
+        stat_change_data.stat_change_str = "MY_VALUE_5 latest add -04.5";
         REQUIRE_NOTHROW(errors = stat_change_data.validate());
         REQUIRE_FALSE(errors.ok());
 
@@ -234,6 +238,20 @@ TEST_CASE("dnd::StatChangeData::validate // invalid effects", tags) {
         REQUIRE_FALSE(errors.ok());
 
         stat_change_data.stat_change_str = "MY_VALUE_5 latest div MY-VALUE_0";
+        REQUIRE_NOTHROW(errors = stat_change_data.validate());
+        REQUIRE_FALSE(errors.ok());
+    }
+
+    SECTION("divide by zero error") {
+        stat_change_data.stat_change_str = "MY_VALUE_1 earliest div 0";
+        REQUIRE_NOTHROW(errors = stat_change_data.validate());
+        REQUIRE_FALSE(errors.ok());
+
+        stat_change_data.stat_change_str = "MY_VALUE_2 early div 0.0";
+        REQUIRE_NOTHROW(errors = stat_change_data.validate());
+        REQUIRE_FALSE(errors.ok());
+
+        stat_change_data.stat_change_str = "MY_VALUE_3 normal div 0.00";
         REQUIRE_NOTHROW(errors = stat_change_data.validate());
         REQUIRE_FALSE(errors.ok());
     }
