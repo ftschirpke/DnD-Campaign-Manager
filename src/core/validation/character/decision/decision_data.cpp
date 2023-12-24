@@ -1,10 +1,11 @@
-#include <algorithm>
 #include <dnd_config.hpp>
 
 #include "decision_data.hpp"
 
+#include <algorithm>
 #include <cassert>
 #include <map>
+#include <optional>
 #include <string>
 #include <vector>
 
