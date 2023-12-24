@@ -16,8 +16,8 @@ bool dnd::FeatureFilter::matches(const Feature& feature) const noexcept { return
 std::vector<const dnd::ContentPiece*> dnd::FeatureFilter::all_matches(const Content& content) const {
     std::vector<const ContentPiece*> matching_content_pieces;
     for (const auto& [_, feature] : content.get_features().get_all()) {
-        if (matches(*feature)) {
-            matching_content_pieces.emplace_back(feature);
+        if (matches(feature)) {
+            matching_content_pieces.emplace_back(&feature.get());
         }
     }
     return matching_content_pieces;

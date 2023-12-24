@@ -407,6 +407,12 @@ void dnd::Session::open_last_session() {
             open_content_pieces.push_back(&feature.value().get());
         }
     }
+    for (const std::string& class_feature_to_open : last_session_open_tabs["class_features"]) {
+        auto class_feature = content.get_class_features().get(class_feature_to_open);
+        if (class_feature.has_value()) {
+            open_content_pieces.push_back(&class_feature.value().get());
+        }
+    }
     for (const std::string& choosable_to_open : last_session_open_tabs["choosables"]) {
         auto choosable = content.get_choosables().get(choosable_to_open);
         if (choosable.has_value()) {

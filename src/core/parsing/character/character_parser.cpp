@@ -79,25 +79,42 @@ dnd::Errors dnd::CharacterParser::parse() {
     return errors;
 }
 
+static bool evaluate_effects_for_decision(
+    const dnd::Effects& effects, dnd::DecisionData& decision_data, std::set<const dnd::Effects*>& processed_effects
+) {
+    if (!effects.get_choices().empty() && !processed_effects.contains(&effects)) {
+        decision_data.set_target(&effects);
+        processed_effects.emplace(&effects);
+        return true;
+    }
+    return false;
+}
+
 void dnd::CharacterParser::set_context(const dnd::Content& content) {
     std::set<const Effects*> processed_effects;
     for (auto& decision_data : data.decisions_data) {
-        const EffectsProvider* effects_provider;
-        if (content.get_features().contains(decision_data.feature_name)) {
-            effects_provider = &content.get_features().get(decision_data.feature_name);
-        } else if (content.get_choosables().contains(decision_data.feature_name)) {
-            effects_provider = &content.get_choosables().get(decision_data.feature_name);
-        } else {
-            decision_data.set_target(nullptr);
-            continue;
-        }
-        std::vector<const Effects*> effects_with_choices = effects_provider->get_all_effects();
-        for (const Effects* effects : effects_with_choices) {
-            if (effects->get_choices().empty() || processed_effects.contains(effects)) {
-                continue;
+        std::optional<EffectsProviderType> type = content.contains_effects_provider(decision_data.feature_name);
+        if (type.has_value()) {
+            switch (type.value()) {
+                case EffectsProviderType::Feature:
+                case EffectsProviderType::Choosable: {
+                    auto effects_provider = content.get_effects_provider(decision_data.feature_name);
+                    assert(effects_provider.has_value());
+                    const Effects& effects = effects_provider.value().get().get_main_effects();
+                    evaluate_effects_for_decision(effects, decision_data, processed_effects);
+                    break;
+                }
+                case EffectsProviderType::ClassFeature: {
+                    auto feature_optional = content.get_class_features().get(decision_data.feature_name);
+                    assert(feature_optional.has_value());
+                    const ClassFeature& feature = feature_optional.value().get();
+                    evaluate_effects_for_decision(feature.get_main_effects(), decision_data, processed_effects);
+                    for (const auto& [_, effects] : feature.get_higher_level_effects()) {
+                        evaluate_effects_for_decision(effects, decision_data, processed_effects);
+                    }
+                    break;
+                }
             }
-            decision_data.set_target(effects);
-            processed_effects.emplace(effects);
         }
     }
 }

@@ -62,11 +62,12 @@ dnd::Errors dnd::CharacterSubraceData::validate_relations(const Content& content
             );
         }
     }
-    if (!content.get_character_races().contains(race_name)) {
+    auto race_optional = content.get_character_races().get(race_name);
+    if (!race_optional.has_value()) {
         errors.add_validation_error(
             ValidationErrorCode::RELATION_NOT_FOUND, this, fmt::format("Character race '{}' does not exist.", race_name)
         );
-    } else if (!content.get_character_races().get(race_name).has_subraces()) {
+    } else if (!race_optional.value().get().has_subraces()) {
         errors.add_validation_error(
             ValidationErrorCode::INVALID_RELATION, this,
             fmt::format("Character race '{}' does not have subraces.", race_name)

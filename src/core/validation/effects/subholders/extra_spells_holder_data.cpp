@@ -47,12 +47,13 @@ static dnd::Errors spells_set_validate_relations(
     dnd::Errors errors;
 
     for (const auto& spell_name : spells) {
-        if (!content.get_spells().contains(spell_name)) {
+        auto spell_optional = content.get_spells().get(spell_name);
+        if (!spell_optional.has_value()) {
             errors.add_validation_error(
                 dnd::ValidationErrorCode::RELATION_NOT_FOUND, parent,
                 fmt::format("Spell '{}' does not exist.", spell_name)
             );
-        } else if (content.get_spells().get(spell_name).get_type().get_spell_level() == dnd::SpellLevel::CANTRIP) {
+        } else if (spell_optional.value().get().get_type().get_spell_level() == dnd::SpellLevel::CANTRIP) {
             errors.add_validation_error(
                 dnd::ValidationErrorCode::INVALID_RELATION, parent, fmt::format("Spell '{}' is a cantrip.", spell_name)
             );
@@ -64,12 +65,13 @@ static dnd::Errors spells_set_validate_relations(
 dnd::Errors dnd::ExtraSpellsHolderData::validate_relations(const Content& content) const {
     Errors errors;
     for (const auto& cantrip_name : free_cantrips) {
-        if (!content.get_spells().contains(cantrip_name)) {
+        auto cantrip_optional = content.get_spells().get(cantrip_name);
+        if (!cantrip_optional.has_value()) {
             errors.add_validation_error(
                 dnd::ValidationErrorCode::RELATION_NOT_FOUND, parent,
                 fmt::format("Cantrip '{}' does not exist.", cantrip_name)
             );
-        } else if (content.get_spells().get(cantrip_name).get_type().get_spell_level() != dnd::SpellLevel::CANTRIP) {
+        } else if (cantrip_optional.value().get().get_type().get_spell_level() != dnd::SpellLevel::CANTRIP) {
             errors.add_validation_error(
                 dnd::ValidationErrorCode::INVALID_RELATION, parent,
                 fmt::format("Spell '{}' is not a cantrip.", cantrip_name)

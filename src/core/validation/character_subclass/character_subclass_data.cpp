@@ -60,19 +60,20 @@ dnd::Errors dnd::CharacterSubclassData::validate_relations(const Content& conten
     }
     for (const auto& feature_data : features_data) {
         errors += feature_data.validate_relations(content);
-        if (content.get_features().contains(feature_data.name)) {
+        if (content.get_class_features().contains(feature_data.name)) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
                 fmt::format("Feature has duplicate name \"{}\".", feature_data.name)
             );
         }
     }
-    if (!content.get_character_classes().contains(class_name)) {
+    auto class_optional = content.get_character_classes().get(class_name);
+    if (!class_optional.has_value()) {
         errors.add_validation_error(
             ValidationErrorCode::RELATION_NOT_FOUND, this,
             fmt::format("Character class '{}' does not exist.", class_name)
         );
-    } else if (spellcasting_data.is_spellcaster && content.get_character_classes().get(class_name).has_spellcasting()) {
+    } else if (spellcasting_data.is_spellcaster && class_optional.value().get().has_spellcasting()) {
         errors.add_validation_error(
             ValidationErrorCode::INVALID_RELATION, this,
             fmt::format(

@@ -30,7 +30,7 @@ public:
     size_t size() const override;
     std::optional<std::reference_wrapper<const T>> get(size_t index) const override;
     std::optional<std::reference_wrapper<const T>> get(const std::string& name) const override;
-    const std::unordered_map<std::string, const T*>& get_all() const;
+    const std::unordered_map<std::string, std::reference_wrapper<const T>>& get_all() const;
     /**
      * @brief Add a content piece to a content piece to the library
      * @param content_piece the content piece to add
@@ -107,7 +107,7 @@ std::optional<std::reference_wrapper<const T>> ReferencingContentLibrary<T>::get
 
 template <typename T>
 requires isContentPieceType<T>
-const std::unordered_map<std::string, const T*>& ReferencingContentLibrary<T>::get_all() const {
+const std::unordered_map<std::string, std::reference_wrapper<const T>>& ReferencingContentLibrary<T>::get_all() const {
     return data;
 }
 

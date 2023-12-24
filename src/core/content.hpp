@@ -50,7 +50,11 @@ public:
     const StorageContentLibrary<Item>& get_items() const;
     const StorageContentLibrary<Spell>& get_spells() const;
     const ReferencingContentLibrary<Feature>& get_features() const;
+    const ReferencingContentLibrary<ClassFeature>& get_class_features() const;
     const StorageContentLibrary<Choosable>& get_choosables() const;
+
+    std::optional<EffectsProviderType> contains_effects_provider(const std::string& name) const;
+    std::optional<std::reference_wrapper<const EffectsProvider>> get_effects_provider(const std::string& name) const;
 
     void set_subgroup(const std::string& group_name, const std::string& subgroup_name);
     void set_subgroups(const std::string& group_name, std::set<std::string>&& subgroups);

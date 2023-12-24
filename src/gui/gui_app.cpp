@@ -73,6 +73,7 @@ static void render_content_count_table(const dnd::Content& content) {
     display_size("Items", content.get_items().size(), w);
     display_size("Spells", content.get_spells().size(), w);
     display_size("Features", content.get_features().size(), w);
+    display_size("Class Features", content.get_class_features().size(), w);
     display_size("Choosables", content.get_choosables().size(), w);
 }
 

@@ -29,12 +29,14 @@ dnd::Errors dnd::CharacterBasisData::validate() const {
 
 dnd::Errors dnd::CharacterBasisData::validate_relations(const dnd::Content& content) const {
     Errors errors;
-    if (!content.get_character_races().contains(race_name)) {
+    auto race_optional = content.get_character_races().get(race_name);
+    if (!race_optional.has_value()) {
         errors.add_validation_error(
             ValidationErrorCode::RELATION_NOT_FOUND, parent, fmt::format("Race '{}' does not exist.", race_name)
         );
     } else if (!subrace_name.empty()) {
-        if (!content.get_character_races().get(race_name).has_subraces()) {
+        const CharacterRace& race = race_optional.value();
+        if (!race.has_subraces()) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_RELATION, parent,
                 fmt::format("Race '{}' does not have subraces.", race_name)
@@ -46,7 +48,7 @@ dnd::Errors dnd::CharacterBasisData::validate_relations(const dnd::Content& cont
                 fmt::format("Subrace '{}' does not exist.", subrace_name)
             );
         }
-    } else if (content.get_character_races().get(race_name).has_subraces()) {
+    } else if (race_optional.value().get().has_subraces()) {
         errors.add_validation_error(
             ValidationErrorCode::INVALID_RELATION, parent, fmt::format("Race '{}' requires subraces.", race_name)
         );

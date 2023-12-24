@@ -65,8 +65,13 @@ std::vector<const dnd::ContentPiece*> dnd::ContentPieceFilter::all_matches(const
         }
     }
     for (const auto& [_, feature] : content.get_features().get_all()) {
-        if (matches(*feature)) {
-            matching_content_pieces.emplace_back(feature);
+        if (matches(feature)) {
+            matching_content_pieces.emplace_back(&feature.get());
+        }
+    }
+    for (const auto& [_, class_feature] : content.get_class_features().get_all()) {
+        if (matches(class_feature)) {
+            matching_content_pieces.emplace_back(&class_feature.get());
         }
     }
     for (const auto& [_, choosable] : content.get_choosables().get_all()) {
