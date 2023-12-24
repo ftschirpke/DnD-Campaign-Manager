@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -25,17 +26,15 @@ public:
     /**
      * @brief Get content piece by its index
      * @param index the index of the piece of content
-     * @return constant reference to the piece of content if it exists
-     * @throws std::out_of_range if the piece of content does not exist
+     * @return constant reference to the piece of content if it exists, std::nullopt otherwise
      */
-    virtual const T& get(size_t index) const = 0;
+    virtual std::optional<std::reference_wrapper<const T>> get(size_t index) const = 0;
     /**
      * @brief Get content piece by its name
      * @param name the name of the piece of content
-     * @return constant reference to the piece of content if it exists
-     * @throws std::out_of_range if the piece of content does not exist
+     * @return constant reference to the piece of content if it exists, std::nullopt otherwise
      */
-    virtual const T& get(const std::string& name) const = 0;
+    virtual std::optional<std::reference_wrapper<const T>> get(const std::string& name) const = 0;
     /**
      * @brief Get the root of the fuzzy search trie
      * @return a pointer to the root of the fuzzy search trie

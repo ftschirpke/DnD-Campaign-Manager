@@ -30,7 +30,7 @@ dnd::CharacterSubclass dnd::CharacterSubclass::create(dnd::CharacterSubclassData
     for (auto& feature_data : data.features_data) {
         features.emplace_back(ClassFeature::create(std::move(feature_data), content));
     }
-    const CharacterClass* cls = &content.get_character_classes().get(data.class_name);
+    const CharacterClass* cls = &content.get_character_classes().get(data.class_name).value().get();
     return CharacterSubclass(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(features), cls,
         create_spellcasting(std::move(data.spellcasting_data))

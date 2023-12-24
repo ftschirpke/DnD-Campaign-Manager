@@ -3,6 +3,8 @@
 
 #include <dnd_config.hpp>
 
+#include <functional>
+#include <optional>
 #include <string>
 #include <unordered_map>
 
@@ -20,6 +22,12 @@
 #include <core/storage_content_library.hpp>
 
 namespace dnd {
+
+enum class EffectsProviderType {
+    Feature,
+    ClassFeature,
+    Choosable,
+};
 
 /**
  * @brief A class that holds all the content for a certain session or campaign
@@ -49,14 +57,18 @@ public:
     void add_group_member(const std::string& group_name, const std::string& value);
     void add_group_members(const std::string& group_name, std::set<std::string>&& values);
 
-    bool add_character(Character&& character);
-    bool add_character_class(CharacterClass&& character_class);
-    bool add_character_subclass(CharacterSubclass&& character_subclass);
-    bool add_character_race(CharacterRace&& character_race);
-    bool add_character_subrace(CharacterSubrace&& character_subrace);
-    bool add_item(Item&& item);
-    bool add_spell(Spell&& spell);
-    bool add_choosable(Choosable&& choosable);
+    std::optional<std::reference_wrapper<const Character>> add_character(Character&& character);
+    std::optional<std::reference_wrapper<const CharacterClass>> add_character_class(CharacterClass&& character_class);
+    std::optional<std::reference_wrapper<const CharacterSubclass>> add_character_subclass(
+        CharacterSubclass&& character_subclass
+    );
+    std::optional<std::reference_wrapper<const CharacterRace>> add_character_race(CharacterRace&& character_race);
+    std::optional<std::reference_wrapper<const CharacterSubrace>> add_character_subrace(
+        CharacterSubrace&& character_subrace
+    );
+    std::optional<std::reference_wrapper<const Item>> add_item(Item&& item);
+    std::optional<std::reference_wrapper<const Spell>> add_spell(Spell&& spell);
+    std::optional<std::reference_wrapper<const Choosable>> add_choosable(Choosable&& choosable);
 private:
     Groups groups;
     StorageContentLibrary<Character> characters;
@@ -68,6 +80,7 @@ private:
     StorageContentLibrary<Spell> spells;
 
     ReferencingContentLibrary<Feature> features;
+    ReferencingContentLibrary<ClassFeature> class_features;
     StorageContentLibrary<Choosable> choosables;
 };
 

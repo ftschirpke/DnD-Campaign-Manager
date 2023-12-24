@@ -5,6 +5,8 @@
 
 #include <algorithm>
 #include <cassert>
+#include <functional>
+#include <optional>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
@@ -26,27 +28,15 @@ public:
     bool contains(const std::string& name) const override;
     bool empty() const override;
     size_t size() const override;
-    /**
-     * @brief Get content piece by its index
-     * @param index the index of the piece of content
-     * @return constant reference to the piece of content if it exists
-     * @throws std::out_of_range if the piece of content does not exist
-     */
-    const T& get(size_t index) const override;
-    /**
-     * @brief Get content piece by its name
-     * @param name the name of the piece of content
-     * @return constant reference to the piece of content if it exists
-     * @throws std::out_of_range if the piece of content does not exist
-     */
-    const T& get(const std::string& name) const override;
+    std::optional<std::reference_wrapper<const T>> get(size_t index) const override;
+    std::optional<std::reference_wrapper<const T>> get(const std::string& name) const override;
     const std::unordered_map<std::string, const T*>& get_all() const;
     /**
-     * @brief Add a pointer to a content piece to the library
+     * @brief Add a content piece to a content piece to the library
      * @param content_piece the content piece to add
-     * @return "true" if the pointer was added, "false" if the content piece was already referenced
+     * @return reference to the inserted content piece, or std::nullopt if a content piece with that name already exists
      */
-    bool add(const T& content_piece);
+    std::optional<std::reference_wrapper<const T>> add(const T& content_piece);
     /**
      * @brief Get the root of the fuzzy search trie
      * @return a pointer to the root of the fuzzy search trie
@@ -55,7 +45,7 @@ public:
 private:
     void save_in_trie(const T* content_piece);
 
-    std::unordered_map<std::string, const T*> data;
+    std::unordered_map<std::string, std::reference_wrapper<const T>> data;
     Trie<T> trie;
 };
 
@@ -97,14 +87,22 @@ size_t ReferencingContentLibrary<T>::size() const {
 
 template <typename T>
 requires isContentPieceType<T>
-const T& ReferencingContentLibrary<T>::get(size_t index) const {
-    return *std::next(data.begin(), static_cast<long>(index))->second;
+std::optional<std::reference_wrapper<const T>> ReferencingContentLibrary<T>::get(size_t index) const {
+    if (index >= data.size()) {
+        return std::nullopt;
+    }
+    std::reference_wrapper<const T> element = std::next(data.begin(), static_cast<long>(index))->second;
+    return element;
 }
 
 template <typename T>
 requires isContentPieceType<T>
-const T& ReferencingContentLibrary<T>::get(const std::string& name) const {
-    return *data.at(name);
+std::optional<std::reference_wrapper<const T>> ReferencingContentLibrary<T>::get(const std::string& name) const {
+    auto iterator = data.find(name);
+    if (iterator == data.end()) {
+        return std::nullopt;
+    }
+    return std::cref(iterator->second);
 }
 
 template <typename T>
@@ -115,14 +113,15 @@ const std::unordered_map<std::string, const T*>& ReferencingContentLibrary<T>::g
 
 template <typename T>
 requires isContentPieceType<T>
-bool ReferencingContentLibrary<T>::add(const T& content_piece) {
+std::optional<std::reference_wrapper<const T>> ReferencingContentLibrary<T>::add(const T& content_piece) {
     const std::string name = content_piece.get_name();
-    if (contains(name)) {
-        return false;
+    auto [it, was_inserted] = data.emplace(name, std::cref(content_piece));
+    if (was_inserted) {
+        save_in_trie(&it->second.get());
+        return std::cref(content_piece);
+    } else {
+        return std::nullopt;
     }
-    data.emplace(name, &content_piece);
-    save_in_trie(&content_piece);
-    return true;
 }
 
 template <typename T>

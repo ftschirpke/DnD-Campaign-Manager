@@ -2,6 +2,8 @@
 
 #include "content.hpp"
 
+#include <functional>
+#include <optional>
 #include <sstream>
 #include <string>
 #include <unordered_map>
@@ -70,71 +72,83 @@ void dnd::Content::add_group_members(const std::string& group_name, std::set<std
     groups.add(group_name, std::move(values));
 }
 
-bool dnd::Content::add_character(dnd::Character&& character) {
+std::optional<std::reference_wrapper<const dnd::Character>> dnd::Content::add_character(dnd::Character&& character) {
     const std::string name = character.get_name();
-    if (characters.add(std::move(character))) {
-        for (const auto& feature : characters.get(name).get_features()) {
+    auto inserted_character = characters.add(std::move(character));
+    if (inserted_character.has_value()) {
+        for (const auto& feature : inserted_character.value().get().get_features()) {
             features.add(feature);
         }
-        return true;
     }
-    return false;
+    return inserted_character;
 }
 
-bool dnd::Content::add_character_class(dnd::CharacterClass&& character_class) {
+std::optional<std::reference_wrapper<const dnd::CharacterClass>> dnd::Content::add_character_class(
+    dnd::CharacterClass&& character_class
+) {
     const std::string name = character_class.get_name();
-    if (character_classes.add(std::move(character_class))) {
-        for (const auto& feature : character_classes.get(name).get_features()) {
-            features.add(feature);
+    auto inserted_class = character_classes.add(std::move(character_class));
+    if (inserted_class.has_value()) {
+        for (const auto& feature : inserted_class.value().get().get_features()) {
+            class_features.add(feature);
         }
-        return true;
     }
-    return false;
+    return inserted_class;
 }
 
-bool dnd::Content::add_character_subclass(dnd::CharacterSubclass&& character_subclass) {
+std::optional<std::reference_wrapper<const dnd::CharacterSubclass>> dnd::Content::add_character_subclass(
+    dnd::CharacterSubclass&& character_subclass
+) {
     const std::string name = character_subclass.get_name();
+    auto inserted_subclass = character_subclasses.add(std::move(character_subclass));
     if (character_subclasses.add(std::move(character_subclass))) {
-        for (const auto& feature : character_subclasses.get(name).get_features()) {
-            features.add(feature);
+        for (const auto& feature : inserted_subclass.value().get().get_features()) {
+            class_features.add(feature);
         }
-        return true;
     }
-    return false;
+    return inserted_subclass;
 }
 
-bool dnd::Content::add_character_race(dnd::CharacterRace&& character_race) {
+std::optional<std::reference_wrapper<const dnd::CharacterRace>> dnd::Content::add_character_race(
+    dnd::CharacterRace&& character_race
+) {
     const std::string name = character_race.get_name();
-    if (character_races.add(std::move(character_race))) {
-        for (const auto& feature : character_races.get(name).get_features()) {
+    auto inserted_race = character_races.add(std::move(character_race));
+    if (inserted_race.has_value()) {
+        for (const auto& feature : inserted_race.value().get().get_features()) {
             features.add(feature);
         }
-        return true;
     }
-    return false;
+    return inserted_race;
 }
 
-bool dnd::Content::add_character_subrace(dnd::CharacterSubrace&& character_subrace) {
+std::optional<std::reference_wrapper<const dnd::CharacterSubrace>> dnd::Content::add_character_subrace(
+    dnd::CharacterSubrace&& character_subrace
+) {
     const std::string name = character_subrace.get_name();
-    if (character_subraces.add(std::move(character_subrace))) {
-        for (const auto& feature : character_subraces.get(name).get_features()) {
+    auto inserted_subrace = character_subraces.add(std::move(character_subrace));
+    if (inserted_subrace.has_value()) {
+        for (const auto& feature : inserted_subrace.value().get().get_features()) {
             features.add(feature);
         }
-        return true;
     }
-    return false;
+    return inserted_subrace;
 }
 
-bool dnd::Content::add_item(dnd::Item&& item) { return items.add(std::move(item)); }
+std::optional<std::reference_wrapper<const dnd::Item>> dnd::Content::add_item(dnd::Item&& item) {
+    return items.add(std::move(item));
+}
 
-bool dnd::Content::add_spell(dnd::Spell&& spell) { return spells.add(std::move(spell)); }
+std::optional<std::reference_wrapper<const dnd::Spell>> dnd::Content::add_spell(dnd::Spell&& spell) {
+    return spells.add(std::move(spell));
+}
 
-bool dnd::Content::add_choosable(dnd::Choosable&& choosable) {
+std::optional<std::reference_wrapper<const dnd::Choosable>> dnd::Content::add_choosable(dnd::Choosable&& choosable) {
     const std::string name = choosable.get_name();
     const std::string type_name = choosable.get_type();
-    if (choosables.add(std::move(choosable))) {
+    auto inserted_choosable = choosables.add(std::move(choosable));
+    if (inserted_choosable.has_value()) {
         groups.add(type_name, name);
-        return true;
     }
-    return false;
+    return inserted_choosable;
 }
