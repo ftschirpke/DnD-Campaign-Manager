@@ -28,6 +28,8 @@ enum class EffectsProviderType {
     Choosable,
 };
 
+using EffectsProviderVariant = VarOfCRef<Feature, ClassFeature, Choosable>;
+
 /**
  * @brief A class that holds all the content for a certain session or campaign
  */
@@ -54,6 +56,7 @@ public:
 
     std::optional<EffectsProviderType> contains_effects_provider(const std::string& name) const;
     OptCRef<EffectsProvider> get_effects_provider(const std::string& name) const;
+    std::optional<EffectsProviderVariant> get_effects_provider_variant(const std::string& name) const;
 
     void set_subgroup(const std::string& group_name, const std::string& subgroup_name);
     void set_subgroups(const std::string& group_name, std::set<std::string>&& subgroups);

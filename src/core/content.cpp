@@ -88,6 +88,22 @@ dnd::OptCRef<dnd::EffectsProvider> dnd::Content::get_effects_provider(const std:
     return std::nullopt;
 }
 
+std::optional<dnd::EffectsProviderVariant> dnd::Content::get_effects_provider_variant(const std::string& name) const {
+    OptCRef<Feature> feature = features.get(name);
+    if (feature.has_value()) {
+        return feature.value();
+    }
+    OptCRef<ClassFeature> class_feature = class_features.get(name);
+    if (class_feature.has_value()) {
+        return class_feature.value();
+    }
+    OptCRef<Choosable> choosable = choosables.get(name);
+    if (choosable.has_value()) {
+        return choosable.value();
+    }
+    return std::nullopt;
+}
+
 void dnd::Content::set_subgroup(const std::string& group_name, const std::string& subgroup_name) {
     groups.set_subgroup(group_name, subgroup_name);
 }
