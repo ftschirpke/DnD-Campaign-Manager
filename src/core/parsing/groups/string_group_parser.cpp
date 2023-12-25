@@ -25,7 +25,7 @@ dnd::Errors dnd::StringGroupParser::parse() {
         return errors;
     }
 
-    for (auto& [key, value] : json.items()) {
+    for (const auto& [key, value] : json.items()) {
         if (key == "__no_subgroup__") {
             errors.add_parsing_error(
                 ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(),
@@ -42,7 +42,7 @@ dnd::Errors dnd::StringGroupParser::parse() {
             );
         }
 
-        for (auto& group_member : members[key]) {
+        for (const std::string& group_member : members[key]) {
             if (group_member.empty()) {
                 errors.add_parsing_error(
                     ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(),

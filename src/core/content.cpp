@@ -2,8 +2,6 @@
 
 #include "content.hpp"
 
-#include <functional>
-#include <optional>
 #include <sstream>
 #include <string>
 #include <unordered_map>
@@ -12,6 +10,7 @@
 
 #include <core/referencing_content_library.hpp>
 #include <core/storage_content_library.hpp>
+#include <core/utils/types.hpp>
 
 bool dnd::Content::empty() const {
     return characters.empty() && character_classes.empty() && character_subclasses.empty() && character_races.empty()
@@ -73,18 +72,16 @@ std::optional<dnd::EffectsProviderType> dnd::Content::contains_effects_provider(
     return std::nullopt;
 }
 
-std::optional<std::reference_wrapper<const dnd::EffectsProvider>> dnd::Content::get_effects_provider(
-    const std::string& name
-) const {
-    std::optional<std::reference_wrapper<const Feature>> feature = features.get(name);
+dnd::OptCRef<dnd::EffectsProvider> dnd::Content::get_effects_provider(const std::string& name) const {
+    OptCRef<Feature> feature = features.get(name);
     if (feature.has_value()) {
         return feature.value();
     }
-    std::optional<std::reference_wrapper<const ClassFeature>> class_feature = class_features.get(name);
+    OptCRef<ClassFeature> class_feature = class_features.get(name);
     if (class_feature.has_value()) {
         return class_feature.value();
     }
-    std::optional<std::reference_wrapper<const Choosable>> choosable = choosables.get(name);
+    OptCRef<Choosable> choosable = choosables.get(name);
     if (choosable.has_value()) {
         return choosable.value();
     }
@@ -107,81 +104,69 @@ void dnd::Content::add_group_members(const std::string& group_name, std::set<std
     groups.add(group_name, std::move(values));
 }
 
-std::optional<std::reference_wrapper<const dnd::Character>> dnd::Content::add_character(dnd::Character&& character) {
+dnd::OptCRef<dnd::Character> dnd::Content::add_character(dnd::Character&& character) {
     const std::string name = character.get_name();
-    auto inserted_character = characters.add(std::move(character));
+    OptCRef<Character> inserted_character = characters.add(std::move(character));
     if (inserted_character.has_value()) {
-        for (const auto& feature : inserted_character.value().get().get_features()) {
+        for (const Feature& feature : inserted_character.value().get().get_features()) {
             features.add(feature);
         }
     }
     return inserted_character;
 }
 
-std::optional<std::reference_wrapper<const dnd::CharacterClass>> dnd::Content::add_character_class(
-    dnd::CharacterClass&& character_class
-) {
+dnd::OptCRef<dnd::CharacterClass> dnd::Content::add_character_class(dnd::CharacterClass&& character_class) {
     const std::string name = character_class.get_name();
-    auto inserted_class = character_classes.add(std::move(character_class));
+    OptCRef<CharacterClass> inserted_class = character_classes.add(std::move(character_class));
     if (inserted_class.has_value()) {
-        for (const auto& feature : inserted_class.value().get().get_features()) {
+        for (const ClassFeature& feature : inserted_class.value().get().get_features()) {
             class_features.add(feature);
         }
     }
     return inserted_class;
 }
 
-std::optional<std::reference_wrapper<const dnd::CharacterSubclass>> dnd::Content::add_character_subclass(
-    dnd::CharacterSubclass&& character_subclass
-) {
+dnd::OptCRef<dnd::CharacterSubclass> dnd::Content::add_character_subclass(dnd::CharacterSubclass&& character_subclass) {
     const std::string name = character_subclass.get_name();
-    auto inserted_subclass = character_subclasses.add(std::move(character_subclass));
+    OptCRef<CharacterSubclass> inserted_subclass = character_subclasses.add(std::move(character_subclass));
     if (character_subclasses.add(std::move(character_subclass))) {
-        for (const auto& feature : inserted_subclass.value().get().get_features()) {
+        for (const ClassFeature& feature : inserted_subclass.value().get().get_features()) {
             class_features.add(feature);
         }
     }
     return inserted_subclass;
 }
 
-std::optional<std::reference_wrapper<const dnd::CharacterRace>> dnd::Content::add_character_race(
-    dnd::CharacterRace&& character_race
-) {
+dnd::OptCRef<dnd::CharacterRace> dnd::Content::add_character_race(dnd::CharacterRace&& character_race) {
     const std::string name = character_race.get_name();
-    auto inserted_race = character_races.add(std::move(character_race));
+    OptCRef<CharacterRace> inserted_race = character_races.add(std::move(character_race));
     if (inserted_race.has_value()) {
-        for (const auto& feature : inserted_race.value().get().get_features()) {
+        for (const Feature& feature : inserted_race.value().get().get_features()) {
             features.add(feature);
         }
     }
     return inserted_race;
 }
 
-std::optional<std::reference_wrapper<const dnd::CharacterSubrace>> dnd::Content::add_character_subrace(
-    dnd::CharacterSubrace&& character_subrace
-) {
+dnd::OptCRef<dnd::CharacterSubrace> dnd::Content::add_character_subrace(dnd::CharacterSubrace&& character_subrace) {
     const std::string name = character_subrace.get_name();
-    auto inserted_subrace = character_subraces.add(std::move(character_subrace));
+    OptCRef<CharacterSubrace> inserted_subrace = character_subraces.add(std::move(character_subrace));
     if (inserted_subrace.has_value()) {
-        for (const auto& feature : inserted_subrace.value().get().get_features()) {
+        for (const Feature& feature : inserted_subrace.value().get().get_features()) {
             features.add(feature);
         }
     }
     return inserted_subrace;
 }
 
-std::optional<std::reference_wrapper<const dnd::Item>> dnd::Content::add_item(dnd::Item&& item) {
-    return items.add(std::move(item));
-}
+dnd::OptCRef<dnd::Item> dnd::Content::add_item(dnd::Item&& item) { return items.add(std::move(item)); }
 
-std::optional<std::reference_wrapper<const dnd::Spell>> dnd::Content::add_spell(dnd::Spell&& spell) {
-    return spells.add(std::move(spell));
-}
+dnd::OptCRef<dnd::Spell> dnd::Content::add_spell(dnd::Spell&& spell) { return spells.add(std::move(spell)); }
 
-std::optional<std::reference_wrapper<const dnd::Choosable>> dnd::Content::add_choosable(dnd::Choosable&& choosable) {
+dnd::OptCRef<dnd::Choosable> dnd::Content::add_choosable(dnd::Choosable&& choosable) {
     const std::string name = choosable.get_name();
     const std::string type_name = choosable.get_type();
-    auto inserted_choosable = choosables.add(std::move(choosable));
+    OptCRef<Choosable> inserted_choosable = choosables.add(std::move(choosable));
     if (inserted_choosable.has_value()) {
         groups.add(type_name, name);
     }

@@ -84,14 +84,14 @@ dnd::ParsingResult dnd::parse_content(const std::filesystem::path& content_path,
     }
 
     std::vector<std::filesystem::directory_entry> content_directories;
-    for (auto& entry : std::filesystem::directory_iterator(content_path / "general")) {
+    for (const auto& entry : std::filesystem::directory_iterator(content_path / "general")) {
         if (entry.is_directory()) {
             content_directories.emplace_back(std::move(entry));
         }
     }
     content_directories.emplace_back(content_path / campaign_dir_name);
 
-    auto content_ref = std::ref(result.content);
+    std::reference_wrapper<Content> content_ref = std::ref(result.content);
     auto content_directories_ref = std::ref(content_directories);
     {
         DND_MEASURE_SCOPE("Parsing: string groups, spells");
@@ -250,7 +250,7 @@ static dnd::Errors parse_all_of_type(
             );
             continue;
         }
-        for (auto& entry : std::filesystem::directory_iterator(dir.path() / directory_name)) {
+        for (const auto& entry : std::filesystem::directory_iterator(dir.path() / directory_name)) {
             if (!entry.is_regular_file()) {
                 errors.add_parsing_error(
                     dnd::ParsingErrorCode::INVALID_FILE_FORMAT, entry.path(),

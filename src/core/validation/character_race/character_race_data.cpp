@@ -21,7 +21,7 @@ std::unique_ptr<dnd::ValidationData> dnd::CharacterRaceData::pack() const {
 dnd::Errors dnd::CharacterRaceData::validate() const {
     Errors errors;
     std::unordered_set<std::string> unique_feature_names;
-    for (const auto& feature_data : features_data) {
+    for (const FeatureData& feature_data : features_data) {
         errors += feature_data.validate();
         if (unique_feature_names.contains(feature_data.name)) {
             errors.add_validation_error(
@@ -47,7 +47,7 @@ dnd::Errors dnd::CharacterRaceData::validate_relations(const Content& content) c
             ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, fmt::format("Race has duplicate name \"{}\".", name)
         );
     }
-    for (const auto& feature_data : features_data) {
+    for (const FeatureData& feature_data : features_data) {
         errors += feature_data.validate_relations(content);
         if (content.get_features().contains(feature_data.name)) {
             errors.add_validation_error(

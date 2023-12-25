@@ -25,7 +25,7 @@ dnd::CharacterSubrace dnd::CharacterSubrace::create(dnd::CharacterSubraceData&& 
     }
     std::vector<Feature> features;
     features.reserve(data.features_data.size());
-    for (auto& feature_data : data.features_data) {
+    for (FeatureData& feature_data : data.features_data) {
         features.emplace_back(Feature::create(std::move(feature_data), content));
     }
     const CharacterRace* race = &content.get_character_races().get(data.race_name).value().get();

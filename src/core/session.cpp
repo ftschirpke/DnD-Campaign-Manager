@@ -1,6 +1,7 @@
 #include <dnd_config.hpp>
 
 #include "core/searching/advanced_search/advanced_content_search.hpp"
+#include "core/utils/types.hpp"
 #include "session.hpp"
 
 #include <chrono>
@@ -144,7 +145,7 @@ void dnd::Session::save_session_values() {
     }
 
     CollectOpenTabsVisitor collect_open_tabs_visitor;
-    for (const auto open_content_piece : open_content_pieces) {
+    for (const ContentPiece* open_content_piece : open_content_pieces) {
         open_content_piece->accept_visitor(collect_open_tabs_visitor);
     }
     last_session["open_tabs"] = collect_open_tabs_visitor.get_open_tabs();
@@ -360,61 +361,63 @@ void dnd::Session::parse_content_and_initialize() {
 
 void dnd::Session::open_last_session() {
     for (const std::string& character_to_open : last_session_open_tabs["characters"]) {
-        auto character = content.get_characters().get(character_to_open);
+        OptCRef<Character> character = content.get_characters().get(character_to_open);
         if (character.has_value()) {
             open_content_pieces.push_back(&character.value().get());
         }
     }
     for (const std::string& character_class_to_open : last_session_open_tabs["character_classes"]) {
-        auto character_class = content.get_character_classes().get(character_class_to_open);
+        OptCRef<CharacterClass> character_class = content.get_character_classes().get(character_class_to_open);
         if (character_class.has_value()) {
             open_content_pieces.push_back(&character_class.value().get());
         }
     }
     for (const std::string& character_subclass_to_open : last_session_open_tabs["character_subclasses"]) {
-        auto character_subclass = content.get_character_subclasses().get(character_subclass_to_open);
+        OptCRef<CharacterSubclass> character_subclass = content.get_character_subclasses().get(
+            character_subclass_to_open
+        );
         if (character_subclass.has_value()) {
             open_content_pieces.push_back(&character_subclass.value().get());
         }
     }
     for (const std::string& character_race_to_open : last_session_open_tabs["character_races"]) {
-        auto character_race = content.get_character_races().get(character_race_to_open);
+        OptCRef<CharacterRace> character_race = content.get_character_races().get(character_race_to_open);
         if (character_race.has_value()) {
             open_content_pieces.push_back(&character_race.value().get());
         }
     }
     for (const std::string& character_subrace_to_open : last_session_open_tabs["character_subraces"]) {
-        auto character_subrace = content.get_character_subraces().get(character_subrace_to_open);
+        OptCRef<CharacterSubrace> character_subrace = content.get_character_subraces().get(character_subrace_to_open);
         if (character_subrace.has_value()) {
             open_content_pieces.push_back(&character_subrace.value().get());
         }
     }
     for (const std::string& item_to_open : last_session_open_tabs["items"]) {
-        auto item = content.get_items().get(item_to_open);
+        OptCRef<Item> item = content.get_items().get(item_to_open);
         if (item.has_value()) {
             open_content_pieces.push_back(&item.value().get());
         }
     }
     for (const std::string& spell_to_open : last_session_open_tabs["spells"]) {
-        auto spell = content.get_spells().get(spell_to_open);
+        OptCRef<Spell> spell = content.get_spells().get(spell_to_open);
         if (spell.has_value()) {
             open_content_pieces.push_back(&spell.value().get());
         }
     }
     for (const std::string& feature_to_open : last_session_open_tabs["features"]) {
-        auto feature = content.get_features().get(feature_to_open);
+        OptCRef<Feature> feature = content.get_features().get(feature_to_open);
         if (feature.has_value()) {
             open_content_pieces.push_back(&feature.value().get());
         }
     }
     for (const std::string& class_feature_to_open : last_session_open_tabs["class_features"]) {
-        auto class_feature = content.get_class_features().get(class_feature_to_open);
+        OptCRef<ClassFeature> class_feature = content.get_class_features().get(class_feature_to_open);
         if (class_feature.has_value()) {
             open_content_pieces.push_back(&class_feature.value().get());
         }
     }
     for (const std::string& choosable_to_open : last_session_open_tabs["choosables"]) {
-        auto choosable = content.get_choosables().get(choosable_to_open);
+        OptCRef<Choosable> choosable = content.get_choosables().get(choosable_to_open);
         if (choosable.has_value()) {
             open_content_pieces.push_back(&choosable.value().get());
         }

@@ -3,8 +3,6 @@
 
 #include <dnd_config.hpp>
 
-#include <functional>
-#include <optional>
 #include <string>
 #include <unordered_map>
 
@@ -20,6 +18,7 @@
 #include <core/models/spell/spell.hpp>
 #include <core/referencing_content_library.hpp>
 #include <core/storage_content_library.hpp>
+#include <core/utils/types.hpp>
 
 namespace dnd {
 
@@ -54,25 +53,21 @@ public:
     const StorageContentLibrary<Choosable>& get_choosables() const;
 
     std::optional<EffectsProviderType> contains_effects_provider(const std::string& name) const;
-    std::optional<std::reference_wrapper<const EffectsProvider>> get_effects_provider(const std::string& name) const;
+    OptCRef<EffectsProvider> get_effects_provider(const std::string& name) const;
 
     void set_subgroup(const std::string& group_name, const std::string& subgroup_name);
     void set_subgroups(const std::string& group_name, std::set<std::string>&& subgroups);
     void add_group_member(const std::string& group_name, const std::string& value);
     void add_group_members(const std::string& group_name, std::set<std::string>&& values);
 
-    std::optional<std::reference_wrapper<const Character>> add_character(Character&& character);
-    std::optional<std::reference_wrapper<const CharacterClass>> add_character_class(CharacterClass&& character_class);
-    std::optional<std::reference_wrapper<const CharacterSubclass>> add_character_subclass(
-        CharacterSubclass&& character_subclass
-    );
-    std::optional<std::reference_wrapper<const CharacterRace>> add_character_race(CharacterRace&& character_race);
-    std::optional<std::reference_wrapper<const CharacterSubrace>> add_character_subrace(
-        CharacterSubrace&& character_subrace
-    );
-    std::optional<std::reference_wrapper<const Item>> add_item(Item&& item);
-    std::optional<std::reference_wrapper<const Spell>> add_spell(Spell&& spell);
-    std::optional<std::reference_wrapper<const Choosable>> add_choosable(Choosable&& choosable);
+    OptCRef<Character> add_character(Character&& character);
+    OptCRef<CharacterClass> add_character_class(CharacterClass&& character_class);
+    OptCRef<CharacterSubclass> add_character_subclass(CharacterSubclass&& character_subclass);
+    OptCRef<CharacterRace> add_character_race(CharacterRace&& character_race);
+    OptCRef<CharacterSubrace> add_character_subrace(CharacterSubrace&& character_subrace);
+    OptCRef<Item> add_item(Item&& item);
+    OptCRef<Spell> add_spell(Spell&& spell);
+    OptCRef<Choosable> add_choosable(Choosable&& choosable);
 private:
     Groups groups;
     StorageContentLibrary<Character> characters;

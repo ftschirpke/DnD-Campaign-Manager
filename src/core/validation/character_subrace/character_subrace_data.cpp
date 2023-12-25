@@ -22,7 +22,7 @@ std::unique_ptr<dnd::ValidationData> dnd::CharacterSubraceData::pack() const {
 dnd::Errors dnd::CharacterSubraceData::validate() const {
     Errors errors;
     std::unordered_set<std::string> unique_feature_names;
-    for (const auto& feature_data : features_data) {
+    for (const FeatureData& feature_data : features_data) {
         errors += feature_data.validate();
         if (unique_feature_names.contains(feature_data.name)) {
             errors.add_validation_error(
@@ -53,7 +53,7 @@ dnd::Errors dnd::CharacterSubraceData::validate_relations(const Content& content
             ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, fmt::format("Subrace has duplicate name \"{}\".", name)
         );
     }
-    for (const auto& feature_data : features_data) {
+    for (const FeatureData& feature_data : features_data) {
         errors += feature_data.validate_relations(content);
         if (content.get_features().contains(feature_data.name)) {
             errors.add_validation_error(
@@ -62,7 +62,7 @@ dnd::Errors dnd::CharacterSubraceData::validate_relations(const Content& content
             );
         }
     }
-    auto race_optional = content.get_character_races().get(race_name);
+    OptCRef<CharacterRace> race_optional = content.get_character_races().get(race_name);
     if (!race_optional.has_value()) {
         errors.add_validation_error(
             ValidationErrorCode::RELATION_NOT_FOUND, this, fmt::format("Character race '{}' does not exist.", race_name)

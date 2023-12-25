@@ -45,7 +45,7 @@ static void create_header(dnd::LatexDocument& document) {
 
 static dnd::LatexScope* create_card_page(dnd::LatexDocument& document) {
     std::string color = "white";
-    auto begin_end = document.body.add_begin_end("tcbitemize");
+    dnd::LatexBeginEnd begin_end = document.body.add_begin_end("tcbitemize");
     begin_end.begin_command->add_bracket_argument(
         "size=fbox,raster height=\\textheight,raster columns=3, raster equal skip=5mm,raster rows=3,enhanced,sharp "
         "corners,colback="

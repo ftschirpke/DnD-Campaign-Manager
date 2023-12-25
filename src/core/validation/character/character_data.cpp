@@ -31,7 +31,7 @@ std::unique_ptr<dnd::ValidationData> dnd::CharacterData::pack() const { return s
 dnd::Errors dnd::CharacterData::validate() const {
     Errors errors = ValidationData::validate();
     std::unordered_set<std::string> unique_feature_names;
-    for (const auto& feature_data : features_data) {
+    for (const FeatureData& feature_data : features_data) {
         errors += feature_data.validate();
         if (unique_feature_names.contains(feature_data.name)) {
             errors.add_validation_error(
@@ -45,7 +45,7 @@ dnd::Errors dnd::CharacterData::validate() const {
     errors += base_ability_scores_data.validate();
     errors += character_basis_data.validate();
     errors += progression_data.validate();
-    for (const auto& decision_data : decisions_data) {
+    for (const DecisionData& decision_data : decisions_data) {
         errors += decision_data.validate();
     }
     return errors;
@@ -59,7 +59,7 @@ dnd::Errors dnd::CharacterData::validate_relations(const dnd::Content& content) 
             fmt::format("Character has duplicate name \"{}\".", name)
         );
     }
-    for (const auto& feature_data : features_data) {
+    for (const FeatureData& feature_data : features_data) {
         errors += feature_data.validate_relations(content);
         if (content.get_features().contains(feature_data.name)
             || content.get_class_features().contains(feature_data.name)) {
@@ -73,7 +73,7 @@ dnd::Errors dnd::CharacterData::validate_relations(const dnd::Content& content) 
     errors += base_ability_scores_data.validate_relations(content);
     errors += character_basis_data.validate_relations(content);
 
-    auto class_optional = content.get_character_classes().get(character_basis_data.class_name);
+    OptCRef<CharacterClass> class_optional = content.get_character_classes().get(character_basis_data.class_name);
     if (!character_basis_data.class_name.empty() && class_optional.has_value()) {
         const CharacterClass& cls = class_optional.value();
         if (progression_data.level >= cls.get_important_levels().get_subclass_level()
@@ -95,7 +95,7 @@ dnd::Errors dnd::CharacterData::validate_relations(const dnd::Content& content) 
             );
         }
 
-        for (auto& hit_dice_roll : progression_data.hit_dice_rolls) {
+        for (int hit_dice_roll : progression_data.hit_dice_rolls) {
             if (!value_is_possible_for(hit_dice_roll, cls.get_hit_dice())) {
                 errors.add_validation_error(
                     ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
@@ -108,9 +108,11 @@ dnd::Errors dnd::CharacterData::validate_relations(const dnd::Content& content) 
         }
     }
 
-    for (const auto& decision_data : decisions_data) {
+    for (const DecisionData& decision_data : decisions_data) {
         errors += decision_data.validate_relations(content);
     }
+
+    // TODO: recheck this function, the code that was here did nothing
 
     return errors;
 }

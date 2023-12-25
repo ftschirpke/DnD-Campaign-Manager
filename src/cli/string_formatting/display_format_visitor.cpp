@@ -29,7 +29,7 @@ void dnd::DisplayFormatVisitor::operator()(const Table& table) const {
     size_t rows = table.get_rows().size();
     size_t cols = table.get_num_columns();
     std::vector<size_t> col_widths(cols, 0);
-    for (const auto& row : table.get_rows()) {
+    for (const std::vector<std::string_view>& row : table.get_rows()) {
         for (size_t i = 0; i < cols; ++i) {
             col_widths[i] = std::max(col_widths[i], row[i].size());
         }
@@ -57,7 +57,7 @@ void dnd::DisplayFormatVisitor::operator()(const Table& table) const {
     }
     // print table
     bool first = true;
-    for (const auto& row : right_padded_strings) {
+    for (const std::vector<std::string>& row : right_padded_strings) {
         output.formatted_text(" {} ", fmt::join(row, " | "));
         if (first) {
             // print separator line after first row

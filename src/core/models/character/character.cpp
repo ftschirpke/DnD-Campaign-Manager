@@ -33,7 +33,7 @@ dnd::Character dnd::Character::create(dnd::CharacterData&& data, const Content& 
 
     std::vector<Feature> features;
     features.reserve(data.features_data.size());
-    for (auto& feature_data : data.features_data) {
+    for (FeatureData& feature_data : data.features_data) {
         features.emplace_back(Feature::create(std::move(feature_data), content));
     }
 
@@ -42,7 +42,7 @@ dnd::Character dnd::Character::create(dnd::CharacterData&& data, const Content& 
     Progression progression = Progression::create(std::move(data.progression_data));
 
     std::vector<Decision> decisions;
-    for (auto& decision_data : data.decisions_data) {
+    for (DecisionData& decision_data : data.decisions_data) {
         decisions.emplace_back(Decision::create(std::move(decision_data), content));
     }
 

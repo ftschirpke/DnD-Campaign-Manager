@@ -30,7 +30,7 @@ std::string dnd::string_uppercase_copy(const std::string& str) {
 
 void dnd::snake_case_to_capitalized_spaced_words(std::string& str) {
     bool first_in_word = true;
-    for (auto& c : str) {
+    for (char& c : str) {
         if (c == '_') {
             c = ' ';
             first_in_word = true;

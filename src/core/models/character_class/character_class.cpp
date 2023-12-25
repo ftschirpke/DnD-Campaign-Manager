@@ -54,7 +54,7 @@ dnd::CharacterClass dnd::CharacterClass::create(dnd::CharacterClassData&& data, 
 
     std::vector<ClassFeature> features;
     features.reserve(data.features_data.size());
-    for (auto& feature_data : data.features_data) {
+    for (ClassFeatureData& feature_data : data.features_data) {
         if (feature_data.name == data.subclass_feature_name) {
             subclass_level = determine_subclass_level(feature_data);
             features.emplace_back(ClassFeature::create(std::move(feature_data), content));

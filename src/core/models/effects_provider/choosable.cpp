@@ -23,7 +23,7 @@ dnd::Choosable dnd::Choosable::create(dnd::ChoosableData&& data, const dnd::Cont
     }
     std::vector<std::unique_ptr<Condition>> prerequisites;
     prerequisites.reserve(data.prerequisites_data.size());
-    for (auto& prerequisite_data : data.prerequisites_data) {
+    for (ConditionData& prerequisite_data : data.prerequisites_data) {
         prerequisites.emplace_back(create_condition(std::move(prerequisite_data)));
     }
 

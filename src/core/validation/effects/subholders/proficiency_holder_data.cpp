@@ -22,7 +22,7 @@ static dnd::Errors string_set_validate(
     const std::set<std::string>& string_set, const dnd::ValidationData* parent, const char* set_name
 ) {
     dnd::Errors errors;
-    for (const auto& str_item : string_set) {
+    for (const std::string& str_item : string_set) {
         if (str_item.empty()) {
             errors.add_validation_error(
                 dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
@@ -43,7 +43,7 @@ dnd::Errors dnd::ProficiencyHolderData::validate() const {
     errors += string_set_validate(languages, parent, "Languages");
     errors += string_set_validate(senses, parent, "Senses");
 
-    for (const auto& skill : skills) {
+    for (const std::string& skill : skills) {
         if (!dnd::is_skill(skill)) {
             errors.add_validation_error(
                 dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
@@ -51,7 +51,7 @@ dnd::Errors dnd::ProficiencyHolderData::validate() const {
             );
         }
     }
-    for (const auto& saving_throw_ability : saving_throws) {
+    for (const std::string& saving_throw_ability : saving_throws) {
         if (!dnd::is_ability(saving_throw_ability)) {
             errors.add_validation_error(
                 dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
@@ -69,7 +69,7 @@ static dnd::Errors string_group_set_validate_relations(
     const char* group_name, const dnd::Content& content
 ) {
     dnd::Errors errors;
-    for (const auto& str_item : string_group_set) {
+    for (const std::string& str_item : string_group_set) {
         if (!content.get_groups().is_part_of_group(str_item, group_name)
             && !content.get_groups().is_subgroup(str_item, group_name)) {
             errors.add_validation_error(

@@ -13,7 +13,7 @@ static constexpr const char* tags = "[core][validation][character]";
 static dnd::CharacterData create_valid_character_data() {
     dnd::CharacterData character_data;
     dndtest::set_valid_mock_values(character_data, "Valid Character");
-    auto& feature_data = character_data.features_data.emplace_back(&character_data);
+    dnd::FeatureData& feature_data = character_data.features_data.emplace_back(&character_data);
     dndtest::set_valid_mock_values(feature_data, "Valid Character Feature");
     character_data.base_ability_scores_data.ability_scores = {10, 8, 12, 15, 13, 14};
     character_data.character_basis_data.race_name = "Human";

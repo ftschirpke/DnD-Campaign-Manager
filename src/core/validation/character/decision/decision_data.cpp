@@ -1,9 +1,12 @@
 #include <dnd_config.hpp>
 
+#include "core/models/character_subrace/character_subrace.hpp"
 #include "decision_data.hpp"
 
+#include <algorithm>
 #include <cassert>
 #include <map>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -45,24 +48,6 @@ dnd::Errors dnd::DecisionData::validate() const {
     return errors;
 }
 
-static bool class_feature_is_in(const dnd::Feature& feature_to_find, const std::vector<dnd::ClassFeature>& features) {
-    for (const dnd::ClassFeature& feature : features) {
-        if (&feature == &feature_to_find) {
-            return true;
-        }
-    }
-    return false;
-}
-
-static bool feature_is_in(const dnd::Feature& feature_to_find, const std::vector<dnd::Feature>& features) {
-    for (const dnd::Feature& feature : features) {
-        if (&feature == &feature_to_find) {
-            return true;
-        }
-    }
-    return false;
-}
-
 dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) const {
     Errors errors;
 
@@ -70,7 +55,7 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
         return errors;
     }
     std::map<std::string, const dnd::Choice*> choices;
-    for (const auto& choice : target->get_choices()) {
+    for (const Choice& choice : target->get_choices()) {
         assert(!choices.contains(choice.get_attribute_name()));
         if (selections.contains(choice.get_attribute_name())) {
             choices[choice.get_attribute_name()] = &choice;
@@ -92,7 +77,7 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
             continue;
         }
         const std::set<std::string> possible_values = choices[attribute_name]->possible_values(content);
-        for (const auto& value : selection) {
+        for (const std::string& value : selection) {
             if (std::find(possible_values.cbegin(), possible_values.cend(), value) == possible_values.cend()) {
                 errors.add_validation_error(
                     ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
@@ -102,60 +87,115 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
         }
     }
 
-    if (!content.get_features().contains(feature_name)) {
+    std::optional<EffectsProviderType> feature_type_optional = content.contains_effects_provider(feature_name);
+    if (!feature_type_optional.has_value()) {
         errors.add_validation_error(
             ValidationErrorCode::RELATION_NOT_FOUND, parent, "Decision cannot be linked to any existing feature."
         );
         return errors;
     }
 
-    const Feature& linked_feature = content.get_features().get(feature_name).value().get();
-    std::vector<const Effects*> effects_with_choices = linked_feature.get_all_effects();
-
-    bool target_found_in_feature = false;
-    for (const Effects* effects : effects_with_choices) {
-        if (effects == target) {
-            target_found_in_feature = true;
+    bool target_exists = false;
+    switch (feature_type_optional.value()) {
+        case EffectsProviderType::Feature:
+        case EffectsProviderType::Choosable: {
+            const EffectsProvider& linked_effects_provider = content.get_effects_provider(feature_name).value();
+            const Effects& effects = linked_effects_provider.get_main_effects();
+            target_exists = &effects == target;
+            break;
+        }
+        case EffectsProviderType::ClassFeature: {
+            const ClassFeature& linked_class_feature = content.get_class_features().get(feature_name).value();
+            const Effects& main_effects = linked_class_feature.get_main_effects();
+            if (&main_effects != target) {
+                bool found_in_higher_levels = false;
+                for (const auto& [_, effects] : linked_class_feature.get_higher_level_effects()) {
+                    if (&effects == target) {
+                        found_in_higher_levels = true;
+                        break;
+                    }
+                }
+                if (found_in_higher_levels) {
+                    target_exists = true;
+                }
+            } else {
+                target_exists = true;
+            }
             break;
         }
     }
-    if (!target_found_in_feature) {
-        errors.add_validation_error(
-            ValidationErrorCode::RELATION_NOT_FOUND, parent, "Decision cannot be linked to any of the feature's parts."
-        );
-    }
 
     bool feature_found = false;
-    if (character_data != nullptr) {
-        const std::string& race_name = character_data->character_basis_data.race_name;
-        auto race_optional = content.get_character_races().get(race_name);
-        if (race_optional.has_value()) {
-            const CharacterRace& race = race_optional.value();
-            feature_found = feature_is_in(linked_feature, race.get_features());
+    if (character_data == nullptr) {
+        errors.add_validation_error(
+            ValidationErrorCode::MISSING_ATTRIBUTE, parent, "Decision has no character data to validate against."
+        );
+    } else if (target_exists) {
+        auto has_feature_name = [this](const ContentPiece& effects_provider) {
+            return effects_provider.get_name() == feature_name;
+        };
+        switch (feature_type_optional.value()) {
+            // TODO: check character specific features for choices
+            case EffectsProviderType::Feature: {
+                const std::string& race_name = character_data->character_basis_data.race_name;
+                OptCRef<CharacterRace> race_optional = content.get_character_races().get(race_name);
+                if (race_optional.has_value()) {
+                    const CharacterRace& race = race_optional.value();
+                    feature_found = std::any_of(
+                        race.get_features().begin(), race.get_features().end(), has_feature_name
+                    );
+                    if (feature_found) {
+                        break;
+                    }
+                }
+                const std::string& subrace_name = character_data->character_basis_data.subrace_name;
+                OptCRef<CharacterSubrace> subrace_optional = content.get_character_subraces().get(subrace_name);
+                if (subrace_optional.has_value()) {
+                    const CharacterSubrace& subrace = subrace_optional.value();
+                    feature_found = std::any_of(
+                        subrace.get_features().begin(), subrace.get_features().end(), has_feature_name
+                    );
+                }
+                break;
+            }
+            case EffectsProviderType::ClassFeature: {
+                const std::string& class_name = character_data->character_basis_data.class_name;
+                OptCRef<CharacterClass> class_optional = content.get_character_classes().get(class_name);
+                if (class_optional.has_value()) {
+                    const CharacterClass& cls = class_optional.value();
+                    feature_found = std::any_of(cls.get_features().begin(), cls.get_features().end(), has_feature_name);
+                    if (feature_found) {
+                        break;
+                    }
+                }
+                const std::string& subclass_name = character_data->character_basis_data.subclass_name;
+                OptCRef<CharacterSubclass> subclass_optional = content.get_character_subclasses().get(subclass_name);
+                if (content.get_character_subclasses().contains(subclass_name)) {
+                    const CharacterSubclass& subclass = subclass_optional.value();
+                    feature_found = std::any_of(
+                        subclass.get_features().begin(), subclass.get_features().end(), has_feature_name
+                    );
+                }
+                break;
+            }
+            case EffectsProviderType::Choosable: {
+                // TODO: check choosables for choices
+                break;
+            }
         }
-        const std::string& subrace_name = character_data->character_basis_data.subrace_name;
-        auto subrace_optional = content.get_character_subraces().get(subrace_name);
-        if (!feature_found && subrace_optional.has_value()) {
-            const CharacterSubrace& subrace = subrace_optional.value();
-            feature_found = feature_is_in(linked_feature, subrace.get_features());
+        if (!feature_found) {
+            errors.add_validation_error(
+                ValidationErrorCode::RELATION_NOT_FOUND, parent,
+                fmt::format(
+                    "Decision target \"{}\" exists but is not available to the character ({}).", feature_name,
+                    character_data->name
+                )
+            );
         }
-        const std::string& class_name = character_data->character_basis_data.class_name;
-        auto class_optional = content.get_character_classes().get(class_name);
-        if (!feature_found && class_optional.has_value()) {
-            const CharacterClass& cls = class_optional.value();
-            feature_found = class_feature_is_in(linked_feature, cls.get_features());
-        }
-        const std::string& subclass_name = character_data->character_basis_data.subclass_name;
-        auto subclass_optional = content.get_character_subclasses().get(subclass_name);
-        if (!feature_found && content.get_character_subclasses().contains(subclass_name)) {
-            const CharacterSubclass& subclass = subclass_optional.value();
-            feature_found = class_feature_is_in(linked_feature, subclass.get_features());
-        }
-    }
-    if (!feature_found) {
+    } else {
         errors.add_validation_error(
             ValidationErrorCode::RELATION_NOT_FOUND, parent,
-            "Decision cannot be linked to any of the character's features."
+            fmt::format("Decision has target feature \"{}\" which doesn't seem to exist.", feature_name)
         );
     }
     return errors;

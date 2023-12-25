@@ -27,7 +27,7 @@ TEST_CASE("dnd::SpellTypeData::validate // valid spell type", tags) {
     dnd::SpellTypeData data(&parent);
     dnd::Errors errors;
     SECTION("cantrips") {
-        for (const auto& spelling : allowed_magic_school_spellings) {
+        for (const char* spelling : allowed_magic_school_spellings) {
             data.str = fmt::format("{} cantrip", spelling);
             REQUIRE_NOTHROW(errors = data.validate());
             REQUIRE(errors.ok());
@@ -35,7 +35,7 @@ TEST_CASE("dnd::SpellTypeData::validate // valid spell type", tags) {
     }
 
     SECTION("non-cantrip spells") {
-        for (const auto& spelling : allowed_magic_school_spellings) {
+        for (const char* spelling : allowed_magic_school_spellings) {
             for (size_t level = 1; level <= 9; ++level) {
                 data.str = fmt::format("{}-level {}", spell_levels[level - 1], spelling);
                 REQUIRE_NOTHROW(errors = data.validate());

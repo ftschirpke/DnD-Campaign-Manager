@@ -17,7 +17,7 @@
 dnd::DisplayFormatVisitor::DisplayFormatVisitor(ImGuiTableFlags table_flags) : table_flags(table_flags) {}
 
 void dnd::DisplayFormatVisitor::operator()(const BulletedList& bulleted_list) const {
-    for (const auto& element : bulleted_list.get_items()) {
+    for (const std::string_view& element : bulleted_list.get_items()) {
         ImGui::Bullet();
         ImGui::TextWrapped("%s", std::string(element).c_str());
     }
@@ -41,7 +41,7 @@ void dnd::DisplayFormatVisitor::operator()(const Table& table) const {
     );
     if (ImGui::BeginTable(table_id.c_str(), static_cast<int>(table.get_num_columns()), table_flags)) {
         bool is_first = true;
-        for (const auto& row : rows) {
+        for (const std::vector<std::string_view>& row : rows) {
             if (!is_first) {
                 ImGui::TableNextRow();
             }

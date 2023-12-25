@@ -35,7 +35,7 @@ dnd::Errors dnd::ProgressionData::validate() const {
         );
     }
 
-    for (auto& hit_dice_roll : hit_dice_rolls) {
+    for (int hit_dice_roll : hit_dice_rolls) {
         if (hit_dice_roll < 1) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,

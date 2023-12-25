@@ -32,8 +32,8 @@ static constexpr std::array<std::pair<std::string_view, dnd::ChoiceType>, 22> va
 };
 
 bool dnd::is_valid_choice_attribute_name(const std::string& attribute_name) noexcept {
-    for (const auto& valid_attribute_name : valid_attribute_names) {
-        if (valid_attribute_name.first == attribute_name) {
+    for (const auto& [valid_attribute_name, _] : valid_attribute_names) {
+        if (valid_attribute_name == attribute_name) {
             return true;
         }
     }
@@ -41,9 +41,9 @@ bool dnd::is_valid_choice_attribute_name(const std::string& attribute_name) noex
 }
 
 dnd::ChoiceType dnd::choice_type_for_attribute_name(const std::string& attribute_name) {
-    for (const auto& valid_attribute_name : valid_attribute_names) {
-        if (valid_attribute_name.first == attribute_name) {
-            return valid_attribute_name.second;
+    for (const auto& [valid_attribute_name, choice_type] : valid_attribute_names) {
+        if (valid_attribute_name == attribute_name) {
+            return choice_type;
         }
     }
     throw std::invalid_argument("Invalid choice attribute name: " + attribute_name);
@@ -62,8 +62,8 @@ static constexpr std::array<std::pair<std::string_view, std::string_view>, 9> va
 };
 
 bool dnd::attribute_name_implies_group(const std::string& attribute_name) noexcept {
-    for (const auto& group_name : valid_group_names) {
-        if (group_name.first == attribute_name) {
+    for (const auto& [group_name, _] : valid_group_names) {
+        if (group_name == attribute_name) {
             return true;
         }
     }
@@ -71,9 +71,9 @@ bool dnd::attribute_name_implies_group(const std::string& attribute_name) noexce
 }
 
 std::string dnd::group_name_for_attribute_name(const std::string& attribute_name) {
-    for (const auto& group_name : valid_group_names) {
-        if (group_name.first == attribute_name) {
-            return std::string(group_name.second);
+    for (const auto& [proficiency_name, group_name] : valid_group_names) {
+        if (proficiency_name == attribute_name) {
+            return std::string(group_name);
         }
     }
     throw std::invalid_argument("Attribute name '" + attribute_name + "' does not imply a group of strings");

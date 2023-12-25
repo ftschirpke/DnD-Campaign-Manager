@@ -41,7 +41,7 @@ dnd::Errors dnd::ChoosableParser::parse_into(nlohmann::ordered_json&& json, Choo
     } else if (has_prerequisites) {
         std::vector<std::string> prerequisite_conditions_strs;
         errors += parse_optional_attribute_into(json, "prerequisites", prerequisite_conditions_strs);
-        for (const auto& prerequisite_condition_str : prerequisite_conditions_strs) {
+        for (const std::string& prerequisite_condition_str : prerequisite_conditions_strs) {
             ConditionData& condition_data = data.prerequisites_data.emplace_back(&data);
             condition_data.condition_str = prerequisite_condition_str;
         }
