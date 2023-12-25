@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <functional>
 #include <vector>
 
 #include <core/utils/types.hpp>
@@ -40,9 +41,9 @@ private:
         OptCRef<CharacterSubclass> subclass
     ) noexcept;
 
-    const CharacterRace& race;
+    std::reference_wrapper<const CharacterRace> race;
     OptCRef<CharacterSubrace> subrace;
-    const CharacterClass& cls;
+    std::reference_wrapper<const CharacterClass> cls;
     OptCRef<CharacterSubclass> subclass;
 };
 

@@ -2,6 +2,8 @@
 
 #include "character_basis.hpp"
 
+#include <functional>
+
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
@@ -48,4 +50,4 @@ dnd::CharacterBasis::CharacterBasis(
     const CharacterRace& race, OptCRef<CharacterSubrace> subrace, const CharacterClass& cls,
     OptCRef<CharacterSubclass> subclass
 ) noexcept
-    : race(race), subrace(subrace), cls(cls), subclass(subclass) {}
+    : race(std::cref(race)), subrace(subrace), cls(std::cref(cls)), subclass(subclass) {}
