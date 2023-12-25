@@ -19,41 +19,33 @@ dnd::CharacterBasis dnd::CharacterBasis::create(dnd::CharacterBasisData&& data, 
     if (!data.validate_relations(content).ok()) {
         throw dnd::invalid_data("CharacterBasis data is incompatible with the given content.");
     }
-    const CharacterRace* race = &content.get_character_races().get(data.race_name).value().get();
-    const CharacterSubrace* subrace = nullptr;
-    const CharacterClass* cls = &content.get_character_classes().get(data.class_name).value().get();
-    const CharacterSubclass* subclass = nullptr;
+    const CharacterRace& race = content.get_character_races().get(data.race_name).value().get();
+    OptCRef<CharacterSubrace> subrace;
+    const CharacterClass& cls = content.get_character_classes().get(data.class_name).value().get();
+    OptCRef<CharacterSubclass> subclass;
     if (!data.subrace_name.empty()) {
-        subrace = &content.get_character_subraces().get(data.subrace_name).value().get();
+        subrace = content.get_character_subraces().get(data.subrace_name).value().get();
     }
     if (!data.subclass_name.empty()) {
-        subclass = &content.get_character_subclasses().get(data.subclass_name).value().get();
+        subclass = content.get_character_subclasses().get(data.subclass_name).value().get();
     }
     return CharacterBasis(race, subrace, cls, subclass);
 }
 
-const dnd::CharacterRace* dnd::CharacterBasis::get_race() const noexcept { return race; }
+const dnd::CharacterRace& dnd::CharacterBasis::get_race() const noexcept { return race; }
 
-const dnd::CharacterSubrace* dnd::CharacterBasis::get_subrace() const noexcept { return subrace; }
+dnd::OptCRef<dnd::CharacterSubrace> dnd::CharacterBasis::get_subrace() const noexcept { return subrace; }
 
-const dnd::CharacterClass* dnd::CharacterBasis::get_class() const noexcept { return cls; }
+const dnd::CharacterClass& dnd::CharacterBasis::get_class() const noexcept { return cls; }
 
-const dnd::CharacterSubclass* dnd::CharacterBasis::get_subclass() const noexcept { return subclass; }
+dnd::OptCRef<dnd::CharacterSubclass> dnd::CharacterBasis::get_subclass() const noexcept { return subclass; }
 
-bool dnd::CharacterBasis::has_subrace() const noexcept { return subrace != nullptr; }
+bool dnd::CharacterBasis::has_subrace() const noexcept { return subrace.has_value(); }
 
-bool dnd::CharacterBasis::has_subclass() const noexcept { return subclass != nullptr; }
+bool dnd::CharacterBasis::has_subclass() const noexcept { return subclass.has_value(); }
 
 dnd::CharacterBasis::CharacterBasis(
-    const CharacterRace* race, const CharacterSubrace* subrace, const CharacterClass* cls,
-    const CharacterSubclass* subclass
+    const CharacterRace& race, OptCRef<CharacterSubrace> subrace, const CharacterClass& cls,
+    OptCRef<CharacterSubclass> subclass
 ) noexcept
     : race(race), subrace(subrace), cls(cls), subclass(subclass) {}
-
-dnd::CharacterBasis::CharacterBasis(
-    const CharacterRace* race, const CharacterClass* cls, const CharacterSubclass* subclass
-) noexcept
-    : race(race), subrace(nullptr), cls(cls), subclass(subclass) {}
-
-dnd::CharacterBasis::CharacterBasis(const CharacterRace* race, const CharacterClass* cls) noexcept
-    : race(race), subrace(nullptr), cls(cls), subclass(nullptr) {}
