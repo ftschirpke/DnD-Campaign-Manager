@@ -19,7 +19,7 @@ dnd::ExtraSpellsHolderData::ExtraSpellsHolderData(const ValidationData* parent) 
 static dnd::Errors spells_set_validate(const std::set<std::string>& spells, const dnd::ValidationData* parent) {
     dnd::Errors errors;
 
-    for (const auto& spell_name : spells) {
+    for (const std::string& spell_name : spells) {
         if (spell_name.empty()) {
             errors.add_validation_error(
                 dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent, fmt::format("Name of extra spell is empty.")
@@ -46,8 +46,8 @@ static dnd::Errors spells_set_validate_relations(
 ) {
     dnd::Errors errors;
 
-    for (const auto& spell_name : spells) {
-        auto spell_optional = content.get_spells().get(spell_name);
+    for (const std::string& spell_name : spells) {
+        dnd::OptCRef<dnd::Spell> spell_optional = content.get_spells().get(spell_name);
         if (!spell_optional.has_value()) {
             errors.add_validation_error(
                 dnd::ValidationErrorCode::RELATION_NOT_FOUND, parent,
@@ -64,8 +64,8 @@ static dnd::Errors spells_set_validate_relations(
 
 dnd::Errors dnd::ExtraSpellsHolderData::validate_relations(const Content& content) const {
     Errors errors;
-    for (const auto& cantrip_name : free_cantrips) {
-        auto cantrip_optional = content.get_spells().get(cantrip_name);
+    for (const std::string& cantrip_name : free_cantrips) {
+        OptCRef<Spell> cantrip_optional = content.get_spells().get(cantrip_name);
         if (!cantrip_optional.has_value()) {
             errors.add_validation_error(
                 dnd::ValidationErrorCode::RELATION_NOT_FOUND, parent,

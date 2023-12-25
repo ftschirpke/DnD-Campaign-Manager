@@ -1,5 +1,6 @@
 #include <dnd_config.hpp>
 
+#include "core/validation/effects_provider/class_feature_data.hpp"
 #include "minimal_testing_content.hpp"
 
 #include <cassert>
@@ -81,7 +82,7 @@ static void add_classes(dnd::Content& content) {
     class_data.spellcasting_data.is_spellcaster = true;
     class_data.spellcasting_data.ability = "INT";
     class_data.spellcasting_data.is_spells_known_type = true;
-    auto& feature_data = class_data.features_data.emplace_back(&class_data);
+    dnd::ClassFeatureData& feature_data = class_data.features_data.emplace_back(&class_data);
     dndtest::set_valid_mock_values(feature_data, "Example Class Feature");
     class_data.subclass_feature_name = "Example Class Feature";
     class_data.hit_dice_data.str = "d6";
@@ -93,7 +94,7 @@ static void add_classes(dnd::Content& content) {
     dnd::CharacterClassData class_data2;
     dndtest::set_valid_mock_values(class_data2, "Rogue");
     class_data2.spellcasting_data.is_spellcaster = false;
-    auto& feature_data2 = class_data2.features_data.emplace_back(&class_data2);
+    dnd::ClassFeatureData& feature_data2 = class_data2.features_data.emplace_back(&class_data2);
     dndtest::set_valid_mock_values(feature_data2, "Example Class Feature 2");
     class_data2.subclass_feature_name = "Example Class Feature 2";
     class_data2.hit_dice_data.str = "d8";
@@ -105,7 +106,7 @@ static void add_classes(dnd::Content& content) {
     dnd::CharacterSubclassData subclass_data;
     dndtest::set_valid_mock_values(subclass_data, "Abjuration Wizard");
     subclass_data.spellcasting_data.is_spellcaster = false;
-    auto& feature_data3 = subclass_data.features_data.emplace_back(&subclass_data);
+    dnd::ClassFeatureData& feature_data3 = subclass_data.features_data.emplace_back(&subclass_data);
     dndtest::set_valid_mock_values(feature_data3, "Example Subclass Feature");
     subclass_data.class_name = "Wizard";
     assert(subclass_data.validate().ok());
@@ -115,7 +116,7 @@ static void add_classes(dnd::Content& content) {
     dnd::CharacterSubclassData subclass_data2;
     dndtest::set_valid_mock_values(subclass_data2, "Assassin");
     subclass_data2.spellcasting_data.is_spellcaster = false;
-    auto& feature_data4 = subclass_data2.features_data.emplace_back(&subclass_data2);
+    dnd::ClassFeatureData& feature_data4 = subclass_data2.features_data.emplace_back(&subclass_data2);
     dndtest::set_valid_mock_values(feature_data4, "Example Subclass Feature 2");
     subclass_data2.class_name = "Rogue";
     assert(subclass_data2.validate().ok());
@@ -126,7 +127,7 @@ static void add_classes(dnd::Content& content) {
 static void add_races(dnd::Content& content) {
     dnd::CharacterRaceData race_data1;
     dndtest::set_valid_mock_values(race_data1, "Dwarf");
-    auto& feature_data1 = race_data1.features_data.emplace_back(&race_data1);
+    dnd::FeatureData& feature_data1 = race_data1.features_data.emplace_back(&race_data1);
     dndtest::set_valid_mock_values(feature_data1, "Example Race Feature");
     race_data1.subraces = true;
     assert(race_data1.validate().ok());
@@ -135,7 +136,7 @@ static void add_races(dnd::Content& content) {
 
     dnd::CharacterRaceData race_data2;
     dndtest::set_valid_mock_values(race_data2, "Human");
-    auto& feature_data2 = race_data2.features_data.emplace_back(&race_data2);
+    dnd::FeatureData& feature_data2 = race_data2.features_data.emplace_back(&race_data2);
     dndtest::set_valid_mock_values(feature_data2, "Example Race Feature 2");
     race_data2.subraces = false;
     assert(race_data2.validate().ok());
@@ -144,7 +145,7 @@ static void add_races(dnd::Content& content) {
 
     dnd::CharacterRaceData race_data3;
     dndtest::set_valid_mock_values(race_data3, "Elf");
-    auto& feature_data3 = race_data3.features_data.emplace_back(&race_data3);
+    dnd::FeatureData& feature_data3 = race_data3.features_data.emplace_back(&race_data3);
     dndtest::set_valid_mock_values(feature_data3, "Example Race Feature 3");
     race_data3.subraces = true;
     assert(race_data3.validate().ok());
@@ -153,7 +154,7 @@ static void add_races(dnd::Content& content) {
 
     dnd::CharacterSubraceData subrace_data1;
     dndtest::set_valid_mock_values(subrace_data1, "Hill Dwarf");
-    auto& feature_data4 = subrace_data1.features_data.emplace_back(&subrace_data1);
+    dnd::FeatureData& feature_data4 = subrace_data1.features_data.emplace_back(&subrace_data1);
     dndtest::set_valid_mock_values(feature_data4, "Example Subrace Feature");
     subrace_data1.race_name = "Dwarf";
     assert(subrace_data1.validate().ok());
@@ -162,7 +163,7 @@ static void add_races(dnd::Content& content) {
 
     dnd::CharacterSubraceData subrace_data2;
     dndtest::set_valid_mock_values(subrace_data2, "High Elf");
-    auto& feature_data5 = subrace_data2.features_data.emplace_back(&subrace_data2);
+    dnd::FeatureData& feature_data5 = subrace_data2.features_data.emplace_back(&subrace_data2);
     dndtest::set_valid_mock_values(feature_data5, "Example Subrace Feature 2");
     subrace_data2.race_name = "Elf";
     assert(subrace_data2.validate().ok());
@@ -174,7 +175,7 @@ static void add_characters(dnd::Content& content) {
     DND_UNUSED(content);
     dnd::CharacterData character_data;
     dndtest::set_valid_mock_values(character_data, "Example Character");
-    auto& feature_data = character_data.features_data.emplace_back(&character_data);
+    dnd::FeatureData& feature_data = character_data.features_data.emplace_back(&character_data);
     dndtest::set_valid_mock_values(feature_data, "Example Character Feature");
     character_data.base_ability_scores_data.ability_scores = {10, 8, 12, 15, 13, 14};
     character_data.character_basis_data.race_name = "Dwarf";

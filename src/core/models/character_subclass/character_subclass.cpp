@@ -27,7 +27,7 @@ dnd::CharacterSubclass dnd::CharacterSubclass::create(dnd::CharacterSubclassData
     }
     std::vector<ClassFeature> features;
     features.reserve(data.features_data.size());
-    for (auto& feature_data : data.features_data) {
+    for (ClassFeatureData& feature_data : data.features_data) {
         features.emplace_back(ClassFeature::create(std::move(feature_data), content));
     }
     const CharacterClass* cls = &content.get_character_classes().get(data.class_name).value().get();

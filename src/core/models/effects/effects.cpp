@@ -34,17 +34,17 @@ dnd::Effects dnd::Effects::create(dnd::EffectsData&& data, const dnd::Content& c
     }
     std::vector<std::unique_ptr<Condition>> activation_conditions;
     activation_conditions.reserve(data.activation_conditions_data.size());
-    for (auto& condition_data : data.activation_conditions_data) {
+    for (ConditionData& condition_data : data.activation_conditions_data) {
         activation_conditions.emplace_back(create_condition(std::move(condition_data)));
     }
     std::vector<Choice> choices;
     choices.reserve(data.choices_data.size());
-    for (auto& choice_data : data.choices_data) {
+    for (ChoiceData& choice_data : data.choices_data) {
         choices.emplace_back(Choice::create(std::move(choice_data), content));
     }
     std::vector<std::unique_ptr<StatChange>> stat_changes;
     stat_changes.reserve(data.stat_changes_data.size());
-    for (auto& stat_change_data : data.stat_changes_data) {
+    for (StatChangeData& stat_change_data : data.stat_changes_data) {
         stat_changes.emplace_back(create_stat_change(std::move(stat_change_data)));
     }
     return Effects(
@@ -92,7 +92,7 @@ bool dnd::Effects::empty() const {
 bool dnd::Effects::is_active(
     const std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
-    for (auto& condition : activation_conditions) {
+    for (const std::unique_ptr<Condition>& condition : activation_conditions) {
         if (!condition->evaluate(attributes, constants)) {
             return false;
         }

@@ -25,13 +25,13 @@ dnd::EffectsData::EffectsData(const ValidationData* parent) noexcept
 
 dnd::Errors dnd::EffectsData::validate() const {
     Errors errors;
-    for (const auto& condition_data : activation_conditions_data) {
+    for (const ConditionData& condition_data : activation_conditions_data) {
         errors += condition_data.validate();
     }
-    for (const auto& choice_data : choices_data) {
+    for (const ChoiceData& choice_data : choices_data) {
         errors += choice_data.validate();
     }
-    for (const auto& stat_change_data : stat_changes_data) {
+    for (const StatChangeData& stat_change_data : stat_changes_data) {
         errors += stat_change_data.validate();
     }
     errors += action_holder_data.validate();
@@ -43,7 +43,7 @@ dnd::Errors dnd::EffectsData::validate() const {
 
 dnd::Errors dnd::EffectsData::validate_relations(const Content& content) const {
     Errors errors;
-    for (const auto& choice_data : choices_data) {
+    for (const ChoiceData& choice_data : choices_data) {
         errors += choice_data.validate_relations(content);
     }
     errors += extra_spells_holder_data.validate_relations(content);

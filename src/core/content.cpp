@@ -106,9 +106,9 @@ void dnd::Content::add_group_members(const std::string& group_name, std::set<std
 
 dnd::OptCRef<dnd::Character> dnd::Content::add_character(dnd::Character&& character) {
     const std::string name = character.get_name();
-    auto inserted_character = characters.add(std::move(character));
+    OptCRef<Character> inserted_character = characters.add(std::move(character));
     if (inserted_character.has_value()) {
-        for (const auto& feature : inserted_character.value().get().get_features()) {
+        for (const Feature& feature : inserted_character.value().get().get_features()) {
             features.add(feature);
         }
     }
@@ -117,22 +117,20 @@ dnd::OptCRef<dnd::Character> dnd::Content::add_character(dnd::Character&& charac
 
 dnd::OptCRef<dnd::CharacterClass> dnd::Content::add_character_class(dnd::CharacterClass&& character_class) {
     const std::string name = character_class.get_name();
-    auto inserted_class = character_classes.add(std::move(character_class));
+    OptCRef<CharacterClass> inserted_class = character_classes.add(std::move(character_class));
     if (inserted_class.has_value()) {
-        for (const auto& feature : inserted_class.value().get().get_features()) {
+        for (const ClassFeature& feature : inserted_class.value().get().get_features()) {
             class_features.add(feature);
         }
     }
     return inserted_class;
 }
 
-dnd::OptCRef<dnd::CharacterSubclass> dnd::Content::add_character_subclass(
-    dnd::CharacterSubclass&& character_subclass
-) {
+dnd::OptCRef<dnd::CharacterSubclass> dnd::Content::add_character_subclass(dnd::CharacterSubclass&& character_subclass) {
     const std::string name = character_subclass.get_name();
-    auto inserted_subclass = character_subclasses.add(std::move(character_subclass));
+    OptCRef<CharacterSubclass> inserted_subclass = character_subclasses.add(std::move(character_subclass));
     if (character_subclasses.add(std::move(character_subclass))) {
-        for (const auto& feature : inserted_subclass.value().get().get_features()) {
+        for (const ClassFeature& feature : inserted_subclass.value().get().get_features()) {
             class_features.add(feature);
         }
     }
@@ -141,21 +139,20 @@ dnd::OptCRef<dnd::CharacterSubclass> dnd::Content::add_character_subclass(
 
 dnd::OptCRef<dnd::CharacterRace> dnd::Content::add_character_race(dnd::CharacterRace&& character_race) {
     const std::string name = character_race.get_name();
-    auto inserted_race = character_races.add(std::move(character_race));
+    OptCRef<CharacterRace> inserted_race = character_races.add(std::move(character_race));
     if (inserted_race.has_value()) {
-        for (const auto& feature : inserted_race.value().get().get_features()) {
+        for (const Feature& feature : inserted_race.value().get().get_features()) {
             features.add(feature);
         }
     }
     return inserted_race;
 }
 
-dnd::OptCRef<dnd::CharacterSubrace> dnd::Content::add_character_subrace(dnd::CharacterSubrace&& character_subrace
-) {
+dnd::OptCRef<dnd::CharacterSubrace> dnd::Content::add_character_subrace(dnd::CharacterSubrace&& character_subrace) {
     const std::string name = character_subrace.get_name();
-    auto inserted_subrace = character_subraces.add(std::move(character_subrace));
+    OptCRef<CharacterSubrace> inserted_subrace = character_subraces.add(std::move(character_subrace));
     if (inserted_subrace.has_value()) {
-        for (const auto& feature : inserted_subrace.value().get().get_features()) {
+        for (const Feature& feature : inserted_subrace.value().get().get_features()) {
             features.add(feature);
         }
     }
@@ -169,7 +166,7 @@ dnd::OptCRef<dnd::Spell> dnd::Content::add_spell(dnd::Spell&& spell) { return sp
 dnd::OptCRef<dnd::Choosable> dnd::Content::add_choosable(dnd::Choosable&& choosable) {
     const std::string name = choosable.get_name();
     const std::string type_name = choosable.get_type();
-    auto inserted_choosable = choosables.add(std::move(choosable));
+    OptCRef<Choosable> inserted_choosable = choosables.add(std::move(choosable));
     if (inserted_choosable.has_value()) {
         groups.add(type_name, name);
     }

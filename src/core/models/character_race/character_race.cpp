@@ -23,7 +23,7 @@ dnd::CharacterRace dnd::CharacterRace::create(dnd::CharacterRaceData&& data, con
     }
     std::vector<Feature> features;
     features.reserve(data.features_data.size());
-    for (auto& feature_data : data.features_data) {
+    for (FeatureData& feature_data : data.features_data) {
         features.emplace_back(Feature::create(std::move(feature_data), content));
     }
     return CharacterRace(

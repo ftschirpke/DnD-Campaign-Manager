@@ -24,7 +24,7 @@ dnd::ChoiceData::ChoiceData(const ValidationData* parent) noexcept : ValidationS
 
 static dnd::Errors validate_ability_choice(const dnd::ChoiceData& data, const dnd::ValidationData* parent) {
     dnd::Errors errors;
-    for (const auto& explicit_choice : data.explicit_choices) {
+    for (const std::string& explicit_choice : data.explicit_choices) {
         if (explicit_choice.empty()) {
             continue;
         }
@@ -51,7 +51,7 @@ static dnd::Errors validate_ability_choice(const dnd::ChoiceData& data, const dn
 
 static dnd::Errors validate_skill_choice(const dnd::ChoiceData& data, const dnd::ValidationData* parent) {
     dnd::Errors errors;
-    for (const auto& explicit_choice : data.explicit_choices) {
+    for (const std::string& explicit_choice : data.explicit_choices) {
         if (explicit_choice.empty()) {
             continue;
         }
@@ -79,7 +79,7 @@ static dnd::Errors validate_skill_choice(const dnd::ChoiceData& data, const dnd:
 static dnd::Errors validate_stat_change_choice(const dnd::ChoiceData& data, const dnd::ValidationData* parent) {
     dnd::Errors errors;
     dnd::StatChangeData stat_change_data(parent);
-    for (const auto& explicit_choice : data.explicit_choices) {
+    for (const std::string& explicit_choice : data.explicit_choices) {
         if (explicit_choice.empty()) {
             continue;
         }
@@ -118,7 +118,7 @@ dnd::Errors dnd::ChoiceData::validate() const {
         return errors;
     }
 
-    for (const auto& explicit_choice : explicit_choices) {
+    for (const std::string& explicit_choice : explicit_choices) {
         if (explicit_choice.empty()) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
@@ -126,7 +126,7 @@ dnd::Errors dnd::ChoiceData::validate() const {
             );
         }
     }
-    for (const auto& group_name : group_names) {
+    for (const std::string& group_name : group_names) {
         if (group_name.empty()) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
@@ -167,7 +167,7 @@ static dnd::Errors validate_relations_string_choice(
         return errors;
     }
     const std::string group_name = dnd::group_name_for_attribute_name(data.attribute_name);
-    for (const auto& explicit_choice : data.explicit_choices) {
+    for (const std::string& explicit_choice : data.explicit_choices) {
         if (explicit_choice.empty()) {
             continue;
         }
@@ -181,7 +181,7 @@ static dnd::Errors validate_relations_string_choice(
             );
         }
     }
-    for (const auto& subgroup_name : data.group_names) {
+    for (const std::string& subgroup_name : data.group_names) {
         if (subgroup_name.empty()) {
             continue;
         }
@@ -202,7 +202,7 @@ static dnd::Errors validate_relations_item_choice(
     const dnd::ChoiceData& data, const dnd::ValidationData* parent, const dnd::Content& content
 ) {
     dnd::Errors errors;
-    for (const auto& explicit_choice : data.explicit_choices) {
+    for (const std::string& explicit_choice : data.explicit_choices) {
         if (explicit_choice.empty()) {
             continue;
         }
@@ -216,7 +216,7 @@ static dnd::Errors validate_relations_item_choice(
             );
         }
     }
-    for (const auto& group_name : data.group_names) {
+    for (const std::string& group_name : data.group_names) {
         if (group_name.empty()) {
             continue;
         }
@@ -244,7 +244,7 @@ static dnd::Errors validate_relations_spell_choice(
     const dnd::ChoiceData& data, const dnd::ValidationData* parent, const dnd::Content& content
 ) {
     dnd::Errors errors;
-    for (const auto& explicit_choice : data.explicit_choices) {
+    for (const std::string& explicit_choice : data.explicit_choices) {
         if (explicit_choice.empty()) {
             continue;
         }
@@ -258,7 +258,7 @@ static dnd::Errors validate_relations_spell_choice(
             );
         }
     }
-    for (const auto& group_name : data.group_names) {
+    for (const std::string& group_name : data.group_names) {
         if (group_name.empty()) {
             continue;
         }
@@ -319,7 +319,7 @@ static dnd::Errors validate_relations_choosable_choice(
     const dnd::ChoiceData& data, const dnd::ValidationData* parent, const dnd::Content& content
 ) {
     dnd::Errors errors;
-    for (const auto& explicit_choice : data.explicit_choices) {
+    for (const std::string& explicit_choice : data.explicit_choices) {
         if (explicit_choice.empty()) {
             continue;
         }
@@ -333,7 +333,7 @@ static dnd::Errors validate_relations_choosable_choice(
             );
         }
     }
-    for (const auto& group_name : data.group_names) {
+    for (const std::string& group_name : data.group_names) {
         if (group_name.empty()) {
             continue;
         }

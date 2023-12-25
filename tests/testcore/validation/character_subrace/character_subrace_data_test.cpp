@@ -5,6 +5,7 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include <core/errors/errors.hpp>
+#include <core/validation/effects_provider/feature_data.hpp>
 #include <testcore/minimal_testing_content.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
@@ -18,7 +19,7 @@ TEST_CASE("dnd::CharacterSubraceData::validate and ::validate_relations // valid
 
     SECTION("race with one valid feature") {
         data.race_name = "Dwarf";
-        auto& feature_data = data.features_data.emplace_back(&data);
+        dnd::FeatureData& feature_data = data.features_data.emplace_back(&data);
         dndtest::set_valid_mock_values(feature_data, "Feature");
         REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_NOTHROW(errors += data.validate_relations(content));
@@ -46,7 +47,7 @@ TEST_CASE("dnd::CharacterSubraceData::validate // invalid subrace data", tags) {
 
     SECTION("subrace without race is invalid") {
         data.race_name = "";
-        auto& feature_data = data.features_data.emplace_back(&data);
+        dnd::FeatureData& feature_data = data.features_data.emplace_back(&data);
         dndtest::set_valid_mock_values(feature_data, "Feature");
         REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_FALSE(errors.ok());
@@ -80,7 +81,7 @@ TEST_CASE("dnd::CharacterSubraceData::validate // invalid subrace data", tags) {
 TEST_CASE("dnd::CharacterSubraceData::validate_relations // invalid subrace data relations", tags) {
     dnd::CharacterSubraceData data;
     dndtest::set_valid_mock_values(data, "Subrace");
-    auto& valid_feature_data = data.features_data.emplace_back(&data);
+    dnd::FeatureData& valid_feature_data = data.features_data.emplace_back(&data);
     dndtest::set_valid_mock_values(valid_feature_data, "Valid Feature");
     dnd::Content content = dndtest::minimal_testing_content();
     dnd::Errors errors;
@@ -95,7 +96,7 @@ TEST_CASE("dnd::CharacterSubraceData::validate_relations // invalid subrace data
     SECTION("features with duplicate names aren't allowed") {
         data.name = "New Subrace";
         data.race_name = "Dwarf";
-        auto& feature_data = data.features_data.emplace_back(&data);
+        dnd::FeatureData& feature_data = data.features_data.emplace_back(&data);
         dndtest::set_valid_mock_values(feature_data, "Duplicate Feature");
         feature_data.name = "Example Subrace Feature"; // feature with that name already exists in the example content
         REQUIRE_NOTHROW(errors = data.validate_relations(content));

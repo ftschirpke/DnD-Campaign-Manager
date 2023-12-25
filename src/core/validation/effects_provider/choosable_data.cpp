@@ -20,7 +20,7 @@ dnd::Errors dnd::ChoosableData::validate() const {
             ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Choosable Feature has empty type"
         );
     }
-    for (const auto& prerequisite_data : prerequisites_data) {
+    for (const ConditionData& prerequisite_data : prerequisites_data) {
         errors += prerequisite_data.validate();
     }
     return errors;

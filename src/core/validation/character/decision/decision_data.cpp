@@ -1,5 +1,6 @@
 #include <dnd_config.hpp>
 
+#include "core/models/character_subrace/character_subrace.hpp"
 #include "decision_data.hpp"
 
 #include <algorithm>
@@ -54,7 +55,7 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
         return errors;
     }
     std::map<std::string, const dnd::Choice*> choices;
-    for (const auto& choice : target->get_choices()) {
+    for (const Choice& choice : target->get_choices()) {
         assert(!choices.contains(choice.get_attribute_name()));
         if (selections.contains(choice.get_attribute_name())) {
             choices[choice.get_attribute_name()] = &choice;
@@ -76,7 +77,7 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
             continue;
         }
         const std::set<std::string> possible_values = choices[attribute_name]->possible_values(content);
-        for (const auto& value : selection) {
+        for (const std::string& value : selection) {
             if (std::find(possible_values.cbegin(), possible_values.cend(), value) == possible_values.cend()) {
                 errors.add_validation_error(
                     ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
@@ -137,7 +138,7 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
             // TODO: check character specific features for choices
             case EffectsProviderType::Feature: {
                 const std::string& race_name = character_data->character_basis_data.race_name;
-                auto race_optional = content.get_character_races().get(race_name);
+                OptCRef<CharacterRace> race_optional = content.get_character_races().get(race_name);
                 if (race_optional.has_value()) {
                     const CharacterRace& race = race_optional.value();
                     feature_found = std::any_of(
@@ -148,7 +149,7 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
                     }
                 }
                 const std::string& subrace_name = character_data->character_basis_data.subrace_name;
-                auto subrace_optional = content.get_character_subraces().get(subrace_name);
+                OptCRef<CharacterSubrace> subrace_optional = content.get_character_subraces().get(subrace_name);
                 if (subrace_optional.has_value()) {
                     const CharacterSubrace& subrace = subrace_optional.value();
                     feature_found = std::any_of(
@@ -159,7 +160,7 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
             }
             case EffectsProviderType::ClassFeature: {
                 const std::string& class_name = character_data->character_basis_data.class_name;
-                auto class_optional = content.get_character_classes().get(class_name);
+                OptCRef<CharacterClass> class_optional = content.get_character_classes().get(class_name);
                 if (class_optional.has_value()) {
                     const CharacterClass& cls = class_optional.value();
                     feature_found = std::any_of(cls.get_features().begin(), cls.get_features().end(), has_feature_name);
@@ -168,7 +169,7 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
                     }
                 }
                 const std::string& subclass_name = character_data->character_basis_data.subclass_name;
-                auto subclass_optional = content.get_character_subclasses().get(subclass_name);
+                OptCRef<CharacterSubclass> subclass_optional = content.get_character_subclasses().get(subclass_name);
                 if (content.get_character_subclasses().contains(subclass_name)) {
                     const CharacterSubclass& subclass = subclass_optional.value();
                     feature_found = std::any_of(

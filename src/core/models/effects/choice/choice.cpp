@@ -153,12 +153,12 @@ std::set<std::string> dnd::Choice::possible_values(const dnd::Content& content) 
     std::set<std::string> possible_values;
     switch (type) {
         case ChoiceType::ABILITY:
-            for (const auto& ability : ability_cstrings_inorder) {
+            for (const char* ability : ability_cstrings_inorder) {
                 possible_values.emplace(ability);
             }
             break;
         case ChoiceType::SKILL:
-            for (const auto& skill : get_all_skills()) {
+            for (const std::string& skill : get_all_skills()) {
                 possible_values.emplace(skill);
             };
             break;
@@ -170,7 +170,7 @@ std::set<std::string> dnd::Choice::possible_values(const dnd::Content& content) 
             };
             [[fallthrough]];
         case ChoiceType::STAT_CHANGE:
-            for (const auto& explicit_choice : explicit_choices) {
+            for (const std::string& explicit_choice : explicit_choices) {
                 possible_values.emplace(explicit_choice);
             };
             break;

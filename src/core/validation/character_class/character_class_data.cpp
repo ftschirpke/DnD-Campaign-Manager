@@ -32,7 +32,7 @@ dnd::Errors dnd::CharacterClassData::validate() const {
 
     bool has_subclass_feature = false;
     std::unordered_set<std::string> unique_feature_names;
-    for (const auto& feature_data : features_data) {
+    for (const ClassFeatureData& feature_data : features_data) {
         errors += feature_data.validate();
         if (unique_feature_names.contains(feature_data.name)) {
             errors.add_validation_error(
@@ -71,7 +71,7 @@ dnd::Errors dnd::CharacterClassData::validate_relations(const dnd::Content& cont
             ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, fmt::format("Class has duplicate name \"{}\".", name)
         );
     }
-    for (const auto& feature_data : features_data) {
+    for (const ClassFeatureData& feature_data : features_data) {
         errors += feature_data.validate_relations(content);
         if (content.get_class_features().contains(feature_data.name)) {
             errors.add_validation_error(

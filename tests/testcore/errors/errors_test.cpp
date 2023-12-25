@@ -7,6 +7,8 @@
 
 #include <catch2/catch_test_macros.hpp>
 
+#include <core/errors/parsing_error.hpp>
+#include <core/errors/validation_error.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
 static constexpr const char* tags = "[core][errors]";
@@ -29,7 +31,7 @@ TEST_CASE("dnd::Errors // Construction and Getter Methods", tags) {
             dnd::ParsingErrorCode::INVALID_FILE_FORMAT, "/path/to/file.txt", "Invalid file format"
         );
 
-        const auto& parsing_errors = errors.get_parsing_errors();
+        const std::vector<dnd::ParsingError>& parsing_errors = errors.get_parsing_errors();
         REQUIRE(parsing_errors.size() == 2);
         REQUIRE(parsing_errors[0].get_error_code() == dnd::ParsingErrorCode::FILE_NOT_FOUND);
         REQUIRE(parsing_errors[1].get_error_code() == dnd::ParsingErrorCode::INVALID_FILE_FORMAT);
@@ -45,7 +47,7 @@ TEST_CASE("dnd::Errors // Construction and Getter Methods", tags) {
             dnd::ValidationErrorCode::INVALID_ATTRIBUTE_FORMAT, &validation_data, "Invalid attribute format"
         );
 
-        const auto& validation_errors = errors.get_validation_errors();
+        const std::vector<dnd::ValidationError>& validation_errors = errors.get_validation_errors();
         REQUIRE(validation_errors.size() == 2);
         REQUIRE(validation_errors[0].get_error_code() == dnd::ValidationErrorCode::MISSING_ATTRIBUTE);
         REQUIRE(validation_errors[1].get_error_code() == dnd::ValidationErrorCode::INVALID_ATTRIBUTE_FORMAT);
@@ -63,8 +65,8 @@ TEST_CASE("dnd::Errors // Construction and Getter Methods", tags) {
 
         errors.merge(std::move(other_errors));
 
-        const auto& parsing_errors = errors.get_parsing_errors();
-        const auto& validation_errors = errors.get_validation_errors();
+        const std::vector<dnd::ParsingError>& parsing_errors = errors.get_parsing_errors();
+        const std::vector<dnd::ValidationError>& validation_errors = errors.get_validation_errors();
         REQUIRE(parsing_errors.size() == 1);
         REQUIRE(validation_errors.size() == 1);
         REQUIRE(parsing_errors[0].get_error_code() == dnd::ParsingErrorCode::FILE_NOT_FOUND);
@@ -83,8 +85,8 @@ TEST_CASE("dnd::Errors // Construction and Getter Methods", tags) {
 
         errors += std::move(other_errors);
 
-        const auto& parsing_errors = errors.get_parsing_errors();
-        const auto& validation_errors = errors.get_validation_errors();
+        const std::vector<dnd::ParsingError>& parsing_errors = errors.get_parsing_errors();
+        const std::vector<dnd::ValidationError>& validation_errors = errors.get_validation_errors();
         REQUIRE(parsing_errors.size() == 1);
         REQUIRE(validation_errors.size() == 1);
         REQUIRE(parsing_errors[0].get_error_code() == dnd::ParsingErrorCode::FILE_NOT_FOUND);

@@ -60,7 +60,7 @@ dnd::Errors dnd::EffectsParser::parse_activation_conditions_into(
     } else if (has_activations) {
         std::vector<std::string> activation_conditions_strs;
         errors += parse_optional_attribute_into(json, "activations", activation_conditions_strs);
-        for (const auto& activation_condition_str : activation_conditions_strs) {
+        for (const std::string& activation_condition_str : activation_conditions_strs) {
             ConditionData& condition_data = data.emplace_back(parent);
             condition_data.condition_str = activation_condition_str;
         }
@@ -113,7 +113,7 @@ dnd::Errors dnd::EffectsParser::parse_stat_changes_into(
 ) const {
     std::vector<std::string> stat_change_strings;
     Errors errors = parse_optional_attribute_into(json, "stat_changes", stat_change_strings);
-    for (auto& stat_change_string : stat_change_strings) {
+    for (std::string& stat_change_string : stat_change_strings) {
         StatChangeData& stat_change_data = data.emplace_back(parent);
         stat_change_data.stat_change_str = std::move(stat_change_string);
     }

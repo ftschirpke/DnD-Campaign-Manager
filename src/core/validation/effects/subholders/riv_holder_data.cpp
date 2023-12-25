@@ -18,7 +18,7 @@ static dnd::Errors string_set_validate(
     const std::set<std::string>& string_set, const dnd::ValidationData* parent, const char* set_name
 ) {
     dnd::Errors errors;
-    for (const auto& str_item : string_set) {
+    for (const std::string& str_item : string_set) {
         if (str_item.empty()) {
             errors.add_validation_error(
                 dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
@@ -43,7 +43,7 @@ static dnd::Errors string_group_set_validate_relations(
     const char* group_name, const dnd::Content& content
 ) {
     dnd::Errors errors;
-    for (const auto& str_item : string_group_set) {
+    for (const std::string& str_item : string_group_set) {
         if (!content.get_groups().is_part_of_group(str_item, group_name)) {
             errors.add_validation_error(
                 dnd::ValidationErrorCode::RELATION_NOT_FOUND, parent,

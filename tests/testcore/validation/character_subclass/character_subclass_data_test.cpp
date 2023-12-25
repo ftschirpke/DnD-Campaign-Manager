@@ -5,6 +5,7 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include <core/errors/errors.hpp>
+#include <core/validation/effects_provider/class_feature_data.hpp>
 #include <testcore/minimal_testing_content.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
@@ -19,7 +20,7 @@ TEST_CASE("dnd::CharacterSubclassData::validate and ::validate_relations // vali
 
     SECTION("class with one valid feature") {
         data.class_name = "Wizard";
-        auto& feature_data = data.features_data.emplace_back(&data);
+        dnd::ClassFeatureData& feature_data = data.features_data.emplace_back(&data);
         dndtest::set_valid_mock_values(feature_data, "Feature");
         REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_NOTHROW(errors += data.validate_relations(content));
@@ -48,7 +49,7 @@ TEST_CASE("dnd::CharacterSubclassData::validate // invalid subclass data", tags)
 
     SECTION("subclass without class is invalid") {
         data.class_name = "";
-        auto& feature_data = data.features_data.emplace_back(&data);
+        dnd::ClassFeatureData& feature_data = data.features_data.emplace_back(&data);
         dndtest::set_valid_mock_values(feature_data, "Feature");
         REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_FALSE(errors.ok());
@@ -83,7 +84,7 @@ TEST_CASE("dnd::CharacterSubclassData::validate_relations // invalid subclass da
     dnd::CharacterSubclassData data;
     dndtest::set_valid_mock_values(data, "Subclass");
     data.spellcasting_data.is_spellcaster = false;
-    auto& valid_feature_data = data.features_data.emplace_back(&data);
+    dnd::ClassFeatureData& valid_feature_data = data.features_data.emplace_back(&data);
     dndtest::set_valid_mock_values(valid_feature_data, "Valid Feature");
     dnd::Content content = dndtest::minimal_testing_content();
     dnd::Errors errors;
@@ -98,7 +99,7 @@ TEST_CASE("dnd::CharacterSubclassData::validate_relations // invalid subclass da
     SECTION("features with duplicate names aren't allowed") {
         data.name = "New Subclass";
         data.class_name = "Wizard";
-        auto& feature_data = data.features_data.emplace_back(&data);
+        dnd::ClassFeatureData& feature_data = data.features_data.emplace_back(&data);
         dndtest::set_valid_mock_values(feature_data, "Duplicate Feature");
         feature_data.name = "Example Subclass Feature"; // feature with that name already exists in the example content
         REQUIRE_NOTHROW(errors = data.validate_relations(content));

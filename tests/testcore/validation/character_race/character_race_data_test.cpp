@@ -80,7 +80,7 @@ TEST_CASE("dnd::CharacterRaceData::validate_relations // invalid race data relat
 
     SECTION("features with duplicate names aren't allowed") {
         data.name = "New Race";
-        auto& feature_data = data.features_data.emplace_back(&data);
+        dnd::FeatureData& feature_data = data.features_data.emplace_back(&data);
         dndtest::set_valid_mock_values(feature_data, "Duplicate Feature");
         feature_data.name = "Example Race Feature"; // feature with that name already exists in the example content
         REQUIRE_NOTHROW(errors = data.validate_relations(content));

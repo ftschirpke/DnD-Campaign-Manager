@@ -23,7 +23,7 @@ std::set<std::string> dnd::Groups::get_group(const std::string& group_name) cons
     if (!subgroups.contains(group_name)) {
         return group_members;
     }
-    for (const auto& subgroup_name : subgroups.at(group_name)) {
+    for (const std::string& subgroup_name : subgroups.at(group_name)) {
         std::set<std::string> subgroup_members = get_group(subgroup_name);
         group_members.insert(
             std::make_move_iterator(subgroup_members.begin()), std::make_move_iterator(subgroup_members.end())
@@ -58,7 +58,7 @@ void dnd::Groups::set_subgroups(const std::string& group_name, std::set<std::str
         std::make_move_iterator(subgroup_names.begin()), std::make_move_iterator(subgroup_names.end())
     );
     members[group_name];
-    for (const auto& subgroup_name : subgroup_names) {
+    for (const std::string& subgroup_name : subgroup_names) {
         members[subgroup_name];
     }
 }
@@ -72,7 +72,7 @@ bool dnd::Groups::is_subgroup(const std::string& subgroup_name, const std::strin
     if (subgroups.at(group_name).contains(subgroup_name)) {
         return true;
     }
-    for (const auto& subgroup : subgroups.at(group_name)) {
+    for (const std::string& subgroup : subgroups.at(group_name)) {
         if (is_subgroup(subgroup_name, subgroup)) {
             return true;
         }
@@ -90,7 +90,7 @@ bool dnd::Groups::is_part_of_group(const std::string& name, const std::string& g
     if (!subgroups.contains(group_name)) {
         return false;
     }
-    for (const auto& subgroup_name : subgroups.at(group_name)) {
+    for (const std::string& subgroup_name : subgroups.at(group_name)) {
         if (is_part_of_group(name, subgroup_name)) {
             return true;
         }

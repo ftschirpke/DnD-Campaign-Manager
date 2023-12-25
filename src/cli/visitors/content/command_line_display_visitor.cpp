@@ -38,7 +38,7 @@ static void format_text(const std::string& text) {
     static dnd::DisplayFormatVisitor display_format_visitor;
     static dnd::StringFormatter string_formatter(false);
     std::vector<std::unique_ptr<dnd::Format>> formats = string_formatter.parse_formats(text);
-    for (const auto& format : formats) {
+    for (const std::unique_ptr<dnd::Format>& format : formats) {
         format->accept(display_format_visitor);
     }
 }
