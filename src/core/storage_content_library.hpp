@@ -14,6 +14,7 @@
 #include <core/models/content_piece.hpp>
 #include <core/searching/fuzzy_search/trie.hpp>
 #include <core/utils/string_manipulation.hpp>
+#include <core/utils/types.hpp>
 
 namespace dnd {
 
@@ -28,10 +29,10 @@ public:
     bool contains(const std::string& name) const override;
     bool empty() const override;
     size_t size() const override;
-    std::optional<std::reference_wrapper<const T>> get(size_t index) const override;
-    std::optional<std::reference_wrapper<const T>> get(const std::string& name) const override;
+    OptRef<const T> get(size_t index) const override;
+    OptRef<const T> get(const std::string& name) const override;
     const std::unordered_map<std::string, T>& get_all() const;
-    std::optional<std::reference_wrapper<const T>> add(T&& content_piece);
+    OptRef<const T> add(T&& content_piece);
     /**
      * @brief Get the root of the trie
      * @return a pointer to the root of the trie
@@ -81,7 +82,7 @@ size_t StorageContentLibrary<T>::size() const {
 
 template <typename T>
 requires isContentPieceType<T>
-std::optional<std::reference_wrapper<const T>> StorageContentLibrary<T>::get(size_t index) const {
+OptRef<const T> StorageContentLibrary<T>::get(size_t index) const {
     if (index >= data.size()) {
         return std::nullopt;
     }
@@ -91,7 +92,7 @@ std::optional<std::reference_wrapper<const T>> StorageContentLibrary<T>::get(siz
 
 template <typename T>
 requires isContentPieceType<T>
-std::optional<std::reference_wrapper<const T>> StorageContentLibrary<T>::get(const std::string& name) const {
+OptRef<const T> StorageContentLibrary<T>::get(const std::string& name) const {
     auto iterator = data.find(name);
     if (iterator == data.end()) {
         return std::nullopt;
@@ -107,7 +108,7 @@ const std::unordered_map<std::string, T>& StorageContentLibrary<T>::get_all() co
 
 template <typename T>
 requires isContentPieceType<T>
-std::optional<std::reference_wrapper<const T>> StorageContentLibrary<T>::add(T&& content_piece) {
+OptRef<const T> StorageContentLibrary<T>::add(T&& content_piece) {
     const std::string name = content_piece.get_name();
     auto [it, was_inserted] = data.emplace(name, std::move(content_piece));
     if (was_inserted) {

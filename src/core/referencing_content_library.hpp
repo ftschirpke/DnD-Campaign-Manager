@@ -5,8 +5,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <functional>
-#include <optional>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
@@ -14,6 +12,7 @@
 #include <core/content_library.hpp>
 #include <core/searching/fuzzy_search/trie.hpp>
 #include <core/utils/string_manipulation.hpp>
+#include <core/utils/types.hpp>
 
 namespace dnd {
 
@@ -28,15 +27,15 @@ public:
     bool contains(const std::string& name) const override;
     bool empty() const override;
     size_t size() const override;
-    std::optional<std::reference_wrapper<const T>> get(size_t index) const override;
-    std::optional<std::reference_wrapper<const T>> get(const std::string& name) const override;
+    OptRef<const T> get(size_t index) const override;
+    OptRef<const T> get(const std::string& name) const override;
     const std::unordered_map<std::string, std::reference_wrapper<const T>>& get_all() const;
     /**
      * @brief Add a content piece to a content piece to the library
      * @param content_piece the content piece to add
      * @return reference to the inserted content piece, or std::nullopt if a content piece with that name already exists
      */
-    std::optional<std::reference_wrapper<const T>> add(const T& content_piece);
+    OptRef<const T> add(const T& content_piece);
     /**
      * @brief Get the root of the fuzzy search trie
      * @return a pointer to the root of the fuzzy search trie
@@ -87,7 +86,7 @@ size_t ReferencingContentLibrary<T>::size() const {
 
 template <typename T>
 requires isContentPieceType<T>
-std::optional<std::reference_wrapper<const T>> ReferencingContentLibrary<T>::get(size_t index) const {
+OptRef<const T> ReferencingContentLibrary<T>::get(size_t index) const {
     if (index >= data.size()) {
         return std::nullopt;
     }
@@ -97,7 +96,7 @@ std::optional<std::reference_wrapper<const T>> ReferencingContentLibrary<T>::get
 
 template <typename T>
 requires isContentPieceType<T>
-std::optional<std::reference_wrapper<const T>> ReferencingContentLibrary<T>::get(const std::string& name) const {
+OptRef<const T> ReferencingContentLibrary<T>::get(const std::string& name) const {
     auto iterator = data.find(name);
     if (iterator == data.end()) {
         return std::nullopt;
@@ -113,7 +112,7 @@ const std::unordered_map<std::string, std::reference_wrapper<const T>>& Referenc
 
 template <typename T>
 requires isContentPieceType<T>
-std::optional<std::reference_wrapper<const T>> ReferencingContentLibrary<T>::add(const T& content_piece) {
+OptRef<const T> ReferencingContentLibrary<T>::add(const T& content_piece) {
     const std::string name = content_piece.get_name();
     auto [it, was_inserted] = data.emplace(name, std::cref(content_piece));
     if (was_inserted) {
