@@ -1,5 +1,6 @@
 #include <dnd_config.hpp>
 
+#include "core/utils/types.hpp"
 #include "display_visitor.hpp"
 
 #include <cassert>
@@ -64,22 +65,20 @@ void dnd::DisplayVisitor::operator()(const dnd::Character& character) {
     output.formatted_text("Level: {}", character.get_progression().get_level());
     output.formatted_text("XP: {}", character.get_progression().get_xp());
 
-    const CharacterRace* race_ptr = character.get_basis().get_race();
-    assert(race_ptr != nullptr);
-    output.formatted_text("Race: {}", race_ptr->get_name());
+    const CharacterRace& race = character.get_basis().get_race();
+    output.formatted_text("Race: {}", race.get_name());
 
-    const CharacterSubrace* subrace_ptr = character.get_basis().get_subrace();
-    if (subrace_ptr != nullptr) {
-        output.formatted_text("Subrace: {}", subrace_ptr->get_name());
+    OptCRef<CharacterSubrace> subrace = character.get_basis().get_subrace();
+    if (subrace.has_value()) {
+        output.formatted_text("Subrace: {}", subrace.value().get().get_name());
     }
 
-    const CharacterClass* class_ptr = character.get_basis().get_class();
-    assert(class_ptr != nullptr);
-    output.formatted_text("Class: {}", class_ptr->get_name());
+    const CharacterClass& classv = character.get_basis().get_class();
+    output.formatted_text("Class: {}", classv.get_name());
 
-    const CharacterSubclass* subclass_ptr = character.get_basis().get_subclass();
-    if (subclass_ptr != nullptr) {
-        output.formatted_text("Subclass: {}", subclass_ptr->get_name());
+    OptCRef<CharacterSubclass> subclass = character.get_basis().get_subclass();
+    if (subclass.has_value()) {
+        output.formatted_text("Subclass: {}", subclass.value().get().get_name());
     }
 
     list_features<Feature>(output, character.get_features());

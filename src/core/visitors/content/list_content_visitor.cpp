@@ -26,7 +26,7 @@ std::vector<std::string> dnd::ListContentVisitor::get_list() { return std::move(
 void dnd::ListContentVisitor::operator()(const Character& character) {
     string_list.emplace_back(fmt::format(
         "{} [CHARACTER] : Level {} {} {}", character.get_name(), character.get_progression().get_level(),
-        character.get_basis().get_class()->get_name(), character.get_basis().get_race()->get_name()
+        character.get_basis().get_class().get_name(), character.get_basis().get_race().get_name()
     ));
 }
 

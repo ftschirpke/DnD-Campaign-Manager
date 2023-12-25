@@ -70,15 +70,16 @@ const dnd::CharacterBasis& dnd::Character::get_basis() const noexcept { return b
 const dnd::Progression& dnd::Character::get_progression() const noexcept { return progression; }
 
 void dnd::Character::for_all_effects_do(std::function<void(const dnd::Effects&)> func) const noexcept {
-    for (const Feature& feature : basis.get_race()->get_features()) {
+    for (const Feature& feature : basis.get_race().get_features()) {
         func(feature.get_main_effects());
     }
-    if (basis.has_subrace()) {
-        for (const Feature& feature : basis.get_subrace()->get_features()) {
+    OptCRef<CharacterSubrace> subrace = basis.get_subrace();
+    if (subrace.has_value()) {
+        for (const Feature& feature : subrace.value().get().get_features()) {
             func(feature.get_main_effects());
         }
     }
-    for (const ClassFeature& feature : basis.get_class()->get_features()) {
+    for (const ClassFeature& feature : basis.get_class().get_features()) {
         func(feature.get_main_effects());
         for (const auto& [level, effects] : feature.get_higher_level_effects()) {
             if (level > progression.get_level()) {
@@ -87,8 +88,9 @@ void dnd::Character::for_all_effects_do(std::function<void(const dnd::Effects&)>
             func(effects);
         }
     }
-    if (basis.has_subrace()) {
-        for (const ClassFeature& feature : basis.get_subclass()->get_features()) {
+    OptCRef<CharacterSubclass> subclass = basis.get_subclass();
+    if (subclass.has_value()) {
+        for (const ClassFeature& feature : subclass.value().get().get_features()) {
             func(feature.get_main_effects());
             for (const auto& [level, effects] : feature.get_higher_level_effects()) {
                 if (level > progression.get_level()) {
