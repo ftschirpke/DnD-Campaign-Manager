@@ -53,21 +53,21 @@ public:
     const StorageContentLibrary<Choosable>& get_choosables() const;
 
     std::optional<EffectsProviderType> contains_effects_provider(const std::string& name) const;
-    OptRef<const EffectsProvider> get_effects_provider(const std::string& name) const;
+    OptCRef<EffectsProvider> get_effects_provider(const std::string& name) const;
 
     void set_subgroup(const std::string& group_name, const std::string& subgroup_name);
     void set_subgroups(const std::string& group_name, std::set<std::string>&& subgroups);
     void add_group_member(const std::string& group_name, const std::string& value);
     void add_group_members(const std::string& group_name, std::set<std::string>&& values);
 
-    OptRef<const Character> add_character(Character&& character);
-    OptRef<const CharacterClass> add_character_class(CharacterClass&& character_class);
-    OptRef<const CharacterSubclass> add_character_subclass(CharacterSubclass&& character_subclass);
-    OptRef<const CharacterRace> add_character_race(CharacterRace&& character_race);
-    OptRef<const CharacterSubrace> add_character_subrace(CharacterSubrace&& character_subrace);
-    OptRef<const Item> add_item(Item&& item);
-    OptRef<const Spell> add_spell(Spell&& spell);
-    OptRef<const Choosable> add_choosable(Choosable&& choosable);
+    OptCRef<Character> add_character(Character&& character);
+    OptCRef<CharacterClass> add_character_class(CharacterClass&& character_class);
+    OptCRef<CharacterSubclass> add_character_subclass(CharacterSubclass&& character_subclass);
+    OptCRef<CharacterRace> add_character_race(CharacterRace&& character_race);
+    OptCRef<CharacterSubrace> add_character_subrace(CharacterSubrace&& character_subrace);
+    OptCRef<Item> add_item(Item&& item);
+    OptCRef<Spell> add_spell(Spell&& spell);
+    OptCRef<Choosable> add_choosable(Choosable&& choosable);
 private:
     Groups groups;
     StorageContentLibrary<Character> characters;

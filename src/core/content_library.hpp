@@ -28,13 +28,13 @@ public:
      * @param index the index of the piece of content
      * @return constant reference to the piece of content if it exists, std::nullopt otherwise
      */
-    virtual OptRef<const T> get(size_t index) const = 0;
+    virtual OptCRef<T> get(size_t index) const = 0;
     /**
      * @brief Get content piece by its name
      * @param name the name of the piece of content
      * @return constant reference to the piece of content if it exists, std::nullopt otherwise
      */
-    virtual OptRef<const T> get(const std::string& name) const = 0;
+    virtual OptCRef<T> get(const std::string& name) const = 0;
     /**
      * @brief Get the root of the fuzzy search trie
      * @return a pointer to the root of the fuzzy search trie

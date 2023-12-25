@@ -29,7 +29,7 @@ dnd::Errors dnd::CharacterBasisData::validate() const {
 
 dnd::Errors dnd::CharacterBasisData::validate_relations(const dnd::Content& content) const {
     Errors errors;
-    OptRef<const CharacterRace> race_optional = content.get_character_races().get(race_name);
+    OptCRef<CharacterRace> race_optional = content.get_character_races().get(race_name);
     if (!race_optional.has_value()) {
         errors.add_validation_error(
             ValidationErrorCode::RELATION_NOT_FOUND, parent, fmt::format("Race '{}' does not exist.", race_name)
@@ -42,7 +42,7 @@ dnd::Errors dnd::CharacterBasisData::validate_relations(const dnd::Content& cont
                 fmt::format("Race '{}' does not have subraces.", race_name)
             );
         }
-        OptRef<const CharacterSubrace> subrace_optional = content.get_character_subraces().get(subrace_name);
+        OptCRef<CharacterSubrace> subrace_optional = content.get_character_subraces().get(subrace_name);
         if (!subrace_optional.has_value()) {
             errors.add_validation_error(
                 ValidationErrorCode::RELATION_NOT_FOUND, parent,
@@ -60,14 +60,14 @@ dnd::Errors dnd::CharacterBasisData::validate_relations(const dnd::Content& cont
         );
     }
 
-    OptRef<const CharacterClass> class_optional = content.get_character_classes().get(class_name);
+    OptCRef<CharacterClass> class_optional = content.get_character_classes().get(class_name);
     if (!class_optional.has_value()) {
         errors.add_validation_error(
             ValidationErrorCode::RELATION_NOT_FOUND, parent, fmt::format("Class '{}' does not exist.", class_name)
         );
     } else if (!subclass_name.empty()) {
         const CharacterClass& cls = class_optional.value();
-        OptRef<const CharacterSubclass> subclass_optional = content.get_character_subclasses().get(subclass_name);
+        OptCRef<CharacterSubclass> subclass_optional = content.get_character_subclasses().get(subclass_name);
         if (!subclass_optional.has_value()) {
             errors.add_validation_error(
                 ValidationErrorCode::RELATION_NOT_FOUND, parent,

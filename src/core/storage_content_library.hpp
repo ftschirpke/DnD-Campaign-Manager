@@ -29,10 +29,10 @@ public:
     bool contains(const std::string& name) const override;
     bool empty() const override;
     size_t size() const override;
-    OptRef<const T> get(size_t index) const override;
-    OptRef<const T> get(const std::string& name) const override;
+    OptCRef<T> get(size_t index) const override;
+    OptCRef<T> get(const std::string& name) const override;
     const std::unordered_map<std::string, T>& get_all() const;
-    OptRef<const T> add(T&& content_piece);
+    OptCRef<T> add(T&& content_piece);
     /**
      * @brief Get the root of the trie
      * @return a pointer to the root of the trie
@@ -82,7 +82,7 @@ size_t StorageContentLibrary<T>::size() const {
 
 template <typename T>
 requires isContentPieceType<T>
-OptRef<const T> StorageContentLibrary<T>::get(size_t index) const {
+OptCRef<T> StorageContentLibrary<T>::get(size_t index) const {
     if (index >= data.size()) {
         return std::nullopt;
     }
@@ -92,7 +92,7 @@ OptRef<const T> StorageContentLibrary<T>::get(size_t index) const {
 
 template <typename T>
 requires isContentPieceType<T>
-OptRef<const T> StorageContentLibrary<T>::get(const std::string& name) const {
+OptCRef<T> StorageContentLibrary<T>::get(const std::string& name) const {
     auto iterator = data.find(name);
     if (iterator == data.end()) {
         return std::nullopt;
@@ -108,7 +108,7 @@ const std::unordered_map<std::string, T>& StorageContentLibrary<T>::get_all() co
 
 template <typename T>
 requires isContentPieceType<T>
-OptRef<const T> StorageContentLibrary<T>::add(T&& content_piece) {
+OptCRef<T> StorageContentLibrary<T>::add(T&& content_piece) {
     const std::string name = content_piece.get_name();
     auto [it, was_inserted] = data.emplace(name, std::move(content_piece));
     if (was_inserted) {
