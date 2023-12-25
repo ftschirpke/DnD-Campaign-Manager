@@ -142,14 +142,14 @@ static void add_races(dnd::Content& content) {
     assert(race_data2.validate_relations(content).ok());
     content.add_character_race(dnd::CharacterRace::create(std::move(race_data2), content));
 
-    // dnd::CharacterRaceData race_data3;
-    // dndtest::set_valid_mock_values(race_data3, "Elf");
-    // auto& feature_data3 = race_data3.features_data.emplace_back(&race_data3);
-    // dndtest::set_valid_mock_values(feature_data3, "Example Race Feature 3");
-    // race_data3.subraces = true;
-    // assert(race_data3.validate().ok());
-    // assert(race_data3.validate_relations(content).ok());
-    // content.add_character_race(dnd::CharacterRace::create(std::move(race_data3), content));
+    dnd::CharacterRaceData race_data3;
+    dndtest::set_valid_mock_values(race_data3, "Elf");
+    auto& feature_data3 = race_data3.features_data.emplace_back(&race_data3);
+    dndtest::set_valid_mock_values(feature_data3, "Example Race Feature 3");
+    race_data3.subraces = true;
+    assert(race_data3.validate().ok());
+    assert(race_data3.validate_relations(content).ok());
+    content.add_character_race(dnd::CharacterRace::create(std::move(race_data3), content));
 
     dnd::CharacterSubraceData subrace_data1;
     dndtest::set_valid_mock_values(subrace_data1, "Hill Dwarf");
@@ -160,33 +160,33 @@ static void add_races(dnd::Content& content) {
     assert(subrace_data1.validate_relations(content).ok());
     content.add_character_subrace(dnd::CharacterSubrace::create(std::move(subrace_data1), content));
 
-    // dnd::CharacterSubraceData subrace_data2;
-    // dndtest::set_valid_mock_values(subrace_data2, "High Elf");
-    // auto& feature_data5 = subrace_data2.features_data.emplace_back(&subrace_data2);
-    // dndtest::set_valid_mock_values(feature_data5, "Example Subrace Feature 2");
-    // subrace_data2.race_name = "Elf";
-    // assert(subrace_data2.validate().ok());
-    // assert(subrace_data2.validate_relations(content).ok());
-    // content.add_character_subrace(dnd::CharacterSubrace::create(std::move(subrace_data2), content));
+    dnd::CharacterSubraceData subrace_data2;
+    dndtest::set_valid_mock_values(subrace_data2, "High Elf");
+    auto& feature_data5 = subrace_data2.features_data.emplace_back(&subrace_data2);
+    dndtest::set_valid_mock_values(feature_data5, "Example Subrace Feature 2");
+    subrace_data2.race_name = "Elf";
+    assert(subrace_data2.validate().ok());
+    assert(subrace_data2.validate_relations(content).ok());
+    content.add_character_subrace(dnd::CharacterSubrace::create(std::move(subrace_data2), content));
 }
 
 static void add_characters(dnd::Content& content) {
     DND_UNUSED(content);
-    // dnd::CharacterData character_data;
-    // dndtest::set_valid_mock_values(character_data, "Example Character");
-    // auto& feature_data = character_data.features_data.emplace_back(&character_data);
-    // dndtest::set_valid_mock_values(feature_data, "Example Character Feature");
-    // character_data.base_ability_scores_data.ability_scores = {10, 8, 12, 15, 13, 14};
-    // character_data.character_basis_data.race_name = "Dwarf";
-    // character_data.character_basis_data.subrace_name = "Hill Dwarf";
-    // character_data.character_basis_data.class_name = "Wizard";
-    // character_data.character_basis_data.subclass_name = "Abjuration Wizard";
-    // character_data.progression_data.level = 4;
-    // character_data.progression_data.xp = 4200;
-    // character_data.progression_data.hit_dice_rolls = {6, 4, 2, 5};
-    // assert(character_data.validate().ok());
-    // assert(character_data.validate_relations(content).ok());
-    // content.add_character(dnd::Character::create(std::move(character_data), content));
+    dnd::CharacterData character_data;
+    dndtest::set_valid_mock_values(character_data, "Example Character");
+    auto& feature_data = character_data.features_data.emplace_back(&character_data);
+    dndtest::set_valid_mock_values(feature_data, "Example Character Feature");
+    character_data.base_ability_scores_data.ability_scores = {10, 8, 12, 15, 13, 14};
+    character_data.character_basis_data.race_name = "Dwarf";
+    character_data.character_basis_data.subrace_name = "Hill Dwarf";
+    character_data.character_basis_data.class_name = "Wizard";
+    character_data.character_basis_data.subclass_name = "Abjuration Wizard";
+    character_data.progression_data.level = 4;
+    character_data.progression_data.xp = 4200;
+    character_data.progression_data.hit_dice_rolls = {6, 4, 2, 5};
+    assert(character_data.validate().ok());
+    assert(character_data.validate_relations(content).ok());
+    content.add_character(dnd::Character::create(std::move(character_data), content));
 }
 
 dnd::Content dndtest::minimal_testing_content() {
