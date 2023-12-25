@@ -22,11 +22,7 @@
 
 namespace dnd {
 
-enum class EffectsProviderType {
-    Feature,
-    ClassFeature,
-    Choosable,
-};
+using EffectsProviderVariant = VarOfCRef<Feature, ClassFeature, Choosable>;
 
 /**
  * @brief A class that holds all the content for a certain session or campaign
@@ -52,8 +48,7 @@ public:
     const ReferencingContentLibrary<ClassFeature>& get_class_features() const;
     const StorageContentLibrary<Choosable>& get_choosables() const;
 
-    std::optional<EffectsProviderType> contains_effects_provider(const std::string& name) const;
-    OptCRef<EffectsProvider> get_effects_provider(const std::string& name) const;
+    std::optional<EffectsProviderVariant> get_effects_provider(const std::string& name) const;
 
     void set_subgroup(const std::string& group_name, const std::string& subgroup_name);
     void set_subgroups(const std::string& group_name, std::set<std::string>&& subgroups);

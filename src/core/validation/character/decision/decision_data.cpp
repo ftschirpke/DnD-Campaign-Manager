@@ -87,8 +87,9 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
         }
     }
 
-    std::optional<EffectsProviderType> feature_type_optional = content.contains_effects_provider(feature_name);
-    if (!feature_type_optional.has_value()) {
+
+    std::optional<EffectsProviderVariant> effects_provider_optional = content.get_effects_provider(feature_name);
+    if (!effects_provider_optional.has_value()) {
         errors.add_validation_error(
             ValidationErrorCode::RELATION_NOT_FOUND, parent, "Decision cannot be linked to any existing feature."
         );
@@ -96,31 +97,30 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
     }
 
     bool target_exists = false;
-    switch (feature_type_optional.value()) {
-        case EffectsProviderType::Feature:
-        case EffectsProviderType::Choosable: {
-            const EffectsProvider& linked_effects_provider = content.get_effects_provider(feature_name).value();
-            const Effects& effects = linked_effects_provider.get_main_effects();
-            target_exists = &effects == target;
+    EffectsProviderVariant effects_provider_variant = effects_provider_optional.value();
+    switch (effects_provider_variant.index()) {
+        case 0: {
+            const Feature& feature = std::get<0>(effects_provider_variant);
+            target_exists = target == &feature.get_main_effects();
             break;
         }
-        case EffectsProviderType::ClassFeature: {
-            const ClassFeature& linked_class_feature = content.get_class_features().get(feature_name).value();
-            const Effects& main_effects = linked_class_feature.get_main_effects();
-            if (&main_effects != target) {
-                bool found_in_higher_levels = false;
-                for (const auto& [_, effects] : linked_class_feature.get_higher_level_effects()) {
+        case 1: {
+            const ClassFeature& class_feature = std::get<1>(effects_provider_variant);
+            if (target == &class_feature.get_main_effects()) {
+                target_exists = true;
+            } else {
+                for (const auto& [_, effects] : class_feature.get_higher_level_effects()) {
                     if (&effects == target) {
-                        found_in_higher_levels = true;
+                        target_exists = true;
                         break;
                     }
                 }
-                if (found_in_higher_levels) {
-                    target_exists = true;
-                }
-            } else {
-                target_exists = true;
             }
+            break;
+        }
+        case 2: {
+            const Choosable& choosable = std::get<2>(effects_provider_variant);
+            target_exists = target == &choosable.get_main_effects();
             break;
         }
     }
@@ -134,9 +134,9 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
         auto has_feature_name = [this](const ContentPiece& effects_provider) {
             return effects_provider.get_name() == feature_name;
         };
-        switch (feature_type_optional.value()) {
+        switch (effects_provider_variant.index()) {
             // TODO: check character specific features for choices
-            case EffectsProviderType::Feature: {
+            case 0: /* Feature */ {
                 const std::string& race_name = character_data->character_basis_data.race_name;
                 OptCRef<CharacterRace> race_optional = content.get_character_races().get(race_name);
                 if (race_optional.has_value()) {
@@ -158,7 +158,7 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
                 }
                 break;
             }
-            case EffectsProviderType::ClassFeature: {
+            case 1: /* ClassFeature */ {
                 const std::string& class_name = character_data->character_basis_data.class_name;
                 OptCRef<CharacterClass> class_optional = content.get_character_classes().get(class_name);
                 if (class_optional.has_value()) {
@@ -178,7 +178,7 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
                 }
                 break;
             }
-            case EffectsProviderType::Choosable: {
+            case 2: /* Choosable */ {
                 // TODO: check choosables for choices
                 break;
             }

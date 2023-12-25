@@ -93,27 +93,33 @@ static bool evaluate_effects_for_decision(
 void dnd::CharacterParser::set_context(const dnd::Content& content) {
     std::set<const Effects*> processed_effects;
     for (DecisionData& decision_data : data.decisions_data) {
-        std::optional<EffectsProviderType> type = content.contains_effects_provider(decision_data.feature_name);
-        if (!type.has_value()) {
+        std::optional<EffectsProviderVariant> effects_provider_optional = content.get_effects_provider(
+            decision_data.feature_name
+        );
+        if (!effects_provider_optional.has_value()) {
             continue;
         }
-        switch (type.value()) {
-            case EffectsProviderType::Feature:
-            case EffectsProviderType::Choosable: {
-                OptCRef<EffectsProvider> effects_provider = content.get_effects_provider(decision_data.feature_name);
-                assert(effects_provider.has_value());
-                const Effects& effects = effects_provider.value().get().get_main_effects();
-                evaluate_effects_for_decision(effects, decision_data, processed_effects);
+        EffectsProviderVariant effects_provider_variant = effects_provider_optional.value();
+        switch (effects_provider_variant.index()) {
+            case 0: {
+                const Feature& feature = std::get<0>(effects_provider_variant);
+                evaluate_effects_for_decision(feature.get_main_effects(), decision_data, processed_effects);
                 break;
             }
-            case EffectsProviderType::ClassFeature: {
-                OptCRef<ClassFeature> feature_optional = content.get_class_features().get(decision_data.feature_name);
-                assert(feature_optional.has_value());
-                const ClassFeature& feature = feature_optional.value().get();
-                evaluate_effects_for_decision(feature.get_main_effects(), decision_data, processed_effects);
-                for (const auto& [_, effects] : feature.get_higher_level_effects()) {
+            case 1: {
+                const ClassFeature& class_feature = std::get<1>(effects_provider_variant);
+                evaluate_effects_for_decision(class_feature.get_main_effects(), decision_data, processed_effects);
+                for (const auto& [level, effects] : class_feature.get_higher_level_effects()) {
+                    if (level > data.progression_data.level) {
+                        break; // effects are not yet available and character cannot make decisions about them
+                    }
                     evaluate_effects_for_decision(effects, decision_data, processed_effects);
                 }
+                break;
+            }
+            case 2: {
+                const Choosable& choosable = std::get<2>(effects_provider_variant);
+                evaluate_effects_for_decision(choosable.get_main_effects(), decision_data, processed_effects);
                 break;
             }
         }
