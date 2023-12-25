@@ -53,7 +53,7 @@ private:
     ) noexcept;
 
     int level;
-    std::map<int, Effects> higher_level_effects;
+    std::map<int, Effects> higher_level_effects; // careful when changing the type here, some code relies on order
 };
 
 } // namespace dnd
