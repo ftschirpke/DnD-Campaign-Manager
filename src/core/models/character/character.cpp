@@ -18,6 +18,7 @@
 #include <core/models/character_race/character_race.hpp>
 #include <core/models/character_subclass/character_subclass.hpp>
 #include <core/models/character_subrace/character_subrace.hpp>
+#include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/source_info.hpp>
 #include <core/validation/character/character_data.hpp>
@@ -60,11 +61,50 @@ const dnd::SourceInfo& dnd::Character::get_source_info() const noexcept { return
 
 const std::vector<dnd::Feature>& dnd::Character::get_features() const noexcept { return features; }
 
+const std::vector<dnd::Choosable>& dnd::Character::get_choosables() const noexcept { return choosables; }
+
 const dnd::AbilityScores& dnd::Character::get_base_ability_scores() const noexcept { return base_ability_scores; }
 
 const dnd::CharacterBasis& dnd::Character::get_basis() const noexcept { return basis; }
 
 const dnd::Progression& dnd::Character::get_progression() const noexcept { return progression; }
+
+void dnd::Character::for_all_effects_do(std::function<void(const dnd::Effects&)> func) const noexcept {
+    for (const Feature& feature : basis.get_race()->get_features()) {
+        func(feature.get_main_effects());
+    }
+    if (basis.has_subrace()) {
+        for (const Feature& feature : basis.get_subrace()->get_features()) {
+            func(feature.get_main_effects());
+        }
+    }
+    for (const ClassFeature& feature : basis.get_class()->get_features()) {
+        func(feature.get_main_effects());
+        for (const auto& [level, effects] : feature.get_higher_level_effects()) {
+            if (level > progression.get_level()) {
+                break;
+            }
+            func(effects);
+        }
+    }
+    if (basis.has_subrace()) {
+        for (const ClassFeature& feature : basis.get_subclass()->get_features()) {
+            func(feature.get_main_effects());
+            for (const auto& [level, effects] : feature.get_higher_level_effects()) {
+                if (level > progression.get_level()) {
+                    break;
+                }
+                func(effects);
+            }
+        }
+    }
+    for (const Feature& feature : features) {
+        func(feature.get_main_effects());
+    }
+    for (const Choosable& choosable : choosables) {
+        func(choosable.get_main_effects());
+    }
+}
 
 int dnd::Character::get_proficiency_bonus() const noexcept {
     return proficiency_bonus_for_level(progression.get_level());

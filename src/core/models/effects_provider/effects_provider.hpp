@@ -16,7 +16,6 @@ class EffectsProvider {
 public:
     virtual ~EffectsProvider() = default;
     virtual const Effects& get_main_effects() const noexcept = 0;
-    virtual std::vector<const Effects*> get_all_effects() const = 0;
 };
 
 } // namespace dnd

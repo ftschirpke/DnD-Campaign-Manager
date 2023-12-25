@@ -43,7 +43,6 @@ public:
     const std::string& get_description() const noexcept override;
     const SourceInfo& get_source_info() const noexcept override;
     const dnd::Effects& get_main_effects() const noexcept override;
-    std::vector<const dnd::Effects*> get_all_effects() const override;
     const std::string& get_type() const noexcept;
     const std::vector<std::unique_ptr<Condition>>& get_prerequisites() const noexcept;
 

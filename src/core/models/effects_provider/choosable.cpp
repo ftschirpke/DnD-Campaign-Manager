@@ -42,10 +42,6 @@ const dnd::SourceInfo& dnd::Choosable::get_source_info() const noexcept { return
 
 const dnd::Effects& dnd::Choosable::get_main_effects() const noexcept { return main_effects; }
 
-std::vector<const dnd::Effects*> dnd::Choosable::get_all_effects() const {
-    return std::vector<const Effects*>{&main_effects};
-}
-
 const std::string& dnd::Choosable::get_type() const noexcept { return type; }
 
 const std::vector<std::unique_ptr<dnd::Condition>>& dnd::Choosable::get_prerequisites() const noexcept {

@@ -15,6 +15,7 @@
 #include <core/models/character_subclass/character_subclass.hpp>
 #include <core/models/character_subrace/character_subrace.hpp>
 #include <core/models/content_piece.hpp>
+#include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/source_info.hpp>
 #include <core/validation/character/character_data.hpp>
@@ -44,11 +45,14 @@ public:
     const std::string& get_description() const noexcept override;
     const SourceInfo& get_source_info() const noexcept override;
     const std::vector<Feature>& get_features() const noexcept;
+    const std::vector<Choosable>& get_choosables() const noexcept;
     const AbilityScores& get_base_ability_scores() const noexcept;
     const CharacterBasis& get_basis() const noexcept;
     const Progression& get_progression() const noexcept;
 
     int get_proficiency_bonus() const noexcept;
+
+    void for_all_effects_do(std::function<void(const Effects&)> func) const noexcept;
 
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
@@ -62,6 +66,7 @@ private:
     std::string description;
     SourceInfo source_info;
     std::vector<Feature> features;
+    std::vector<Choosable> choosables;
     AbilityScores base_ability_scores;
     CharacterBasis basis;
     Progression progression;

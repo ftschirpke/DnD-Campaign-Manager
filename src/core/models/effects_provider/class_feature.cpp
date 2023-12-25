@@ -43,15 +43,6 @@ dnd::ClassFeature dnd::ClassFeature::create(dnd::ClassFeatureData&& data, const 
     );
 }
 
-std::vector<const dnd::Effects*> dnd::ClassFeature::get_all_effects() const {
-    std::vector<const Effects*> all_effects = Feature::get_all_effects();
-    all_effects.reserve(higher_level_effects.size() + 1);
-    for (auto& [_, effects] : higher_level_effects) {
-        all_effects.push_back(&effects);
-    }
-    return all_effects;
-}
-
 int dnd::ClassFeature::get_level() const noexcept { return level; }
 
 const std::map<int, dnd::Effects>& dnd::ClassFeature::get_higher_level_effects() const noexcept {
