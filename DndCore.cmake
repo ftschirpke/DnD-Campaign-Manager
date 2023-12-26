@@ -5,6 +5,7 @@ set_target_properties(${DND_CORE} PROPERTIES EXPORT_COMPILE_COMMANDS ON)
 target_include_directories(${DND_CORE}
     PUBLIC
     ${CMAKE_SOURCE_DIR}/src
+    ${PROJECT_BINARY_DIR}/tl_expected/include
     SYSTEM PRIVATE
     ${PROJECT_BINARY_DIR}/src
 )
