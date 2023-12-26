@@ -14,10 +14,10 @@ namespace dnd {
 
 class Content;
 
-class CharacterBasisData : public ValidationSubdata {
+class FeatureProvidersData : public ValidationSubdata {
 public:
-    CharacterBasisData(const ValidationData* parent) noexcept;
-    std::strong_ordering operator<=>(const CharacterBasisData&) const noexcept = default;
+    FeatureProvidersData(const ValidationData* parent) noexcept;
+    std::strong_ordering operator<=>(const FeatureProvidersData&) const noexcept = default;
     virtual Errors validate() const override;
     virtual Errors validate_relations(const Content& content) const override;
 

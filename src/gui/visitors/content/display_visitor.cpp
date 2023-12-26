@@ -117,12 +117,12 @@ void dnd::DisplayVisitor::operator()(const Character& character) {
     // TODO: display stats (again)
 
     label("Species:");
-    const Species& species = character.get_basis().get_species();
+    const Species& species = character.get_feature_providers().get_species();
     if (ImGui::CollapsingHeader(species.get_name().c_str())) {
         operator()(species);
     }
 
-    OptCRef<Subspecies> subspecies_optional = character.get_basis().get_subspecies();
+    OptCRef<Subspecies> subspecies_optional = character.get_feature_providers().get_subspecies();
     if (subspecies_optional.has_value()) {
         label("Subspecies:");
         const Subspecies& subspecies = subspecies_optional.value();
@@ -132,12 +132,12 @@ void dnd::DisplayVisitor::operator()(const Character& character) {
     }
 
     label("Class:");
-    const Class& cls = character.get_basis().get_class();
+    const Class& cls = character.get_feature_providers().get_class();
     if (ImGui::CollapsingHeader(cls.get_name().c_str())) {
         operator()(cls);
     }
 
-    OptCRef<Subclass> subclass_optional = character.get_basis().get_subclass();
+    OptCRef<Subclass> subclass_optional = character.get_feature_providers().get_subclass();
     if (subclass_optional.has_value()) {
         label("Subclass:");
         const Subclass& subclass = subclass_optional.value();

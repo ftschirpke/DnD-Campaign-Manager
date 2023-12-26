@@ -7,7 +7,7 @@
 #include <vector>
 
 #include <core/utils/types.hpp>
-#include <core/validation/character/character_basis_data.hpp>
+#include <core/validation/character/feature_providers_data.hpp>
 
 namespace dnd {
 
@@ -17,16 +17,16 @@ class Subspecies;
 class Class;
 class Subclass;
 
-class CharacterBasis {
+class FeatureProviders {
 public:
     /**
-     * @brief Constructs a CharacterBasis object
-     * @param data the data to construct the CharacterBasis object from
+     * @brief Constructs a FeatureProviders object
+     * @param data the data to construct the FeatureProviders object from
      * @param content the content to use for the construction
-     * @return the constructed CharacterBasis object
+     * @return the constructed FeatureProviders object
      * @throws dnd::invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static CharacterBasis create(CharacterBasisData&& data, const Content& content);
+    static FeatureProviders create(FeatureProvidersData&& data, const Content& content);
 
     const Species& get_species() const noexcept;
     OptCRef<Subspecies> get_subspecies() const noexcept;
@@ -36,7 +36,7 @@ public:
     bool has_subspecies() const noexcept;
     bool has_subclass() const noexcept;
 private:
-    CharacterBasis(
+    FeatureProviders(
         const Species& species, OptCRef<Subspecies> subspecies, const Class& cls, OptCRef<Subclass> subclass
     ) noexcept;
 

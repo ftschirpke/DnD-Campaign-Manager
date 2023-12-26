@@ -23,7 +23,7 @@
 #include <core/validation/validation_data.hpp>
 
 dnd::CharacterData::CharacterData() noexcept
-    : ValidationData(), features_data(), base_ability_scores_data(this), character_basis_data(this),
+    : ValidationData(), features_data(), base_ability_scores_data(this), feature_providers_data(this),
       progression_data(this), decisions_data() {}
 
 std::unique_ptr<dnd::ValidationData> dnd::CharacterData::pack() const { return std::make_unique<CharacterData>(*this); }
@@ -43,7 +43,7 @@ dnd::Errors dnd::CharacterData::validate() const {
         }
     }
     errors += base_ability_scores_data.validate();
-    errors += character_basis_data.validate();
+    errors += feature_providers_data.validate();
     errors += progression_data.validate();
     for (const DecisionData& decision_data : decisions_data) {
         errors += decision_data.validate();
@@ -71,13 +71,13 @@ dnd::Errors dnd::CharacterData::validate_relations(const dnd::Content& content) 
     }
 
     errors += base_ability_scores_data.validate_relations(content);
-    errors += character_basis_data.validate_relations(content);
+    errors += feature_providers_data.validate_relations(content);
 
-    OptCRef<Class> class_optional = content.get_classes().get(character_basis_data.class_name);
-    if (!character_basis_data.class_name.empty() && class_optional.has_value()) {
+    OptCRef<Class> class_optional = content.get_classes().get(feature_providers_data.class_name);
+    if (!feature_providers_data.class_name.empty() && class_optional.has_value()) {
         const Class& cls = class_optional.value();
         if (progression_data.level >= cls.get_important_levels().get_subclass_level()
-            && character_basis_data.subclass_name.empty()) {
+            && feature_providers_data.subclass_name.empty()) {
             errors.add_validation_error(
                 ValidationErrorCode::INCONSISTENT_ATTRIBUTES, this,
                 fmt::format(
@@ -85,7 +85,7 @@ dnd::Errors dnd::CharacterData::validate_relations(const dnd::Content& content) 
                     cls.get_important_levels().get_subclass_level(), name, progression_data.level
                 )
             );
-        } else if (progression_data.level < cls.get_important_levels().get_subclass_level() && !character_basis_data.subclass_name.empty()) {
+        } else if (progression_data.level < cls.get_important_levels().get_subclass_level() && !feature_providers_data.subclass_name.empty()) {
             errors.add_validation_error(
                 ValidationErrorCode::INCONSISTENT_ATTRIBUTES, this,
                 fmt::format(

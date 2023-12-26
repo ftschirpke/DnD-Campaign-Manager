@@ -178,10 +178,10 @@ static void add_characters(dnd::Content& content) {
     dnd::FeatureData& feature_data = character_data.features_data.emplace_back(&character_data);
     dndtest::set_valid_mock_values(feature_data, "Example Character Feature");
     character_data.base_ability_scores_data.ability_scores = {10, 8, 12, 15, 13, 14};
-    character_data.character_basis_data.species_name = "Dwarf";
-    character_data.character_basis_data.subspecies_name = "Hill Dwarf";
-    character_data.character_basis_data.class_name = "Wizard";
-    character_data.character_basis_data.subclass_name = "Abjuration Wizard";
+    character_data.feature_providers_data.species_name = "Dwarf";
+    character_data.feature_providers_data.subspecies_name = "Hill Dwarf";
+    character_data.feature_providers_data.class_name = "Wizard";
+    character_data.feature_providers_data.subclass_name = "Abjuration Wizard";
     character_data.progression_data.level = 4;
     character_data.progression_data.xp = 4200;
     character_data.progression_data.hit_dice_rolls = {6, 4, 2, 5};

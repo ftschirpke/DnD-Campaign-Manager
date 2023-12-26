@@ -10,7 +10,7 @@
 
 #include <core/errors/errors.hpp>
 #include <core/validation/character/ability_scores_data.hpp>
-#include <core/validation/character/character_basis_data.hpp>
+#include <core/validation/character/feature_providers_data.hpp>
 #include <core/validation/character/decision/decision_data.hpp>
 #include <core/validation/character/progression_data.hpp>
 #include <core/validation/effects_provider/feature_data.hpp>
@@ -30,7 +30,7 @@ public:
 
     std::vector<FeatureData> features_data;
     AbilityScoresData base_ability_scores_data;
-    CharacterBasisData character_basis_data;
+    FeatureProvidersData feature_providers_data;
     ProgressionData progression_data;
     std::vector<DecisionData> decisions_data;
 };

@@ -12,7 +12,7 @@
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/character/ability_scores.hpp>
-#include <core/models/character/character_basis.hpp>
+#include <core/models/character/feature_providers.hpp>
 #include <core/models/character/progression.hpp>
 #include <core/models/class/class.hpp>
 #include <core/models/effects_provider/choosable.hpp>
@@ -39,7 +39,7 @@ dnd::Character dnd::Character::create(dnd::CharacterData&& data, const Content& 
     }
 
     AbilityScores base_ability_scores = AbilityScores::create(std::move(data.base_ability_scores_data));
-    CharacterBasis basis = CharacterBasis::create(std::move(data.character_basis_data), content);
+    FeatureProviders feature_providers = FeatureProviders::create(std::move(data.feature_providers_data), content);
     Progression progression = Progression::create(std::move(data.progression_data));
 
     std::vector<Decision> decisions;
@@ -49,7 +49,7 @@ dnd::Character dnd::Character::create(dnd::CharacterData&& data, const Content& 
 
     return Character(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(features),
-        std::move(base_ability_scores), std::move(basis), std::move(progression), std::move(decisions)
+        std::move(base_ability_scores), std::move(feature_providers), std::move(progression), std::move(decisions)
     );
 }
 
@@ -65,21 +65,21 @@ const std::vector<dnd::Choosable>& dnd::Character::get_choosables() const noexce
 
 const dnd::AbilityScores& dnd::Character::get_base_ability_scores() const noexcept { return base_ability_scores; }
 
-const dnd::CharacterBasis& dnd::Character::get_basis() const noexcept { return basis; }
+const dnd::FeatureProviders& dnd::Character::get_feature_providers() const noexcept { return feature_providers; }
 
 const dnd::Progression& dnd::Character::get_progression() const noexcept { return progression; }
 
 void dnd::Character::for_all_effects_do(std::function<void(const dnd::Effects&)> func) const noexcept {
-    for (const Feature& feature : basis.get_species().get_features()) {
+    for (const Feature& feature : feature_providers.get_species().get_features()) {
         func(feature.get_main_effects());
     }
-    OptCRef<Subspecies> subspecies = basis.get_subspecies();
+    OptCRef<Subspecies> subspecies = feature_providers.get_subspecies();
     if (subspecies.has_value()) {
         for (const Feature& feature : subspecies.value().get().get_features()) {
             func(feature.get_main_effects());
         }
     }
-    for (const ClassFeature& feature : basis.get_class().get_features()) {
+    for (const ClassFeature& feature : feature_providers.get_class().get_features()) {
         func(feature.get_main_effects());
         for (const auto& [level, effects] : feature.get_higher_level_effects()) {
             if (level > progression.get_level()) {
@@ -88,7 +88,7 @@ void dnd::Character::for_all_effects_do(std::function<void(const dnd::Effects&)>
             func(effects);
         }
     }
-    OptCRef<Subclass> subclass = basis.get_subclass();
+    OptCRef<Subclass> subclass = feature_providers.get_subclass();
     if (subclass.has_value()) {
         for (const ClassFeature& feature : subclass.value().get().get_features()) {
             func(feature.get_main_effects());
@@ -116,9 +116,9 @@ void dnd::Character::accept_visitor(dnd::ContentVisitor& visitor) const { visito
 
 dnd::Character::Character(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path,
-    std::vector<dnd::Feature>&& features, dnd::AbilityScores&& base_ability_scores, dnd::CharacterBasis&& basis,
+    std::vector<dnd::Feature>&& features, dnd::AbilityScores&& base_ability_scores, dnd::FeatureProviders&& feature_providers,
     dnd::Progression&& progression, std::vector<dnd::Decision>&& decisions
 ) noexcept
     : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
-      features(std::move(features)), base_ability_scores(std::move(base_ability_scores)), basis(std::move(basis)),
+      features(std::move(features)), base_ability_scores(std::move(base_ability_scores)), feature_providers(std::move(feature_providers)),
       progression(std::move(progression)), decisions(std::move(decisions)) {}

@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include "character_basis_data.hpp"
+#include "feature_providers_data.hpp"
 
 #include <string>
 
@@ -12,9 +12,9 @@
 #include <core/validation/validation_data.hpp>
 #include <core/validation/validation_subdata.hpp>
 
-dnd::CharacterBasisData::CharacterBasisData(const dnd::ValidationData* parent) noexcept : ValidationSubdata(parent) {}
+dnd::FeatureProvidersData::FeatureProvidersData(const dnd::ValidationData* parent) noexcept : ValidationSubdata(parent) {}
 
-dnd::Errors dnd::CharacterBasisData::validate() const {
+dnd::Errors dnd::FeatureProvidersData::validate() const {
     Errors errors;
     if (species_name.empty()) {
         errors.add_validation_error(
@@ -29,7 +29,7 @@ dnd::Errors dnd::CharacterBasisData::validate() const {
     return errors;
 }
 
-dnd::Errors dnd::CharacterBasisData::validate_relations(const dnd::Content& content) const {
+dnd::Errors dnd::FeatureProvidersData::validate_relations(const dnd::Content& content) const {
     Errors errors;
     OptCRef<Species> species_optional = content.get_species().get(species_name);
     if (!species_optional.has_value()) {

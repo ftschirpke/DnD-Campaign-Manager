@@ -65,18 +65,18 @@ void dnd::DisplayVisitor::operator()(const dnd::Character& character) {
     output.formatted_text("Level: {}", character.get_progression().get_level());
     output.formatted_text("XP: {}", character.get_progression().get_xp());
 
-    const Species& species = character.get_basis().get_species();
+    const Species& species = character.get_feature_providers().get_species();
     output.formatted_text("Species: {}", species.get_name());
 
-    OptCRef<Subspecies> subspecies = character.get_basis().get_subspecies();
+    OptCRef<Subspecies> subspecies = character.get_feature_providers().get_subspecies();
     if (subspecies.has_value()) {
         output.formatted_text("Subspecies: {}", subspecies.value().get().get_name());
     }
 
-    const Class& cls = character.get_basis().get_class();
+    const Class& cls = character.get_feature_providers().get_class();
     output.formatted_text("Class: {}", cls.get_name());
 
-    OptCRef<Subclass> subclass = character.get_basis().get_subclass();
+    OptCRef<Subclass> subclass = character.get_feature_providers().get_subclass();
     if (subclass.has_value()) {
         output.formatted_text("Subclass: {}", subclass.value().get().get_name());
     }

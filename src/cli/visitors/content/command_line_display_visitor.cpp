@@ -64,20 +64,20 @@ void dnd::DisplayVisitor::operator()(const dnd::Character& character) {
     output.formatted_text("Level: {}", character.get_progression().get_level());
     output.formatted_text("XP: {}", character.get_progression().get_xp());
 
-    const Species* species_ptr = character.get_basis().get_species();
+    const Species* species_ptr = character.get_feature_providers().get_species();
     assert(species_ptr != nullptr);
     output.formatted_text("Species: {}", species_ptr->get_name());
 
-    const Subspecies* subspecies_ptr = character.get_basis().get_subspecies();
+    const Subspecies* subspecies_ptr = character.get_feature_providers().get_subspecies();
     if (subspecies_ptr != nullptr) {
         output.formatted_text("Subspecies: {}", subspecies_ptr->get_name());
     }
 
-    const Class* class_ptr = character.get_basis().get_class();
+    const Class* class_ptr = character.get_feature_providers().get_class();
     assert(class_ptr != nullptr);
     output.formatted_text("Class: {}", class_ptr->get_name());
 
-    const Subclass* subclass_ptr = character.get_basis().get_subclass();
+    const Subclass* subclass_ptr = character.get_feature_providers().get_subclass();
     if (subclass_ptr != nullptr) {
         output.formatted_text("Subclass: {}", subclass_ptr->get_name());
     }

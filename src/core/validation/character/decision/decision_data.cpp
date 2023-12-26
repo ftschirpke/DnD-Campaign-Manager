@@ -137,7 +137,7 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
         switch (effects_provider_variant.index()) {
             // TODO: check character specific features for choices
             case 0: /* Feature */ {
-                const std::string& species_name = character_data->character_basis_data.species_name;
+                const std::string& species_name = character_data->feature_providers_data.species_name;
                 OptCRef<Species> species_optional = content.get_species().get(species_name);
                 if (species_optional.has_value()) {
                     const Species& species = species_optional.value();
@@ -148,7 +148,7 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
                         break;
                     }
                 }
-                const std::string& subspecies_name = character_data->character_basis_data.subspecies_name;
+                const std::string& subspecies_name = character_data->feature_providers_data.subspecies_name;
                 OptCRef<Subspecies> subspecies_optional = content.get_subspecies().get(subspecies_name);
                 if (subspecies_optional.has_value()) {
                     const Subspecies& subspecies = subspecies_optional.value();
@@ -159,7 +159,7 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
                 break;
             }
             case 1: /* ClassFeature */ {
-                const std::string& class_name = character_data->character_basis_data.class_name;
+                const std::string& class_name = character_data->feature_providers_data.class_name;
                 OptCRef<Class> class_optional = content.get_classes().get(class_name);
                 if (class_optional.has_value()) {
                     const Class& cls = class_optional.value();
@@ -168,7 +168,7 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
                         break;
                     }
                 }
-                const std::string& subclass_name = character_data->character_basis_data.subclass_name;
+                const std::string& subclass_name = character_data->feature_providers_data.subclass_name;
                 OptCRef<Subclass> subclass_optional = content.get_subclasses().get(subclass_name);
                 if (content.get_subclasses().contains(subclass_name)) {
                     const Subclass& subclass = subclass_optional.value();

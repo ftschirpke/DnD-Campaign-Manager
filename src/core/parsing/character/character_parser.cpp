@@ -35,10 +35,10 @@ dnd::Errors dnd::CharacterParser::parse() {
     data.source_path = get_filepath();
 
     errors += parse_required_attribute_into(json, "base_ability_scores", data.base_ability_scores_data.ability_scores);
-    errors += parse_required_attribute_into(json, "species", data.character_basis_data.species_name);
-    errors += parse_required_attribute_into(json, "class", data.character_basis_data.class_name);
-    errors += parse_optional_attribute_into(json, "subspecies", data.character_basis_data.subspecies_name);
-    errors += parse_optional_attribute_into(json, "subclass", data.character_basis_data.subclass_name);
+    errors += parse_required_attribute_into(json, "species", data.feature_providers_data.species_name);
+    errors += parse_required_attribute_into(json, "class", data.feature_providers_data.class_name);
+    errors += parse_optional_attribute_into(json, "subspecies", data.feature_providers_data.subspecies_name);
+    errors += parse_optional_attribute_into(json, "subclass", data.feature_providers_data.subclass_name);
 
     bool has_level = json.contains("level");
     bool has_xp = json.contains("xp");
