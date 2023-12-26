@@ -12,19 +12,21 @@
 
 #include <core/basic_mechanics/dice.hpp>
 #include <core/models/character/character.hpp>
-#include <core/models/character_class/character_class.hpp>
-#include <core/models/character_race/character_race.hpp>
-#include <core/models/character_subclass/character_subclass.hpp>
-#include <core/models/character_subrace/character_subrace.hpp>
+#include <core/models/class/class.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/class_feature.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/item/item.hpp>
+#include <core/models/species/species.hpp>
 #include <core/models/spell/spell.hpp>
+#include <core/models/subclass/subclass.hpp>
+#include <core/models/subspecies/subspecies.hpp>
 #include <core/output/string_formatting/formats/format.hpp>
 #include <core/output/string_formatting/string_formatter.hpp>
 #include <core/visitors/content/content_visitor.hpp>
+
+namespace dnd {
 
 static const ImVec2 cell_padding = ImVec2(5, 5);
 static constexpr ImGuiTableFlags content_table_flags = ImGuiTableFlags_NoBordersInBodyUntilResize;
@@ -47,7 +49,7 @@ static void wrapped_label(const char* label) {
     ImGui::TableSetColumnIndex(1);
 }
 
-static void source(const dnd::ContentPiece& content_piece) {
+static void source(const ContentPiece& content_piece) {
     ImGui::TableNextRow();
     ImGui::TableSetColumnIndex(0);
     ImGui::Text("Source:");
@@ -64,7 +66,7 @@ static void source(const dnd::ContentPiece& content_piece) {
     ImGui::Separator();
 }
 
-static void begin_content_table(const dnd::ContentPiece& content_piece) {
+static void begin_content_table(const ContentPiece& content_piece) {
     std::string table_id = content_piece.get_name() + "_table";
     ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, cell_padding);
     ImGui::BeginTable(table_id.c_str(), 2, content_table_flags);
@@ -78,16 +80,16 @@ static void end_content_table() {
 }
 
 static void display_formatted_text(const std::string& formatted_text) {
-    static dnd::DisplayFormatVisitor display_format_visitor(table_flags);
-    static dnd::StringFormatter string_formatter(false);
-    std::vector<std::unique_ptr<dnd::Format>> text_formats = string_formatter.parse_formats(formatted_text);
+    static DisplayFormatVisitor display_format_visitor(table_flags);
+    static StringFormatter string_formatter(false);
+    std::vector<std::unique_ptr<Format>> text_formats = string_formatter.parse_formats(formatted_text);
     for (auto it = text_formats.begin(); it != text_formats.end(); ++it) {
         (*it)->accept(display_format_visitor);
     }
 }
 
 template <typename T>
-static void list_features(dnd::DisplayVisitor& visitor, const std::vector<T>& features) {
+static void list_features(DisplayVisitor& visitor, const std::vector<T>& features) {
     if (features.empty()) {
         ImGui::Text("None");
         return;
@@ -103,7 +105,7 @@ static void list_features(dnd::DisplayVisitor& visitor, const std::vector<T>& fe
     ImGui::Separator();
 }
 
-void dnd::DisplayVisitor::operator()(const Character& character) {
+void DisplayVisitor::operator()(const Character& character) {
     begin_content_table(character);
 
     label("Type:");
@@ -116,31 +118,31 @@ void dnd::DisplayVisitor::operator()(const Character& character) {
 
     // TODO: display stats (again)
 
-    label("Race:");
-    const CharacterRace& race = character.get_basis().get_race();
-    if (ImGui::CollapsingHeader(race.get_name().c_str())) {
-        operator()(race);
+    label("Species:");
+    const Species& species = character.get_feature_providers().get_species();
+    if (ImGui::CollapsingHeader(species.get_name().c_str())) {
+        operator()(species);
     }
 
-    OptCRef<CharacterSubrace> subrace_optional = character.get_basis().get_subrace();
-    if (subrace_optional.has_value()) {
-        label("Subrace:");
-        const CharacterSubrace& subrace = subrace_optional.value();
-        if (ImGui::CollapsingHeader(subrace.get_name().c_str())) {
-            operator()(subrace);
+    OptCRef<Subspecies> subspecies_optional = character.get_feature_providers().get_subspecies();
+    if (subspecies_optional.has_value()) {
+        label("Subspecies:");
+        const Subspecies& subspecies = subspecies_optional.value();
+        if (ImGui::CollapsingHeader(subspecies.get_name().c_str())) {
+            operator()(subspecies);
         }
     }
 
     label("Class:");
-    const CharacterClass& classv = character.get_basis().get_class();
-    if (ImGui::CollapsingHeader(classv.get_name().c_str())) {
-        operator()(classv);
+    const Class& cls = character.get_feature_providers().get_class();
+    if (ImGui::CollapsingHeader(cls.get_name().c_str())) {
+        operator()(cls);
     }
 
-    OptCRef<CharacterSubclass> subclass_optional = character.get_basis().get_subclass();
+    OptCRef<Subclass> subclass_optional = character.get_feature_providers().get_subclass();
     if (subclass_optional.has_value()) {
         label("Subclass:");
-        const CharacterSubclass& subclass = subclass_optional.value();
+        const Subclass& subclass = subclass_optional.value();
         if (ImGui::CollapsingHeader(subclass.get_name().c_str())) {
             operator()(subclass);
         }
@@ -152,71 +154,69 @@ void dnd::DisplayVisitor::operator()(const Character& character) {
     end_content_table();
 }
 
-void dnd::DisplayVisitor::operator()(const CharacterClass& character_class) {
-    begin_content_table(character_class);
+void DisplayVisitor::operator()(const Class& cls) {
+    begin_content_table(cls);
 
     label("Type:");
     ImGui::Text("Class");
-    source(character_class);
+    source(cls);
     label("Hit Die:");
-    ImGui::Text("%s", dice_to_string(character_class.get_hit_dice()).c_str());
+    ImGui::Text("%s", dice_to_string(cls.get_hit_dice()).c_str());
     label("Feat Levels:");
-    std::string feat_level_str = fmt::format(
-        "{}", fmt::join(character_class.get_important_levels().get_feat_levels(), ", ")
-    );
+    std::string feat_level_str = fmt::format("{}", fmt::join(cls.get_important_levels().get_feat_levels(), ", "));
     ImGui::Text("%s", feat_level_str.c_str());
     label("Subclass Level:");
-    ImGui::Text("%d", character_class.get_important_levels().get_subclass_level());
+    ImGui::Text("%d", cls.get_important_levels().get_subclass_level());
     label("Features:");
-    list_features<ClassFeature>(*this, character_class.get_features());
+    list_features<ClassFeature>(*this, cls.get_features());
 
     end_content_table();
 }
 
-void dnd::DisplayVisitor::operator()(const CharacterSubclass& character_subclass) {
-    begin_content_table(character_subclass);
+void DisplayVisitor::operator()(const Subclass& subclass) {
+    begin_content_table(subclass);
 
     label("Type:");
     ImGui::Text("Subclass");
-    source(character_subclass);
+    source(subclass);
     label("Class name:");
-    ImGui::Text("%s", character_subclass.get_class()->get_name().c_str());
+    ImGui::Text("%s", subclass.get_class()->get_name().c_str());
     label("Features:");
-    list_features<ClassFeature>(*this, character_subclass.get_features());
+    list_features<ClassFeature>(*this, subclass.get_features());
 
     end_content_table();
 }
 
-void dnd::DisplayVisitor::operator()(const CharacterRace& character_race) {
-    begin_content_table(character_race);
+void DisplayVisitor::operator()(const Species& species) {
+    begin_content_table(species);
 
     label("Type:");
-    ImGui::Text("Race");
-    source(character_race);
-    const char* has_subraces_cstr = character_race.has_subraces() ? "yes" : "no";
-    label("Has Subraces:");
-    ImGui::Text("%s", has_subraces_cstr);
+    ImGui::Text("Species");
+    source(species);
+    const char* has_subspecies_cstr = species.has_subspecies() ? "yes" : "no";
+    label("Has Subspecies:");
+    ImGui::Text("%s", has_subspecies_cstr);
     label("Features:");
-    list_features<Feature>(*this, character_race.get_features());
+    list_features<Feature>(*this, species.get_features());
 
     end_content_table();
 }
 
-void dnd::DisplayVisitor::operator()(const CharacterSubrace& character_subrace) {
-    begin_content_table(character_subrace);
+void DisplayVisitor::operator()(const Subspecies& subspecies) {
+    begin_content_table(subspecies);
 
     label("Type:");
-    ImGui::Text("Subrace");
-    source(character_subrace);
-    label("Race name:");
-    ImGui::Text("%s", character_subrace.get_race()->get_name().c_str());
+    ImGui::Text("Subspecies");
+    source(subspecies);
+    label("Species name:");
+    ImGui::Text("%s", subspecies.get_species()->get_name().c_str());
     label("Features:");
-    list_features<Feature>(*this, character_subrace.get_features());
+    list_features<Feature>(*this, subspecies.get_features());
 
     end_content_table();
 }
 
-void dnd::DisplayVisitor::operator()(const Item& item) {
+void DisplayVisitor::operator()(const Item& item) {
     begin_content_table(item);
 
     label("Type:");
@@ -235,7 +235,7 @@ void dnd::DisplayVisitor::operator()(const Item& item) {
     end_content_table();
 }
 
-void dnd::DisplayVisitor::operator()(const Spell& spell) {
+void DisplayVisitor::operator()(const Spell& spell) {
     begin_content_table(spell);
 
     label("Type:");
@@ -261,7 +261,7 @@ void dnd::DisplayVisitor::operator()(const Spell& spell) {
     end_content_table();
 }
 
-void dnd::DisplayVisitor::operator()(const Feature& feature) {
+void DisplayVisitor::operator()(const Feature& feature) {
     begin_content_table(feature);
 
     label("Type:");
@@ -273,7 +273,7 @@ void dnd::DisplayVisitor::operator()(const Feature& feature) {
     end_content_table();
 }
 
-void dnd::DisplayVisitor::operator()(const Choosable& choosable) {
+void DisplayVisitor::operator()(const Choosable& choosable) {
     begin_content_table(choosable);
 
     label("Type:");
@@ -284,3 +284,5 @@ void dnd::DisplayVisitor::operator()(const Choosable& choosable) {
 
     end_content_table();
 }
+
+} // namespace dnd

@@ -10,19 +10,21 @@
 
 #include <core/models/effects/stat_change/stat_change.hpp>
 
-dnd::IdentifierStatChange::IdentifierStatChange(
-    const std::string& affected_attribute, dnd::StatChangeTime time, const std::string& operation_name,
+namespace dnd {
+
+IdentifierStatChange::IdentifierStatChange(
+    const std::string& affected_attribute, StatChangeTime time, const std::string& operation_name,
     const std::string& value_identifier
 ) noexcept
     : StatChange(affected_attribute, time, operation_name), value_identifier(value_identifier) {}
 
-dnd::IdentifierStatChange::IdentifierStatChange(
-    std::string_view affected_attribute, dnd::StatChangeTime time, std::string_view operation_name,
+IdentifierStatChange::IdentifierStatChange(
+    std::string_view affected_attribute, StatChangeTime time, std::string_view operation_name,
     std::string_view value_identifier
 ) noexcept
     : StatChange(affected_attribute, time, operation_name), value_identifier(value_identifier) {}
 
-void dnd::IdentifierStatChange::apply_to(
+void IdentifierStatChange::apply_to(
     std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
     if (mathematical_operation == nullptr) {
@@ -38,3 +40,5 @@ void dnd::IdentifierStatChange::apply_to(
     }
     attributes[affected_attribute] = mathematical_operation(attributes[affected_attribute], value);
 }
+
+} // namespace dnd

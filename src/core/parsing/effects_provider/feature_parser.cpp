@@ -15,10 +15,12 @@
 #include <core/validation/effects_provider/feature_data.hpp>
 #include <core/validation/validation_data.hpp>
 
-dnd::FeatureParser::FeatureParser(const std::filesystem::path& filepath) noexcept
+namespace dnd {
+
+FeatureParser::FeatureParser(const std::filesystem::path& filepath) noexcept
     : Parser(filepath), effects_parser(filepath) {}
 
-dnd::Errors dnd::FeatureParser::parse_into(nlohmann::ordered_json&& json, FeatureData& data) const {
+Errors FeatureParser::parse_into(nlohmann::ordered_json&& json, FeatureData& data) const {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
@@ -35,8 +37,8 @@ dnd::Errors dnd::FeatureParser::parse_into(nlohmann::ordered_json&& json, Featur
     return errors;
 }
 
-dnd::Errors dnd::FeatureParser::parse_multiple_into(
-    nlohmann::ordered_json&& json, std::vector<FeatureData>& data, const dnd::ValidationData* parent
+Errors FeatureParser::parse_multiple_into(
+    nlohmann::ordered_json&& json, std::vector<FeatureData>& data, const ValidationData* parent
 ) const {
     Errors errors;
     if (!json.is_object()) {
@@ -55,3 +57,5 @@ dnd::Errors dnd::FeatureParser::parse_multiple_into(
 
     return errors;
 }
+
+} // namespace dnd

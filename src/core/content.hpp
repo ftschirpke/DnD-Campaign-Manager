@@ -8,14 +8,14 @@
 
 #include <core/groups.hpp>
 #include <core/models/character/character.hpp>
-#include <core/models/character_class/character_class.hpp>
-#include <core/models/character_race/character_race.hpp>
-#include <core/models/character_subclass/character_subclass.hpp>
-#include <core/models/character_subrace/character_subrace.hpp>
+#include <core/models/class/class.hpp>
 #include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/item/item.hpp>
+#include <core/models/species/species.hpp>
 #include <core/models/spell/spell.hpp>
+#include <core/models/subclass/subclass.hpp>
+#include <core/models/subspecies/subspecies.hpp>
 #include <core/referencing_content_library.hpp>
 #include <core/storage_content_library.hpp>
 #include <core/utils/types.hpp>
@@ -38,10 +38,10 @@ public:
 
     const Groups& get_groups() const;
     const StorageContentLibrary<Character>& get_characters() const;
-    const StorageContentLibrary<CharacterClass>& get_character_classes() const;
-    const StorageContentLibrary<CharacterSubclass>& get_character_subclasses() const;
-    const StorageContentLibrary<CharacterRace>& get_character_races() const;
-    const StorageContentLibrary<CharacterSubrace>& get_character_subraces() const;
+    const StorageContentLibrary<Class>& get_classes() const;
+    const StorageContentLibrary<Subclass>& get_subclasses() const;
+    const StorageContentLibrary<Species>& get_species() const;
+    const StorageContentLibrary<Subspecies>& get_subspecies() const;
     const StorageContentLibrary<Item>& get_items() const;
     const StorageContentLibrary<Spell>& get_spells() const;
     const ReferencingContentLibrary<Feature>& get_features() const;
@@ -56,26 +56,26 @@ public:
     void add_group_members(const std::string& group_name, std::set<std::string>&& values);
 
     OptCRef<Character> add_character(Character&& character);
-    OptCRef<CharacterClass> add_character_class(CharacterClass&& character_class);
-    OptCRef<CharacterSubclass> add_character_subclass(CharacterSubclass&& character_subclass);
-    OptCRef<CharacterRace> add_character_race(CharacterRace&& character_race);
-    OptCRef<CharacterSubrace> add_character_subrace(CharacterSubrace&& character_subrace);
+    OptCRef<Class> add_class(Class&& cls);
+    OptCRef<Subclass> add_subclass(Subclass&& subclass);
+    OptCRef<Species> add_species(Species&& species);
+    OptCRef<Subspecies> add_subspecies(Subspecies&& subspecies);
     OptCRef<Item> add_item(Item&& item);
     OptCRef<Spell> add_spell(Spell&& spell);
     OptCRef<Choosable> add_choosable(Choosable&& choosable);
 private:
     Groups groups;
-    StorageContentLibrary<Character> characters;
-    StorageContentLibrary<CharacterClass> character_classes;
-    StorageContentLibrary<CharacterSubclass> character_subclasses;
-    StorageContentLibrary<CharacterRace> character_races;
-    StorageContentLibrary<CharacterSubrace> character_subraces;
-    StorageContentLibrary<Item> items;
-    StorageContentLibrary<Spell> spells;
+    StorageContentLibrary<Character> character_libary;
+    StorageContentLibrary<Class> class_library;
+    StorageContentLibrary<Subclass> subclass_library;
+    StorageContentLibrary<Species> species_library;
+    StorageContentLibrary<Subspecies> subspecies_library;
+    StorageContentLibrary<Item> item_library;
+    StorageContentLibrary<Spell> spell_library;
 
-    ReferencingContentLibrary<Feature> features;
-    ReferencingContentLibrary<ClassFeature> class_features;
-    StorageContentLibrary<Choosable> choosables;
+    ReferencingContentLibrary<Feature> feature_library;
+    ReferencingContentLibrary<ClassFeature> class_feature_library;
+    StorageContentLibrary<Choosable> choosable_library;
 };
 
 } // namespace dnd

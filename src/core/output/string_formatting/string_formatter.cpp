@@ -13,11 +13,12 @@
 #include <core/output/string_formatting/formats/table.hpp>
 #include <core/utils/string_manipulation.hpp>
 
-dnd::StringFormatter::StringFormatter(bool ignore_double_newline) noexcept
-    : ignore_double_newline(ignore_double_newline) {}
+namespace dnd {
 
-std::vector<std::unique_ptr<dnd::Format>> dnd::StringFormatter::parse_formats(const std::string& text) const {
-    std::vector<std::unique_ptr<dnd::Format>> formats;
+StringFormatter::StringFormatter(bool ignore_double_newline) noexcept : ignore_double_newline(ignore_double_newline) {}
+
+std::vector<std::unique_ptr<Format>> StringFormatter::parse_formats(const std::string& text) const {
+    std::vector<std::unique_ptr<Format>> formats;
 
     std::string::const_iterator it = text.cbegin();
 
@@ -49,7 +50,7 @@ std::vector<std::unique_ptr<dnd::Format>> dnd::StringFormatter::parse_formats(co
     return formats;
 }
 
-std::unique_ptr<dnd::Paragraph> dnd::StringFormatter::parse_paragraph(
+std::unique_ptr<Paragraph> StringFormatter::parse_paragraph(
     std::string::const_iterator& it, const std::string::const_iterator& end_it
 ) const {
     std::string::const_iterator start_it = it;
@@ -72,7 +73,7 @@ std::unique_ptr<dnd::Paragraph> dnd::StringFormatter::parse_paragraph(
     return paragraph;
 }
 
-std::unique_ptr<dnd::BulletedList> dnd::StringFormatter::parse_bulleted_list(
+std::unique_ptr<BulletedList> StringFormatter::parse_bulleted_list(
     std::string::const_iterator& it, const std::string::const_iterator& end_it
 ) const {
     std::unique_ptr<BulletedList> bulleted_list(new BulletedList());
@@ -101,7 +102,7 @@ std::unique_ptr<dnd::BulletedList> dnd::StringFormatter::parse_bulleted_list(
     return bulleted_list;
 }
 
-std::unique_ptr<dnd::Table> dnd::StringFormatter::parse_table(
+std::unique_ptr<Table> StringFormatter::parse_table(
     std::string::const_iterator& it, const std::string::const_iterator& end_it
 ) const {
     std::unique_ptr<Table> table(new Table());
@@ -127,3 +128,5 @@ std::unique_ptr<dnd::Table> dnd::StringFormatter::parse_table(
     }
     return table;
 }
+
+} // namespace dnd

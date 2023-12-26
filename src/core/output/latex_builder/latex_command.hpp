@@ -14,12 +14,12 @@ class LatexCommand : virtual public LatexObject {
 public:
     LatexCommand(const std::string& name);
     virtual ~LatexCommand() = default;
-    LatexCommand* add_brace_argument(const std::string& argument);
+    LatexCommand* add_bspecies_argument(const std::string& argument);
     LatexCommand* add_bracket_argument(const std::string& argument);
     std::string str() const override;
 private:
     const std::string name;
-    std::vector<std::string> brace_arguments;
+    std::vector<std::string> bspecies_arguments;
     std::vector<std::string> bracket_arguments;
 };
 

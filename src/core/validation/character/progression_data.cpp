@@ -10,9 +10,11 @@
 #include <core/validation/validation_data.hpp>
 #include <core/validation/validation_subdata.hpp>
 
-dnd::ProgressionData::ProgressionData(const dnd::ValidationData* parent) noexcept : ValidationSubdata(parent) {}
+namespace dnd {
 
-dnd::Errors dnd::ProgressionData::validate() const {
+ProgressionData::ProgressionData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
+
+Errors ProgressionData::validate() const {
     Errors errors;
     bool valid_level = level >= 1 && level <= 20;
     bool valid_xp = xp >= 0;
@@ -52,3 +54,5 @@ dnd::Errors dnd::ProgressionData::validate() const {
     }
     return errors;
 }
+
+} // namespace dnd

@@ -16,7 +16,9 @@
 #include <core/validation/effects_provider/class_feature_data.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
-dnd::ClassFeature dnd::ClassFeature::create(dnd::ClassFeatureData&& data, const dnd::Content& content) {
+namespace dnd {
+
+ClassFeature ClassFeature::create(ClassFeatureData&& data, const Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create class feature from invalid data.");
     }
@@ -43,17 +45,17 @@ dnd::ClassFeature dnd::ClassFeature::create(dnd::ClassFeatureData&& data, const 
     );
 }
 
-int dnd::ClassFeature::get_level() const noexcept { return level; }
+int ClassFeature::get_level() const noexcept { return level; }
 
-const std::map<int, dnd::Effects>& dnd::ClassFeature::get_higher_level_effects() const noexcept {
-    return higher_level_effects;
-}
+const std::map<int, Effects>& ClassFeature::get_higher_level_effects() const noexcept { return higher_level_effects; }
 
-void dnd::ClassFeature::accept_visitor(dnd::ContentVisitor& visitor) const { visitor(*this); }
+void ClassFeature::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
-dnd::ClassFeature::ClassFeature(
+ClassFeature::ClassFeature(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, int level,
     Effects&& main_effects, std::map<int, Effects>&& higher_level_effects
 ) noexcept
     : Feature(std::move(name), std::move(description), std::move(source_path), std::move(main_effects)), level(level),
       higher_level_effects(std::move(higher_level_effects)) {}
+
+} // namespace dnd

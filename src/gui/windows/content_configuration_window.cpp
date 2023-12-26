@@ -8,15 +8,17 @@
 #include <core/errors/errors.hpp>
 #include <core/session.hpp>
 
+namespace dnd {
+
 static constexpr ImGuiFileBrowserFlags file_dialog_flags = ImGuiFileBrowserFlags_SelectDirectory
                                                            | ImGuiFileBrowserFlags_HideRegularFiles;
 
 static const ImGuiWindowFlags error_popup_options = ImGuiWindowFlags_AlwaysAutoResize;
 
-dnd::ContentConfigurationWindow::ContentConfigurationWindow(Session& session)
+ContentConfigurationWindow::ContentConfigurationWindow(Session& session)
     : session(session), content_dir_dialog(file_dialog_flags), is_selecting_campaign(false) {}
 
-void dnd::ContentConfigurationWindow::initialize() {
+void ContentConfigurationWindow::initialize() {
     content_dir_dialog.SetTitle("Select content directory");
     content_dir_dialog.SetWindowSize(1200, 900);
 
@@ -32,7 +34,7 @@ void dnd::ContentConfigurationWindow::initialize() {
     }
 }
 
-void dnd::ContentConfigurationWindow::open_content_directory_selection() {
+void ContentConfigurationWindow::open_content_directory_selection() {
     if (content_dir_dialog.HasSelected()) {
         content_dir_dialog.SetPwd(content_dir_dialog.GetSelected().parent_path());
     } else {
@@ -41,14 +43,14 @@ void dnd::ContentConfigurationWindow::open_content_directory_selection() {
     content_dir_dialog.Open();
 }
 
-void dnd::ContentConfigurationWindow::open_campaign_selection() { is_selecting_campaign = true; }
+void ContentConfigurationWindow::open_campaign_selection() { is_selecting_campaign = true; }
 
-void dnd::ContentConfigurationWindow::render() {
+void ContentConfigurationWindow::render() {
     render_content_dir_selection();
     render_campaign_selection();
 }
 
-void dnd::ContentConfigurationWindow::render_content_dir_selection() {
+void ContentConfigurationWindow::render_content_dir_selection() {
     DND_MEASURE_FUNCTION();
     content_dir_dialog.Display();
     if (content_dir_dialog.HasSelected()) {
@@ -72,7 +74,7 @@ void dnd::ContentConfigurationWindow::render_content_dir_selection() {
     }
 }
 
-void dnd::ContentConfigurationWindow::render_campaign_selection() {
+void ContentConfigurationWindow::render_campaign_selection() {
     DND_MEASURE_FUNCTION();
     if (is_selecting_campaign) {
         ImGui::OpenPopup("Select campaign");
@@ -97,3 +99,5 @@ void dnd::ContentConfigurationWindow::render_campaign_selection() {
         ImGui::EndPopup();
     }
 }
+
+} // namespace dnd

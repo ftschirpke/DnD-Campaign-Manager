@@ -23,7 +23,9 @@
 #include <core/parsing/content_parsing.hpp>
 #include <core/utils/string_manipulation.hpp>
 
-int dnd::launch(int argc, char** argv) {
+namespace dnd {
+
+int launch(int argc, char** argv) {
     DND_MEASURE_FUNCTION();
     CommandLineOutput output;
     const std::filesystem::path cur_path = std::filesystem::current_path();
@@ -83,3 +85,5 @@ int dnd::launch(int argc, char** argv) {
 
     return 0;
 }
+
+} // namespace dnd

@@ -14,22 +14,24 @@
 #include <gui/windows/error_messages_window.hpp>
 #include <gui/windows/fuzzy_search_window.hpp>
 
+namespace dnd {
+
 static const char* const imgui_ini_filename = "imgui.ini";
 
 static const ImGuiWindowFlags error_popup_options = ImGuiWindowFlags_AlwaysAutoResize;
 
-dnd::GuiApp::GuiApp()
+GuiApp::GuiApp()
     : show_demo_window(false), session(), content_configuration_window(session), content_window(session),
       error_messages_window(session), fuzzy_search_window(session), advanced_search_window(session) {
     ImGui::GetIO().IniFilename = imgui_ini_filename;
 }
 
-void dnd::GuiApp::initialize() {
+void GuiApp::initialize() {
     session.retrieve_last_session_values();
     content_configuration_window.initialize();
 }
 
-void dnd::GuiApp::render() {
+void GuiApp::render() {
     DND_MEASURE_FUNCTION();
     ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
 
@@ -62,14 +64,14 @@ static void display_size(const char* const name, size_t s, float w) {
 }
 
 static const float min_w = 240.0f;
-static void render_content_count_table(const dnd::Content& content) {
+static void render_content_count_table(const Content& content) {
     float window_width = ImGui::GetWindowWidth();
     float w = std::max(min_w, window_width);
     display_size("Characters", content.get_characters().size(), w);
-    display_size("Classes", content.get_character_classes().size(), w);
-    display_size("Subclasses", content.get_character_subclasses().size(), w);
-    display_size("Races", content.get_character_races().size(), w);
-    display_size("Subraces", content.get_character_subraces().size(), w);
+    display_size("Classes", content.get_classes().size(), w);
+    display_size("Subclasses", content.get_subclasses().size(), w);
+    display_size("Species", content.get_species().size(), w);
+    display_size("Subspecies", content.get_subspecies().size(), w);
     display_size("Items", content.get_items().size(), w);
     display_size("Spells", content.get_spells().size(), w);
     display_size("Features", content.get_features().size(), w);
@@ -77,7 +79,7 @@ static void render_content_count_table(const dnd::Content& content) {
     display_size("Choosables", content.get_choosables().size(), w);
 }
 
-void dnd::GuiApp::render_overview_window() {
+void GuiApp::render_overview_window() {
     DND_MEASURE_FUNCTION();
     ImGui::Begin("Overview");
 
@@ -133,7 +135,7 @@ void dnd::GuiApp::render_overview_window() {
     ImGui::End();
 }
 
-void dnd::GuiApp::render_parsing_error_popup() {
+void GuiApp::render_parsing_error_popup() {
     DND_MEASURE_FUNCTION();
     ImGui::OpenPopup("Error");
     if (ImGui::BeginPopupModal("Error", nullptr, error_popup_options)) {
@@ -167,3 +169,5 @@ void dnd::GuiApp::render_parsing_error_popup() {
         ImGui::EndPopup();
     }
 }
+
+} // namespace dnd

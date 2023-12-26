@@ -1,5 +1,5 @@
-#ifndef CHARACTER_HPP_
-#define CHARACTER_HPP_
+#ifndef HPP_
+#define HPP_
 
 #include <dnd_config.hpp>
 
@@ -7,17 +7,17 @@
 #include <string>
 
 #include <core/models/character/ability_scores.hpp>
-#include <core/models/character/character_basis.hpp>
 #include <core/models/character/decision/decision.hpp>
+#include <core/models/character/feature_providers.hpp>
 #include <core/models/character/progression.hpp>
-#include <core/models/character_class/character_class.hpp>
-#include <core/models/character_race/character_race.hpp>
-#include <core/models/character_subclass/character_subclass.hpp>
-#include <core/models/character_subrace/character_subrace.hpp>
+#include <core/models/class/class.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/source_info.hpp>
+#include <core/models/species/species.hpp>
+#include <core/models/subclass/subclass.hpp>
+#include <core/models/subspecies/subspecies.hpp>
 #include <core/validation/character/character_data.hpp>
 
 namespace dnd {
@@ -47,7 +47,7 @@ public:
     const std::vector<Feature>& get_features() const noexcept;
     const std::vector<Choosable>& get_choosables() const noexcept;
     const AbilityScores& get_base_ability_scores() const noexcept;
-    const CharacterBasis& get_basis() const noexcept;
+    const FeatureProviders& get_feature_providers() const noexcept;
     const Progression& get_progression() const noexcept;
 
     int get_proficiency_bonus() const noexcept;
@@ -58,7 +58,7 @@ public:
 private:
     Character(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path,
-        std::vector<Feature>&& features, AbilityScores&& base_ability_scores, CharacterBasis&& basis,
+        std::vector<Feature>&& features, AbilityScores&& base_ability_scores, FeatureProviders&& feature_providers,
         Progression&& progression, std::vector<Decision>&& decisions
     ) noexcept;
 
@@ -68,11 +68,11 @@ private:
     std::vector<Feature> features;
     std::vector<Choosable> choosables;
     AbilityScores base_ability_scores;
-    CharacterBasis basis;
+    FeatureProviders feature_providers;
     Progression progression;
     std::vector<Decision> decisions;
 };
 
 } // namespace dnd
 
-#endif // CHARACTER_HPP_
+#endif // HPP_

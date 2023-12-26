@@ -10,31 +10,33 @@
 #include <core/validation/spell/spell_type_data.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
+namespace dnd::test {
+
 static constexpr const char* tags = "[core][validation][spell]";
 
 static constexpr const char* fixed_components = "V, S, M (a bit of this and a bit of that)";
 static constexpr const char* fixed_type = "Evocation cantrip";
 
 static bool validate_fixed_values() {
-    dndtest::ValidationDataMock parent;
-    dnd::SpellComponentsData components_data(&parent);
+    ValidationDataMock parent;
+    SpellComponentsData components_data(&parent);
     components_data.str = fixed_components;
-    dnd::SpellTypeData type_data(&parent);
+    SpellTypeData type_data(&parent);
     type_data.str = fixed_type;
     return components_data.validate().ok() && type_data.validate().ok();
 }
 
-static void set_valid_components_and_type(dnd::SpellData& data) {
+static void set_valid_components_and_type(SpellData& data) {
     data.components_data.str = fixed_components;
     data.type_data.str = fixed_type;
 }
 
-TEST_CASE("dnd::SpellData::validate // valid spells", tags) {
-    dnd::SpellData data;
-    dndtest::set_valid_mock_values(data, "Spell");
+TEST_CASE("SpellData::validate // valid spells", tags) {
+    SpellData data;
+    set_valid_mock_values(data, "Spell");
     REQUIRE(validate_fixed_values());
     set_valid_components_and_type(data);
-    dnd::Errors errors;
+    Errors errors;
 
     SECTION("Spell 1") {
         data.casting_time = "1 action";
@@ -56,11 +58,11 @@ TEST_CASE("dnd::SpellData::validate // valid spells", tags) {
     }
 }
 
-TEST_CASE("dnd::SpellData::validate // invalid spells", tags) {
-    dnd::SpellData data;
-    dndtest::set_valid_mock_values(data, "Spell");
+TEST_CASE("SpellData::validate // invalid spells", tags) {
+    SpellData data;
+    set_valid_mock_values(data, "Spell");
     set_valid_components_and_type(data);
-    dnd::Errors errors;
+    Errors errors;
 
     SECTION("Empty casting time") {
         data.casting_time = "";
@@ -98,3 +100,5 @@ TEST_CASE("dnd::SpellData::validate // invalid spells", tags) {
         REQUIRE_FALSE(errors.ok());
     }
 }
+
+} // namespace dnd::test

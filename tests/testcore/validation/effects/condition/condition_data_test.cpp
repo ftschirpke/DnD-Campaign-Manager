@@ -7,12 +7,14 @@
 #include <core/errors/errors.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
+namespace dnd::test {
+
 static constexpr const char* tags = "[core][validation][effects]";
 
-TEST_CASE("dnd::ConditionData::validate // valid conditions", tags) {
-    dndtest::ValidationDataMock parent;
-    dnd::ConditionData condition_data(&parent);
-    dnd::Errors errors;
+TEST_CASE("ConditionData::validate // valid conditions", tags) {
+    ValidationDataMock parent;
+    ConditionData condition_data(&parent);
+    Errors errors;
 
     SECTION("boolean conditions") {
         condition_data.condition_str = "HAS_ARMOR == true";
@@ -77,10 +79,10 @@ TEST_CASE("dnd::ConditionData::validate // valid conditions", tags) {
     }
 }
 
-TEST_CASE("dnd::ConditionData::validate // invalid conditions", tags) {
-    dndtest::ValidationDataMock parent;
-    dnd::ConditionData condition_data(&parent);
-    dnd::Errors errors;
+TEST_CASE("ConditionData::validate // invalid conditions", tags) {
+    ValidationDataMock parent;
+    ConditionData condition_data(&parent);
+    Errors errors;
 
     SECTION("invalid attribute format (left side)") {
         condition_data.condition_str = "lowercase_not_allowed > 4";
@@ -180,3 +182,5 @@ TEST_CASE("dnd::ConditionData::validate // invalid conditions", tags) {
         REQUIRE_FALSE(errors.ok());
     }
 }
+
+} // namespace dnd::test

@@ -7,10 +7,14 @@
 
 #include <core/output/string_formatting/format_visitor.hpp>
 
-dnd::BulletedList::BulletedList() noexcept : items({}) {}
+namespace dnd {
 
-void dnd::BulletedList::add_item(std::string_view item) { items.push_back(item); }
+BulletedList::BulletedList() noexcept : items({}) {}
 
-std::vector<std::string_view> dnd::BulletedList::get_items() const noexcept { return items; }
+void BulletedList::add_item(std::string_view item) { items.push_back(item); }
 
-void dnd::BulletedList::accept(const FormatVisitor& visitor) const { visitor(*this); }
+std::vector<std::string_view> BulletedList::get_items() const noexcept { return items; }
+
+void BulletedList::accept(const FormatVisitor& visitor) const { visitor(*this); }
+
+} // namespace dnd

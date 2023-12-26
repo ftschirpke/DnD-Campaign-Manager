@@ -14,22 +14,24 @@
 #include <core/validation/validation_data.hpp>
 #include <core/validation/validation_subdata.hpp>
 
-dnd::ExtraSpellsHolderData::ExtraSpellsHolderData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
+namespace dnd {
 
-static dnd::Errors spells_set_validate(const std::set<std::string>& spells, const dnd::ValidationData* parent) {
-    dnd::Errors errors;
+ExtraSpellsHolderData::ExtraSpellsHolderData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
+
+static Errors spells_set_validate(const std::set<std::string>& spells, const ValidationData* parent) {
+    Errors errors;
 
     for (const std::string& spell_name : spells) {
         if (spell_name.empty()) {
             errors.add_validation_error(
-                dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent, fmt::format("Name of extra spell is empty.")
+                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent, fmt::format("Name of extra spell is empty.")
             );
         }
     }
     return errors;
 }
 
-dnd::Errors dnd::ExtraSpellsHolderData::validate() const {
+Errors ExtraSpellsHolderData::validate() const {
     Errors errors;
     errors += spells_set_validate(free_cantrips, parent);
     errors += spells_set_validate(at_will, parent);
@@ -41,40 +43,38 @@ dnd::Errors dnd::ExtraSpellsHolderData::validate() const {
     return errors;
 }
 
-static dnd::Errors spells_set_validate_relations(
-    const std::set<std::string>& spells, const dnd::ValidationData* parent, const dnd::Content& content
+static Errors spells_set_validate_relations(
+    const std::set<std::string>& spells, const ValidationData* parent, const Content& content
 ) {
-    dnd::Errors errors;
+    Errors errors;
 
     for (const std::string& spell_name : spells) {
-        dnd::OptCRef<dnd::Spell> spell_optional = content.get_spells().get(spell_name);
+        OptCRef<Spell> spell_optional = content.get_spells().get(spell_name);
         if (!spell_optional.has_value()) {
             errors.add_validation_error(
-                dnd::ValidationErrorCode::RELATION_NOT_FOUND, parent,
-                fmt::format("Spell '{}' does not exist.", spell_name)
+                ValidationErrorCode::RELATION_NOT_FOUND, parent, fmt::format("Spell '{}' does not exist.", spell_name)
             );
-        } else if (spell_optional.value().get().get_type().get_spell_level() == dnd::SpellLevel::CANTRIP) {
+        } else if (spell_optional.value().get().get_type().get_spell_level() == SpellLevel::CANTRIP) {
             errors.add_validation_error(
-                dnd::ValidationErrorCode::INVALID_RELATION, parent, fmt::format("Spell '{}' is a cantrip.", spell_name)
+                ValidationErrorCode::INVALID_RELATION, parent, fmt::format("Spell '{}' is a cantrip.", spell_name)
             );
         }
     }
     return errors;
 }
 
-dnd::Errors dnd::ExtraSpellsHolderData::validate_relations(const Content& content) const {
+Errors ExtraSpellsHolderData::validate_relations(const Content& content) const {
     Errors errors;
     for (const std::string& cantrip_name : free_cantrips) {
         OptCRef<Spell> cantrip_optional = content.get_spells().get(cantrip_name);
         if (!cantrip_optional.has_value()) {
             errors.add_validation_error(
-                dnd::ValidationErrorCode::RELATION_NOT_FOUND, parent,
+                ValidationErrorCode::RELATION_NOT_FOUND, parent,
                 fmt::format("Cantrip '{}' does not exist.", cantrip_name)
             );
-        } else if (cantrip_optional.value().get().get_type().get_spell_level() != dnd::SpellLevel::CANTRIP) {
+        } else if (cantrip_optional.value().get().get_type().get_spell_level() != SpellLevel::CANTRIP) {
             errors.add_validation_error(
-                dnd::ValidationErrorCode::INVALID_RELATION, parent,
-                fmt::format("Spell '{}' is not a cantrip.", cantrip_name)
+                ValidationErrorCode::INVALID_RELATION, parent, fmt::format("Spell '{}' is not a cantrip.", cantrip_name)
             );
         }
     }
@@ -87,7 +87,9 @@ dnd::Errors dnd::ExtraSpellsHolderData::validate_relations(const Content& conten
     return errors;
 }
 
-bool dnd::ExtraSpellsHolderData::empty() const noexcept {
+bool ExtraSpellsHolderData::empty() const noexcept {
     return free_cantrips.empty() && at_will.empty() && innate.empty() && free_once_a_day.empty() && spells_known.empty()
            && spells_known_included.empty() && added_to_spell_list.empty();
 }
+
+} // namespace dnd

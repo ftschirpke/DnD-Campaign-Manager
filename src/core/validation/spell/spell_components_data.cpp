@@ -11,13 +11,15 @@
 #include <core/validation/validation_data.hpp>
 #include <core/validation/validation_subdata.hpp>
 
+namespace dnd {
+
 static constexpr const char*
     spell_components_regex_cstr = "V, S, M \\(.*\\)|V, S|V, M \\(.*\\)|S, M \\(.*\\)|V|S|M \\(.*\\)";
 
 
-dnd::SpellComponentsData::SpellComponentsData(const dnd::ValidationData* parent) noexcept : ValidationSubdata(parent) {}
+SpellComponentsData::SpellComponentsData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
 
-dnd::Errors dnd::SpellComponentsData::validate() const {
+Errors SpellComponentsData::validate() const {
     DND_MEASURE_FUNCTION();
     static const std::regex spell_components_regex(spell_components_regex_cstr);
     Errors errors;
@@ -28,3 +30,5 @@ dnd::Errors dnd::SpellComponentsData::validate() const {
     }
     return errors;
 }
+
+} // namespace dnd

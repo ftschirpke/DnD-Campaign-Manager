@@ -6,9 +6,13 @@
 
 #include <core/errors/errors.hpp>
 
+namespace dnd::test {
+
 static constexpr const char* tags = "[core][parsing]";
 
-TEST_CASE("dnd::parse_content // providing invalid directory to parsing function", tags) {
-    dnd::ParsingResult result = dnd::parse_content("/this/directory/doesnt/exist", "example_campaign");
+TEST_CASE("parse_content // providing invalid directory to parsing function", tags) {
+    ParsingResult result = parse_content("/this/directory/doesnt/exist", "example_campaign");
     REQUIRE_FALSE(result.errors.ok());
 }
+
+} // namespace dnd::test

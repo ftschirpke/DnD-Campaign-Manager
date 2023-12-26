@@ -16,7 +16,9 @@
 #include <core/utils/string_manipulation.hpp>
 #include <core/validation/effects/condition/condition_data.hpp>
 
-std::unique_ptr<dnd::Condition> dnd::create_condition(dnd::ConditionData&& condition_data) {
+namespace dnd {
+
+std::unique_ptr<Condition> create_condition(ConditionData&& condition_data) {
     if (!condition_data.validate().ok()) {
         throw invalid_data("Cannot create condition from invalid data.");
     }
@@ -43,3 +45,5 @@ std::unique_ptr<dnd::Condition> dnd::create_condition(dnd::ConditionData&& condi
         );
     }
 }
+
+} // namespace dnd

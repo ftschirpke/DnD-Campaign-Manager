@@ -8,13 +8,15 @@
 #include <testcore/minimal_testing_content.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
+namespace dnd::test {
+
 static constexpr const char* tags = "[core][validation][effects]";
 
-TEST_CASE("dnd::RIVHolderData::validate and ::validate_relations", tags) {
-    dndtest::ValidationDataMock parent;
-    dnd::RIVHolderData data(&parent);
-    dnd::Content content = dndtest::minimal_testing_content();
-    dnd::Errors errors;
+TEST_CASE("RIVHolderData::validate and ::validate_relations", tags) {
+    ValidationDataMock parent;
+    RIVHolderData data(&parent);
+    Content content = minimal_testing_content();
+    Errors errors;
 
     SECTION("empty") {
         REQUIRE_NOTHROW(errors = data.validate());
@@ -81,10 +83,10 @@ TEST_CASE("dnd::RIVHolderData::validate and ::validate_relations", tags) {
     }
 }
 
-TEST_CASE("dnd::RIVHolderData::validate // invalid RIV holders") {
-    dndtest::ValidationDataMock parent;
-    dnd::RIVHolderData data(&parent);
-    dnd::Errors errors;
+TEST_CASE("RIVHolderData::validate // invalid RIV holders") {
+    ValidationDataMock parent;
+    RIVHolderData data(&parent);
+    Errors errors;
 
     SECTION("invalid damage resistances") {
         data.damage_resistances = {""};
@@ -143,11 +145,11 @@ TEST_CASE("dnd::RIVHolderData::validate // invalid RIV holders") {
     }
 }
 
-TEST_CASE("dnd::RIVHolderData::validate_relations // invalid RIV holder relations") {
-    dndtest::ValidationDataMock parent;
-    dnd::RIVHolderData data(&parent);
-    dnd::Content content = dndtest::minimal_testing_content();
-    dnd::Errors errors;
+TEST_CASE("RIVHolderData::validate_relations // invalid RIV holder relations") {
+    ValidationDataMock parent;
+    RIVHolderData data(&parent);
+    Content content = minimal_testing_content();
+    Errors errors;
 
     SECTION("unknown damage resistance") {
         data.damage_resistances = {"unknown"};
@@ -206,9 +208,9 @@ TEST_CASE("dnd::RIVHolderData::validate_relations // invalid RIV holder relation
     }
 }
 
-TEST_CASE("dnd::RIVHolderData::empty", tags) {
-    dndtest::ValidationDataMock parent;
-    dnd::RIVHolderData data(&parent);
+TEST_CASE("RIVHolderData::empty", tags) {
+    ValidationDataMock parent;
+    RIVHolderData data(&parent);
 
     REQUIRE(data.empty());
 
@@ -240,3 +242,5 @@ TEST_CASE("dnd::RIVHolderData::empty", tags) {
         REQUIRE_FALSE(data.empty());
     }
 }
+
+} // namespace dnd::test

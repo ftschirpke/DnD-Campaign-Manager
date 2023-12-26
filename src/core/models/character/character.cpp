@@ -12,24 +12,26 @@
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/character/ability_scores.hpp>
-#include <core/models/character/character_basis.hpp>
+#include <core/models/character/feature_providers.hpp>
 #include <core/models/character/progression.hpp>
-#include <core/models/character_class/character_class.hpp>
-#include <core/models/character_race/character_race.hpp>
-#include <core/models/character_subclass/character_subclass.hpp>
-#include <core/models/character_subrace/character_subrace.hpp>
+#include <core/models/class/class.hpp>
 #include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/source_info.hpp>
+#include <core/models/species/species.hpp>
+#include <core/models/subclass/subclass.hpp>
+#include <core/models/subspecies/subspecies.hpp>
 #include <core/validation/character/character_data.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
-dnd::Character dnd::Character::create(dnd::CharacterData&& data, const Content& content) {
+namespace dnd {
+
+Character Character::create(CharacterData&& data, const Content& content) {
     if (!data.validate().ok()) {
-        throw dnd::invalid_data("Cannot create character from invalid data.");
+        throw invalid_data("Cannot create character from invalid data.");
     }
     if (!data.validate_relations(content).ok()) {
-        throw dnd::invalid_data("Character data is incompatible with the given content.");
+        throw invalid_data("Character data is incompatible with the given content.");
     }
 
     std::vector<Feature> features;
@@ -39,7 +41,7 @@ dnd::Character dnd::Character::create(dnd::CharacterData&& data, const Content& 
     }
 
     AbilityScores base_ability_scores = AbilityScores::create(std::move(data.base_ability_scores_data));
-    CharacterBasis basis = CharacterBasis::create(std::move(data.character_basis_data), content);
+    FeatureProviders feature_providers = FeatureProviders::create(std::move(data.feature_providers_data), content);
     Progression progression = Progression::create(std::move(data.progression_data));
 
     std::vector<Decision> decisions;
@@ -49,37 +51,37 @@ dnd::Character dnd::Character::create(dnd::CharacterData&& data, const Content& 
 
     return Character(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(features),
-        std::move(base_ability_scores), std::move(basis), std::move(progression), std::move(decisions)
+        std::move(base_ability_scores), std::move(feature_providers), std::move(progression), std::move(decisions)
     );
 }
 
-const std::string& dnd::Character::get_name() const noexcept { return name; }
+const std::string& Character::get_name() const noexcept { return name; }
 
-const std::string& dnd::Character::get_description() const noexcept { return description; }
+const std::string& Character::get_description() const noexcept { return description; }
 
-const dnd::SourceInfo& dnd::Character::get_source_info() const noexcept { return source_info; }
+const SourceInfo& Character::get_source_info() const noexcept { return source_info; }
 
-const std::vector<dnd::Feature>& dnd::Character::get_features() const noexcept { return features; }
+const std::vector<Feature>& Character::get_features() const noexcept { return features; }
 
-const std::vector<dnd::Choosable>& dnd::Character::get_choosables() const noexcept { return choosables; }
+const std::vector<Choosable>& Character::get_choosables() const noexcept { return choosables; }
 
-const dnd::AbilityScores& dnd::Character::get_base_ability_scores() const noexcept { return base_ability_scores; }
+const AbilityScores& Character::get_base_ability_scores() const noexcept { return base_ability_scores; }
 
-const dnd::CharacterBasis& dnd::Character::get_basis() const noexcept { return basis; }
+const FeatureProviders& Character::get_feature_providers() const noexcept { return feature_providers; }
 
-const dnd::Progression& dnd::Character::get_progression() const noexcept { return progression; }
+const Progression& Character::get_progression() const noexcept { return progression; }
 
-void dnd::Character::for_all_effects_do(std::function<void(const dnd::Effects&)> func) const noexcept {
-    for (const Feature& feature : basis.get_race().get_features()) {
+void Character::for_all_effects_do(std::function<void(const Effects&)> func) const noexcept {
+    for (const Feature& feature : feature_providers.get_species().get_features()) {
         func(feature.get_main_effects());
     }
-    OptCRef<CharacterSubrace> subrace = basis.get_subrace();
-    if (subrace.has_value()) {
-        for (const Feature& feature : subrace.value().get().get_features()) {
+    OptCRef<Subspecies> subspecies = feature_providers.get_subspecies();
+    if (subspecies.has_value()) {
+        for (const Feature& feature : subspecies.value().get().get_features()) {
             func(feature.get_main_effects());
         }
     }
-    for (const ClassFeature& feature : basis.get_class().get_features()) {
+    for (const ClassFeature& feature : feature_providers.get_class().get_features()) {
         func(feature.get_main_effects());
         for (const auto& [level, effects] : feature.get_higher_level_effects()) {
             if (level > progression.get_level()) {
@@ -88,7 +90,7 @@ void dnd::Character::for_all_effects_do(std::function<void(const dnd::Effects&)>
             func(effects);
         }
     }
-    OptCRef<CharacterSubclass> subclass = basis.get_subclass();
+    OptCRef<Subclass> subclass = feature_providers.get_subclass();
     if (subclass.has_value()) {
         for (const ClassFeature& feature : subclass.value().get().get_features()) {
             func(feature.get_main_effects());
@@ -108,17 +110,18 @@ void dnd::Character::for_all_effects_do(std::function<void(const dnd::Effects&)>
     }
 }
 
-int dnd::Character::get_proficiency_bonus() const noexcept {
-    return proficiency_bonus_for_level(progression.get_level());
-}
+int Character::get_proficiency_bonus() const noexcept { return proficiency_bonus_for_level(progression.get_level()); }
 
-void dnd::Character::accept_visitor(dnd::ContentVisitor& visitor) const { visitor(*this); }
+void Character::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
-dnd::Character::Character(
-    std::string&& name, std::string&& description, std::filesystem::path&& source_path,
-    std::vector<dnd::Feature>&& features, dnd::AbilityScores&& base_ability_scores, dnd::CharacterBasis&& basis,
-    dnd::Progression&& progression, std::vector<dnd::Decision>&& decisions
+Character::Character(
+    std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::vector<Feature>&& features,
+    AbilityScores&& base_ability_scores, FeatureProviders&& feature_providers, Progression&& progression,
+    std::vector<Decision>&& decisions
 ) noexcept
     : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
-      features(std::move(features)), base_ability_scores(std::move(base_ability_scores)), basis(std::move(basis)),
-      progression(std::move(progression)), decisions(std::move(decisions)) {}
+      features(std::move(features)), base_ability_scores(std::move(base_ability_scores)),
+      feature_providers(std::move(feature_providers)), progression(std::move(progression)),
+      decisions(std::move(decisions)) {}
+
+} // namespace dnd

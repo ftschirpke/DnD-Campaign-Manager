@@ -7,13 +7,15 @@
 
 #include <core/output/string_formatting/format_visitor.hpp>
 
-dnd::Table::Table() noexcept : num_columns(0), current_row(0), rows({{}}) {}
+namespace dnd {
 
-std::vector<std::vector<std::string_view>> dnd::Table::get_rows() const noexcept { return rows; }
+Table::Table() noexcept : num_columns(0), current_row(0), rows({{}}) {}
 
-size_t dnd::Table::get_num_columns() const noexcept { return num_columns; }
+std::vector<std::vector<std::string_view>> Table::get_rows() const noexcept { return rows; }
 
-void dnd::Table::add_element(std::string_view element) {
+size_t Table::get_num_columns() const noexcept { return num_columns; }
+
+void Table::add_element(std::string_view element) {
     rows[current_row].push_back(element);
     if (rows[current_row].size() > num_columns) {
         num_columns = rows[current_row].size();
@@ -23,9 +25,11 @@ void dnd::Table::add_element(std::string_view element) {
     }
 }
 
-void dnd::Table::next_row() {
+void Table::next_row() {
     rows.push_back({});
     ++current_row;
 }
 
-void dnd::Table::accept(const FormatVisitor& visitor) const { visitor(*this); }
+void Table::accept(const FormatVisitor& visitor) const { visitor(*this); }
+
+} // namespace dnd

@@ -13,22 +13,24 @@
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
-#include <core/models/character_class/character_class.hpp>
-#include <core/models/character_race/character_race.hpp>
+#include <core/models/class/class.hpp>
 #include <core/models/effects/effects.hpp>
 #include <core/models/effects_provider/feature.hpp>
+#include <core/models/species/species.hpp>
 #include <core/referencing_content_library.hpp>
 #include <core/validation/character/progression_data.hpp>
 #include <core/validation/effects_provider/feature_data.hpp>
 #include <core/validation/validation_data.hpp>
 
-dnd::CharacterData::CharacterData() noexcept
-    : ValidationData(), features_data(), base_ability_scores_data(this), character_basis_data(this),
+namespace dnd {
+
+CharacterData::CharacterData() noexcept
+    : ValidationData(), features_data(), base_ability_scores_data(this), feature_providers_data(this),
       progression_data(this), decisions_data() {}
 
-std::unique_ptr<dnd::ValidationData> dnd::CharacterData::pack() const { return std::make_unique<CharacterData>(*this); }
+std::unique_ptr<ValidationData> CharacterData::pack() const { return std::make_unique<CharacterData>(*this); }
 
-dnd::Errors dnd::CharacterData::validate() const {
+Errors CharacterData::validate() const {
     Errors errors = ValidationData::validate();
     std::unordered_set<std::string> unique_feature_names;
     for (const FeatureData& feature_data : features_data) {
@@ -43,7 +45,7 @@ dnd::Errors dnd::CharacterData::validate() const {
         }
     }
     errors += base_ability_scores_data.validate();
-    errors += character_basis_data.validate();
+    errors += feature_providers_data.validate();
     errors += progression_data.validate();
     for (const DecisionData& decision_data : decisions_data) {
         errors += decision_data.validate();
@@ -51,7 +53,7 @@ dnd::Errors dnd::CharacterData::validate() const {
     return errors;
 }
 
-dnd::Errors dnd::CharacterData::validate_relations(const dnd::Content& content) const {
+Errors CharacterData::validate_relations(const Content& content) const {
     Errors errors;
     if (content.get_characters().contains(name)) {
         errors.add_validation_error(
@@ -71,13 +73,13 @@ dnd::Errors dnd::CharacterData::validate_relations(const dnd::Content& content) 
     }
 
     errors += base_ability_scores_data.validate_relations(content);
-    errors += character_basis_data.validate_relations(content);
+    errors += feature_providers_data.validate_relations(content);
 
-    OptCRef<CharacterClass> class_optional = content.get_character_classes().get(character_basis_data.class_name);
-    if (!character_basis_data.class_name.empty() && class_optional.has_value()) {
-        const CharacterClass& cls = class_optional.value();
+    OptCRef<Class> class_optional = content.get_classes().get(feature_providers_data.class_name);
+    if (!feature_providers_data.class_name.empty() && class_optional.has_value()) {
+        const Class& cls = class_optional.value();
         if (progression_data.level >= cls.get_important_levels().get_subclass_level()
-            && character_basis_data.subclass_name.empty()) {
+            && feature_providers_data.subclass_name.empty()) {
             errors.add_validation_error(
                 ValidationErrorCode::INCONSISTENT_ATTRIBUTES, this,
                 fmt::format(
@@ -85,7 +87,7 @@ dnd::Errors dnd::CharacterData::validate_relations(const dnd::Content& content) 
                     cls.get_important_levels().get_subclass_level(), name, progression_data.level
                 )
             );
-        } else if (progression_data.level < cls.get_important_levels().get_subclass_level() && !character_basis_data.subclass_name.empty()) {
+        } else if (progression_data.level < cls.get_important_levels().get_subclass_level() && !feature_providers_data.subclass_name.empty()) {
             errors.add_validation_error(
                 ValidationErrorCode::INCONSISTENT_ATTRIBUTES, this,
                 fmt::format(
@@ -116,3 +118,5 @@ dnd::Errors dnd::CharacterData::validate_relations(const dnd::Content& content) 
 
     return errors;
 }
+
+} // namespace dnd

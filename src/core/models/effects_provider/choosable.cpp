@@ -14,7 +14,9 @@
 #include <core/validation/effects_provider/choosable_data.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
-dnd::Choosable dnd::Choosable::create(dnd::ChoosableData&& data, const dnd::Content& content) {
+namespace dnd {
+
+Choosable Choosable::create(ChoosableData&& data, const Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create choosable feature from invalid data");
     }
@@ -34,25 +36,25 @@ dnd::Choosable dnd::Choosable::create(dnd::ChoosableData&& data, const dnd::Cont
     );
 }
 
-const std::string& dnd::Choosable::get_name() const noexcept { return name; }
+const std::string& Choosable::get_name() const noexcept { return name; }
 
-const std::string& dnd::Choosable::get_description() const noexcept { return description; }
+const std::string& Choosable::get_description() const noexcept { return description; }
 
-const dnd::SourceInfo& dnd::Choosable::get_source_info() const noexcept { return source_info; }
+const SourceInfo& Choosable::get_source_info() const noexcept { return source_info; }
 
-const dnd::Effects& dnd::Choosable::get_main_effects() const noexcept { return main_effects; }
+const Effects& Choosable::get_main_effects() const noexcept { return main_effects; }
 
-const std::string& dnd::Choosable::get_type() const noexcept { return type; }
+const std::string& Choosable::get_type() const noexcept { return type; }
 
-const std::vector<std::unique_ptr<dnd::Condition>>& dnd::Choosable::get_prerequisites() const noexcept {
-    return prerequisites;
-}
+const std::vector<std::unique_ptr<Condition>>& Choosable::get_prerequisites() const noexcept { return prerequisites; }
 
-void dnd::Choosable::accept_visitor(dnd::ContentVisitor& visitor) const { visitor(*this); }
+void Choosable::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
-dnd::Choosable::Choosable(
+Choosable::Choosable(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& type,
     std::vector<std::unique_ptr<Condition>>&& prerequisites, Effects&& main_effects
 ) noexcept
     : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
       main_effects(std::move(main_effects)), type(type), prerequisites(std::move(prerequisites)) {}
+
+} // namespace dnd

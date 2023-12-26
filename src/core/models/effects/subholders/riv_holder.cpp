@@ -14,6 +14,8 @@
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/validation/effects/subholders/riv_holder_data.hpp>
 
+namespace dnd {
+
 static std::vector<std::string> set_to_vector(std::set<std::string>&& set) {
     std::vector<std::string> vector;
     vector.reserve(set.size());
@@ -21,12 +23,12 @@ static std::vector<std::string> set_to_vector(std::set<std::string>&& set) {
     return vector;
 }
 
-dnd::RIVHolder dnd::RIVHolder::create(dnd::RIVHolderData&& data, const dnd::Content& content) {
+RIVHolder RIVHolder::create(RIVHolderData&& data, const Content& content) {
     if (!data.validate().ok()) {
-        throw dnd::invalid_data("Cannot create RIVHolder from invalid data.");
+        throw invalid_data("Cannot create RIVHolder from invalid data.");
     }
     if (!data.validate_relations(content).ok()) {
-        throw dnd::invalid_data("RIVHolderData is incompatible with the given content.");
+        throw invalid_data("RIVHolderData is incompatible with the given content.");
     }
     return RIVHolder(
         set_to_vector(std::move(data.damage_resistances)), set_to_vector(std::move(data.damage_immunities)),
@@ -34,24 +36,22 @@ dnd::RIVHolder dnd::RIVHolder::create(dnd::RIVHolderData&& data, const dnd::Cont
     );
 }
 
-const std::vector<std::string>& dnd::RIVHolder::get_damage_resistances() const noexcept { return damage_resistances; }
+const std::vector<std::string>& RIVHolder::get_damage_resistances() const noexcept { return damage_resistances; }
 
-const std::vector<std::string>& dnd::RIVHolder::get_damage_immunities() const noexcept { return damage_immunities; }
+const std::vector<std::string>& RIVHolder::get_damage_immunities() const noexcept { return damage_immunities; }
 
-const std::vector<std::string>& dnd::RIVHolder::get_damage_vulnerabilities() const noexcept {
+const std::vector<std::string>& RIVHolder::get_damage_vulnerabilities() const noexcept {
     return damage_vulnerabilities;
 }
 
-const std::vector<std::string>& dnd::RIVHolder::get_condition_immunities() const noexcept {
-    return condition_immunities;
-}
+const std::vector<std::string>& RIVHolder::get_condition_immunities() const noexcept { return condition_immunities; }
 
-bool dnd::RIVHolder::empty() const {
+bool RIVHolder::empty() const {
     return damage_resistances.empty() && damage_immunities.empty() && damage_vulnerabilities.empty()
            && condition_immunities.empty();
 }
 
-void dnd::RIVHolder::merge(dnd::RIVHolder&& other) {
+void RIVHolder::merge(RIVHolder&& other) {
     damage_resistances.insert(
         damage_resistances.end(), std::make_move_iterator(other.damage_resistances.begin()),
         std::make_move_iterator(other.damage_resistances.end())
@@ -70,10 +70,12 @@ void dnd::RIVHolder::merge(dnd::RIVHolder&& other) {
     );
 }
 
-dnd::RIVHolder::RIVHolder(
+RIVHolder::RIVHolder(
     std::vector<std::string>&& damage_resistances, std::vector<std::string>&& damage_immunities,
     std::vector<std::string>&& damage_vulnerabilities, std::vector<std::string>&& condition_immunities
 ) noexcept
     : damage_resistances(std::move(damage_resistances)), damage_immunities(std::move(damage_immunities)),
       damage_vulnerabilities(std::move(damage_vulnerabilities)), condition_immunities(std::move(condition_immunities)) {
 }
+
+} // namespace dnd

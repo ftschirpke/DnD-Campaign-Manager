@@ -15,10 +15,12 @@
 #include <core/validation/effects_provider/class_feature_data.hpp>
 #include <core/validation/validation_data.hpp>
 
-dnd::ClassFeatureParser::ClassFeatureParser(const std::filesystem::path& filepath) noexcept
+namespace dnd {
+
+ClassFeatureParser::ClassFeatureParser(const std::filesystem::path& filepath) noexcept
     : Parser(filepath), effects_parser(filepath) {}
 
-dnd::Errors dnd::ClassFeatureParser::parse_into(nlohmann::ordered_json&& json, ClassFeatureData& data) const {
+Errors ClassFeatureParser::parse_into(nlohmann::ordered_json&& json, ClassFeatureData& data) const {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
@@ -63,8 +65,8 @@ dnd::Errors dnd::ClassFeatureParser::parse_into(nlohmann::ordered_json&& json, C
     return errors;
 }
 
-dnd::Errors dnd::ClassFeatureParser::parse_multiple_into(
-    nlohmann::ordered_json&& json, std::vector<ClassFeatureData>& data, const dnd::ValidationData* parent
+Errors ClassFeatureParser::parse_multiple_into(
+    nlohmann::ordered_json&& json, std::vector<ClassFeatureData>& data, const ValidationData* parent
 ) const {
     Errors errors;
     if (!json.is_object()) {
@@ -83,3 +85,5 @@ dnd::Errors dnd::ClassFeatureParser::parse_multiple_into(
 
     return errors;
 }
+
+} // namespace dnd

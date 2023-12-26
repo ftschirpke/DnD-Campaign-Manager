@@ -13,17 +13,19 @@
 
 #include <core/searching/content_filters/bool_filter.hpp>
 #include <core/searching/content_filters/character/character_filter.hpp>
-#include <core/searching/content_filters/character_class/character_class_filter.hpp>
-#include <core/searching/content_filters/character_race/character_race_filter.hpp>
-#include <core/searching/content_filters/character_subclass/character_subclass_filter.hpp>
-#include <core/searching/content_filters/character_subrace/character_subrace_filter.hpp>
+#include <core/searching/content_filters/class/class_filter.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
 #include <core/searching/content_filters/effects_provider/choosable_filter.hpp>
 #include <core/searching/content_filters/effects_provider/feature_filter.hpp>
 #include <core/searching/content_filters/item/item_filter.hpp>
 #include <core/searching/content_filters/selection_filter.hpp>
+#include <core/searching/content_filters/species/species_filter.hpp>
 #include <core/searching/content_filters/spell/spell_filter.hpp>
+#include <core/searching/content_filters/subclass/subclass_filter.hpp>
+#include <core/searching/content_filters/subspecies/subspecies_filter.hpp>
+
+namespace dnd {
 
 static constexpr ImGuiComboFlags combo_flags = ImGuiComboFlags_PopupAlignLeft;
 
@@ -37,16 +39,16 @@ static size_t find_index(const std::array<std::pair<S, T>, K>& array, const T& v
     return array.size();
 }
 
-static constexpr std::array<std::pair<const char*, dnd::BoolFilterType>, 3> bool_filter_types = {
-    std::make_pair("None", dnd::BoolFilterType::NONE),
-    std::make_pair("Is True", dnd::BoolFilterType::IS_TRUE),
-    std::make_pair("Is False", dnd::BoolFilterType::IS_FALSE),
+static constexpr std::array<std::pair<const char*, BoolFilterType>, 3> bool_filter_types = {
+    std::make_pair("None", BoolFilterType::NONE),
+    std::make_pair("Is True", BoolFilterType::IS_TRUE),
+    std::make_pair("Is False", BoolFilterType::IS_FALSE),
 };
 
-static void visit_bool_filter(const char* name, dnd::BoolFilter& filter) {
+static void visit_bool_filter(const char* name, BoolFilter& filter) {
     DND_MEASURE_FUNCTION();
-    dnd::BoolFilterType type = filter.get_type();
-    if (type == dnd::BoolFilterType::NONE) {
+    BoolFilterType type = filter.get_type();
+    if (type == BoolFilterType::NONE) {
         return;
     }
     ImGui::TableSetColumnIndex(1);
@@ -75,22 +77,22 @@ static void visit_bool_filter(const char* name, dnd::BoolFilter& filter) {
     ImGui::TableNextRow();
 }
 
-static constexpr std::array<std::pair<const char*, dnd::StringFilterType>, 9> string_filter_types = {
-    std::make_pair("None", dnd::StringFilterType::NONE),
-    std::make_pair("Equal", dnd::StringFilterType::EQUAL),
-    std::make_pair("Not Equal", dnd::StringFilterType::NOT_EQUAL),
-    std::make_pair("Contains", dnd::StringFilterType::CONTAINS),
-    std::make_pair("Not Contains", dnd::StringFilterType::NOT_CONTAINS),
-    std::make_pair("Starts With", dnd::StringFilterType::STARTS_WITH),
-    std::make_pair("Not Starts With", dnd::StringFilterType::NOT_STARTS_WITH),
-    std::make_pair("Ends With", dnd::StringFilterType::ENDS_WITH),
-    std::make_pair("Not Ends With", dnd::StringFilterType::NOT_ENDS_WITH),
+static constexpr std::array<std::pair<const char*, StringFilterType>, 9> string_filter_types = {
+    std::make_pair("None", StringFilterType::NONE),
+    std::make_pair("Equal", StringFilterType::EQUAL),
+    std::make_pair("Not Equal", StringFilterType::NOT_EQUAL),
+    std::make_pair("Contains", StringFilterType::CONTAINS),
+    std::make_pair("Not Contains", StringFilterType::NOT_CONTAINS),
+    std::make_pair("Starts With", StringFilterType::STARTS_WITH),
+    std::make_pair("Not Starts With", StringFilterType::NOT_STARTS_WITH),
+    std::make_pair("Ends With", StringFilterType::ENDS_WITH),
+    std::make_pair("Not Ends With", StringFilterType::NOT_ENDS_WITH),
 };
 
-static void visit_string_filter(const char* name, dnd::StringFilter& filter) {
+static void visit_string_filter(const char* name, StringFilter& filter) {
     DND_MEASURE_FUNCTION();
-    dnd::StringFilterType type = filter.get_type();
-    if (type == dnd::StringFilterType::NONE) {
+    StringFilterType type = filter.get_type();
+    if (type == StringFilterType::NONE) {
         return;
     }
     ImGui::TableSetColumnIndex(1);
@@ -122,14 +124,14 @@ static void visit_string_filter(const char* name, dnd::StringFilter& filter) {
     ImGui::TableNextRow();
 }
 
-static constexpr std::array<std::pair<const char*, dnd::NumberFilterType>, 7> number_filter_types = {
-    std::make_pair("None", dnd::NumberFilterType::NONE),
-    std::make_pair("=", dnd::NumberFilterType::EQUAL),
-    std::make_pair("!=", dnd::NumberFilterType::NOT_EQUAL),
-    std::make_pair("<", dnd::NumberFilterType::LESS_THAN),
-    std::make_pair("<=", dnd::NumberFilterType::LESS_THAN_OR_EQUAL),
-    std::make_pair(">", dnd::NumberFilterType::GREATER_THAN),
-    std::make_pair(">=", dnd::NumberFilterType::GREATER_THAN_OR_EQUAL),
+static constexpr std::array<std::pair<const char*, NumberFilterType>, 7> number_filter_types = {
+    std::make_pair("None", NumberFilterType::NONE),
+    std::make_pair("=", NumberFilterType::EQUAL),
+    std::make_pair("!=", NumberFilterType::NOT_EQUAL),
+    std::make_pair("<", NumberFilterType::LESS_THAN),
+    std::make_pair("<=", NumberFilterType::LESS_THAN_OR_EQUAL),
+    std::make_pair(">", NumberFilterType::GREATER_THAN),
+    std::make_pair(">=", NumberFilterType::GREATER_THAN_OR_EQUAL),
 };
 
 template <typename T>
@@ -150,10 +152,10 @@ ImGuiDataType_ number_data_type<float>() {
 
 template <typename T>
 requires std::is_arithmetic_v<T>
-static void visit_number_filter(const char* name, dnd::NumberFilter<T>& filter) {
+static void visit_number_filter(const char* name, NumberFilter<T>& filter) {
     DND_MEASURE_FUNCTION();
-    dnd::NumberFilterType type = filter.get_type();
-    if (type == dnd::NumberFilterType::NONE) {
+    NumberFilterType type = filter.get_type();
+    if (type == NumberFilterType::NONE) {
         return;
     }
     ImGui::TableSetColumnIndex(1);
@@ -188,17 +190,17 @@ static void visit_number_filter(const char* name, dnd::NumberFilter<T>& filter) 
     ImGui::TableNextRow();
 }
 
-static constexpr std::array<std::pair<const char*, dnd::SelectionFilterType>, 3> selection_filter_types = {
-    std::make_pair("None", dnd::SelectionFilterType::NONE),
-    std::make_pair("Is In", dnd::SelectionFilterType::IS_IN),
-    std::make_pair("Is Not In", dnd::SelectionFilterType::IS_NOT_IN),
+static constexpr std::array<std::pair<const char*, SelectionFilterType>, 3> selection_filter_types = {
+    std::make_pair("None", SelectionFilterType::NONE),
+    std::make_pair("Is In", SelectionFilterType::IS_IN),
+    std::make_pair("Is Not In", SelectionFilterType::IS_NOT_IN),
 };
 
 template <typename T>
-static void visit_selection_filter(const char* name, dnd::SelectionFilter<T>& filter) {
+static void visit_selection_filter(const char* name, SelectionFilter<T>& filter) {
     DND_MEASURE_FUNCTION();
-    dnd::SelectionFilterType type = filter.get_type();
-    if (type == dnd::SelectionFilterType::NONE) {
+    SelectionFilterType type = filter.get_type();
+    if (type == SelectionFilterType::NONE) {
         return;
     }
     ImGui::TableSetColumnIndex(1);
@@ -229,8 +231,8 @@ static void visit_selection_filter(const char* name, dnd::SelectionFilter<T>& fi
     ImGui::TableNextRow();
 }
 
-static void visit_content_piece_filter(dnd::ContentPieceFilter& content_piece_filter) {
-    dnd::NameFilterVariant& name_filter = content_piece_filter.name_filter;
+static void visit_content_piece_filter(ContentPieceFilter& content_piece_filter) {
+    NameFilterVariant& name_filter = content_piece_filter.name_filter;
     switch (name_filter.index()) {
         case 0:
             visit_string_filter("Name", std::get<0>(name_filter));
@@ -245,14 +247,14 @@ static void visit_content_piece_filter(dnd::ContentPieceFilter& content_piece_fi
     visit_bool_filter("Is Sourcebook", content_piece_filter.is_sourcebook_filter);
 }
 
-static void bool_menu_item(const char* name, dnd::BoolFilter& filter, dnd::BoolFilterType default_type) {
+static void bool_menu_item(const char* name, BoolFilter& filter, BoolFilterType default_type) {
     if (!filter.is_set() && ImGui::MenuItem(name)) {
         filter.set_type(default_type);
         ImGui::CloseCurrentPopup();
     }
 }
 
-static void string_menu_item(const char* name, dnd::StringFilter& filter, dnd::StringFilterType default_type) {
+static void string_menu_item(const char* name, StringFilter& filter, StringFilterType default_type) {
     if (!filter.is_set() && ImGui::MenuItem(name)) {
         filter.set_type(default_type);
         ImGui::CloseCurrentPopup();
@@ -261,7 +263,7 @@ static void string_menu_item(const char* name, dnd::StringFilter& filter, dnd::S
 
 template <typename T>
 requires std::is_arithmetic_v<T>
-static void number_menu_item(const char* name, dnd::NumberFilter<T>& filter, dnd::NumberFilterType default_type) {
+static void number_menu_item(const char* name, NumberFilter<T>& filter, NumberFilterType default_type) {
     if (!filter.is_set() && ImGui::MenuItem(name)) {
         filter.set_type(default_type);
         ImGui::CloseCurrentPopup();
@@ -269,28 +271,26 @@ static void number_menu_item(const char* name, dnd::NumberFilter<T>& filter, dnd
 }
 
 template <typename T>
-static void selection_menu_item(
-    const char* name, dnd::SelectionFilter<T>& filter, dnd::SelectionFilterType default_type
-) {
+static void selection_menu_item(const char* name, SelectionFilter<T>& filter, SelectionFilterType default_type) {
     if (!filter.is_set() && ImGui::MenuItem(name)) {
         filter.set_type(default_type);
         ImGui::CloseCurrentPopup();
     }
 }
 
-static void content_piece_filter_menu_items(dnd::ContentPieceFilter& content_piece_filter) {
+static void content_piece_filter_menu_items(ContentPieceFilter& content_piece_filter) {
     bool name_filter_set = std::visit(
         [](const auto& filter) noexcept { return filter.is_set(); }, content_piece_filter.name_filter
     );
     if (!name_filter_set && ImGui::MenuItem("Name")) {
-        content_piece_filter.name_filter.emplace<dnd::StringFilter>().set_type(dnd::StringFilterType::EQUAL);
+        content_piece_filter.name_filter.emplace<StringFilter>().set_type(StringFilterType::EQUAL);
         ImGui::CloseCurrentPopup();
     }
-    string_menu_item("Description", content_piece_filter.description_filter, dnd::StringFilterType::CONTAINS);
-    bool_menu_item("Is Sourcebook", content_piece_filter.is_sourcebook_filter, dnd::BoolFilterType::IS_TRUE);
+    string_menu_item("Description", content_piece_filter.description_filter, StringFilterType::CONTAINS);
+    bool_menu_item("Is Sourcebook", content_piece_filter.is_sourcebook_filter, BoolFilterType::IS_TRUE);
 }
 
-void dnd::FilterSettingVisitor::operator()(ContentPieceFilter& content_piece_filter) {
+void FilterSettingVisitor::operator()(ContentPieceFilter& content_piece_filter) {
     DND_MEASURE_FUNCTION();
     ImGui::TableSetColumnIndex(1);
     visit_content_piece_filter(content_piece_filter);
@@ -306,7 +306,7 @@ void dnd::FilterSettingVisitor::operator()(ContentPieceFilter& content_piece_fil
     }
 }
 
-void dnd::FilterSettingVisitor::operator()(CharacterFilter& character_filter) {
+void FilterSettingVisitor::operator()(CharacterFilter& character_filter) {
     DND_MEASURE_FUNCTION();
     ImGui::TableSetColumnIndex(1);
     visit_content_piece_filter(character_filter);
@@ -320,13 +320,13 @@ void dnd::FilterSettingVisitor::operator()(CharacterFilter& character_filter) {
     if (ImGui::BeginPopup("value_filter_popup")) {
         DND_MEASURE_SCOPE("CharacterFilter - Add Value Filter Popup");
         content_piece_filter_menu_items(character_filter);
-        number_menu_item("Level", character_filter.level_filter, dnd::NumberFilterType::EQUAL);
-        number_menu_item("XP", character_filter.xp_filter, dnd::NumberFilterType::GREATER_THAN_OR_EQUAL);
+        number_menu_item("Level", character_filter.level_filter, NumberFilterType::EQUAL);
+        number_menu_item("XP", character_filter.xp_filter, NumberFilterType::GREATER_THAN_OR_EQUAL);
         ImGui::EndPopup();
     }
 }
 
-void dnd::FilterSettingVisitor::operator()(CharacterClassFilter& class_filter) {
+void FilterSettingVisitor::operator()(ClassFilter& class_filter) {
     DND_MEASURE_FUNCTION();
     ImGui::TableSetColumnIndex(1);
     visit_content_piece_filter(class_filter);
@@ -337,14 +337,14 @@ void dnd::FilterSettingVisitor::operator()(CharacterClassFilter& class_filter) {
         ImGui::OpenPopup("value_filter_popup");
     }
     if (ImGui::BeginPopup("value_filter_popup")) {
-        DND_MEASURE_SCOPE("CharacterClassFilter - Add Value Filter Popup");
+        DND_MEASURE_SCOPE("ClassFilter - Add Value Filter Popup");
         content_piece_filter_menu_items(class_filter);
-        bool_menu_item("Has Spellcasting", class_filter.has_spellcasting_filter, dnd::BoolFilterType::IS_TRUE);
+        bool_menu_item("Has Spellcasting", class_filter.has_spellcasting_filter, BoolFilterType::IS_TRUE);
         ImGui::EndPopup();
     }
 }
 
-void dnd::FilterSettingVisitor::operator()(CharacterSubclassFilter& subclass_filter) {
+void FilterSettingVisitor::operator()(SubclassFilter& subclass_filter) {
     DND_MEASURE_FUNCTION();
     ImGui::TableSetColumnIndex(1);
     visit_content_piece_filter(subclass_filter);
@@ -355,48 +355,48 @@ void dnd::FilterSettingVisitor::operator()(CharacterSubclassFilter& subclass_fil
         ImGui::OpenPopup("value_filter_popup");
     }
     if (ImGui::BeginPopup("value_filter_popup")) {
-        DND_MEASURE_SCOPE("CharacterSubclassFilter - Add Value Filter Popup");
+        DND_MEASURE_SCOPE("SubclassFilter - Add Value Filter Popup");
         content_piece_filter_menu_items(subclass_filter);
-        bool_menu_item("Has Spellcasting", subclass_filter.has_spellcasting_filter, dnd::BoolFilterType::IS_TRUE);
+        bool_menu_item("Has Spellcasting", subclass_filter.has_spellcasting_filter, BoolFilterType::IS_TRUE);
         ImGui::EndPopup();
     }
 }
 
-void dnd::FilterSettingVisitor::operator()(CharacterRaceFilter& race_filter) {
+void FilterSettingVisitor::operator()(SpeciesFilter& species_filter) {
     DND_MEASURE_FUNCTION();
     ImGui::TableSetColumnIndex(1);
-    visit_content_piece_filter(race_filter);
-    visit_bool_filter("Has Subraces", race_filter.has_subraces_filter);
+    visit_content_piece_filter(species_filter);
+    visit_bool_filter("Has Subspecies", species_filter.has_subspecies_filter);
 
     ImGui::TableSetColumnIndex(1);
-    if (!race_filter.has_all_filters() && ImGui::Button("Add Value Filter")) {
+    if (!species_filter.has_all_filters() && ImGui::Button("Add Value Filter")) {
         ImGui::OpenPopup("value_filter_popup");
     }
     if (ImGui::BeginPopup("value_filter_popup")) {
-        DND_MEASURE_SCOPE("CharacterRaceFilter - Add Value Filter Popup");
-        content_piece_filter_menu_items(race_filter);
-        bool_menu_item("Has Subraces", race_filter.has_subraces_filter, dnd::BoolFilterType::IS_TRUE);
+        DND_MEASURE_SCOPE("SpeciesFilter - Add Value Filter Popup");
+        content_piece_filter_menu_items(species_filter);
+        bool_menu_item("Has Subspecies", species_filter.has_subspecies_filter, BoolFilterType::IS_TRUE);
         ImGui::EndPopup();
     }
 }
 
-void dnd::FilterSettingVisitor::operator()(CharacterSubraceFilter& subrace_filter) {
+void FilterSettingVisitor::operator()(SubspeciesFilter& subspecies_filter) {
     DND_MEASURE_FUNCTION();
     ImGui::TableSetColumnIndex(1);
-    visit_content_piece_filter(subrace_filter);
+    visit_content_piece_filter(subspecies_filter);
 
     ImGui::TableSetColumnIndex(1);
-    if (!subrace_filter.has_all_filters() && ImGui::Button("Add Value Filter")) {
+    if (!subspecies_filter.has_all_filters() && ImGui::Button("Add Value Filter")) {
         ImGui::OpenPopup("value_filter_popup");
     }
     if (ImGui::BeginPopup("value_filter_popup")) {
-        DND_MEASURE_SCOPE("CharacterSubraceFilter - Add Value Filter Popup");
-        content_piece_filter_menu_items(subrace_filter);
+        DND_MEASURE_SCOPE("SubspeciesFilter - Add Value Filter Popup");
+        content_piece_filter_menu_items(subspecies_filter);
         ImGui::EndPopup();
     }
 }
 
-void dnd::FilterSettingVisitor::operator()(ItemFilter& item_filter) {
+void FilterSettingVisitor::operator()(ItemFilter& item_filter) {
     DND_MEASURE_FUNCTION();
     ImGui::TableSetColumnIndex(1);
     visit_content_piece_filter(item_filter);
@@ -410,15 +410,13 @@ void dnd::FilterSettingVisitor::operator()(ItemFilter& item_filter) {
     if (ImGui::BeginPopup("value_filter_popup")) {
         DND_MEASURE_SCOPE("ItemFilter - Add Value Filter Popup");
         content_piece_filter_menu_items(item_filter);
-        string_menu_item(
-            "Cosmetic Description", item_filter.cosmetic_description_filter, dnd::StringFilterType::CONTAINS
-        );
-        bool_menu_item("Requires Attunement", item_filter.attunement_filter, dnd::BoolFilterType::IS_TRUE);
+        string_menu_item("Cosmetic Description", item_filter.cosmetic_description_filter, StringFilterType::CONTAINS);
+        bool_menu_item("Requires Attunement", item_filter.attunement_filter, BoolFilterType::IS_TRUE);
         ImGui::EndPopup();
     }
 }
 
-void dnd::FilterSettingVisitor::operator()(SpellFilter& spell_filter) {
+void FilterSettingVisitor::operator()(SpellFilter& spell_filter) {
     DND_MEASURE_FUNCTION();
     ImGui::TableSetColumnIndex(1);
     visit_content_piece_filter(spell_filter);
@@ -440,21 +438,21 @@ void dnd::FilterSettingVisitor::operator()(SpellFilter& spell_filter) {
     if (ImGui::BeginPopup("value_filter_popup")) {
         DND_MEASURE_SCOPE("SpellFilter - Add Value Filter Popup");
         content_piece_filter_menu_items(spell_filter);
-        bool_menu_item("Verbal Component", spell_filter.verbal_component_filter, dnd::BoolFilterType::IS_TRUE);
-        bool_menu_item("Somatic Component", spell_filter.somatic_component_filter, dnd::BoolFilterType::IS_TRUE);
-        bool_menu_item("Material Component", spell_filter.material_component_filter, dnd::BoolFilterType::IS_TRUE);
-        number_menu_item("Level", spell_filter.level_filter, dnd::NumberFilterType::EQUAL);
-        selection_menu_item("Magic School", spell_filter.magic_school_filter, dnd::SelectionFilterType::IS_IN);
-        bool_menu_item("Ritual", spell_filter.ritual_filter, dnd::BoolFilterType::IS_TRUE);
-        string_menu_item("Casting Time", spell_filter.casting_time_filter, dnd::StringFilterType::CONTAINS);
-        string_menu_item("Range", spell_filter.range_filter, dnd::StringFilterType::CONTAINS);
-        string_menu_item("Duration", spell_filter.duration_filter, dnd::StringFilterType::CONTAINS);
-        selection_menu_item("Classes", spell_filter.classes_filter, dnd::SelectionFilterType::IS_IN);
+        bool_menu_item("Verbal Component", spell_filter.verbal_component_filter, BoolFilterType::IS_TRUE);
+        bool_menu_item("Somatic Component", spell_filter.somatic_component_filter, BoolFilterType::IS_TRUE);
+        bool_menu_item("Material Component", spell_filter.material_component_filter, BoolFilterType::IS_TRUE);
+        number_menu_item("Level", spell_filter.level_filter, NumberFilterType::EQUAL);
+        selection_menu_item("Magic School", spell_filter.magic_school_filter, SelectionFilterType::IS_IN);
+        bool_menu_item("Ritual", spell_filter.ritual_filter, BoolFilterType::IS_TRUE);
+        string_menu_item("Casting Time", spell_filter.casting_time_filter, StringFilterType::CONTAINS);
+        string_menu_item("Range", spell_filter.range_filter, StringFilterType::CONTAINS);
+        string_menu_item("Duration", spell_filter.duration_filter, StringFilterType::CONTAINS);
+        selection_menu_item("Classes", spell_filter.classes_filter, SelectionFilterType::IS_IN);
         ImGui::EndPopup();
     }
 }
 
-void dnd::FilterSettingVisitor::operator()(FeatureFilter& feature_filter) {
+void FilterSettingVisitor::operator()(FeatureFilter& feature_filter) {
     DND_MEASURE_FUNCTION();
     ImGui::TableSetColumnIndex(1);
     visit_content_piece_filter(feature_filter);
@@ -470,7 +468,7 @@ void dnd::FilterSettingVisitor::operator()(FeatureFilter& feature_filter) {
     }
 }
 
-void dnd::FilterSettingVisitor::operator()(ChoosableFilter& choosable_filter) {
+void FilterSettingVisitor::operator()(ChoosableFilter& choosable_filter) {
     DND_MEASURE_FUNCTION();
     ImGui::TableSetColumnIndex(1);
     visit_content_piece_filter(choosable_filter);
@@ -484,8 +482,10 @@ void dnd::FilterSettingVisitor::operator()(ChoosableFilter& choosable_filter) {
     if (ImGui::BeginPopup("value_filter_popup")) {
         DND_MEASURE_SCOPE("ChoosableFilter - Add Value Filter Popup");
         content_piece_filter_menu_items(choosable_filter);
-        string_menu_item("Type", choosable_filter.type_filter, dnd::StringFilterType::EQUAL);
-        bool_menu_item("Has Prerequisites", choosable_filter.has_prerequisites_filter, dnd::BoolFilterType::IS_TRUE);
+        string_menu_item("Type", choosable_filter.type_filter, StringFilterType::EQUAL);
+        bool_menu_item("Has Prerequisites", choosable_filter.has_prerequisites_filter, BoolFilterType::IS_TRUE);
         ImGui::EndPopup();
     }
 }
+
+} // namespace dnd

@@ -8,16 +8,18 @@
 #include <cli/visitors/content/display_visitor.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
-#include <core/models/character_race/character_race.hpp>
+#include <core/models/species/species.hpp>
 #include <core/session.hpp>
 #include <core/utils/char_manipulation.hpp>
 #include <core/visitors/content/list_content_visitor.hpp>
 
+namespace dnd {
+
 constexpr const char* separator = "================================================================================";
 
-dnd::CliApp::CliApp() : session("last_cli_session.ini"), output() {}
+CliApp::CliApp() : session("last_cli_session.ini"), output() {}
 
-void dnd::CliApp::initialize(
+void CliApp::initialize(
     const std::filesystem::path& content_directory, const std::string& campaign_name, bool testrun
 ) {
     Errors errors = session.set_content_directory(content_directory);
@@ -84,7 +86,7 @@ void dnd::CliApp::initialize(
     output.text("Ready.");
 }
 
-void dnd::CliApp::run() {
+void CliApp::run() {
     std::string command_input;
     while (true) {
         output.text(separator);
@@ -96,7 +98,7 @@ void dnd::CliApp::run() {
         if (command_input.empty()) {
             return;
         }
-        char command = dnd::char_to_uppercase(command_input[0]);
+        char command = char_to_uppercase(command_input[0]);
         switch (command) {
             case 'X':
                 return;
@@ -118,7 +120,7 @@ void dnd::CliApp::run() {
 
 constexpr std::array<bool, 9> search_options = {true, true, true, true, true, true, true, true, true};
 
-void dnd::CliApp::search_content_by_name() {
+void CliApp::search_content_by_name() {
     std::string search_query = "?";
     while (true) {
         output.text(separator);
@@ -162,15 +164,15 @@ void dnd::CliApp::search_content_by_name() {
     }
 }
 
-void dnd::CliApp::list_all_content_of_a_type() {
+void CliApp::list_all_content_of_a_type() {
     std::string type_str = "?";
     while (true) {
         output.text(separator);
         output.text("[0] Characters");
         output.text("[1] Classes");
         output.text("[2] Subclasses");
-        output.text("[3] Races");
-        output.text("[4] Subraces");
+        output.text("[3] Species");
+        output.text("[4] Subspecies");
         output.text("[5] Spells");
         output.text("[6] Items");
         output.text("[7] Features");
@@ -192,23 +194,23 @@ void dnd::CliApp::list_all_content_of_a_type() {
                 }
                 break;
             case 1:
-                for (const auto& [_, character_class] : session.get_content().get_character_classes().get_all()) {
-                    character_class.accept_visitor(visitor);
+                for (const auto& [_, cls] : session.get_content().get_classes().get_all()) {
+                    cls.accept_visitor(visitor);
                 }
                 break;
             case 2:
-                for (const auto& [_, character_subclass] : session.get_content().get_character_subclasses().get_all()) {
-                    character_subclass.accept_visitor(visitor);
+                for (const auto& [_, subclass] : session.get_content().get_subclasses().get_all()) {
+                    subclass.accept_visitor(visitor);
                 }
                 break;
             case 3:
-                for (const auto& [_, character_race] : session.get_content().get_character_races().get_all()) {
-                    character_race.accept_visitor(visitor);
+                for (const auto& [_, species] : session.get_content().get_species().get_all()) {
+                    species.accept_visitor(visitor);
                 }
                 break;
             case 4:
-                for (const auto& [_, character_subrace] : session.get_content().get_character_subraces().get_all()) {
-                    character_subrace.accept_visitor(visitor);
+                for (const auto& [_, subspecies] : session.get_content().get_subspecies().get_all()) {
+                    subspecies.accept_visitor(visitor);
                 }
                 break;
             case 5:
@@ -260,16 +262,16 @@ void dnd::CliApp::list_all_content_of_a_type() {
                 display_content_piece(&session.get_content().get_characters().get(index).value().get());
                 break;
             case 1:
-                display_content_piece(&session.get_content().get_character_classes().get(index).value().get());
+                display_content_piece(&session.get_content().get_classes().get(index).value().get());
                 break;
             case 2:
-                display_content_piece(&session.get_content().get_character_subclasses().get(index).value().get());
+                display_content_piece(&session.get_content().get_subclasses().get(index).value().get());
                 break;
             case 3:
-                display_content_piece(&session.get_content().get_character_races().get(index).value().get());
+                display_content_piece(&session.get_content().get_species().get(index).value().get());
                 break;
             case 4:
-                display_content_piece(&session.get_content().get_character_subraces().get(index).value().get());
+                display_content_piece(&session.get_content().get_subspecies().get(index).value().get());
                 break;
             case 5:
                 display_content_piece(&session.get_content().get_spells().get(index).value().get());
@@ -290,7 +292,7 @@ void dnd::CliApp::list_all_content_of_a_type() {
     }
 }
 
-void dnd::CliApp::view_open_content_pieces() {
+void CliApp::view_open_content_pieces() {
     std::string index_str = "?";
     while (true) {
         std::deque<const ContentPiece*>& open_content_pieces = session.get_open_content_pieces();
@@ -316,8 +318,10 @@ void dnd::CliApp::view_open_content_pieces() {
     }
 }
 
-void dnd::CliApp::display_content_piece(const ContentPiece* content_piece) {
+void CliApp::display_content_piece(const ContentPiece* content_piece) {
     output.text(separator);
     content_piece->accept_visitor(display_visitor);
     output.text(separator);
 }
+
+} // namespace dnd

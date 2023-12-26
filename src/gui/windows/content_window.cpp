@@ -6,9 +6,11 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
 
-dnd::ContentWindow::ContentWindow(Session& session) : session(session), display_visitor() {}
+namespace dnd {
 
-void dnd::ContentWindow::render() {
+ContentWindow::ContentWindow(Session& session) : session(session), display_visitor() {}
+
+void ContentWindow::render() {
     DND_MEASURE_FUNCTION();
     ImGui::Begin("Content");
     std::deque<const ContentPiece*>& open_content_pieces = session.get_open_content_pieces();
@@ -54,3 +56,5 @@ void dnd::ContentWindow::render() {
     }
     ImGui::End();
 }
+
+} // namespace dnd

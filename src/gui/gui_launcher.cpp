@@ -20,6 +20,8 @@
 #define GL_SILENCE_DEPRECATION
 #include <GLFW/glfw3.h> // Will drag system OpenGL headers
 
+namespace dnd {
+
 static void glfw_error_callback(int error, const char* description) {
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
@@ -110,7 +112,7 @@ static void clean_up(GLFWwindow* window) {
 }
 
 // Main code
-int dnd::launch() {
+int launch() {
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit()) {
         return 1;
@@ -161,3 +163,5 @@ int dnd::launch() {
     clean_up(window);
     return 0;
 }
+
+} // namespace dnd

@@ -9,11 +9,13 @@
 #include <core/validation/effects/condition/condition_data.hpp>
 #include <core/validation/effects_provider/feature_data.hpp>
 
-dnd::ChoosableData::ChoosableData() noexcept : FeatureData(this) {}
+namespace dnd {
 
-std::unique_ptr<dnd::ValidationData> dnd::ChoosableData::pack() const { return std::make_unique<ChoosableData>(*this); }
+ChoosableData::ChoosableData() noexcept : FeatureData(this) {}
 
-dnd::Errors dnd::ChoosableData::validate() const {
+std::unique_ptr<ValidationData> ChoosableData::pack() const { return std::make_unique<ChoosableData>(*this); }
+
+Errors ChoosableData::validate() const {
     Errors errors = FeatureData::validate();
     if (type.empty()) {
         errors.add_validation_error(
@@ -25,3 +27,5 @@ dnd::Errors dnd::ChoosableData::validate() const {
     }
     return errors;
 }
+
+} // namespace dnd

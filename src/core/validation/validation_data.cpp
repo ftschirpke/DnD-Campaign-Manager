@@ -10,7 +10,9 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 
-dnd::Errors dnd::ValidationData::validate() const {
+namespace dnd {
+
+Errors ValidationData::validate() const {
     Errors errors;
     if (name.empty()) {
         errors.add_validation_error(ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Name is empty");
@@ -29,7 +31,9 @@ dnd::Errors dnd::ValidationData::validate() const {
     return errors;
 }
 
-dnd::Errors dnd::ValidationData::validate_relations(const Content& content) const {
+Errors ValidationData::validate_relations(const Content& content) const {
     DND_UNUSED(content);
     return Errors();
 }
+
+} // namespace dnd

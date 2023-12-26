@@ -19,10 +19,12 @@
 #include <core/validation/character/character_data.hpp>
 #include <core/validation/character/decision/decision_data.hpp>
 
-dnd::CharacterParser::CharacterParser(const std::filesystem::path& filepath) noexcept
+namespace dnd {
+
+CharacterParser::CharacterParser(const std::filesystem::path& filepath) noexcept
     : FileParser(filepath, false), feature_parser(filepath) {}
 
-dnd::Errors dnd::CharacterParser::parse() {
+Errors CharacterParser::parse() {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
@@ -35,10 +37,10 @@ dnd::Errors dnd::CharacterParser::parse() {
     data.source_path = get_filepath();
 
     errors += parse_required_attribute_into(json, "base_ability_scores", data.base_ability_scores_data.ability_scores);
-    errors += parse_required_attribute_into(json, "race", data.character_basis_data.race_name);
-    errors += parse_required_attribute_into(json, "class", data.character_basis_data.class_name);
-    errors += parse_optional_attribute_into(json, "subrace", data.character_basis_data.subrace_name);
-    errors += parse_optional_attribute_into(json, "subclass", data.character_basis_data.subclass_name);
+    errors += parse_required_attribute_into(json, "species", data.feature_providers_data.species_name);
+    errors += parse_required_attribute_into(json, "class", data.feature_providers_data.class_name);
+    errors += parse_optional_attribute_into(json, "subspecies", data.feature_providers_data.subspecies_name);
+    errors += parse_optional_attribute_into(json, "subclass", data.feature_providers_data.subclass_name);
 
     bool has_level = json.contains("level");
     bool has_xp = json.contains("xp");
@@ -80,7 +82,7 @@ dnd::Errors dnd::CharacterParser::parse() {
 }
 
 static bool evaluate_effects_for_decision(
-    const dnd::Effects& effects, dnd::DecisionData& decision_data, std::set<const dnd::Effects*>& processed_effects
+    const Effects& effects, DecisionData& decision_data, std::set<const Effects*>& processed_effects
 ) {
     if (!effects.get_choices().empty() && !processed_effects.contains(&effects)) {
         decision_data.set_target(&effects);
@@ -90,7 +92,7 @@ static bool evaluate_effects_for_decision(
     return false;
 }
 
-void dnd::CharacterParser::set_context(const dnd::Content& content) {
+void CharacterParser::set_context(const Content& content) {
     std::set<const Effects*> processed_effects;
     for (DecisionData& decision_data : data.decisions_data) {
         std::optional<EffectsProviderVariant> effects_provider_optional = content.get_effects_provider(
@@ -126,19 +128,17 @@ void dnd::CharacterParser::set_context(const dnd::Content& content) {
     }
 }
 
-dnd::Errors dnd::CharacterParser::validate(const Content& content) const {
+Errors CharacterParser::validate(const Content& content) const {
     Errors errors = data.validate();
     errors += data.validate_relations(content);
     return errors;
 }
 
-void dnd::CharacterParser::save_result(Content& content) {
+void CharacterParser::save_result(Content& content) {
     content.add_character(Character::create(std::move(data), content));
 }
 
-dnd::Errors dnd::CharacterParser::parse_decision(
-    nlohmann::ordered_json&& decision_json, dnd::DecisionData& decision_data
-) const {
+Errors CharacterParser::parse_decision(nlohmann::ordered_json&& decision_json, DecisionData& decision_data) const {
     Errors errors;
     if (!decision_json.is_object()) {
         errors.add_parsing_error(
@@ -153,3 +153,5 @@ dnd::Errors dnd::CharacterParser::parse_decision(
 
     return errors;
 }
+
+} // namespace dnd

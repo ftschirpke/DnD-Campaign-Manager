@@ -13,7 +13,9 @@
 #include <core/validation/validation_data.hpp>
 #include <core/validation/validation_subdata.hpp>
 
-dnd::SpellcastingData::SpellcastingData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {
+namespace dnd {
+
+SpellcastingData::SpellcastingData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {
     for (int& val : spells_known) {
         val = 0;
     }
@@ -27,7 +29,7 @@ dnd::SpellcastingData::SpellcastingData(const ValidationData* parent) noexcept :
     }
 }
 
-dnd::Errors dnd::SpellcastingData::validate() const {
+Errors SpellcastingData::validate() const {
     Errors errors;
 
     if (!is_spellcaster) {
@@ -103,3 +105,5 @@ dnd::Errors dnd::SpellcastingData::validate() const {
 
     return errors;
 }
+
+} // namespace dnd

@@ -7,14 +7,16 @@
 #include <core/errors/errors.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
+namespace dnd::test {
+
 static constexpr const char* tags = "[core][validation][item]";
 
-TEST_CASE("dnd::ItemData::validate", tags) {
-    dnd::ItemData item_data;
-    dndtest::set_valid_mock_values(item_data, "Item");
+TEST_CASE("ItemData::validate", tags) {
+    ItemData item_data;
+    set_valid_mock_values(item_data, "Item");
     item_data.requires_attunement = false;
 
-    dnd::Errors errors;
+    Errors errors;
     SECTION("Valid data without optional fields") {
         REQUIRE_NOTHROW(errors = item_data.validate());
         REQUIRE(errors.ok());
@@ -30,3 +32,5 @@ TEST_CASE("dnd::ItemData::validate", tags) {
         REQUIRE(errors.ok());
     }
 }
+
+} // namespace dnd::test

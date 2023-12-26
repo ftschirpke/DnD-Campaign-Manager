@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include "core/models/character_subrace/character_subrace.hpp"
+#include "core/models/subspecies/subspecies.hpp"
 #include "decision_data.hpp"
 
 #include <algorithm>
@@ -21,10 +21,12 @@
 #include <core/validation/character/character_data.hpp>
 #include <core/validation/effects/effects_data.hpp>
 
-dnd::DecisionData::DecisionData(const dnd::CharacterData* parent, const dnd::Effects* target) noexcept
+namespace dnd {
+
+DecisionData::DecisionData(const CharacterData* parent, const Effects* target) noexcept
     : ValidationSubdata(parent), selections(), character_data(parent), target(target) {}
 
-dnd::Errors dnd::DecisionData::validate() const {
+Errors DecisionData::validate() const {
     Errors errors;
     if (parent == nullptr) {
         errors.add_validation_error(
@@ -48,13 +50,13 @@ dnd::Errors dnd::DecisionData::validate() const {
     return errors;
 }
 
-dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) const {
+Errors DecisionData::validate_relations(const Content& content) const {
     Errors errors;
 
     if (target == nullptr) {
         return errors;
     }
-    std::map<std::string, const dnd::Choice*> choices;
+    std::map<std::string, const Choice*> choices;
     for (const Choice& choice : target->get_choices()) {
         assert(!choices.contains(choice.get_attribute_name()));
         if (selections.contains(choice.get_attribute_name())) {
@@ -137,41 +139,41 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
         switch (effects_provider_variant.index()) {
             // TODO: check character specific features for choices
             case 0: /* Feature */ {
-                const std::string& race_name = character_data->character_basis_data.race_name;
-                OptCRef<CharacterRace> race_optional = content.get_character_races().get(race_name);
-                if (race_optional.has_value()) {
-                    const CharacterRace& race = race_optional.value();
+                const std::string& species_name = character_data->feature_providers_data.species_name;
+                OptCRef<Species> species_optional = content.get_species().get(species_name);
+                if (species_optional.has_value()) {
+                    const Species& species = species_optional.value();
                     feature_found = std::any_of(
-                        race.get_features().begin(), race.get_features().end(), has_feature_name
+                        species.get_features().begin(), species.get_features().end(), has_feature_name
                     );
                     if (feature_found) {
                         break;
                     }
                 }
-                const std::string& subrace_name = character_data->character_basis_data.subrace_name;
-                OptCRef<CharacterSubrace> subrace_optional = content.get_character_subraces().get(subrace_name);
-                if (subrace_optional.has_value()) {
-                    const CharacterSubrace& subrace = subrace_optional.value();
+                const std::string& subspecies_name = character_data->feature_providers_data.subspecies_name;
+                OptCRef<Subspecies> subspecies_optional = content.get_subspecies().get(subspecies_name);
+                if (subspecies_optional.has_value()) {
+                    const Subspecies& subspecies = subspecies_optional.value();
                     feature_found = std::any_of(
-                        subrace.get_features().begin(), subrace.get_features().end(), has_feature_name
+                        subspecies.get_features().begin(), subspecies.get_features().end(), has_feature_name
                     );
                 }
                 break;
             }
             case 1: /* ClassFeature */ {
-                const std::string& class_name = character_data->character_basis_data.class_name;
-                OptCRef<CharacterClass> class_optional = content.get_character_classes().get(class_name);
+                const std::string& class_name = character_data->feature_providers_data.class_name;
+                OptCRef<Class> class_optional = content.get_classes().get(class_name);
                 if (class_optional.has_value()) {
-                    const CharacterClass& cls = class_optional.value();
+                    const Class& cls = class_optional.value();
                     feature_found = std::any_of(cls.get_features().begin(), cls.get_features().end(), has_feature_name);
                     if (feature_found) {
                         break;
                     }
                 }
-                const std::string& subclass_name = character_data->character_basis_data.subclass_name;
-                OptCRef<CharacterSubclass> subclass_optional = content.get_character_subclasses().get(subclass_name);
-                if (content.get_character_subclasses().contains(subclass_name)) {
-                    const CharacterSubclass& subclass = subclass_optional.value();
+                const std::string& subclass_name = character_data->feature_providers_data.subclass_name;
+                OptCRef<Subclass> subclass_optional = content.get_subclasses().get(subclass_name);
+                if (content.get_subclasses().contains(subclass_name)) {
+                    const Subclass& subclass = subclass_optional.value();
                     feature_found = std::any_of(
                         subclass.get_features().begin(), subclass.get_features().end(), has_feature_name
                     );
@@ -201,8 +203,10 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
     return errors;
 }
 
-const dnd::CharacterData* dnd::DecisionData::get_character_data() const noexcept { return character_data; }
+const CharacterData* DecisionData::get_character_data() const noexcept { return character_data; }
 
-const dnd::Effects* dnd::DecisionData::get_target() const noexcept { return target; }
+const Effects* DecisionData::get_target() const noexcept { return target; }
 
-void dnd::DecisionData::set_target(const dnd::Effects* new_target) noexcept { target = new_target; }
+void DecisionData::set_target(const Effects* new_target) noexcept { target = new_target; }
+
+} // namespace dnd

@@ -9,7 +9,9 @@
 #include <array>
 #include <string>
 
-dnd::FuzzySearchWindow::FuzzySearchWindow(Session& session) : session(session), search_query(), search_options() {
+namespace dnd {
+
+FuzzySearchWindow::FuzzySearchWindow(Session& session) : session(session), search_query(), search_options() {
     search_options.fill(true);
 }
 
@@ -23,7 +25,7 @@ static void fuzzy_search_option_line(size_t index, const char* const name, std::
     ImGui::Checkbox(name, &options[index]);
 }
 
-void dnd::FuzzySearchWindow::render() {
+void FuzzySearchWindow::render() {
     DND_MEASURE_FUNCTION();
     ImGui::Begin("Simple Search");
 
@@ -37,8 +39,8 @@ void dnd::FuzzySearchWindow::render() {
             search_options.fill(true);
         }
         fuzzy_search_option_line(0, "Characters", search_options);
-        fuzzy_search_option_line(1, "Races", search_options);
-        fuzzy_search_option_line(3, "Subraces", search_options);
+        fuzzy_search_option_line(1, "Species", search_options);
+        fuzzy_search_option_line(3, "Subspecies", search_options);
         fuzzy_search_option_line(2, "Classes", search_options);
         fuzzy_search_option_line(4, "Subclasses", search_options);
         fuzzy_search_option_line(5, "Items", search_options);
@@ -83,3 +85,5 @@ void dnd::FuzzySearchWindow::render() {
 
     ImGui::End();
 }
+
+} // namespace dnd

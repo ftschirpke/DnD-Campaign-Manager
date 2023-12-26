@@ -1,5 +1,5 @@
-#ifndef CHARACTER_FILTER_HPP_
-#define CHARACTER_FILTER_HPP_
+#ifndef FILTER_HPP_
+#define FILTER_HPP_
 
 #include <dnd_config.hpp>
 
@@ -25,4 +25,4 @@ public:
 
 } // namespace dnd
 
-#endif // CHARACTER_FILTER_HPP_
+#endif // FILTER_HPP_

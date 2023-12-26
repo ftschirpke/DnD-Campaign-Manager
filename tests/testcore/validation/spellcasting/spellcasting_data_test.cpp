@@ -7,12 +7,14 @@
 #include <core/errors/errors.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
-static constexpr const char* tags = "[core][validation][character_class]";
+namespace dnd::test {
 
-TEST_CASE("dnd::SpellcastingData::validate // valid spellcasting data", tags) {
-    dndtest::ValidationDataMock parent;
-    dnd::SpellcastingData data(&parent);
-    dnd::Errors errors;
+static constexpr const char* tags = "[core][validation][class]";
+
+TEST_CASE("SpellcastingData::validate // valid spellcasting data", tags) {
+    ValidationDataMock parent;
+    SpellcastingData data(&parent);
+    Errors errors;
 
     SECTION("not a spellcaster") {
         data.is_spellcaster = false;
@@ -83,10 +85,10 @@ TEST_CASE("dnd::SpellcastingData::validate // valid spellcasting data", tags) {
     }
 }
 
-TEST_CASE("dnd::SpellcastingData::validate // invalid spellcasting data", tags) {
-    dndtest::ValidationDataMock parent;
+TEST_CASE("SpellcastingData::validate // invalid spellcasting data", tags) {
+    ValidationDataMock parent;
 
-    dnd::SpellcastingData data1(&parent);
+    SpellcastingData data1(&parent);
     data1.is_spellcaster = true;
     data1.ability = "INT";
     data1.ritual_casting = true;
@@ -97,7 +99,7 @@ TEST_CASE("dnd::SpellcastingData::validate // invalid spellcasting data", tags) 
     data1.spell_slots[1].fill(2);
     data1.spell_slots[2].fill(1);
 
-    dnd::SpellcastingData data2(&parent);
+    SpellcastingData data2(&parent);
     data2.is_spellcaster = true;
     data2.ability = "WIS";
     data2.ritual_casting = false;
@@ -110,7 +112,7 @@ TEST_CASE("dnd::SpellcastingData::validate // invalid spellcasting data", tags) 
     data2.spell_slots[3].fill(1);
     data2.spell_slots[4] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
-    dnd::Errors errors;
+    Errors errors;
     REQUIRE_NOTHROW(errors = data1.validate());
     REQUIRE(errors.ok());
     REQUIRE_NOTHROW(errors = data2.validate());
@@ -188,3 +190,5 @@ TEST_CASE("dnd::SpellcastingData::validate // invalid spellcasting data", tags) 
         REQUIRE_FALSE(errors.ok());
     }
 }
+
+} // namespace dnd::test

@@ -11,18 +11,20 @@
 #include <imgui/imgui.h>
 
 #include <core/searching/content_filters/character/character_filter.hpp>
-#include <core/searching/content_filters/character_class/character_class_filter.hpp>
-#include <core/searching/content_filters/character_race/character_race_filter.hpp>
-#include <core/searching/content_filters/character_subclass/character_subclass_filter.hpp>
-#include <core/searching/content_filters/character_subrace/character_subrace_filter.hpp>
+#include <core/searching/content_filters/class/class_filter.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
 #include <core/searching/content_filters/effects_provider/choosable_filter.hpp>
 #include <core/searching/content_filters/effects_provider/feature_filter.hpp>
 #include <core/searching/content_filters/item/item_filter.hpp>
+#include <core/searching/content_filters/species/species_filter.hpp>
 #include <core/searching/content_filters/spell/spell_filter.hpp>
+#include <core/searching/content_filters/subclass/subclass_filter.hpp>
+#include <core/searching/content_filters/subspecies/subspecies_filter.hpp>
 #include <core/session.hpp>
 #include <gui/visitors/filters/filter_setting_visitor.hpp>
+
+namespace dnd {
 
 static constexpr ImVec2 cell_padding = ImVec2(5, 5);
 static constexpr ImGuiTableFlags content_table_flags = ImGuiTableFlags_NoBordersInBodyUntilResize;
@@ -33,12 +35,12 @@ static constexpr float fourth_column_width = 250;
 static constexpr float first_column_button_width = 162.5f;
 
 static constexpr std::array<const char*, 10> content_filter_names = {
-    "Any", "Characters", "Classes", "Subclasses", "Races", "Subraces", "Items", "Spells", "Features", "Choosables",
+    "Any", "Characters", "Classes", "Subclasses", "Species", "Subspecies", "Items", "Spells", "Features", "Choosables",
 };
 
-dnd::AdvancedSearchWindow::AdvancedSearchWindow(Session& session) : session(session), result_list() {}
+AdvancedSearchWindow::AdvancedSearchWindow(Session& session) : session(session), result_list() {}
 
-void dnd::AdvancedSearchWindow::render() {
+void AdvancedSearchWindow::render() {
     DND_MEASURE_FUNCTION();
     ImGui::Begin("Advanced Search");
 
@@ -80,16 +82,16 @@ void dnd::AdvancedSearchWindow::render() {
                 filter = CharacterFilter();
                 break;
             case 2:
-                filter = CharacterClassFilter();
+                filter = ClassFilter();
                 break;
             case 3:
-                filter = CharacterSubclassFilter();
+                filter = SubclassFilter();
                 break;
             case 4:
-                filter = CharacterRaceFilter();
+                filter = SpeciesFilter();
                 break;
             case 5:
-                filter = CharacterSubraceFilter();
+                filter = SubspeciesFilter();
                 break;
             case 6:
                 filter = ItemFilter();
@@ -146,3 +148,5 @@ void dnd::AdvancedSearchWindow::render() {
 
     ImGui::End();
 }
+
+} // namespace dnd

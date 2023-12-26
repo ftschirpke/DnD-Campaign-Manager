@@ -22,30 +22,30 @@
 #include <core/searching/content_filters/spell/spell_filter.hpp>
 #include <core/validation/effects/choice/choice_data.hpp>
 
+namespace dnd {
+
 
 static constexpr const char* cantrip_filter_regex_cstr = "(([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|"
                                                          "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation) )?"
                                                          "(([a-zA-Z][a-z]*) )?[cC]antrips";
 
-static std::unique_ptr<dnd::ContentFilter> create_cantrip_filter(const std::string& group_name) {
-    dnd::SpellFilter cantrip_filter;
-    cantrip_filter.level_filter.set(dnd::NumberFilterType::EQUAL, 0);
+static std::unique_ptr<ContentFilter> create_cantrip_filter(const std::string& group_name) {
+    SpellFilter cantrip_filter;
+    cantrip_filter.level_filter.set(NumberFilterType::EQUAL, 0);
     static const std::regex cantrip_filter_regex(cantrip_filter_regex_cstr);
     std::smatch match;
     if (!std::regex_match(group_name, match, cantrip_filter_regex)) {
-        throw dnd::invalid_data("Cannot create choice filter from invalid group name.");
+        throw invalid_data("Cannot create choice filter from invalid group name.");
     }
     const std::string spell_level = match[2].str();
     if (!spell_level.empty()) {
-        cantrip_filter.magic_school_filter.set(
-            dnd::SelectionFilterType::IS_IN, {dnd::magic_school_from_name(spell_level)}
-        );
+        cantrip_filter.magic_school_filter.set(SelectionFilterType::IS_IN, {magic_school_from_name(spell_level)});
     }
     const std::string spell_class_name = match[4].str();
     if (!spell_class_name.empty()) {
-        cantrip_filter.classes_filter.set(dnd::SelectionFilterType::IS_IN, {spell_class_name});
+        cantrip_filter.classes_filter.set(SelectionFilterType::IS_IN, {spell_class_name});
     }
-    return std::make_unique<dnd::SpellFilter>(std::move(cantrip_filter));
+    return std::make_unique<SpellFilter>(std::move(cantrip_filter));
 }
 
 static constexpr const char* spell_filter_regex_cstr = "((1st|2nd|3rd|[4-9]th)-level )?"
@@ -53,48 +53,46 @@ static constexpr const char* spell_filter_regex_cstr = "((1st|2nd|3rd|[4-9]th)-l
                                                        "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation) )?"
                                                        "(([a-zA-Z][a-z]*) )?[sS]pells";
 
-static std::unique_ptr<dnd::ContentFilter> create_spell_filter(const std::string& group_name) {
-    dnd::SpellFilter spell_filter;
+static std::unique_ptr<ContentFilter> create_spell_filter(const std::string& group_name) {
+    SpellFilter spell_filter;
     static const std::regex spell_filter_regex(spell_filter_regex_cstr);
     std::smatch match;
     if (!std::regex_match(group_name, match, spell_filter_regex)) {
-        throw dnd::invalid_data("Cannot create choice filter from invalid group name.");
+        throw invalid_data("Cannot create choice filter from invalid group name.");
     }
     const std::string spell_level = match[2].str();
     if (spell_level.empty()) {
-        spell_filter.level_filter.set(dnd::NumberFilterType::GREATER_THAN, 0);
+        spell_filter.level_filter.set(NumberFilterType::GREATER_THAN, 0);
     } else if (spell_level == "1st") {
-        spell_filter.level_filter.set(dnd::NumberFilterType::EQUAL, 1);
+        spell_filter.level_filter.set(NumberFilterType::EQUAL, 1);
     } else if (spell_level == "2nd") {
-        spell_filter.level_filter.set(dnd::NumberFilterType::EQUAL, 2);
+        spell_filter.level_filter.set(NumberFilterType::EQUAL, 2);
     } else if (spell_level == "3rd") {
-        spell_filter.level_filter.set(dnd::NumberFilterType::EQUAL, 3);
+        spell_filter.level_filter.set(NumberFilterType::EQUAL, 3);
     } else {
-        spell_filter.level_filter.set(dnd::NumberFilterType::EQUAL, spell_level[0] - '0');
+        spell_filter.level_filter.set(NumberFilterType::EQUAL, spell_level[0] - '0');
     }
     const std::string spell_school_name = match[4].str();
     if (!spell_school_name.empty()) {
-        spell_filter.magic_school_filter.set(
-            dnd::SelectionFilterType::IS_IN, {dnd::magic_school_from_name(spell_school_name)}
-        );
+        spell_filter.magic_school_filter.set(SelectionFilterType::IS_IN, {magic_school_from_name(spell_school_name)});
     }
     const std::string spell_class_name = match[6].str();
     if (!spell_class_name.empty()) {
-        spell_filter.classes_filter.set(dnd::SelectionFilterType::IS_IN, {spell_class_name});
+        spell_filter.classes_filter.set(SelectionFilterType::IS_IN, {spell_class_name});
     }
-    return std::make_unique<dnd::SpellFilter>(std::move(spell_filter));
+    return std::make_unique<SpellFilter>(std::move(spell_filter));
 }
 
-static std::vector<std::unique_ptr<dnd::ContentFilter>> spell_filters(dnd::ChoiceData& data) {
-    std::vector<std::unique_ptr<dnd::ContentFilter>> filters;
+static std::vector<std::unique_ptr<ContentFilter>> spell_filters(ChoiceData& data) {
+    std::vector<std::unique_ptr<ContentFilter>> filters;
     if (!data.explicit_choices.empty()) {
-        dnd::SpellFilter spell_filter;
-        dnd::SelectionFilter<std::string>& selection_filter = spell_filter.name_filter.emplace<1>();
-        selection_filter.set(dnd::SelectionFilterType::IS_IN, data.explicit_choices);
-        filters.emplace_back(std::make_unique<dnd::SpellFilter>(std::move(spell_filter)));
+        SpellFilter spell_filter;
+        SelectionFilter<std::string>& selection_filter = spell_filter.name_filter.emplace<1>();
+        selection_filter.set(SelectionFilterType::IS_IN, data.explicit_choices);
+        filters.emplace_back(std::make_unique<SpellFilter>(std::move(spell_filter)));
     }
     for (const std::string& group_name : data.group_names) {
-        dnd::SpellFilter spell_filter;
+        SpellFilter spell_filter;
         if (data.attribute_name == "cantrips_free") {
             filters.emplace_back(create_cantrip_filter(group_name));
         } else {
@@ -104,7 +102,7 @@ static std::vector<std::unique_ptr<dnd::ContentFilter>> spell_filters(dnd::Choic
     return filters;
 }
 
-dnd::Choice dnd::Choice::create(dnd::ChoiceData&& data, const dnd::Content& content) {
+Choice Choice::create(ChoiceData&& data, const Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create choice from invalid data.");
     }
@@ -145,11 +143,11 @@ dnd::Choice dnd::Choice::create(dnd::ChoiceData&& data, const dnd::Content& cont
     );
 }
 
-const std::string& dnd::Choice::get_attribute_name() const noexcept { return attribute_name; }
+const std::string& Choice::get_attribute_name() const noexcept { return attribute_name; }
 
-int dnd::Choice::get_amount() const noexcept { return amount; }
+int Choice::get_amount() const noexcept { return amount; }
 
-std::set<std::string> dnd::Choice::possible_values(const dnd::Content& content) const {
+std::set<std::string> Choice::possible_values(const Content& content) const {
     std::set<std::string> possible_values;
     switch (type) {
         case ChoiceType::ABILITY:
@@ -196,9 +194,11 @@ std::set<std::string> dnd::Choice::possible_values(const dnd::Content& content) 
     return possible_values;
 }
 
-dnd::Choice::Choice(
+Choice::Choice(
     ChoiceType type, std::vector<std::unique_ptr<ContentFilter>>&& filters, std::string&& attribute_name, int amount,
     std::vector<std::string>&& group_names, std::vector<std::string>&& explicit_choices
 ) noexcept
     : type(type), attribute_name(std::move(attribute_name)), amount(amount), group_names(std::move(group_names)),
       explicit_choices(std::move(explicit_choices)), filters(std::move(filters)) {}
+
+} // namespace dnd

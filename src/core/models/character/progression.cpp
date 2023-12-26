@@ -7,18 +7,22 @@
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/validation/character/progression_data.hpp>
 
-dnd::Progression dnd::Progression::create(dnd::ProgressionData&& data) {
+namespace dnd {
+
+Progression Progression::create(ProgressionData&& data) {
     if (!data.validate().ok()) {
-        throw dnd::invalid_data("Cannot create Progression object from invalid data.");
+        throw invalid_data("Cannot create Progression object from invalid data.");
     }
     return Progression(data.level, data.xp, std::move(data.hit_dice_rolls));
 }
 
-int dnd::Progression::get_level() const noexcept { return level; }
+int Progression::get_level() const noexcept { return level; }
 
-int dnd::Progression::get_xp() const noexcept { return xp; }
+int Progression::get_xp() const noexcept { return xp; }
 
-const std::vector<int>& dnd::Progression::get_hit_dice_rolls() const noexcept { return hit_dice_rolls; }
+const std::vector<int>& Progression::get_hit_dice_rolls() const noexcept { return hit_dice_rolls; }
 
-dnd::Progression::Progression(int level, int xp, std::vector<int>&& hit_dice_rolls) noexcept
+Progression::Progression(int level, int xp, std::vector<int>&& hit_dice_rolls) noexcept
     : level(level), xp(xp), hit_dice_rolls(std::move(hit_dice_rolls)) {}
+
+} // namespace dnd

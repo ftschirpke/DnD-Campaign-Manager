@@ -14,9 +14,11 @@
 #include <core/errors/parsing_error.hpp>
 #include <core/errors/validation_error.hpp>
 
-dnd::StringGroupParser::StringGroupParser(const std::filesystem::path& file_path) : FileParser(file_path, false) {}
+namespace dnd {
 
-dnd::Errors dnd::StringGroupParser::parse() {
+StringGroupParser::StringGroupParser(const std::filesystem::path& file_path) : FileParser(file_path, false) {}
+
+Errors StringGroupParser::parse() {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
@@ -55,7 +57,7 @@ dnd::Errors dnd::StringGroupParser::parse() {
     return errors;
 }
 
-dnd::Errors dnd::StringGroupParser::validate(const dnd::Content& content) const {
+Errors StringGroupParser::validate(const Content& content) const {
     DND_UNUSED(content);
     Errors errors;
     for (const auto& [group_name, values] : subgroups) {
@@ -77,7 +79,7 @@ dnd::Errors dnd::StringGroupParser::validate(const dnd::Content& content) const 
     return errors;
 }
 
-void dnd::StringGroupParser::save_result(dnd::Content& content) {
+void StringGroupParser::save_result(Content& content) {
     for (auto& [group_name, values] : subgroups) {
         content.set_subgroups(group_name, std::move(values));
     }
@@ -86,7 +88,7 @@ void dnd::StringGroupParser::save_result(dnd::Content& content) {
     }
 }
 
-dnd::Errors dnd::StringGroupParser::parse_subgroups(nlohmann::ordered_json& sub_json, const std::string& parent) {
+Errors StringGroupParser::parse_subgroups(nlohmann::ordered_json& sub_json, const std::string& parent) {
     Errors errors;
     for (auto& [key, value] : sub_json.items()) {
         subgroups[parent].insert(key);
@@ -115,3 +117,5 @@ dnd::Errors dnd::StringGroupParser::parse_subgroups(nlohmann::ordered_json& sub_
     }
     return errors;
 }
+
+} // namespace dnd

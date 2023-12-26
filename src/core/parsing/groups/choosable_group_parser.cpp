@@ -15,10 +15,12 @@
 #include <core/utils/string_manipulation.hpp>
 #include <core/validation/effects_provider/choosable_data.hpp>
 
-dnd::ChoosableGroupParser::ChoosableGroupParser(const std::filesystem::path& filepath) noexcept
+namespace dnd {
+
+ChoosableGroupParser::ChoosableGroupParser(const std::filesystem::path& filepath) noexcept
     : FileParser(filepath, true), choosable_parser(filepath) {}
 
-dnd::Errors dnd::ChoosableGroupParser::parse() {
+Errors ChoosableGroupParser::parse() {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
@@ -52,7 +54,7 @@ dnd::Errors dnd::ChoosableGroupParser::parse() {
     return errors;
 }
 
-dnd::Errors dnd::ChoosableGroupParser::validate(const dnd::Content& content) const {
+Errors ChoosableGroupParser::validate(const Content& content) const {
     Errors errors;
     assert(choosables_in_file == data.size());
     feature_data_valid.resize(choosables_in_file, false);
@@ -65,7 +67,7 @@ dnd::Errors dnd::ChoosableGroupParser::validate(const dnd::Content& content) con
     return errors;
 }
 
-void dnd::ChoosableGroupParser::save_result(dnd::Content& content) {
+void ChoosableGroupParser::save_result(Content& content) {
     for (size_t i = 0; i < data.size(); ++i) {
         if (feature_data_valid[i]) {
             snake_case_to_capitalized_spaced_words(data[i].type);
@@ -73,3 +75,5 @@ void dnd::ChoosableGroupParser::save_result(dnd::Content& content) {
         }
     }
 }
+
+} // namespace dnd

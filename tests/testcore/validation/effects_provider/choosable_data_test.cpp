@@ -8,13 +8,15 @@
 #include <testcore/minimal_testing_content.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
+namespace dnd::test {
+
 static constexpr const char* tags = "[core][validation][effects_provider]";
 
-TEST_CASE("dnd::ChoosableFeatureData::validate", tags) {
-    dnd::ChoosableData data;
-    dndtest::set_valid_mock_values(data, "Choosable Feature");
-    dnd::Content content = dndtest::minimal_testing_content();
-    dnd::Errors errors;
+TEST_CASE("ChoosableFeatureData::validate", tags) {
+    ChoosableData data;
+    set_valid_mock_values(data, "Choosable Feature");
+    Content content = minimal_testing_content();
+    Errors errors;
 
     SECTION("without any effect holders, at least a type is needed") {
         REQUIRE_NOTHROW(errors = data.validate());
@@ -27,3 +29,5 @@ TEST_CASE("dnd::ChoosableFeatureData::validate", tags) {
         REQUIRE(errors.ok());
     }
 }
+
+} // namespace dnd::test

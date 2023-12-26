@@ -15,10 +15,12 @@
 #include <core/validation/effects/condition/condition_data.hpp>
 #include <core/validation/effects_provider/choosable_data.hpp>
 
-dnd::ChoosableParser::ChoosableParser(const std::filesystem::path& filepath) noexcept
+namespace dnd {
+
+ChoosableParser::ChoosableParser(const std::filesystem::path& filepath) noexcept
     : Parser(filepath), feature_parser(filepath) {}
 
-dnd::Errors dnd::ChoosableParser::parse_into(nlohmann::ordered_json&& json, ChoosableData& data) const {
+Errors ChoosableParser::parse_into(nlohmann::ordered_json&& json, ChoosableData& data) const {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
@@ -54,3 +56,5 @@ dnd::Errors dnd::ChoosableParser::parse_into(nlohmann::ordered_json&& json, Choo
 
     return errors;
 }
+
+} // namespace dnd

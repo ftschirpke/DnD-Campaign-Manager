@@ -15,19 +15,21 @@ I am excited you are considering contributing to this project.
 **Please contact me on GitHub or preferably [via email](mailto:friedrich.tschirpke@student.hu-berlin.de).**
 
 This is especially important because the project is still in its beginnings and only managed by myself right now.
-Thus, the documentation is lacking. Although I am trying my best to always document my ideas in markdown files and
-list all the TODOs, I understand that it might be very hard to understand anything in this project.
+Thus, the documentation is lacking.
+I understand that it might be very hard to understand anything in this project, even though
+I am trying my best to always document my ideas in markdown files and list all the TODOs,
 There are probably many ideas which only exist in my head and I forgot to explain them anywhere. 
 
 So, **do not hesitate to ask questions.**
 
-I would be happy to clarify and explain my ideas. I am also open to any ideas to improve the project if you have any.
+I would be happy to clarify and explain my ideas.
+I am also open to any ideas to improve the project if you have any.
 
 ## Requirements
 
 You need a C++ compiler and [CMake](https://cmake.org/) to build the project.
 Additionally, you need to have X11 installed.
-On Windows and MacOS it is installed by default, on Linux distributions you might to install it yourself.
+On Windows and MacOS it should be installed by default, on Linux distributions you might to install it yourself.
 
 ## Format
 
@@ -39,48 +41,7 @@ In most cases changing the [clang-format file](.clang-format) itself might be th
 ## Comments
 
 Please try to add at least a few words of explanation to every piece of code that is either hard to understand or
-part of the public interface of a class.
-I usually try to add a short explanation to protected and private class members as well.
-I generally try to write a short comment for everything in a header file to reduce the amount a developer that
-does not know my code needs to look up what things do and instead only needs to read a header file or
-maybe their code editor even displays the comment for them directly.
-
-For classes, structs, and enums, I use a small java-style doxygen comment:
-
-```c++
-/**
- * @brief An empty class
- */
-class MyClass {};
-```
-For functions, I use the java-style doxygen comments as well:
-```c++
-/**
- * @brief Returns the given value, unless its zero then an exception is thrown
- * @param a some parameter without use
- * @return the input parameter a
- * @throws std::invalid_argument if a is zero
- */
-int my_function(int a) {
-    if (a == 0) {
-        throw std::invalid_argument("Argument cannot be zero.");
-    }
-    return a;
-}
-```
-And for (member) variables, I just use a single-line comment because that usually suffices
-```c++
-/**
- * @brief A class to represent animals
- */
-class Animal {
-    // the name of the animal
-    int name;
-};
-```
-
-So, please try to add comments to your code, and if you don't, please make clear that this still needs to be done
-(by writing a sentence in your PR or opening an issue).
+part of the public interface of a class and not fully explained by its name.
 
 ## Style
 
@@ -172,9 +133,7 @@ inline void MyClass::print() const { std::cout << name << '\n'; }
 As explained [above](#includes), implementation files should include everything that they explicitly use,
 even when the header file already includes the same header.
 
-In Implementation files, there should be no namespace-block.
-Instead, write `dnd::MyClass::my_function` when implementing a function "my_function" of the class "MyClass"
-which was defined inside this code base (therefore being in the "dnd" namespace).
+In Implementation files, there should be a namespace-block.
 
 ## Commit types
 

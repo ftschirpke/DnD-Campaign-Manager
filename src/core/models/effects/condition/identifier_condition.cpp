@@ -10,17 +10,19 @@
 
 #include <core/models/effects/condition/condition.hpp>
 
-dnd::IdentifierCondition::IdentifierCondition(
+namespace dnd {
+
+IdentifierCondition::IdentifierCondition(
     const std::string& left_side_identifier, const std::string& operator_name, const std::string& right_side_identifier
 ) noexcept
     : Condition(left_side_identifier, operator_name), right_side_identifier(right_side_identifier) {}
 
-dnd::IdentifierCondition::IdentifierCondition(
+IdentifierCondition::IdentifierCondition(
     std::string_view left_side_identifier, std::string_view operator_name, std::string_view right_side_identifier
 ) noexcept
     : Condition(left_side_identifier, operator_name), right_side_identifier(right_side_identifier) {}
 
-bool dnd::IdentifierCondition::evaluate(
+bool IdentifierCondition::evaluate(
     const std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
     if (comparison_operator == nullptr) {
@@ -44,3 +46,5 @@ bool dnd::IdentifierCondition::evaluate(
     }
     return comparison_operator(left_side_value, right_side_value);
 }
+
+} // namespace dnd

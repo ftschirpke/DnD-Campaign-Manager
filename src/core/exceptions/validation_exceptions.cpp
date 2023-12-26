@@ -5,6 +5,10 @@
 #include <stdexcept>
 #include <string>
 
-dnd::invalid_data::invalid_data(const std::string& message) : std::invalid_argument(message) {}
+namespace dnd {
 
-dnd::invalid_data::invalid_data(const char* message) : std::invalid_argument(message) {}
+invalid_data::invalid_data(const std::string& message) : std::invalid_argument(message) {}
+
+invalid_data::invalid_data(const char* message) : std::invalid_argument(message) {}
+
+} // namespace dnd

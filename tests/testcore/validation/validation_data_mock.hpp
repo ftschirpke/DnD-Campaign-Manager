@@ -8,7 +8,7 @@
 
 #include <core/validation/validation_data.hpp>
 
-namespace dndtest {
+namespace dnd::test {
 
 void set_valid_mock_values(dnd::ValidationData& data, const char* data_name = nullptr);
 
@@ -23,6 +23,6 @@ public:
     virtual std::unique_ptr<dnd::ValidationData> pack() const override;
 };
 
-} // namespace dndtest
+} // namespace dnd::test
 
 #endif // VALIDATION_DATA_MOCK_HPP_

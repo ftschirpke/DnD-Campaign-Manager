@@ -14,16 +14,18 @@
 #include <core/output/string_formatting/formats/paragraph.hpp>
 #include <core/output/string_formatting/formats/table.hpp>
 
-dnd::DisplayFormatVisitor::DisplayFormatVisitor(ImGuiTableFlags table_flags) : table_flags(table_flags) {}
+namespace dnd {
 
-void dnd::DisplayFormatVisitor::operator()(const BulletedList& bulleted_list) const {
+DisplayFormatVisitor::DisplayFormatVisitor(ImGuiTableFlags table_flags) : table_flags(table_flags) {}
+
+void DisplayFormatVisitor::operator()(const BulletedList& bulleted_list) const {
     for (const std::string_view& element : bulleted_list.get_items()) {
         ImGui::Bullet();
         ImGui::TextWrapped("%s", std::string(element).c_str());
     }
 }
 
-void dnd::DisplayFormatVisitor::operator()(const Paragraph& paragraph) const {
+void DisplayFormatVisitor::operator()(const Paragraph& paragraph) const {
     std::string_view text = paragraph.get_text();
     ImGui::TextWrapped("%s", std::string(text).c_str());
     if (paragraph.get_empty_line_after()) {
@@ -31,7 +33,7 @@ void dnd::DisplayFormatVisitor::operator()(const Paragraph& paragraph) const {
     }
 }
 
-void dnd::DisplayFormatVisitor::operator()(const Table& table) const {
+void DisplayFormatVisitor::operator()(const Table& table) const {
     std::vector<std::vector<std::string_view>> rows = table.get_rows();
     if (rows.empty() || rows[0].empty()) {
         return;
@@ -61,3 +63,5 @@ void dnd::DisplayFormatVisitor::operator()(const Table& table) const {
         ImGui::EndTable();
     }
 }
+
+} // namespace dnd

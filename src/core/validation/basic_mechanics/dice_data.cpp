@@ -11,11 +11,13 @@
 #include <core/validation/validation_data.hpp>
 #include <core/validation/validation_subdata.hpp>
 
+namespace dnd {
+
 static constexpr const char* dice_regex_cstr = "[dD](4|6|8|10|12|20|100)";
 
-dnd::DiceData::DiceData(const dnd::ValidationData* parent) noexcept : ValidationSubdata(parent) {}
+DiceData::DiceData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
 
-dnd::Errors dnd::DiceData::validate() const {
+Errors DiceData::validate() const {
     static const std::regex dice_regex(dice_regex_cstr);
     Errors errors;
     if (!std::regex_match(str, dice_regex)) {
@@ -25,3 +27,5 @@ dnd::Errors dnd::DiceData::validate() const {
     }
     return errors;
 }
+
+} // namespace dnd

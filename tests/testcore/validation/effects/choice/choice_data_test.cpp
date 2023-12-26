@@ -9,13 +9,15 @@
 #include <testcore/minimal_testing_content.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
+namespace dnd::test {
+
 static constexpr const char* tags = "[core][validation][effects]";
 
-TEST_CASE("dnd::ChoiceData::validate and ::validate_relations // valid choice data", tags) {
-    dndtest::ValidationDataMock parent;
-    dnd::ChoiceData choice_data(&parent);
-    dnd::Content content = dndtest::minimal_testing_content();
-    dnd::Errors errors;
+TEST_CASE("ChoiceData::validate and ::validate_relations // valid choice data", tags) {
+    ValidationDataMock parent;
+    ChoiceData choice_data(&parent);
+    Content content = minimal_testing_content();
+    Errors errors;
 
     SECTION("attribute name implies group name") {
         choice_data.attribute_name = "languages";
@@ -95,10 +97,10 @@ TEST_CASE("dnd::ChoiceData::validate and ::validate_relations // valid choice da
     }
 }
 
-TEST_CASE("dnd::ChoiceData::validate // invalid choice data", tags) {
-    dndtest::ValidationDataMock parent;
-    dnd::ChoiceData choice_data(&parent);
-    dnd::Errors errors;
+TEST_CASE("ChoiceData::validate // invalid choice data", tags) {
+    ValidationDataMock parent;
+    ChoiceData choice_data(&parent);
+    Errors errors;
 
     SECTION("Empty attribute name") {
         choice_data.attribute_name = "";
@@ -166,11 +168,11 @@ TEST_CASE("dnd::ChoiceData::validate // invalid choice data", tags) {
     }
 }
 
-TEST_CASE("dnd::ChoiceData::validate_relations // invalid choice data relations", tags) {
-    dndtest::ValidationDataMock parent;
-    dnd::ChoiceData choice_data(&parent);
-    dnd::Content content = dndtest::minimal_testing_content();
-    dnd::Errors errors;
+TEST_CASE("ChoiceData::validate_relations // invalid choice data relations", tags) {
+    ValidationDataMock parent;
+    ChoiceData choice_data(&parent);
+    Content content = minimal_testing_content();
+    Errors errors;
 
     SECTION("Invalid choices for attribute") {
         choice_data.attribute_name = "languages";
@@ -216,3 +218,5 @@ TEST_CASE("dnd::ChoiceData::validate_relations // invalid choice data relations"
         REQUIRE_FALSE(errors.ok());
     }
 }
+
+} // namespace dnd::test

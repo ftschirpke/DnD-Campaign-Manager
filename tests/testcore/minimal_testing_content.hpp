@@ -5,10 +5,10 @@
 
 #include <core/content.hpp>
 
-namespace dndtest {
+namespace dnd::test {
 
-dnd::Content minimal_testing_content();
+Content minimal_testing_content();
 
-} // namespace dndtest
+} // namespace dnd::test
 
 #endif // MINIMAL_TESTING_CONTENT_HPP_

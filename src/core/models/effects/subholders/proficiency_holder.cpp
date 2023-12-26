@@ -12,6 +12,8 @@
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/validation/effects/subholders/proficiency_holder_data.hpp>
 
+namespace dnd {
+
 static std::vector<std::string> set_to_vector(std::set<std::string>&& set) {
     std::vector<std::string> vector;
     vector.reserve(set.size());
@@ -19,12 +21,12 @@ static std::vector<std::string> set_to_vector(std::set<std::string>&& set) {
     return vector;
 }
 
-dnd::ProficiencyHolder dnd::ProficiencyHolder::create(ProficiencyHolderData&& data, const Content& content) {
+ProficiencyHolder ProficiencyHolder::create(ProficiencyHolderData&& data, const Content& content) {
     if (!data.validate().ok()) {
-        throw dnd::invalid_data("Cannot create ProficiencyHolder from invalid data.");
+        throw invalid_data("Cannot create ProficiencyHolder from invalid data.");
     }
     if (!data.validate_relations(content).ok()) {
-        throw dnd::invalid_data("ProficiencyHolderData is incompatible with the given content.");
+        throw invalid_data("ProficiencyHolderData is incompatible with the given content.");
     }
     return ProficiencyHolder(
         set_to_vector(std::move(data.armor)), set_to_vector(std::move(data.weapons)),
@@ -34,37 +36,37 @@ dnd::ProficiencyHolder dnd::ProficiencyHolder::create(ProficiencyHolderData&& da
     );
 }
 
-const std::vector<std::string>& dnd::ProficiencyHolder::get_armor_proficiencies() const noexcept {
+const std::vector<std::string>& ProficiencyHolder::get_armor_proficiencies() const noexcept {
     return armor_proficiencies;
 }
 
-const std::vector<std::string>& dnd::ProficiencyHolder::get_weapon_proficiencies() const noexcept {
+const std::vector<std::string>& ProficiencyHolder::get_weapon_proficiencies() const noexcept {
     return weapon_proficiencies;
 }
 
-const std::vector<std::string>& dnd::ProficiencyHolder::get_tool_proficiencies() const noexcept {
+const std::vector<std::string>& ProficiencyHolder::get_tool_proficiencies() const noexcept {
     return tool_proficiencies;
 }
 
-const std::vector<std::string>& dnd::ProficiencyHolder::get_skill_proficiencies() const noexcept {
+const std::vector<std::string>& ProficiencyHolder::get_skill_proficiencies() const noexcept {
     return skill_proficiencies;
 }
 
-const std::vector<std::string>& dnd::ProficiencyHolder::get_saving_throw_proficiencies() const noexcept {
+const std::vector<std::string>& ProficiencyHolder::get_saving_throw_proficiencies() const noexcept {
     return saving_throw_proficiencies;
 }
 
-const std::vector<std::string>& dnd::ProficiencyHolder::get_known_languages() const noexcept { return known_languages; }
+const std::vector<std::string>& ProficiencyHolder::get_known_languages() const noexcept { return known_languages; }
 
-const std::vector<std::string>& dnd::ProficiencyHolder::get_senses() const noexcept { return senses; }
+const std::vector<std::string>& ProficiencyHolder::get_senses() const noexcept { return senses; }
 
-bool dnd::ProficiencyHolder::empty() const {
+bool ProficiencyHolder::empty() const {
     return armor_proficiencies.empty() && weapon_proficiencies.empty() && tool_proficiencies.empty()
            && skill_proficiencies.empty() && saving_throw_proficiencies.empty() && known_languages.empty()
            && senses.empty();
 }
 
-void dnd::ProficiencyHolder::merge(dnd::ProficiencyHolder&& other) {
+void ProficiencyHolder::merge(ProficiencyHolder&& other) {
     armor_proficiencies.insert(
         armor_proficiencies.end(), std::make_move_iterator(other.armor_proficiencies.begin()),
         std::make_move_iterator(other.armor_proficiencies.end())
@@ -94,7 +96,7 @@ void dnd::ProficiencyHolder::merge(dnd::ProficiencyHolder&& other) {
     );
 }
 
-dnd::ProficiencyHolder::ProficiencyHolder(
+ProficiencyHolder::ProficiencyHolder(
     std::vector<std::string>&& armor, std::vector<std::string>&& weapons, std::vector<std::string>&& tools,
     std::vector<std::string>&& skills, std::vector<std::string>&& saving_throws, std::vector<std::string>&& languages,
     std::vector<std::string>&& senses
@@ -103,3 +105,5 @@ dnd::ProficiencyHolder::ProficiencyHolder(
       tool_proficiencies(std::move(tools)), skill_proficiencies(std::move(skills)),
       saving_throw_proficiencies(std::move(saving_throws)), known_languages(std::move(languages)),
       senses(std::move(senses)) {}
+
+} // namespace dnd

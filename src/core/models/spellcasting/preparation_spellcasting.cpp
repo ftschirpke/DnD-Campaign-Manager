@@ -10,9 +10,11 @@
 #include <core/models/character/ability_scores.hpp>
 #include <core/models/spellcasting/spellcasting.hpp>
 
-dnd::PreparationSpellcastingType dnd::PreparationSpellcasting::get_type() const noexcept { return type; }
+namespace dnd {
 
-int dnd::PreparationSpellcasting::get_prepared_spells_amount(AbilityScores ability_scores, int level) const noexcept {
+PreparationSpellcastingType PreparationSpellcasting::get_type() const noexcept { return type; }
+
+int PreparationSpellcasting::get_prepared_spells_amount(AbilityScores ability_scores, int level) const noexcept {
     if (level < 1 || level > 20) {
         return 0;
     }
@@ -31,9 +33,11 @@ int dnd::PreparationSpellcasting::get_prepared_spells_amount(AbilityScores abili
     return prepared_spells_amount;
 }
 
-dnd::PreparationSpellcasting::PreparationSpellcasting(
+PreparationSpellcasting::PreparationSpellcasting(
     Ability spellcasting_ability, bool ritual_casting, std::array<int, 20>&& cantrips_known,
     std::array<std::array<int, 20>, 9>&& spell_slots, PreparationSpellcastingType type
 ) noexcept
     : Spellcasting(spellcasting_ability, ritual_casting, std::move(cantrips_known), std::move(spell_slots)),
       type(type) {}
+
+} // namespace dnd

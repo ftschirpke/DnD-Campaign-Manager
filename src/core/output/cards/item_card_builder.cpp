@@ -17,19 +17,21 @@
 #include <core/output/latex_builder/latex_scope.hpp>
 #include <core/output/latex_builder/latex_text.hpp>
 
+namespace dnd {
+
 constexpr int card_character_cutoff = 900;
 
 
-void dnd::ItemCardBuilder::add_item(const Item* item) { items.push_back(item); }
+void ItemCardBuilder::add_item(const Item* item) { items.push_back(item); }
 
-void dnd::ItemCardBuilder::write_latex_file() {
+void ItemCardBuilder::write_latex_file() {
     std::stringstream sstr;
     auto t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     sstr << std::put_time(std::localtime(&t), "%F %T\n\n") << ".tex";
     write_latex_file(sstr.str());
 }
 
-static void create_header(dnd::LatexDocument& document) {
+static void create_header(LatexDocument& document) {
     document.document_class.add_bracket_argument("parskip");
     document.use_package("geometry");
     document.use_package("tcolorbox")->add_bracket_argument("most");
@@ -43,9 +45,9 @@ static void create_header(dnd::LatexDocument& document) {
     document.header.add_command("makeatother");
 }
 
-static dnd::LatexScope* create_card_page(dnd::LatexDocument& document) {
+static LatexScope* create_card_page(LatexDocument& document) {
     std::string color = "white";
-    dnd::LatexBeginEnd begin_end = document.body.add_begin_end("tcbitemize");
+    LatexBeginEnd begin_end = document.body.add_begin_end("tcbitemize");
     begin_end.begin_command->add_bracket_argument(
         "size=fbox,raster height=\\textheight,raster columns=3, raster equal skip=5mm,raster rows=3,enhanced,sharp "
         "corners,colback="
@@ -54,14 +56,14 @@ static dnd::LatexScope* create_card_page(dnd::LatexDocument& document) {
     return begin_end.scope;
 }
 
-static dnd::LatexText* create_card_header(dnd::LatexScope* scope, const dnd::Item* item, int counter) {
+static LatexText* create_card_header(LatexScope* scope, const Item* item, int counter) {
     scope->add_command("tcbitem");
     scope->add_command("vspace", "1mm");
-    dnd::LatexScope* center_scope = scope->add_begin_end("center").scope;
+    LatexScope* center_scope = scope->add_begin_end("center").scope;
     center_scope->add_command("MakeUppercase");
-    dnd::LatexScope* sub_scope = center_scope->add_scope();
+    LatexScope* sub_scope = center_scope->add_scope();
     sub_scope->add_command("textbf");
-    dnd::LatexText* title = sub_scope->add_scope()->add_text(item->get_name() + " (" + std::to_string(counter) + ')');
+    LatexText* title = sub_scope->add_scope()->add_text(item->get_name() + " (" + std::to_string(counter) + ')');
     scope->add_command("vspace", "-3mm");
     if (item->requires_attunement()) {
         scope->add_command("vspace", "-5mm");
@@ -72,18 +74,18 @@ static dnd::LatexText* create_card_header(dnd::LatexScope* scope, const dnd::Ite
     return title;
 }
 
-static void create_card_footer(dnd::LatexScope* scope) { scope->add_command("vspace", "\\fill"); }
+static void create_card_footer(LatexScope* scope) { scope->add_command("vspace", "\\fill"); }
 
-static dnd::LatexScope* create_textit_scope(dnd::LatexScope* scope) {
-    dnd::LatexScope* center_scope = scope->add_begin_end("Center").scope;
+static LatexScope* create_textit_scope(LatexScope* scope) {
+    LatexScope* center_scope = scope->add_begin_end("Center").scope;
     center_scope->add_command("scriptsize");
     center_scope->add_command("textit");
     return center_scope->add_scope();
 }
 
-static int create_item_cards(dnd::LatexScope* scope, const dnd::Item* item) {
+static int create_item_cards(LatexScope* scope, const Item* item) {
     int counter = 1;
-    dnd::LatexText* first_title = create_card_header(scope, item, counter);
+    LatexText* first_title = create_card_header(scope, item, counter);
     size_t start = 0;
     size_t end = 0;
     size_t characters_written = 0;
@@ -96,7 +98,7 @@ static int create_item_cards(dnd::LatexScope* scope, const dnd::Item* item) {
                 characters_written = 0;
             }
 
-            dnd::LatexText* text = scope->add_text(item->get_description().substr(start, end - start));
+            LatexText* text = scope->add_text(item->get_description().substr(start, end - start));
             characters_written += end - start;
             if (end + 1 < item->get_description().size() && item->get_description()[end + 1] == '\n') {
                 text->add_line_break();
@@ -123,7 +125,7 @@ static int create_item_cards(dnd::LatexScope* scope, const dnd::Item* item) {
         end = 0;
         scope->add_command("vfill");
         description_swap_card = counter;
-        dnd::LatexScope* current_it_scope = create_textit_scope(scope);
+        LatexScope* current_it_scope = create_textit_scope(scope);
         while (end < item->get_cosmetic_description().size()) {
             if (item->get_cosmetic_description()[end] == '\n') {
                 if (characters_written + end - start > card_character_cutoff) {
@@ -140,8 +142,7 @@ static int create_item_cards(dnd::LatexScope* scope, const dnd::Item* item) {
                     description_swap_card = counter;
                     written_cosmetic_description_yet = true;
                 }
-                dnd::LatexText* text = current_it_scope->add_text(
-                    item->get_cosmetic_description().substr(start, end - start)
+                LatexText* text = current_it_scope->add_text(item->get_cosmetic_description().substr(start, end - start)
                 );
 
                 characters_written += end - start;
@@ -175,7 +176,7 @@ static int create_item_cards(dnd::LatexScope* scope, const dnd::Item* item) {
     return counter;
 }
 
-static int calculate_cards_to_create(const dnd::Item* item) {
+static int calculate_cards_to_create(const Item* item) {
     int counter = 1;
     size_t start = 0;
     size_t end = 0;
@@ -223,11 +224,11 @@ static int calculate_cards_to_create(const dnd::Item* item) {
     return counter;
 }
 
-void dnd::ItemCardBuilder::write_latex_file(const std::string& filename) {
+void ItemCardBuilder::write_latex_file(const std::string& filename) {
     LatexDocument document("scrartcl");
     create_header(document);
 
-    std::unordered_map<int, std::deque<dnd::LatexScope*>> not_full_scopes;
+    std::unordered_map<int, std::deque<LatexScope*>> not_full_scopes;
     not_full_scopes[9].push_back(create_card_page(document));
 
     for (const Item* item : items) {
@@ -265,3 +266,5 @@ void dnd::ItemCardBuilder::write_latex_file(const std::string& filename) {
     output_stream << document.str();
     output_stream.close();
 }
+
+} // namespace dnd
