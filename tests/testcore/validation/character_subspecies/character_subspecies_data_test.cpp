@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include <core/validation/character_subrace/character_subrace_data.hpp>
+#include <core/validation/character_subspecies/character_subspecies_data.hpp>
 
 #include <catch2/catch_test_macros.hpp>
 
@@ -9,16 +9,16 @@
 #include <testcore/minimal_testing_content.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
-static constexpr const char* tags = "[core][validation][character_subrace]";
+static constexpr const char* tags = "[core][validation][character_subspecies]";
 
-TEST_CASE("dnd::CharacterSubraceData::validate and ::validate_relations // valid subrace data", tags) {
-    dnd::CharacterSubraceData data;
-    dndtest::set_valid_mock_values(data, "Subrace");
+TEST_CASE("dnd::CharacterSubspeciesData::validate and ::validate_relations // valid subspecies data", tags) {
+    dnd::CharacterSubspeciesData data;
+    dndtest::set_valid_mock_values(data, "Subspecies");
     dnd::Content content = dndtest::minimal_testing_content();
     dnd::Errors errors;
 
-    SECTION("race with one valid feature") {
-        data.race_name = "Dwarf";
+    SECTION("species with one valid feature") {
+        data.species_name = "Dwarf";
         dnd::FeatureData& feature_data = data.features_data.emplace_back(&data);
         dndtest::set_valid_mock_values(feature_data, "Feature");
         REQUIRE_NOTHROW(errors = data.validate());
@@ -26,8 +26,8 @@ TEST_CASE("dnd::CharacterSubraceData::validate and ::validate_relations // valid
         REQUIRE(errors.ok());
     }
 
-    SECTION("race with multiple differently named features") {
-        data.race_name = "Dwarf";
+    SECTION("species with multiple differently named features") {
+        data.species_name = "Dwarf";
         dnd::FeatureData& feature_data1 = data.features_data.emplace_back(&data);
         dndtest::set_valid_mock_values(feature_data1, "Feature 1");
         dnd::FeatureData& feature_data2 = data.features_data.emplace_back(&data);
@@ -40,33 +40,33 @@ TEST_CASE("dnd::CharacterSubraceData::validate and ::validate_relations // valid
     }
 }
 
-TEST_CASE("dnd::CharacterSubraceData::validate // invalid subrace data", tags) {
-    dnd::CharacterSubraceData data;
-    dndtest::set_valid_mock_values(data, "Subrace");
+TEST_CASE("dnd::CharacterSubspeciesData::validate // invalid subspecies data", tags) {
+    dnd::CharacterSubspeciesData data;
+    dndtest::set_valid_mock_values(data, "Subspecies");
     dnd::Errors errors;
 
-    SECTION("subrace without race is invalid") {
-        data.race_name = "";
+    SECTION("subspecies without species is invalid") {
+        data.species_name = "";
         dnd::FeatureData& feature_data = data.features_data.emplace_back(&data);
         dndtest::set_valid_mock_values(feature_data, "Feature");
         REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_FALSE(errors.ok());
     }
 
-    SECTION("subrace without features is invalid") {
-        data.race_name = "Dwarf";
+    SECTION("subspecies without features is invalid") {
+        data.species_name = "Dwarf";
         REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_FALSE(errors.ok());
     }
 
-    SECTION("subrace without a race is invalid") {
-        data.race_name = "";
+    SECTION("subspecies without a species is invalid") {
+        data.species_name = "";
         REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_FALSE(errors.ok());
     }
 
-    SECTION("subrace with duplicate feature names") {
-        data.race_name = "Dwarf";
+    SECTION("subspecies with duplicate feature names") {
+        data.species_name = "Dwarf";
         dnd::FeatureData& feature_data1 = data.features_data.emplace_back(&data);
         dndtest::set_valid_mock_values(feature_data1, "Duplicate Feature");
         dnd::FeatureData& feature_data2 = data.features_data.emplace_back(&data);
@@ -78,39 +78,39 @@ TEST_CASE("dnd::CharacterSubraceData::validate // invalid subrace data", tags) {
     }
 }
 
-TEST_CASE("dnd::CharacterSubraceData::validate_relations // invalid subrace data relations", tags) {
-    dnd::CharacterSubraceData data;
-    dndtest::set_valid_mock_values(data, "Subrace");
+TEST_CASE("dnd::CharacterSubspeciesData::validate_relations // invalid subspecies data relations", tags) {
+    dnd::CharacterSubspeciesData data;
+    dndtest::set_valid_mock_values(data, "Subspecies");
     dnd::FeatureData& valid_feature_data = data.features_data.emplace_back(&data);
     dndtest::set_valid_mock_values(valid_feature_data, "Valid Feature");
     dnd::Content content = dndtest::minimal_testing_content();
     dnd::Errors errors;
 
-    SECTION("subrace with a name that already exists in the content") {
+    SECTION("subspecies with a name that already exists in the content") {
         data.name = "Hill Dwarf"; // already exists in the example content
-        data.race_name = "Dwarf";
+        data.species_name = "Dwarf";
         REQUIRE_NOTHROW(errors = data.validate_relations(content));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("features with duplicate names aren't allowed") {
-        data.name = "New Subrace";
-        data.race_name = "Dwarf";
+        data.name = "New Subspecies";
+        data.species_name = "Dwarf";
         dnd::FeatureData& feature_data = data.features_data.emplace_back(&data);
         dndtest::set_valid_mock_values(feature_data, "Duplicate Feature");
-        feature_data.name = "Example Subrace Feature"; // feature with that name already exists in the example content
+        feature_data.name = "Example Subspecies Feature"; // feature with that name already exists in the example content
         REQUIRE_NOTHROW(errors = data.validate_relations(content));
         REQUIRE_FALSE(errors.ok());
     }
 
-    SECTION("a race with the given race name must exist") {
-        data.race_name = "Nonexistent race";
+    SECTION("a species with the given species name must exist") {
+        data.species_name = "Nonexistent species";
         REQUIRE_NOTHROW(errors = data.validate_relations(content));
         REQUIRE_FALSE(errors.ok());
     }
 
-    SECTION("the race with the given race name must allow subraces") {
-        data.race_name = "Human"; // doesn't allow subraces
+    SECTION("the species with the given species name must allow subspecies") {
+        data.species_name = "Human"; // doesn't allow subspecies
         REQUIRE_NOTHROW(errors = data.validate_relations(content));
         REQUIRE_FALSE(errors.ok());
     }

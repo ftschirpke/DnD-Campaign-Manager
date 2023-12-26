@@ -17,8 +17,8 @@ public:
     void operator()(const Character& character) override;
     void operator()(const CharacterClass& character_class) override;
     void operator()(const CharacterSubclass& character_subclass) override;
-    void operator()(const CharacterRace& character_race) override;
-    void operator()(const CharacterSubrace& character_subrace) override;
+    void operator()(const CharacterSpecies& character_species) override;
+    void operator()(const CharacterSubspecies& character_subspecies) override;
     void operator()(const Item& item) override;
     void operator()(const Spell& spell) override;
     void operator()(const Feature& feature) override;

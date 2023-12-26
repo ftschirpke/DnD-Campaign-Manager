@@ -12,8 +12,8 @@
 namespace dnd {
 
 class Content;
-class CharacterRace;
-class CharacterSubrace;
+class CharacterSpecies;
+class CharacterSubspecies;
 class CharacterClass;
 class CharacterSubclass;
 
@@ -28,21 +28,21 @@ public:
      */
     static CharacterBasis create(CharacterBasisData&& data, const Content& content);
 
-    const CharacterRace& get_race() const noexcept;
-    OptCRef<CharacterSubrace> get_subrace() const noexcept;
+    const CharacterSpecies& get_species() const noexcept;
+    OptCRef<CharacterSubspecies> get_subspecies() const noexcept;
     const CharacterClass& get_class() const noexcept;
     OptCRef<CharacterSubclass> get_subclass() const noexcept;
 
-    bool has_subrace() const noexcept;
+    bool has_subspecies() const noexcept;
     bool has_subclass() const noexcept;
 private:
     CharacterBasis(
-        const CharacterRace& race, OptCRef<CharacterSubrace> subrace, const CharacterClass& cls,
+        const CharacterSpecies& species, OptCRef<CharacterSubspecies> subspecies, const CharacterClass& cls,
         OptCRef<CharacterSubclass> subclass
     ) noexcept;
 
-    std::reference_wrapper<const CharacterRace> race;
-    OptCRef<CharacterSubrace> subrace;
+    std::reference_wrapper<const CharacterSpecies> species;
+    OptCRef<CharacterSubspecies> subspecies;
     std::reference_wrapper<const CharacterClass> cls;
     OptCRef<CharacterSubclass> subclass;
 };

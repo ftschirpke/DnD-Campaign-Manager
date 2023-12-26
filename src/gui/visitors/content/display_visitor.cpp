@@ -13,9 +13,9 @@
 #include <core/basic_mechanics/dice.hpp>
 #include <core/models/character/character.hpp>
 #include <core/models/character_class/character_class.hpp>
-#include <core/models/character_race/character_race.hpp>
+#include <core/models/character_species/character_species.hpp>
 #include <core/models/character_subclass/character_subclass.hpp>
-#include <core/models/character_subrace/character_subrace.hpp>
+#include <core/models/character_subspecies/character_subspecies.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/class_feature.hpp>
@@ -116,18 +116,18 @@ void dnd::DisplayVisitor::operator()(const Character& character) {
 
     // TODO: display stats (again)
 
-    label("Race:");
-    const CharacterRace& race = character.get_basis().get_race();
-    if (ImGui::CollapsingHeader(race.get_name().c_str())) {
-        operator()(race);
+    label("Species:");
+    const CharacterSpecies& species = character.get_basis().get_species();
+    if (ImGui::CollapsingHeader(species.get_name().c_str())) {
+        operator()(species);
     }
 
-    OptCRef<CharacterSubrace> subrace_optional = character.get_basis().get_subrace();
-    if (subrace_optional.has_value()) {
-        label("Subrace:");
-        const CharacterSubrace& subrace = subrace_optional.value();
-        if (ImGui::CollapsingHeader(subrace.get_name().c_str())) {
-            operator()(subrace);
+    OptCRef<CharacterSubspecies> subspecies_optional = character.get_basis().get_subspecies();
+    if (subspecies_optional.has_value()) {
+        label("Subspecies:");
+        const CharacterSubspecies& subspecies = subspecies_optional.value();
+        if (ImGui::CollapsingHeader(subspecies.get_name().c_str())) {
+            operator()(subspecies);
         }
     }
 
@@ -187,31 +187,31 @@ void dnd::DisplayVisitor::operator()(const CharacterSubclass& character_subclass
     end_content_table();
 }
 
-void dnd::DisplayVisitor::operator()(const CharacterRace& character_race) {
-    begin_content_table(character_race);
+void dnd::DisplayVisitor::operator()(const CharacterSpecies& character_species) {
+    begin_content_table(character_species);
 
     label("Type:");
-    ImGui::Text("Race");
-    source(character_race);
-    const char* has_subraces_cstr = character_race.has_subraces() ? "yes" : "no";
-    label("Has Subraces:");
-    ImGui::Text("%s", has_subraces_cstr);
+    ImGui::Text("Species");
+    source(character_species);
+    const char* has_subspecies_cstr = character_species.has_subspecies() ? "yes" : "no";
+    label("Has Subspecies:");
+    ImGui::Text("%s", has_subspecies_cstr);
     label("Features:");
-    list_features<Feature>(*this, character_race.get_features());
+    list_features<Feature>(*this, character_species.get_features());
 
     end_content_table();
 }
 
-void dnd::DisplayVisitor::operator()(const CharacterSubrace& character_subrace) {
-    begin_content_table(character_subrace);
+void dnd::DisplayVisitor::operator()(const CharacterSubspecies& character_subspecies) {
+    begin_content_table(character_subspecies);
 
     label("Type:");
-    ImGui::Text("Subrace");
-    source(character_subrace);
-    label("Race name:");
-    ImGui::Text("%s", character_subrace.get_race()->get_name().c_str());
+    ImGui::Text("Subspecies");
+    source(character_subspecies);
+    label("Species name:");
+    ImGui::Text("%s", character_subspecies.get_species()->get_name().c_str());
     label("Features:");
-    list_features<Feature>(*this, character_subrace.get_features());
+    list_features<Feature>(*this, character_subspecies.get_features());
 
     end_content_table();
 }

@@ -5,8 +5,8 @@
 #include <string>
 #include <vector>
 
-dnd::LatexCommand* dnd::LatexCommand::add_brace_argument(const std::string& argument) {
-    brace_arguments.push_back(argument);
+dnd::LatexCommand* dnd::LatexCommand::add_bspecies_argument(const std::string& argument) {
+    bspecies_arguments.push_back(argument);
     return this;
 }
 
@@ -20,8 +20,8 @@ std::string dnd::LatexCommand::str() const {
     for (const std::string& bracket_arg : bracket_arguments) {
         command_string += '[' + bracket_arg + ']';
     }
-    for (const std::string& brace_arg : brace_arguments) {
-        command_string += '{' + brace_arg + '}';
+    for (const std::string& bspecies_arg : bspecies_arguments) {
+        command_string += '{' + bspecies_arg + '}';
     }
     command_string += '\n';
     return command_string;

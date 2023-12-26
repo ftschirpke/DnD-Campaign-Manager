@@ -10,9 +10,9 @@
 
 #include <core/models/character/character.hpp>
 #include <core/models/character_class/character_class.hpp>
-#include <core/models/character_race/character_race.hpp>
+#include <core/models/character_species/character_species.hpp>
 #include <core/models/character_subclass/character_subclass.hpp>
-#include <core/models/character_subrace/character_subrace.hpp>
+#include <core/models/character_subspecies/character_subspecies.hpp>
 #include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/item/item.hpp>
@@ -26,7 +26,7 @@ std::vector<std::string> dnd::ListContentVisitor::get_list() { return std::move(
 void dnd::ListContentVisitor::operator()(const Character& character) {
     string_list.emplace_back(fmt::format(
         "{} [CHARACTER] : Level {} {} {}", character.get_name(), character.get_progression().get_level(),
-        character.get_basis().get_class().get_name(), character.get_basis().get_race().get_name()
+        character.get_basis().get_class().get_name(), character.get_basis().get_species().get_name()
     ));
 }
 
@@ -39,13 +39,13 @@ void dnd::ListContentVisitor::operator()(const CharacterSubclass& character_subc
         fmt::format("{} [{} SUBCLASS]", character_subclass.get_name(), character_subclass.get_class()->get_name())
     );
 }
-void dnd::ListContentVisitor::operator()(const CharacterRace& character_race) {
-    string_list.emplace_back(fmt::format("{} [RACE]", character_race.get_name()));
+void dnd::ListContentVisitor::operator()(const CharacterSpecies& character_species) {
+    string_list.emplace_back(fmt::format("{} [RACE]", character_species.get_name()));
 }
 
-void dnd::ListContentVisitor::operator()(const CharacterSubrace& character_subrace) {
+void dnd::ListContentVisitor::operator()(const CharacterSubspecies& character_subspecies) {
     string_list.emplace_back(
-        fmt::format("{} [{} SUBRACE]", character_subrace.get_name(), character_subrace.get_race()->get_name())
+        fmt::format("{} [{} SUBRACE]", character_subspecies.get_name(), character_subspecies.get_species()->get_name())
     );
 }
 

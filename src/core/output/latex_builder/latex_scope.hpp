@@ -27,17 +27,17 @@ struct LatexBeginEnd {
 class LatexScope : virtual public LatexObject {
 public:
     LatexScope();
-    LatexScope* no_enclosing_braces();
+    LatexScope* no_enclosing_bspecies();
     LatexScope* add_line_break();
     LatexScope* add_line_break(const std::string& spacing_argument);
     LatexScope* add_scope();
     LatexText* add_text(const std::string& text);
     LatexCommand* add_command(const std::string& command);
-    LatexCommand* add_command(const std::string& command, const std::string& brace_argument);
+    LatexCommand* add_command(const std::string& command, const std::string& bspecies_argument);
     LatexBeginEnd add_begin_end(const std::string& name);
     std::string str() const override;
 private:
-    bool enclosing_braces;
+    bool enclosing_bspecies;
     std::vector<std::unique_ptr<LatexObject>> objects;
 };
 

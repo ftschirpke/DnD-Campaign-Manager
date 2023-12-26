@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include "character_subrace_data.hpp"
+#include "character_subspecies_data.hpp"
 
 #include <memory>
 #include <string>
@@ -15,11 +15,11 @@
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/validation/effects_provider/feature_data.hpp>
 
-std::unique_ptr<dnd::ValidationData> dnd::CharacterSubraceData::pack() const {
-    return std::make_unique<CharacterSubraceData>(*this);
+std::unique_ptr<dnd::ValidationData> dnd::CharacterSubspeciesData::pack() const {
+    return std::make_unique<CharacterSubspeciesData>(*this);
 }
 
-dnd::Errors dnd::CharacterSubraceData::validate() const {
+dnd::Errors dnd::CharacterSubspeciesData::validate() const {
     Errors errors;
     std::unordered_set<std::string> unique_feature_names;
     for (const FeatureData& feature_data : features_data) {
@@ -35,22 +35,22 @@ dnd::Errors dnd::CharacterSubraceData::validate() const {
     }
     if (features_data.empty()) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Character subrace has no features."
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Character subspecies has no features."
         );
     }
-    if (race_name.empty()) {
+    if (species_name.empty()) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Character subrace has no race name."
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Character subspecies has no species name."
         );
     }
     return errors;
 }
 
-dnd::Errors dnd::CharacterSubraceData::validate_relations(const Content& content) const {
+dnd::Errors dnd::CharacterSubspeciesData::validate_relations(const Content& content) const {
     Errors errors;
-    if (content.get_character_subraces().contains(name)) {
+    if (content.get_character_subspecies().contains(name)) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, fmt::format("Subrace has duplicate name \"{}\".", name)
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, fmt::format("Subspecies has duplicate name \"{}\".", name)
         );
     }
     for (const FeatureData& feature_data : features_data) {
@@ -62,15 +62,15 @@ dnd::Errors dnd::CharacterSubraceData::validate_relations(const Content& content
             );
         }
     }
-    OptCRef<CharacterRace> race_optional = content.get_character_races().get(race_name);
-    if (!race_optional.has_value()) {
+    OptCRef<CharacterSpecies> species_optional = content.get_character_species().get(species_name);
+    if (!species_optional.has_value()) {
         errors.add_validation_error(
-            ValidationErrorCode::RELATION_NOT_FOUND, this, fmt::format("Character race '{}' does not exist.", race_name)
+            ValidationErrorCode::RELATION_NOT_FOUND, this, fmt::format("Character species '{}' does not exist.", species_name)
         );
-    } else if (!race_optional.value().get().has_subraces()) {
+    } else if (!species_optional.value().get().has_subspecies()) {
         errors.add_validation_error(
             ValidationErrorCode::INVALID_RELATION, this,
-            fmt::format("Character race '{}' does not have subraces.", race_name)
+            fmt::format("Character species '{}' does not have subspecies.", species_name)
         );
     }
     return errors;

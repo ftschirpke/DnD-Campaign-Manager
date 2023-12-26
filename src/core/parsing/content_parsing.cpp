@@ -19,9 +19,9 @@
 #include <core/errors/validation_error.hpp>
 #include <core/parsing/character/character_parser.hpp>
 #include <core/parsing/character_class/character_class_parser.hpp>
-#include <core/parsing/character_race/character_race_parser.hpp>
+#include <core/parsing/character_species/character_species_parser.hpp>
 #include <core/parsing/character_subclass/character_subclass_parser.hpp>
-#include <core/parsing/character_subrace/character_subrace_parser.hpp>
+#include <core/parsing/character_subspecies/character_subspecies_parser.hpp>
 #include <core/parsing/file_parser.hpp>
 #include <core/parsing/groups/choosable_group_parser.hpp>
 #include <core/parsing/groups/string_group_parser.hpp>
@@ -105,14 +105,14 @@ dnd::ParsingResult dnd::parse_content(const std::filesystem::path& content_path,
         result.errors += spell_future.get();
     }
     {
-        DND_MEASURE_SCOPE("Parsing: items, choosable features, races, classes");
+        DND_MEASURE_SCOPE("Parsing: items, choosable features, species, classes");
         std::future<Errors> item_future = std::async(
             std::launch::async, parse_all_of_type, ParsingType::ITEM, content_ref, content_directories_ref
         );
         std::future<Errors> choosable_future = std::async(
             std::launch::async, parse_all_of_type, ParsingType::CHOOSABLES, content_ref, content_directories_ref
         );
-        std::future<Errors> race_future = std::async(
+        std::future<Errors> species_future = std::async(
             std::launch::async, parse_all_of_type, ParsingType::RACE, content_ref, content_directories_ref
         );
         std::future<Errors> class_future = std::async(
@@ -120,18 +120,18 @@ dnd::ParsingResult dnd::parse_content(const std::filesystem::path& content_path,
         );
         result.errors += item_future.get();
         result.errors += choosable_future.get();
-        result.errors += race_future.get();
+        result.errors += species_future.get();
         result.errors += class_future.get();
     }
     {
-        DND_MEASURE_SCOPE("Parsing: subraces, subclasses");
-        std::future<Errors> subrace_future = std::async(
+        DND_MEASURE_SCOPE("Parsing: subspecies, subclasses");
+        std::future<Errors> subspecies_future = std::async(
             std::launch::async, parse_all_of_type, ParsingType::SUBRACE, content_ref, content_directories_ref
         );
         std::future<Errors> subclass_future = std::async(
             std::launch::async, parse_all_of_type, ParsingType::SUBCLASS, content_ref, content_directories_ref
         );
-        result.errors += subrace_future.get();
+        result.errors += subspecies_future.get();
         result.errors += subclass_future.get();
     }
     {
@@ -187,11 +187,11 @@ static dnd::Errors parse_file_of_type(const std::filesystem::path& file, dnd::Co
         case ParsingType::CHARACTER:
             return parse_file(content, dnd::CharacterParser(file));
         case ParsingType::RACE:
-            return parse_file(content, dnd::CharacterRaceParser(file));
+            return parse_file(content, dnd::CharacterSpeciesParser(file));
         case ParsingType::CLASS:
             return parse_file(content, dnd::CharacterClassParser(file));
         case ParsingType::SUBRACE:
-            return parse_file(content, dnd::CharacterSubraceParser(file));
+            return parse_file(content, dnd::CharacterSubspeciesParser(file));
         case ParsingType::SUBCLASS:
             return parse_file(content, dnd::CharacterSubclassParser(file));
         case ParsingType::ITEM:
@@ -211,11 +211,11 @@ static const char* type_directory_name(ParsingType type) {
         case ParsingType::CHARACTER:
             return "characters";
         case ParsingType::RACE:
-            return "races";
+            return "species";
         case ParsingType::CLASS:
             return "classes";
         case ParsingType::SUBRACE:
-            return "subraces";
+            return "subspecies";
         case ParsingType::SUBCLASS:
             return "subclasses";
         case ParsingType::ITEM:

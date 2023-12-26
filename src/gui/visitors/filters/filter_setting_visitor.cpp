@@ -14,9 +14,9 @@
 #include <core/searching/content_filters/bool_filter.hpp>
 #include <core/searching/content_filters/character/character_filter.hpp>
 #include <core/searching/content_filters/character_class/character_class_filter.hpp>
-#include <core/searching/content_filters/character_race/character_race_filter.hpp>
+#include <core/searching/content_filters/character_species/character_species_filter.hpp>
 #include <core/searching/content_filters/character_subclass/character_subclass_filter.hpp>
-#include <core/searching/content_filters/character_subrace/character_subrace_filter.hpp>
+#include <core/searching/content_filters/character_subspecies/character_subspecies_filter.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
 #include <core/searching/content_filters/effects_provider/choosable_filter.hpp>
@@ -362,36 +362,36 @@ void dnd::FilterSettingVisitor::operator()(CharacterSubclassFilter& subclass_fil
     }
 }
 
-void dnd::FilterSettingVisitor::operator()(CharacterRaceFilter& race_filter) {
+void dnd::FilterSettingVisitor::operator()(CharacterSpeciesFilter& species_filter) {
     DND_MEASURE_FUNCTION();
     ImGui::TableSetColumnIndex(1);
-    visit_content_piece_filter(race_filter);
-    visit_bool_filter("Has Subraces", race_filter.has_subraces_filter);
+    visit_content_piece_filter(species_filter);
+    visit_bool_filter("Has Subspecies", species_filter.has_subspecies_filter);
 
     ImGui::TableSetColumnIndex(1);
-    if (!race_filter.has_all_filters() && ImGui::Button("Add Value Filter")) {
+    if (!species_filter.has_all_filters() && ImGui::Button("Add Value Filter")) {
         ImGui::OpenPopup("value_filter_popup");
     }
     if (ImGui::BeginPopup("value_filter_popup")) {
-        DND_MEASURE_SCOPE("CharacterRaceFilter - Add Value Filter Popup");
-        content_piece_filter_menu_items(race_filter);
-        bool_menu_item("Has Subraces", race_filter.has_subraces_filter, dnd::BoolFilterType::IS_TRUE);
+        DND_MEASURE_SCOPE("CharacterSpeciesFilter - Add Value Filter Popup");
+        content_piece_filter_menu_items(species_filter);
+        bool_menu_item("Has Subspecies", species_filter.has_subspecies_filter, dnd::BoolFilterType::IS_TRUE);
         ImGui::EndPopup();
     }
 }
 
-void dnd::FilterSettingVisitor::operator()(CharacterSubraceFilter& subrace_filter) {
+void dnd::FilterSettingVisitor::operator()(CharacterSubspeciesFilter& subspecies_filter) {
     DND_MEASURE_FUNCTION();
     ImGui::TableSetColumnIndex(1);
-    visit_content_piece_filter(subrace_filter);
+    visit_content_piece_filter(subspecies_filter);
 
     ImGui::TableSetColumnIndex(1);
-    if (!subrace_filter.has_all_filters() && ImGui::Button("Add Value Filter")) {
+    if (!subspecies_filter.has_all_filters() && ImGui::Button("Add Value Filter")) {
         ImGui::OpenPopup("value_filter_popup");
     }
     if (ImGui::BeginPopup("value_filter_popup")) {
-        DND_MEASURE_SCOPE("CharacterSubraceFilter - Add Value Filter Popup");
-        content_piece_filter_menu_items(subrace_filter);
+        DND_MEASURE_SCOPE("CharacterSubspeciesFilter - Add Value Filter Popup");
+        content_piece_filter_menu_items(subspecies_filter);
         ImGui::EndPopup();
     }
 }

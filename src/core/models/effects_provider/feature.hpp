@@ -19,7 +19,7 @@ class Content;
 class ContentVisitor;
 
 /**
- * @brief A class representing a simple feature provided by a class, subclass, race, subrace, or character.
+ * @brief A class representing a simple feature provided by a class, subclass, species, subspecies, or character.
  */
 class Feature : public ContentPiece, public EffectsProvider {
 public:

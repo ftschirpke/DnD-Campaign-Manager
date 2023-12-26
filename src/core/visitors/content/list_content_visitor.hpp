@@ -9,9 +9,9 @@
 
 #include <core/models/character/character.hpp>
 #include <core/models/character_class/character_class.hpp>
-#include <core/models/character_race/character_race.hpp>
+#include <core/models/character_species/character_species.hpp>
 #include <core/models/character_subclass/character_subclass.hpp>
-#include <core/models/character_subrace/character_subrace.hpp>
+#include <core/models/character_subspecies/character_subspecies.hpp>
 #include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/item/item.hpp>
@@ -27,8 +27,8 @@ public:
     virtual void operator()(const Character& character) override;
     virtual void operator()(const CharacterClass& character_class) override;
     virtual void operator()(const CharacterSubclass& character_subclass) override;
-    virtual void operator()(const CharacterRace& character_race) override;
-    virtual void operator()(const CharacterSubrace& character_subrace) override;
+    virtual void operator()(const CharacterSpecies& character_species) override;
+    virtual void operator()(const CharacterSubspecies& character_subspecies) override;
     virtual void operator()(const Item& item) override;
     virtual void operator()(const Spell& spell) override;
     virtual void operator()(const Feature& feature) override;

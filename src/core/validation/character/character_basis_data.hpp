@@ -21,8 +21,8 @@ public:
     virtual Errors validate() const override;
     virtual Errors validate_relations(const Content& content) const override;
 
-    std::string race_name;
-    std::string subrace_name;
+    std::string species_name;
+    std::string subspecies_name;
     std::string class_name;
     std::string subclass_name;
 };

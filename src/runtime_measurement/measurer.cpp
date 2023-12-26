@@ -23,9 +23,9 @@ static constexpr std::array<const char*, 12> values_for_human_readable = {
     "dnd::ContentParser::parseAllOfSingleFileType ( Group )",
     "dnd::ContentParser::parseAllOfMultiFileType ( Group )",
     "dnd::ContentParser::parseAllOfMultiFileType ( Spell )",
-    "dnd::ContentParser::parseAllOfMultiFileType ( Race )",
+    "dnd::ContentParser::parseAllOfMultiFileType ( Species )",
     "dnd::ContentParser::parseAllOfMultiFileType ( Class )",
-    "dnd::ContentParser::parseAllOfMultiFileType ( Subrace )",
+    "dnd::ContentParser::parseAllOfMultiFileType ( Subspecies )",
     "dnd::ContentParser::parseAllOfMultiFileType ( Subclass )",
     "dnd::ContentParser::parseAllOfMultiFileType ( Character )",
     "Main execution scope without parsing",
@@ -33,7 +33,7 @@ static constexpr std::array<const char*, 12> values_for_human_readable = {
 
 void dnd::Measurer::beginSession(const std::string& name, const std::string& filepath = "results.json") {
     session_start_time = std::chrono::system_clock::now();
-    session = new MeasuringSession{name, filepath, {{"traceEvents", nlohmann::json::array()}}};
+    session = new MeasuringSession{name, filepath, {{"tspeciesEvents", nlohmann::json::array()}}};
 }
 
 void dnd::Measurer::endSession() {
@@ -42,7 +42,7 @@ void dnd::Measurer::endSession() {
     // convert thread ids to consecutive integers
     std::vector<size_t> thread_ids;
     int next_id = 0;
-    for (auto& measurement : session->json.at("traceEvents")) {
+    for (auto& measurement : session->json.at("tspeciesEvents")) {
         auto it = find(thread_ids.begin(), thread_ids.end(), measurement.at("tid"));
         if (it != thread_ids.end()) {
             long idx = it - thread_ids.begin();
@@ -73,7 +73,7 @@ void dnd::Measurer::endSession() {
     output_stream << "Session stopped at: " << std::put_time(std::localtime(&end), "%F %T\n\n");
 
     for (const char* human_readable_value : values_for_human_readable) {
-        for (auto& measurement : session->json.at("traceEvents")) {
+        for (auto& measurement : session->json.at("tspeciesEvents")) {
             if (measurement.at("name") == human_readable_value) {
                 output_stream << human_readable_value;
                 for (size_t i = 0; i < max_str_len - strlen(human_readable_value); ++i) {
@@ -107,7 +107,7 @@ void dnd::Measurer::writeProfile(const TimerResult& result) {
     };
 
     std::lock_guard<std::mutex> lock(write_profile_mutex);
-    session->json.at("traceEvents").push_back(result_json);
+    session->json.at("tspeciesEvents").push_back(result_json);
 }
 
 void dnd::Timer::stop() {

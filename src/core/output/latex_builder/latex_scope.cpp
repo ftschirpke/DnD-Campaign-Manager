@@ -11,10 +11,10 @@
 #include <core/output/latex_builder/latex_object.hpp>
 #include <core/output/latex_builder/latex_text.hpp>
 
-dnd::LatexScope::LatexScope() : enclosing_braces(true) {}
+dnd::LatexScope::LatexScope() : enclosing_bspecies(true) {}
 
-dnd::LatexScope* dnd::LatexScope::no_enclosing_braces() {
-    enclosing_braces = false;
+dnd::LatexScope* dnd::LatexScope::no_enclosing_bspecies() {
+    enclosing_bspecies = false;
     return this;
 }
 
@@ -50,7 +50,7 @@ dnd::LatexCommand* dnd::LatexScope::add_command(const std::string& name) {
 }
 
 dnd::LatexCommand* dnd::LatexScope::add_command(const std::string& name, const std::string& argument) {
-    return add_command(name)->add_brace_argument(argument);
+    return add_command(name)->add_bspecies_argument(argument);
 }
 
 dnd::LatexBeginEnd dnd::LatexScope::add_begin_end(const std::string& name) {
@@ -59,7 +59,7 @@ dnd::LatexBeginEnd dnd::LatexScope::add_begin_end(const std::string& name) {
     objects.emplace_back(std::move(begin_command));
 
     auto begin_end_scope = std::make_unique<LatexScope>();
-    begin_end_scope->no_enclosing_braces();
+    begin_end_scope->no_enclosing_bspecies();
     LatexScope* scope_ptr = begin_end_scope.get();
     objects.emplace_back(std::move(begin_end_scope));
 
@@ -73,13 +73,13 @@ std::string dnd::LatexScope::str() const {
     std::string scope_string;
     scope_string.reserve(100);
 
-    if (enclosing_braces) {
+    if (enclosing_bspecies) {
         scope_string += "{\n";
     }
     for (auto it = objects.cbegin(); it != objects.cend(); ++it) {
         scope_string += (*it)->str();
     }
-    if (enclosing_braces) {
+    if (enclosing_bspecies) {
         scope_string += "}\n";
     }
 

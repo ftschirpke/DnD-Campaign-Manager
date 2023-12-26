@@ -12,9 +12,9 @@
 #include <core/content.hpp>
 #include <core/models/character/character.hpp>
 #include <core/models/character_class/character_class.hpp>
-#include <core/models/character_race/character_race.hpp>
+#include <core/models/character_species/character_species.hpp>
 #include <core/models/character_subclass/character_subclass.hpp>
-#include <core/models/character_subrace/character_subrace.hpp>
+#include <core/models/character_subspecies/character_subspecies.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/feature.hpp>
@@ -27,8 +27,8 @@ dnd::FuzzyContentSearch::FuzzyContentSearch(const Content& content) {
     character_search_path.push(content.get_characters().get_trie_root());
     character_class_search_path.push(content.get_character_classes().get_trie_root());
     character_subclass_search_path.push(content.get_character_subclasses().get_trie_root());
-    character_race_search_path.push(content.get_character_races().get_trie_root());
-    character_subrace_search_path.push(content.get_character_subraces().get_trie_root());
+    character_species_search_path.push(content.get_character_species().get_trie_root());
+    character_subspecies_search_path.push(content.get_character_subspecies().get_trie_root());
     item_search_path.push(content.get_items().get_trie_root());
     spell_search_path.push(content.get_spells().get_trie_root());
     feature_search_path.push(content.get_features().get_trie_root());
@@ -85,8 +85,8 @@ void dnd::FuzzyContentSearch::add_character_to_query(char c) {
     character_search_path.push_top_child(c);
     character_class_search_path.push_top_child(c);
     character_subclass_search_path.push_top_child(c);
-    character_race_search_path.push_top_child(c);
-    character_subrace_search_path.push_top_child(c);
+    character_species_search_path.push_top_child(c);
+    character_subspecies_search_path.push_top_child(c);
     item_search_path.push_top_child(c);
     spell_search_path.push_top_child(c);
     feature_search_path.push_top_child(c);
@@ -105,10 +105,10 @@ void dnd::FuzzyContentSearch::remove_character_from_query() {
     assert(character_class_search_path.size() >= 1);
     character_subclass_search_path.pop();
     assert(character_subclass_search_path.size() >= 1);
-    character_race_search_path.pop();
-    assert(character_race_search_path.size() >= 1);
-    character_subrace_search_path.pop();
-    assert(character_subrace_search_path.size() >= 1);
+    character_species_search_path.pop();
+    assert(character_species_search_path.size() >= 1);
+    character_subspecies_search_path.pop();
+    assert(character_subspecies_search_path.size() >= 1);
     item_search_path.pop();
     assert(item_search_path.size() >= 1);
     spell_search_path.pop();
@@ -128,13 +128,13 @@ std::vector<const dnd::ContentPiece*> dnd::FuzzyContentSearch::get_results(const
         character_search_path.insert_top_successors_into(results);
     }
     if (options[1]) {
-        character_race_search_path.insert_top_successors_into(results);
+        character_species_search_path.insert_top_successors_into(results);
     }
     if (options[2]) {
         character_class_search_path.insert_top_successors_into(results);
     }
     if (options[3]) {
-        character_subrace_search_path.insert_top_successors_into(results);
+        character_subspecies_search_path.insert_top_successors_into(results);
     }
     if (options[4]) {
         character_subclass_search_path.insert_top_successors_into(results);

@@ -12,9 +12,9 @@
 
 #include <core/searching/content_filters/character/character_filter.hpp>
 #include <core/searching/content_filters/character_class/character_class_filter.hpp>
-#include <core/searching/content_filters/character_race/character_race_filter.hpp>
+#include <core/searching/content_filters/character_species/character_species_filter.hpp>
 #include <core/searching/content_filters/character_subclass/character_subclass_filter.hpp>
-#include <core/searching/content_filters/character_subrace/character_subrace_filter.hpp>
+#include <core/searching/content_filters/character_subspecies/character_subspecies_filter.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
 #include <core/searching/content_filters/effects_provider/choosable_filter.hpp>
@@ -33,7 +33,7 @@ static constexpr float fourth_column_width = 250;
 static constexpr float first_column_button_width = 162.5f;
 
 static constexpr std::array<const char*, 10> content_filter_names = {
-    "Any", "Characters", "Classes", "Subclasses", "Races", "Subraces", "Items", "Spells", "Features", "Choosables",
+    "Any", "Characters", "Classes", "Subclasses", "Species", "Subspecies", "Items", "Spells", "Features", "Choosables",
 };
 
 dnd::AdvancedSearchWindow::AdvancedSearchWindow(Session& session) : session(session), result_list() {}
@@ -86,10 +86,10 @@ void dnd::AdvancedSearchWindow::render() {
                 filter = CharacterSubclassFilter();
                 break;
             case 4:
-                filter = CharacterRaceFilter();
+                filter = CharacterSpeciesFilter();
                 break;
             case 5:
-                filter = CharacterSubraceFilter();
+                filter = CharacterSubspeciesFilter();
                 break;
             case 6:
                 filter = ItemFilter();

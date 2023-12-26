@@ -16,8 +16,8 @@ dnd::CharacterBasisData::CharacterBasisData(const dnd::ValidationData* parent) n
 
 dnd::Errors dnd::CharacterBasisData::validate() const {
     Errors errors;
-    if (race_name.empty()) {
-        errors.add_validation_error(ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent, "Race name cannot be empty.");
+    if (species_name.empty()) {
+        errors.add_validation_error(ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent, "Species name cannot be empty.");
     }
     if (class_name.empty()) {
         errors.add_validation_error(
@@ -29,34 +29,34 @@ dnd::Errors dnd::CharacterBasisData::validate() const {
 
 dnd::Errors dnd::CharacterBasisData::validate_relations(const dnd::Content& content) const {
     Errors errors;
-    OptCRef<CharacterRace> race_optional = content.get_character_races().get(race_name);
-    if (!race_optional.has_value()) {
+    OptCRef<CharacterSpecies> species_optional = content.get_character_species().get(species_name);
+    if (!species_optional.has_value()) {
         errors.add_validation_error(
-            ValidationErrorCode::RELATION_NOT_FOUND, parent, fmt::format("Race '{}' does not exist.", race_name)
+            ValidationErrorCode::RELATION_NOT_FOUND, parent, fmt::format("Species '{}' does not exist.", species_name)
         );
-    } else if (!subrace_name.empty()) {
-        const CharacterRace& race = race_optional.value();
-        if (!race.has_subraces()) {
+    } else if (!subspecies_name.empty()) {
+        const CharacterSpecies& species = species_optional.value();
+        if (!species.has_subspecies()) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_RELATION, parent,
-                fmt::format("Race '{}' does not have subraces.", race_name)
+                fmt::format("Species '{}' does not have subspecies.", species_name)
             );
         }
-        OptCRef<CharacterSubrace> subrace_optional = content.get_character_subraces().get(subrace_name);
-        if (!subrace_optional.has_value()) {
+        OptCRef<CharacterSubspecies> subspecies_optional = content.get_character_subspecies().get(subspecies_name);
+        if (!subspecies_optional.has_value()) {
             errors.add_validation_error(
                 ValidationErrorCode::RELATION_NOT_FOUND, parent,
-                fmt::format("Subrace '{}' does not exist.", subrace_name)
+                fmt::format("Subspecies '{}' does not exist.", subspecies_name)
             );
-        } else if (subrace_optional.value().get().get_race() != &race) {
+        } else if (subspecies_optional.value().get().get_species() != &species) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_RELATION, parent,
-                fmt::format("Subrace '{}' is not a subrace of race '{}'.", subrace_name, race_name)
+                fmt::format("Subspecies '{}' is not a subspecies of species '{}'.", subspecies_name, species_name)
             );
         }
-    } else if (race_optional.value().get().has_subraces()) {
+    } else if (species_optional.value().get().has_subspecies()) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_RELATION, parent, fmt::format("Race '{}' requires subraces.", race_name)
+            ValidationErrorCode::INVALID_RELATION, parent, fmt::format("Species '{}' requires subspecies.", species_name)
         );
     }
 

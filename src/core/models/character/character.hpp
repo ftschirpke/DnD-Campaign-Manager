@@ -11,9 +11,9 @@
 #include <core/models/character/decision/decision.hpp>
 #include <core/models/character/progression.hpp>
 #include <core/models/character_class/character_class.hpp>
-#include <core/models/character_race/character_race.hpp>
+#include <core/models/character_species/character_species.hpp>
 #include <core/models/character_subclass/character_subclass.hpp>
-#include <core/models/character_subrace/character_subrace.hpp>
+#include <core/models/character_subspecies/character_subspecies.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/feature.hpp>

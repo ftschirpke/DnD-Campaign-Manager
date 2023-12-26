@@ -8,7 +8,7 @@
 #include <cli/visitors/content/display_visitor.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
-#include <core/models/character_race/character_race.hpp>
+#include <core/models/character_species/character_species.hpp>
 #include <core/session.hpp>
 #include <core/utils/char_manipulation.hpp>
 #include <core/visitors/content/list_content_visitor.hpp>
@@ -169,8 +169,8 @@ void dnd::CliApp::list_all_content_of_a_type() {
         output.text("[0] Characters");
         output.text("[1] Classes");
         output.text("[2] Subclasses");
-        output.text("[3] Races");
-        output.text("[4] Subraces");
+        output.text("[3] Species");
+        output.text("[4] Subspecies");
         output.text("[5] Spells");
         output.text("[6] Items");
         output.text("[7] Features");
@@ -202,13 +202,13 @@ void dnd::CliApp::list_all_content_of_a_type() {
                 }
                 break;
             case 3:
-                for (const auto& [_, character_race] : session.get_content().get_character_races().get_all()) {
-                    character_race.accept_visitor(visitor);
+                for (const auto& [_, character_species] : session.get_content().get_character_species().get_all()) {
+                    character_species.accept_visitor(visitor);
                 }
                 break;
             case 4:
-                for (const auto& [_, character_subrace] : session.get_content().get_character_subraces().get_all()) {
-                    character_subrace.accept_visitor(visitor);
+                for (const auto& [_, character_subspecies] : session.get_content().get_character_subspecies().get_all()) {
+                    character_subspecies.accept_visitor(visitor);
                 }
                 break;
             case 5:
@@ -266,10 +266,10 @@ void dnd::CliApp::list_all_content_of_a_type() {
                 display_content_piece(&session.get_content().get_character_subclasses().get(index).value().get());
                 break;
             case 3:
-                display_content_piece(&session.get_content().get_character_races().get(index).value().get());
+                display_content_piece(&session.get_content().get_character_species().get(index).value().get());
                 break;
             case 4:
-                display_content_piece(&session.get_content().get_character_subraces().get(index).value().get());
+                display_content_piece(&session.get_content().get_character_subspecies().get(index).value().get());
                 break;
             case 5:
                 display_content_piece(&session.get_content().get_spells().get(index).value().get());

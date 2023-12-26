@@ -8,9 +8,9 @@
 
 #include <core/models/character/character.hpp>
 #include <core/models/character_class/character_class.hpp>
-#include <core/models/character_race/character_race.hpp>
+#include <core/models/character_species/character_species.hpp>
 #include <core/models/character_subclass/character_subclass.hpp>
-#include <core/models/character_subrace/character_subrace.hpp>
+#include <core/models/character_subspecies/character_subspecies.hpp>
 #include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/item/item.hpp>
@@ -39,18 +39,18 @@ void dnd::CollectOpenTabsVisitor::operator()(const CharacterSubclass& character_
     }
     open_tabs_json["character_subclass"].push_back(character_subclass.get_name());
 }
-void dnd::CollectOpenTabsVisitor::operator()(const CharacterRace& character_race) {
-    if (!open_tabs_json.contains("character_race")) {
-        open_tabs_json["character_race"] = nlohmann::json::array();
+void dnd::CollectOpenTabsVisitor::operator()(const CharacterSpecies& character_species) {
+    if (!open_tabs_json.contains("character_species")) {
+        open_tabs_json["character_species"] = nlohmann::json::array();
     }
-    open_tabs_json["character_race"].push_back(character_race.get_name());
+    open_tabs_json["character_species"].push_back(character_species.get_name());
 }
 
-void dnd::CollectOpenTabsVisitor::operator()(const CharacterSubrace& character_subrace) {
-    if (!open_tabs_json.contains("character_subrace")) {
-        open_tabs_json["character_subrace"] = nlohmann::json::array();
+void dnd::CollectOpenTabsVisitor::operator()(const CharacterSubspecies& character_subspecies) {
+    if (!open_tabs_json.contains("character_subspecies")) {
+        open_tabs_json["character_subspecies"] = nlohmann::json::array();
     }
-    open_tabs_json["character_subrace"].push_back(character_subrace.get_name());
+    open_tabs_json["character_subspecies"].push_back(character_subspecies.get_name());
 }
 
 void dnd::CollectOpenTabsVisitor::operator()(const Item& item) {

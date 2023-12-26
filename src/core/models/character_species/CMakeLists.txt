@@ -1,4 +1,4 @@
 target_sources(${DND_CORE}
     PRIVATE
-    character_race.cpp
+    character_species.cpp
 )

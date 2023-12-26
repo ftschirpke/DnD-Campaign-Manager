@@ -8,8 +8,8 @@ namespace dnd {
 class Character;
 class CharacterClass;
 class CharacterSubclass;
-class CharacterRace;
-class CharacterSubrace;
+class CharacterSpecies;
+class CharacterSubspecies;
 class Item;
 class Spell;
 class Feature;
@@ -21,8 +21,8 @@ public:
     virtual void operator()(const Character& character) = 0;
     virtual void operator()(const CharacterClass& character_class) = 0;
     virtual void operator()(const CharacterSubclass& character_subclass) = 0;
-    virtual void operator()(const CharacterRace& character_race) = 0;
-    virtual void operator()(const CharacterSubrace& character_subrace) = 0;
+    virtual void operator()(const CharacterSpecies& character_species) = 0;
+    virtual void operator()(const CharacterSubspecies& character_subspecies) = 0;
     virtual void operator()(const Item& item) = 0;
     virtual void operator()(const Spell& spell) = 0;
     virtual void operator()(const Feature& feature) = 0;

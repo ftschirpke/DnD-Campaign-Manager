@@ -380,16 +380,16 @@ void dnd::Session::open_last_session() {
             open_content_pieces.push_back(&character_subclass.value().get());
         }
     }
-    for (const std::string& character_race_to_open : last_session_open_tabs["character_races"]) {
-        OptCRef<CharacterRace> character_race = content.get_character_races().get(character_race_to_open);
-        if (character_race.has_value()) {
-            open_content_pieces.push_back(&character_race.value().get());
+    for (const std::string& character_species_to_open : last_session_open_tabs["character_species"]) {
+        OptCRef<CharacterSpecies> character_species = content.get_character_species().get(character_species_to_open);
+        if (character_species.has_value()) {
+            open_content_pieces.push_back(&character_species.value().get());
         }
     }
-    for (const std::string& character_subrace_to_open : last_session_open_tabs["character_subraces"]) {
-        OptCRef<CharacterSubrace> character_subrace = content.get_character_subraces().get(character_subrace_to_open);
-        if (character_subrace.has_value()) {
-            open_content_pieces.push_back(&character_subrace.value().get());
+    for (const std::string& character_subspecies_to_open : last_session_open_tabs["character_subspecies"]) {
+        OptCRef<CharacterSubspecies> character_subspecies = content.get_character_subspecies().get(character_subspecies_to_open);
+        if (character_subspecies.has_value()) {
+            open_content_pieces.push_back(&character_subspecies.value().get());
         }
     }
     for (const std::string& item_to_open : last_session_open_tabs["items"]) {

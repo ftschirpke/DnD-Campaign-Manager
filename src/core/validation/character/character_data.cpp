@@ -14,7 +14,7 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/models/character_class/character_class.hpp>
-#include <core/models/character_race/character_race.hpp>
+#include <core/models/character_species/character_species.hpp>
 #include <core/models/effects/effects.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/referencing_content_library.hpp>

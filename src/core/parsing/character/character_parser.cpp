@@ -35,9 +35,9 @@ dnd::Errors dnd::CharacterParser::parse() {
     data.source_path = get_filepath();
 
     errors += parse_required_attribute_into(json, "base_ability_scores", data.base_ability_scores_data.ability_scores);
-    errors += parse_required_attribute_into(json, "race", data.character_basis_data.race_name);
+    errors += parse_required_attribute_into(json, "species", data.character_basis_data.species_name);
     errors += parse_required_attribute_into(json, "class", data.character_basis_data.class_name);
-    errors += parse_optional_attribute_into(json, "subrace", data.character_basis_data.subrace_name);
+    errors += parse_optional_attribute_into(json, "subspecies", data.character_basis_data.subspecies_name);
     errors += parse_optional_attribute_into(json, "subclass", data.character_basis_data.subclass_name);
 
     bool has_level = json.contains("level");

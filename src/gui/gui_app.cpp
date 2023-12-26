@@ -68,8 +68,8 @@ static void render_content_count_table(const dnd::Content& content) {
     display_size("Characters", content.get_characters().size(), w);
     display_size("Classes", content.get_character_classes().size(), w);
     display_size("Subclasses", content.get_character_subclasses().size(), w);
-    display_size("Races", content.get_character_races().size(), w);
-    display_size("Subraces", content.get_character_subraces().size(), w);
+    display_size("Species", content.get_character_species().size(), w);
+    display_size("Subspecies", content.get_character_subspecies().size(), w);
     display_size("Items", content.get_items().size(), w);
     display_size("Spells", content.get_spells().size(), w);
     display_size("Features", content.get_features().size(), w);

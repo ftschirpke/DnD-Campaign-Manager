@@ -16,8 +16,8 @@ static dnd::CharacterData create_valid_character_data() {
     dnd::FeatureData& feature_data = character_data.features_data.emplace_back(&character_data);
     dndtest::set_valid_mock_values(feature_data, "Valid Character Feature");
     character_data.base_ability_scores_data.ability_scores = {10, 8, 12, 15, 13, 14};
-    character_data.character_basis_data.race_name = "Human";
-    character_data.character_basis_data.subrace_name = "";
+    character_data.character_basis_data.species_name = "Human";
+    character_data.character_basis_data.subspecies_name = "";
     character_data.character_basis_data.class_name = "Rogue";
     character_data.character_basis_data.subclass_name = "Assassin";
     character_data.progression_data.level = 5;
@@ -59,31 +59,31 @@ TEST_CASE("dnd::CharacterData::validate and ::validate_relations", tags) {
         REQUIRE_FALSE(errors.ok());
     }
 
-    SECTION("character race must exist") {
-        data.character_basis_data.race_name = "Nonexistent";
+    SECTION("character species must exist") {
+        data.character_basis_data.species_name = "Nonexistent";
         REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_NOTHROW(errors += data.validate_relations(content));
         REQUIRE_FALSE(errors.ok());
     }
 
-    SECTION("character cannot have subrace if race does not have subraces") {
-        data.character_basis_data.race_name = "Human";
-        data.character_basis_data.subrace_name = "Hill Dwarf";
+    SECTION("character cannot have subspecies if species does not have subspecies") {
+        data.character_basis_data.species_name = "Human";
+        data.character_basis_data.subspecies_name = "Hill Dwarf";
         REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_NOTHROW(errors += data.validate_relations(content));
         REQUIRE_FALSE(errors.ok());
     }
 
-    SECTION("character subrace must exist") {
-        data.character_basis_data.subrace_name = "Nonexistent";
+    SECTION("character subspecies must exist") {
+        data.character_basis_data.subspecies_name = "Nonexistent";
         REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_NOTHROW(errors += data.validate_relations(content));
         REQUIRE_FALSE(errors.ok());
     }
 
-    SECTION("character subrace must be a subrace of the character's race") {
-        data.character_basis_data.race_name = "Dwarf";
-        data.character_basis_data.subrace_name = "High Elf";
+    SECTION("character subspecies must be a subspecies of the character's species") {
+        data.character_basis_data.species_name = "Dwarf";
+        data.character_basis_data.subspecies_name = "High Elf";
         REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_NOTHROW(errors += data.validate_relations(content));
         REQUIRE_FALSE(errors.ok());

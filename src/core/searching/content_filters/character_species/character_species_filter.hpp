@@ -5,19 +5,19 @@
 
 #include <vector>
 
-#include <core/models/character_race/character_race.hpp>
+#include <core/models/character_species/character_species.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
 
 namespace dnd {
 
-class CharacterRaceFilter : public ContentPieceFilter {
+class CharacterSpeciesFilter : public ContentPieceFilter {
 public:
     bool has_all_filters() const noexcept override;
-    bool matches(const CharacterRace& character_race) const noexcept;
+    bool matches(const CharacterSpecies& character_species) const noexcept;
     std::vector<const ContentPiece*> all_matches(const Content& content) const override;
     void clear() override;
 
-    BoolFilter has_subraces_filter;
+    BoolFilter has_subspecies_filter;
 };
 
 } // namespace dnd

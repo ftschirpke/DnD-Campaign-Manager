@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include <core/validation/character_race/character_race_data.hpp>
+#include <core/validation/character_species/character_species_data.hpp>
 
 #include <utility>
 
@@ -11,16 +11,16 @@
 #include <testcore/minimal_testing_content.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
-static constexpr const char* tags = "[core][validation][character_race]";
+static constexpr const char* tags = "[core][validation][character_species]";
 
-TEST_CASE("dnd::CharacterRaceData::validate and ::validate_relations // valid race data", tags) {
-    dnd::CharacterRaceData data;
-    dndtest::set_valid_mock_values(data, "Race");
+TEST_CASE("dnd::CharacterSpeciesData::validate and ::validate_relations // valid species data", tags) {
+    dnd::CharacterSpeciesData data;
+    dndtest::set_valid_mock_values(data, "Species");
     dnd::Content content = dndtest::minimal_testing_content();
     dnd::Errors errors;
 
-    SECTION("race with one valid feature") {
-        data.subraces = false;
+    SECTION("species with one valid feature") {
+        data.subspecies = false;
         dnd::FeatureData& feature_data = data.features_data.emplace_back(&data);
         dndtest::set_valid_mock_values(feature_data, "Feature");
         REQUIRE_NOTHROW(errors = data.validate());
@@ -28,8 +28,8 @@ TEST_CASE("dnd::CharacterRaceData::validate and ::validate_relations // valid ra
         REQUIRE(errors.ok());
     }
 
-    SECTION("race with multiple differently named features") {
-        data.subraces = true;
+    SECTION("species with multiple differently named features") {
+        data.subspecies = true;
         dnd::FeatureData& feature_data1 = data.features_data.emplace_back(&data);
         dndtest::set_valid_mock_values(feature_data1, "Feature 1");
         dnd::FeatureData& feature_data2 = data.features_data.emplace_back(&data);
@@ -42,19 +42,19 @@ TEST_CASE("dnd::CharacterRaceData::validate and ::validate_relations // valid ra
     }
 }
 
-TEST_CASE("dnd::CharacterRaceData::validate // invalid race data", tags) {
-    dnd::CharacterRaceData data;
-    dndtest::set_valid_mock_values(data, "Race");
+TEST_CASE("dnd::CharacterSpeciesData::validate // invalid species data", tags) {
+    dnd::CharacterSpeciesData data;
+    dndtest::set_valid_mock_values(data, "Species");
     dnd::Errors errors;
 
-    SECTION("race without features is invalid") {
-        data.subraces = true;
+    SECTION("species without features is invalid") {
+        data.subspecies = true;
         REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_FALSE(errors.ok());
     }
 
-    SECTION("race with duplicate feature names") {
-        data.subraces = false;
+    SECTION("species with duplicate feature names") {
+        data.subspecies = false;
         dnd::FeatureData& feature_data1 = data.features_data.emplace_back(&data);
         dndtest::set_valid_mock_values(feature_data1, "Duplicate Feature");
         dnd::FeatureData& feature_data2 = data.features_data.emplace_back(&data);
@@ -66,23 +66,23 @@ TEST_CASE("dnd::CharacterRaceData::validate // invalid race data", tags) {
     }
 }
 
-TEST_CASE("dnd::CharacterRaceData::validate_relations // invalid race data relations", tags) {
-    dnd::CharacterRaceData data;
-    dndtest::set_valid_mock_values(data, "Race");
+TEST_CASE("dnd::CharacterSpeciesData::validate_relations // invalid species data relations", tags) {
+    dnd::CharacterSpeciesData data;
+    dndtest::set_valid_mock_values(data, "Species");
     dnd::Content content = dndtest::minimal_testing_content();
     dnd::Errors errors;
 
-    SECTION("race with a name that already exists in the content") {
+    SECTION("species with a name that already exists in the content") {
         data.name = "Dwarf"; // already exists in the example content
         REQUIRE_NOTHROW(errors = data.validate_relations(content));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("features with duplicate names aren't allowed") {
-        data.name = "New Race";
+        data.name = "New Species";
         dnd::FeatureData& feature_data = data.features_data.emplace_back(&data);
         dndtest::set_valid_mock_values(feature_data, "Duplicate Feature");
-        feature_data.name = "Example Race Feature"; // feature with that name already exists in the example content
+        feature_data.name = "Example Species Feature"; // feature with that name already exists in the example content
         REQUIRE_NOTHROW(errors = data.validate_relations(content));
         REQUIRE_FALSE(errors.ok());
     }

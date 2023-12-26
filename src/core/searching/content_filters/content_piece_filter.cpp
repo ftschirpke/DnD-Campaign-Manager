@@ -44,14 +44,14 @@ std::vector<const dnd::ContentPiece*> dnd::ContentPieceFilter::all_matches(const
             matching_content_pieces.emplace_back(&character_subclass);
         }
     }
-    for (const auto& [_, character_race] : content.get_character_races().get_all()) {
-        if (matches(character_race)) {
-            matching_content_pieces.emplace_back(&character_race);
+    for (const auto& [_, character_species] : content.get_character_species().get_all()) {
+        if (matches(character_species)) {
+            matching_content_pieces.emplace_back(&character_species);
         }
     }
-    for (const auto& [_, character_subrace] : content.get_character_subraces().get_all()) {
-        if (matches(character_subrace)) {
-            matching_content_pieces.emplace_back(&character_subrace);
+    for (const auto& [_, character_subspecies] : content.get_character_subspecies().get_all()) {
+        if (matches(character_subspecies)) {
+            matching_content_pieces.emplace_back(&character_subspecies);
         }
     }
     for (const auto& [_, item] : content.get_items().get_all()) {

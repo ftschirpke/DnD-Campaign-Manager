@@ -13,15 +13,15 @@
 
 namespace dnd {
 
-class CharacterSubraceData : public ValidationData {
+class CharacterSubspeciesData : public ValidationData {
 public:
-    std::strong_ordering operator<=>(const CharacterSubraceData&) const noexcept = default;
+    std::strong_ordering operator<=>(const CharacterSubspeciesData&) const noexcept = default;
     virtual std::unique_ptr<ValidationData> pack() const override;
     virtual Errors validate() const override;
     virtual Errors validate_relations(const Content& content) const override;
 
     std::vector<FeatureData> features_data;
-    std::string race_name;
+    std::string species_name;
 };
 
 } // namespace dnd

@@ -37,8 +37,8 @@ void dnd::FuzzySearchWindow::render() {
             search_options.fill(true);
         }
         fuzzy_search_option_line(0, "Characters", search_options);
-        fuzzy_search_option_line(1, "Races", search_options);
-        fuzzy_search_option_line(3, "Subraces", search_options);
+        fuzzy_search_option_line(1, "Species", search_options);
+        fuzzy_search_option_line(3, "Subspecies", search_options);
         fuzzy_search_option_line(2, "Classes", search_options);
         fuzzy_search_option_line(4, "Subclasses", search_options);
         fuzzy_search_option_line(5, "Items", search_options);

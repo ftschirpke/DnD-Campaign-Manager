@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include "core/models/character_subrace/character_subrace.hpp"
+#include "core/models/character_subspecies/character_subspecies.hpp"
 #include "decision_data.hpp"
 
 #include <algorithm>
@@ -137,23 +137,23 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
         switch (effects_provider_variant.index()) {
             // TODO: check character specific features for choices
             case 0: /* Feature */ {
-                const std::string& race_name = character_data->character_basis_data.race_name;
-                OptCRef<CharacterRace> race_optional = content.get_character_races().get(race_name);
-                if (race_optional.has_value()) {
-                    const CharacterRace& race = race_optional.value();
+                const std::string& species_name = character_data->character_basis_data.species_name;
+                OptCRef<CharacterSpecies> species_optional = content.get_character_species().get(species_name);
+                if (species_optional.has_value()) {
+                    const CharacterSpecies& species = species_optional.value();
                     feature_found = std::any_of(
-                        race.get_features().begin(), race.get_features().end(), has_feature_name
+                        species.get_features().begin(), species.get_features().end(), has_feature_name
                     );
                     if (feature_found) {
                         break;
                     }
                 }
-                const std::string& subrace_name = character_data->character_basis_data.subrace_name;
-                OptCRef<CharacterSubrace> subrace_optional = content.get_character_subraces().get(subrace_name);
-                if (subrace_optional.has_value()) {
-                    const CharacterSubrace& subrace = subrace_optional.value();
+                const std::string& subspecies_name = character_data->character_basis_data.subspecies_name;
+                OptCRef<CharacterSubspecies> subspecies_optional = content.get_character_subspecies().get(subspecies_name);
+                if (subspecies_optional.has_value()) {
+                    const CharacterSubspecies& subspecies = subspecies_optional.value();
                     feature_found = std::any_of(
-                        subrace.get_features().begin(), subrace.get_features().end(), has_feature_name
+                        subspecies.get_features().begin(), subspecies.get_features().end(), has_feature_name
                     );
                 }
                 break;

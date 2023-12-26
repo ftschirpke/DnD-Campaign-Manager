@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include "character_race_data.hpp"
+#include "character_species_data.hpp"
 
 #include <memory>
 #include <string>
@@ -14,11 +14,11 @@
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 
-std::unique_ptr<dnd::ValidationData> dnd::CharacterRaceData::pack() const {
-    return std::make_unique<CharacterRaceData>(*this);
+std::unique_ptr<dnd::ValidationData> dnd::CharacterSpeciesData::pack() const {
+    return std::make_unique<CharacterSpeciesData>(*this);
 }
 
-dnd::Errors dnd::CharacterRaceData::validate() const {
+dnd::Errors dnd::CharacterSpeciesData::validate() const {
     Errors errors;
     std::unordered_set<std::string> unique_feature_names;
     for (const FeatureData& feature_data : features_data) {
@@ -26,7 +26,7 @@ dnd::Errors dnd::CharacterRaceData::validate() const {
         if (unique_feature_names.contains(feature_data.name)) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
-                fmt::format("Character race has duplicate feature \"{}\".", feature_data.name)
+                fmt::format("Character species has duplicate feature \"{}\".", feature_data.name)
             );
         } else {
             unique_feature_names.insert(feature_data.name);
@@ -34,17 +34,17 @@ dnd::Errors dnd::CharacterRaceData::validate() const {
     }
     if (features_data.empty()) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Character race has no features."
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Character species has no features."
         );
     }
     return errors;
 }
 
-dnd::Errors dnd::CharacterRaceData::validate_relations(const Content& content) const {
+dnd::Errors dnd::CharacterSpeciesData::validate_relations(const Content& content) const {
     Errors errors;
-    if (content.get_character_races().contains(name)) {
+    if (content.get_character_species().contains(name)) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, fmt::format("Race has duplicate name \"{}\".", name)
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, fmt::format("Species has duplicate name \"{}\".", name)
         );
     }
     for (const FeatureData& feature_data : features_data) {

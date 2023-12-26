@@ -14,9 +14,9 @@
 #include <core/basic_mechanics/dice.hpp>
 #include <core/models/character/character.hpp>
 #include <core/models/character_class/character_class.hpp>
-#include <core/models/character_race/character_race.hpp>
+#include <core/models/character_species/character_species.hpp>
 #include <core/models/character_subclass/character_subclass.hpp>
-#include <core/models/character_subrace/character_subrace.hpp>
+#include <core/models/character_subspecies/character_subspecies.hpp>
 #include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/item/item.hpp>
@@ -65,12 +65,12 @@ void dnd::DisplayVisitor::operator()(const dnd::Character& character) {
     output.formatted_text("Level: {}", character.get_progression().get_level());
     output.formatted_text("XP: {}", character.get_progression().get_xp());
 
-    const CharacterRace& race = character.get_basis().get_race();
-    output.formatted_text("Race: {}", race.get_name());
+    const CharacterSpecies& species = character.get_basis().get_species();
+    output.formatted_text("Species: {}", species.get_name());
 
-    OptCRef<CharacterSubrace> subrace = character.get_basis().get_subrace();
-    if (subrace.has_value()) {
-        output.formatted_text("Subrace: {}", subrace.value().get().get_name());
+    OptCRef<CharacterSubspecies> subspecies = character.get_basis().get_subspecies();
+    if (subspecies.has_value()) {
+        output.formatted_text("Subspecies: {}", subspecies.value().get().get_name());
     }
 
     const CharacterClass& classv = character.get_basis().get_class();
@@ -108,23 +108,23 @@ void dnd::DisplayVisitor::operator()(const CharacterSubclass& character_subclass
     list_features<ClassFeature>(output, character_subclass.get_features());
 }
 
-void dnd::DisplayVisitor::operator()(const CharacterRace& character_race) {
-    output.text(character_race.get_name());
-    output.text("Type: Race");
-    display_source_info(output, character_race.get_source_info());
-    const char* has_subraces_cstr = character_race.has_subraces() ? "yes" : "no";
-    output.formatted_text("Has Subraces: {}", has_subraces_cstr);
+void dnd::DisplayVisitor::operator()(const CharacterSpecies& character_species) {
+    output.text(character_species.get_name());
+    output.text("Type: Species");
+    display_source_info(output, character_species.get_source_info());
+    const char* has_subspecies_cstr = character_species.has_subspecies() ? "yes" : "no";
+    output.formatted_text("Has Subspecies: {}", has_subspecies_cstr);
 
-    list_features<Feature>(output, character_race.get_features());
+    list_features<Feature>(output, character_species.get_features());
 }
 
-void dnd::DisplayVisitor::operator()(const CharacterSubrace& character_subrace) {
-    output.text(character_subrace.get_name());
-    output.text("Type: Subrace");
-    display_source_info(output, character_subrace.get_source_info());
-    output.formatted_text("Race name: {}", character_subrace.get_race()->get_name());
+void dnd::DisplayVisitor::operator()(const CharacterSubspecies& character_subspecies) {
+    output.text(character_subspecies.get_name());
+    output.text("Type: Subspecies");
+    display_source_info(output, character_subspecies.get_source_info());
+    output.formatted_text("Species name: {}", character_subspecies.get_species()->get_name());
 
-    list_features<Feature>(output, character_subrace.get_features());
+    list_features<Feature>(output, character_subspecies.get_features());
 }
 
 void dnd::DisplayVisitor::operator()(const Item& item) {

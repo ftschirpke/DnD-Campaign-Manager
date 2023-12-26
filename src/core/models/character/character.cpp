@@ -15,9 +15,9 @@
 #include <core/models/character/character_basis.hpp>
 #include <core/models/character/progression.hpp>
 #include <core/models/character_class/character_class.hpp>
-#include <core/models/character_race/character_race.hpp>
+#include <core/models/character_species/character_species.hpp>
 #include <core/models/character_subclass/character_subclass.hpp>
-#include <core/models/character_subrace/character_subrace.hpp>
+#include <core/models/character_subspecies/character_subspecies.hpp>
 #include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/source_info.hpp>
@@ -70,12 +70,12 @@ const dnd::CharacterBasis& dnd::Character::get_basis() const noexcept { return b
 const dnd::Progression& dnd::Character::get_progression() const noexcept { return progression; }
 
 void dnd::Character::for_all_effects_do(std::function<void(const dnd::Effects&)> func) const noexcept {
-    for (const Feature& feature : basis.get_race().get_features()) {
+    for (const Feature& feature : basis.get_species().get_features()) {
         func(feature.get_main_effects());
     }
-    OptCRef<CharacterSubrace> subrace = basis.get_subrace();
-    if (subrace.has_value()) {
-        for (const Feature& feature : subrace.value().get().get_features()) {
+    OptCRef<CharacterSubspecies> subspecies = basis.get_subspecies();
+    if (subspecies.has_value()) {
+        for (const Feature& feature : subspecies.value().get().get_features()) {
             func(feature.get_main_effects());
         }
     }

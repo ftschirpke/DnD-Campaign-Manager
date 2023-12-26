@@ -55,7 +55,7 @@ static dnd::LatexScope* create_card_page(dnd::LatexDocument& document) {
 
 static void create_minipage(dnd::LatexScope* scope, const std::string& name, const std::string& value) {
     dnd::LatexBeginEnd minipage = scope->add_begin_end("minipage");
-    minipage.begin_command->add_brace_argument("0.49\\textwidth");
+    minipage.begin_command->add_bspecies_argument("0.49\\textwidth");
     minipage.scope->add_command("centering");
     minipage.scope->add_command("footnotesize");
     minipage.scope->add_scope()->add_text(name)->add_modifier("scshape");

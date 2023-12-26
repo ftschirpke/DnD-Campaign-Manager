@@ -7,51 +7,51 @@
 #include <string>
 #include <vector>
 
-#include <core/models/character_race/character_race.hpp>
+#include <core/models/character_species/character_species.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/source_info.hpp>
-#include <core/validation/character_subrace/character_subrace_data.hpp>
+#include <core/validation/character_subspecies/character_subspecies_data.hpp>
 
 namespace dnd {
 
 class Content;
 class ContentVisitor;
 
-class CharacterSubrace : public ContentPiece {
+class CharacterSubspecies : public ContentPiece {
 public:
     /**
-     * @brief Constructs a character subrace from the given data and content
-     * @param data the data to construct the character subrace from
+     * @brief Constructs a character subspecies from the given data and content
+     * @param data the data to construct the character subspecies from
      * @param content the content to use for the construction
-     * @return the constructed character subrace
+     * @return the constructed character subspecies
      * @throws dnd::invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static CharacterSubrace create(CharacterSubraceData&& data, const Content& content);
+    static CharacterSubspecies create(CharacterSubspeciesData&& data, const Content& content);
 
-    CharacterSubrace(const CharacterSubrace&) = delete;
-    CharacterSubrace& operator=(const CharacterSubrace&) = delete;
-    CharacterSubrace(CharacterSubrace&&) = default;
-    CharacterSubrace& operator=(CharacterSubrace&&) = default;
+    CharacterSubspecies(const CharacterSubspecies&) = delete;
+    CharacterSubspecies& operator=(const CharacterSubspecies&) = delete;
+    CharacterSubspecies(CharacterSubspecies&&) = default;
+    CharacterSubspecies& operator=(CharacterSubspecies&&) = default;
 
     const std::string& get_name() const noexcept override;
     const std::string& get_description() const noexcept override;
     const SourceInfo& get_source_info() const noexcept override;
     const std::vector<Feature>& get_features() const noexcept;
-    const CharacterRace* get_race() const noexcept;
+    const CharacterSpecies* get_species() const noexcept;
 
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
-    CharacterSubrace(
+    CharacterSubspecies(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path,
-        std::vector<Feature>&& features, const CharacterRace* race
+        std::vector<Feature>&& features, const CharacterSpecies* species
     ) noexcept;
 
     std::string name;
     std::string description;
     SourceInfo source_info;
     std::vector<Feature> features;
-    const CharacterRace* race;
+    const CharacterSpecies* species;
 };
 
 } // namespace dnd
