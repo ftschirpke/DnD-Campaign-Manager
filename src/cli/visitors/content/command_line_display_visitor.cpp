@@ -104,7 +104,7 @@ void dnd::DisplayVisitor::operator()(const CharacterSubclass& character_subclass
     output.text(character_subclass.get_name());
     output.text("Type: Subclass");
     display_source_info(output, character_subclass.get_source_info());
-    output.formatted_text("Class name:", character_subclass.get_class()->get_name());
+    output.formatted_text("Class name:", character_subclass.get_class().get_name());
 
     list_features<ClassFeature>(output, character_subclass.get_features());
 }
@@ -123,7 +123,7 @@ void dnd::DisplayVisitor::operator()(const CharacterSubrace& character_subrace) 
     output.text(character_subrace.get_name());
     output.text("Type: Subrace");
     display_source_info(output, character_subrace.get_source_info());
-    output.formatted_text("Race name: {}", character_subrace.get_race()->get_name());
+    output.formatted_text("Race name: {}", character_subrace.get_race().get_name());
 
     list_features<Feature>(output, character_subrace.get_features());
 }

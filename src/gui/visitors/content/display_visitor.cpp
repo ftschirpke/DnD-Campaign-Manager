@@ -117,32 +117,32 @@ void dnd::DisplayVisitor::operator()(const Character& character) {
     // TODO: display stats (again)
 
     label("Race:");
-    const CharacterRace* race_ptr = character.get_basis().get_race();
-    assert(race_ptr != nullptr);
-    if (ImGui::CollapsingHeader(race_ptr->get_name().c_str())) {
-        operator()(*race_ptr);
+    const CharacterRace& race = character.get_basis().get_race();
+    if (ImGui::CollapsingHeader(race.get_name().c_str())) {
+        operator()(race);
     }
 
-    const CharacterSubrace* const subrace_ptr = character.get_basis().get_subrace();
-    if (subrace_ptr != nullptr) {
+    OptCRef<CharacterSubrace> subrace_optional = character.get_basis().get_subrace();
+    if (subrace_optional.has_value()) {
         label("Subrace:");
-        if (ImGui::CollapsingHeader(character.get_basis().get_subrace()->get_name().c_str())) {
-            operator()(*subrace_ptr);
+        const CharacterSubrace& subrace = subrace_optional.value();
+        if (ImGui::CollapsingHeader(subrace.get_name().c_str())) {
+            operator()(subrace);
         }
     }
 
     label("Class:");
-    const CharacterClass* const class_ptr = character.get_basis().get_class();
-    assert(class_ptr != nullptr);
-    if (ImGui::CollapsingHeader(class_ptr->get_name().c_str())) {
-        operator()(*class_ptr);
+    const CharacterClass& classv = character.get_basis().get_class();
+    if (ImGui::CollapsingHeader(classv.get_name().c_str())) {
+        operator()(classv);
     }
 
-    const CharacterSubclass* const subclass_ptr = character.get_basis().get_subclass();
-    if (subclass_ptr != nullptr) {
+    OptCRef<CharacterSubclass> subclass_optional = character.get_basis().get_subclass();
+    if (subclass_optional.has_value()) {
         label("Subclass:");
-        if (ImGui::CollapsingHeader(character.get_basis().get_subclass()->get_name().c_str())) {
-            operator()(*subclass_ptr);
+        const CharacterSubclass& subclass = subclass_optional.value();
+        if (ImGui::CollapsingHeader(subclass.get_name().c_str())) {
+            operator()(subclass);
         }
     }
 

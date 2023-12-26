@@ -3,8 +3,10 @@
 
 #include <dnd_config.hpp>
 
+#include <functional>
 #include <vector>
 
+#include <core/utils/types.hpp>
 #include <core/validation/character/character_basis_data.hpp>
 
 namespace dnd {
@@ -26,25 +28,23 @@ public:
      */
     static CharacterBasis create(CharacterBasisData&& data, const Content& content);
 
-    const CharacterRace* get_race() const noexcept;
-    const CharacterSubrace* get_subrace() const noexcept;
-    const CharacterClass* get_class() const noexcept;
-    const CharacterSubclass* get_subclass() const noexcept;
+    const CharacterRace& get_race() const noexcept;
+    OptCRef<CharacterSubrace> get_subrace() const noexcept;
+    const CharacterClass& get_class() const noexcept;
+    OptCRef<CharacterSubclass> get_subclass() const noexcept;
 
     bool has_subrace() const noexcept;
     bool has_subclass() const noexcept;
 private:
     CharacterBasis(
-        const CharacterRace* race, const CharacterSubrace* subrace, const CharacterClass* cls,
-        const CharacterSubclass* subclass
+        const CharacterRace& race, OptCRef<CharacterSubrace> subrace, const CharacterClass& cls,
+        OptCRef<CharacterSubclass> subclass
     ) noexcept;
-    CharacterBasis(const CharacterRace* race, const CharacterClass* cls, const CharacterSubclass* subclass) noexcept;
-    CharacterBasis(const CharacterRace* race, const CharacterClass* cls) noexcept;
 
-    const CharacterRace* race;
-    const CharacterSubrace* subrace;
-    const CharacterClass* cls;
-    const CharacterSubclass* subclass;
+    std::reference_wrapper<const CharacterRace> race;
+    OptCRef<CharacterSubrace> subrace;
+    std::reference_wrapper<const CharacterClass> cls;
+    OptCRef<CharacterSubclass> subclass;
 };
 
 } // namespace dnd
