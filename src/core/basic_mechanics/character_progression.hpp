@@ -1,5 +1,5 @@
-#ifndef PROGRESSION_HPP_
-#define PROGRESSION_HPP_
+#ifndef CHARACTER_PROGRESSION_HPP_
+#define CHARACTER_PROGRESSION_HPP_
 
 #include <dnd_config.hpp>
 
@@ -30,4 +30,4 @@ int proficiency_bonus_for_level(int level);
 
 } // namespace dnd
 
-#endif // PROGRESSION_HPP_
+#endif // CHARACTER_PROGRESSION_HPP_

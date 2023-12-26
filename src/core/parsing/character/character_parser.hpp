@@ -1,5 +1,5 @@
-#ifndef PARSER_HPP_
-#define PARSER_HPP_
+#ifndef CHARACTER_PARSER_HPP_
+#define CHARACTER_PARSER_HPP_
 
 #include <dnd_config.hpp>
 
@@ -31,4 +31,4 @@ private:
 
 } // namespace dnd
 
-#endif // PARSER_HPP_
+#endif // CHARACTER_PARSER_HPP_
