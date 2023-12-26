@@ -1,5 +1,5 @@
-#ifndef CHARACTER_SUBCLASS_FILTER_HPP_
-#define CHARACTER_SUBCLASS_FILTER_HPP_
+#ifndef SUBCLASS_FILTER_HPP_
+#define SUBCLASS_FILTER_HPP_
 
 #include <dnd_config.hpp>
 
@@ -21,4 +21,4 @@ public:
 
 } // namespace dnd
 
-#endif // CHARACTER_SUBCLASS_FILTER_HPP_
+#endif // SUBCLASS_FILTER_HPP_

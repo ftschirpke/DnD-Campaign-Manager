@@ -1,5 +1,5 @@
-#ifndef CHARACTER_CLASS_DATA_HPP_
-#define CHARACTER_CLASS_DATA_HPP_
+#ifndef CLASS_DATA_HPP_
+#define CLASS_DATA_HPP_
 
 #include <dnd_config.hpp>
 
@@ -36,4 +36,4 @@ public:
 
 } // namespace dnd
 
-#endif // CHARACTER_CLASS_DATA_HPP_
+#endif // CLASS_DATA_HPP_

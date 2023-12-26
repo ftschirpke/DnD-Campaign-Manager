@@ -32,8 +32,8 @@ namespace {
 
 enum class ParsingType {
     CHARACTER,
-    RACE,
-    SUBRACE,
+    SPECIES,
+    SUBSPECIES,
     CLASS,
     SUBCLASS,
     ITEM,
@@ -113,7 +113,7 @@ dnd::ParsingResult dnd::parse_content(const std::filesystem::path& content_path,
             std::launch::async, parse_all_of_type, ParsingType::CHOOSABLES, content_ref, content_directories_ref
         );
         std::future<Errors> species_future = std::async(
-            std::launch::async, parse_all_of_type, ParsingType::RACE, content_ref, content_directories_ref
+            std::launch::async, parse_all_of_type, ParsingType::SPECIES, content_ref, content_directories_ref
         );
         std::future<Errors> class_future = std::async(
             std::launch::async, parse_all_of_type, ParsingType::CLASS, content_ref, content_directories_ref
@@ -126,7 +126,7 @@ dnd::ParsingResult dnd::parse_content(const std::filesystem::path& content_path,
     {
         DND_MEASURE_SCOPE("Parsing: subspecies, subclasses");
         std::future<Errors> subspecies_future = std::async(
-            std::launch::async, parse_all_of_type, ParsingType::SUBRACE, content_ref, content_directories_ref
+            std::launch::async, parse_all_of_type, ParsingType::SUBSPECIES, content_ref, content_directories_ref
         );
         std::future<Errors> subclass_future = std::async(
             std::launch::async, parse_all_of_type, ParsingType::SUBCLASS, content_ref, content_directories_ref
@@ -186,11 +186,11 @@ static dnd::Errors parse_file_of_type(const std::filesystem::path& file, dnd::Co
     switch (type) {
         case ParsingType::CHARACTER:
             return parse_file(content, dnd::CharacterParser(file));
-        case ParsingType::RACE:
+        case ParsingType::SPECIES:
             return parse_file(content, dnd::SpeciesParser(file));
         case ParsingType::CLASS:
             return parse_file(content, dnd::ClassParser(file));
-        case ParsingType::SUBRACE:
+        case ParsingType::SUBSPECIES:
             return parse_file(content, dnd::SubspeciesParser(file));
         case ParsingType::SUBCLASS:
             return parse_file(content, dnd::SubclassParser(file));
@@ -210,11 +210,11 @@ static const char* type_directory_name(ParsingType type) {
     switch (type) {
         case ParsingType::CHARACTER:
             return "characters";
-        case ParsingType::RACE:
+        case ParsingType::SPECIES:
             return "species";
         case ParsingType::CLASS:
             return "classes";
-        case ParsingType::SUBRACE:
+        case ParsingType::SUBSPECIES:
             return "subspecies";
         case ParsingType::SUBCLASS:
             return "subclasses";

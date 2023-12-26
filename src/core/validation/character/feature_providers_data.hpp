@@ -1,5 +1,5 @@
-#ifndef CHARACTER_BASIS_DATA_HPP_
-#define CHARACTER_BASIS_DATA_HPP_
+#ifndef FEATURE_PROVIDERS_DATA_HPP_
+#define FEATURE_PROVIDERS_DATA_HPP_
 
 #include <dnd_config.hpp>
 
@@ -29,4 +29,4 @@ public:
 
 } // namespace dnd
 
-#endif // CHARACTER_BASIS_DATA_HPP_
+#endif // FEATURE_PROVIDERS_DATA_HPP_

@@ -1,5 +1,5 @@
-#ifndef CHARACTER_RACE_PARSER_HPP_
-#define CHARACTER_RACE_PARSER_HPP_
+#ifndef SPECIES_PARSER_HPP_
+#define SPECIES_PARSER_HPP_
 
 #include <dnd_config.hpp>
 
@@ -27,4 +27,4 @@ private:
 
 } // namespace dnd
 
-#endif // CHARACTER_RACE_PARSER_HPP_
+#endif // SPECIES_PARSER_HPP_

@@ -116,9 +116,10 @@ void dnd::Character::accept_visitor(dnd::ContentVisitor& visitor) const { visito
 
 dnd::Character::Character(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path,
-    std::vector<dnd::Feature>&& features, dnd::AbilityScores&& base_ability_scores, dnd::FeatureProviders&& feature_providers,
-    dnd::Progression&& progression, std::vector<dnd::Decision>&& decisions
+    std::vector<dnd::Feature>&& features, dnd::AbilityScores&& base_ability_scores,
+    dnd::FeatureProviders&& feature_providers, dnd::Progression&& progression, std::vector<dnd::Decision>&& decisions
 ) noexcept
     : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
-      features(std::move(features)), base_ability_scores(std::move(base_ability_scores)), feature_providers(std::move(feature_providers)),
-      progression(std::move(progression)), decisions(std::move(decisions)) {}
+      features(std::move(features)), base_ability_scores(std::move(base_ability_scores)),
+      feature_providers(std::move(feature_providers)), progression(std::move(progression)),
+      decisions(std::move(decisions)) {}

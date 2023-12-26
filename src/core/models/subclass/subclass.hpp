@@ -1,5 +1,5 @@
-#ifndef CHARACTER_SUBCLASS_HPP_
-#define CHARACTER_SUBCLASS_HPP_
+#ifndef SUBCLASS_HPP_
+#define SUBCLASS_HPP_
 
 #include <dnd_config.hpp>
 
@@ -61,4 +61,4 @@ private:
 
 } // namespace dnd
 
-#endif // CHARACTER_SUBCLASS_HPP_
+#endif // SUBCLASS_HPP_

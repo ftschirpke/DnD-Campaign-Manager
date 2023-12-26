@@ -1,5 +1,5 @@
-#ifndef CHARACTER_CLASS_PARSER_HPP_
-#define CHARACTER_CLASS_PARSER_HPP_
+#ifndef CLASS_PARSER_HPP_
+#define CLASS_PARSER_HPP_
 
 #include <dnd_config.hpp>
 
@@ -27,4 +27,4 @@ private:
 
 } // namespace dnd
 
-#endif // CHARACTER_CLASS_PARSER_HPP_
+#endif // CLASS_PARSER_HPP_

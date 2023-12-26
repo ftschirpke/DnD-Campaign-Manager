@@ -1,5 +1,5 @@
-#ifndef CHARACTER_SUBRACE_PARSER_HPP_
-#define CHARACTER_SUBRACE_PARSER_HPP_
+#ifndef SUBSPECIES_PARSER_HPP_
+#define SUBSPECIES_PARSER_HPP_
 
 #include <dnd_config.hpp>
 
@@ -27,4 +27,4 @@ private:
 
 } // namespace dnd
 
-#endif // CHARACTER_SUBRACE_PARSER_HPP_
+#endif // SUBSPECIES_PARSER_HPP_

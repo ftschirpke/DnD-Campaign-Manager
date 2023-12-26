@@ -1,5 +1,5 @@
-#ifndef CHARACTER_DATA_HPP_
-#define CHARACTER_DATA_HPP_
+#ifndef DATA_HPP_
+#define DATA_HPP_
 
 #include <dnd_config.hpp>
 
@@ -10,8 +10,8 @@
 
 #include <core/errors/errors.hpp>
 #include <core/validation/character/ability_scores_data.hpp>
-#include <core/validation/character/feature_providers_data.hpp>
 #include <core/validation/character/decision/decision_data.hpp>
+#include <core/validation/character/feature_providers_data.hpp>
 #include <core/validation/character/progression_data.hpp>
 #include <core/validation/effects_provider/feature_data.hpp>
 #include <core/validation/validation_data.hpp>
@@ -37,4 +37,4 @@ public:
 
 } // namespace dnd
 
-#endif // CHARACTER_DATA_HPP_
+#endif // DATA_HPP_

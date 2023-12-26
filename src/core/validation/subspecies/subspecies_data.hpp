@@ -1,5 +1,5 @@
-#ifndef CHARACTER_SUBRACE_DATA_HPP_
-#define CHARACTER_SUBRACE_DATA_HPP_
+#ifndef SUBSPECIES_DATA_HPP_
+#define SUBSPECIES_DATA_HPP_
 
 #include <dnd_config.hpp>
 
@@ -26,4 +26,4 @@ public:
 
 } // namespace dnd
 
-#endif // CHARACTER_SUBRACE_DATA_HPP_
+#endif // SUBSPECIES_DATA_HPP_

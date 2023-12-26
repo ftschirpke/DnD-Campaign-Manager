@@ -1,5 +1,5 @@
-#ifndef CHARACTER_RACE_FILTER_HPP_
-#define CHARACTER_RACE_FILTER_HPP_
+#ifndef SPECIES_FILTER_HPP_
+#define SPECIES_FILTER_HPP_
 
 #include <dnd_config.hpp>
 
@@ -22,4 +22,4 @@ public:
 
 } // namespace dnd
 
-#endif // CHARACTER_RACE_FILTER_HPP_
+#endif // SPECIES_FILTER_HPP_

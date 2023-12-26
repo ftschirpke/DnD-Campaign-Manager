@@ -26,7 +26,8 @@ std::vector<std::string> dnd::ListContentVisitor::get_list() { return std::move(
 void dnd::ListContentVisitor::operator()(const Character& character) {
     string_list.emplace_back(fmt::format(
         "{} [CHARACTER] : Level {} {} {}", character.get_name(), character.get_progression().get_level(),
-        character.get_feature_providers().get_class().get_name(), character.get_feature_providers().get_species().get_name()
+        character.get_feature_providers().get_class().get_name(),
+        character.get_feature_providers().get_species().get_name()
     ));
 }
 
@@ -38,11 +39,12 @@ void dnd::ListContentVisitor::operator()(const Subclass& subclass) {
     string_list.emplace_back(fmt::format("{} [{} SUBCLASS]", subclass.get_name(), subclass.get_class()->get_name()));
 }
 void dnd::ListContentVisitor::operator()(const Species& species) {
-    string_list.emplace_back(fmt::format("{} [RACE]", species.get_name()));
+    string_list.emplace_back(fmt::format("{} [SPECIES]", species.get_name()));
 }
 
 void dnd::ListContentVisitor::operator()(const Subspecies& subspecies) {
-    string_list.emplace_back(fmt::format("{} [{} SUBRACE]", subspecies.get_name(), subspecies.get_species()->get_name())
+    string_list.emplace_back(
+        fmt::format("{} [{} SUBSPECIES]", subspecies.get_name(), subspecies.get_species()->get_name())
     );
 }
 

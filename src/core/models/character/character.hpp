@@ -1,5 +1,5 @@
-#ifndef CHARACTER_HPP_
-#define CHARACTER_HPP_
+#ifndef HPP_
+#define HPP_
 
 #include <dnd_config.hpp>
 
@@ -7,8 +7,8 @@
 #include <string>
 
 #include <core/models/character/ability_scores.hpp>
-#include <core/models/character/feature_providers.hpp>
 #include <core/models/character/decision/decision.hpp>
+#include <core/models/character/feature_providers.hpp>
 #include <core/models/character/progression.hpp>
 #include <core/models/class/class.hpp>
 #include <core/models/content_piece.hpp>
@@ -75,4 +75,4 @@ private:
 
 } // namespace dnd
 
-#endif // CHARACTER_HPP_
+#endif // HPP_

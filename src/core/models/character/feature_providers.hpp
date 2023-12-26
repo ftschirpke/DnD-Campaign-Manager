@@ -1,5 +1,5 @@
-#ifndef CHARACTER_BASIS_HPP_
-#define CHARACTER_BASIS_HPP_
+#ifndef BASIS_HPP_
+#define BASIS_HPP_
 
 #include <dnd_config.hpp>
 
@@ -48,4 +48,4 @@ private:
 
 } // namespace dnd
 
-#endif // CHARACTER_BASIS_HPP_
+#endif // BASIS_HPP_

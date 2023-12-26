@@ -1,5 +1,5 @@
-#ifndef CHARACTER_RACE_DATA_HPP_
-#define CHARACTER_RACE_DATA_HPP_
+#ifndef SPECIES_DATA_HPP_
+#define SPECIES_DATA_HPP_
 
 #include <dnd_config.hpp>
 
@@ -26,4 +26,4 @@ public:
 
 } // namespace dnd
 
-#endif // CHARACTER_RACE_DATA_HPP_
+#endif // SPECIES_DATA_HPP_

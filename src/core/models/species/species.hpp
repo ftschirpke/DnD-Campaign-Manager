@@ -1,5 +1,5 @@
-#ifndef CHARACTER_RACE_HPP_
-#define CHARACTER_RACE_HPP_
+#ifndef SPECIES_HPP_
+#define SPECIES_HPP_
 
 #include <dnd_config.hpp>
 
@@ -55,4 +55,4 @@ private:
 
 } // namespace dnd
 
-#endif // CHARACTER_RACE_HPP_
+#endif // SPECIES_HPP_

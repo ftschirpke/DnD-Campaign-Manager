@@ -1,5 +1,5 @@
-#ifndef CHARACTER_SUBRACE_FILTER_HPP_
-#define CHARACTER_SUBRACE_FILTER_HPP_
+#ifndef SUBSPECIES_FILTER_HPP_
+#define SUBSPECIES_FILTER_HPP_
 
 #include <dnd_config.hpp>
 
@@ -18,4 +18,4 @@ public:
 
 } // namespace dnd
 
-#endif // CHARACTER_SUBRACE_FILTER_HPP_
+#endif // SUBSPECIES_FILTER_HPP_
