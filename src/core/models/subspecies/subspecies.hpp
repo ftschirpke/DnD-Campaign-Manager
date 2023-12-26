@@ -7,10 +7,10 @@
 #include <string>
 #include <vector>
 
-#include <core/models/species/species.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/source_info.hpp>
+#include <core/models/species/species.hpp>
 #include <core/validation/subspecies/subspecies_data.hpp>
 
 namespace dnd {

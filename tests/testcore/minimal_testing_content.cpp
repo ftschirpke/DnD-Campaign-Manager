@@ -10,9 +10,9 @@
 #include <core/content.hpp>
 #include <core/models/class/class.hpp>
 #include <core/models/species/species.hpp>
+#include <core/models/spell/spell.hpp>
 #include <core/models/subclass/subclass.hpp>
 #include <core/models/subspecies/subspecies.hpp>
-#include <core/models/spell/spell.hpp>
 #include <core/validation/character/character_data.hpp>
 #include <core/validation/class/class_data.hpp>
 #include <core/validation/species/species_data.hpp>

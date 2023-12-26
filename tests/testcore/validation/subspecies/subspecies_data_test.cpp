@@ -98,7 +98,8 @@ TEST_CASE("dnd::SubspeciesData::validate_relations // invalid subspecies data re
         data.species_name = "Dwarf";
         dnd::FeatureData& feature_data = data.features_data.emplace_back(&data);
         dndtest::set_valid_mock_values(feature_data, "Duplicate Feature");
-        feature_data.name = "Example Subspecies Feature"; // feature with that name already exists in the example content
+        feature_data
+            .name = "Example Subspecies Feature"; // feature with that name already exists in the example content
         REQUIRE_NOTHROW(errors = data.validate_relations(content));
         REQUIRE_FALSE(errors.ok());
     }

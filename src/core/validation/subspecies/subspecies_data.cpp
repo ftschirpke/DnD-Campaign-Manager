@@ -50,7 +50,8 @@ dnd::Errors dnd::SubspeciesData::validate_relations(const Content& content) cons
     Errors errors;
     if (content.get_subspecies().contains(name)) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, fmt::format("Subspecies has duplicate name \"{}\".", name)
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
+            fmt::format("Subspecies has duplicate name \"{}\".", name)
         );
     }
     for (const FeatureData& feature_data : features_data) {
@@ -65,7 +66,8 @@ dnd::Errors dnd::SubspeciesData::validate_relations(const Content& content) cons
     OptCRef<Species> species_optional = content.get_species().get(species_name);
     if (!species_optional.has_value()) {
         errors.add_validation_error(
-            ValidationErrorCode::RELATION_NOT_FOUND, this, fmt::format("Character species '{}' does not exist.", species_name)
+            ValidationErrorCode::RELATION_NOT_FOUND, this,
+            fmt::format("Character species '{}' does not exist.", species_name)
         );
     } else if (!species_optional.value().get().has_subspecies()) {
         errors.add_validation_error(

@@ -11,13 +11,13 @@
 #include <core/models/character/decision/decision.hpp>
 #include <core/models/character/progression.hpp>
 #include <core/models/class/class.hpp>
-#include <core/models/species/species.hpp>
-#include <core/models/subclass/subclass.hpp>
-#include <core/models/subspecies/subspecies.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/source_info.hpp>
+#include <core/models/species/species.hpp>
+#include <core/models/subclass/subclass.hpp>
+#include <core/models/subspecies/subspecies.hpp>
 #include <core/validation/character/character_data.hpp>
 
 namespace dnd {

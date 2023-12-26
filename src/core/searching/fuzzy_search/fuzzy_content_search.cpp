@@ -12,14 +12,14 @@
 #include <core/content.hpp>
 #include <core/models/character/character.hpp>
 #include <core/models/class/class.hpp>
-#include <core/models/species/species.hpp>
-#include <core/models/subclass/subclass.hpp>
-#include <core/models/subspecies/subspecies.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/item/item.hpp>
+#include <core/models/species/species.hpp>
 #include <core/models/spell/spell.hpp>
+#include <core/models/subclass/subclass.hpp>
+#include <core/models/subspecies/subspecies.hpp>
 #include <core/utils/char_manipulation.hpp>
 
 dnd::FuzzyContentSearch::FuzzyContentSearch(const Content& content) {

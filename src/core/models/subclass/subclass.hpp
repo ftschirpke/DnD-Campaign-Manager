@@ -48,8 +48,7 @@ public:
 private:
     Subclass(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path,
-        std::vector<ClassFeature>&& features, const Class* cls,
-        std::unique_ptr<Spellcasting>&& spellcasting = nullptr
+        std::vector<ClassFeature>&& features, const Class* cls, std::unique_ptr<Spellcasting>&& spellcasting = nullptr
     ) noexcept;
 
     std::string name;

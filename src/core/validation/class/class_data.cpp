@@ -22,9 +22,7 @@ dnd::ClassData::ClassData() noexcept
     : ValidationData(), spellcasting_data(this), features_data(), subclass_feature_name(), hit_dice_data(this),
       important_levels_data(this) {}
 
-std::unique_ptr<dnd::ValidationData> dnd::ClassData::pack() const {
-    return std::make_unique<ClassData>(*this);
-}
+std::unique_ptr<dnd::ValidationData> dnd::ClassData::pack() const { return std::make_unique<ClassData>(*this); }
 
 dnd::Errors dnd::ClassData::validate() const {
     Errors errors = ValidationData::validate();

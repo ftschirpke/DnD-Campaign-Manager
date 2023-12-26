@@ -47,7 +47,6 @@ bool dnd::CharacterBasis::has_subspecies() const noexcept { return subspecies.ha
 bool dnd::CharacterBasis::has_subclass() const noexcept { return subclass.has_value(); }
 
 dnd::CharacterBasis::CharacterBasis(
-    const Species& species, OptCRef<Subspecies> subspecies, const Class& cls,
-    OptCRef<Subclass> subclass
+    const Species& species, OptCRef<Subspecies> subspecies, const Class& cls, OptCRef<Subclass> subclass
 ) noexcept
     : species(std::cref(species)), subspecies(subspecies), cls(std::cref(cls)), subclass(subclass) {}

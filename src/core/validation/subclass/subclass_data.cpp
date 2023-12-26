@@ -16,12 +16,9 @@
 #include <core/validation/effects_provider/class_feature_data.hpp>
 #include <core/validation/spellcasting/spellcasting_data.hpp>
 
-dnd::SubclassData::SubclassData() noexcept
-    : ValidationData(), spellcasting_data(this), features_data(), class_name() {}
+dnd::SubclassData::SubclassData() noexcept : ValidationData(), spellcasting_data(this), features_data(), class_name() {}
 
-std::unique_ptr<dnd::ValidationData> dnd::SubclassData::pack() const {
-    return std::make_unique<SubclassData>(*this);
-}
+std::unique_ptr<dnd::ValidationData> dnd::SubclassData::pack() const { return std::make_unique<SubclassData>(*this); }
 
 dnd::Errors dnd::SubclassData::validate() const {
     Errors errors;

@@ -11,9 +11,9 @@
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
-#include <core/models/species/species.hpp>
 #include <core/models/effects_provider/class_feature.hpp>
 #include <core/models/source_info.hpp>
+#include <core/models/species/species.hpp>
 #include <core/models/spellcasting/spellcasting_factory.hpp>
 #include <core/validation/subclass/subclass_data.hpp>
 #include <core/visitors/content/content_visitor.hpp>

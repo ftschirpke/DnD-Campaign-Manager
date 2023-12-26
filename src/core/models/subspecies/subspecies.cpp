@@ -10,9 +10,9 @@
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
-#include <core/models/species/species.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/source_info.hpp>
+#include <core/models/species/species.hpp>
 #include <core/validation/subspecies/subspecies_data.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 

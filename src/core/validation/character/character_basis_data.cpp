@@ -17,7 +17,9 @@ dnd::CharacterBasisData::CharacterBasisData(const dnd::ValidationData* parent) n
 dnd::Errors dnd::CharacterBasisData::validate() const {
     Errors errors;
     if (species_name.empty()) {
-        errors.add_validation_error(ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent, "Species name cannot be empty.");
+        errors.add_validation_error(
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent, "Species name cannot be empty."
+        );
     }
     if (class_name.empty()) {
         errors.add_validation_error(
@@ -56,7 +58,8 @@ dnd::Errors dnd::CharacterBasisData::validate_relations(const dnd::Content& cont
         }
     } else if (species_optional.value().get().has_subspecies()) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_RELATION, parent, fmt::format("Species '{}' requires subspecies.", species_name)
+            ValidationErrorCode::INVALID_RELATION, parent,
+            fmt::format("Species '{}' requires subspecies.", species_name)
         );
     }
 

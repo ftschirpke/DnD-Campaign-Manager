@@ -14,9 +14,7 @@
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 
-std::unique_ptr<dnd::ValidationData> dnd::SpeciesData::pack() const {
-    return std::make_unique<SpeciesData>(*this);
-}
+std::unique_ptr<dnd::ValidationData> dnd::SpeciesData::pack() const { return std::make_unique<SpeciesData>(*this); }
 
 dnd::Errors dnd::SpeciesData::validate() const {
     Errors errors;

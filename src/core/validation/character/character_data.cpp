@@ -14,9 +14,9 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/models/class/class.hpp>
-#include <core/models/species/species.hpp>
 #include <core/models/effects/effects.hpp>
 #include <core/models/effects_provider/feature.hpp>
+#include <core/models/species/species.hpp>
 #include <core/referencing_content_library.hpp>
 #include <core/validation/character/progression_data.hpp>
 #include <core/validation/effects_provider/feature_data.hpp>

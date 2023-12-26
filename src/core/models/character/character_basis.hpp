@@ -37,8 +37,7 @@ public:
     bool has_subclass() const noexcept;
 private:
     CharacterBasis(
-        const Species& species, OptCRef<Subspecies> subspecies, const Class& cls,
-        OptCRef<Subclass> subclass
+        const Species& species, OptCRef<Subspecies> subspecies, const Class& cls, OptCRef<Subclass> subclass
     ) noexcept;
 
     std::reference_wrapper<const Species> species;

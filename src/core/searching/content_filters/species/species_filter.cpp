@@ -5,8 +5,8 @@
 #include <vector>
 
 #include <core/content.hpp>
-#include <core/models/species/species.hpp>
 #include <core/models/content_piece.hpp>
+#include <core/models/species/species.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
 
 bool dnd::SpeciesFilter::has_all_filters() const noexcept {

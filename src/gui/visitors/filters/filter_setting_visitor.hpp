@@ -5,14 +5,14 @@
 
 #include <core/searching/content_filters/character/character_filter.hpp>
 #include <core/searching/content_filters/class/class_filter.hpp>
-#include <core/searching/content_filters/species/species_filter.hpp>
-#include <core/searching/content_filters/subclass/subclass_filter.hpp>
-#include <core/searching/content_filters/subspecies/subspecies_filter.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
 #include <core/searching/content_filters/effects_provider/choosable_filter.hpp>
 #include <core/searching/content_filters/effects_provider/feature_filter.hpp>
 #include <core/searching/content_filters/item/item_filter.hpp>
+#include <core/searching/content_filters/species/species_filter.hpp>
 #include <core/searching/content_filters/spell/spell_filter.hpp>
+#include <core/searching/content_filters/subclass/subclass_filter.hpp>
+#include <core/searching/content_filters/subspecies/subspecies_filter.hpp>
 
 
 namespace dnd {
