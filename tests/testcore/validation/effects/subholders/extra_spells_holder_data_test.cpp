@@ -8,13 +8,15 @@
 #include <testcore/minimal_testing_content.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
+namespace dnd::test {
+
 static constexpr const char* tags = "[core][validation][effects]";
 
-TEST_CASE("dnd::ExtraSpellsHolderData::validate and ::validate_relations // valid extra spell holders", tags) {
-    dndtest::ValidationDataMock parent;
-    dnd::ExtraSpellsHolderData extra_spells_holder_data(&parent);
-    dnd::Content content = dndtest::minimal_testing_content();
-    dnd::Errors errors;
+TEST_CASE("ExtraSpellsHolderData::validate and ::validate_relations // valid extra spell holders", tags) {
+    ValidationDataMock parent;
+    ExtraSpellsHolderData extra_spells_holder_data(&parent);
+    Content content = minimal_testing_content();
+    Errors errors;
 
     SECTION("empty extra spell holders") {
         REQUIRE_NOTHROW(errors = extra_spells_holder_data.validate());
@@ -111,10 +113,10 @@ TEST_CASE("dnd::ExtraSpellsHolderData::validate and ::validate_relations // vali
     }
 }
 
-TEST_CASE("dnd::ExtraSpellsHolderData::validate // invalid extra spell holders", tags) {
-    dndtest::ValidationDataMock parent;
-    dnd::ExtraSpellsHolderData extra_spells_holder_data(&parent);
-    dnd::Errors errors;
+TEST_CASE("ExtraSpellsHolderData::validate // invalid extra spell holders", tags) {
+    ValidationDataMock parent;
+    ExtraSpellsHolderData extra_spells_holder_data(&parent);
+    Errors errors;
 
     SECTION("empty free cantrip names") {
         extra_spells_holder_data.free_cantrips = {""};
@@ -187,11 +189,11 @@ TEST_CASE("dnd::ExtraSpellsHolderData::validate // invalid extra spell holders",
     }
 }
 
-TEST_CASE("dnd::ExtraSpellsHolderData::validate_relations // invalid extra spell holder relations", tags) {
-    dndtest::ValidationDataMock parent;
-    dnd::ExtraSpellsHolderData extra_spells_holder_data(&parent);
-    dnd::Content content = dndtest::minimal_testing_content();
-    dnd::Errors errors;
+TEST_CASE("ExtraSpellsHolderData::validate_relations // invalid extra spell holder relations", tags) {
+    ValidationDataMock parent;
+    ExtraSpellsHolderData extra_spells_holder_data(&parent);
+    Content content = minimal_testing_content();
+    Errors errors;
 
     REQUIRE_NOTHROW(errors = extra_spells_holder_data.validate());
     REQUIRE(errors.ok());
@@ -309,9 +311,9 @@ TEST_CASE("dnd::ExtraSpellsHolderData::validate_relations // invalid extra spell
     }
 }
 
-TEST_CASE("dnd::ExtraSpellsHolderData::emtpy") {
-    dndtest::ValidationDataMock parent;
-    dnd::ExtraSpellsHolderData extra_spells_holder_data(&parent);
+TEST_CASE("ExtraSpellsHolderData::emtpy") {
+    ValidationDataMock parent;
+    ExtraSpellsHolderData extra_spells_holder_data(&parent);
 
     REQUIRE(extra_spells_holder_data.empty());
 
@@ -357,3 +359,5 @@ TEST_CASE("dnd::ExtraSpellsHolderData::emtpy") {
         REQUIRE_FALSE(extra_spells_holder_data.empty());
     }
 }
+
+} // namespace dnd::test

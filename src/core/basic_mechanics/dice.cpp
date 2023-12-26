@@ -5,9 +5,11 @@
 #include <stdexcept>
 #include <string>
 
-int dnd::dice_to_int(dnd::Dice dice_type) { return static_cast<int>(dice_type); }
+namespace dnd {
 
-dnd::Dice dnd::int_to_dice(int number) {
+int dice_to_int(Dice dice_type) { return static_cast<int>(dice_type); }
+
+Dice int_to_dice(int number) {
     switch (number) {
         case 4:
             return Dice::D4;
@@ -28,9 +30,9 @@ dnd::Dice dnd::int_to_dice(int number) {
     };
 }
 
-std::string dnd::dice_to_string(dnd::Dice dice_type) { return 'd' + std::to_string(dice_to_int(dice_type)); }
+std::string dice_to_string(Dice dice_type) { return 'd' + std::to_string(dice_to_int(dice_type)); }
 
-dnd::Dice dnd::string_to_dice(const std::string& str) {
+Dice string_to_dice(const std::string& str) {
     std::string dice_str = str;
     if (dice_str[0] == 'D') {
         dice_str[0] = 'd';
@@ -54,6 +56,8 @@ dnd::Dice dnd::string_to_dice(const std::string& str) {
     }
 }
 
-bool dnd::value_is_possible_for(int value, dnd::Dice dice_type) {
+bool value_is_possible_for(int value, Dice dice_type) {
     return value >= 1 && value <= dice_to_int(dice_type);
 }
+
+} // namespace dnd

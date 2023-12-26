@@ -18,13 +18,15 @@
 #include <core/validation/spellcasting/spellcasting_data.hpp>
 #include <core/validation/validation_data.hpp>
 
-dnd::ClassData::ClassData() noexcept
+namespace dnd {
+
+ClassData::ClassData() noexcept
     : ValidationData(), spellcasting_data(this), features_data(), subclass_feature_name(), hit_dice_data(this),
       important_levels_data(this) {}
 
-std::unique_ptr<dnd::ValidationData> dnd::ClassData::pack() const { return std::make_unique<ClassData>(*this); }
+std::unique_ptr<ValidationData> ClassData::pack() const { return std::make_unique<ClassData>(*this); }
 
-dnd::Errors dnd::ClassData::validate() const {
+Errors ClassData::validate() const {
     Errors errors = ValidationData::validate();
     errors += spellcasting_data.validate();
 
@@ -62,7 +64,7 @@ dnd::Errors dnd::ClassData::validate() const {
     return errors;
 }
 
-dnd::Errors dnd::ClassData::validate_relations(const dnd::Content& content) const {
+Errors ClassData::validate_relations(const Content& content) const {
     Errors errors;
     if (content.get_classes().contains(name)) {
         errors.add_validation_error(
@@ -80,3 +82,5 @@ dnd::Errors dnd::ClassData::validate_relations(const dnd::Content& content) cons
     }
     return errors;
 }
+
+} // namespace dnd

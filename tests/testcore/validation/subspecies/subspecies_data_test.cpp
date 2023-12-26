@@ -9,18 +9,20 @@
 #include <testcore/minimal_testing_content.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
+namespace dnd::test {
+
 static constexpr const char* tags = "[core][validation][subspecies]";
 
-TEST_CASE("dnd::SubspeciesData::validate and ::validate_relations // valid subspecies data", tags) {
-    dnd::SubspeciesData data;
-    dndtest::set_valid_mock_values(data, "Subspecies");
-    dnd::Content content = dndtest::minimal_testing_content();
-    dnd::Errors errors;
+TEST_CASE("SubspeciesData::validate and ::validate_relations // valid subspecies data", tags) {
+    SubspeciesData data;
+    set_valid_mock_values(data, "Subspecies");
+    Content content = minimal_testing_content();
+    Errors errors;
 
     SECTION("species with one valid feature") {
         data.species_name = "Dwarf";
-        dnd::FeatureData& feature_data = data.features_data.emplace_back(&data);
-        dndtest::set_valid_mock_values(feature_data, "Feature");
+        FeatureData& feature_data = data.features_data.emplace_back(&data);
+        set_valid_mock_values(feature_data, "Feature");
         REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_NOTHROW(errors += data.validate_relations(content));
         REQUIRE(errors.ok());
@@ -28,27 +30,27 @@ TEST_CASE("dnd::SubspeciesData::validate and ::validate_relations // valid subsp
 
     SECTION("species with multiple differently named features") {
         data.species_name = "Dwarf";
-        dnd::FeatureData& feature_data1 = data.features_data.emplace_back(&data);
-        dndtest::set_valid_mock_values(feature_data1, "Feature 1");
-        dnd::FeatureData& feature_data2 = data.features_data.emplace_back(&data);
-        dndtest::set_valid_mock_values(feature_data2, "Feature 2");
-        dnd::FeatureData& feature_data3 = data.features_data.emplace_back(&data);
-        dndtest::set_valid_mock_values(feature_data3, "Feature 3");
+        FeatureData& feature_data1 = data.features_data.emplace_back(&data);
+        set_valid_mock_values(feature_data1, "Feature 1");
+        FeatureData& feature_data2 = data.features_data.emplace_back(&data);
+        set_valid_mock_values(feature_data2, "Feature 2");
+        FeatureData& feature_data3 = data.features_data.emplace_back(&data);
+        set_valid_mock_values(feature_data3, "Feature 3");
         REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_NOTHROW(errors += data.validate_relations(content));
         REQUIRE(errors.ok());
     }
 }
 
-TEST_CASE("dnd::SubspeciesData::validate // invalid subspecies data", tags) {
-    dnd::SubspeciesData data;
-    dndtest::set_valid_mock_values(data, "Subspecies");
-    dnd::Errors errors;
+TEST_CASE("SubspeciesData::validate // invalid subspecies data", tags) {
+    SubspeciesData data;
+    set_valid_mock_values(data, "Subspecies");
+    Errors errors;
 
     SECTION("subspecies without species is invalid") {
         data.species_name = "";
-        dnd::FeatureData& feature_data = data.features_data.emplace_back(&data);
-        dndtest::set_valid_mock_values(feature_data, "Feature");
+        FeatureData& feature_data = data.features_data.emplace_back(&data);
+        set_valid_mock_values(feature_data, "Feature");
         REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_FALSE(errors.ok());
     }
@@ -67,24 +69,24 @@ TEST_CASE("dnd::SubspeciesData::validate // invalid subspecies data", tags) {
 
     SECTION("subspecies with duplicate feature names") {
         data.species_name = "Dwarf";
-        dnd::FeatureData& feature_data1 = data.features_data.emplace_back(&data);
-        dndtest::set_valid_mock_values(feature_data1, "Duplicate Feature");
-        dnd::FeatureData& feature_data2 = data.features_data.emplace_back(&data);
-        dndtest::set_valid_mock_values(feature_data2, "Duplicate Feature");
-        dnd::FeatureData& feature_data3 = data.features_data.emplace_back(&data);
-        dndtest::set_valid_mock_values(feature_data3, "Other Feature");
+        FeatureData& feature_data1 = data.features_data.emplace_back(&data);
+        set_valid_mock_values(feature_data1, "Duplicate Feature");
+        FeatureData& feature_data2 = data.features_data.emplace_back(&data);
+        set_valid_mock_values(feature_data2, "Duplicate Feature");
+        FeatureData& feature_data3 = data.features_data.emplace_back(&data);
+        set_valid_mock_values(feature_data3, "Other Feature");
         REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_FALSE(errors.ok());
     }
 }
 
-TEST_CASE("dnd::SubspeciesData::validate_relations // invalid subspecies data relations", tags) {
-    dnd::SubspeciesData data;
-    dndtest::set_valid_mock_values(data, "Subspecies");
-    dnd::FeatureData& valid_feature_data = data.features_data.emplace_back(&data);
-    dndtest::set_valid_mock_values(valid_feature_data, "Valid Feature");
-    dnd::Content content = dndtest::minimal_testing_content();
-    dnd::Errors errors;
+TEST_CASE("SubspeciesData::validate_relations // invalid subspecies data relations", tags) {
+    SubspeciesData data;
+    set_valid_mock_values(data, "Subspecies");
+    FeatureData& valid_feature_data = data.features_data.emplace_back(&data);
+    set_valid_mock_values(valid_feature_data, "Valid Feature");
+    Content content = minimal_testing_content();
+    Errors errors;
 
     SECTION("subspecies with a name that already exists in the content") {
         data.name = "Hill Dwarf"; // already exists in the example content
@@ -96,8 +98,8 @@ TEST_CASE("dnd::SubspeciesData::validate_relations // invalid subspecies data re
     SECTION("features with duplicate names aren't allowed") {
         data.name = "New Subspecies";
         data.species_name = "Dwarf";
-        dnd::FeatureData& feature_data = data.features_data.emplace_back(&data);
-        dndtest::set_valid_mock_values(feature_data, "Duplicate Feature");
+        FeatureData& feature_data = data.features_data.emplace_back(&data);
+        set_valid_mock_values(feature_data, "Duplicate Feature");
         feature_data
             .name = "Example Subspecies Feature"; // feature with that name already exists in the example content
         REQUIRE_NOTHROW(errors = data.validate_relations(content));
@@ -116,3 +118,5 @@ TEST_CASE("dnd::SubspeciesData::validate_relations // invalid subspecies data re
         REQUIRE_FALSE(errors.ok());
     }
 }
+
+} // namespace dnd::test

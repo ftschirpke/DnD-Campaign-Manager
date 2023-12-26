@@ -12,13 +12,15 @@
 #include <core/validation/validation_data.hpp>
 #include <core/validation/validation_subdata.hpp>
 
+namespace dnd {
+
 static constexpr const char*
     stat_change_regex_cstr = "[A-Z][_A-Z0-9]+ (earliest|early|normal|late|latest) ((add|sub|mult|div|set|max|min) "
                              "([A-Z][_A-Z0-9]+|-?[1-9]\\d*(\\.[1-9]|\\.\\d[1-9])?)|(set (false|true)))";
 
-dnd::StatChangeData::StatChangeData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
+StatChangeData::StatChangeData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
 
-dnd::Errors dnd::StatChangeData::validate() const {
+Errors StatChangeData::validate() const {
     DND_MEASURE_FUNCTION();
     Errors errors;
     static const std::regex stat_change_regex(stat_change_regex_cstr);
@@ -40,3 +42,5 @@ dnd::Errors dnd::StatChangeData::validate() const {
     }
     return errors;
 }
+
+} // namespace dnd

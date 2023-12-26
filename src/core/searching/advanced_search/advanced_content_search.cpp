@@ -10,37 +10,41 @@
 #include <core/searching/content_filters/content_filter.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
 
-dnd::AdvancedContentSearch::AdvancedContentSearch(const Content& content) noexcept
+namespace dnd {
+
+AdvancedContentSearch::AdvancedContentSearch(const Content& content) noexcept
     : content(content), filter(ContentPieceFilter()), searching(false), search_future() {}
 
-dnd::ContentFilterVariant& dnd::AdvancedContentSearch::get_filter() { return filter; }
+ContentFilterVariant& AdvancedContentSearch::get_filter() { return filter; }
 
-const std::vector<const dnd::ContentPiece*>& dnd::AdvancedContentSearch::get_search_results() const noexcept {
+const std::vector<const ContentPiece*>& AdvancedContentSearch::get_search_results() const noexcept {
     return search_results;
 }
 
-static std::vector<const dnd::ContentPiece*> search(
-    const dnd::Content& content, dnd::ContentFilterVariant searching_filter
+static std::vector<const ContentPiece*> search(
+    const Content& content, ContentFilterVariant searching_filter
 ) {
-    std::vector<const dnd::ContentPiece*> search_results = std::visit(
-        [&content](const dnd::ContentFilter& filter) { return filter.all_matches(content); }, searching_filter
+    std::vector<const ContentPiece*> search_results = std::visit(
+        [&content](const ContentFilter& filter) { return filter.all_matches(content); }, searching_filter
     );
     std::sort(
         search_results.begin(), search_results.end(),
-        [](const dnd::ContentPiece* lhs, const dnd::ContentPiece* rhs) { return lhs->get_name() < rhs->get_name(); }
+        [](const ContentPiece* lhs, const ContentPiece* rhs) { return lhs->get_name() < rhs->get_name(); }
     );
     return search_results;
 }
 
-void dnd::AdvancedContentSearch::start_searching() {
+void AdvancedContentSearch::start_searching() {
     searching = true;
     search_future = std::async(std::launch::async, search, std::ref(content), filter);
 }
 
-bool dnd::AdvancedContentSearch::search_results_available() {
+bool AdvancedContentSearch::search_results_available() {
     if (searching && search_future.wait_for(std::chrono::nanoseconds(1)) == std::future_status::ready) {
         searching = false;
         search_results = search_future.get();
     }
     return !searching;
 }
+
+} // namespace dnd

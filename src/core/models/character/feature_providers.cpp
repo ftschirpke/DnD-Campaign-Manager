@@ -14,12 +14,14 @@
 #include <core/models/subspecies/subspecies.hpp>
 #include <core/validation/character/feature_providers_data.hpp>
 
-dnd::FeatureProviders dnd::FeatureProviders::create(dnd::FeatureProvidersData&& data, const dnd::Content& content) {
+namespace dnd {
+
+FeatureProviders FeatureProviders::create(FeatureProvidersData&& data, const Content& content) {
     if (!data.validate().ok()) {
-        throw dnd::invalid_data("Cannot create FeatureProviders object from invalid data.");
+        throw invalid_data("Cannot create FeatureProviders object from invalid data.");
     }
     if (!data.validate_relations(content).ok()) {
-        throw dnd::invalid_data("FeatureProviders data is incompatible with the given content.");
+        throw invalid_data("FeatureProviders data is incompatible with the given content.");
     }
     const Species& species = content.get_species().get(data.species_name).value().get();
     OptCRef<Subspecies> subspecies;
@@ -34,19 +36,21 @@ dnd::FeatureProviders dnd::FeatureProviders::create(dnd::FeatureProvidersData&& 
     return FeatureProviders(species, subspecies, cls, subclass);
 }
 
-const dnd::Species& dnd::FeatureProviders::get_species() const noexcept { return species; }
+const Species& FeatureProviders::get_species() const noexcept { return species; }
 
-dnd::OptCRef<dnd::Subspecies> dnd::FeatureProviders::get_subspecies() const noexcept { return subspecies; }
+OptCRef<Subspecies> FeatureProviders::get_subspecies() const noexcept { return subspecies; }
 
-const dnd::Class& dnd::FeatureProviders::get_class() const noexcept { return cls; }
+const Class& FeatureProviders::get_class() const noexcept { return cls; }
 
-dnd::OptCRef<dnd::Subclass> dnd::FeatureProviders::get_subclass() const noexcept { return subclass; }
+OptCRef<Subclass> FeatureProviders::get_subclass() const noexcept { return subclass; }
 
-bool dnd::FeatureProviders::has_subspecies() const noexcept { return subspecies.has_value(); }
+bool FeatureProviders::has_subspecies() const noexcept { return subspecies.has_value(); }
 
-bool dnd::FeatureProviders::has_subclass() const noexcept { return subclass.has_value(); }
+bool FeatureProviders::has_subclass() const noexcept { return subclass.has_value(); }
 
-dnd::FeatureProviders::FeatureProviders(
+FeatureProviders::FeatureProviders(
     const Species& species, OptCRef<Subspecies> subspecies, const Class& cls, OptCRef<Subclass> subclass
 ) noexcept
     : species(std::cref(species)), subspecies(subspecies), cls(std::cref(cls)), subclass(subclass) {}
+
+} // namespace dnd

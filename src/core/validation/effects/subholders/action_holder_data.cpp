@@ -7,9 +7,11 @@
 #include <core/validation/validation_data.hpp>
 #include <core/validation/validation_subdata.hpp>
 
-dnd::ActionHolderData::ActionHolderData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
+namespace dnd {
 
-dnd::Errors dnd::ActionHolderData::validate() const {
+ActionHolderData::ActionHolderData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
+
+Errors ActionHolderData::validate() const {
     Errors errors;
     for (const auto& [action_name, action_description] : actions) {
         if (action_name.empty()) {
@@ -50,6 +52,8 @@ dnd::Errors dnd::ActionHolderData::validate() const {
     return errors;
 }
 
-bool dnd::ActionHolderData::empty() const noexcept {
+bool ActionHolderData::empty() const noexcept {
     return actions.empty() && bonus_actions.empty() && reactions.empty();
 }
+
+} // namespace dnd

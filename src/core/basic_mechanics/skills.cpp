@@ -12,6 +12,8 @@
 
 #include <core/utils/char_manipulation.hpp>
 
+namespace dnd {
+
 static constexpr std::array<std::pair<std::string_view, std::string_view>, 18> skill_abilities = {
     std::pair("ACROBATICS", "DEX"),      std::pair("ANIMAL_HANDLING", "WIS"), std::pair("ARCANA", "INT"),
     std::pair("ATHLETICS", "STR"),       std::pair("DECEPTION", "CHA"),       std::pair("HISTORY", "INT"),
@@ -21,7 +23,7 @@ static constexpr std::array<std::pair<std::string_view, std::string_view>, 18> s
     std::pair("SLEIGHT_OF_HAND", "DEX"), std::pair("STEALTH", "DEX"),         std::pair("SURVIVAL", "WIS"),
 };
 
-bool dnd::is_skill(const std::string& skill) noexcept {
+bool is_skill(const std::string& skill) noexcept {
     for (const auto& skill_ability_pair : skill_abilities) {
         std::string_view skill_to_check = skill_ability_pair.first;
         if (skill.size() != skill_to_check.size()) {
@@ -46,7 +48,7 @@ bool dnd::is_skill(const std::string& skill) noexcept {
     return false;
 }
 
-std::vector<std::string> dnd::get_all_skills() noexcept {
+std::vector<std::string> get_all_skills() noexcept {
     std::vector<std::string> skills;
     skills.reserve(skill_abilities.size());
     for (const auto& [skill_name, _] : skill_abilities) {
@@ -61,10 +63,12 @@ std::vector<std::string> dnd::get_all_skills() noexcept {
     return skills;
 }
 
-std::map<std::string, std::string> dnd::get_abilities_for_all_skills() noexcept {
+std::map<std::string, std::string> get_abilities_for_all_skills() noexcept {
     std::map<std::string, std::string> skill_ability_map;
     for (const auto& skill_ability_pair : skill_abilities) {
         skill_ability_map.emplace(skill_ability_pair);
     }
     return skill_ability_map;
 }
+
+} // namespace dnd

@@ -26,6 +26,8 @@
 #include <core/output/string_formatting/string_formatter.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
+namespace dnd {
+
 static const ImVec2 cell_padding = ImVec2(5, 5);
 static constexpr ImGuiTableFlags content_table_flags = ImGuiTableFlags_NoBordersInBodyUntilResize;
 static const float first_column_width = 150;
@@ -47,7 +49,7 @@ static void wrapped_label(const char* label) {
     ImGui::TableSetColumnIndex(1);
 }
 
-static void source(const dnd::ContentPiece& content_piece) {
+static void source(const ContentPiece& content_piece) {
     ImGui::TableNextRow();
     ImGui::TableSetColumnIndex(0);
     ImGui::Text("Source:");
@@ -64,7 +66,7 @@ static void source(const dnd::ContentPiece& content_piece) {
     ImGui::Separator();
 }
 
-static void begin_content_table(const dnd::ContentPiece& content_piece) {
+static void begin_content_table(const ContentPiece& content_piece) {
     std::string table_id = content_piece.get_name() + "_table";
     ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, cell_padding);
     ImGui::BeginTable(table_id.c_str(), 2, content_table_flags);
@@ -78,16 +80,16 @@ static void end_content_table() {
 }
 
 static void display_formatted_text(const std::string& formatted_text) {
-    static dnd::DisplayFormatVisitor display_format_visitor(table_flags);
-    static dnd::StringFormatter string_formatter(false);
-    std::vector<std::unique_ptr<dnd::Format>> text_formats = string_formatter.parse_formats(formatted_text);
+    static DisplayFormatVisitor display_format_visitor(table_flags);
+    static StringFormatter string_formatter(false);
+    std::vector<std::unique_ptr<Format>> text_formats = string_formatter.parse_formats(formatted_text);
     for (auto it = text_formats.begin(); it != text_formats.end(); ++it) {
         (*it)->accept(display_format_visitor);
     }
 }
 
 template <typename T>
-static void list_features(dnd::DisplayVisitor& visitor, const std::vector<T>& features) {
+static void list_features(DisplayVisitor& visitor, const std::vector<T>& features) {
     if (features.empty()) {
         ImGui::Text("None");
         return;
@@ -103,7 +105,7 @@ static void list_features(dnd::DisplayVisitor& visitor, const std::vector<T>& fe
     ImGui::Separator();
 }
 
-void dnd::DisplayVisitor::operator()(const Character& character) {
+void DisplayVisitor::operator()(const Character& character) {
     begin_content_table(character);
 
     label("Type:");
@@ -152,7 +154,7 @@ void dnd::DisplayVisitor::operator()(const Character& character) {
     end_content_table();
 }
 
-void dnd::DisplayVisitor::operator()(const Class& cls) {
+void DisplayVisitor::operator()(const Class& cls) {
     begin_content_table(cls);
 
     label("Type:");
@@ -171,7 +173,7 @@ void dnd::DisplayVisitor::operator()(const Class& cls) {
     end_content_table();
 }
 
-void dnd::DisplayVisitor::operator()(const Subclass& subclass) {
+void DisplayVisitor::operator()(const Subclass& subclass) {
     begin_content_table(subclass);
 
     label("Type:");
@@ -185,7 +187,7 @@ void dnd::DisplayVisitor::operator()(const Subclass& subclass) {
     end_content_table();
 }
 
-void dnd::DisplayVisitor::operator()(const Species& species) {
+void DisplayVisitor::operator()(const Species& species) {
     begin_content_table(species);
 
     label("Type:");
@@ -200,7 +202,7 @@ void dnd::DisplayVisitor::operator()(const Species& species) {
     end_content_table();
 }
 
-void dnd::DisplayVisitor::operator()(const Subspecies& subspecies) {
+void DisplayVisitor::operator()(const Subspecies& subspecies) {
     begin_content_table(subspecies);
 
     label("Type:");
@@ -214,7 +216,7 @@ void dnd::DisplayVisitor::operator()(const Subspecies& subspecies) {
     end_content_table();
 }
 
-void dnd::DisplayVisitor::operator()(const Item& item) {
+void DisplayVisitor::operator()(const Item& item) {
     begin_content_table(item);
 
     label("Type:");
@@ -233,7 +235,7 @@ void dnd::DisplayVisitor::operator()(const Item& item) {
     end_content_table();
 }
 
-void dnd::DisplayVisitor::operator()(const Spell& spell) {
+void DisplayVisitor::operator()(const Spell& spell) {
     begin_content_table(spell);
 
     label("Type:");
@@ -259,7 +261,7 @@ void dnd::DisplayVisitor::operator()(const Spell& spell) {
     end_content_table();
 }
 
-void dnd::DisplayVisitor::operator()(const Feature& feature) {
+void DisplayVisitor::operator()(const Feature& feature) {
     begin_content_table(feature);
 
     label("Type:");
@@ -271,7 +273,7 @@ void dnd::DisplayVisitor::operator()(const Feature& feature) {
     end_content_table();
 }
 
-void dnd::DisplayVisitor::operator()(const Choosable& choosable) {
+void DisplayVisitor::operator()(const Choosable& choosable) {
     begin_content_table(choosable);
 
     label("Type:");
@@ -282,3 +284,5 @@ void dnd::DisplayVisitor::operator()(const Choosable& choosable) {
 
     end_content_table();
 }
+
+} // namespace dnd

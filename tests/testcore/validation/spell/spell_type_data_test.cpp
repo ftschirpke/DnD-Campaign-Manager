@@ -11,6 +11,8 @@
 #include <core/errors/errors.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
+namespace dnd::test {
+
 static constexpr const char* tags = "[core][validation][spell]";
 
 static constexpr std::array<const char*, 16> allowed_magic_school_spellings = {
@@ -22,10 +24,10 @@ static constexpr std::array<const char*, 16> allowed_magic_school_spellings = {
 static constexpr std::array<const char*, 9> spell_levels = {"1st", "2nd", "3rd", "4th", "5th",
                                                             "6th", "7th", "8th", "9th"};
 
-TEST_CASE("dnd::SpellTypeData::validate // valid spell type", tags) {
-    dndtest::ValidationDataMock parent;
-    dnd::SpellTypeData data(&parent);
-    dnd::Errors errors;
+TEST_CASE("SpellTypeData::validate // valid spell type", tags) {
+    ValidationDataMock parent;
+    SpellTypeData data(&parent);
+    Errors errors;
     SECTION("cantrips") {
         for (const char* spelling : allowed_magic_school_spellings) {
             data.str = fmt::format("{} cantrip", spelling);
@@ -49,10 +51,10 @@ TEST_CASE("dnd::SpellTypeData::validate // valid spell type", tags) {
     }
 }
 
-TEST_CASE("dnd::SpellTypeData::validate // invalid spell type", tags) {
-    dndtest::ValidationDataMock parent;
-    dnd::SpellTypeData data(&parent);
-    dnd::Errors errors;
+TEST_CASE("SpellTypeData::validate // invalid spell type", tags) {
+    ValidationDataMock parent;
+    SpellTypeData data(&parent);
+    Errors errors;
     SECTION("other formats than standard D&D format not allowed") {
         data.str = "Level 9 illusion";
         REQUIRE_NOTHROW(errors = data.validate());
@@ -161,3 +163,5 @@ TEST_CASE("dnd::SpellTypeData::validate // invalid spell type", tags) {
         REQUIRE_FALSE(errors.ok());
     }
 }
+
+} // namespace dnd::test

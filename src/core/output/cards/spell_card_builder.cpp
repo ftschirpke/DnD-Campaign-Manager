@@ -18,18 +18,20 @@
 #include <core/output/latex_builder/latex_scope.hpp>
 #include <core/output/latex_builder/latex_text.hpp>
 
+namespace dnd {
+
 constexpr int card_character_cutoff = 750;
 
-void dnd::SpellCardBuilder::addSpell(const Spell* spell) { spells.push_back(spell); }
+void SpellCardBuilder::addSpell(const Spell* spell) { spells.push_back(spell); }
 
-void dnd::SpellCardBuilder::write_latex_file() {
+void SpellCardBuilder::write_latex_file() {
     std::stringstream sstr;
     std::time_t t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     sstr << std::put_time(std::localtime(&t), "%F %T\n\n") << ".tex";
     write_latex_file(sstr.str());
 }
 
-static void create_header(dnd::LatexDocument& document) {
+static void create_header(LatexDocument& document) {
     document.document_class.add_bracket_argument("parskip");
     document.use_package("geometry");
     document.use_package("tcolorbox")->add_bracket_argument("most");
@@ -42,9 +44,9 @@ static void create_header(dnd::LatexDocument& document) {
     document.header.add_command("makeatother");
 }
 
-static dnd::LatexScope* create_card_page(dnd::LatexDocument& document) {
+static LatexScope* create_card_page(LatexDocument& document) {
     std::string color = "white";
-    dnd::LatexBeginEnd begin_end = document.body.add_begin_end("tcbitemize");
+    LatexBeginEnd begin_end = document.body.add_begin_end("tcbitemize");
     begin_end.begin_command->add_bracket_argument(
         "size=fbox,raster height=\\textheight,raster columns=3, raster equal skip=5mm,raster rows=3,enhanced,sharp "
         "corners,colback="
@@ -53,8 +55,8 @@ static dnd::LatexScope* create_card_page(dnd::LatexDocument& document) {
     return begin_end.scope;
 }
 
-static void create_minipage(dnd::LatexScope* scope, const std::string& name, const std::string& value) {
-    dnd::LatexBeginEnd minipage = scope->add_begin_end("minipage");
+static void create_minipage(LatexScope* scope, const std::string& name, const std::string& value) {
+    LatexBeginEnd minipage = scope->add_begin_end("minipage");
     minipage.begin_command->add_bspecies_argument("0.49\\textwidth");
     minipage.scope->add_command("centering");
     minipage.scope->add_command("footnotesize");
@@ -63,14 +65,14 @@ static void create_minipage(dnd::LatexScope* scope, const std::string& name, con
     minipage.scope->add_text(value)->add_modifier("scriptsize");
 }
 
-static dnd::LatexText* create_card_header(dnd::LatexScope* scope, const dnd::Spell* spell, int counter) {
+static LatexText* create_card_header(LatexScope* scope, const Spell* spell, int counter) {
     scope->add_command("tcbitem");
     scope->add_command("vspace", "1mm");
-    dnd::LatexScope* center_scope = scope->add_begin_end("center").scope;
+    LatexScope* center_scope = scope->add_begin_end("center").scope;
     center_scope->add_command("MakeUppercase");
-    dnd::LatexScope* sub_scope = center_scope->add_scope();
+    LatexScope* sub_scope = center_scope->add_scope();
     sub_scope->add_command("textbf");
-    dnd::LatexText* title = sub_scope->add_scope()->add_text(spell->get_name() + " (" + std::to_string(counter) + ')');
+    LatexText* title = sub_scope->add_scope()->add_text(spell->get_name() + " (" + std::to_string(counter) + ')');
     scope->add_command("vspace", "-3mm");
     create_minipage(scope, "Casting Time", spell->get_casting_time());
     create_minipage(scope, "Range", spell->get_range());
@@ -89,14 +91,14 @@ static dnd::LatexText* create_card_header(dnd::LatexScope* scope, const dnd::Spe
     return title;
 }
 
-static void create_card_footer(dnd::LatexScope* scope, const dnd::Spell* spell) {
+static void create_card_footer(LatexScope* scope, const Spell* spell) {
     scope->add_command("vfill");
     scope->add_text(spell->get_type().str())->add_modifier("scriptsize")->add_modifier("centering");
 }
 
-static int create_spell_cards(dnd::LatexScope* scope, const dnd::Spell* spell) {
+static int create_spell_cards(LatexScope* scope, const Spell* spell) {
     int counter = 1;
-    dnd::LatexText* first_title = create_card_header(scope, spell, counter);
+    LatexText* first_title = create_card_header(scope, spell, counter);
     size_t start = 0;
     size_t end = 0;
     size_t characters_written = 0;
@@ -109,7 +111,7 @@ static int create_spell_cards(dnd::LatexScope* scope, const dnd::Spell* spell) {
                 characters_written = 0;
             }
 
-            dnd::LatexText* text = scope->add_text(spell->get_description().substr(start, end - start));
+            LatexText* text = scope->add_text(spell->get_description().substr(start, end - start));
             characters_written += end - start;
             if (end + 1 < spell->get_description().size() && spell->get_description()[end + 1] == '\n') {
                 text->add_line_break();
@@ -133,7 +135,7 @@ static int create_spell_cards(dnd::LatexScope* scope, const dnd::Spell* spell) {
     return counter;
 }
 
-static int calculate_cards_to_create(const dnd::Spell* spell) {
+static int calculate_cards_to_create(const Spell* spell) {
     int counter = 1;
     size_t start = 0;
     size_t end = 0;
@@ -159,11 +161,11 @@ static int calculate_cards_to_create(const dnd::Spell* spell) {
     return counter;
 }
 
-void dnd::SpellCardBuilder::write_latex_file(const std::string& filename) {
+void SpellCardBuilder::write_latex_file(const std::string& filename) {
     LatexDocument document("scrartcl");
     create_header(document);
 
-    std::unordered_map<int, std::deque<dnd::LatexScope*>> not_full_scopes;
+    std::unordered_map<int, std::deque<LatexScope*>> not_full_scopes;
     not_full_scopes[9].push_back(create_card_page(document));
 
     for (const Spell* spell : spells) {
@@ -200,3 +202,5 @@ void dnd::SpellCardBuilder::write_latex_file(const std::string& filename) {
     output_stream << document.str();
     output_stream.close();
 }
+
+} // namespace dnd

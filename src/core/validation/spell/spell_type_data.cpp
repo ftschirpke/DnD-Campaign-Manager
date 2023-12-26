@@ -12,6 +12,8 @@
 #include <core/validation/validation_data.hpp>
 #include <core/validation/validation_subdata.hpp>
 
+namespace dnd {
+
 static constexpr const char* spell_type_regex_cstr = "(1st|2nd|3rd|[4-9]th)-level "
                                                      "([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|"
                                                      "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)"
@@ -20,9 +22,9 @@ static constexpr const char* spell_type_regex_cstr = "(1st|2nd|3rd|[4-9]th)-leve
                                                      "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)"
                                                      " cantrip";
 
-dnd::SpellTypeData::SpellTypeData(const dnd::ValidationData* parent) noexcept : ValidationSubdata(parent) {}
+SpellTypeData::SpellTypeData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
 
-dnd::Errors dnd::SpellTypeData::validate() const {
+Errors SpellTypeData::validate() const {
     DND_MEASURE_FUNCTION();
     static const std::regex spell_type_regex(spell_type_regex_cstr);
     Errors errors;
@@ -33,3 +35,5 @@ dnd::Errors dnd::SpellTypeData::validate() const {
     }
     return errors;
 }
+
+} // namespace dnd

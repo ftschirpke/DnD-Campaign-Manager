@@ -20,17 +20,19 @@
 #include <core/validation/validation_data.hpp>
 #include <core/validation/validation_subdata.hpp>
 
-dnd::ChoiceData::ChoiceData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
+namespace dnd {
 
-static dnd::Errors validate_ability_choice(const dnd::ChoiceData& data, const dnd::ValidationData* parent) {
-    dnd::Errors errors;
+ChoiceData::ChoiceData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
+
+static Errors validate_ability_choice(const ChoiceData& data, const ValidationData* parent) {
+    Errors errors;
     for (const std::string& explicit_choice : data.explicit_choices) {
         if (explicit_choice.empty()) {
             continue;
         }
-        if (!dnd::is_ability(explicit_choice)) {
+        if (!is_ability(explicit_choice)) {
             errors.add_validation_error(
-                dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
                 fmt::format(
                     "Choice for '{}' cannot have '{}' as an option since that is not an ability.", data.attribute_name,
                     explicit_choice
@@ -40,7 +42,7 @@ static dnd::Errors validate_ability_choice(const dnd::ChoiceData& data, const dn
     }
     if (!data.group_names.empty()) {
         errors.add_validation_error(
-            dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
             fmt::format(
                 "Choice for '{}' implies the selection of an ability which prohibits group names.", data.attribute_name
             )
@@ -49,15 +51,15 @@ static dnd::Errors validate_ability_choice(const dnd::ChoiceData& data, const dn
     return errors;
 }
 
-static dnd::Errors validate_skill_choice(const dnd::ChoiceData& data, const dnd::ValidationData* parent) {
-    dnd::Errors errors;
+static Errors validate_skill_choice(const ChoiceData& data, const ValidationData* parent) {
+    Errors errors;
     for (const std::string& explicit_choice : data.explicit_choices) {
         if (explicit_choice.empty()) {
             continue;
         }
-        if (!dnd::is_skill(explicit_choice)) {
+        if (!is_skill(explicit_choice)) {
             errors.add_validation_error(
-                dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
                 fmt::format(
                     "Choice for '{}' cannot have '{}' as an option since that is not a skill.", data.attribute_name,
                     explicit_choice
@@ -67,7 +69,7 @@ static dnd::Errors validate_skill_choice(const dnd::ChoiceData& data, const dnd:
     }
     if (!data.group_names.empty()) {
         errors.add_validation_error(
-            dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
             fmt::format(
                 "Choice for '{}' implies the selection of a skill which prohibits group names.", data.attribute_name
             )
@@ -76,9 +78,9 @@ static dnd::Errors validate_skill_choice(const dnd::ChoiceData& data, const dnd:
     return errors;
 }
 
-static dnd::Errors validate_stat_change_choice(const dnd::ChoiceData& data, const dnd::ValidationData* parent) {
-    dnd::Errors errors;
-    dnd::StatChangeData stat_change_data(parent);
+static Errors validate_stat_change_choice(const ChoiceData& data, const ValidationData* parent) {
+    Errors errors;
+    StatChangeData stat_change_data(parent);
     for (const std::string& explicit_choice : data.explicit_choices) {
         if (explicit_choice.empty()) {
             continue;
@@ -88,7 +90,7 @@ static dnd::Errors validate_stat_change_choice(const dnd::ChoiceData& data, cons
     }
     if (!data.group_names.empty()) {
         errors.add_validation_error(
-            dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
             fmt::format(
                 "Choice for '{}' implies the selection of a stat change which prohibits group names.",
                 data.attribute_name
@@ -98,7 +100,7 @@ static dnd::Errors validate_stat_change_choice(const dnd::ChoiceData& data, cons
     return errors;
 }
 
-dnd::Errors dnd::ChoiceData::validate() const {
+Errors ChoiceData::validate() const {
     Errors errors;
     if (amount <= 0) {
         errors.add_validation_error(
@@ -152,13 +154,13 @@ dnd::Errors dnd::ChoiceData::validate() const {
     return errors;
 }
 
-static dnd::Errors validate_relations_string_choice(
-    const dnd::ChoiceData& data, const dnd::ValidationData* parent, const dnd::Content& content
+static Errors validate_relations_string_choice(
+    const ChoiceData& data, const ValidationData* parent, const Content& content
 ) {
-    dnd::Errors errors;
-    if (!dnd::attribute_name_implies_group(data.attribute_name)) {
+    Errors errors;
+    if (!attribute_name_implies_group(data.attribute_name)) {
         errors.add_validation_error(
-            dnd::ValidationErrorCode::INCONSISTENT_ATTRIBUTES, parent,
+            ValidationErrorCode::INCONSISTENT_ATTRIBUTES, parent,
             fmt::format(
                 "Choice for '{}' implies string selection but no string group which is contradictory.",
                 data.attribute_name
@@ -166,14 +168,14 @@ static dnd::Errors validate_relations_string_choice(
         );
         return errors;
     }
-    const std::string group_name = dnd::group_name_for_attribute_name(data.attribute_name);
+    const std::string group_name = group_name_for_attribute_name(data.attribute_name);
     for (const std::string& explicit_choice : data.explicit_choices) {
         if (explicit_choice.empty()) {
             continue;
         }
         if (!content.get_groups().is_part_of_group(explicit_choice, group_name)) {
             errors.add_validation_error(
-                dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
                 fmt::format(
                     "Choice for '{}' cannot have '{}' as an option since that is part of the group '{}'.",
                     data.attribute_name, explicit_choice, group_name
@@ -187,7 +189,7 @@ static dnd::Errors validate_relations_string_choice(
         }
         if (!content.get_groups().is_subgroup(subgroup_name, group_name)) {
             errors.add_validation_error(
-                dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
                 fmt::format(
                     "Choice for '{}' cannot have '{}' as a group name since that is not a subgroup of '{}'.",
                     data.attribute_name, subgroup_name, group_name
@@ -198,17 +200,17 @@ static dnd::Errors validate_relations_string_choice(
     return errors;
 }
 
-static dnd::Errors validate_relations_item_choice(
-    const dnd::ChoiceData& data, const dnd::ValidationData* parent, const dnd::Content& content
+static Errors validate_relations_item_choice(
+    const ChoiceData& data, const ValidationData* parent, const Content& content
 ) {
-    dnd::Errors errors;
+    Errors errors;
     for (const std::string& explicit_choice : data.explicit_choices) {
         if (explicit_choice.empty()) {
             continue;
         }
         if (!content.get_items().contains(explicit_choice)) {
             errors.add_validation_error(
-                dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
                 fmt::format(
                     "Choice for '{}' cannot have '{}' as an option since that is not an item.", data.attribute_name,
                     explicit_choice
@@ -221,7 +223,7 @@ static dnd::Errors validate_relations_item_choice(
             continue;
         }
         errors.add_validation_error(
-            dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
             fmt::format(
                 "Choice for '{}' cannot have '{}' as a group name since that is not a name specifying items.",
                 data.attribute_name, group_name
@@ -240,17 +242,17 @@ static constexpr const char* spell_filter_regex_cstr = "((1st|2nd|3rd|[4-9]th)-l
                                                        "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation) )?"
                                                        "(([a-zA-Z][a-z]*) )?[sS]pells";
 
-static dnd::Errors validate_relations_spell_choice(
-    const dnd::ChoiceData& data, const dnd::ValidationData* parent, const dnd::Content& content
+static Errors validate_relations_spell_choice(
+    const ChoiceData& data, const ValidationData* parent, const Content& content
 ) {
-    dnd::Errors errors;
+    Errors errors;
     for (const std::string& explicit_choice : data.explicit_choices) {
         if (explicit_choice.empty()) {
             continue;
         }
         if (!content.get_spells().contains(explicit_choice)) {
             errors.add_validation_error(
-                dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
                 fmt::format(
                     "Choice for '{}' cannot have '{}' as an option since that is not a spell.", data.attribute_name,
                     explicit_choice
@@ -269,7 +271,7 @@ static dnd::Errors validate_relations_spell_choice(
                 std::string class_name = match_pieces[4];
                 if (!class_name.empty() && !content.get_classes().contains(class_name)) {
                     errors.add_validation_error(
-                        dnd::ValidationErrorCode::RELATION_NOT_FOUND, parent,
+                        ValidationErrorCode::RELATION_NOT_FOUND, parent,
                         fmt::format(
                             "Choice for '{}' cannot have '{}' as a group name because '{}' is not a character class.",
                             data.attribute_name, group_name, class_name
@@ -278,7 +280,7 @@ static dnd::Errors validate_relations_spell_choice(
                 }
             } else {
                 errors.add_validation_error(
-                    dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                    ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
                     fmt::format(
                         "Choice for '{}' cannot have '{}' as a group name because that is not a name specifying "
                         "cantrips.",
@@ -293,7 +295,7 @@ static dnd::Errors validate_relations_spell_choice(
                 std::string class_name = match_pieces[6];
                 if (!class_name.empty() && !content.get_classes().contains(class_name)) {
                     errors.add_validation_error(
-                        dnd::ValidationErrorCode::RELATION_NOT_FOUND, parent,
+                        ValidationErrorCode::RELATION_NOT_FOUND, parent,
                         fmt::format(
                             "Choice for '{}' cannot have '{}' as a group name because '{}' is not a character class.",
                             data.attribute_name, group_name, class_name
@@ -302,7 +304,7 @@ static dnd::Errors validate_relations_spell_choice(
                 }
             } else {
                 errors.add_validation_error(
-                    dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                    ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
                     fmt::format(
                         "Choice for '{}' cannot have '{}' as a group name because that is not a name specifying "
                         "spells.",
@@ -315,17 +317,17 @@ static dnd::Errors validate_relations_spell_choice(
     return errors;
 }
 
-static dnd::Errors validate_relations_choosable_choice(
-    const dnd::ChoiceData& data, const dnd::ValidationData* parent, const dnd::Content& content
+static Errors validate_relations_choosable_choice(
+    const ChoiceData& data, const ValidationData* parent, const Content& content
 ) {
-    dnd::Errors errors;
+    Errors errors;
     for (const std::string& explicit_choice : data.explicit_choices) {
         if (explicit_choice.empty()) {
             continue;
         }
         if (!content.get_choosables().contains(explicit_choice)) {
             errors.add_validation_error(
-                dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
                 fmt::format(
                     "Choice for '{}' cannot have '{}' as an option since that is not an choosable feature.",
                     data.attribute_name, explicit_choice
@@ -338,7 +340,7 @@ static dnd::Errors validate_relations_choosable_choice(
             continue;
         }
         errors.add_validation_error(
-            dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
             fmt::format(
                 "Choice for '{}' cannot have '{}' as a group name since that is not a name specifying "
                 "choosable features.",
@@ -349,7 +351,7 @@ static dnd::Errors validate_relations_choosable_choice(
     return errors;
 }
 
-dnd::Errors dnd::ChoiceData::validate_relations(const Content& content) const {
+Errors ChoiceData::validate_relations(const Content& content) const {
     Errors errors;
     if (!is_valid_choice_attribute_name(attribute_name)) {
         return errors;
@@ -375,3 +377,5 @@ dnd::Errors dnd::ChoiceData::validate_relations(const Content& content) const {
 
     return errors;
 }
+
+} // namespace dnd

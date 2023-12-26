@@ -8,12 +8,14 @@
 #include <core/errors/errors.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
+namespace dnd::test {
+
 static constexpr const char* tags = "[core][validation][spell]";
 
-TEST_CASE("dnd::SpellComponentsData::validate // valid components", tags) {
-    dndtest::ValidationDataMock parent;
-    dnd::SpellComponentsData data(&parent);
-    dnd::Errors errors;
+TEST_CASE("SpellComponentsData::validate // valid components", tags) {
+    ValidationDataMock parent;
+    SpellComponentsData data(&parent);
+    Errors errors;
 
     std::string components_string = "A bit of this and a bit of that";
 
@@ -54,10 +56,10 @@ TEST_CASE("dnd::SpellComponentsData::validate // valid components", tags) {
     }
 }
 
-TEST_CASE("dnd::SpellComponentsData::validate // invalid components", tags) {
-    dndtest::ValidationDataMock parent;
-    dnd::SpellComponentsData data(&parent);
-    dnd::Errors errors;
+TEST_CASE("SpellComponentsData::validate // invalid components", tags) {
+    ValidationDataMock parent;
+    SpellComponentsData data(&parent);
+    Errors errors;
 
     SECTION("completely wrong letters not allowed") {
         data.str = "A, B";
@@ -129,3 +131,5 @@ TEST_CASE("dnd::SpellComponentsData::validate // invalid components", tags) {
         REQUIRE_FALSE(errors.ok());
     }
 }
+
+} // namespace dnd::test

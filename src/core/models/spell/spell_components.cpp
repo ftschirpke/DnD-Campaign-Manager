@@ -12,7 +12,9 @@
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/validation/spell/spell_components_data.hpp>
 
-dnd::SpellComponents dnd::SpellComponents::create(SpellComponentsData&& components_data) {
+namespace dnd {
+
+SpellComponents SpellComponents::create(SpellComponentsData&& components_data) {
     if (!components_data.validate().ok()) {
         throw invalid_data("Cannot create SpellComponents from invalid data.");
     }
@@ -47,32 +49,32 @@ dnd::SpellComponents dnd::SpellComponents::create(SpellComponentsData&& componen
     return SpellComponents(verbal, somatic, material, std::move(materials_needed));
 }
 
-dnd::SpellComponents::SpellComponents(
+SpellComponents::SpellComponents(
     bool verbal, bool somatic, bool material, const std::string& material_components
 ) noexcept
     : verbal(verbal), somatic(somatic), material(material), material_components(material_components) {}
 
-dnd::SpellComponents::SpellComponents(
+SpellComponents::SpellComponents(
     bool verbal, bool somatic, bool material, std::string&& material_components
 ) noexcept
     : verbal(verbal), somatic(somatic), material(material), material_components(std::move(material_components)) {}
 
-bool dnd::SpellComponents::has_verbal() const noexcept { return verbal; }
+bool SpellComponents::has_verbal() const noexcept { return verbal; }
 
-bool dnd::SpellComponents::has_somatic() const noexcept { return somatic; }
+bool SpellComponents::has_somatic() const noexcept { return somatic; }
 
-bool dnd::SpellComponents::has_material() const noexcept { return material; }
+bool SpellComponents::has_material() const noexcept { return material; }
 
-const std::string& dnd::SpellComponents::get_material_components() const noexcept { return material_components; }
+const std::string& SpellComponents::get_material_components() const noexcept { return material_components; }
 
-std::string dnd::SpellComponents::str() const {
+std::string SpellComponents::str() const {
     if (!material || material_components.empty()) {
         return short_str();
     }
     return fmt::format("{} ({})", short_str(), material_components);
 }
 
-std::string dnd::SpellComponents::short_str() const {
+std::string SpellComponents::short_str() const {
     assert(verbal || somatic || material);
     if (verbal && somatic && material) {
         return "V, S, M";
@@ -91,3 +93,5 @@ std::string dnd::SpellComponents::short_str() const {
     }
     return "";
 }
+
+} // namespace dnd

@@ -9,19 +9,21 @@
 #include <testcore/minimal_testing_content.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
+namespace dnd::test {
+
 static constexpr const char* tags = "[core][validation][subclass]";
 
-TEST_CASE("dnd::SubclassData::validate and ::validate_relations // valid subclass data", tags) {
-    dnd::SubclassData data;
-    dndtest::set_valid_mock_values(data, "Subclass");
+TEST_CASE("SubclassData::validate and ::validate_relations // valid subclass data", tags) {
+    SubclassData data;
+    set_valid_mock_values(data, "Subclass");
     data.spellcasting_data.is_spellcaster = false;
-    dnd::Content content = dndtest::minimal_testing_content();
-    dnd::Errors errors;
+    Content content = minimal_testing_content();
+    Errors errors;
 
     SECTION("class with one valid feature") {
         data.class_name = "Wizard";
-        dnd::ClassFeatureData& feature_data = data.features_data.emplace_back(&data);
-        dndtest::set_valid_mock_values(feature_data, "Feature");
+        ClassFeatureData& feature_data = data.features_data.emplace_back(&data);
+        set_valid_mock_values(feature_data, "Feature");
         REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_NOTHROW(errors += data.validate_relations(content));
         REQUIRE(errors.ok());
@@ -29,28 +31,28 @@ TEST_CASE("dnd::SubclassData::validate and ::validate_relations // valid subclas
 
     SECTION("class with multiple differently named features") {
         data.class_name = "Wizard";
-        dnd::FeatureData& feature_data1 = data.features_data.emplace_back(&data);
-        dndtest::set_valid_mock_values(feature_data1, "Feature 1");
-        dnd::FeatureData& feature_data2 = data.features_data.emplace_back(&data);
-        dndtest::set_valid_mock_values(feature_data2, "Feature 2");
-        dnd::FeatureData& feature_data3 = data.features_data.emplace_back(&data);
-        dndtest::set_valid_mock_values(feature_data3, "Feature 3");
+        FeatureData& feature_data1 = data.features_data.emplace_back(&data);
+        set_valid_mock_values(feature_data1, "Feature 1");
+        FeatureData& feature_data2 = data.features_data.emplace_back(&data);
+        set_valid_mock_values(feature_data2, "Feature 2");
+        FeatureData& feature_data3 = data.features_data.emplace_back(&data);
+        set_valid_mock_values(feature_data3, "Feature 3");
         REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_NOTHROW(errors += data.validate_relations(content));
         REQUIRE(errors.ok());
     }
 }
 
-TEST_CASE("dnd::SubclassData::validate // invalid subclass data", tags) {
-    dnd::SubclassData data;
-    dndtest::set_valid_mock_values(data, "Subclass");
+TEST_CASE("SubclassData::validate // invalid subclass data", tags) {
+    SubclassData data;
+    set_valid_mock_values(data, "Subclass");
     data.spellcasting_data.is_spellcaster = false;
-    dnd::Errors errors;
+    Errors errors;
 
     SECTION("subclass without class is invalid") {
         data.class_name = "";
-        dnd::ClassFeatureData& feature_data = data.features_data.emplace_back(&data);
-        dndtest::set_valid_mock_values(feature_data, "Feature");
+        ClassFeatureData& feature_data = data.features_data.emplace_back(&data);
+        set_valid_mock_values(feature_data, "Feature");
         REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_FALSE(errors.ok());
     }
@@ -69,25 +71,25 @@ TEST_CASE("dnd::SubclassData::validate // invalid subclass data", tags) {
 
     SECTION("subclass with duplicate feature names") {
         data.class_name = "Wizard";
-        dnd::FeatureData& feature_data1 = data.features_data.emplace_back(&data);
-        dndtest::set_valid_mock_values(feature_data1, "Duplicate Feature");
-        dnd::FeatureData& feature_data2 = data.features_data.emplace_back(&data);
-        dndtest::set_valid_mock_values(feature_data2, "Duplicate Feature");
-        dnd::FeatureData& feature_data3 = data.features_data.emplace_back(&data);
-        dndtest::set_valid_mock_values(feature_data3, "Other Feature");
+        FeatureData& feature_data1 = data.features_data.emplace_back(&data);
+        set_valid_mock_values(feature_data1, "Duplicate Feature");
+        FeatureData& feature_data2 = data.features_data.emplace_back(&data);
+        set_valid_mock_values(feature_data2, "Duplicate Feature");
+        FeatureData& feature_data3 = data.features_data.emplace_back(&data);
+        set_valid_mock_values(feature_data3, "Other Feature");
         REQUIRE_NOTHROW(errors = data.validate());
         REQUIRE_FALSE(errors.ok());
     }
 }
 
-TEST_CASE("dnd::SubclassData::validate_relations // invalid subclass data relations", tags) {
-    dnd::SubclassData data;
-    dndtest::set_valid_mock_values(data, "Subclass");
+TEST_CASE("SubclassData::validate_relations // invalid subclass data relations", tags) {
+    SubclassData data;
+    set_valid_mock_values(data, "Subclass");
     data.spellcasting_data.is_spellcaster = false;
-    dnd::ClassFeatureData& valid_feature_data = data.features_data.emplace_back(&data);
-    dndtest::set_valid_mock_values(valid_feature_data, "Valid Feature");
-    dnd::Content content = dndtest::minimal_testing_content();
-    dnd::Errors errors;
+    ClassFeatureData& valid_feature_data = data.features_data.emplace_back(&data);
+    set_valid_mock_values(valid_feature_data, "Valid Feature");
+    Content content = minimal_testing_content();
+    Errors errors;
 
     SECTION("subclass with a name that already exists in the content") {
         data.name = "Abjuration Wizard"; // already exists in the example content
@@ -99,8 +101,8 @@ TEST_CASE("dnd::SubclassData::validate_relations // invalid subclass data relati
     SECTION("features with duplicate names aren't allowed") {
         data.name = "New Subclass";
         data.class_name = "Wizard";
-        dnd::ClassFeatureData& feature_data = data.features_data.emplace_back(&data);
-        dndtest::set_valid_mock_values(feature_data, "Duplicate Feature");
+        ClassFeatureData& feature_data = data.features_data.emplace_back(&data);
+        set_valid_mock_values(feature_data, "Duplicate Feature");
         feature_data.name = "Example Subclass Feature"; // feature with that name already exists in the example content
         REQUIRE_NOTHROW(errors = data.validate_relations(content));
         REQUIRE_FALSE(errors.ok());
@@ -121,3 +123,5 @@ TEST_CASE("dnd::SubclassData::validate_relations // invalid subclass data relati
         REQUIRE_FALSE(errors.ok());
     }
 }
+
+} // namespace dnd::test

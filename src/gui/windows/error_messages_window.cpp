@@ -6,9 +6,11 @@
 
 #include <core/session.hpp>
 
-dnd::ErrorMessagesWindow::ErrorMessagesWindow(Session& session) : session(session) {}
+namespace dnd {
 
-void dnd::ErrorMessagesWindow::render() {
+ErrorMessagesWindow::ErrorMessagesWindow(Session& session) : session(session) {}
+
+void ErrorMessagesWindow::render() {
     DND_MEASURE_FUNCTION();
     ImGui::Begin("Errors");
     for (const std::string& message : session.get_unknown_error_messages()) {
@@ -24,3 +26,5 @@ void dnd::ErrorMessagesWindow::render() {
     }
     ImGui::End();
 }
+
+} // namespace dnd

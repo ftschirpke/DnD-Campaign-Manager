@@ -12,12 +12,14 @@
 #include <core/validation/validation_data.hpp>
 #include <core/validation/validation_subdata.hpp>
 
+namespace dnd {
+
 static constexpr const char* condition_regex_cstr = "[A-Z][_A-Z0-9]+ ((==|!=|>=|<=|>|<) "
                                                     "([A-Z][_A-Z0-9]+|-?\\d+(\\.\\d\\d?)?|)|== true|== false)";
 
-dnd::ConditionData::ConditionData(const dnd::ValidationData* parent) noexcept : ValidationSubdata(parent) {}
+ConditionData::ConditionData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
 
-dnd::Errors dnd::ConditionData::validate() const {
+Errors ConditionData::validate() const {
     DND_MEASURE_FUNCTION();
     static const std::regex condition_regex(condition_regex_cstr);
     Errors errors;
@@ -28,3 +30,5 @@ dnd::Errors dnd::ConditionData::validate() const {
     }
     return errors;
 }
+
+} // namespace dnd

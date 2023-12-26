@@ -15,11 +15,13 @@
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/validation/effects_provider/feature_data.hpp>
 
-std::unique_ptr<dnd::ValidationData> dnd::SubspeciesData::pack() const {
+namespace dnd {
+
+std::unique_ptr<ValidationData> SubspeciesData::pack() const {
     return std::make_unique<SubspeciesData>(*this);
 }
 
-dnd::Errors dnd::SubspeciesData::validate() const {
+Errors SubspeciesData::validate() const {
     Errors errors;
     std::unordered_set<std::string> unique_feature_names;
     for (const FeatureData& feature_data : features_data) {
@@ -46,7 +48,7 @@ dnd::Errors dnd::SubspeciesData::validate() const {
     return errors;
 }
 
-dnd::Errors dnd::SubspeciesData::validate_relations(const Content& content) const {
+Errors SubspeciesData::validate_relations(const Content& content) const {
     Errors errors;
     if (content.get_subspecies().contains(name)) {
         errors.add_validation_error(
@@ -77,3 +79,5 @@ dnd::Errors dnd::SubspeciesData::validate_relations(const Content& content) cons
     }
     return errors;
 }
+
+} // namespace dnd

@@ -14,7 +14,9 @@
 #include <core/validation/spell/spell_data.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
-dnd::Spell dnd::Spell::create(dnd::SpellData&& spell_data) {
+namespace dnd {
+
+Spell Spell::create(SpellData&& spell_data) {
     if (!spell_data.validate().ok()) {
         throw invalid_data("Cannot create Spell from invalid data.");
     }
@@ -29,27 +31,27 @@ dnd::Spell dnd::Spell::create(dnd::SpellData&& spell_data) {
     );
 }
 
-const std::string& dnd::Spell::get_name() const noexcept { return name; }
+const std::string& Spell::get_name() const noexcept { return name; }
 
-const std::string& dnd::Spell::get_description() const noexcept { return description; }
+const std::string& Spell::get_description() const noexcept { return description; }
 
-const dnd::SourceInfo& dnd::Spell::get_source_info() const noexcept { return source_info; }
+const SourceInfo& Spell::get_source_info() const noexcept { return source_info; }
 
-const dnd::SpellComponents& dnd::Spell::get_components() const noexcept { return components; }
+const SpellComponents& Spell::get_components() const noexcept { return components; }
 
-const dnd::SpellType& dnd::Spell::get_type() const noexcept { return type; }
+const SpellType& Spell::get_type() const noexcept { return type; }
 
-const std::string& dnd::Spell::get_casting_time() const noexcept { return casting_time; }
+const std::string& Spell::get_casting_time() const noexcept { return casting_time; }
 
-const std::string& dnd::Spell::get_range() const noexcept { return range; }
+const std::string& Spell::get_range() const noexcept { return range; }
 
-const std::string& dnd::Spell::get_duration() const noexcept { return duration; }
+const std::string& Spell::get_duration() const noexcept { return duration; }
 
-const std::set<std::string>& dnd::Spell::get_classes() const noexcept { return classes; }
+const std::set<std::string>& Spell::get_classes() const noexcept { return classes; }
 
-void dnd::Spell::accept_visitor(dnd::ContentVisitor& visitor) const { visitor(*this); }
+void Spell::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
-dnd::Spell::Spell(
+Spell::Spell(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, SpellComponents&& components,
     SpellType&& type, std::string&& casting_time, std::string&& range, std::string&& duration,
     std::set<std::string>&& classes
@@ -57,3 +59,5 @@ dnd::Spell::Spell(
     : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
       components(std::move(components)), type(std::move(type)), casting_time(std::move(casting_time)),
       range(std::move(range)), duration(std::move(duration)), classes(std::move(classes)) {}
+
+} // namespace dnd

@@ -15,7 +15,9 @@
 #include <core/models/spellcasting/spells_known_spellcasting.hpp>
 #include <core/validation/spellcasting/spellcasting_data.hpp>
 
-std::unique_ptr<dnd::Spellcasting> dnd::create_spellcasting(dnd::SpellcastingData&& data) {
+namespace dnd {
+
+std::unique_ptr<Spellcasting> create_spellcasting(SpellcastingData&& data) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create spellcasting from invalid data.");
     }
@@ -44,3 +46,5 @@ std::unique_ptr<dnd::Spellcasting> dnd::create_spellcasting(dnd::SpellcastingDat
     assert(false);
     return nullptr;
 }
+
+} // namespace dnd

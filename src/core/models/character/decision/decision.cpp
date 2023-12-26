@@ -15,16 +15,18 @@
 #include <core/models/effects_provider/feature.hpp>
 #include <core/validation/character/decision/decision_data.hpp>
 
+namespace dnd {
+
 void ins(std::set<std::string>& set, std::vector<std::string>&& vec) {
     set.insert(std::make_move_iterator(vec.begin()), std::make_move_iterator(vec.end()));
 }
 
-dnd::Decision dnd::Decision::create(dnd::DecisionData&& data, const dnd::Content& content) {
+Decision Decision::create(DecisionData&& data, const Content& content) {
     if (!data.validate().ok()) {
-        throw dnd::invalid_data("Cannot create Decision from invalid data.");
+        throw invalid_data("Cannot create Decision from invalid data.");
     }
     if (!data.validate_relations(content).ok()) {
-        throw dnd::invalid_data("Decision data is incompatible with the given content.");
+        throw invalid_data("Decision data is incompatible with the given content.");
     }
     EffectsData res_data(data.get_character_data());
     for (const std::string& stat_change_str : data.selections["stat_changes"]) {
@@ -59,9 +61,11 @@ dnd::Decision dnd::Decision::create(dnd::DecisionData&& data, const dnd::Content
     return Decision(data.get_target(), Effects::create(std::move(res_data), content));
 }
 
-const dnd::Effects* dnd::Decision::get_target() const noexcept { return target; }
+const Effects* Decision::get_target() const noexcept { return target; }
 
-const dnd::Effects& dnd::Decision::get_effects() const noexcept { return effects; }
+const Effects& Decision::get_effects() const noexcept { return effects; }
 
-dnd::Decision::Decision(const dnd::Effects* target, dnd::Effects effects) noexcept
+Decision::Decision(const Effects* target, Effects effects) noexcept
     : target(target), effects(std::move(effects)) {}
+
+} // namespace dnd

@@ -11,15 +11,17 @@
 #include <core/searching/content_filters/bool_filter.hpp>
 #include <core/searching/content_filters/string_filter.hpp>
 
-dnd::ContentPieceFilter::ContentPieceFilter() noexcept
+namespace dnd {
+
+ContentPieceFilter::ContentPieceFilter() noexcept
     : name_filter(StringFilter()), description_filter(), is_sourcebook_filter() {}
 
-bool dnd::ContentPieceFilter::has_all_filters() const noexcept {
+bool ContentPieceFilter::has_all_filters() const noexcept {
     return std::visit([](const auto& filter) noexcept { return filter.is_set(); }, name_filter)
            && description_filter.is_set() && is_sourcebook_filter.is_set();
 }
 
-bool dnd::ContentPieceFilter::matches(const ContentPiece& content_piece) const noexcept {
+bool ContentPieceFilter::matches(const ContentPiece& content_piece) const noexcept {
     return std::visit(
                [&content_piece](const auto& filter) { return filter.matches(content_piece.get_name()); }, name_filter
            )
@@ -27,7 +29,7 @@ bool dnd::ContentPieceFilter::matches(const ContentPiece& content_piece) const n
            && is_sourcebook_filter.matches(content_piece.get_source_info().is_from_source_book());
 }
 
-std::vector<const dnd::ContentPiece*> dnd::ContentPieceFilter::all_matches(const Content& content) const {
+std::vector<const ContentPiece*> ContentPieceFilter::all_matches(const Content& content) const {
     std::vector<const ContentPiece*> matching_content_pieces;
     for (const auto& [_, character] : content.get_characters().get_all()) {
         if (matches(character)) {
@@ -82,8 +84,10 @@ std::vector<const dnd::ContentPiece*> dnd::ContentPieceFilter::all_matches(const
     return matching_content_pieces;
 }
 
-void dnd::ContentPieceFilter::clear() {
+void ContentPieceFilter::clear() {
     name_filter = StringFilter();
     description_filter.clear();
     is_sourcebook_filter.clear();
 }
+
+} // namespace dnd

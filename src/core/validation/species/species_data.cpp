@@ -14,9 +14,11 @@
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 
-std::unique_ptr<dnd::ValidationData> dnd::SpeciesData::pack() const { return std::make_unique<SpeciesData>(*this); }
+namespace dnd {
 
-dnd::Errors dnd::SpeciesData::validate() const {
+std::unique_ptr<ValidationData> SpeciesData::pack() const { return std::make_unique<SpeciesData>(*this); }
+
+Errors SpeciesData::validate() const {
     Errors errors;
     std::unordered_set<std::string> unique_feature_names;
     for (const FeatureData& feature_data : features_data) {
@@ -38,7 +40,7 @@ dnd::Errors dnd::SpeciesData::validate() const {
     return errors;
 }
 
-dnd::Errors dnd::SpeciesData::validate_relations(const Content& content) const {
+Errors SpeciesData::validate_relations(const Content& content) const {
     Errors errors;
     if (content.get_species().contains(name)) {
         errors.add_validation_error(
@@ -56,3 +58,5 @@ dnd::Errors dnd::SpeciesData::validate_relations(const Content& content) const {
     }
     return errors;
 }
+
+} // namespace dnd

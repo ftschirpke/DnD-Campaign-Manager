@@ -17,10 +17,12 @@
 #include <core/parsing/file_parser.hpp>
 #include <core/validation/species/species_data.hpp>
 
-dnd::SpeciesParser::SpeciesParser(const std::filesystem::path& filepath) noexcept
+namespace dnd {
+
+SpeciesParser::SpeciesParser(const std::filesystem::path& filepath) noexcept
     : FileParser(filepath, false), feature_parser(filepath), data() {}
 
-dnd::Errors dnd::SpeciesParser::parse() {
+Errors SpeciesParser::parse() {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
@@ -46,12 +48,14 @@ dnd::Errors dnd::SpeciesParser::parse() {
     return errors;
 }
 
-dnd::Errors dnd::SpeciesParser::validate(const dnd::Content& content) const {
+Errors SpeciesParser::validate(const Content& content) const {
     Errors errors = data.validate();
     errors += data.validate_relations(content);
     return errors;
 }
 
-void dnd::SpeciesParser::save_result(dnd::Content& content) {
+void SpeciesParser::save_result(Content& content) {
     content.add_species(Species::create(std::move(data), content));
 }
+
+} // namespace dnd

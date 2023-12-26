@@ -18,10 +18,12 @@
 #include <core/validation/class/class_data.hpp>
 #include <core/validation/spellcasting/spellcasting_data.hpp>
 
-dnd::ClassParser::ClassParser(const std::filesystem::path& filepath) noexcept
+namespace dnd {
+
+ClassParser::ClassParser(const std::filesystem::path& filepath) noexcept
     : FileParser(filepath, false), class_feature_parser(filepath), data() {}
 
-dnd::Errors dnd::ClassParser::parse() {
+Errors ClassParser::parse() {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
@@ -95,12 +97,14 @@ dnd::Errors dnd::ClassParser::parse() {
     return errors;
 }
 
-dnd::Errors dnd::ClassParser::validate(const dnd::Content& content) const {
+Errors ClassParser::validate(const Content& content) const {
     Errors errors = data.validate();
     errors += data.validate_relations(content);
     return errors;
 }
 
-void dnd::ClassParser::save_result(dnd::Content& content) {
+void ClassParser::save_result(Content& content) {
     content.add_class(Class::create(std::move(data), content));
 }
+
+} // namespace dnd

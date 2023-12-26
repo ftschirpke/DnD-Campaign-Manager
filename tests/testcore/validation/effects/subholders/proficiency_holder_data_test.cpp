@@ -8,13 +8,15 @@
 #include <testcore/minimal_testing_content.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
+namespace dnd::test {
+
 static constexpr const char* tags = "[core][validation][effects]";
 
-TEST_CASE("dnd::ProficiencyHolderData::validate and ::validate_relations // valid proficiency holder", tags) {
-    dndtest::ValidationDataMock parent;
-    dnd::ProficiencyHolderData proficiency_holder(&parent);
-    dnd::Content content = dndtest::minimal_testing_content();
-    dnd::Errors errors;
+TEST_CASE("ProficiencyHolderData::validate and ::validate_relations // valid proficiency holder", tags) {
+    ValidationDataMock parent;
+    ProficiencyHolderData proficiency_holder(&parent);
+    Content content = minimal_testing_content();
+    Errors errors;
 
     SECTION("empty proficiency holder") {
         REQUIRE_NOTHROW(errors = proficiency_holder.validate());
@@ -120,10 +122,10 @@ TEST_CASE("dnd::ProficiencyHolderData::validate and ::validate_relations // vali
     }
 }
 
-TEST_CASE("dnd::ProficiencyHolderData::validate // invalid proficiency holder", tags) {
-    dndtest::ValidationDataMock parent;
-    dnd::ProficiencyHolderData proficiency_holder(&parent);
-    dnd::Errors errors;
+TEST_CASE("ProficiencyHolderData::validate // invalid proficiency holder", tags) {
+    ValidationDataMock parent;
+    ProficiencyHolderData proficiency_holder(&parent);
+    Errors errors;
 
     SECTION("empty armor") {
         proficiency_holder.armor = {""};
@@ -216,11 +218,11 @@ TEST_CASE("dnd::ProficiencyHolderData::validate // invalid proficiency holder", 
     }
 }
 
-TEST_CASE("dnd::ProficiencyHolderData::validate_relations // invalid proficiency holder relations", tags) {
-    dndtest::ValidationDataMock parent;
-    dnd::ProficiencyHolderData proficiency_holder(&parent);
-    dnd::Content content = dndtest::minimal_testing_content();
-    dnd::Errors errors;
+TEST_CASE("ProficiencyHolderData::validate_relations // invalid proficiency holder relations", tags) {
+    ValidationDataMock parent;
+    ProficiencyHolderData proficiency_holder(&parent);
+    Content content = minimal_testing_content();
+    Errors errors;
 
     SECTION("unknown armor") {
         proficiency_holder.armor = {"unknown armor"};
@@ -273,10 +275,10 @@ TEST_CASE("dnd::ProficiencyHolderData::validate_relations // invalid proficiency
     }
 }
 
-TEST_CASE("dnd::ProficiencyHolderData::empty", tags) {
-    dndtest::ValidationDataMock parent;
-    dnd::ProficiencyHolderData proficiency_holder(&parent);
-    dnd::Errors errors;
+TEST_CASE("ProficiencyHolderData::empty", tags) {
+    ValidationDataMock parent;
+    ProficiencyHolderData proficiency_holder(&parent);
+    Errors errors;
 
     REQUIRE(proficiency_holder.empty());
 
@@ -326,3 +328,5 @@ TEST_CASE("dnd::ProficiencyHolderData::empty", tags) {
         REQUIRE_FALSE(proficiency_holder.empty());
     }
 }
+
+} // namespace dnd::test

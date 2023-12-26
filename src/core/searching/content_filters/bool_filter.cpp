@@ -2,19 +2,21 @@
 
 #include "bool_filter.hpp"
 
-dnd::BoolFilter::BoolFilter() noexcept : type(BoolFilterType::NONE) {}
+namespace dnd {
 
-bool dnd::BoolFilter::is_set() const noexcept { return type != BoolFilterType::NONE; }
+BoolFilter::BoolFilter() noexcept : type(BoolFilterType::NONE) {}
 
-dnd::BoolFilterType dnd::BoolFilter::get_type() const noexcept { return type; }
+bool BoolFilter::is_set() const noexcept { return type != BoolFilterType::NONE; }
 
-void dnd::BoolFilter::set_type(BoolFilterType new_type) noexcept { type = new_type; }
+BoolFilterType BoolFilter::get_type() const noexcept { return type; }
 
-void dnd::BoolFilter::set(BoolFilterType new_type) noexcept { set_type(new_type); }
+void BoolFilter::set_type(BoolFilterType new_type) noexcept { type = new_type; }
 
-void dnd::BoolFilter::clear() noexcept { type = BoolFilterType::NONE; }
+void BoolFilter::set(BoolFilterType new_type) noexcept { set_type(new_type); }
 
-bool dnd::BoolFilter::matches(bool boolean) const noexcept {
+void BoolFilter::clear() noexcept { type = BoolFilterType::NONE; }
+
+bool BoolFilter::matches(bool boolean) const noexcept {
     switch (type) {
         case BoolFilterType::IS_TRUE:
             return boolean;
@@ -26,3 +28,5 @@ bool dnd::BoolFilter::matches(bool boolean) const noexcept {
             return false;
     }
 }
+
+} // namespace dnd

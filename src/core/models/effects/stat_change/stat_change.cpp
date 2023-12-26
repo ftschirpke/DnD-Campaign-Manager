@@ -10,6 +10,8 @@
 #include <unordered_map>
 #include <utility>
 
+namespace dnd {
+
 static constexpr std::array<std::pair<const char*, int (*)(int, int)>, 7> mathematical_operations = {
     std::pair("add", [](int a, int b) { return a + b; }),
     std::pair("sub", [](int a, int b) { return a - b; }),
@@ -34,8 +36,8 @@ static constexpr std::array<std::pair<const char*, int (*)(int, int)>, 7> mathem
     std::pair("min", [](int a, int b) { return std::min(a, b); }),
 };
 
-dnd::StatChange::StatChange(
-    const std::string& affected_attribute, dnd::StatChangeTime time, const std::string& operation_name
+StatChange::StatChange(
+    const std::string& affected_attribute, StatChangeTime time, const std::string& operation_name
 ) noexcept
     : affected_attribute(affected_attribute), mathematical_operation(nullptr), time(time) {
     for (const auto& [name, operation] : mathematical_operations) {
@@ -46,8 +48,8 @@ dnd::StatChange::StatChange(
     }
 }
 
-dnd::StatChange::StatChange(
-    std::string_view affected_attribute, dnd::StatChangeTime time, std::string_view operation_name
+StatChange::StatChange(
+    std::string_view affected_attribute, StatChangeTime time, std::string_view operation_name
 ) noexcept
     : affected_attribute(affected_attribute), mathematical_operation(nullptr), time(time) {
     for (const auto& [name, operation] : mathematical_operations) {
@@ -58,4 +60,6 @@ dnd::StatChange::StatChange(
     }
 }
 
-dnd::StatChangeTime dnd::StatChange::get_time() const noexcept { return time; }
+StatChangeTime StatChange::get_time() const noexcept { return time; }
+
+} // namespace dnd

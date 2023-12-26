@@ -18,12 +18,14 @@
 #include <core/validation/validation_data.hpp>
 #include <core/validation/validation_subdata.hpp>
 
-dnd::EffectsData::EffectsData(const ValidationData* parent) noexcept
+namespace dnd {
+
+EffectsData::EffectsData(const ValidationData* parent) noexcept
     : ValidationSubdata(parent), activation_conditions_data(), choices_data(), stat_changes_data(),
       action_holder_data(parent), extra_spells_holder_data(parent), proficiency_holder_data(parent),
       riv_holder_data(parent) {}
 
-dnd::Errors dnd::EffectsData::validate() const {
+Errors EffectsData::validate() const {
     Errors errors;
     for (const ConditionData& condition_data : activation_conditions_data) {
         errors += condition_data.validate();
@@ -41,7 +43,7 @@ dnd::Errors dnd::EffectsData::validate() const {
     return errors;
 }
 
-dnd::Errors dnd::EffectsData::validate_relations(const Content& content) const {
+Errors EffectsData::validate_relations(const Content& content) const {
     Errors errors;
     for (const ChoiceData& choice_data : choices_data) {
         errors += choice_data.validate_relations(content);
@@ -51,3 +53,5 @@ dnd::Errors dnd::EffectsData::validate_relations(const Content& content) const {
     errors += riv_holder_data.validate_relations(content);
     return errors;
 }
+
+} // namespace dnd

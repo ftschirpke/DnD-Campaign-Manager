@@ -25,9 +25,11 @@
 #include <core/output/string_formatting/string_formatter.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
+namespace dnd {
+
 constexpr const char* separator = "--------------------------------------------------------------------------------";
 
-static void display_source_info(dnd::CommandLineOutput& output, const dnd::SourceInfo& source_info) {
+static void display_source_info(CommandLineOutput& output, const SourceInfo& source_info) {
     output.formatted_text(
         "Source: {} / {} / {}", source_info.get_source_group_name(), source_info.get_source_type_name(),
         source_info.get_source_name()
@@ -35,21 +37,21 @@ static void display_source_info(dnd::CommandLineOutput& output, const dnd::Sourc
 }
 
 static void format_text(const std::string& text) {
-    static dnd::DisplayFormatVisitor display_format_visitor;
-    static dnd::StringFormatter string_formatter(false);
-    std::vector<std::unique_ptr<dnd::Format>> formats = string_formatter.parse_formats(text);
-    for (const std::unique_ptr<dnd::Format>& format : formats) {
+    static DisplayFormatVisitor display_format_visitor;
+    static StringFormatter string_formatter(false);
+    std::vector<std::unique_ptr<Format>> formats = string_formatter.parse_formats(text);
+    for (const std::unique_ptr<Format>& format : formats) {
         format->accept(display_format_visitor);
     }
 }
 
 template <typename T>
-static void list_features(dnd::CommandLineOutput& output, const std::vector<T>& features) {
+static void list_features(CommandLineOutput& output, const std::vector<T>& features) {
     if (features.empty()) {
         return;
     }
     output.text("Features:");
-    for (const dnd::Feature& feature : features) {
+    for (const Feature& feature : features) {
         output.text(separator);
         output.text(feature.get_name());
         output.text("Description:");
@@ -57,7 +59,7 @@ static void list_features(dnd::CommandLineOutput& output, const std::vector<T>& 
     }
 }
 
-void dnd::DisplayVisitor::operator()(const dnd::Character& character) {
+void DisplayVisitor::operator()(const Character& character) {
     output.text(character.get_name());
     output.text("Type: Character");
     display_source_info(output, character.get_source_info());
@@ -85,7 +87,7 @@ void dnd::DisplayVisitor::operator()(const dnd::Character& character) {
     list_features<Feature>(output, character.get_features());
 }
 
-void dnd::DisplayVisitor::operator()(const dnd::Class& cls) {
+void DisplayVisitor::operator()(const Class& cls) {
     output.text(class.get_name());
     output.text("Type: Class");
     display_source_info(output, class.get_source_info());
@@ -98,7 +100,7 @@ void dnd::DisplayVisitor::operator()(const dnd::Class& cls) {
     list_features<ClassFeature>(output, class.get_features());
 }
 
-void dnd::DisplayVisitor::operator()(const Subclass& subclass) {
+void DisplayVisitor::operator()(const Subclass& subclass) {
     output.text(subclass.get_name());
     output.text("Type: Subclass");
     display_source_info(output, subclass.get_source_info());
@@ -107,7 +109,7 @@ void dnd::DisplayVisitor::operator()(const Subclass& subclass) {
     list_features<ClassFeature>(output, subclass.get_features());
 }
 
-void dnd::DisplayVisitor::operator()(const Species& species) {
+void DisplayVisitor::operator()(const Species& species) {
     output.text(species.get_name());
     output.text("Type: Species");
     display_source_info(output, species.get_source_info());
@@ -117,7 +119,7 @@ void dnd::DisplayVisitor::operator()(const Species& species) {
     list_features<Feature>(output, species.get_features());
 }
 
-void dnd::DisplayVisitor::operator()(const Subspecies& subspecies) {
+void DisplayVisitor::operator()(const Subspecies& subspecies) {
     output.text(subspecies.get_name());
     output.text("Type: Subspecies");
     display_source_info(output, subspecies.get_source_info());
@@ -126,7 +128,7 @@ void dnd::DisplayVisitor::operator()(const Subspecies& subspecies) {
     list_features<Feature>(output, subspecies.get_features());
 }
 
-void dnd::DisplayVisitor::operator()(const Item& item) {
+void DisplayVisitor::operator()(const Item& item) {
     output.text(item.get_name());
     output.text("Type: Item");
     display_source_info(output, item.get_source_info());
@@ -140,7 +142,7 @@ void dnd::DisplayVisitor::operator()(const Item& item) {
     }
 }
 
-void dnd::DisplayVisitor::operator()(const Spell& spell) {
+void DisplayVisitor::operator()(const Spell& spell) {
     output.text(spell.get_name());
     output.text("Type: Spell");
     display_source_info(output, spell.get_source_info());
@@ -154,7 +156,7 @@ void dnd::DisplayVisitor::operator()(const Spell& spell) {
     format_text(spell.get_description());
 }
 
-void dnd::DisplayVisitor::operator()(const Feature& feature) {
+void DisplayVisitor::operator()(const Feature& feature) {
     output.text(feature.get_name());
     output.text("Type: Feature");
     display_source_info(output, feature.get_source_info());
@@ -162,10 +164,12 @@ void dnd::DisplayVisitor::operator()(const Feature& feature) {
     format_text(feature.get_description());
 }
 
-void dnd::DisplayVisitor::operator()(const Choosable& choosable) {
+void DisplayVisitor::operator()(const Choosable& choosable) {
     output.text(choosable.get_name());
     output.formatted_text("Type: Choosable Feature - %s", choosable.get_type());
     display_source_info(output, choosable.get_source_info());
     output.text("Description:");
     format_text(choosable.get_description());
 }
+
+} // namespace dnd

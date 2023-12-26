@@ -4,6 +4,10 @@
 
 #include <filesystem>
 
-const std::filesystem::path& dnd::Parser::get_filepath() const noexcept { return filepath; }
+namespace dnd {
 
-dnd::Parser::Parser(const std::filesystem::path& filepath) noexcept : filepath(filepath) {}
+const std::filesystem::path& Parser::get_filepath() const noexcept { return filepath; }
+
+Parser::Parser(const std::filesystem::path& filepath) noexcept : filepath(filepath) {}
+
+} // namespace dnd

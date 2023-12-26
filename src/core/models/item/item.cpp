@@ -12,7 +12,9 @@
 #include <core/models/source_info.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
-dnd::Item dnd::Item::create(ItemData&& item_data) {
+namespace dnd {
+
+Item Item::create(ItemData&& item_data) {
     if (!item_data.validate().ok()) {
         throw invalid_data("Cannot create Item from invalid data.");
     }
@@ -22,21 +24,23 @@ dnd::Item dnd::Item::create(ItemData&& item_data) {
     );
 }
 
-const std::string& dnd::Item::get_name() const noexcept { return name; }
+const std::string& Item::get_name() const noexcept { return name; }
 
-const std::string& dnd::Item::get_description() const noexcept { return description; }
+const std::string& Item::get_description() const noexcept { return description; }
 
-const dnd::SourceInfo& dnd::Item::get_source_info() const noexcept { return source_info; }
+const SourceInfo& Item::get_source_info() const noexcept { return source_info; }
 
-const std::string& dnd::Item::get_cosmetic_description() const noexcept { return cosmetic_description; }
+const std::string& Item::get_cosmetic_description() const noexcept { return cosmetic_description; }
 
-bool dnd::Item::requires_attunement() const noexcept { return attunement; }
+bool Item::requires_attunement() const noexcept { return attunement; }
 
-void dnd::Item::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
+void Item::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
-dnd::Item::Item(
+Item::Item(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path,
     std::string&& cosmetic_description, bool requires_attunement
 ) noexcept
     : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
       cosmetic_description(std::move(cosmetic_description)), attunement(requires_attunement) {}
+
+} // namespace dnd

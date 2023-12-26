@@ -11,10 +11,12 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
 
-dnd::FileParser::FileParser(const std::filesystem::path& filepath, bool multiple_pieces_per_file) noexcept
+namespace dnd {
+
+FileParser::FileParser(const std::filesystem::path& filepath, bool multiple_pieces_per_file) noexcept
     : Parser(filepath), multiple_pieces_per_file(multiple_pieces_per_file) {}
 
-dnd::Errors dnd::FileParser::open_json() {
+Errors FileParser::open_json() {
     DND_MEASURE_FUNCTION();
     Errors errors;
     if (get_filepath().extension().string() != ".json") {
@@ -37,6 +39,8 @@ dnd::Errors dnd::FileParser::open_json() {
     return errors;
 }
 
-bool dnd::FileParser::continue_after_errors() const noexcept { return multiple_pieces_per_file; }
+bool FileParser::continue_after_errors() const noexcept { return multiple_pieces_per_file; }
 
-void dnd::FileParser::set_context(const dnd::Content& content) { DND_UNUSED(content); }
+void FileParser::set_context(const Content& content) { DND_UNUSED(content); }
+
+} // namespace dnd

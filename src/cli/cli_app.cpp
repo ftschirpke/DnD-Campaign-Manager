@@ -13,11 +13,13 @@
 #include <core/utils/char_manipulation.hpp>
 #include <core/visitors/content/list_content_visitor.hpp>
 
+namespace dnd {
+
 constexpr const char* separator = "================================================================================";
 
-dnd::CliApp::CliApp() : session("last_cli_session.ini"), output() {}
+CliApp::CliApp() : session("last_cli_session.ini"), output() {}
 
-void dnd::CliApp::initialize(
+void CliApp::initialize(
     const std::filesystem::path& content_directory, const std::string& campaign_name, bool testrun
 ) {
     Errors errors = session.set_content_directory(content_directory);
@@ -84,7 +86,7 @@ void dnd::CliApp::initialize(
     output.text("Ready.");
 }
 
-void dnd::CliApp::run() {
+void CliApp::run() {
     std::string command_input;
     while (true) {
         output.text(separator);
@@ -96,7 +98,7 @@ void dnd::CliApp::run() {
         if (command_input.empty()) {
             return;
         }
-        char command = dnd::char_to_uppercase(command_input[0]);
+        char command = char_to_uppercase(command_input[0]);
         switch (command) {
             case 'X':
                 return;
@@ -118,7 +120,7 @@ void dnd::CliApp::run() {
 
 constexpr std::array<bool, 9> search_options = {true, true, true, true, true, true, true, true, true};
 
-void dnd::CliApp::search_content_by_name() {
+void CliApp::search_content_by_name() {
     std::string search_query = "?";
     while (true) {
         output.text(separator);
@@ -162,7 +164,7 @@ void dnd::CliApp::search_content_by_name() {
     }
 }
 
-void dnd::CliApp::list_all_content_of_a_type() {
+void CliApp::list_all_content_of_a_type() {
     std::string type_str = "?";
     while (true) {
         output.text(separator);
@@ -290,7 +292,7 @@ void dnd::CliApp::list_all_content_of_a_type() {
     }
 }
 
-void dnd::CliApp::view_open_content_pieces() {
+void CliApp::view_open_content_pieces() {
     std::string index_str = "?";
     while (true) {
         std::deque<const ContentPiece*>& open_content_pieces = session.get_open_content_pieces();
@@ -316,8 +318,10 @@ void dnd::CliApp::view_open_content_pieces() {
     }
 }
 
-void dnd::CliApp::display_content_piece(const ContentPiece* content_piece) {
+void CliApp::display_content_piece(const ContentPiece* content_piece) {
     output.text(separator);
     content_piece->accept_visitor(display_visitor);
     output.text(separator);
 }
+
+} // namespace dnd

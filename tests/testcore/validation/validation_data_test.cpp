@@ -10,13 +10,15 @@
 #include <core/errors/errors.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
+namespace dnd::test {
+
 static constexpr const char* tags = "[core][validation]";
 
-TEST_CASE("dnd::ValidationData::validate", tags) {
-    dndtest::ValidationDataMock data;
+TEST_CASE("ValidationData::validate", tags) {
+    ValidationDataMock data;
     const std::filesystem::path dummy_path = std::filesystem::path(DND_MOCK_DIRECTORY) / "dummy_files" / "file1.json";
 
-    dnd::Errors errors;
+    Errors errors;
     SECTION("Valid Data") {
         data.name = "Name";
         data.description = "Description";
@@ -57,3 +59,5 @@ TEST_CASE("dnd::ValidationData::validate", tags) {
         REQUIRE_FALSE(errors.ok());
     }
 }
+
+} // namespace dnd::test

@@ -7,12 +7,14 @@
 #include <core/errors/errors.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
+namespace dnd::test {
+
 static constexpr const char* tags = "[core][validation][class]";
 
-TEST_CASE("dnd::ImportantLevelsData::validate", tags) {
-    dndtest::ValidationDataMock parent;
-    dnd::ImportantLevelsData data(&parent);
-    dnd::Errors errors;
+TEST_CASE("ImportantLevelsData::validate", tags) {
+    ValidationDataMock parent;
+    ImportantLevelsData data(&parent);
+    Errors errors;
 
     SECTION("at least one feat level is required") {
         data.feat_levels = {};
@@ -56,3 +58,5 @@ TEST_CASE("dnd::ImportantLevelsData::validate", tags) {
         REQUIRE(errors.ok());
     }
 }
+
+} // namespace dnd::test

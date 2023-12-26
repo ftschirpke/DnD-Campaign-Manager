@@ -11,31 +11,33 @@
 #include <core/errors/validation_error.hpp>
 #include <core/validation/validation_data.hpp>
 
-bool dnd::Errors::ok() const { return parsing_errors.empty() && validation_errors.empty(); }
+namespace dnd {
 
-void dnd::Errors::add_parsing_error(
+bool Errors::ok() const { return parsing_errors.empty() && validation_errors.empty(); }
+
+void Errors::add_parsing_error(
     ParsingErrorCode error_code, const std::filesystem::path& filepath, std::string&& message
 ) {
     parsing_errors.emplace_back(error_code, std::move(filepath), std::move(message));
 }
 
-void dnd::Errors::add_parsing_error(ParsingError&& error) { parsing_errors.emplace_back(std::move(error)); }
+void Errors::add_parsing_error(ParsingError&& error) { parsing_errors.emplace_back(std::move(error)); }
 
-void dnd::Errors::add_validation_error(
+void Errors::add_validation_error(
     ValidationErrorCode error_code, const ValidationData* validation_data, std::string&& message
 ) {
     validation_errors.emplace_back(error_code, validation_data, std::move(message));
 }
 
-void dnd::Errors::add_validation_error(ValidationError&& error) { validation_errors.emplace_back(std::move(error)); }
+void Errors::add_validation_error(ValidationError&& error) { validation_errors.emplace_back(std::move(error)); }
 
-const std::vector<dnd::ParsingError>& dnd::Errors::get_parsing_errors() const noexcept { return parsing_errors; }
+const std::vector<ParsingError>& Errors::get_parsing_errors() const noexcept { return parsing_errors; }
 
-const std::vector<dnd::ValidationError>& dnd::Errors::get_validation_errors() const noexcept {
+const std::vector<ValidationError>& Errors::get_validation_errors() const noexcept {
     return validation_errors;
 }
 
-void dnd::Errors::merge(Errors&& other) {
+void Errors::merge(Errors&& other) {
     parsing_errors.insert(
         parsing_errors.end(), std::make_move_iterator(other.parsing_errors.begin()),
         std::make_move_iterator(other.parsing_errors.end())
@@ -46,7 +48,9 @@ void dnd::Errors::merge(Errors&& other) {
     );
 }
 
-dnd::Errors& dnd::Errors::operator+=(Errors&& other) {
+Errors& Errors::operator+=(Errors&& other) {
     merge(std::move(other));
     return *this;
 }
+
+} // namespace dnd

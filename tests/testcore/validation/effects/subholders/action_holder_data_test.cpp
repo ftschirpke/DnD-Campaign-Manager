@@ -7,12 +7,14 @@
 #include <core/errors/errors.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
+namespace dnd::test {
+
 static constexpr const char* tags = "[core][validation][effects]";
 
-TEST_CASE("dnd::ActionHolderData::validate // valid action holders", tags) {
-    dndtest::ValidationDataMock parent;
-    dnd::ActionHolderData action_holder_data(&parent);
-    dnd::Errors errors;
+TEST_CASE("ActionHolderData::validate // valid action holders", tags) {
+    ValidationDataMock parent;
+    ActionHolderData action_holder_data(&parent);
+    Errors errors;
 
     SECTION("empty action holders") {
         REQUIRE_NOTHROW(errors = action_holder_data.validate());
@@ -54,10 +56,10 @@ TEST_CASE("dnd::ActionHolderData::validate // valid action holders", tags) {
     }
 }
 
-TEST_CASE("dnd::ActionHolderData::validate // invalid action holders", tags) {
-    dndtest::ValidationDataMock parent;
-    dnd::ActionHolderData action_holder_data(&parent);
-    dnd::Errors errors;
+TEST_CASE("ActionHolderData::validate // invalid action holders", tags) {
+    ValidationDataMock parent;
+    ActionHolderData action_holder_data(&parent);
+    Errors errors;
 
     SECTION("empty action name") {
         action_holder_data.actions[""] = "Do something";
@@ -117,10 +119,10 @@ TEST_CASE("dnd::ActionHolderData::validate // invalid action holders", tags) {
     }
 }
 
-TEST_CASE("dnd::ActionHolderData::empty", tags) {
-    dndtest::ValidationDataMock parent;
-    dnd::ActionHolderData action_holder_data(&parent);
-    dnd::Errors errors;
+TEST_CASE("ActionHolderData::empty", tags) {
+    ValidationDataMock parent;
+    ActionHolderData action_holder_data(&parent);
+    Errors errors;
 
     REQUIRE(action_holder_data.empty());
 
@@ -146,3 +148,5 @@ TEST_CASE("dnd::ActionHolderData::empty", tags) {
         REQUIRE_FALSE(action_holder_data.empty());
     }
 }
+
+} // namespace dnd::test

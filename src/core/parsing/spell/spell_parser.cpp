@@ -11,9 +11,11 @@
 #include <core/models/spell/spell.hpp>
 #include <core/validation/spell/spell_data.hpp>
 
-dnd::SpellParser::SpellParser(const std::filesystem::path& file_path) : FileParser(file_path, true) {}
+namespace dnd {
 
-dnd::Errors dnd::SpellParser::parse() {
+SpellParser::SpellParser(const std::filesystem::path& file_path) : FileParser(file_path, true) {}
+
+Errors SpellParser::parse() {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
@@ -50,7 +52,7 @@ dnd::Errors dnd::SpellParser::parse() {
     return errors;
 }
 
-dnd::Errors dnd::SpellParser::validate(const dnd::Content& content) const {
+Errors SpellParser::validate(const Content& content) const {
     Errors errors;
     assert(spells_in_file == spell_data.size());
     spell_data_valid.resize(spells_in_file, false);
@@ -63,7 +65,7 @@ dnd::Errors dnd::SpellParser::validate(const dnd::Content& content) const {
     return errors;
 }
 
-void dnd::SpellParser::save_result(dnd::Content& content) {
+void SpellParser::save_result(Content& content) {
     assert(spells_in_file == spell_data_valid.size());
     assert(spells_in_file == spell_data.size());
     for (size_t i = 0; i < spells_in_file; ++i) {
@@ -72,3 +74,5 @@ void dnd::SpellParser::save_result(dnd::Content& content) {
         }
     }
 }
+
+} // namespace dnd

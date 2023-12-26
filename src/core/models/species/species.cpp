@@ -14,7 +14,9 @@
 #include <core/validation/species/species_data.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
-dnd::Species dnd::Species::create(dnd::SpeciesData&& data, const dnd::Content& content) {
+namespace dnd {
+
+Species Species::create(SpeciesData&& data, const Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create character species from invalid data.");
     }
@@ -32,21 +34,23 @@ dnd::Species dnd::Species::create(dnd::SpeciesData&& data, const dnd::Content& c
     );
 }
 
-const std::string& dnd::Species::get_name() const noexcept { return name; }
+const std::string& Species::get_name() const noexcept { return name; }
 
-const std::string& dnd::Species::get_description() const noexcept { return description; }
+const std::string& Species::get_description() const noexcept { return description; }
 
-const dnd::SourceInfo& dnd::Species::get_source_info() const noexcept { return source_info; }
+const SourceInfo& Species::get_source_info() const noexcept { return source_info; }
 
-const std::vector<dnd::Feature>& dnd::Species::get_features() const noexcept { return features; }
+const std::vector<Feature>& Species::get_features() const noexcept { return features; }
 
-bool dnd::Species::has_subspecies() const noexcept { return subspecies; }
+bool Species::has_subspecies() const noexcept { return subspecies; }
 
-void dnd::Species::accept_visitor(dnd::ContentVisitor& visitor) const { visitor(*this); }
+void Species::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
-dnd::Species::Species(
+Species::Species(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::vector<Feature>&& features,
     bool has_subspecies
 ) noexcept
     : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
       features(std::move(features)), subspecies(has_subspecies) {}
+
+} // namespace dnd

@@ -5,30 +5,32 @@
 #include <string>
 #include <vector>
 
-dnd::LatexText::LatexText(const std::string& text) : end_with_newline(true), linebreak(false), text(text) {}
+namespace dnd {
 
-dnd::LatexText* dnd::LatexText::no_ending_new_line() {
+LatexText::LatexText(const std::string& text) : end_with_newline(true), linebreak(false), text(text) {}
+
+LatexText* LatexText::no_ending_new_line() {
     end_with_newline = false;
     return this;
 }
 
-dnd::LatexText* dnd::LatexText::add_line_break() {
+LatexText* LatexText::add_line_break() {
     linebreak = true;
     return this;
 }
 
-dnd::LatexText* dnd::LatexText::add_line_break(const std::string& spacing_argument) {
+LatexText* LatexText::add_line_break(const std::string& spacing_argument) {
     linebreak = true;
     linebreak_spacing_argument = spacing_argument;
     return this;
 }
 
-dnd::LatexText* dnd::LatexText::add_modifier(const std::string& modifier) {
+LatexText* LatexText::add_modifier(const std::string& modifier) {
     modifiers.push_back(modifier);
     return this;
 }
 
-std::string dnd::LatexText::str() const {
+std::string LatexText::str() const {
     std::string text_string;
     for (const std::string& modifier : modifiers) {
         text_string += '\\' + modifier + ' ';
@@ -46,6 +48,8 @@ std::string dnd::LatexText::str() const {
     return text_string;
 }
 
-std::string dnd::LatexText::get_text() const { return text; }
+std::string LatexText::get_text() const { return text; }
 
-void dnd::LatexText::set_text(const std::string& new_text) { text = new_text; }
+void LatexText::set_text(const std::string& new_text) { text = new_text; }
+
+} // namespace dnd

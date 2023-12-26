@@ -17,7 +17,9 @@
 #include <core/utils/string_manipulation.hpp>
 #include <core/validation/effects/stat_change/stat_change_data.hpp>
 
-std::unique_ptr<dnd::StatChange> dnd::create_stat_change(dnd::StatChangeData&& stat_change_data) {
+namespace dnd {
+
+std::unique_ptr<StatChange> create_stat_change(StatChangeData&& stat_change_data) {
     if (!stat_change_data.validate().ok()) {
         throw invalid_data("Cannot create stat_change from invalid data.");
     }
@@ -29,19 +31,19 @@ std::unique_ptr<dnd::StatChange> dnd::create_stat_change(dnd::StatChangeData&& s
     it = std::find(it, stat_change_data.stat_change_str.cend(), ' ');
 
     const std::string_view stat_change_time_str = str_view(last_it, it);
-    dnd::StatChangeTime stat_change_time = static_cast<dnd::StatChangeTime>(-1);
+    StatChangeTime stat_change_time = static_cast<StatChangeTime>(-1);
     if (stat_change_time_str == "earliest") {
-        stat_change_time = dnd::StatChangeTime::EARLIEST;
+        stat_change_time = StatChangeTime::EARLIEST;
     } else if (stat_change_time_str == "early") {
-        stat_change_time = dnd::StatChangeTime::EARLY;
+        stat_change_time = StatChangeTime::EARLY;
     } else if (stat_change_time_str == "normal") {
-        stat_change_time = dnd::StatChangeTime::NORMAL;
+        stat_change_time = StatChangeTime::NORMAL;
     } else if (stat_change_time_str == "late") {
-        stat_change_time = dnd::StatChangeTime::LATE;
+        stat_change_time = StatChangeTime::LATE;
     } else if (stat_change_time_str == "latest") {
-        stat_change_time = dnd::StatChangeTime::LATEST;
+        stat_change_time = StatChangeTime::LATEST;
     }
-    assert(stat_change_time != static_cast<dnd::StatChangeTime>(-1));
+    assert(stat_change_time != static_cast<StatChangeTime>(-1));
 
     last_it = ++it;
     it = std::find(it, stat_change_data.stat_change_str.cend(), ' ');
@@ -64,3 +66,5 @@ std::unique_ptr<dnd::StatChange> dnd::create_stat_change(dnd::StatChangeData&& s
         );
     }
 }
+
+} // namespace dnd

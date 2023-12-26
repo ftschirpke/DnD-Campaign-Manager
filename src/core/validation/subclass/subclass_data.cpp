@@ -16,11 +16,13 @@
 #include <core/validation/effects_provider/class_feature_data.hpp>
 #include <core/validation/spellcasting/spellcasting_data.hpp>
 
-dnd::SubclassData::SubclassData() noexcept : ValidationData(), spellcasting_data(this), features_data(), class_name() {}
+namespace dnd {
 
-std::unique_ptr<dnd::ValidationData> dnd::SubclassData::pack() const { return std::make_unique<SubclassData>(*this); }
+SubclassData::SubclassData() noexcept : ValidationData(), spellcasting_data(this), features_data(), class_name() {}
 
-dnd::Errors dnd::SubclassData::validate() const {
+std::unique_ptr<ValidationData> SubclassData::pack() const { return std::make_unique<SubclassData>(*this); }
+
+Errors SubclassData::validate() const {
     Errors errors;
     std::unordered_set<std::string> unique_feature_names;
     for (const ClassFeatureData& feature_data : features_data) {
@@ -48,7 +50,7 @@ dnd::Errors dnd::SubclassData::validate() const {
     return errors;
 }
 
-dnd::Errors dnd::SubclassData::validate_relations(const Content& content) const {
+Errors SubclassData::validate_relations(const Content& content) const {
     Errors errors;
     if (content.get_subclasses().contains(name)) {
         errors.add_validation_error(
@@ -82,3 +84,5 @@ dnd::Errors dnd::SubclassData::validate_relations(const Content& content) const 
     errors += spellcasting_data.validate_relations(content);
     return errors;
 }
+
+} // namespace dnd

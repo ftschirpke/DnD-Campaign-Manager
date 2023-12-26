@@ -8,30 +8,32 @@
 #include <string_view>
 #include <utility>
 
-static constexpr std::array<std::pair<std::string_view, dnd::ChoiceType>, 22> valid_attribute_names = {
-    std::pair("stat_changes", dnd::ChoiceType::STAT_CHANGE),
-    std::pair("cantrips_free", dnd::ChoiceType::SPELL),
-    std::pair("spells_at_will", dnd::ChoiceType::SPELL),
-    std::pair("spells_innate", dnd::ChoiceType::SPELL),
-    std::pair("spells_free_once_a_day", dnd::ChoiceType::SPELL),
-    std::pair("spells_known", dnd::ChoiceType::SPELL),
-    std::pair("spells_known_included", dnd::ChoiceType::SPELL),
-    std::pair("spells_added_to_spell_list", dnd::ChoiceType::SPELL),
-    std::pair("spells_always_prepared", dnd::ChoiceType::SPELL),
-    std::pair("saving_throw_proficiencies", dnd::ChoiceType::ABILITY),
-    std::pair("skill_proficiencies", dnd::ChoiceType::SKILL),
-    std::pair("armor_proficiencies", dnd::ChoiceType::STRING),
-    std::pair("weapon_proficiencies", dnd::ChoiceType::STRING),
-    std::pair("tool_proficiencies", dnd::ChoiceType::STRING),
-    std::pair("languages", dnd::ChoiceType::STRING),
-    std::pair("senses", dnd::ChoiceType::STRING),
-    std::pair("damage_resistances", dnd::ChoiceType::STRING),
-    std::pair("damage_immunities", dnd::ChoiceType::STRING),
-    std::pair("damage_vulnerabilities", dnd::ChoiceType::STRING),
-    std::pair("condition_immunities", dnd::ChoiceType::STRING),
+namespace dnd {
+
+static constexpr std::array<std::pair<std::string_view, ChoiceType>, 22> valid_attribute_names = {
+    std::pair("stat_changes", ChoiceType::STAT_CHANGE),
+    std::pair("cantrips_free", ChoiceType::SPELL),
+    std::pair("spells_at_will", ChoiceType::SPELL),
+    std::pair("spells_innate", ChoiceType::SPELL),
+    std::pair("spells_free_once_a_day", ChoiceType::SPELL),
+    std::pair("spells_known", ChoiceType::SPELL),
+    std::pair("spells_known_included", ChoiceType::SPELL),
+    std::pair("spells_added_to_spell_list", ChoiceType::SPELL),
+    std::pair("spells_always_prepared", ChoiceType::SPELL),
+    std::pair("saving_throw_proficiencies", ChoiceType::ABILITY),
+    std::pair("skill_proficiencies", ChoiceType::SKILL),
+    std::pair("armor_proficiencies", ChoiceType::STRING),
+    std::pair("weapon_proficiencies", ChoiceType::STRING),
+    std::pair("tool_proficiencies", ChoiceType::STRING),
+    std::pair("languages", ChoiceType::STRING),
+    std::pair("senses", ChoiceType::STRING),
+    std::pair("damage_resistances", ChoiceType::STRING),
+    std::pair("damage_immunities", ChoiceType::STRING),
+    std::pair("damage_vulnerabilities", ChoiceType::STRING),
+    std::pair("condition_immunities", ChoiceType::STRING),
 };
 
-bool dnd::is_valid_choice_attribute_name(const std::string& attribute_name) noexcept {
+bool is_valid_choice_attribute_name(const std::string& attribute_name) noexcept {
     for (const auto& [valid_attribute_name, _] : valid_attribute_names) {
         if (valid_attribute_name == attribute_name) {
             return true;
@@ -40,7 +42,7 @@ bool dnd::is_valid_choice_attribute_name(const std::string& attribute_name) noex
     return false;
 }
 
-dnd::ChoiceType dnd::choice_type_for_attribute_name(const std::string& attribute_name) {
+ChoiceType choice_type_for_attribute_name(const std::string& attribute_name) {
     for (const auto& [valid_attribute_name, choice_type] : valid_attribute_names) {
         if (valid_attribute_name == attribute_name) {
             return choice_type;
@@ -61,7 +63,7 @@ static constexpr std::array<std::pair<std::string_view, std::string_view>, 9> va
     std::pair("condition_immunities", "conditions"),
 };
 
-bool dnd::attribute_name_implies_group(const std::string& attribute_name) noexcept {
+bool attribute_name_implies_group(const std::string& attribute_name) noexcept {
     for (const auto& [group_name, _] : valid_group_names) {
         if (group_name == attribute_name) {
             return true;
@@ -70,7 +72,7 @@ bool dnd::attribute_name_implies_group(const std::string& attribute_name) noexce
     return false;
 }
 
-std::string dnd::group_name_for_attribute_name(const std::string& attribute_name) {
+std::string group_name_for_attribute_name(const std::string& attribute_name) {
     for (const auto& [proficiency_name, group_name] : valid_group_names) {
         if (proficiency_name == attribute_name) {
             return std::string(group_name);
@@ -78,3 +80,5 @@ std::string dnd::group_name_for_attribute_name(const std::string& attribute_name
     }
     throw std::invalid_argument("Attribute name '" + attribute_name + "' does not imply a group of strings");
 }
+
+} // namespace dnd

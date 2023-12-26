@@ -4,4 +4,8 @@
 
 #include <memory>
 
-std::unique_ptr<dnd::ValidationData> dnd::ItemData::pack() const { return std::make_unique<ItemData>(*this); }
+namespace dnd {
+
+std::unique_ptr<ValidationData> ItemData::pack() const { return std::make_unique<ItemData>(*this); }
+
+} // namespace dnd

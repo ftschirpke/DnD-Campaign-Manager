@@ -8,27 +8,29 @@
 
 #include <core/utils/char_manipulation.hpp>
 
-void dnd::string_lowercase_inplace(std::string& str) {
+namespace dnd {
+
+void string_lowercase_inplace(std::string& str) {
     std::transform(str.begin(), str.end(), str.begin(), uchar_to_lowercase);
 }
 
-void dnd::string_uppercase_inplace(std::string& str) {
+void string_uppercase_inplace(std::string& str) {
     std::transform(str.begin(), str.end(), str.begin(), uchar_to_uppercase);
 }
 
-std::string dnd::string_lowercase_copy(const std::string& str) {
+std::string string_lowercase_copy(const std::string& str) {
     std::string lower_str = str;
     string_lowercase_inplace(lower_str);
     return lower_str;
 }
 
-std::string dnd::string_uppercase_copy(const std::string& str) {
+std::string string_uppercase_copy(const std::string& str) {
     std::string upper_str = str;
     string_uppercase_inplace(upper_str);
     return upper_str;
 }
 
-void dnd::snake_case_to_capitalized_spaced_words(std::string& str) {
+void snake_case_to_capitalized_spaced_words(std::string& str) {
     bool first_in_word = true;
     for (char& c : str) {
         if (c == '_') {
@@ -41,7 +43,7 @@ void dnd::snake_case_to_capitalized_spaced_words(std::string& str) {
     }
 }
 
-std::string_view dnd::str_view(const std::string::const_iterator& first, const std::string::const_iterator& last) {
+std::string_view str_view(const std::string::const_iterator& first, const std::string::const_iterator& last) {
 #ifdef __APPLE__
     auto it = first;
     size_t size = 0;
@@ -54,3 +56,5 @@ std::string_view dnd::str_view(const std::string::const_iterator& first, const s
     return std::string_view(first, last);
 #endif
 }
+
+} // namespace dnd

@@ -9,13 +9,15 @@
 #include <core/models/subspecies/subspecies.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
 
-bool dnd::SubspeciesFilter::has_all_filters() const noexcept { return ContentPieceFilter::has_all_filters(); }
+namespace dnd {
 
-bool dnd::SubspeciesFilter::matches(const Subspecies& subspecies) const noexcept {
+bool SubspeciesFilter::has_all_filters() const noexcept { return ContentPieceFilter::has_all_filters(); }
+
+bool SubspeciesFilter::matches(const Subspecies& subspecies) const noexcept {
     return ContentPieceFilter::matches(subspecies);
 }
 
-std::vector<const dnd::ContentPiece*> dnd::SubspeciesFilter::all_matches(const Content& content) const {
+std::vector<const ContentPiece*> SubspeciesFilter::all_matches(const Content& content) const {
     std::vector<const ContentPiece*> matching_content_pieces;
     for (const auto& [_, subspecies] : content.get_subspecies().get_all()) {
         if (matches(subspecies)) {
@@ -25,4 +27,6 @@ std::vector<const dnd::ContentPiece*> dnd::SubspeciesFilter::all_matches(const C
     return matching_content_pieces;
 }
 
-void dnd::SubspeciesFilter::clear() { ContentPieceFilter::clear(); }
+void SubspeciesFilter::clear() { ContentPieceFilter::clear(); }
+
+} // namespace dnd

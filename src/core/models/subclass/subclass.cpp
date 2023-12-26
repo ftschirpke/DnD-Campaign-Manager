@@ -18,7 +18,9 @@
 #include <core/validation/subclass/subclass_data.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
-dnd::Subclass dnd::Subclass::create(dnd::SubclassData&& data, const dnd::Content& content) {
+namespace dnd {
+
+Subclass Subclass::create(SubclassData&& data, const Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create character subclass from invalid data.");
     }
@@ -37,25 +39,27 @@ dnd::Subclass dnd::Subclass::create(dnd::SubclassData&& data, const dnd::Content
     );
 }
 
-const std::string& dnd::Subclass::get_name() const noexcept { return name; }
+const std::string& Subclass::get_name() const noexcept { return name; }
 
-const std::string& dnd::Subclass::get_description() const noexcept { return description; }
+const std::string& Subclass::get_description() const noexcept { return description; }
 
-const dnd::SourceInfo& dnd::Subclass::get_source_info() const noexcept { return source_info; }
+const SourceInfo& Subclass::get_source_info() const noexcept { return source_info; }
 
-const std::vector<dnd::ClassFeature>& dnd::Subclass::get_features() const noexcept { return features; }
+const std::vector<ClassFeature>& Subclass::get_features() const noexcept { return features; }
 
-bool dnd::Subclass::has_spellcasting() const noexcept { return spellcasting != nullptr; }
+bool Subclass::has_spellcasting() const noexcept { return spellcasting != nullptr; }
 
-const dnd::Spellcasting* dnd::Subclass::get_spellcasting() const noexcept { return spellcasting.get(); }
+const Spellcasting* Subclass::get_spellcasting() const noexcept { return spellcasting.get(); }
 
-const dnd::Class* dnd::Subclass::get_class() const noexcept { return cls; }
+const Class* Subclass::get_class() const noexcept { return cls; }
 
-void dnd::Subclass::accept_visitor(dnd::ContentVisitor& visitor) const { visitor(*this); }
+void Subclass::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
-dnd::Subclass::Subclass(
+Subclass::Subclass(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path,
     std::vector<ClassFeature>&& features, const Class* cls, std::unique_ptr<Spellcasting>&& spellcasting
 ) noexcept
     : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
       features(std::move(features)), cls(cls), spellcasting(std::move(spellcasting)) {}
+
+} // namespace dnd

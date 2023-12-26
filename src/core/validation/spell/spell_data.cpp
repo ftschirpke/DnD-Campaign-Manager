@@ -17,11 +17,13 @@
 #include <core/validation/spell/spell_type_data.hpp>
 #include <core/validation/validation_data.hpp>
 
-dnd::SpellData::SpellData() noexcept : components_data(this), type_data(this) {}
+namespace dnd {
 
-std::unique_ptr<dnd::ValidationData> dnd::SpellData::pack() const { return std::make_unique<SpellData>(*this); }
+SpellData::SpellData() noexcept : components_data(this), type_data(this) {}
 
-dnd::Errors dnd::SpellData::validate() const {
+std::unique_ptr<ValidationData> SpellData::pack() const { return std::make_unique<SpellData>(*this); }
+
+Errors SpellData::validate() const {
     DND_MEASURE_FUNCTION();
     Errors errors = ValidationData::validate();
     errors += components_data.validate();
@@ -40,3 +42,5 @@ dnd::Errors dnd::SpellData::validate() const {
     }
     return errors;
 }
+
+} // namespace dnd

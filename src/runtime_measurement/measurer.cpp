@@ -16,27 +16,29 @@
 
 #include <nlohmann/json.hpp>
 
+namespace dnd {
+
 static constexpr std::array<const char*, 12> values_for_human_readable = {
-    "int dnd::launch(int, char**)",
+    "int launch(int, char**)",
     "Main execution scope",
-    "dnd::Content dnd::ContentParser::parse(const std::filesystem::__cxx11::path&, const string&)",
-    "dnd::ContentParser::parseAllOfSingleFileType ( Group )",
-    "dnd::ContentParser::parseAllOfMultiFileType ( Group )",
-    "dnd::ContentParser::parseAllOfMultiFileType ( Spell )",
-    "dnd::ContentParser::parseAllOfMultiFileType ( Species )",
-    "dnd::ContentParser::parseAllOfMultiFileType ( Class )",
-    "dnd::ContentParser::parseAllOfMultiFileType ( Subspecies )",
-    "dnd::ContentParser::parseAllOfMultiFileType ( Subclass )",
-    "dnd::ContentParser::parseAllOfMultiFileType ( Character )",
+    "Content ContentParser::parse(const std::filesystem::__cxx11::path&, const string&)",
+    "ContentParser::parseAllOfSingleFileType ( Group )",
+    "ContentParser::parseAllOfMultiFileType ( Group )",
+    "ContentParser::parseAllOfMultiFileType ( Spell )",
+    "ContentParser::parseAllOfMultiFileType ( Species )",
+    "ContentParser::parseAllOfMultiFileType ( Class )",
+    "ContentParser::parseAllOfMultiFileType ( Subspecies )",
+    "ContentParser::parseAllOfMultiFileType ( Subclass )",
+    "ContentParser::parseAllOfMultiFileType ( Character )",
     "Main execution scope without parsing",
 };
 
-void dnd::Measurer::beginSession(const std::string& name, const std::string& filepath = "results.json") {
+void Measurer::beginSession(const std::string& name, const std::string& filepath = "results.json") {
     session_start_time = std::chrono::system_clock::now();
     session = new MeasuringSession{name, filepath, {{"tspeciesEvents", nlohmann::json::array()}}};
 }
 
-void dnd::Measurer::endSession() {
+void Measurer::endSession() {
     std::chrono::time_point session_end_time = std::chrono::system_clock::now();
 
     // convert thread ids to consecutive integers
@@ -94,7 +96,7 @@ void dnd::Measurer::endSession() {
     session = nullptr;
 }
 
-void dnd::Measurer::writeProfile(const TimerResult& result) {
+void Measurer::writeProfile(const TimerResult& result) {
     if (session == nullptr) {
         return;
     }
@@ -110,7 +112,7 @@ void dnd::Measurer::writeProfile(const TimerResult& result) {
     session->json.at("tspeciesEvents").push_back(result_json);
 }
 
-void dnd::Timer::stop() {
+void Timer::stop() {
     std::chrono::system_clock::time_point end_time = std::chrono::system_clock::now();
 
     int64_t start = std::chrono::time_point_cast<std::chrono::microseconds>(start_time).time_since_epoch().count();
@@ -122,3 +124,5 @@ void dnd::Timer::stop() {
 
     stopped = true;
 }
+
+} // namespace dnd

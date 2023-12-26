@@ -9,37 +9,39 @@
 
 #include <core/models/effects/condition/condition.hpp>
 
-dnd::LiteralCondition::LiteralCondition(
+namespace dnd {
+
+LiteralCondition::LiteralCondition(
     const std::string& left_side_identifier, const std::string& operator_name, bool right_side
 ) noexcept
     : Condition(left_side_identifier, operator_name), right_side(right_side) {}
 
-dnd::LiteralCondition::LiteralCondition(
+LiteralCondition::LiteralCondition(
     std::string_view left_side_identifier, std::string_view operator_name, bool right_side
 ) noexcept
     : Condition(left_side_identifier, operator_name), right_side(right_side) {}
 
-dnd::LiteralCondition::LiteralCondition(
+LiteralCondition::LiteralCondition(
     const std::string& left_side_identifier, const std::string& operator_name, int right_side
 ) noexcept
     : Condition(left_side_identifier, operator_name), right_side(right_side * 100) {}
 
-dnd::LiteralCondition::LiteralCondition(
+LiteralCondition::LiteralCondition(
     std::string_view left_side_identifier, std::string_view operator_name, int right_side
 ) noexcept
     : Condition(left_side_identifier, operator_name), right_side(right_side * 100) {}
 
-dnd::LiteralCondition::LiteralCondition(
+LiteralCondition::LiteralCondition(
     const std::string& left_side_identifier, const std::string& operator_name, float right_side
 ) noexcept
     : Condition(left_side_identifier, operator_name), right_side(static_cast<int>(right_side * 100)) {}
 
-dnd::LiteralCondition::LiteralCondition(
+LiteralCondition::LiteralCondition(
     std::string_view left_side_identifier, std::string_view operator_name, float right_side
 ) noexcept
     : Condition(left_side_identifier, operator_name), right_side(static_cast<int>(right_side * 100)) {}
 
-bool dnd::LiteralCondition::evaluate(
+bool LiteralCondition::evaluate(
     const std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
 ) const {
     if (comparison_operator == nullptr) {
@@ -51,3 +53,5 @@ bool dnd::LiteralCondition::evaluate(
     }
     throw std::out_of_range("Identifier \"" + left_side_identifier + "\" not found.");
 }
+
+} // namespace dnd

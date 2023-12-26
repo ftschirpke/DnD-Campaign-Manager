@@ -15,10 +15,12 @@
 #include <core/parsing/file_parser.hpp>
 #include <core/validation/subspecies/subspecies_data.hpp>
 
-dnd::SubspeciesParser::SubspeciesParser(const std::filesystem::path& filepath) noexcept
+namespace dnd {
+
+SubspeciesParser::SubspeciesParser(const std::filesystem::path& filepath) noexcept
     : FileParser(filepath, false), feature_parser(filepath), data() {}
 
-dnd::Errors dnd::SubspeciesParser::parse() {
+Errors SubspeciesParser::parse() {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
@@ -44,12 +46,14 @@ dnd::Errors dnd::SubspeciesParser::parse() {
     return errors;
 }
 
-dnd::Errors dnd::SubspeciesParser::validate(const dnd::Content& content) const {
+Errors SubspeciesParser::validate(const Content& content) const {
     Errors errors = data.validate();
     errors += data.validate_relations(content);
     return errors;
 }
 
-void dnd::SubspeciesParser::save_result(dnd::Content& content) {
+void SubspeciesParser::save_result(Content& content) {
     content.add_subspecies(Subspecies::create(std::move(data), content));
 }
+
+} // namespace dnd

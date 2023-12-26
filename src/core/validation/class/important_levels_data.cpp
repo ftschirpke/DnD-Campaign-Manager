@@ -10,9 +10,11 @@
 #include <core/validation/validation_data.hpp>
 #include <core/validation/validation_subdata.hpp>
 
-dnd::ImportantLevelsData::ImportantLevelsData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
+namespace dnd {
 
-dnd::Errors dnd::ImportantLevelsData::validate() const {
+ImportantLevelsData::ImportantLevelsData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
+
+Errors ImportantLevelsData::validate() const {
     Errors errors;
     if (feat_levels.empty()) {
         errors.add_validation_error(
@@ -29,3 +31,5 @@ dnd::Errors dnd::ImportantLevelsData::validate() const {
     }
     return errors;
 }
+
+} // namespace dnd

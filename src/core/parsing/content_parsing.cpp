@@ -28,6 +28,8 @@
 #include <core/parsing/subclass/subclass_parser.hpp>
 #include <core/parsing/subspecies/subspecies_parser.hpp>
 
+namespace dnd {
+
 namespace {
 
 enum class ParsingType {
@@ -44,15 +46,15 @@ enum class ParsingType {
 } // namespace
 
 
-static dnd::Errors parse_all_of_type(
-    ParsingType type, dnd::Content& content, const std::vector<std::filesystem::directory_entry>& content_directories
+static Errors parse_all_of_type(
+    ParsingType type, Content& content, const std::vector<std::filesystem::directory_entry>& content_directories
 );
-static dnd::Errors parse_string_groups(
-    dnd::Content& content, const std::vector<std::filesystem::directory_entry>& content_directories
+static Errors parse_string_groups(
+    Content& content, const std::vector<std::filesystem::directory_entry>& content_directories
 );
 
 
-dnd::ParsingResult dnd::parse_content(const std::filesystem::path& content_path, const std::string& campaign_dir_name) {
+ParsingResult parse_content(const std::filesystem::path& content_path, const std::string& campaign_dir_name) {
     DND_MEASURE_FUNCTION();
     ParsingResult result;
     result.content_path = content_path;
@@ -142,33 +144,33 @@ dnd::ParsingResult dnd::parse_content(const std::filesystem::path& content_path,
     return result;
 }
 
-static dnd::Errors parse_file(dnd::Content& content, dnd::FileParser&& parser) {
+static Errors parse_file(Content& content, FileParser&& parser) {
     DND_MEASURE_SCOPE(parser.get_filepath().string().c_str());
-    dnd::Errors errors;
+    Errors errors;
     bool successful = true;
     try {
-        dnd::Errors open_json_errors = parser.open_json();
+        Errors open_json_errors = parser.open_json();
         successful = open_json_errors.ok();
         errors += std::move(open_json_errors);
         if (!successful) {
             return errors;
         }
 
-        dnd::Errors parse_errors = parser.parse();
+        Errors parse_errors = parser.parse();
         successful = parse_errors.ok();
         errors += std::move(parse_errors);
         if (!successful && !parser.continue_after_errors()) {
             return errors;
         }
     } catch (const std::exception& e) {
-        errors.add_parsing_error(dnd::ParsingErrorCode::UNKNOWN_ERROR, parser.get_filepath(), e.what());
+        errors.add_parsing_error(ParsingErrorCode::UNKNOWN_ERROR, parser.get_filepath(), e.what());
         return errors;
     }
 
     try {
         parser.set_context(content);
 
-        dnd::Errors validation_errors = parser.validate(content);
+        Errors validation_errors = parser.validate(content);
         successful = validation_errors.ok();
         errors += std::move(validation_errors);
         if (!successful && !parser.continue_after_errors()) {
@@ -177,32 +179,32 @@ static dnd::Errors parse_file(dnd::Content& content, dnd::FileParser&& parser) {
 
         parser.save_result(content);
     } catch (const std::exception& e) {
-        errors.add_validation_error(dnd::ValidationErrorCode::UNKNOWN_ERROR, nullptr, e.what());
+        errors.add_validation_error(ValidationErrorCode::UNKNOWN_ERROR, nullptr, e.what());
     }
     return errors;
 }
 
-static dnd::Errors parse_file_of_type(const std::filesystem::path& file, dnd::Content& content, ParsingType type) {
+static Errors parse_file_of_type(const std::filesystem::path& file, Content& content, ParsingType type) {
     switch (type) {
         case ParsingType::CHARACTER:
-            return parse_file(content, dnd::CharacterParser(file));
+            return parse_file(content, CharacterParser(file));
         case ParsingType::SPECIES:
-            return parse_file(content, dnd::SpeciesParser(file));
+            return parse_file(content, SpeciesParser(file));
         case ParsingType::CLASS:
-            return parse_file(content, dnd::ClassParser(file));
+            return parse_file(content, ClassParser(file));
         case ParsingType::SUBSPECIES:
-            return parse_file(content, dnd::SubspeciesParser(file));
+            return parse_file(content, SubspeciesParser(file));
         case ParsingType::SUBCLASS:
-            return parse_file(content, dnd::SubclassParser(file));
+            return parse_file(content, SubclassParser(file));
         case ParsingType::ITEM:
-            return parse_file(content, dnd::ItemParser(file));
+            return parse_file(content, ItemParser(file));
         case ParsingType::SPELL:
-            return parse_file(content, dnd::SpellParser(file));
+            return parse_file(content, SpellParser(file));
         case ParsingType::CHOOSABLES:
-            return parse_file(content, dnd::ChoosableGroupParser(file));
+            return parse_file(content, ChoosableGroupParser(file));
         default:
             assert(false);
-            return dnd::Errors();
+            return Errors();
     }
 }
 
@@ -230,11 +232,11 @@ static const char* type_directory_name(ParsingType type) {
     }
 }
 
-static dnd::Errors parse_all_of_type(
-    ParsingType type, dnd::Content& content, const std::vector<std::filesystem::directory_entry>& content_directories
+static Errors parse_all_of_type(
+    ParsingType type, Content& content, const std::vector<std::filesystem::directory_entry>& content_directories
 ) {
     DND_MEASURE_SCOPE(fmt::format("Parsing all: {}", type_directory_name(type)).c_str());
-    dnd::Errors errors;
+    Errors errors;
 
     const char* directory_name = type_directory_name(type);
 
@@ -245,7 +247,7 @@ static dnd::Errors parse_all_of_type(
         }
         if (!std::filesystem::is_directory(directory)) {
             errors.add_parsing_error(
-                dnd::ParsingErrorCode::INVALID_FILE_FORMAT, directory.path(),
+                ParsingErrorCode::INVALID_FILE_FORMAT, directory.path(),
                 fmt::format("Expected '{}' to be a directory but it wasn't.", directory.path().string())
             );
             continue;
@@ -253,7 +255,7 @@ static dnd::Errors parse_all_of_type(
         for (const auto& entry : std::filesystem::directory_iterator(dir.path() / directory_name)) {
             if (!entry.is_regular_file()) {
                 errors.add_parsing_error(
-                    dnd::ParsingErrorCode::INVALID_FILE_FORMAT, entry.path(),
+                    ParsingErrorCode::INVALID_FILE_FORMAT, entry.path(),
                     fmt::format("Expected '{}' to be a regular file but it wasn't.", entry.path().string())
                 );
                 continue;
@@ -264,19 +266,19 @@ static dnd::Errors parse_all_of_type(
     return errors;
 }
 
-static dnd::Errors parse_string_groups(
-    dnd::Content& content, const std::vector<std::filesystem::directory_entry>& content_directories
+static Errors parse_string_groups(
+    Content& content, const std::vector<std::filesystem::directory_entry>& content_directories
 ) {
     DND_MEASURE_FUNCTION();
-    dnd::Errors errors;
+    Errors errors;
     for (const auto& dir : content_directories) {
         const std::filesystem::directory_entry groups_file(dir.path() / "groups.json");
         if (std::filesystem::exists(groups_file)) {
             if (std::filesystem::is_regular_file(groups_file)) {
-                errors += parse_file(content, dnd::StringGroupParser(groups_file.path()));
+                errors += parse_file(content, StringGroupParser(groups_file.path()));
             } else {
                 errors.add_parsing_error(
-                    dnd::ParsingErrorCode::INVALID_FILE_FORMAT, groups_file.path(),
+                    ParsingErrorCode::INVALID_FILE_FORMAT, groups_file.path(),
                     fmt::format("Expected '{}' to be a regular file but it wasn't.", groups_file.path().string())
                 );
             }
@@ -285,3 +287,5 @@ static dnd::Errors parse_string_groups(
     }
     return errors;
 }
+
+} // namespace dnd

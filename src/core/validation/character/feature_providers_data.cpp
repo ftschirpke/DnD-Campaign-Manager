@@ -12,9 +12,11 @@
 #include <core/validation/validation_data.hpp>
 #include <core/validation/validation_subdata.hpp>
 
-dnd::FeatureProvidersData::FeatureProvidersData(const dnd::ValidationData* parent) noexcept : ValidationSubdata(parent) {}
+namespace dnd {
 
-dnd::Errors dnd::FeatureProvidersData::validate() const {
+FeatureProvidersData::FeatureProvidersData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
+
+Errors FeatureProvidersData::validate() const {
     Errors errors;
     if (species_name.empty()) {
         errors.add_validation_error(
@@ -29,7 +31,7 @@ dnd::Errors dnd::FeatureProvidersData::validate() const {
     return errors;
 }
 
-dnd::Errors dnd::FeatureProvidersData::validate_relations(const dnd::Content& content) const {
+Errors FeatureProvidersData::validate_relations(const Content& content) const {
     Errors errors;
     OptCRef<Species> species_optional = content.get_species().get(species_name);
     if (!species_optional.has_value()) {
@@ -85,3 +87,5 @@ dnd::Errors dnd::FeatureProvidersData::validate_relations(const dnd::Content& co
     }
     return errors;
 }
+
+} // namespace dnd

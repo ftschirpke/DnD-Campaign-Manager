@@ -21,10 +21,12 @@
 #include <core/validation/character/character_data.hpp>
 #include <core/validation/effects/effects_data.hpp>
 
-dnd::DecisionData::DecisionData(const dnd::CharacterData* parent, const dnd::Effects* target) noexcept
+namespace dnd {
+
+DecisionData::DecisionData(const CharacterData* parent, const Effects* target) noexcept
     : ValidationSubdata(parent), selections(), character_data(parent), target(target) {}
 
-dnd::Errors dnd::DecisionData::validate() const {
+Errors DecisionData::validate() const {
     Errors errors;
     if (parent == nullptr) {
         errors.add_validation_error(
@@ -48,13 +50,13 @@ dnd::Errors dnd::DecisionData::validate() const {
     return errors;
 }
 
-dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) const {
+Errors DecisionData::validate_relations(const Content& content) const {
     Errors errors;
 
     if (target == nullptr) {
         return errors;
     }
-    std::map<std::string, const dnd::Choice*> choices;
+    std::map<std::string, const Choice*> choices;
     for (const Choice& choice : target->get_choices()) {
         assert(!choices.contains(choice.get_attribute_name()));
         if (selections.contains(choice.get_attribute_name())) {
@@ -201,8 +203,10 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
     return errors;
 }
 
-const dnd::CharacterData* dnd::DecisionData::get_character_data() const noexcept { return character_data; }
+const CharacterData* DecisionData::get_character_data() const noexcept { return character_data; }
 
-const dnd::Effects* dnd::DecisionData::get_target() const noexcept { return target; }
+const Effects* DecisionData::get_target() const noexcept { return target; }
 
-void dnd::DecisionData::set_target(const dnd::Effects* new_target) noexcept { target = new_target; }
+void DecisionData::set_target(const Effects* new_target) noexcept { target = new_target; }
+
+} // namespace dnd

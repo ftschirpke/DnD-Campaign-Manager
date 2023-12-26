@@ -22,13 +22,15 @@
 #include <core/validation/effects_provider/feature_data.hpp>
 #include <core/validation/validation_data.hpp>
 
-dnd::CharacterData::CharacterData() noexcept
+namespace dnd {
+
+CharacterData::CharacterData() noexcept
     : ValidationData(), features_data(), base_ability_scores_data(this), feature_providers_data(this),
       progression_data(this), decisions_data() {}
 
-std::unique_ptr<dnd::ValidationData> dnd::CharacterData::pack() const { return std::make_unique<CharacterData>(*this); }
+std::unique_ptr<ValidationData> CharacterData::pack() const { return std::make_unique<CharacterData>(*this); }
 
-dnd::Errors dnd::CharacterData::validate() const {
+Errors CharacterData::validate() const {
     Errors errors = ValidationData::validate();
     std::unordered_set<std::string> unique_feature_names;
     for (const FeatureData& feature_data : features_data) {
@@ -51,7 +53,7 @@ dnd::Errors dnd::CharacterData::validate() const {
     return errors;
 }
 
-dnd::Errors dnd::CharacterData::validate_relations(const dnd::Content& content) const {
+Errors CharacterData::validate_relations(const Content& content) const {
     Errors errors;
     if (content.get_characters().contains(name)) {
         errors.add_validation_error(
@@ -116,3 +118,5 @@ dnd::Errors dnd::CharacterData::validate_relations(const dnd::Content& content) 
 
     return errors;
 }
+
+} // namespace dnd

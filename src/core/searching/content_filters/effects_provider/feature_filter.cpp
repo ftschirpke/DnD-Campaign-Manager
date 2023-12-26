@@ -9,11 +9,13 @@
 #include <core/models/effects_provider/feature.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
 
-bool dnd::FeatureFilter::has_all_filters() const noexcept { return ContentPieceFilter::has_all_filters(); }
+namespace dnd {
 
-bool dnd::FeatureFilter::matches(const Feature& feature) const noexcept { return ContentPieceFilter::matches(feature); }
+bool FeatureFilter::has_all_filters() const noexcept { return ContentPieceFilter::has_all_filters(); }
 
-std::vector<const dnd::ContentPiece*> dnd::FeatureFilter::all_matches(const Content& content) const {
+bool FeatureFilter::matches(const Feature& feature) const noexcept { return ContentPieceFilter::matches(feature); }
+
+std::vector<const ContentPiece*> FeatureFilter::all_matches(const Content& content) const {
     std::vector<const ContentPiece*> matching_content_pieces;
     for (const auto& [_, feature] : content.get_features().get_all()) {
         if (matches(feature)) {
@@ -23,4 +25,6 @@ std::vector<const dnd::ContentPiece*> dnd::FeatureFilter::all_matches(const Cont
     return matching_content_pieces;
 }
 
-void dnd::FeatureFilter::clear() { ContentPieceFilter::clear(); }
+void FeatureFilter::clear() { ContentPieceFilter::clear(); }
+
+} // namespace dnd

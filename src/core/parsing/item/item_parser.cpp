@@ -17,9 +17,11 @@
 #include <core/models/item/item.hpp>
 #include <core/validation/item/item_data.hpp>
 
-dnd::ItemParser::ItemParser(const std::filesystem::path& file_path) : FileParser(file_path, true) {}
+namespace dnd {
 
-dnd::Errors dnd::ItemParser::parse() {
+ItemParser::ItemParser(const std::filesystem::path& file_path) : FileParser(file_path, true) {}
+
+Errors ItemParser::parse() {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
@@ -52,7 +54,7 @@ dnd::Errors dnd::ItemParser::parse() {
     return errors;
 }
 
-dnd::Errors dnd::ItemParser::validate(const dnd::Content& content) const {
+Errors ItemParser::validate(const Content& content) const {
     Errors errors;
     assert(items_in_file == item_data.size());
     item_data_valid.resize(items_in_file, false);
@@ -65,7 +67,7 @@ dnd::Errors dnd::ItemParser::validate(const dnd::Content& content) const {
     return errors;
 }
 
-void dnd::ItemParser::save_result(dnd::Content& content) {
+void ItemParser::save_result(Content& content) {
     assert(items_in_file == item_data_valid.size());
     assert(items_in_file == item_data.size());
     for (size_t i = 0; i < items_in_file; ++i) {
@@ -74,3 +76,5 @@ void dnd::ItemParser::save_result(dnd::Content& content) {
         }
     }
 }
+
+} // namespace dnd

@@ -24,51 +24,53 @@
 #include <core/visitors/content/collect_open_tabs_visitor.hpp>
 #include <core/visitors/content/list_content_visitor.hpp>
 
-dnd::Session::Session(const char* last_session_filename)
+namespace dnd {
+
+Session::Session(const char* last_session_filename)
     : last_session_filename(last_session_filename), status(SessionStatus::CONTENT_DIR_SELECTION), content_directory(),
       campaign_name(), parsing_future(), errors(), content(), last_session_open_tabs(), open_content_pieces(),
       selected_content_piece(), fuzzy_search(), fuzzy_search_results(), fuzzy_search_result_count(0),
       fuzzy_search_result_strings(), advanced_search(content), unknown_error_messages() {}
 
-dnd::Session::~Session() { save_session_values(); }
+Session::~Session() { save_session_values(); }
 
-dnd::SessionStatus dnd::Session::get_status() const noexcept { return status; }
+SessionStatus Session::get_status() const noexcept { return status; }
 
-dnd::Content& dnd::Session::get_content() noexcept { return content; }
+Content& Session::get_content() noexcept { return content; }
 
-const dnd::Errors& dnd::Session::get_errors() const noexcept { return errors; }
+const Errors& Session::get_errors() const noexcept { return errors; }
 
-const std::vector<std::string>& dnd::Session::get_unknown_error_messages() const noexcept {
+const std::vector<std::string>& Session::get_unknown_error_messages() const noexcept {
     return unknown_error_messages;
 }
 
-const std::vector<std::string>& dnd::Session::get_parsing_error_messages() const noexcept {
+const std::vector<std::string>& Session::get_parsing_error_messages() const noexcept {
     return parsing_error_messages;
 }
 
-const std::vector<std::string>& dnd::Session::get_validation_error_messages() const noexcept {
+const std::vector<std::string>& Session::get_validation_error_messages() const noexcept {
     return validation_error_messages;
 }
 
-const std::string& dnd::Session::get_campaign_name() const noexcept { return campaign_name; }
+const std::string& Session::get_campaign_name() const noexcept { return campaign_name; }
 
-const std::filesystem::path& dnd::Session::get_content_directory() const noexcept { return content_directory; }
+const std::filesystem::path& Session::get_content_directory() const noexcept { return content_directory; }
 
-std::deque<const dnd::ContentPiece*>& dnd::Session::get_open_content_pieces() noexcept { return open_content_pieces; }
+std::deque<const ContentPiece*>& Session::get_open_content_pieces() noexcept { return open_content_pieces; }
 
-const dnd::ContentPiece* dnd::Session::get_selected_content_piece() noexcept {
+const ContentPiece* Session::get_selected_content_piece() noexcept {
     const ContentPiece* rv = selected_content_piece;
     selected_content_piece = nullptr;
     return rv;
 }
 
-size_t dnd::Session::get_fuzzy_search_result_count() const noexcept { return fuzzy_search_result_count; }
+size_t Session::get_fuzzy_search_result_count() const noexcept { return fuzzy_search_result_count; }
 
-bool dnd::Session::too_many_fuzzy_search_results() const noexcept {
+bool Session::too_many_fuzzy_search_results() const noexcept {
     return fuzzy_search_result_count > max_search_results;
 }
 
-std::vector<std::string> dnd::Session::get_possible_campaign_names() const {
+std::vector<std::string> Session::get_possible_campaign_names() const {
     if (content_directory.empty()) {
         return {};
     }
@@ -82,7 +84,7 @@ std::vector<std::string> dnd::Session::get_possible_campaign_names() const {
     return campaign_names;
 }
 
-std::vector<std::string> dnd::Session::get_fuzzy_search_result_strings() const {
+std::vector<std::string> Session::get_fuzzy_search_result_strings() const {
     DND_MEASURE_FUNCTION();
     ListContentVisitor list_content_visitor;
     list_content_visitor.reserve(fuzzy_search_result_count);
@@ -95,7 +97,7 @@ std::vector<std::string> dnd::Session::get_fuzzy_search_result_strings() const {
     return list_content_visitor.get_list();
 }
 
-std::vector<std::string> dnd::Session::get_advanced_search_result_strings() const {
+std::vector<std::string> Session::get_advanced_search_result_strings() const {
     DND_MEASURE_FUNCTION();
     ListContentVisitor list_content_visitor;
     const std::vector<const ContentPiece*>& advanced_search_results = advanced_search.get_search_results();
@@ -106,7 +108,7 @@ std::vector<std::string> dnd::Session::get_advanced_search_result_strings() cons
     return list_content_visitor.get_list();
 }
 
-void dnd::Session::retrieve_last_session_values() {
+void Session::retrieve_last_session_values() {
     if (!std::filesystem::exists(last_session_filename)) {
         return;
     }
@@ -135,7 +137,7 @@ void dnd::Session::retrieve_last_session_values() {
     last_session_open_tabs = last_session["open_tabs"].get<std::unordered_map<std::string, std::vector<std::string>>>();
 }
 
-void dnd::Session::save_session_values() {
+void Session::save_session_values() {
     nlohmann::json last_session;
     if (!content_directory.empty()) {
         last_session["content_directory"] = content_directory.string();
@@ -155,14 +157,14 @@ void dnd::Session::save_session_values() {
     last_session_file.close();
 }
 
-void dnd::Session::clear_unknown_error_messages() { unknown_error_messages.clear(); }
+void Session::clear_unknown_error_messages() { unknown_error_messages.clear(); }
 
-dnd::Errors dnd::Session::set_campaign_name(const std::string& new_campaign_name) {
+Errors Session::set_campaign_name(const std::string& new_campaign_name) {
     Errors campaign_errors;
     if (campaign_name == new_campaign_name) {
         if (campaign_name.empty()) {
             campaign_errors.add_validation_error(
-                dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, nullptr, "The campaign name is empty."
+                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, nullptr, "The campaign name is empty."
             );
         }
         return campaign_errors;
@@ -170,7 +172,7 @@ dnd::Errors dnd::Session::set_campaign_name(const std::string& new_campaign_name
     std::vector<std::string> possible_names = get_possible_campaign_names();
     if (std::find(possible_names.begin(), possible_names.end(), new_campaign_name) == possible_names.end()) {
         campaign_errors.add_validation_error(
-            dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, nullptr,
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, nullptr,
             fmt::format("The campaign name \"{}\" is not valid.", new_campaign_name)
         );
         return campaign_errors;
@@ -181,36 +183,36 @@ dnd::Errors dnd::Session::set_campaign_name(const std::string& new_campaign_name
     return campaign_errors;
 }
 
-static dnd::Errors validate_content_directory(const std::filesystem::path& content_directory) {
-    dnd::Errors errors;
+static Errors validate_content_directory(const std::filesystem::path& content_directory) {
+    Errors errors;
     if (!std::filesystem::exists(content_directory)) {
         errors.add_validation_error(
-            dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, nullptr, "The content directory does not exist."
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, nullptr, "The content directory does not exist."
         );
     } else if (!std::filesystem::is_directory(content_directory)) {
         errors.add_validation_error(
-            dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, nullptr, "The content directory is not a directory."
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, nullptr, "The content directory is not a directory."
         );
     } else if (!std::filesystem::exists(content_directory / "general")) {
         errors.add_validation_error(
-            dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, nullptr,
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, nullptr,
             "The content directory does not contain a \"general\" directory."
         );
     } else if (!std::filesystem::is_directory(content_directory / "general")) {
         errors.add_validation_error(
-            dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, nullptr,
+            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, nullptr,
             "The content directory does not contain a \"general\" directory, but a file with the same name."
         );
     }
     return errors;
 }
 
-dnd::Errors dnd::Session::set_content_directory(const std::filesystem::path& new_content_directory) {
+Errors Session::set_content_directory(const std::filesystem::path& new_content_directory) {
     Errors content_dir_errors;
     if (content_directory == new_content_directory) {
         if (content_directory.empty()) {
             content_dir_errors.add_validation_error(
-                dnd::ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, nullptr, "The content directory is empty."
+                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, nullptr, "The content directory is empty."
             );
         }
         return content_dir_errors;
@@ -231,8 +233,8 @@ dnd::Errors dnd::Session::set_content_directory(const std::filesystem::path& new
 class ContentPieceComparator {
 public:
     explicit ContentPieceComparator(const std::string& search_query)
-        : query_length(search_query.size()), lower_query(dnd::string_lowercase_copy(search_query)),
-          upper_query(dnd::string_uppercase_copy(search_query)) {}
+        : query_length(search_query.size()), lower_query(string_lowercase_copy(search_query)),
+          upper_query(string_uppercase_copy(search_query)) {}
 
     bool starts_with_search_query(const std::string& name) const {
         size_t i = 0;
@@ -247,7 +249,7 @@ public:
         return true;
     }
 
-    bool operator()(const dnd::ContentPiece* a, const dnd::ContentPiece* b) const {
+    bool operator()(const ContentPiece* a, const ContentPiece* b) const {
         const std::string& a_name = a->get_name();
         const std::string& b_name = b->get_name();
         bool prioritize_a = starts_with_search_query(a_name);
@@ -266,7 +268,7 @@ private:
     std::string upper_query;
 };
 
-void dnd::Session::set_fuzzy_search(const std::string& search_query, const std::array<bool, 9>& search_options) {
+void Session::set_fuzzy_search(const std::string& search_query, const std::array<bool, 9>& search_options) {
     DND_MEASURE_FUNCTION();
     fuzzy_search->set_search_query(search_query);
     std::vector<const ContentPiece*> vec_search_results = fuzzy_search->get_results(search_options);
@@ -281,14 +283,14 @@ void dnd::Session::set_fuzzy_search(const std::string& search_query, const std::
     }
 }
 
-void dnd::Session::open_fuzzy_search_result(size_t index) {
+void Session::open_fuzzy_search_result(size_t index) {
     if (index >= fuzzy_search_result_count) {
         return;
     }
     open_content_piece(fuzzy_search_results[index]);
 }
 
-void dnd::Session::open_advanced_search_result(size_t index) {
+void Session::open_advanced_search_result(size_t index) {
     const std::vector<const ContentPiece*>& advanced_search_results = advanced_search.get_search_results();
     if (index >= advanced_search_results.size()) {
         return;
@@ -296,9 +298,9 @@ void dnd::Session::open_advanced_search_result(size_t index) {
     open_content_piece(advanced_search_results[index]);
 }
 
-void dnd::Session::start_advanced_search() { advanced_search.start_searching(); }
+void Session::start_advanced_search() { advanced_search.start_searching(); }
 
-bool dnd::Session::advanced_search_results_available() {
+bool Session::advanced_search_results_available() {
     try {
         return advanced_search.search_results_available();
     } catch (const std::exception& e) {
@@ -308,13 +310,13 @@ bool dnd::Session::advanced_search_results_available() {
     }
 }
 
-void dnd::Session::set_advanced_search_filter(ContentFilterVariant&& filter) {
+void Session::set_advanced_search_filter(ContentFilterVariant&& filter) {
     advanced_search.set_filter(std::move(filter));
 }
 
-dnd::ContentFilterVariant& dnd::Session::get_advanced_search_filter() { return advanced_search.get_filter(); }
+ContentFilterVariant& Session::get_advanced_search_filter() { return advanced_search.get_filter(); }
 
-bool dnd::Session::parsing_result_available() {
+bool Session::parsing_result_available() {
     DND_MEASURE_FUNCTION();
     if (status == SessionStatus::PARSING
         && parsing_future.wait_for(std::chrono::nanoseconds(1)) == std::future_status::ready) {
@@ -329,12 +331,12 @@ bool dnd::Session::parsing_result_available() {
     return status == SessionStatus::READY;
 }
 
-void dnd::Session::start_parsing() {
+void Session::start_parsing() {
     parsing_future = std::async(std::launch::async, &Session::parse_content_and_initialize, this);
     status = SessionStatus::PARSING;
 }
 
-void dnd::Session::parse_content_and_initialize() {
+void Session::parse_content_and_initialize() {
     ParsingResult parsing_result = parse_content(content_directory, campaign_name);
     content = std::move(parsing_result.content);
     errors = std::move(parsing_result.errors);
@@ -359,7 +361,7 @@ void dnd::Session::parse_content_and_initialize() {
     }
 }
 
-void dnd::Session::open_last_session() {
+void Session::open_last_session() {
     for (const std::string& character_to_open : last_session_open_tabs["characters"]) {
         OptCRef<Character> character = content.get_characters().get(character_to_open);
         if (character.has_value()) {
@@ -422,9 +424,11 @@ void dnd::Session::open_last_session() {
     }
 }
 
-void dnd::Session::open_content_piece(const ContentPiece* content_piece) {
+void Session::open_content_piece(const ContentPiece* content_piece) {
     if (std::find(open_content_pieces.begin(), open_content_pieces.end(), content_piece) == open_content_pieces.end()) {
         open_content_pieces.push_back(content_piece);
     }
     selected_content_piece = content_piece;
 }
+
+} // namespace dnd

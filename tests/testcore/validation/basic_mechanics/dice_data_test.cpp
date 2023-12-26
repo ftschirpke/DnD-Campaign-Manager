@@ -4,12 +4,14 @@
 
 #include <catch2/catch_test_macros.hpp>
 
+namespace dnd::test {
+
 static constexpr const char* tags = "[core][validation][basic_mechanics][dice]";
 
-TEST_CASE("dnd::DiceData", tags) {
-    dnd::DiceData data(nullptr);
+TEST_CASE("DiceData", tags) {
+    DiceData data(nullptr);
 
-    dnd::Errors errors;
+    Errors errors;
     SECTION("Valid dice") {
         data.str = "d4";
         REQUIRE_NOTHROW(errors = data.validate());
@@ -93,3 +95,5 @@ TEST_CASE("dnd::DiceData", tags) {
         REQUIRE_FALSE(errors.ok());
     }
 }
+
+} // namespace dnd::test

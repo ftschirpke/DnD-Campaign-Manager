@@ -17,10 +17,12 @@
 #include <core/parsing/file_parser.hpp>
 #include <core/validation/class/class_data.hpp>
 
-dnd::SubclassParser::SubclassParser(const std::filesystem::path& filepath) noexcept
+namespace dnd {
+
+SubclassParser::SubclassParser(const std::filesystem::path& filepath) noexcept
     : FileParser(filepath, false), class_feature_parser(filepath), data() {}
 
-dnd::Errors dnd::SubclassParser::parse() {
+Errors SubclassParser::parse() {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
@@ -92,12 +94,14 @@ dnd::Errors dnd::SubclassParser::parse() {
     return errors;
 }
 
-dnd::Errors dnd::SubclassParser::validate(const Content& content) const {
+Errors SubclassParser::validate(const Content& content) const {
     Errors errors = data.validate();
     errors += data.validate_relations(content);
     return errors;
 }
 
-void dnd::SubclassParser::save_result(Content& content) {
+void SubclassParser::save_result(Content& content) {
     content.add_subclass(Subclass::create(std::move(data), content));
 }
+
+} // namespace dnd

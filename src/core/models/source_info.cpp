@@ -5,6 +5,8 @@
 #include <filesystem>
 #include <string>
 
+namespace dnd {
+
 static std::string nth_parent_stem(const std::filesystem::path& path, int n) noexcept {
     std::filesystem::path parent = path;
     for (int i = 0; i < n; ++i) {
@@ -21,14 +23,14 @@ static std::string beautify_source_path(const std::filesystem::path& source_path
     return relative_path.string();
 }
 
-dnd::SourceInfo::SourceInfo(const std::filesystem::path& source_path) noexcept
+SourceInfo::SourceInfo(const std::filesystem::path& source_path) noexcept
     : source_path(source_path), beautified_source_path(), source_book(nth_parent_stem(source_path, 3) == "general"),
       source_group_name(nth_parent_stem(source_path, 2)), source_type_name(nth_parent_stem(source_path, 1)),
       source_name(source_path.stem().string()) {
     beautified_source_path = beautify_source_path(this->source_path);
 }
 
-dnd::SourceInfo::SourceInfo(std::filesystem::path&& source_path) noexcept
+SourceInfo::SourceInfo(std::filesystem::path&& source_path) noexcept
     : source_path(std::move(source_path)), beautified_source_path(),
       source_book(nth_parent_stem(this->source_path, 3) == "general"),
       source_group_name(nth_parent_stem(this->source_path, 2)), source_type_name(nth_parent_stem(this->source_path, 1)),
@@ -36,14 +38,16 @@ dnd::SourceInfo::SourceInfo(std::filesystem::path&& source_path) noexcept
     beautified_source_path = beautify_source_path(this->source_path);
 }
 
-const std::filesystem::path& dnd::SourceInfo::get_source_path() const noexcept { return source_path; }
+const std::filesystem::path& SourceInfo::get_source_path() const noexcept { return source_path; }
 
-const std::string& dnd::SourceInfo::get_beautified_source_path() const noexcept { return beautified_source_path; }
+const std::string& SourceInfo::get_beautified_source_path() const noexcept { return beautified_source_path; }
 
-bool dnd::SourceInfo::is_from_source_book() const noexcept { return source_book; }
+bool SourceInfo::is_from_source_book() const noexcept { return source_book; }
 
-const std::string& dnd::SourceInfo::get_source_group_name() const noexcept { return source_group_name; }
+const std::string& SourceInfo::get_source_group_name() const noexcept { return source_group_name; }
 
-const std::string& dnd::SourceInfo::get_source_type_name() const noexcept { return source_type_name; }
+const std::string& SourceInfo::get_source_type_name() const noexcept { return source_type_name; }
 
-const std::string& dnd::SourceInfo::get_source_name() const noexcept { return source_name; }
+const std::string& SourceInfo::get_source_name() const noexcept { return source_name; }
+
+} // namespace dnd

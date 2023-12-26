@@ -24,12 +24,14 @@
 #include <core/validation/character/character_data.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
-dnd::Character dnd::Character::create(dnd::CharacterData&& data, const Content& content) {
+namespace dnd {
+
+Character Character::create(CharacterData&& data, const Content& content) {
     if (!data.validate().ok()) {
-        throw dnd::invalid_data("Cannot create character from invalid data.");
+        throw invalid_data("Cannot create character from invalid data.");
     }
     if (!data.validate_relations(content).ok()) {
-        throw dnd::invalid_data("Character data is incompatible with the given content.");
+        throw invalid_data("Character data is incompatible with the given content.");
     }
 
     std::vector<Feature> features;
@@ -53,23 +55,23 @@ dnd::Character dnd::Character::create(dnd::CharacterData&& data, const Content& 
     );
 }
 
-const std::string& dnd::Character::get_name() const noexcept { return name; }
+const std::string& Character::get_name() const noexcept { return name; }
 
-const std::string& dnd::Character::get_description() const noexcept { return description; }
+const std::string& Character::get_description() const noexcept { return description; }
 
-const dnd::SourceInfo& dnd::Character::get_source_info() const noexcept { return source_info; }
+const SourceInfo& Character::get_source_info() const noexcept { return source_info; }
 
-const std::vector<dnd::Feature>& dnd::Character::get_features() const noexcept { return features; }
+const std::vector<Feature>& Character::get_features() const noexcept { return features; }
 
-const std::vector<dnd::Choosable>& dnd::Character::get_choosables() const noexcept { return choosables; }
+const std::vector<Choosable>& Character::get_choosables() const noexcept { return choosables; }
 
-const dnd::AbilityScores& dnd::Character::get_base_ability_scores() const noexcept { return base_ability_scores; }
+const AbilityScores& Character::get_base_ability_scores() const noexcept { return base_ability_scores; }
 
-const dnd::FeatureProviders& dnd::Character::get_feature_providers() const noexcept { return feature_providers; }
+const FeatureProviders& Character::get_feature_providers() const noexcept { return feature_providers; }
 
-const dnd::Progression& dnd::Character::get_progression() const noexcept { return progression; }
+const Progression& Character::get_progression() const noexcept { return progression; }
 
-void dnd::Character::for_all_effects_do(std::function<void(const dnd::Effects&)> func) const noexcept {
+void Character::for_all_effects_do(std::function<void(const Effects&)> func) const noexcept {
     for (const Feature& feature : feature_providers.get_species().get_features()) {
         func(feature.get_main_effects());
     }
@@ -108,18 +110,20 @@ void dnd::Character::for_all_effects_do(std::function<void(const dnd::Effects&)>
     }
 }
 
-int dnd::Character::get_proficiency_bonus() const noexcept {
+int Character::get_proficiency_bonus() const noexcept {
     return proficiency_bonus_for_level(progression.get_level());
 }
 
-void dnd::Character::accept_visitor(dnd::ContentVisitor& visitor) const { visitor(*this); }
+void Character::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
-dnd::Character::Character(
+Character::Character(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path,
-    std::vector<dnd::Feature>&& features, dnd::AbilityScores&& base_ability_scores,
-    dnd::FeatureProviders&& feature_providers, dnd::Progression&& progression, std::vector<dnd::Decision>&& decisions
+    std::vector<Feature>&& features, AbilityScores&& base_ability_scores,
+    FeatureProviders&& feature_providers, Progression&& progression, std::vector<Decision>&& decisions
 ) noexcept
     : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
       features(std::move(features)), base_ability_scores(std::move(base_ability_scores)),
       feature_providers(std::move(feature_providers)), progression(std::move(progression)),
       decisions(std::move(decisions)) {}
+
+} // namespace dnd

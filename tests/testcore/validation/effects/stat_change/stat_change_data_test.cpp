@@ -7,12 +7,14 @@
 #include <core/errors/errors.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
+namespace dnd::test {
+
 static constexpr const char* tags = "[core][validation][effects]";
 
-TEST_CASE("dnd::StatChangeData::validate // valid effects", tags) {
-    dndtest::ValidationDataMock parent;
-    dnd::StatChangeData stat_change_data(&parent);
-    dnd::Errors errors;
+TEST_CASE("StatChangeData::validate // valid effects", tags) {
+    ValidationDataMock parent;
+    StatChangeData stat_change_data(&parent);
+    Errors errors;
 
     SECTION("boolean effects") {
         stat_change_data.stat_change_str = "MY_BOOLEAN_VALUE earliest set false";
@@ -81,10 +83,10 @@ TEST_CASE("dnd::StatChangeData::validate // valid effects", tags) {
     }
 }
 
-TEST_CASE("dnd::StatChangeData::validate // invalid effects", tags) {
-    dndtest::ValidationDataMock parent;
-    dnd::StatChangeData stat_change_data(&parent);
-    dnd::Errors errors;
+TEST_CASE("StatChangeData::validate // invalid effects", tags) {
+    ValidationDataMock parent;
+    StatChangeData stat_change_data(&parent);
+    Errors errors;
 
     SECTION("invalid attribute format (first word)") {
         stat_change_data.stat_change_str = "lowercase_not_allowed earliest set false";
@@ -256,3 +258,5 @@ TEST_CASE("dnd::StatChangeData::validate // invalid effects", tags) {
         REQUIRE_FALSE(errors.ok());
     }
 }
+
+} // namespace dnd::test

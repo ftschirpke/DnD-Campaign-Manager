@@ -24,6 +24,8 @@
 #include <core/session.hpp>
 #include <gui/visitors/filters/filter_setting_visitor.hpp>
 
+namespace dnd {
+
 static constexpr ImVec2 cell_padding = ImVec2(5, 5);
 static constexpr ImGuiTableFlags content_table_flags = ImGuiTableFlags_NoBordersInBodyUntilResize;
 static constexpr float first_column_width = 250;
@@ -36,9 +38,9 @@ static constexpr std::array<const char*, 10> content_filter_names = {
     "Any", "Characters", "Classes", "Subclasses", "Species", "Subspecies", "Items", "Spells", "Features", "Choosables",
 };
 
-dnd::AdvancedSearchWindow::AdvancedSearchWindow(Session& session) : session(session), result_list() {}
+AdvancedSearchWindow::AdvancedSearchWindow(Session& session) : session(session), result_list() {}
 
-void dnd::AdvancedSearchWindow::render() {
+void AdvancedSearchWindow::render() {
     DND_MEASURE_FUNCTION();
     ImGui::Begin("Advanced Search");
 
@@ -146,3 +148,5 @@ void dnd::AdvancedSearchWindow::render() {
 
     ImGui::End();
 }
+
+} // namespace dnd

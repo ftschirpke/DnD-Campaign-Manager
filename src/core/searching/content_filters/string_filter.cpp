@@ -4,38 +4,40 @@
 
 #include <string>
 
-dnd::StringFilter::StringFilter() noexcept : type(StringFilterType::NONE), value() {}
+namespace dnd {
 
-bool dnd::StringFilter::is_set() const noexcept { return type != StringFilterType::NONE; }
+StringFilter::StringFilter() noexcept : type(StringFilterType::NONE), value() {}
 
-dnd::StringFilterType dnd::StringFilter::get_type() const noexcept { return type; }
+bool StringFilter::is_set() const noexcept { return type != StringFilterType::NONE; }
 
-std::string& dnd::StringFilter::get_value_mutable() noexcept { return value; }
+StringFilterType StringFilter::get_type() const noexcept { return type; }
 
-const std::string& dnd::StringFilter::get_value() const noexcept { return value; }
+std::string& StringFilter::get_value_mutable() noexcept { return value; }
 
-void dnd::StringFilter::set_type(StringFilterType new_type) noexcept { type = new_type; }
+const std::string& StringFilter::get_value() const noexcept { return value; }
 
-void dnd::StringFilter::set_value(const std::string& new_value) noexcept { value = new_value; }
+void StringFilter::set_type(StringFilterType new_type) noexcept { type = new_type; }
 
-void dnd::StringFilter::set_value(std::string&& new_value) noexcept { value = new_value; }
+void StringFilter::set_value(const std::string& new_value) noexcept { value = new_value; }
 
-void dnd::StringFilter::set(StringFilterType new_type, const std::string& new_value) noexcept {
+void StringFilter::set_value(std::string&& new_value) noexcept { value = new_value; }
+
+void StringFilter::set(StringFilterType new_type, const std::string& new_value) noexcept {
     set_type(new_type);
     set_value(new_value);
 }
 
-void dnd::StringFilter::set(StringFilterType new_type, std::string&& new_value) noexcept {
+void StringFilter::set(StringFilterType new_type, std::string&& new_value) noexcept {
     set_type(new_type);
     set_value(std::move(new_value));
 }
 
-void dnd::StringFilter::clear() noexcept {
+void StringFilter::clear() noexcept {
     set_type(StringFilterType::NONE);
     set_value("");
 }
 
-bool dnd::StringFilter::matches(const std::string& str) const noexcept {
+bool StringFilter::matches(const std::string& str) const noexcept {
     switch (type) {
         case StringFilterType::EQUAL:
             return str == value;
@@ -59,3 +61,5 @@ bool dnd::StringFilter::matches(const std::string& str) const noexcept {
             return false;
     }
 }
+
+} // namespace dnd

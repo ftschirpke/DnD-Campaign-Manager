@@ -27,13 +27,15 @@
 #include <core/validation/effects_provider/feature_data.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
+namespace dnd {
+
 static constexpr const char* level_activation_regex_cstr = "CLASS_LEVEL >= [123456789]\\d?";
 
-static int determine_subclass_level(const dnd::FeatureData& subclass_feature_data) {
+static int determine_subclass_level(const FeatureData& subclass_feature_data) {
     static const std::regex level_activation_regex(level_activation_regex_cstr);
-    const std::vector<dnd::ConditionData>& activation_conditions = subclass_feature_data.main_effects_data
+    const std::vector<ConditionData>& activation_conditions = subclass_feature_data.main_effects_data
                                                                        .activation_conditions_data;
-    for (const dnd::ConditionData& condition_data : activation_conditions) {
+    for (const ConditionData& condition_data : activation_conditions) {
         if (std::regex_match(condition_data.condition_str, level_activation_regex)) {
             return std::stoi(condition_data.condition_str.substr(15));
         }
@@ -41,7 +43,7 @@ static int determine_subclass_level(const dnd::FeatureData& subclass_feature_dat
     return 1;
 }
 
-dnd::Class dnd::Class::create(dnd::ClassData&& data, const dnd::Content& content) {
+Class Class::create(ClassData&& data, const Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create character class from invalid data.");
     }
@@ -76,31 +78,33 @@ dnd::Class dnd::Class::create(dnd::ClassData&& data, const dnd::Content& content
     );
 }
 
-const std::string& dnd::Class::get_name() const noexcept { return name; }
+const std::string& Class::get_name() const noexcept { return name; }
 
-const std::string& dnd::Class::get_description() const noexcept { return description; }
+const std::string& Class::get_description() const noexcept { return description; }
 
-const dnd::SourceInfo& dnd::Class::get_source_info() const noexcept { return source_info; }
+const SourceInfo& Class::get_source_info() const noexcept { return source_info; }
 
-const std::vector<dnd::ClassFeature>& dnd::Class::get_features() const noexcept { return features; }
+const std::vector<ClassFeature>& Class::get_features() const noexcept { return features; }
 
-bool dnd::Class::has_spellcasting() const noexcept { return spellcasting != nullptr; }
+bool Class::has_spellcasting() const noexcept { return spellcasting != nullptr; }
 
-const dnd::Spellcasting* dnd::Class::get_spellcasting() const noexcept { return spellcasting.get(); }
+const Spellcasting* Class::get_spellcasting() const noexcept { return spellcasting.get(); }
 
-const dnd::ClassFeature* dnd::Class::get_subclass_feature() const noexcept { return subclass_feature; }
+const ClassFeature* Class::get_subclass_feature() const noexcept { return subclass_feature; }
 
-const dnd::Dice& dnd::Class::get_hit_dice() const noexcept { return hit_dice; }
+const Dice& Class::get_hit_dice() const noexcept { return hit_dice; }
 
-const dnd::ImportantLevels& dnd::Class::get_important_levels() const noexcept { return important_levels; }
+const ImportantLevels& Class::get_important_levels() const noexcept { return important_levels; }
 
-void dnd::Class::accept_visitor(dnd::ContentVisitor& visitor) const { visitor(*this); }
+void Class::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
-dnd::Class::Class(
+Class::Class(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path,
-    std::vector<dnd::ClassFeature>&& features, const dnd::ClassFeature* subclass_feature, dnd::Dice hit_dice,
-    dnd::ImportantLevels&& important_levels, std::unique_ptr<dnd::Spellcasting>&& spellcasting
+    std::vector<ClassFeature>&& features, const ClassFeature* subclass_feature, Dice hit_dice,
+    ImportantLevels&& important_levels, std::unique_ptr<Spellcasting>&& spellcasting
 ) noexcept
     : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
       features(std::move(features)), spellcasting(std::move(spellcasting)), subclass_feature(subclass_feature),
       hit_dice(std::move(hit_dice)), important_levels(std::move(important_levels)) {}
+
+} // namespace dnd

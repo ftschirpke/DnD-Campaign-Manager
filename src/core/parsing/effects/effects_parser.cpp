@@ -21,9 +21,11 @@
 #include <core/validation/effects/subholders/proficiency_holder_data.hpp>
 #include <core/validation/effects/subholders/riv_holder_data.hpp>
 
-dnd::EffectsParser::EffectsParser(const std::filesystem::path& filepath) noexcept : Parser(filepath) {}
+namespace dnd {
 
-dnd::Errors dnd::EffectsParser::parse_into(nlohmann::ordered_json&& json, dnd::EffectsData& data) const {
+EffectsParser::EffectsParser(const std::filesystem::path& filepath) noexcept : Parser(filepath) {}
+
+Errors EffectsParser::parse_into(nlohmann::ordered_json&& json, EffectsData& data) const {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
@@ -43,8 +45,8 @@ dnd::Errors dnd::EffectsParser::parse_into(nlohmann::ordered_json&& json, dnd::E
     return errors;
 }
 
-dnd::Errors dnd::EffectsParser::parse_activation_conditions_into(
-    nlohmann::ordered_json& json, std::vector<dnd::ConditionData>& data, const dnd::ValidationData* parent
+Errors EffectsParser::parse_activation_conditions_into(
+    nlohmann::ordered_json& json, std::vector<ConditionData>& data, const ValidationData* parent
 ) const {
     Errors errors;
     bool has_activation = json.contains("activation");
@@ -68,8 +70,8 @@ dnd::Errors dnd::EffectsParser::parse_activation_conditions_into(
     return errors;
 }
 
-dnd::Errors dnd::EffectsParser::parse_choices_into(
-    nlohmann::ordered_json& json, std::vector<dnd::ChoiceData>& data, const dnd::ValidationData* parent
+Errors EffectsParser::parse_choices_into(
+    nlohmann::ordered_json& json, std::vector<ChoiceData>& data, const ValidationData* parent
 ) const {
     Errors errors;
     if (!json["choose"].is_object()) {
@@ -108,8 +110,8 @@ dnd::Errors dnd::EffectsParser::parse_choices_into(
     return errors;
 }
 
-dnd::Errors dnd::EffectsParser::parse_stat_changes_into(
-    nlohmann::ordered_json& json, std::vector<dnd::StatChangeData>& data, const dnd::ValidationData* parent
+Errors EffectsParser::parse_stat_changes_into(
+    nlohmann::ordered_json& json, std::vector<StatChangeData>& data, const ValidationData* parent
 ) const {
     std::vector<std::string> stat_change_strings;
     Errors errors = parse_optional_attribute_into(json, "stat_changes", stat_change_strings);
@@ -120,7 +122,7 @@ dnd::Errors dnd::EffectsParser::parse_stat_changes_into(
     return errors;
 }
 
-dnd::Errors dnd::EffectsParser::parse_action_holder_into(nlohmann::ordered_json& json, dnd::ActionHolderData& data)
+Errors EffectsParser::parse_action_holder_into(nlohmann::ordered_json& json, ActionHolderData& data)
     const {
     Errors errors;
     errors += parse_optional_attribute_into(json, "actions", data.actions);
@@ -129,8 +131,8 @@ dnd::Errors dnd::EffectsParser::parse_action_holder_into(nlohmann::ordered_json&
     return errors;
 }
 
-dnd::Errors dnd::EffectsParser::parse_extra_spells_holder_into(
-    nlohmann::ordered_json& json, dnd::ExtraSpellsHolderData& data
+Errors EffectsParser::parse_extra_spells_holder_into(
+    nlohmann::ordered_json& json, ExtraSpellsHolderData& data
 ) const {
     Errors errors;
     errors += parse_optional_attribute_into(json, "cantrips_free", data.free_cantrips);
@@ -150,8 +152,8 @@ dnd::Errors dnd::EffectsParser::parse_extra_spells_holder_into(
     return errors;
 }
 
-dnd::Errors dnd::EffectsParser::parse_proficiency_holder_into(
-    nlohmann::ordered_json& json, dnd::ProficiencyHolderData& data
+Errors EffectsParser::parse_proficiency_holder_into(
+    nlohmann::ordered_json& json, ProficiencyHolderData& data
 ) const {
     Errors errors;
     errors += parse_optional_attribute_into(json, "armor_proficiencies", data.armor);
@@ -164,7 +166,7 @@ dnd::Errors dnd::EffectsParser::parse_proficiency_holder_into(
     return errors;
 }
 
-dnd::Errors dnd::EffectsParser::parse_riv_holder_into(nlohmann::ordered_json& json, dnd::RIVHolderData& data) const {
+Errors EffectsParser::parse_riv_holder_into(nlohmann::ordered_json& json, RIVHolderData& data) const {
     Errors errors;
     errors += parse_optional_attribute_into(json, "damage_resistances", data.damage_resistances);
     errors += parse_optional_attribute_into(json, "damage_immunities", data.damage_immunities);
@@ -172,3 +174,5 @@ dnd::Errors dnd::EffectsParser::parse_riv_holder_into(nlohmann::ordered_json& js
     errors += parse_optional_attribute_into(json, "condition_immunities", data.condition_immunities);
     return errors;
 }
+
+} // namespace dnd

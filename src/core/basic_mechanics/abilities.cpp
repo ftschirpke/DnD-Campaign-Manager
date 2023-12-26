@@ -8,7 +8,9 @@
 #include <string>
 #include <string_view>
 
-dnd::Ability dnd::string_to_ability(const std::string& ability_str) {
+namespace dnd {
+
+Ability string_to_ability(const std::string& ability_str) {
     for (size_t i = 0; i < 6; ++i) {
         if (ability_cstrings_inorder[i] == ability_str) {
             return abilities_inorder[i];
@@ -17,7 +19,7 @@ dnd::Ability dnd::string_to_ability(const std::string& ability_str) {
     throw std::invalid_argument("The ability \"" + ability_str + "\" does not exist.");
 }
 
-std::string dnd::ability_to_string(dnd::Ability ability) {
+std::string ability_to_string(Ability ability) {
     switch (ability) {
         case Ability::STRENGTH:
             return "STR";
@@ -38,12 +40,14 @@ std::string dnd::ability_to_string(dnd::Ability ability) {
     }
 }
 
-bool dnd::is_ability(std::string_view attribute_name) {
+bool is_ability(std::string_view attribute_name) {
     return std::find(ability_cstrings_inorder.cbegin(), ability_cstrings_inorder.cend(), attribute_name)
            != ability_cstrings_inorder.cend();
 }
 
-bool dnd::is_ability(const std::string& attribute_name) {
+bool is_ability(const std::string& attribute_name) {
     return std::find(ability_cstrings_inorder.cbegin(), ability_cstrings_inorder.cend(), attribute_name)
            != ability_cstrings_inorder.cend();
 }
+
+} // namespace dnd
