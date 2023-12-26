@@ -271,9 +271,7 @@ static void number_menu_item(const char* name, NumberFilter<T>& filter, NumberFi
 }
 
 template <typename T>
-static void selection_menu_item(
-    const char* name, SelectionFilter<T>& filter, SelectionFilterType default_type
-) {
+static void selection_menu_item(const char* name, SelectionFilter<T>& filter, SelectionFilterType default_type) {
     if (!filter.is_set() && ImGui::MenuItem(name)) {
         filter.set_type(default_type);
         ImGui::CloseCurrentPopup();
@@ -412,9 +410,7 @@ void FilterSettingVisitor::operator()(ItemFilter& item_filter) {
     if (ImGui::BeginPopup("value_filter_popup")) {
         DND_MEASURE_SCOPE("ItemFilter - Add Value Filter Popup");
         content_piece_filter_menu_items(item_filter);
-        string_menu_item(
-            "Cosmetic Description", item_filter.cosmetic_description_filter, StringFilterType::CONTAINS
-        );
+        string_menu_item("Cosmetic Description", item_filter.cosmetic_description_filter, StringFilterType::CONTAINS);
         bool_menu_item("Requires Attunement", item_filter.attunement_filter, BoolFilterType::IS_TRUE);
         ImGui::EndPopup();
     }

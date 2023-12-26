@@ -138,9 +138,7 @@ void CharacterParser::save_result(Content& content) {
     content.add_character(Character::create(std::move(data), content));
 }
 
-Errors CharacterParser::parse_decision(
-    nlohmann::ordered_json&& decision_json, DecisionData& decision_data
-) const {
+Errors CharacterParser::parse_decision(nlohmann::ordered_json&& decision_json, DecisionData& decision_data) const {
     Errors errors;
     if (!decision_json.is_object()) {
         errors.add_parsing_error(

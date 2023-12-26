@@ -46,9 +46,7 @@ const Effects& Choosable::get_main_effects() const noexcept { return main_effect
 
 const std::string& Choosable::get_type() const noexcept { return type; }
 
-const std::vector<std::unique_ptr<Condition>>& Choosable::get_prerequisites() const noexcept {
-    return prerequisites;
-}
+const std::vector<std::unique_ptr<Condition>>& Choosable::get_prerequisites() const noexcept { return prerequisites; }
 
 void Choosable::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 

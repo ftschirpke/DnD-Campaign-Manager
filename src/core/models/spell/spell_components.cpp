@@ -54,9 +54,7 @@ SpellComponents::SpellComponents(
 ) noexcept
     : verbal(verbal), somatic(somatic), material(material), material_components(material_components) {}
 
-SpellComponents::SpellComponents(
-    bool verbal, bool somatic, bool material, std::string&& material_components
-) noexcept
+SpellComponents::SpellComponents(bool verbal, bool somatic, bool material, std::string&& material_components) noexcept
     : verbal(verbal), somatic(somatic), material(material), material_components(std::move(material_components)) {}
 
 bool SpellComponents::has_verbal() const noexcept { return verbal; }

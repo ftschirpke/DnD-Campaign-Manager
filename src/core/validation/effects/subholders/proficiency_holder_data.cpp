@@ -17,8 +17,7 @@
 
 namespace dnd {
 
-ProficiencyHolderData::ProficiencyHolderData(const ValidationData* parent) noexcept
-    : ValidationSubdata(parent) {}
+ProficiencyHolderData::ProficiencyHolderData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
 
 static Errors string_set_validate(
     const std::set<std::string>& string_set, const ValidationData* parent, const char* set_name

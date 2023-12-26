@@ -23,9 +23,7 @@ TEST_CASE("ValidationError // basic getters", tags) {
         ValidationError error1(ValidationErrorCode::MISSING_ATTRIBUTE, &validation_data, error_message);
         REQUIRE(error1.get_error_code() == ValidationErrorCode::MISSING_ATTRIBUTE);
 
-        ValidationError error2(
-            ValidationErrorCode::INVALID_ATTRIBUTE_FORMAT, &validation_data, error_message
-        );
+        ValidationError error2(ValidationErrorCode::INVALID_ATTRIBUTE_FORMAT, &validation_data, error_message);
         REQUIRE(error2.get_error_code() == ValidationErrorCode::INVALID_ATTRIBUTE_FORMAT);
     }
 
@@ -34,9 +32,7 @@ TEST_CASE("ValidationError // basic getters", tags) {
         REQUIRE(*dynamic_cast<const ValidationDataMock*>(error1.get_validation_data()) == validation_data);
 
         ValidationError error2(ValidationErrorCode::INVALID_RELATION, &other_validation_data, error_message);
-        REQUIRE(
-            *dynamic_cast<const ValidationDataMock*>(error2.get_validation_data()) == other_validation_data
-        );
+        REQUIRE(*dynamic_cast<const ValidationDataMock*>(error2.get_validation_data()) == other_validation_data);
     }
 
     SECTION("Get error message") {

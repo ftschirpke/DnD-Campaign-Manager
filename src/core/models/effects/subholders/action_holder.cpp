@@ -20,9 +20,7 @@ ActionHolder ActionHolder::create(ActionHolderData&& data) {
 
 const std::map<std::string, std::string>& ActionHolder::get_actions() const noexcept { return actions; }
 
-const std::map<std::string, std::string>& ActionHolder::get_bonus_actions() const noexcept {
-    return bonus_actions;
-}
+const std::map<std::string, std::string>& ActionHolder::get_bonus_actions() const noexcept { return bonus_actions; }
 
 const std::map<std::string, std::string>& ActionHolder::get_reactions() const noexcept { return reactions; }
 

@@ -22,8 +22,6 @@ void set_valid_mock_values(ValidationData& data, const char* data_name) {
     data.source_path = std::filesystem::path(DND_MOCK_DIRECTORY) / "dummy_files" / "file1.json";
 }
 
-std::unique_ptr<ValidationData> ValidationDataMock::pack() const {
-    return std::make_unique<ValidationDataMock>(*this);
-}
+std::unique_ptr<ValidationData> ValidationDataMock::pack() const { return std::make_unique<ValidationDataMock>(*this); }
 
 } // namespace dnd::test

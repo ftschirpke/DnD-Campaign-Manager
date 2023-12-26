@@ -21,16 +21,13 @@ const std::vector<const ContentPiece*>& AdvancedContentSearch::get_search_result
     return search_results;
 }
 
-static std::vector<const ContentPiece*> search(
-    const Content& content, ContentFilterVariant searching_filter
-) {
+static std::vector<const ContentPiece*> search(const Content& content, ContentFilterVariant searching_filter) {
     std::vector<const ContentPiece*> search_results = std::visit(
         [&content](const ContentFilter& filter) { return filter.all_matches(content); }, searching_filter
     );
-    std::sort(
-        search_results.begin(), search_results.end(),
-        [](const ContentPiece* lhs, const ContentPiece* rhs) { return lhs->get_name() < rhs->get_name(); }
-    );
+    std::sort(search_results.begin(), search_results.end(), [](const ContentPiece* lhs, const ContentPiece* rhs) {
+        return lhs->get_name() < rhs->get_name();
+    });
     return search_results;
 }
 

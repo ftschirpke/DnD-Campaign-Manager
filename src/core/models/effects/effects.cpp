@@ -74,9 +74,7 @@ const std::vector<std::unique_ptr<Condition>>& Effects::get_activation_condition
 
 const std::vector<Choice>& Effects::get_choices() const noexcept { return choices; }
 
-const std::vector<std::unique_ptr<StatChange>>& Effects::get_stat_changes() const noexcept {
-    return stat_changes;
-}
+const std::vector<std::unique_ptr<StatChange>>& Effects::get_stat_changes() const noexcept { return stat_changes; }
 
 const ActionHolder& Effects::get_actions() const noexcept { return actions; }
 

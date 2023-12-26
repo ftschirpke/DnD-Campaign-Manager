@@ -142,8 +142,7 @@ static int create_item_cards(LatexScope* scope, const Item* item) {
                     description_swap_card = counter;
                     written_cosmetic_description_yet = true;
                 }
-                LatexText* text = current_it_scope->add_text(
-                    item->get_cosmetic_description().substr(start, end - start)
+                LatexText* text = current_it_scope->add_text(item->get_cosmetic_description().substr(start, end - start)
                 );
 
                 characters_written += end - start;

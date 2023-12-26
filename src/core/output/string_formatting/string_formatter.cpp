@@ -15,8 +15,7 @@
 
 namespace dnd {
 
-StringFormatter::StringFormatter(bool ignore_double_newline) noexcept
-    : ignore_double_newline(ignore_double_newline) {}
+StringFormatter::StringFormatter(bool ignore_double_newline) noexcept : ignore_double_newline(ignore_double_newline) {}
 
 std::vector<std::unique_ptr<Format>> StringFormatter::parse_formats(const std::string& text) const {
     std::vector<std::unique_ptr<Format>> formats;

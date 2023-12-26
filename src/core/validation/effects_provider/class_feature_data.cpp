@@ -15,9 +15,7 @@ namespace dnd {
 ClassFeatureData::ClassFeatureData(const ValidationData* parent) noexcept
     : FeatureData(parent), level(1), higher_level_effects_data() {}
 
-std::unique_ptr<ValidationData> ClassFeatureData::pack() const {
-    return std::make_unique<ClassFeatureData>(*this);
-}
+std::unique_ptr<ValidationData> ClassFeatureData::pack() const { return std::make_unique<ClassFeatureData>(*this); }
 
 Errors ClassFeatureData::validate() const {
     Errors errors = FeatureData::validate();

@@ -33,9 +33,7 @@ void Errors::add_validation_error(ValidationError&& error) { validation_errors.e
 
 const std::vector<ParsingError>& Errors::get_parsing_errors() const noexcept { return parsing_errors; }
 
-const std::vector<ValidationError>& Errors::get_validation_errors() const noexcept {
-    return validation_errors;
-}
+const std::vector<ValidationError>& Errors::get_validation_errors() const noexcept { return validation_errors; }
 
 void Errors::merge(Errors&& other) {
     parsing_errors.insert(

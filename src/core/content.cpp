@@ -47,9 +47,7 @@ const StorageContentLibrary<Spell>& Content::get_spells() const { return spell_l
 
 const ReferencingContentLibrary<Feature>& Content::get_features() const { return feature_library; }
 
-const ReferencingContentLibrary<ClassFeature>& Content::get_class_features() const {
-    return class_feature_library;
-}
+const ReferencingContentLibrary<ClassFeature>& Content::get_class_features() const { return class_feature_library; }
 
 const StorageContentLibrary<Choosable>& Content::get_choosables() const { return choosable_library; }
 

@@ -47,9 +47,7 @@ ClassFeature ClassFeature::create(ClassFeatureData&& data, const Content& conten
 
 int ClassFeature::get_level() const noexcept { return level; }
 
-const std::map<int, Effects>& ClassFeature::get_higher_level_effects() const noexcept {
-    return higher_level_effects;
-}
+const std::map<int, Effects>& ClassFeature::get_higher_level_effects() const noexcept { return higher_level_effects; }
 
 void ClassFeature::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 

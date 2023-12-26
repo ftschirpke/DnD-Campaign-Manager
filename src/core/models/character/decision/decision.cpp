@@ -65,7 +65,6 @@ const Effects* Decision::get_target() const noexcept { return target; }
 
 const Effects& Decision::get_effects() const noexcept { return effects; }
 
-Decision::Decision(const Effects* target, Effects effects) noexcept
-    : target(target), effects(std::move(effects)) {}
+Decision::Decision(const Effects* target, Effects effects) noexcept : target(target), effects(std::move(effects)) {}
 
 } // namespace dnd

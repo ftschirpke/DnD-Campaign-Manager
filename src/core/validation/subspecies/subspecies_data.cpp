@@ -17,9 +17,7 @@
 
 namespace dnd {
 
-std::unique_ptr<ValidationData> SubspeciesData::pack() const {
-    return std::make_unique<SubspeciesData>(*this);
-}
+std::unique_ptr<ValidationData> SubspeciesData::pack() const { return std::make_unique<SubspeciesData>(*this); }
 
 Errors SubspeciesData::validate() const {
     Errors errors;

@@ -44,17 +44,13 @@ ExtraSpellsHolder ExtraSpellsHolder::create(ExtraSpellsHolderData&& data, const 
     );
 }
 
-const std::vector<const Spell*>& ExtraSpellsHolder::get_free_cantrips() const noexcept {
-    return free_cantrips;
-}
+const std::vector<const Spell*>& ExtraSpellsHolder::get_free_cantrips() const noexcept { return free_cantrips; }
 
 const std::vector<const Spell*>& ExtraSpellsHolder::get_at_will() const noexcept { return at_will; }
 
 const std::vector<const Spell*>& ExtraSpellsHolder::get_innate() const noexcept { return innate; }
 
-const std::vector<const Spell*>& ExtraSpellsHolder::get_free_once_a_day() const noexcept {
-    return free_once_a_day;
-}
+const std::vector<const Spell*>& ExtraSpellsHolder::get_free_once_a_day() const noexcept { return free_once_a_day; }
 
 const std::vector<const Spell*>& ExtraSpellsHolder::get_spells_known() const noexcept { return spells_known; }
 
@@ -86,10 +82,9 @@ void ExtraSpellsHolder::merge(ExtraSpellsHolder&& other) {
 }
 
 ExtraSpellsHolder::ExtraSpellsHolder(
-    std::vector<const Spell*>&& free_cantrips, std::vector<const Spell*>&& at_will,
-    std::vector<const Spell*>&& innate, std::vector<const Spell*>&& free_once_a_day,
-    std::vector<const Spell*>&& spells_known, std::vector<const Spell*>&& spells_known_included,
-    std::vector<const Spell*>&& added_to_spell_list
+    std::vector<const Spell*>&& free_cantrips, std::vector<const Spell*>&& at_will, std::vector<const Spell*>&& innate,
+    std::vector<const Spell*>&& free_once_a_day, std::vector<const Spell*>&& spells_known,
+    std::vector<const Spell*>&& spells_known_included, std::vector<const Spell*>&& added_to_spell_list
 ) noexcept
     : free_cantrips(std::move(free_cantrips)), at_will(std::move(at_will)), innate(std::move(innate)),
       free_once_a_day(std::move(free_once_a_day)), spells_known(std::move(spells_known)),

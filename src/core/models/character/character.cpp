@@ -110,16 +110,14 @@ void Character::for_all_effects_do(std::function<void(const Effects&)> func) con
     }
 }
 
-int Character::get_proficiency_bonus() const noexcept {
-    return proficiency_bonus_for_level(progression.get_level());
-}
+int Character::get_proficiency_bonus() const noexcept { return proficiency_bonus_for_level(progression.get_level()); }
 
 void Character::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 Character::Character(
-    std::string&& name, std::string&& description, std::filesystem::path&& source_path,
-    std::vector<Feature>&& features, AbilityScores&& base_ability_scores,
-    FeatureProviders&& feature_providers, Progression&& progression, std::vector<Decision>&& decisions
+    std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::vector<Feature>&& features,
+    AbilityScores&& base_ability_scores, FeatureProviders&& feature_providers, Progression&& progression,
+    std::vector<Decision>&& decisions
 ) noexcept
     : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
       features(std::move(features)), base_ability_scores(std::move(base_ability_scores)),

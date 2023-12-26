@@ -122,8 +122,7 @@ Errors EffectsParser::parse_stat_changes_into(
     return errors;
 }
 
-Errors EffectsParser::parse_action_holder_into(nlohmann::ordered_json& json, ActionHolderData& data)
-    const {
+Errors EffectsParser::parse_action_holder_into(nlohmann::ordered_json& json, ActionHolderData& data) const {
     Errors errors;
     errors += parse_optional_attribute_into(json, "actions", data.actions);
     errors += parse_optional_attribute_into(json, "bonus_actions", data.bonus_actions);
@@ -131,9 +130,7 @@ Errors EffectsParser::parse_action_holder_into(nlohmann::ordered_json& json, Act
     return errors;
 }
 
-Errors EffectsParser::parse_extra_spells_holder_into(
-    nlohmann::ordered_json& json, ExtraSpellsHolderData& data
-) const {
+Errors EffectsParser::parse_extra_spells_holder_into(nlohmann::ordered_json& json, ExtraSpellsHolderData& data) const {
     Errors errors;
     errors += parse_optional_attribute_into(json, "cantrips_free", data.free_cantrips);
     errors += parse_optional_attribute_into(json, "spells_at_will", data.at_will);
@@ -152,9 +149,7 @@ Errors EffectsParser::parse_extra_spells_holder_into(
     return errors;
 }
 
-Errors EffectsParser::parse_proficiency_holder_into(
-    nlohmann::ordered_json& json, ProficiencyHolderData& data
-) const {
+Errors EffectsParser::parse_proficiency_holder_into(nlohmann::ordered_json& json, ProficiencyHolderData& data) const {
     Errors errors;
     errors += parse_optional_attribute_into(json, "armor_proficiencies", data.armor);
     errors += parse_optional_attribute_into(json, "weapon_proficiencies", data.weapons);

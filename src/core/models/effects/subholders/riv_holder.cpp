@@ -44,9 +44,7 @@ const std::vector<std::string>& RIVHolder::get_damage_vulnerabilities() const no
     return damage_vulnerabilities;
 }
 
-const std::vector<std::string>& RIVHolder::get_condition_immunities() const noexcept {
-    return condition_immunities;
-}
+const std::vector<std::string>& RIVHolder::get_condition_immunities() const noexcept { return condition_immunities; }
 
 bool RIVHolder::empty() const {
     return damage_resistances.empty() && damage_immunities.empty() && damage_vulnerabilities.empty()

@@ -40,13 +40,9 @@ Content& Session::get_content() noexcept { return content; }
 
 const Errors& Session::get_errors() const noexcept { return errors; }
 
-const std::vector<std::string>& Session::get_unknown_error_messages() const noexcept {
-    return unknown_error_messages;
-}
+const std::vector<std::string>& Session::get_unknown_error_messages() const noexcept { return unknown_error_messages; }
 
-const std::vector<std::string>& Session::get_parsing_error_messages() const noexcept {
-    return parsing_error_messages;
-}
+const std::vector<std::string>& Session::get_parsing_error_messages() const noexcept { return parsing_error_messages; }
 
 const std::vector<std::string>& Session::get_validation_error_messages() const noexcept {
     return validation_error_messages;
@@ -66,9 +62,7 @@ const ContentPiece* Session::get_selected_content_piece() noexcept {
 
 size_t Session::get_fuzzy_search_result_count() const noexcept { return fuzzy_search_result_count; }
 
-bool Session::too_many_fuzzy_search_results() const noexcept {
-    return fuzzy_search_result_count > max_search_results;
-}
+bool Session::too_many_fuzzy_search_results() const noexcept { return fuzzy_search_result_count > max_search_results; }
 
 std::vector<std::string> Session::get_possible_campaign_names() const {
     if (content_directory.empty()) {

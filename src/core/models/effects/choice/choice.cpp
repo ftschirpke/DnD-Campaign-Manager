@@ -39,9 +39,7 @@ static std::unique_ptr<ContentFilter> create_cantrip_filter(const std::string& g
     }
     const std::string spell_level = match[2].str();
     if (!spell_level.empty()) {
-        cantrip_filter.magic_school_filter.set(
-            SelectionFilterType::IS_IN, {magic_school_from_name(spell_level)}
-        );
+        cantrip_filter.magic_school_filter.set(SelectionFilterType::IS_IN, {magic_school_from_name(spell_level)});
     }
     const std::string spell_class_name = match[4].str();
     if (!spell_class_name.empty()) {
@@ -76,9 +74,7 @@ static std::unique_ptr<ContentFilter> create_spell_filter(const std::string& gro
     }
     const std::string spell_school_name = match[4].str();
     if (!spell_school_name.empty()) {
-        spell_filter.magic_school_filter.set(
-            SelectionFilterType::IS_IN, {magic_school_from_name(spell_school_name)}
-        );
+        spell_filter.magic_school_filter.set(SelectionFilterType::IS_IN, {magic_school_from_name(spell_school_name)});
     }
     const std::string spell_class_name = match[6].str();
     if (!spell_class_name.empty()) {

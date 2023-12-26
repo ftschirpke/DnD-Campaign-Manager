@@ -52,8 +52,6 @@ Errors ActionHolderData::validate() const {
     return errors;
 }
 
-bool ActionHolderData::empty() const noexcept {
-    return actions.empty() && bonus_actions.empty() && reactions.empty();
-}
+bool ActionHolderData::empty() const noexcept { return actions.empty() && bonus_actions.empty() && reactions.empty(); }
 
 } // namespace dnd

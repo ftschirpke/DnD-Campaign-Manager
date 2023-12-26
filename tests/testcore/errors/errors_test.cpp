@@ -29,9 +29,7 @@ TEST_CASE("Errors // Construction and Getter Methods", tags) {
         ParsingError parsing_error1(ParsingErrorCode::FILE_NOT_FOUND, "/path/to/file.txt", "File not found");
         errors.add_parsing_error(std::move(parsing_error1));
 
-        errors.add_parsing_error(
-            ParsingErrorCode::INVALID_FILE_FORMAT, "/path/to/file.txt", "Invalid file format"
-        );
+        errors.add_parsing_error(ParsingErrorCode::INVALID_FILE_FORMAT, "/path/to/file.txt", "Invalid file format");
 
         const std::vector<ParsingError>& parsing_errors = errors.get_parsing_errors();
         REQUIRE(parsing_errors.size() == 2);
@@ -80,9 +78,7 @@ TEST_CASE("Errors // Construction and Getter Methods", tags) {
 
         other_errors.add_parsing_error(ParsingErrorCode::FILE_NOT_FOUND, "/path/to/file.txt", "File not found");
 
-        ValidationError validation_error(
-            ValidationErrorCode::MISSING_ATTRIBUTE, &validation_data, "Missing attribute"
-        );
+        ValidationError validation_error(ValidationErrorCode::MISSING_ATTRIBUTE, &validation_data, "Missing attribute");
         other_errors.add_validation_error(std::move(validation_error));
 
         errors += std::move(other_errors);
@@ -110,9 +106,7 @@ TEST_CASE("Errors::ok", tags) {
     }
 
     SECTION("Validation errors") {
-        ValidationError validation_error(
-            ValidationErrorCode::MISSING_ATTRIBUTE, &validation_data, "Missing attribute"
-        );
+        ValidationError validation_error(ValidationErrorCode::MISSING_ATTRIBUTE, &validation_data, "Missing attribute");
         errors.add_validation_error(std::move(validation_error));
 
         REQUIRE_FALSE(errors.ok());
@@ -122,9 +116,7 @@ TEST_CASE("Errors::ok", tags) {
         ParsingError parsing_error(ParsingErrorCode::FILE_NOT_FOUND, "/path/to/file.txt", "File not found");
         errors.add_parsing_error(std::move(parsing_error));
 
-        ValidationError validation_error(
-            ValidationErrorCode::MISSING_ATTRIBUTE, &validation_data, "Missing attribute"
-        );
+        ValidationError validation_error(ValidationErrorCode::MISSING_ATTRIBUTE, &validation_data, "Missing attribute");
         errors.add_validation_error(std::move(validation_error));
 
         REQUIRE_FALSE(errors.ok());

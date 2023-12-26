@@ -56,8 +56,6 @@ Dice string_to_dice(const std::string& str) {
     }
 }
 
-bool value_is_possible_for(int value, Dice dice_type) {
-    return value >= 1 && value <= dice_to_int(dice_type);
-}
+bool value_is_possible_for(int value, Dice dice_type) { return value >= 1 && value <= dice_to_int(dice_type); }
 
 } // namespace dnd
