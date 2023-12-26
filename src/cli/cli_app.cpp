@@ -192,8 +192,8 @@ void dnd::CliApp::list_all_content_of_a_type() {
                 }
                 break;
             case 1:
-                for (const auto& [_, classv] : session.get_content().get_classes().get_all()) {
-                    classv.accept_visitor(visitor);
+                for (const auto& [_, cls] : session.get_content().get_classes().get_all()) {
+                    cls.accept_visitor(visitor);
                 }
                 break;
             case 2:

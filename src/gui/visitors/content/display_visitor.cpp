@@ -132,9 +132,9 @@ void dnd::DisplayVisitor::operator()(const Character& character) {
     }
 
     label("Class:");
-    const Class& classv = character.get_basis().get_class();
-    if (ImGui::CollapsingHeader(classv.get_name().c_str())) {
-        operator()(classv);
+    const Class& cls = character.get_basis().get_class();
+    if (ImGui::CollapsingHeader(cls.get_name().c_str())) {
+        operator()(cls);
     }
 
     OptCRef<Subclass> subclass_optional = character.get_basis().get_subclass();
@@ -152,21 +152,21 @@ void dnd::DisplayVisitor::operator()(const Character& character) {
     end_content_table();
 }
 
-void dnd::DisplayVisitor::operator()(const Class& classv) {
-    begin_content_table(classv);
+void dnd::DisplayVisitor::operator()(const Class& cls) {
+    begin_content_table(cls);
 
     label("Type:");
     ImGui::Text("Class");
-    source(classv);
+    source(cls);
     label("Hit Die:");
-    ImGui::Text("%s", dice_to_string(classv.get_hit_dice()).c_str());
+    ImGui::Text("%s", dice_to_string(cls.get_hit_dice()).c_str());
     label("Feat Levels:");
-    std::string feat_level_str = fmt::format("{}", fmt::join(classv.get_important_levels().get_feat_levels(), ", "));
+    std::string feat_level_str = fmt::format("{}", fmt::join(cls.get_important_levels().get_feat_levels(), ", "));
     ImGui::Text("%s", feat_level_str.c_str());
     label("Subclass Level:");
-    ImGui::Text("%d", classv.get_important_levels().get_subclass_level());
+    ImGui::Text("%d", cls.get_important_levels().get_subclass_level());
     label("Features:");
-    list_features<ClassFeature>(*this, classv.get_features());
+    list_features<ClassFeature>(*this, cls.get_features());
 
     end_content_table();
 }

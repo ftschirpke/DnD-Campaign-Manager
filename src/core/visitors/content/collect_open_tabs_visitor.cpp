@@ -26,11 +26,11 @@ void dnd::CollectOpenTabsVisitor::operator()(const Character& character) {
     open_tabs_json["character"].push_back(character.get_name());
 }
 
-void dnd::CollectOpenTabsVisitor::operator()(const Class& classv) {
+void dnd::CollectOpenTabsVisitor::operator()(const Class& cls) {
     if (!open_tabs_json.contains("class")) {
         open_tabs_json["class"] = nlohmann::json::array();
     }
-    open_tabs_json["class"].push_back(classv.get_name());
+    open_tabs_json["class"].push_back(cls.get_name());
 }
 
 void dnd::CollectOpenTabsVisitor::operator()(const Subclass& subclass) {

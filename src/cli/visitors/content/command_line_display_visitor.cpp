@@ -85,7 +85,7 @@ void dnd::DisplayVisitor::operator()(const dnd::Character& character) {
     list_features<Feature>(output, character.get_features());
 }
 
-void dnd::DisplayVisitor::operator()(const dnd::Class& classv) {
+void dnd::DisplayVisitor::operator()(const dnd::Class& cls) {
     output.text(class.get_name());
     output.text("Type: Class");
     display_source_info(output, class.get_source_info());

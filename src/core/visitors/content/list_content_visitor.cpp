@@ -30,8 +30,8 @@ void dnd::ListContentVisitor::operator()(const Character& character) {
     ));
 }
 
-void dnd::ListContentVisitor::operator()(const Class& classv) {
-    string_list.emplace_back(fmt::format("{} [CLASS]", classv.get_name()));
+void dnd::ListContentVisitor::operator()(const Class& cls) {
+    string_list.emplace_back(fmt::format("{} [CLASS]", cls.get_name()));
 }
 
 void dnd::ListContentVisitor::operator()(const Subclass& subclass) {

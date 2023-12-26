@@ -22,7 +22,7 @@ class CollectOpenTabsVisitor : public ContentVisitor {
 public:
     nlohmann::json get_open_tabs();
     virtual void operator()(const Character& character) override;
-    virtual void operator()(const Class& classv) override;
+    virtual void operator()(const Class& cls) override;
     virtual void operator()(const Subclass& subclass) override;
     virtual void operator()(const Species& species) override;
     virtual void operator()(const Subspecies& subspecies) override;

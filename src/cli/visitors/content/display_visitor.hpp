@@ -15,7 +15,7 @@ namespace dnd {
 class DisplayVisitor : public ContentVisitor {
 public:
     void operator()(const Character& character) override;
-    void operator()(const Class& classv) override;
+    void operator()(const Class& cls) override;
     void operator()(const Subclass& subclass) override;
     void operator()(const Species& species) override;
     void operator()(const Subspecies& subspecies) override;

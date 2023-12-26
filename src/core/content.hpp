@@ -56,7 +56,7 @@ public:
     void add_group_members(const std::string& group_name, std::set<std::string>&& values);
 
     OptCRef<Character> add_character(Character&& character);
-    OptCRef<Class> add_class(Class&& classv);
+    OptCRef<Class> add_class(Class&& cls);
     OptCRef<Subclass> add_subclass(Subclass&& subclass);
     OptCRef<Species> add_species(Species&& species);
     OptCRef<Subspecies> add_subspecies(Subspecies&& subspecies);

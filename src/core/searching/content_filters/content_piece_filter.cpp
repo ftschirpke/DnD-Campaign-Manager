@@ -34,9 +34,9 @@ std::vector<const dnd::ContentPiece*> dnd::ContentPieceFilter::all_matches(const
             matching_content_pieces.emplace_back(&character);
         }
     }
-    for (const auto& [_, classv] : content.get_classes().get_all()) {
-        if (matches(classv)) {
-            matching_content_pieces.emplace_back(&classv);
+    for (const auto& [_, cls] : content.get_classes().get_all()) {
+        if (matches(cls)) {
+            matching_content_pieces.emplace_back(&cls);
         }
     }
     for (const auto& [_, subclass] : content.get_subclasses().get_all()) {

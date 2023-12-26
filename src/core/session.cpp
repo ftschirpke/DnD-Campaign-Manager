@@ -367,9 +367,9 @@ void dnd::Session::open_last_session() {
         }
     }
     for (const std::string& class_to_open : last_session_open_tabs["classes"]) {
-        OptCRef<Class> classv = content.get_classes().get(class_to_open);
-        if (classv.has_value()) {
-            open_content_pieces.push_back(&classv.value().get());
+        OptCRef<Class> cls = content.get_classes().get(class_to_open);
+        if (cls.has_value()) {
+            open_content_pieces.push_back(&cls.value().get());
         }
     }
     for (const std::string& subclass_to_open : last_session_open_tabs["subclasses"]) {

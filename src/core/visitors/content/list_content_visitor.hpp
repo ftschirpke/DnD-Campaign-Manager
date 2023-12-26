@@ -25,7 +25,7 @@ public:
     void reserve(size_t size);
     std::vector<std::string> get_list();
     virtual void operator()(const Character& character) override;
-    virtual void operator()(const Class& classv) override;
+    virtual void operator()(const Class& cls) override;
     virtual void operator()(const Subclass& subclass) override;
     virtual void operator()(const Species& species) override;
     virtual void operator()(const Subspecies& subspecies) override;

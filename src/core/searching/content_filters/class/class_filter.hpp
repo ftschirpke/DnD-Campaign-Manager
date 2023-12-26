@@ -12,7 +12,7 @@ namespace dnd {
 class ClassFilter : public ContentPieceFilter {
 public:
     bool has_all_filters() const noexcept override;
-    bool matches(const Class& classv) const noexcept;
+    bool matches(const Class& cls) const noexcept;
     std::vector<const ContentPiece*> all_matches(const Content& content) const override;
     void clear() override;
 

@@ -19,7 +19,7 @@ class ContentVisitor {
 public:
     virtual ~ContentVisitor() = default;
     virtual void operator()(const Character& character) = 0;
-    virtual void operator()(const Class& classv) = 0;
+    virtual void operator()(const Class& cls) = 0;
     virtual void operator()(const Subclass& subclass) = 0;
     virtual void operator()(const Species& species) = 0;
     virtual void operator()(const Subspecies& subspecies) = 0;

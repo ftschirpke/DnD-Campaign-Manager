@@ -94,9 +94,9 @@ dnd::OptCRef<dnd::Character> dnd::Content::add_character(dnd::Character&& charac
     return inserted_character;
 }
 
-dnd::OptCRef<dnd::Class> dnd::Content::add_class(dnd::Class&& classv) {
-    const std::string name = classv.get_name();
-    OptCRef<Class> inserted_class = class_library.add(std::move(classv));
+dnd::OptCRef<dnd::Class> dnd::Content::add_class(dnd::Class&& cls) {
+    const std::string name = cls.get_name();
+    OptCRef<Class> inserted_class = class_library.add(std::move(cls));
     if (inserted_class.has_value()) {
         for (const ClassFeature& feature : inserted_class.value().get().get_features()) {
             class_feature_library.add(feature);

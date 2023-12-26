@@ -73,8 +73,8 @@ void dnd::DisplayVisitor::operator()(const dnd::Character& character) {
         output.formatted_text("Subspecies: {}", subspecies.value().get().get_name());
     }
 
-    const Class& classv = character.get_basis().get_class();
-    output.formatted_text("Class: {}", classv.get_name());
+    const Class& cls = character.get_basis().get_class();
+    output.formatted_text("Class: {}", cls.get_name());
 
     OptCRef<Subclass> subclass = character.get_basis().get_subclass();
     if (subclass.has_value()) {
@@ -84,17 +84,17 @@ void dnd::DisplayVisitor::operator()(const dnd::Character& character) {
     list_features<Feature>(output, character.get_features());
 }
 
-void dnd::DisplayVisitor::operator()(const dnd::Class& classv) {
-    output.text(classv.get_name());
+void dnd::DisplayVisitor::operator()(const dnd::Class& cls) {
+    output.text(cls.get_name());
     output.text("Type: Class");
-    display_source_info(output, classv.get_source_info());
-    output.formatted_text("Hit Die: {}", dice_to_string(classv.get_hit_dice()));
+    display_source_info(output, cls.get_source_info());
+    output.formatted_text("Hit Die: {}", dice_to_string(cls.get_hit_dice()));
 
-    std::string feat_level_str = fmt::format("{}", fmt::join(classv.get_important_levels().get_feat_levels(), ", "));
+    std::string feat_level_str = fmt::format("{}", fmt::join(cls.get_important_levels().get_feat_levels(), ", "));
     output.formatted_text("Feat Levels: {}", feat_level_str);
-    output.formatted_text("Subclass Level: {}", classv.get_important_levels().get_subclass_level());
+    output.formatted_text("Subclass Level: {}", cls.get_important_levels().get_subclass_level());
 
-    list_features<ClassFeature>(output, classv.get_features());
+    list_features<ClassFeature>(output, cls.get_features());
 }
 
 void dnd::DisplayVisitor::operator()(const Subclass& subclass) {
