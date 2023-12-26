@@ -5,8 +5,8 @@
 #include <vector>
 
 #include <core/content.hpp>
-#include <core/models/subclass/subclass.hpp>
 #include <core/models/content_piece.hpp>
+#include <core/models/subclass/subclass.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
 
 bool dnd::SubclassFilter::has_all_filters() const noexcept {
@@ -14,8 +14,7 @@ bool dnd::SubclassFilter::has_all_filters() const noexcept {
 }
 
 bool dnd::SubclassFilter::matches(const Subclass& subclass) const noexcept {
-    return ContentPieceFilter::matches(subclass)
-           && has_spellcasting_filter.matches(subclass.has_spellcasting());
+    return ContentPieceFilter::matches(subclass) && has_spellcasting_filter.matches(subclass.has_spellcasting());
 }
 
 std::vector<const dnd::ContentPiece*> dnd::SubclassFilter::all_matches(const Content& content) const {
