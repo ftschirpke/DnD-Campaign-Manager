@@ -13,10 +13,10 @@
 
 #include <core/searching/content_filters/bool_filter.hpp>
 #include <core/searching/content_filters/character/character_filter.hpp>
-#include <core/searching/content_filters/character_class/character_class_filter.hpp>
-#include <core/searching/content_filters/character_species/character_species_filter.hpp>
-#include <core/searching/content_filters/character_subclass/character_subclass_filter.hpp>
-#include <core/searching/content_filters/character_subspecies/character_subspecies_filter.hpp>
+#include <core/searching/content_filters/class/class_filter.hpp>
+#include <core/searching/content_filters/species/species_filter.hpp>
+#include <core/searching/content_filters/subclass/subclass_filter.hpp>
+#include <core/searching/content_filters/subspecies/subspecies_filter.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
 #include <core/searching/content_filters/effects_provider/choosable_filter.hpp>
@@ -326,7 +326,7 @@ void dnd::FilterSettingVisitor::operator()(CharacterFilter& character_filter) {
     }
 }
 
-void dnd::FilterSettingVisitor::operator()(CharacterClassFilter& class_filter) {
+void dnd::FilterSettingVisitor::operator()(ClassFilter& class_filter) {
     DND_MEASURE_FUNCTION();
     ImGui::TableSetColumnIndex(1);
     visit_content_piece_filter(class_filter);
@@ -337,14 +337,14 @@ void dnd::FilterSettingVisitor::operator()(CharacterClassFilter& class_filter) {
         ImGui::OpenPopup("value_filter_popup");
     }
     if (ImGui::BeginPopup("value_filter_popup")) {
-        DND_MEASURE_SCOPE("CharacterClassFilter - Add Value Filter Popup");
+        DND_MEASURE_SCOPE("ClassFilter - Add Value Filter Popup");
         content_piece_filter_menu_items(class_filter);
         bool_menu_item("Has Spellcasting", class_filter.has_spellcasting_filter, dnd::BoolFilterType::IS_TRUE);
         ImGui::EndPopup();
     }
 }
 
-void dnd::FilterSettingVisitor::operator()(CharacterSubclassFilter& subclass_filter) {
+void dnd::FilterSettingVisitor::operator()(SubclassFilter& subclass_filter) {
     DND_MEASURE_FUNCTION();
     ImGui::TableSetColumnIndex(1);
     visit_content_piece_filter(subclass_filter);
@@ -355,14 +355,14 @@ void dnd::FilterSettingVisitor::operator()(CharacterSubclassFilter& subclass_fil
         ImGui::OpenPopup("value_filter_popup");
     }
     if (ImGui::BeginPopup("value_filter_popup")) {
-        DND_MEASURE_SCOPE("CharacterSubclassFilter - Add Value Filter Popup");
+        DND_MEASURE_SCOPE("SubclassFilter - Add Value Filter Popup");
         content_piece_filter_menu_items(subclass_filter);
         bool_menu_item("Has Spellcasting", subclass_filter.has_spellcasting_filter, dnd::BoolFilterType::IS_TRUE);
         ImGui::EndPopup();
     }
 }
 
-void dnd::FilterSettingVisitor::operator()(CharacterSpeciesFilter& species_filter) {
+void dnd::FilterSettingVisitor::operator()(SpeciesFilter& species_filter) {
     DND_MEASURE_FUNCTION();
     ImGui::TableSetColumnIndex(1);
     visit_content_piece_filter(species_filter);
@@ -373,14 +373,14 @@ void dnd::FilterSettingVisitor::operator()(CharacterSpeciesFilter& species_filte
         ImGui::OpenPopup("value_filter_popup");
     }
     if (ImGui::BeginPopup("value_filter_popup")) {
-        DND_MEASURE_SCOPE("CharacterSpeciesFilter - Add Value Filter Popup");
+        DND_MEASURE_SCOPE("SpeciesFilter - Add Value Filter Popup");
         content_piece_filter_menu_items(species_filter);
         bool_menu_item("Has Subspecies", species_filter.has_subspecies_filter, dnd::BoolFilterType::IS_TRUE);
         ImGui::EndPopup();
     }
 }
 
-void dnd::FilterSettingVisitor::operator()(CharacterSubspeciesFilter& subspecies_filter) {
+void dnd::FilterSettingVisitor::operator()(SubspeciesFilter& subspecies_filter) {
     DND_MEASURE_FUNCTION();
     ImGui::TableSetColumnIndex(1);
     visit_content_piece_filter(subspecies_filter);
@@ -390,7 +390,7 @@ void dnd::FilterSettingVisitor::operator()(CharacterSubspeciesFilter& subspecies
         ImGui::OpenPopup("value_filter_popup");
     }
     if (ImGui::BeginPopup("value_filter_popup")) {
-        DND_MEASURE_SCOPE("CharacterSubspeciesFilter - Add Value Filter Popup");
+        DND_MEASURE_SCOPE("SubspeciesFilter - Add Value Filter Popup");
         content_piece_filter_menu_items(subspecies_filter);
         ImGui::EndPopup();
     }

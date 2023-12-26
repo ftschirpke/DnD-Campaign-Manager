@@ -13,8 +13,8 @@
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
-#include <core/models/character_class/character_class.hpp>
-#include <core/models/character_species/character_species.hpp>
+#include <core/models/class/class.hpp>
+#include <core/models/species/species.hpp>
 #include <core/models/effects/effects.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/referencing_content_library.hpp>
@@ -73,9 +73,9 @@ dnd::Errors dnd::CharacterData::validate_relations(const dnd::Content& content) 
     errors += base_ability_scores_data.validate_relations(content);
     errors += character_basis_data.validate_relations(content);
 
-    OptCRef<CharacterClass> class_optional = content.get_character_classes().get(character_basis_data.class_name);
+    OptCRef<Class> class_optional = content.get_classes().get(character_basis_data.class_name);
     if (!character_basis_data.class_name.empty() && class_optional.has_value()) {
-        const CharacterClass& cls = class_optional.value();
+        const Class& cls = class_optional.value();
         if (progression_data.level >= cls.get_important_levels().get_subclass_level()
             && character_basis_data.subclass_name.empty()) {
             errors.add_validation_error(

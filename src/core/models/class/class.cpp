@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include "character_class.hpp"
+#include "class.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -17,11 +17,11 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
-#include <core/models/character_class/important_levels.hpp>
+#include <core/models/class/important_levels.hpp>
 #include <core/models/effects_provider/class_feature.hpp>
 #include <core/models/source_info.hpp>
 #include <core/models/spellcasting/spellcasting_factory.hpp>
-#include <core/validation/character_class/character_class_data.hpp>
+#include <core/validation/class/class_data.hpp>
 #include <core/validation/effects/condition/condition_data.hpp>
 #include <core/validation/effects/effects_data.hpp>
 #include <core/validation/effects_provider/feature_data.hpp>
@@ -41,7 +41,7 @@ static int determine_subclass_level(const dnd::FeatureData& subclass_feature_dat
     return 1;
 }
 
-dnd::CharacterClass dnd::CharacterClass::create(dnd::CharacterClassData&& data, const dnd::Content& content) {
+dnd::Class dnd::Class::create(dnd::ClassData&& data, const dnd::Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create character class from invalid data.");
     }
@@ -69,34 +69,34 @@ dnd::CharacterClass dnd::CharacterClass::create(dnd::CharacterClassData&& data, 
     Dice hit_dice = create_dice(std::move(data.hit_dice_data));
     ImportantLevels important_levels = ImportantLevels::create(std::move(data.important_levels_data), subclass_level);
 
-    return CharacterClass(
+    return Class(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(features),
         subclass_feature, std::move(hit_dice), std::move(important_levels),
         create_spellcasting(std::move(data.spellcasting_data))
     );
 }
 
-const std::string& dnd::CharacterClass::get_name() const noexcept { return name; }
+const std::string& dnd::Class::get_name() const noexcept { return name; }
 
-const std::string& dnd::CharacterClass::get_description() const noexcept { return description; }
+const std::string& dnd::Class::get_description() const noexcept { return description; }
 
-const dnd::SourceInfo& dnd::CharacterClass::get_source_info() const noexcept { return source_info; }
+const dnd::SourceInfo& dnd::Class::get_source_info() const noexcept { return source_info; }
 
-const std::vector<dnd::ClassFeature>& dnd::CharacterClass::get_features() const noexcept { return features; }
+const std::vector<dnd::ClassFeature>& dnd::Class::get_features() const noexcept { return features; }
 
-bool dnd::CharacterClass::has_spellcasting() const noexcept { return spellcasting != nullptr; }
+bool dnd::Class::has_spellcasting() const noexcept { return spellcasting != nullptr; }
 
-const dnd::Spellcasting* dnd::CharacterClass::get_spellcasting() const noexcept { return spellcasting.get(); }
+const dnd::Spellcasting* dnd::Class::get_spellcasting() const noexcept { return spellcasting.get(); }
 
-const dnd::ClassFeature* dnd::CharacterClass::get_subclass_feature() const noexcept { return subclass_feature; }
+const dnd::ClassFeature* dnd::Class::get_subclass_feature() const noexcept { return subclass_feature; }
 
-const dnd::Dice& dnd::CharacterClass::get_hit_dice() const noexcept { return hit_dice; }
+const dnd::Dice& dnd::Class::get_hit_dice() const noexcept { return hit_dice; }
 
-const dnd::ImportantLevels& dnd::CharacterClass::get_important_levels() const noexcept { return important_levels; }
+const dnd::ImportantLevels& dnd::Class::get_important_levels() const noexcept { return important_levels; }
 
-void dnd::CharacterClass::accept_visitor(dnd::ContentVisitor& visitor) const { visitor(*this); }
+void dnd::Class::accept_visitor(dnd::ContentVisitor& visitor) const { visitor(*this); }
 
-dnd::CharacterClass::CharacterClass(
+dnd::Class::Class(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path,
     std::vector<dnd::ClassFeature>&& features, const dnd::ClassFeature* subclass_feature, dnd::Dice hit_dice,
     dnd::ImportantLevels&& important_levels, std::unique_ptr<dnd::Spellcasting>&& spellcasting

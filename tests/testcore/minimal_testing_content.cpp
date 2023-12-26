@@ -8,14 +8,14 @@
 #include <utility>
 
 #include <core/content.hpp>
-#include <core/models/character_class/character_class.hpp>
-#include <core/models/character_species/character_species.hpp>
-#include <core/models/character_subclass/character_subclass.hpp>
-#include <core/models/character_subspecies/character_subspecies.hpp>
+#include <core/models/class/class.hpp>
+#include <core/models/species/species.hpp>
+#include <core/models/subclass/subclass.hpp>
+#include <core/models/subspecies/subspecies.hpp>
 #include <core/models/spell/spell.hpp>
 #include <core/validation/character/character_data.hpp>
-#include <core/validation/character_class/character_class_data.hpp>
-#include <core/validation/character_species/character_species_data.hpp>
+#include <core/validation/class/class_data.hpp>
+#include <core/validation/species/species_data.hpp>
 #include <core/validation/spell/spell_data.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
@@ -77,7 +77,7 @@ static void add_spells(dnd::Content& content) {
 }
 
 static void add_classes(dnd::Content& content) {
-    dnd::CharacterClassData class_data;
+    dnd::ClassData class_data;
     dndtest::set_valid_mock_values(class_data, "Wizard");
     class_data.spellcasting_data.is_spellcaster = true;
     class_data.spellcasting_data.ability = "INT";
@@ -89,9 +89,9 @@ static void add_classes(dnd::Content& content) {
     class_data.important_levels_data.feat_levels = {4, 8, 12, 16, 19};
     assert(class_data.validate().ok());
     assert(class_data.validate_relations(content).ok());
-    content.add_character_class(dnd::CharacterClass::create(std::move(class_data), content));
+    content.add_class(dnd::Class::create(std::move(class_data), content));
 
-    dnd::CharacterClassData class_data2;
+    dnd::ClassData class_data2;
     dndtest::set_valid_mock_values(class_data2, "Rogue");
     class_data2.spellcasting_data.is_spellcaster = false;
     dnd::ClassFeatureData& feature_data2 = class_data2.features_data.emplace_back(&class_data2);
@@ -101,9 +101,9 @@ static void add_classes(dnd::Content& content) {
     class_data2.important_levels_data.feat_levels = {4, 8, 12, 16, 19};
     assert(class_data2.validate().ok());
     assert(class_data2.validate_relations(content).ok());
-    content.add_character_class(dnd::CharacterClass::create(std::move(class_data2), content));
+    content.add_class(dnd::Class::create(std::move(class_data2), content));
 
-    dnd::CharacterSubclassData subclass_data;
+    dnd::SubclassData subclass_data;
     dndtest::set_valid_mock_values(subclass_data, "Abjuration Wizard");
     subclass_data.spellcasting_data.is_spellcaster = false;
     dnd::ClassFeatureData& feature_data3 = subclass_data.features_data.emplace_back(&subclass_data);
@@ -111,9 +111,9 @@ static void add_classes(dnd::Content& content) {
     subclass_data.class_name = "Wizard";
     assert(subclass_data.validate().ok());
     assert(subclass_data.validate_relations(content).ok());
-    content.add_character_subclass(dnd::CharacterSubclass::create(std::move(subclass_data), content));
+    content.add_subclass(dnd::Subclass::create(std::move(subclass_data), content));
 
-    dnd::CharacterSubclassData subclass_data2;
+    dnd::SubclassData subclass_data2;
     dndtest::set_valid_mock_values(subclass_data2, "Assassin");
     subclass_data2.spellcasting_data.is_spellcaster = false;
     dnd::ClassFeatureData& feature_data4 = subclass_data2.features_data.emplace_back(&subclass_data2);
@@ -121,54 +121,54 @@ static void add_classes(dnd::Content& content) {
     subclass_data2.class_name = "Rogue";
     assert(subclass_data2.validate().ok());
     assert(subclass_data2.validate_relations(content).ok());
-    content.add_character_subclass(dnd::CharacterSubclass::create(std::move(subclass_data2), content));
+    content.add_subclass(dnd::Subclass::create(std::move(subclass_data2), content));
 }
 
 static void add_species(dnd::Content& content) {
-    dnd::CharacterSpeciesData species_data1;
+    dnd::SpeciesData species_data1;
     dndtest::set_valid_mock_values(species_data1, "Dwarf");
     dnd::FeatureData& feature_data1 = species_data1.features_data.emplace_back(&species_data1);
     dndtest::set_valid_mock_values(feature_data1, "Example Species Feature");
     species_data1.subspecies = true;
     assert(species_data1.validate().ok());
     assert(species_data1.validate_relations(content).ok());
-    content.add_character_species(dnd::CharacterSpecies::create(std::move(species_data1), content));
+    content.add_species(dnd::Species::create(std::move(species_data1), content));
 
-    dnd::CharacterSpeciesData species_data2;
+    dnd::SpeciesData species_data2;
     dndtest::set_valid_mock_values(species_data2, "Human");
     dnd::FeatureData& feature_data2 = species_data2.features_data.emplace_back(&species_data2);
     dndtest::set_valid_mock_values(feature_data2, "Example Species Feature 2");
     species_data2.subspecies = false;
     assert(species_data2.validate().ok());
     assert(species_data2.validate_relations(content).ok());
-    content.add_character_species(dnd::CharacterSpecies::create(std::move(species_data2), content));
+    content.add_species(dnd::Species::create(std::move(species_data2), content));
 
-    dnd::CharacterSpeciesData species_data3;
+    dnd::SpeciesData species_data3;
     dndtest::set_valid_mock_values(species_data3, "Elf");
     dnd::FeatureData& feature_data3 = species_data3.features_data.emplace_back(&species_data3);
     dndtest::set_valid_mock_values(feature_data3, "Example Species Feature 3");
     species_data3.subspecies = true;
     assert(species_data3.validate().ok());
     assert(species_data3.validate_relations(content).ok());
-    content.add_character_species(dnd::CharacterSpecies::create(std::move(species_data3), content));
+    content.add_species(dnd::Species::create(std::move(species_data3), content));
 
-    dnd::CharacterSubspeciesData subspecies_data1;
+    dnd::SubspeciesData subspecies_data1;
     dndtest::set_valid_mock_values(subspecies_data1, "Hill Dwarf");
     dnd::FeatureData& feature_data4 = subspecies_data1.features_data.emplace_back(&subspecies_data1);
     dndtest::set_valid_mock_values(feature_data4, "Example Subspecies Feature");
     subspecies_data1.species_name = "Dwarf";
     assert(subspecies_data1.validate().ok());
     assert(subspecies_data1.validate_relations(content).ok());
-    content.add_character_subspecies(dnd::CharacterSubspecies::create(std::move(subspecies_data1), content));
+    content.add_subspecies(dnd::Subspecies::create(std::move(subspecies_data1), content));
 
-    dnd::CharacterSubspeciesData subspecies_data2;
+    dnd::SubspeciesData subspecies_data2;
     dndtest::set_valid_mock_values(subspecies_data2, "High Elf");
     dnd::FeatureData& feature_data5 = subspecies_data2.features_data.emplace_back(&subspecies_data2);
     dndtest::set_valid_mock_values(feature_data5, "Example Subspecies Feature 2");
     subspecies_data2.species_name = "Elf";
     assert(subspecies_data2.validate().ok());
     assert(subspecies_data2.validate_relations(content).ok());
-    content.add_character_subspecies(dnd::CharacterSubspecies::create(std::move(subspecies_data2), content));
+    content.add_subspecies(dnd::Subspecies::create(std::move(subspecies_data2), content));
 }
 
 static void add_characters(dnd::Content& content) {

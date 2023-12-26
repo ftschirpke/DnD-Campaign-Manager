@@ -18,10 +18,10 @@
 #include <core/errors/parsing_error.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/parsing/character/character_parser.hpp>
-#include <core/parsing/character_class/character_class_parser.hpp>
-#include <core/parsing/character_species/character_species_parser.hpp>
-#include <core/parsing/character_subclass/character_subclass_parser.hpp>
-#include <core/parsing/character_subspecies/character_subspecies_parser.hpp>
+#include <core/parsing/class/class_parser.hpp>
+#include <core/parsing/species/species_parser.hpp>
+#include <core/parsing/subclass/subclass_parser.hpp>
+#include <core/parsing/subspecies/subspecies_parser.hpp>
 #include <core/parsing/file_parser.hpp>
 #include <core/parsing/groups/choosable_group_parser.hpp>
 #include <core/parsing/groups/string_group_parser.hpp>
@@ -187,13 +187,13 @@ static dnd::Errors parse_file_of_type(const std::filesystem::path& file, dnd::Co
         case ParsingType::CHARACTER:
             return parse_file(content, dnd::CharacterParser(file));
         case ParsingType::RACE:
-            return parse_file(content, dnd::CharacterSpeciesParser(file));
+            return parse_file(content, dnd::SpeciesParser(file));
         case ParsingType::CLASS:
-            return parse_file(content, dnd::CharacterClassParser(file));
+            return parse_file(content, dnd::ClassParser(file));
         case ParsingType::SUBRACE:
-            return parse_file(content, dnd::CharacterSubspeciesParser(file));
+            return parse_file(content, dnd::SubspeciesParser(file));
         case ParsingType::SUBCLASS:
-            return parse_file(content, dnd::CharacterSubclassParser(file));
+            return parse_file(content, dnd::SubclassParser(file));
         case ParsingType::ITEM:
             return parse_file(content, dnd::ItemParser(file));
         case ParsingType::SPELL:

@@ -366,30 +366,28 @@ void dnd::Session::open_last_session() {
             open_content_pieces.push_back(&character.value().get());
         }
     }
-    for (const std::string& character_class_to_open : last_session_open_tabs["character_classes"]) {
-        OptCRef<CharacterClass> character_class = content.get_character_classes().get(character_class_to_open);
-        if (character_class.has_value()) {
-            open_content_pieces.push_back(&character_class.value().get());
+    for (const std::string& class_to_open : last_session_open_tabs["classes"]) {
+        OptCRef<Class> classv = content.get_classes().get(class_to_open);
+        if (classv.has_value()) {
+            open_content_pieces.push_back(&classv.value().get());
         }
     }
-    for (const std::string& character_subclass_to_open : last_session_open_tabs["character_subclasses"]) {
-        OptCRef<CharacterSubclass> character_subclass = content.get_character_subclasses().get(
-            character_subclass_to_open
-        );
-        if (character_subclass.has_value()) {
-            open_content_pieces.push_back(&character_subclass.value().get());
+    for (const std::string& subclass_to_open : last_session_open_tabs["subclasses"]) {
+        OptCRef<Subclass> subclass = content.get_subclasses().get(subclass_to_open);
+        if (subclass.has_value()) {
+            open_content_pieces.push_back(&subclass.value().get());
         }
     }
-    for (const std::string& character_species_to_open : last_session_open_tabs["character_species"]) {
-        OptCRef<CharacterSpecies> character_species = content.get_character_species().get(character_species_to_open);
-        if (character_species.has_value()) {
-            open_content_pieces.push_back(&character_species.value().get());
+    for (const std::string& species_to_open : last_session_open_tabs["species"]) {
+        OptCRef<Species> species = content.get_species().get(species_to_open);
+        if (species.has_value()) {
+            open_content_pieces.push_back(&species.value().get());
         }
     }
-    for (const std::string& character_subspecies_to_open : last_session_open_tabs["character_subspecies"]) {
-        OptCRef<CharacterSubspecies> character_subspecies = content.get_character_subspecies().get(character_subspecies_to_open);
-        if (character_subspecies.has_value()) {
-            open_content_pieces.push_back(&character_subspecies.value().get());
+    for (const std::string& subspecies_to_open : last_session_open_tabs["subspecies"]) {
+        OptCRef<Subspecies> subspecies = content.get_subspecies().get(subspecies_to_open);
+        if (subspecies.has_value()) {
+            open_content_pieces.push_back(&subspecies.value().get());
         }
     }
     for (const std::string& item_to_open : last_session_open_tabs["items"]) {

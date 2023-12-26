@@ -3,15 +3,15 @@
 
 #include <dnd_config.hpp>
 
-#include <core/models/character_subspecies/character_subspecies.hpp>
+#include <core/models/subspecies/subspecies.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
 
 namespace dnd {
 
-class CharacterSubspeciesFilter : public ContentPieceFilter {
+class SubspeciesFilter : public ContentPieceFilter {
 public:
     bool has_all_filters() const noexcept override;
-    bool matches(const CharacterSubspecies& character_subspecies) const noexcept;
+    bool matches(const Subspecies& subspecies) const noexcept;
     std::vector<const ContentPiece*> all_matches(const Content& content) const override;
     void clear() override;
 };

@@ -5,15 +5,15 @@
 
 #include <vector>
 
-#include <core/models/character_species/character_species.hpp>
+#include <core/models/species/species.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
 
 namespace dnd {
 
-class CharacterSpeciesFilter : public ContentPieceFilter {
+class SpeciesFilter : public ContentPieceFilter {
 public:
     bool has_all_filters() const noexcept override;
-    bool matches(const CharacterSpecies& character_species) const noexcept;
+    bool matches(const Species& species) const noexcept;
     std::vector<const ContentPiece*> all_matches(const Content& content) const override;
     void clear() override;
 

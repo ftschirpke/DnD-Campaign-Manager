@@ -8,7 +8,7 @@
 #include <cli/visitors/content/display_visitor.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
-#include <core/models/character_species/character_species.hpp>
+#include <core/models/species/species.hpp>
 #include <core/session.hpp>
 #include <core/utils/char_manipulation.hpp>
 #include <core/visitors/content/list_content_visitor.hpp>
@@ -192,23 +192,23 @@ void dnd::CliApp::list_all_content_of_a_type() {
                 }
                 break;
             case 1:
-                for (const auto& [_, character_class] : session.get_content().get_character_classes().get_all()) {
-                    character_class.accept_visitor(visitor);
+                for (const auto& [_, classv] : session.get_content().get_classes().get_all()) {
+                    classv.accept_visitor(visitor);
                 }
                 break;
             case 2:
-                for (const auto& [_, character_subclass] : session.get_content().get_character_subclasses().get_all()) {
-                    character_subclass.accept_visitor(visitor);
+                for (const auto& [_, subclass] : session.get_content().get_subclasses().get_all()) {
+                    subclass.accept_visitor(visitor);
                 }
                 break;
             case 3:
-                for (const auto& [_, character_species] : session.get_content().get_character_species().get_all()) {
-                    character_species.accept_visitor(visitor);
+                for (const auto& [_, species] : session.get_content().get_species().get_all()) {
+                    species.accept_visitor(visitor);
                 }
                 break;
             case 4:
-                for (const auto& [_, character_subspecies] : session.get_content().get_character_subspecies().get_all()) {
-                    character_subspecies.accept_visitor(visitor);
+                for (const auto& [_, subspecies] : session.get_content().get_subspecies().get_all()) {
+                    subspecies.accept_visitor(visitor);
                 }
                 break;
             case 5:
@@ -260,16 +260,16 @@ void dnd::CliApp::list_all_content_of_a_type() {
                 display_content_piece(&session.get_content().get_characters().get(index).value().get());
                 break;
             case 1:
-                display_content_piece(&session.get_content().get_character_classes().get(index).value().get());
+                display_content_piece(&session.get_content().get_classes().get(index).value().get());
                 break;
             case 2:
-                display_content_piece(&session.get_content().get_character_subclasses().get(index).value().get());
+                display_content_piece(&session.get_content().get_subclasses().get(index).value().get());
                 break;
             case 3:
-                display_content_piece(&session.get_content().get_character_species().get(index).value().get());
+                display_content_piece(&session.get_content().get_species().get(index).value().get());
                 break;
             case 4:
-                display_content_piece(&session.get_content().get_character_subspecies().get(index).value().get());
+                display_content_piece(&session.get_content().get_subspecies().get(index).value().get());
                 break;
             case 5:
                 display_content_piece(&session.get_content().get_spells().get(index).value().get());

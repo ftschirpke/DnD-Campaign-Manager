@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include "character_class_data.hpp"
+#include "class_data.hpp"
 
 #include <memory>
 #include <string>
@@ -13,20 +13,20 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/validation/basic_mechanics/dice_data.hpp>
-#include <core/validation/character_class/important_levels_data.hpp>
+#include <core/validation/class/important_levels_data.hpp>
 #include <core/validation/effects_provider/class_feature_data.hpp>
 #include <core/validation/spellcasting/spellcasting_data.hpp>
 #include <core/validation/validation_data.hpp>
 
-dnd::CharacterClassData::CharacterClassData() noexcept
+dnd::ClassData::ClassData() noexcept
     : ValidationData(), spellcasting_data(this), features_data(), subclass_feature_name(), hit_dice_data(this),
       important_levels_data(this) {}
 
-std::unique_ptr<dnd::ValidationData> dnd::CharacterClassData::pack() const {
-    return std::make_unique<CharacterClassData>(*this);
+std::unique_ptr<dnd::ValidationData> dnd::ClassData::pack() const {
+    return std::make_unique<ClassData>(*this);
 }
 
-dnd::Errors dnd::CharacterClassData::validate() const {
+dnd::Errors dnd::ClassData::validate() const {
     Errors errors = ValidationData::validate();
     errors += spellcasting_data.validate();
 
@@ -64,9 +64,9 @@ dnd::Errors dnd::CharacterClassData::validate() const {
     return errors;
 }
 
-dnd::Errors dnd::CharacterClassData::validate_relations(const dnd::Content& content) const {
+dnd::Errors dnd::ClassData::validate_relations(const dnd::Content& content) const {
     Errors errors;
-    if (content.get_character_classes().contains(name)) {
+    if (content.get_classes().contains(name)) {
         errors.add_validation_error(
             ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, fmt::format("Class has duplicate name \"{}\".", name)
         );

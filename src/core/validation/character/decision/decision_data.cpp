@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include "core/models/character_subspecies/character_subspecies.hpp"
+#include "core/models/subspecies/subspecies.hpp"
 #include "decision_data.hpp"
 
 #include <algorithm>
@@ -138,9 +138,9 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
             // TODO: check character specific features for choices
             case 0: /* Feature */ {
                 const std::string& species_name = character_data->character_basis_data.species_name;
-                OptCRef<CharacterSpecies> species_optional = content.get_character_species().get(species_name);
+                OptCRef<Species> species_optional = content.get_species().get(species_name);
                 if (species_optional.has_value()) {
-                    const CharacterSpecies& species = species_optional.value();
+                    const Species& species = species_optional.value();
                     feature_found = std::any_of(
                         species.get_features().begin(), species.get_features().end(), has_feature_name
                     );
@@ -149,9 +149,9 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
                     }
                 }
                 const std::string& subspecies_name = character_data->character_basis_data.subspecies_name;
-                OptCRef<CharacterSubspecies> subspecies_optional = content.get_character_subspecies().get(subspecies_name);
+                OptCRef<Subspecies> subspecies_optional = content.get_subspecies().get(subspecies_name);
                 if (subspecies_optional.has_value()) {
-                    const CharacterSubspecies& subspecies = subspecies_optional.value();
+                    const Subspecies& subspecies = subspecies_optional.value();
                     feature_found = std::any_of(
                         subspecies.get_features().begin(), subspecies.get_features().end(), has_feature_name
                     );
@@ -160,18 +160,18 @@ dnd::Errors dnd::DecisionData::validate_relations(const dnd::Content& content) c
             }
             case 1: /* ClassFeature */ {
                 const std::string& class_name = character_data->character_basis_data.class_name;
-                OptCRef<CharacterClass> class_optional = content.get_character_classes().get(class_name);
+                OptCRef<Class> class_optional = content.get_classes().get(class_name);
                 if (class_optional.has_value()) {
-                    const CharacterClass& cls = class_optional.value();
+                    const Class& cls = class_optional.value();
                     feature_found = std::any_of(cls.get_features().begin(), cls.get_features().end(), has_feature_name);
                     if (feature_found) {
                         break;
                     }
                 }
                 const std::string& subclass_name = character_data->character_basis_data.subclass_name;
-                OptCRef<CharacterSubclass> subclass_optional = content.get_character_subclasses().get(subclass_name);
-                if (content.get_character_subclasses().contains(subclass_name)) {
-                    const CharacterSubclass& subclass = subclass_optional.value();
+                OptCRef<Subclass> subclass_optional = content.get_subclasses().get(subclass_name);
+                if (content.get_subclasses().contains(subclass_name)) {
+                    const Subclass& subclass = subclass_optional.value();
                     feature_found = std::any_of(
                         subclass.get_features().begin(), subclass.get_features().end(), has_feature_name
                     );

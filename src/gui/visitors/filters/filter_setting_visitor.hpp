@@ -4,10 +4,10 @@
 #include <dnd_config.hpp>
 
 #include <core/searching/content_filters/character/character_filter.hpp>
-#include <core/searching/content_filters/character_class/character_class_filter.hpp>
-#include <core/searching/content_filters/character_species/character_species_filter.hpp>
-#include <core/searching/content_filters/character_subclass/character_subclass_filter.hpp>
-#include <core/searching/content_filters/character_subspecies/character_subspecies_filter.hpp>
+#include <core/searching/content_filters/class/class_filter.hpp>
+#include <core/searching/content_filters/species/species_filter.hpp>
+#include <core/searching/content_filters/subclass/subclass_filter.hpp>
+#include <core/searching/content_filters/subspecies/subspecies_filter.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
 #include <core/searching/content_filters/effects_provider/choosable_filter.hpp>
 #include <core/searching/content_filters/effects_provider/feature_filter.hpp>
@@ -21,10 +21,10 @@ class FilterSettingVisitor {
 public:
     void operator()(ContentPieceFilter& content_piece_filter);
     void operator()(CharacterFilter& character_filter);
-    void operator()(CharacterClassFilter& character_class_filter);
-    void operator()(CharacterSubclassFilter& character_subclass_filter);
-    void operator()(CharacterSpeciesFilter& character_species_filter);
-    void operator()(CharacterSubspeciesFilter& character_subspecies_filter);
+    void operator()(ClassFilter& class_filter);
+    void operator()(SubclassFilter& subclass_filter);
+    void operator()(SpeciesFilter& species_filter);
+    void operator()(SubspeciesFilter& subspecies_filter);
     void operator()(ItemFilter& item_filter);
     void operator()(SpellFilter& spell_filter);
     void operator()(FeatureFilter& feature_filter);

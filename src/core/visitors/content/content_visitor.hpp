@@ -6,10 +6,10 @@
 namespace dnd {
 
 class Character;
-class CharacterClass;
-class CharacterSubclass;
-class CharacterSpecies;
-class CharacterSubspecies;
+class Class;
+class Subclass;
+class Species;
+class Subspecies;
 class Item;
 class Spell;
 class Feature;
@@ -19,10 +19,10 @@ class ContentVisitor {
 public:
     virtual ~ContentVisitor() = default;
     virtual void operator()(const Character& character) = 0;
-    virtual void operator()(const CharacterClass& character_class) = 0;
-    virtual void operator()(const CharacterSubclass& character_subclass) = 0;
-    virtual void operator()(const CharacterSpecies& character_species) = 0;
-    virtual void operator()(const CharacterSubspecies& character_subspecies) = 0;
+    virtual void operator()(const Class& classv) = 0;
+    virtual void operator()(const Subclass& subclass) = 0;
+    virtual void operator()(const Species& species) = 0;
+    virtual void operator()(const Subspecies& subspecies) = 0;
     virtual void operator()(const Item& item) = 0;
     virtual void operator()(const Spell& spell) = 0;
     virtual void operator()(const Feature& feature) = 0;

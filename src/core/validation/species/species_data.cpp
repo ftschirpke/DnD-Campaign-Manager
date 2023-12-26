@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include "character_species_data.hpp"
+#include "species_data.hpp"
 
 #include <memory>
 #include <string>
@@ -14,11 +14,11 @@
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 
-std::unique_ptr<dnd::ValidationData> dnd::CharacterSpeciesData::pack() const {
-    return std::make_unique<CharacterSpeciesData>(*this);
+std::unique_ptr<dnd::ValidationData> dnd::SpeciesData::pack() const {
+    return std::make_unique<SpeciesData>(*this);
 }
 
-dnd::Errors dnd::CharacterSpeciesData::validate() const {
+dnd::Errors dnd::SpeciesData::validate() const {
     Errors errors;
     std::unordered_set<std::string> unique_feature_names;
     for (const FeatureData& feature_data : features_data) {
@@ -40,9 +40,9 @@ dnd::Errors dnd::CharacterSpeciesData::validate() const {
     return errors;
 }
 
-dnd::Errors dnd::CharacterSpeciesData::validate_relations(const Content& content) const {
+dnd::Errors dnd::SpeciesData::validate_relations(const Content& content) const {
     Errors errors;
-    if (content.get_character_species().contains(name)) {
+    if (content.get_species().contains(name)) {
         errors.add_validation_error(
             ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, fmt::format("Species has duplicate name \"{}\".", name)
         );

@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include "character_subclass_parser.hpp"
+#include "subclass_parser.hpp"
 
 #include <filesystem>
 #include <string>
@@ -12,15 +12,15 @@
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
-#include <core/models/character_subclass/character_subclass.hpp>
+#include <core/models/subclass/subclass.hpp>
 #include <core/parsing/effects_provider/class_feature_parser.hpp>
 #include <core/parsing/file_parser.hpp>
-#include <core/validation/character_class/character_class_data.hpp>
+#include <core/validation/class/class_data.hpp>
 
-dnd::CharacterSubclassParser::CharacterSubclassParser(const std::filesystem::path& filepath) noexcept
+dnd::SubclassParser::SubclassParser(const std::filesystem::path& filepath) noexcept
     : FileParser(filepath, false), class_feature_parser(filepath), data() {}
 
-dnd::Errors dnd::CharacterSubclassParser::parse() {
+dnd::Errors dnd::SubclassParser::parse() {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
@@ -92,12 +92,12 @@ dnd::Errors dnd::CharacterSubclassParser::parse() {
     return errors;
 }
 
-dnd::Errors dnd::CharacterSubclassParser::validate(const Content& content) const {
+dnd::Errors dnd::SubclassParser::validate(const Content& content) const {
     Errors errors = data.validate();
     errors += data.validate_relations(content);
     return errors;
 }
 
-void dnd::CharacterSubclassParser::save_result(Content& content) {
-    content.add_character_subclass(CharacterSubclass::create(std::move(data), content));
+void dnd::SubclassParser::save_result(Content& content) {
+    content.add_subclass(Subclass::create(std::move(data), content));
 }

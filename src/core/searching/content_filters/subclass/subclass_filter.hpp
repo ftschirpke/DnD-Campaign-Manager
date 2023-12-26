@@ -3,16 +3,16 @@
 
 #include <dnd_config.hpp>
 
-#include <core/models/character_subclass/character_subclass.hpp>
+#include <core/models/subclass/subclass.hpp>
 #include <core/searching/content_filters/bool_filter.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
 
 namespace dnd {
 
-class CharacterSubclassFilter : public ContentPieceFilter {
+class SubclassFilter : public ContentPieceFilter {
 public:
     bool has_all_filters() const noexcept override;
-    bool matches(const CharacterSubclass& character_subclass) const noexcept;
+    bool matches(const Subclass& subclass) const noexcept;
     std::vector<const ContentPiece*> all_matches(const Content& content) const override;
     void clear() override;
 

@@ -9,22 +9,22 @@
 
 #include <core/content.hpp>
 #include <core/searching/content_filters/character/character_filter.hpp>
-#include <core/searching/content_filters/character_class/character_class_filter.hpp>
-#include <core/searching/content_filters/character_species/character_species_filter.hpp>
-#include <core/searching/content_filters/character_subclass/character_subclass_filter.hpp>
-#include <core/searching/content_filters/character_subspecies/character_subspecies_filter.hpp>
+#include <core/searching/content_filters/class/class_filter.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
 #include <core/searching/content_filters/effects_provider/choosable_filter.hpp>
 #include <core/searching/content_filters/effects_provider/feature_filter.hpp>
 #include <core/searching/content_filters/item/item_filter.hpp>
+#include <core/searching/content_filters/species/species_filter.hpp>
 #include <core/searching/content_filters/spell/spell_filter.hpp>
+#include <core/searching/content_filters/subclass/subclass_filter.hpp>
+#include <core/searching/content_filters/subspecies/subspecies_filter.hpp>
 
 namespace dnd {
 
 using ContentFilterVariant = std::variant<
-    ContentPieceFilter, CharacterFilter, CharacterClassFilter, CharacterSubclassFilter, CharacterSpeciesFilter,
-    CharacterSubspeciesFilter, ItemFilter, SpellFilter, FeatureFilter, ChoosableFilter>;
+    ContentPieceFilter, CharacterFilter, ClassFilter, SubclassFilter, SpeciesFilter, SubspeciesFilter, ItemFilter,
+    SpellFilter, FeatureFilter, ChoosableFilter>;
 
 /**
  * @brief A class representing an advanced content search using a content filter.

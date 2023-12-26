@@ -267,7 +267,7 @@ static dnd::Errors validate_relations_spell_choice(
             std::smatch match_pieces;
             if (std::regex_match(group_name, match_pieces, cantrip_filter_regex)) {
                 std::string class_name = match_pieces[4];
-                if (!class_name.empty() && !content.get_character_classes().contains(class_name)) {
+                if (!class_name.empty() && !content.get_classes().contains(class_name)) {
                     errors.add_validation_error(
                         dnd::ValidationErrorCode::RELATION_NOT_FOUND, parent,
                         fmt::format(
@@ -291,7 +291,7 @@ static dnd::Errors validate_relations_spell_choice(
             std::smatch match_pieces;
             if (std::regex_match(group_name, match_pieces, spell_filter_regex)) {
                 std::string class_name = match_pieces[6];
-                if (!class_name.empty() && !content.get_character_classes().contains(class_name)) {
+                if (!class_name.empty() && !content.get_classes().contains(class_name)) {
                     errors.add_validation_error(
                         dnd::ValidationErrorCode::RELATION_NOT_FOUND, parent,
                         fmt::format(

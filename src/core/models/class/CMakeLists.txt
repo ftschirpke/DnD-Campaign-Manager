@@ -1,5 +1,5 @@
 target_sources(${DND_CORE}
     PRIVATE
-    character_class.cpp
+    class.cpp
     important_levels.cpp
 )

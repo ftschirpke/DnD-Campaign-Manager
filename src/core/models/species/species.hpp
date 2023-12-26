@@ -10,14 +10,14 @@
 #include <core/models/content_piece.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/source_info.hpp>
-#include <core/validation/character_species/character_species_data.hpp>
+#include <core/validation/species/species_data.hpp>
 
 namespace dnd {
 
 class Content;
 class ContentVisitor;
 
-class CharacterSpecies : public ContentPiece {
+class Species : public ContentPiece {
 public:
     /**
      * @brief Constructs a character species from the given data and content
@@ -26,12 +26,12 @@ public:
      * @return the constructed character species
      * @throws dnd::invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static CharacterSpecies create(CharacterSpeciesData&& data, const Content& content);
+    static Species create(SpeciesData&& data, const Content& content);
 
-    CharacterSpecies(const CharacterSpecies&) = delete;
-    CharacterSpecies& operator=(const CharacterSpecies&) = delete;
-    CharacterSpecies(CharacterSpecies&&) = default;
-    CharacterSpecies& operator=(CharacterSpecies&&) = default;
+    Species(const Species&) = delete;
+    Species& operator=(const Species&) = delete;
+    Species(Species&&) = default;
+    Species& operator=(Species&&) = default;
 
     const std::string& get_name() const noexcept override;
     const std::string& get_description() const noexcept override;
@@ -41,7 +41,7 @@ public:
 
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
-    CharacterSpecies(
+    Species(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path,
         std::vector<Feature>&& features, bool has_subspecies
     ) noexcept;

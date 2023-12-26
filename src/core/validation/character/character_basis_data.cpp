@@ -29,20 +29,20 @@ dnd::Errors dnd::CharacterBasisData::validate() const {
 
 dnd::Errors dnd::CharacterBasisData::validate_relations(const dnd::Content& content) const {
     Errors errors;
-    OptCRef<CharacterSpecies> species_optional = content.get_character_species().get(species_name);
+    OptCRef<Species> species_optional = content.get_species().get(species_name);
     if (!species_optional.has_value()) {
         errors.add_validation_error(
             ValidationErrorCode::RELATION_NOT_FOUND, parent, fmt::format("Species '{}' does not exist.", species_name)
         );
     } else if (!subspecies_name.empty()) {
-        const CharacterSpecies& species = species_optional.value();
+        const Species& species = species_optional.value();
         if (!species.has_subspecies()) {
             errors.add_validation_error(
                 ValidationErrorCode::INVALID_RELATION, parent,
                 fmt::format("Species '{}' does not have subspecies.", species_name)
             );
         }
-        OptCRef<CharacterSubspecies> subspecies_optional = content.get_character_subspecies().get(subspecies_name);
+        OptCRef<Subspecies> subspecies_optional = content.get_subspecies().get(subspecies_name);
         if (!subspecies_optional.has_value()) {
             errors.add_validation_error(
                 ValidationErrorCode::RELATION_NOT_FOUND, parent,
@@ -60,14 +60,14 @@ dnd::Errors dnd::CharacterBasisData::validate_relations(const dnd::Content& cont
         );
     }
 
-    OptCRef<CharacterClass> class_optional = content.get_character_classes().get(class_name);
+    OptCRef<Class> class_optional = content.get_classes().get(class_name);
     if (!class_optional.has_value()) {
         errors.add_validation_error(
             ValidationErrorCode::RELATION_NOT_FOUND, parent, fmt::format("Class '{}' does not exist.", class_name)
         );
     } else if (!subclass_name.empty()) {
-        const CharacterClass& cls = class_optional.value();
-        OptCRef<CharacterSubclass> subclass_optional = content.get_character_subclasses().get(subclass_name);
+        const Class& cls = class_optional.value();
+        OptCRef<Subclass> subclass_optional = content.get_subclasses().get(subclass_name);
         if (!subclass_optional.has_value()) {
             errors.add_validation_error(
                 ValidationErrorCode::RELATION_NOT_FOUND, parent,

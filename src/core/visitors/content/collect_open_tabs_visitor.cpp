@@ -7,14 +7,14 @@
 #include <nlohmann/json.hpp>
 
 #include <core/models/character/character.hpp>
-#include <core/models/character_class/character_class.hpp>
-#include <core/models/character_species/character_species.hpp>
-#include <core/models/character_subclass/character_subclass.hpp>
-#include <core/models/character_subspecies/character_subspecies.hpp>
+#include <core/models/class/class.hpp>
 #include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/item/item.hpp>
+#include <core/models/species/species.hpp>
 #include <core/models/spell/spell.hpp>
+#include <core/models/subclass/subclass.hpp>
+#include <core/models/subspecies/subspecies.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
 nlohmann::json dnd::CollectOpenTabsVisitor::get_open_tabs() { return std::move(open_tabs_json); }
@@ -26,31 +26,31 @@ void dnd::CollectOpenTabsVisitor::operator()(const Character& character) {
     open_tabs_json["character"].push_back(character.get_name());
 }
 
-void dnd::CollectOpenTabsVisitor::operator()(const CharacterClass& character_class) {
-    if (!open_tabs_json.contains("character_class")) {
-        open_tabs_json["character_class"] = nlohmann::json::array();
+void dnd::CollectOpenTabsVisitor::operator()(const Class& classv) {
+    if (!open_tabs_json.contains("class")) {
+        open_tabs_json["class"] = nlohmann::json::array();
     }
-    open_tabs_json["character_class"].push_back(character_class.get_name());
+    open_tabs_json["class"].push_back(classv.get_name());
 }
 
-void dnd::CollectOpenTabsVisitor::operator()(const CharacterSubclass& character_subclass) {
-    if (!open_tabs_json.contains("character_subclass")) {
-        open_tabs_json["character_subclass"] = nlohmann::json::array();
+void dnd::CollectOpenTabsVisitor::operator()(const Subclass& subclass) {
+    if (!open_tabs_json.contains("subclass")) {
+        open_tabs_json["subclass"] = nlohmann::json::array();
     }
-    open_tabs_json["character_subclass"].push_back(character_subclass.get_name());
+    open_tabs_json["subclass"].push_back(subclass.get_name());
 }
-void dnd::CollectOpenTabsVisitor::operator()(const CharacterSpecies& character_species) {
-    if (!open_tabs_json.contains("character_species")) {
-        open_tabs_json["character_species"] = nlohmann::json::array();
+void dnd::CollectOpenTabsVisitor::operator()(const Species& species) {
+    if (!open_tabs_json.contains("species")) {
+        open_tabs_json["species"] = nlohmann::json::array();
     }
-    open_tabs_json["character_species"].push_back(character_species.get_name());
+    open_tabs_json["species"].push_back(species.get_name());
 }
 
-void dnd::CollectOpenTabsVisitor::operator()(const CharacterSubspecies& character_subspecies) {
-    if (!open_tabs_json.contains("character_subspecies")) {
-        open_tabs_json["character_subspecies"] = nlohmann::json::array();
+void dnd::CollectOpenTabsVisitor::operator()(const Subspecies& subspecies) {
+    if (!open_tabs_json.contains("subspecies")) {
+        open_tabs_json["subspecies"] = nlohmann::json::array();
     }
-    open_tabs_json["character_subspecies"].push_back(character_subspecies.get_name());
+    open_tabs_json["subspecies"].push_back(subspecies.get_name());
 }
 
 void dnd::CollectOpenTabsVisitor::operator()(const Item& item) {

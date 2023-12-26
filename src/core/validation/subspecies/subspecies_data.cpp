@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include "character_subspecies_data.hpp"
+#include "subspecies_data.hpp"
 
 #include <memory>
 #include <string>
@@ -15,11 +15,11 @@
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/validation/effects_provider/feature_data.hpp>
 
-std::unique_ptr<dnd::ValidationData> dnd::CharacterSubspeciesData::pack() const {
-    return std::make_unique<CharacterSubspeciesData>(*this);
+std::unique_ptr<dnd::ValidationData> dnd::SubspeciesData::pack() const {
+    return std::make_unique<SubspeciesData>(*this);
 }
 
-dnd::Errors dnd::CharacterSubspeciesData::validate() const {
+dnd::Errors dnd::SubspeciesData::validate() const {
     Errors errors;
     std::unordered_set<std::string> unique_feature_names;
     for (const FeatureData& feature_data : features_data) {
@@ -46,9 +46,9 @@ dnd::Errors dnd::CharacterSubspeciesData::validate() const {
     return errors;
 }
 
-dnd::Errors dnd::CharacterSubspeciesData::validate_relations(const Content& content) const {
+dnd::Errors dnd::SubspeciesData::validate_relations(const Content& content) const {
     Errors errors;
-    if (content.get_character_subspecies().contains(name)) {
+    if (content.get_subspecies().contains(name)) {
         errors.add_validation_error(
             ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, fmt::format("Subspecies has duplicate name \"{}\".", name)
         );
@@ -62,7 +62,7 @@ dnd::Errors dnd::CharacterSubspeciesData::validate_relations(const Content& cont
             );
         }
     }
-    OptCRef<CharacterSpecies> species_optional = content.get_character_species().get(species_name);
+    OptCRef<Species> species_optional = content.get_species().get(species_name);
     if (!species_optional.has_value()) {
         errors.add_validation_error(
             ValidationErrorCode::RELATION_NOT_FOUND, this, fmt::format("Character species '{}' does not exist.", species_name)

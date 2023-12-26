@@ -13,9 +13,9 @@
 
 namespace dnd {
 
-class CharacterSpeciesData : public ValidationData {
+class SpeciesData : public ValidationData {
 public:
-    std::strong_ordering operator<=>(const CharacterSpeciesData&) const noexcept = default;
+    std::strong_ordering operator<=>(const SpeciesData&) const noexcept = default;
     virtual std::unique_ptr<ValidationData> pack() const override;
     virtual Errors validate() const override;
     virtual Errors validate_relations(const Content& content) const override;

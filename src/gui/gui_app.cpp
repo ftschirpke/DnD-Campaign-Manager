@@ -66,10 +66,10 @@ static void render_content_count_table(const dnd::Content& content) {
     float window_width = ImGui::GetWindowWidth();
     float w = std::max(min_w, window_width);
     display_size("Characters", content.get_characters().size(), w);
-    display_size("Classes", content.get_character_classes().size(), w);
-    display_size("Subclasses", content.get_character_subclasses().size(), w);
-    display_size("Species", content.get_character_species().size(), w);
-    display_size("Subspecies", content.get_character_subspecies().size(), w);
+    display_size("Classes", content.get_classes().size(), w);
+    display_size("Subclasses", content.get_subclasses().size(), w);
+    display_size("Species", content.get_species().size(), w);
+    display_size("Subspecies", content.get_subspecies().size(), w);
     display_size("Items", content.get_items().size(), w);
     display_size("Spells", content.get_spells().size(), w);
     display_size("Features", content.get_features().size(), w);

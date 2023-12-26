@@ -7,7 +7,7 @@
 #include <core/errors/errors.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
-static constexpr const char* tags = "[core][validation][character_class]";
+static constexpr const char* tags = "[core][validation][class]";
 
 TEST_CASE("dnd::SpellcastingData::validate // valid spellcasting data", tags) {
     dndtest::ValidationDataMock parent;

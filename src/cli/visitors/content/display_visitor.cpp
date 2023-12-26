@@ -1,6 +1,5 @@
 #include <dnd_config.hpp>
 
-#include "core/utils/types.hpp"
 #include "display_visitor.hpp"
 
 #include <cassert>
@@ -13,17 +12,18 @@
 #include <cli/output/command_line_output.hpp>
 #include <core/basic_mechanics/dice.hpp>
 #include <core/models/character/character.hpp>
-#include <core/models/character_class/character_class.hpp>
-#include <core/models/character_species/character_species.hpp>
-#include <core/models/character_subclass/character_subclass.hpp>
-#include <core/models/character_subspecies/character_subspecies.hpp>
+#include <core/models/class/class.hpp>
 #include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/item/item.hpp>
 #include <core/models/source_info.hpp>
+#include <core/models/species/species.hpp>
 #include <core/models/spell/spell.hpp>
+#include <core/models/subclass/subclass.hpp>
+#include <core/models/subspecies/subspecies.hpp>
 #include <core/output/string_formatting/formats/format.hpp>
 #include <core/output/string_formatting/string_formatter.hpp>
+#include <core/utils/types.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
 constexpr const char* separator = "--------------------------------------------------------------------------------";
@@ -65,18 +65,18 @@ void dnd::DisplayVisitor::operator()(const dnd::Character& character) {
     output.formatted_text("Level: {}", character.get_progression().get_level());
     output.formatted_text("XP: {}", character.get_progression().get_xp());
 
-    const CharacterSpecies& species = character.get_basis().get_species();
+    const Species& species = character.get_basis().get_species();
     output.formatted_text("Species: {}", species.get_name());
 
-    OptCRef<CharacterSubspecies> subspecies = character.get_basis().get_subspecies();
+    OptCRef<Subspecies> subspecies = character.get_basis().get_subspecies();
     if (subspecies.has_value()) {
         output.formatted_text("Subspecies: {}", subspecies.value().get().get_name());
     }
 
-    const CharacterClass& classv = character.get_basis().get_class();
+    const Class& classv = character.get_basis().get_class();
     output.formatted_text("Class: {}", classv.get_name());
 
-    OptCRef<CharacterSubclass> subclass = character.get_basis().get_subclass();
+    OptCRef<Subclass> subclass = character.get_basis().get_subclass();
     if (subclass.has_value()) {
         output.formatted_text("Subclass: {}", subclass.value().get().get_name());
     }
@@ -84,47 +84,45 @@ void dnd::DisplayVisitor::operator()(const dnd::Character& character) {
     list_features<Feature>(output, character.get_features());
 }
 
-void dnd::DisplayVisitor::operator()(const dnd::CharacterClass& character_class) {
-    output.text(character_class.get_name());
+void dnd::DisplayVisitor::operator()(const dnd::Class& classv) {
+    output.text(classv.get_name());
     output.text("Type: Class");
-    display_source_info(output, character_class.get_source_info());
-    output.formatted_text("Hit Die: {}", dice_to_string(character_class.get_hit_dice()));
+    display_source_info(output, classv.get_source_info());
+    output.formatted_text("Hit Die: {}", dice_to_string(classv.get_hit_dice()));
 
-    std::string feat_level_str = fmt::format(
-        "{}", fmt::join(character_class.get_important_levels().get_feat_levels(), ", ")
-    );
+    std::string feat_level_str = fmt::format("{}", fmt::join(classv.get_important_levels().get_feat_levels(), ", "));
     output.formatted_text("Feat Levels: {}", feat_level_str);
-    output.formatted_text("Subclass Level: {}", character_class.get_important_levels().get_subclass_level());
+    output.formatted_text("Subclass Level: {}", classv.get_important_levels().get_subclass_level());
 
-    list_features<ClassFeature>(output, character_class.get_features());
+    list_features<ClassFeature>(output, classv.get_features());
 }
 
-void dnd::DisplayVisitor::operator()(const CharacterSubclass& character_subclass) {
-    output.text(character_subclass.get_name());
+void dnd::DisplayVisitor::operator()(const Subclass& subclass) {
+    output.text(subclass.get_name());
     output.text("Type: Subclass");
-    display_source_info(output, character_subclass.get_source_info());
-    output.formatted_text("Class name:", character_subclass.get_class()->get_name());
+    display_source_info(output, subclass.get_source_info());
+    output.formatted_text("Class name:", subclass.get_class()->get_name());
 
-    list_features<ClassFeature>(output, character_subclass.get_features());
+    list_features<ClassFeature>(output, subclass.get_features());
 }
 
-void dnd::DisplayVisitor::operator()(const CharacterSpecies& character_species) {
-    output.text(character_species.get_name());
+void dnd::DisplayVisitor::operator()(const Species& species) {
+    output.text(species.get_name());
     output.text("Type: Species");
-    display_source_info(output, character_species.get_source_info());
-    const char* has_subspecies_cstr = character_species.has_subspecies() ? "yes" : "no";
+    display_source_info(output, species.get_source_info());
+    const char* has_subspecies_cstr = species.has_subspecies() ? "yes" : "no";
     output.formatted_text("Has Subspecies: {}", has_subspecies_cstr);
 
-    list_features<Feature>(output, character_species.get_features());
+    list_features<Feature>(output, species.get_features());
 }
 
-void dnd::DisplayVisitor::operator()(const CharacterSubspecies& character_subspecies) {
-    output.text(character_subspecies.get_name());
+void dnd::DisplayVisitor::operator()(const Subspecies& subspecies) {
+    output.text(subspecies.get_name());
     output.text("Type: Subspecies");
-    display_source_info(output, character_subspecies.get_source_info());
-    output.formatted_text("Species name: {}", character_subspecies.get_species()->get_name());
+    display_source_info(output, subspecies.get_source_info());
+    output.formatted_text("Species name: {}", subspecies.get_species()->get_name());
 
-    list_features<Feature>(output, character_subspecies.get_features());
+    list_features<Feature>(output, subspecies.get_features());
 }
 
 void dnd::DisplayVisitor::operator()(const Item& item) {

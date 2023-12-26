@@ -1,4 +1,4 @@
 target_sources(${DND_CORE}
     PRIVATE
-    character_species_parser.cpp
+    species_parser.cpp
 )

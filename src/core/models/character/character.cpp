@@ -14,10 +14,10 @@
 #include <core/models/character/ability_scores.hpp>
 #include <core/models/character/character_basis.hpp>
 #include <core/models/character/progression.hpp>
-#include <core/models/character_class/character_class.hpp>
-#include <core/models/character_species/character_species.hpp>
-#include <core/models/character_subclass/character_subclass.hpp>
-#include <core/models/character_subspecies/character_subspecies.hpp>
+#include <core/models/class/class.hpp>
+#include <core/models/species/species.hpp>
+#include <core/models/subclass/subclass.hpp>
+#include <core/models/subspecies/subspecies.hpp>
 #include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/source_info.hpp>
@@ -73,7 +73,7 @@ void dnd::Character::for_all_effects_do(std::function<void(const dnd::Effects&)>
     for (const Feature& feature : basis.get_species().get_features()) {
         func(feature.get_main_effects());
     }
-    OptCRef<CharacterSubspecies> subspecies = basis.get_subspecies();
+    OptCRef<Subspecies> subspecies = basis.get_subspecies();
     if (subspecies.has_value()) {
         for (const Feature& feature : subspecies.value().get().get_features()) {
             func(feature.get_main_effects());
@@ -88,7 +88,7 @@ void dnd::Character::for_all_effects_do(std::function<void(const dnd::Effects&)>
             func(effects);
         }
     }
-    OptCRef<CharacterSubclass> subclass = basis.get_subclass();
+    OptCRef<Subclass> subclass = basis.get_subclass();
     if (subclass.has_value()) {
         for (const ClassFeature& feature : subclass.value().get().get_features()) {
             func(feature.get_main_effects());

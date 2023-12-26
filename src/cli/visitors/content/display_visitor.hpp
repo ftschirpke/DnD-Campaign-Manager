@@ -15,10 +15,10 @@ namespace dnd {
 class DisplayVisitor : public ContentVisitor {
 public:
     void operator()(const Character& character) override;
-    void operator()(const CharacterClass& character_class) override;
-    void operator()(const CharacterSubclass& character_subclass) override;
-    void operator()(const CharacterSpecies& character_species) override;
-    void operator()(const CharacterSubspecies& character_subspecies) override;
+    void operator()(const Class& classv) override;
+    void operator()(const Subclass& subclass) override;
+    void operator()(const Species& species) override;
+    void operator()(const Subspecies& subspecies) override;
     void operator()(const Item& item) override;
     void operator()(const Spell& spell) override;
     void operator()(const Feature& feature) override;

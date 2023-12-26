@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include <core/validation/character_subspecies/character_subspecies_data.hpp>
+#include <core/validation/subspecies/subspecies_data.hpp>
 
 #include <catch2/catch_test_macros.hpp>
 
@@ -9,10 +9,10 @@
 #include <testcore/minimal_testing_content.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
-static constexpr const char* tags = "[core][validation][character_subspecies]";
+static constexpr const char* tags = "[core][validation][subspecies]";
 
-TEST_CASE("dnd::CharacterSubspeciesData::validate and ::validate_relations // valid subspecies data", tags) {
-    dnd::CharacterSubspeciesData data;
+TEST_CASE("dnd::SubspeciesData::validate and ::validate_relations // valid subspecies data", tags) {
+    dnd::SubspeciesData data;
     dndtest::set_valid_mock_values(data, "Subspecies");
     dnd::Content content = dndtest::minimal_testing_content();
     dnd::Errors errors;
@@ -40,8 +40,8 @@ TEST_CASE("dnd::CharacterSubspeciesData::validate and ::validate_relations // va
     }
 }
 
-TEST_CASE("dnd::CharacterSubspeciesData::validate // invalid subspecies data", tags) {
-    dnd::CharacterSubspeciesData data;
+TEST_CASE("dnd::SubspeciesData::validate // invalid subspecies data", tags) {
+    dnd::SubspeciesData data;
     dndtest::set_valid_mock_values(data, "Subspecies");
     dnd::Errors errors;
 
@@ -78,8 +78,8 @@ TEST_CASE("dnd::CharacterSubspeciesData::validate // invalid subspecies data", t
     }
 }
 
-TEST_CASE("dnd::CharacterSubspeciesData::validate_relations // invalid subspecies data relations", tags) {
-    dnd::CharacterSubspeciesData data;
+TEST_CASE("dnd::SubspeciesData::validate_relations // invalid subspecies data relations", tags) {
+    dnd::SubspeciesData data;
     dndtest::set_valid_mock_values(data, "Subspecies");
     dnd::FeatureData& valid_feature_data = data.features_data.emplace_back(&data);
     dndtest::set_valid_mock_values(valid_feature_data, "Valid Feature");

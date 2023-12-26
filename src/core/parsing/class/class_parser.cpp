@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include "character_class_parser.hpp"
+#include "class_parser.hpp"
 
 #include <filesystem>
 #include <string>
@@ -12,16 +12,16 @@
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
-#include <core/models/character_class/character_class.hpp>
+#include <core/models/class/class.hpp>
 #include <core/parsing/effects_provider/class_feature_parser.hpp>
 #include <core/parsing/file_parser.hpp>
-#include <core/validation/character_class/character_class_data.hpp>
+#include <core/validation/class/class_data.hpp>
 #include <core/validation/spellcasting/spellcasting_data.hpp>
 
-dnd::CharacterClassParser::CharacterClassParser(const std::filesystem::path& filepath) noexcept
+dnd::ClassParser::ClassParser(const std::filesystem::path& filepath) noexcept
     : FileParser(filepath, false), class_feature_parser(filepath), data() {}
 
-dnd::Errors dnd::CharacterClassParser::parse() {
+dnd::Errors dnd::ClassParser::parse() {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
@@ -95,12 +95,12 @@ dnd::Errors dnd::CharacterClassParser::parse() {
     return errors;
 }
 
-dnd::Errors dnd::CharacterClassParser::validate(const dnd::Content& content) const {
+dnd::Errors dnd::ClassParser::validate(const dnd::Content& content) const {
     Errors errors = data.validate();
     errors += data.validate_relations(content);
     return errors;
 }
 
-void dnd::CharacterClassParser::save_result(dnd::Content& content) {
-    content.add_character_class(CharacterClass::create(std::move(data), content));
+void dnd::ClassParser::save_result(dnd::Content& content) {
+    content.add_class(Class::create(std::move(data), content));
 }

@@ -31,21 +31,13 @@ const dnd::Groups& dnd::Content::get_groups() const { return groups; }
 
 const dnd::StorageContentLibrary<dnd::Character>& dnd::Content::get_characters() const { return character_libary; }
 
-const dnd::StorageContentLibrary<dnd::CharacterClass>& dnd::Content::get_character_classes() const {
-    return class_library;
-}
+const dnd::StorageContentLibrary<dnd::Class>& dnd::Content::get_classes() const { return class_library; }
 
-const dnd::StorageContentLibrary<dnd::CharacterSubclass>& dnd::Content::get_character_subclasses() const {
-    return subclass_library;
-}
+const dnd::StorageContentLibrary<dnd::Subclass>& dnd::Content::get_subclasses() const { return subclass_library; }
 
-const dnd::StorageContentLibrary<dnd::CharacterSpecies>& dnd::Content::get_character_species() const {
-    return species_library;
-}
+const dnd::StorageContentLibrary<dnd::Species>& dnd::Content::get_species() const { return species_library; }
 
-const dnd::StorageContentLibrary<dnd::CharacterSubspecies>& dnd::Content::get_character_subspecies() const {
-    return subspecies_library;
-}
+const dnd::StorageContentLibrary<dnd::Subspecies>& dnd::Content::get_subspecies() const { return subspecies_library; }
 
 const dnd::StorageContentLibrary<dnd::Item>& dnd::Content::get_items() const { return item_library; }
 
@@ -102,9 +94,9 @@ dnd::OptCRef<dnd::Character> dnd::Content::add_character(dnd::Character&& charac
     return inserted_character;
 }
 
-dnd::OptCRef<dnd::CharacterClass> dnd::Content::add_character_class(dnd::CharacterClass&& character_class) {
-    const std::string name = character_class.get_name();
-    OptCRef<CharacterClass> inserted_class = class_library.add(std::move(character_class));
+dnd::OptCRef<dnd::Class> dnd::Content::add_class(dnd::Class&& classv) {
+    const std::string name = classv.get_name();
+    OptCRef<Class> inserted_class = class_library.add(std::move(classv));
     if (inserted_class.has_value()) {
         for (const ClassFeature& feature : inserted_class.value().get().get_features()) {
             class_feature_library.add(feature);
@@ -113,10 +105,10 @@ dnd::OptCRef<dnd::CharacterClass> dnd::Content::add_character_class(dnd::Charact
     return inserted_class;
 }
 
-dnd::OptCRef<dnd::CharacterSubclass> dnd::Content::add_character_subclass(dnd::CharacterSubclass&& character_subclass) {
-    const std::string name = character_subclass.get_name();
-    OptCRef<CharacterSubclass> inserted_subclass = subclass_library.add(std::move(character_subclass));
-    if (subclass_library.add(std::move(character_subclass))) {
+dnd::OptCRef<dnd::Subclass> dnd::Content::add_subclass(dnd::Subclass&& subclass) {
+    const std::string name = subclass.get_name();
+    OptCRef<Subclass> inserted_subclass = subclass_library.add(std::move(subclass));
+    if (subclass_library.add(std::move(subclass))) {
         for (const ClassFeature& class_feature : inserted_subclass.value().get().get_features()) {
             class_feature_library.add(class_feature);
         }
@@ -124,9 +116,9 @@ dnd::OptCRef<dnd::CharacterSubclass> dnd::Content::add_character_subclass(dnd::C
     return inserted_subclass;
 }
 
-dnd::OptCRef<dnd::CharacterSpecies> dnd::Content::add_character_species(dnd::CharacterSpecies&& character_species) {
-    const std::string name = character_species.get_name();
-    OptCRef<CharacterSpecies> inserted_species = species_library.add(std::move(character_species));
+dnd::OptCRef<dnd::Species> dnd::Content::add_species(dnd::Species&& species) {
+    const std::string name = species.get_name();
+    OptCRef<Species> inserted_species = species_library.add(std::move(species));
     if (inserted_species.has_value()) {
         for (const Feature& feature : inserted_species.value().get().get_features()) {
             feature_library.add(feature);
@@ -135,11 +127,9 @@ dnd::OptCRef<dnd::CharacterSpecies> dnd::Content::add_character_species(dnd::Cha
     return inserted_species;
 }
 
-dnd::OptCRef<dnd::CharacterSubspecies> dnd::Content::add_character_subspecies(
-    dnd::CharacterSubspecies&& character_subspecies
-) {
-    const std::string name = character_subspecies.get_name();
-    OptCRef<CharacterSubspecies> inserted_subspecies = subspecies_library.add(std::move(character_subspecies));
+dnd::OptCRef<dnd::Subspecies> dnd::Content::add_subspecies(dnd::Subspecies&& subspecies) {
+    const std::string name = subspecies.get_name();
+    OptCRef<Subspecies> inserted_subspecies = subspecies_library.add(std::move(subspecies));
     if (inserted_subspecies.has_value()) {
         for (const Feature& feature : inserted_subspecies.value().get().get_features()) {
             feature_library.add(feature);

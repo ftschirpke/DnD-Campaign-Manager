@@ -1,13 +1,13 @@
 #include <dnd_config.hpp>
 
-#include <core/validation/character_class/important_levels_data.hpp>
+#include <core/validation/class/important_levels_data.hpp>
 
 #include <catch2/catch_test_macros.hpp>
 
 #include <core/errors/errors.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
-static constexpr const char* tags = "[core][validation][character_class]";
+static constexpr const char* tags = "[core][validation][class]";
 
 TEST_CASE("dnd::ImportantLevelsData::validate", tags) {
     dndtest::ValidationDataMock parent;

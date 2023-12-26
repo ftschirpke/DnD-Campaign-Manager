@@ -12,7 +12,7 @@
 
 namespace dnd {
 
-class CharacterClassData;
+class ClassData;
 
 class SpellcastingData : public ValidationSubdata {
 public:

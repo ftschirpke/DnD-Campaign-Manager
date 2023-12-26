@@ -9,14 +9,14 @@
 #include <fmt/format.h>
 
 #include <core/models/character/character.hpp>
-#include <core/models/character_class/character_class.hpp>
-#include <core/models/character_species/character_species.hpp>
-#include <core/models/character_subclass/character_subclass.hpp>
-#include <core/models/character_subspecies/character_subspecies.hpp>
+#include <core/models/class/class.hpp>
 #include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/item/item.hpp>
+#include <core/models/species/species.hpp>
 #include <core/models/spell/spell.hpp>
+#include <core/models/subclass/subclass.hpp>
+#include <core/models/subspecies/subspecies.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
 void dnd::ListContentVisitor::reserve(size_t size) { string_list.reserve(size); }
@@ -30,22 +30,19 @@ void dnd::ListContentVisitor::operator()(const Character& character) {
     ));
 }
 
-void dnd::ListContentVisitor::operator()(const CharacterClass& character_class) {
-    string_list.emplace_back(fmt::format("{} [CLASS]", character_class.get_name()));
+void dnd::ListContentVisitor::operator()(const Class& classv) {
+    string_list.emplace_back(fmt::format("{} [CLASS]", classv.get_name()));
 }
 
-void dnd::ListContentVisitor::operator()(const CharacterSubclass& character_subclass) {
-    string_list.emplace_back(
-        fmt::format("{} [{} SUBCLASS]", character_subclass.get_name(), character_subclass.get_class()->get_name())
-    );
+void dnd::ListContentVisitor::operator()(const Subclass& subclass) {
+    string_list.emplace_back(fmt::format("{} [{} SUBCLASS]", subclass.get_name(), subclass.get_class()->get_name()));
 }
-void dnd::ListContentVisitor::operator()(const CharacterSpecies& character_species) {
-    string_list.emplace_back(fmt::format("{} [RACE]", character_species.get_name()));
+void dnd::ListContentVisitor::operator()(const Species& species) {
+    string_list.emplace_back(fmt::format("{} [RACE]", species.get_name()));
 }
 
-void dnd::ListContentVisitor::operator()(const CharacterSubspecies& character_subspecies) {
-    string_list.emplace_back(
-        fmt::format("{} [{} SUBRACE]", character_subspecies.get_name(), character_subspecies.get_species()->get_name())
+void dnd::ListContentVisitor::operator()(const Subspecies& subspecies) {
+    string_list.emplace_back(fmt::format("{} [{} SUBRACE]", subspecies.get_name(), subspecies.get_species()->get_name())
     );
 }
 

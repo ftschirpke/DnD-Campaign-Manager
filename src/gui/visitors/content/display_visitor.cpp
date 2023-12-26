@@ -12,16 +12,16 @@
 
 #include <core/basic_mechanics/dice.hpp>
 #include <core/models/character/character.hpp>
-#include <core/models/character_class/character_class.hpp>
-#include <core/models/character_species/character_species.hpp>
-#include <core/models/character_subclass/character_subclass.hpp>
-#include <core/models/character_subspecies/character_subspecies.hpp>
+#include <core/models/class/class.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/class_feature.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/item/item.hpp>
+#include <core/models/species/species.hpp>
 #include <core/models/spell/spell.hpp>
+#include <core/models/subclass/subclass.hpp>
+#include <core/models/subspecies/subspecies.hpp>
 #include <core/output/string_formatting/formats/format.hpp>
 #include <core/output/string_formatting/string_formatter.hpp>
 #include <core/visitors/content/content_visitor.hpp>
@@ -117,30 +117,30 @@ void dnd::DisplayVisitor::operator()(const Character& character) {
     // TODO: display stats (again)
 
     label("Species:");
-    const CharacterSpecies& species = character.get_basis().get_species();
+    const Species& species = character.get_basis().get_species();
     if (ImGui::CollapsingHeader(species.get_name().c_str())) {
         operator()(species);
     }
 
-    OptCRef<CharacterSubspecies> subspecies_optional = character.get_basis().get_subspecies();
+    OptCRef<Subspecies> subspecies_optional = character.get_basis().get_subspecies();
     if (subspecies_optional.has_value()) {
         label("Subspecies:");
-        const CharacterSubspecies& subspecies = subspecies_optional.value();
+        const Subspecies& subspecies = subspecies_optional.value();
         if (ImGui::CollapsingHeader(subspecies.get_name().c_str())) {
             operator()(subspecies);
         }
     }
 
     label("Class:");
-    const CharacterClass& classv = character.get_basis().get_class();
+    const Class& classv = character.get_basis().get_class();
     if (ImGui::CollapsingHeader(classv.get_name().c_str())) {
         operator()(classv);
     }
 
-    OptCRef<CharacterSubclass> subclass_optional = character.get_basis().get_subclass();
+    OptCRef<Subclass> subclass_optional = character.get_basis().get_subclass();
     if (subclass_optional.has_value()) {
         label("Subclass:");
-        const CharacterSubclass& subclass = subclass_optional.value();
+        const Subclass& subclass = subclass_optional.value();
         if (ImGui::CollapsingHeader(subclass.get_name().c_str())) {
             operator()(subclass);
         }
@@ -152,66 +152,64 @@ void dnd::DisplayVisitor::operator()(const Character& character) {
     end_content_table();
 }
 
-void dnd::DisplayVisitor::operator()(const CharacterClass& character_class) {
-    begin_content_table(character_class);
+void dnd::DisplayVisitor::operator()(const Class& classv) {
+    begin_content_table(classv);
 
     label("Type:");
     ImGui::Text("Class");
-    source(character_class);
+    source(classv);
     label("Hit Die:");
-    ImGui::Text("%s", dice_to_string(character_class.get_hit_dice()).c_str());
+    ImGui::Text("%s", dice_to_string(classv.get_hit_dice()).c_str());
     label("Feat Levels:");
-    std::string feat_level_str = fmt::format(
-        "{}", fmt::join(character_class.get_important_levels().get_feat_levels(), ", ")
-    );
+    std::string feat_level_str = fmt::format("{}", fmt::join(classv.get_important_levels().get_feat_levels(), ", "));
     ImGui::Text("%s", feat_level_str.c_str());
     label("Subclass Level:");
-    ImGui::Text("%d", character_class.get_important_levels().get_subclass_level());
+    ImGui::Text("%d", classv.get_important_levels().get_subclass_level());
     label("Features:");
-    list_features<ClassFeature>(*this, character_class.get_features());
+    list_features<ClassFeature>(*this, classv.get_features());
 
     end_content_table();
 }
 
-void dnd::DisplayVisitor::operator()(const CharacterSubclass& character_subclass) {
-    begin_content_table(character_subclass);
+void dnd::DisplayVisitor::operator()(const Subclass& subclass) {
+    begin_content_table(subclass);
 
     label("Type:");
     ImGui::Text("Subclass");
-    source(character_subclass);
+    source(subclass);
     label("Class name:");
-    ImGui::Text("%s", character_subclass.get_class()->get_name().c_str());
+    ImGui::Text("%s", subclass.get_class()->get_name().c_str());
     label("Features:");
-    list_features<ClassFeature>(*this, character_subclass.get_features());
+    list_features<ClassFeature>(*this, subclass.get_features());
 
     end_content_table();
 }
 
-void dnd::DisplayVisitor::operator()(const CharacterSpecies& character_species) {
-    begin_content_table(character_species);
+void dnd::DisplayVisitor::operator()(const Species& species) {
+    begin_content_table(species);
 
     label("Type:");
     ImGui::Text("Species");
-    source(character_species);
-    const char* has_subspecies_cstr = character_species.has_subspecies() ? "yes" : "no";
+    source(species);
+    const char* has_subspecies_cstr = species.has_subspecies() ? "yes" : "no";
     label("Has Subspecies:");
     ImGui::Text("%s", has_subspecies_cstr);
     label("Features:");
-    list_features<Feature>(*this, character_species.get_features());
+    list_features<Feature>(*this, species.get_features());
 
     end_content_table();
 }
 
-void dnd::DisplayVisitor::operator()(const CharacterSubspecies& character_subspecies) {
-    begin_content_table(character_subspecies);
+void dnd::DisplayVisitor::operator()(const Subspecies& subspecies) {
+    begin_content_table(subspecies);
 
     label("Type:");
     ImGui::Text("Subspecies");
-    source(character_subspecies);
+    source(subspecies);
     label("Species name:");
-    ImGui::Text("%s", character_subspecies.get_species()->get_name().c_str());
+    ImGui::Text("%s", subspecies.get_species()->get_name().c_str());
     label("Features:");
-    list_features<Feature>(*this, character_subspecies.get_features());
+    list_features<Feature>(*this, subspecies.get_features());
 
     end_content_table();
 }

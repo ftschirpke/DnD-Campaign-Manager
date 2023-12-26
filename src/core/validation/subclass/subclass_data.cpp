@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include "character_subclass_data.hpp"
+#include "subclass_data.hpp"
 
 #include <memory>
 #include <string>
@@ -16,14 +16,14 @@
 #include <core/validation/effects_provider/class_feature_data.hpp>
 #include <core/validation/spellcasting/spellcasting_data.hpp>
 
-dnd::CharacterSubclassData::CharacterSubclassData() noexcept
+dnd::SubclassData::SubclassData() noexcept
     : ValidationData(), spellcasting_data(this), features_data(), class_name() {}
 
-std::unique_ptr<dnd::ValidationData> dnd::CharacterSubclassData::pack() const {
-    return std::make_unique<CharacterSubclassData>(*this);
+std::unique_ptr<dnd::ValidationData> dnd::SubclassData::pack() const {
+    return std::make_unique<SubclassData>(*this);
 }
 
-dnd::Errors dnd::CharacterSubclassData::validate() const {
+dnd::Errors dnd::SubclassData::validate() const {
     Errors errors;
     std::unordered_set<std::string> unique_feature_names;
     for (const ClassFeatureData& feature_data : features_data) {
@@ -51,9 +51,9 @@ dnd::Errors dnd::CharacterSubclassData::validate() const {
     return errors;
 }
 
-dnd::Errors dnd::CharacterSubclassData::validate_relations(const Content& content) const {
+dnd::Errors dnd::SubclassData::validate_relations(const Content& content) const {
     Errors errors;
-    if (content.get_character_subclasses().contains(name)) {
+    if (content.get_subclasses().contains(name)) {
         errors.add_validation_error(
             ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, fmt::format("Subclass has duplicate name \"{}\".", name)
         );
@@ -67,7 +67,7 @@ dnd::Errors dnd::CharacterSubclassData::validate_relations(const Content& conten
             );
         }
     }
-    OptCRef<CharacterClass> class_optional = content.get_character_classes().get(class_name);
+    OptCRef<Class> class_optional = content.get_classes().get(class_name);
     if (!class_optional.has_value()) {
         errors.add_validation_error(
             ValidationErrorCode::RELATION_NOT_FOUND, this,

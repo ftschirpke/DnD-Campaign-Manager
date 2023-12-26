@@ -7,18 +7,18 @@
 #include <string>
 #include <vector>
 
-#include <core/models/character_species/character_species.hpp>
+#include <core/models/species/species.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/source_info.hpp>
-#include <core/validation/character_subspecies/character_subspecies_data.hpp>
+#include <core/validation/subspecies/subspecies_data.hpp>
 
 namespace dnd {
 
 class Content;
 class ContentVisitor;
 
-class CharacterSubspecies : public ContentPiece {
+class Subspecies : public ContentPiece {
 public:
     /**
      * @brief Constructs a character subspecies from the given data and content
@@ -27,31 +27,31 @@ public:
      * @return the constructed character subspecies
      * @throws dnd::invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static CharacterSubspecies create(CharacterSubspeciesData&& data, const Content& content);
+    static Subspecies create(SubspeciesData&& data, const Content& content);
 
-    CharacterSubspecies(const CharacterSubspecies&) = delete;
-    CharacterSubspecies& operator=(const CharacterSubspecies&) = delete;
-    CharacterSubspecies(CharacterSubspecies&&) = default;
-    CharacterSubspecies& operator=(CharacterSubspecies&&) = default;
+    Subspecies(const Subspecies&) = delete;
+    Subspecies& operator=(const Subspecies&) = delete;
+    Subspecies(Subspecies&&) = default;
+    Subspecies& operator=(Subspecies&&) = default;
 
     const std::string& get_name() const noexcept override;
     const std::string& get_description() const noexcept override;
     const SourceInfo& get_source_info() const noexcept override;
     const std::vector<Feature>& get_features() const noexcept;
-    const CharacterSpecies* get_species() const noexcept;
+    const Species* get_species() const noexcept;
 
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
-    CharacterSubspecies(
+    Subspecies(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path,
-        std::vector<Feature>&& features, const CharacterSpecies* species
+        std::vector<Feature>&& features, const Species* species
     ) noexcept;
 
     std::string name;
     std::string description;
     SourceInfo source_info;
     std::vector<Feature> features;
-    const CharacterSpecies* species;
+    const Species* species;
 };
 
 } // namespace dnd

@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include <core/validation/character_subclass/character_subclass_data.hpp>
+#include <core/validation/subclass/subclass_data.hpp>
 
 #include <catch2/catch_test_macros.hpp>
 
@@ -9,10 +9,10 @@
 #include <testcore/minimal_testing_content.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
-static constexpr const char* tags = "[core][validation][character_subclass]";
+static constexpr const char* tags = "[core][validation][subclass]";
 
-TEST_CASE("dnd::CharacterSubclassData::validate and ::validate_relations // valid subclass data", tags) {
-    dnd::CharacterSubclassData data;
+TEST_CASE("dnd::SubclassData::validate and ::validate_relations // valid subclass data", tags) {
+    dnd::SubclassData data;
     dndtest::set_valid_mock_values(data, "Subclass");
     data.spellcasting_data.is_spellcaster = false;
     dnd::Content content = dndtest::minimal_testing_content();
@@ -41,8 +41,8 @@ TEST_CASE("dnd::CharacterSubclassData::validate and ::validate_relations // vali
     }
 }
 
-TEST_CASE("dnd::CharacterSubclassData::validate // invalid subclass data", tags) {
-    dnd::CharacterSubclassData data;
+TEST_CASE("dnd::SubclassData::validate // invalid subclass data", tags) {
+    dnd::SubclassData data;
     dndtest::set_valid_mock_values(data, "Subclass");
     data.spellcasting_data.is_spellcaster = false;
     dnd::Errors errors;
@@ -80,8 +80,8 @@ TEST_CASE("dnd::CharacterSubclassData::validate // invalid subclass data", tags)
     }
 }
 
-TEST_CASE("dnd::CharacterSubclassData::validate_relations // invalid subclass data relations", tags) {
-    dnd::CharacterSubclassData data;
+TEST_CASE("dnd::SubclassData::validate_relations // invalid subclass data relations", tags) {
+    dnd::SubclassData data;
     dndtest::set_valid_mock_values(data, "Subclass");
     data.spellcasting_data.is_spellcaster = false;
     dnd::ClassFeatureData& valid_feature_data = data.features_data.emplace_back(&data);

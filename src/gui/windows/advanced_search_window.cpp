@@ -11,10 +11,10 @@
 #include <imgui/imgui.h>
 
 #include <core/searching/content_filters/character/character_filter.hpp>
-#include <core/searching/content_filters/character_class/character_class_filter.hpp>
-#include <core/searching/content_filters/character_species/character_species_filter.hpp>
-#include <core/searching/content_filters/character_subclass/character_subclass_filter.hpp>
-#include <core/searching/content_filters/character_subspecies/character_subspecies_filter.hpp>
+#include <core/searching/content_filters/class/class_filter.hpp>
+#include <core/searching/content_filters/species/species_filter.hpp>
+#include <core/searching/content_filters/subclass/subclass_filter.hpp>
+#include <core/searching/content_filters/subspecies/subspecies_filter.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
 #include <core/searching/content_filters/effects_provider/choosable_filter.hpp>
@@ -80,16 +80,16 @@ void dnd::AdvancedSearchWindow::render() {
                 filter = CharacterFilter();
                 break;
             case 2:
-                filter = CharacterClassFilter();
+                filter = ClassFilter();
                 break;
             case 3:
-                filter = CharacterSubclassFilter();
+                filter = SubclassFilter();
                 break;
             case 4:
-                filter = CharacterSpeciesFilter();
+                filter = SpeciesFilter();
                 break;
             case 5:
-                filter = CharacterSubspeciesFilter();
+                filter = SubspeciesFilter();
                 break;
             case 6:
                 filter = ItemFilter();

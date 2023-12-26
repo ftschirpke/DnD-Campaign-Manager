@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include <core/validation/character_species/character_species_data.hpp>
+#include <core/validation/species/species_data.hpp>
 
 #include <utility>
 
@@ -11,10 +11,10 @@
 #include <testcore/minimal_testing_content.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
-static constexpr const char* tags = "[core][validation][character_species]";
+static constexpr const char* tags = "[core][validation][species]";
 
-TEST_CASE("dnd::CharacterSpeciesData::validate and ::validate_relations // valid species data", tags) {
-    dnd::CharacterSpeciesData data;
+TEST_CASE("dnd::SpeciesData::validate and ::validate_relations // valid species data", tags) {
+    dnd::SpeciesData data;
     dndtest::set_valid_mock_values(data, "Species");
     dnd::Content content = dndtest::minimal_testing_content();
     dnd::Errors errors;
@@ -42,8 +42,8 @@ TEST_CASE("dnd::CharacterSpeciesData::validate and ::validate_relations // valid
     }
 }
 
-TEST_CASE("dnd::CharacterSpeciesData::validate // invalid species data", tags) {
-    dnd::CharacterSpeciesData data;
+TEST_CASE("dnd::SpeciesData::validate // invalid species data", tags) {
+    dnd::SpeciesData data;
     dndtest::set_valid_mock_values(data, "Species");
     dnd::Errors errors;
 
@@ -66,8 +66,8 @@ TEST_CASE("dnd::CharacterSpeciesData::validate // invalid species data", tags) {
     }
 }
 
-TEST_CASE("dnd::CharacterSpeciesData::validate_relations // invalid species data relations", tags) {
-    dnd::CharacterSpeciesData data;
+TEST_CASE("dnd::SpeciesData::validate_relations // invalid species data relations", tags) {
+    dnd::SpeciesData data;
     dndtest::set_valid_mock_values(data, "Species");
     dnd::Content content = dndtest::minimal_testing_content();
     dnd::Errors errors;

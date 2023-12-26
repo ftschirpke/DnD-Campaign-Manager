@@ -34,24 +34,24 @@ std::vector<const dnd::ContentPiece*> dnd::ContentPieceFilter::all_matches(const
             matching_content_pieces.emplace_back(&character);
         }
     }
-    for (const auto& [_, character_class] : content.get_character_classes().get_all()) {
-        if (matches(character_class)) {
-            matching_content_pieces.emplace_back(&character_class);
+    for (const auto& [_, classv] : content.get_classes().get_all()) {
+        if (matches(classv)) {
+            matching_content_pieces.emplace_back(&classv);
         }
     }
-    for (const auto& [_, character_subclass] : content.get_character_subclasses().get_all()) {
-        if (matches(character_subclass)) {
-            matching_content_pieces.emplace_back(&character_subclass);
+    for (const auto& [_, subclass] : content.get_subclasses().get_all()) {
+        if (matches(subclass)) {
+            matching_content_pieces.emplace_back(&subclass);
         }
     }
-    for (const auto& [_, character_species] : content.get_character_species().get_all()) {
-        if (matches(character_species)) {
-            matching_content_pieces.emplace_back(&character_species);
+    for (const auto& [_, species] : content.get_species().get_all()) {
+        if (matches(species)) {
+            matching_content_pieces.emplace_back(&species);
         }
     }
-    for (const auto& [_, character_subspecies] : content.get_character_subspecies().get_all()) {
-        if (matches(character_subspecies)) {
-            matching_content_pieces.emplace_back(&character_subspecies);
+    for (const auto& [_, subspecies] : content.get_subspecies().get_all()) {
+        if (matches(subspecies)) {
+            matching_content_pieces.emplace_back(&subspecies);
         }
     }
     for (const auto& [_, item] : content.get_items().get_all()) {

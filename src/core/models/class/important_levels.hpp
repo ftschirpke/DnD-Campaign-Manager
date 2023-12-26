@@ -5,7 +5,7 @@
 
 #include <set>
 
-#include <core/validation/character_class/important_levels_data.hpp>
+#include <core/validation/class/important_levels_data.hpp>
 
 namespace dnd {
 

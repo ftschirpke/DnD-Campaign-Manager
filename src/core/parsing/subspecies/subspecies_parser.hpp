@@ -10,19 +10,19 @@
 #include <core/errors/errors.hpp>
 #include <core/parsing/effects_provider/feature_parser.hpp>
 #include <core/parsing/file_parser.hpp>
-#include <core/validation/character_subspecies/character_subspecies_data.hpp>
+#include <core/validation/subspecies/subspecies_data.hpp>
 
 namespace dnd {
 
-class CharacterSubspeciesParser : public FileParser {
+class SubspeciesParser : public FileParser {
 public:
-    explicit CharacterSubspeciesParser(const std::filesystem::path& filepath) noexcept;
+    explicit SubspeciesParser(const std::filesystem::path& filepath) noexcept;
     virtual Errors parse() override;
     virtual Errors validate(const Content& content) const override;
     virtual void save_result(Content& content) override;
 private:
     FeatureParser feature_parser;
-    CharacterSubspeciesData data;
+    SubspeciesData data;
 };
 
 } // namespace dnd

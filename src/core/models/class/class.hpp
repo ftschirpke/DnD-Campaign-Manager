@@ -9,19 +9,19 @@
 #include <vector>
 
 #include <core/basic_mechanics/dice.hpp>
-#include <core/models/character_class/important_levels.hpp>
+#include <core/models/class/important_levels.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/models/effects_provider/class_feature.hpp>
 #include <core/models/source_info.hpp>
 #include <core/models/spellcasting/spellcasting.hpp>
-#include <core/validation/character_class/character_class_data.hpp>
+#include <core/validation/class/class_data.hpp>
 
 namespace dnd {
 
 class Content;
 class ContentVisitor;
 
-class CharacterClass : public ContentPiece {
+class Class : public ContentPiece {
 public:
     /**
      * @brief Constructs a character class from the given data and content
@@ -30,12 +30,12 @@ public:
      * @return the constructed character class
      * @throws dnd::invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static CharacterClass create(CharacterClassData&& data, const Content& content);
+    static Class create(ClassData&& data, const Content& content);
 
-    CharacterClass(const CharacterClass&) = delete;
-    CharacterClass& operator=(const CharacterClass&) = delete;
-    CharacterClass(CharacterClass&&) = default;
-    CharacterClass& operator=(CharacterClass&&) = default;
+    Class(const Class&) = delete;
+    Class& operator=(const Class&) = delete;
+    Class(Class&&) = default;
+    Class& operator=(Class&&) = default;
 
     const std::string& get_name() const noexcept override;
     const std::string& get_description() const noexcept override;
@@ -49,7 +49,7 @@ public:
 
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
-    CharacterClass(
+    Class(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path,
         std::vector<ClassFeature>&& features, const ClassFeature* subclass_feature, Dice hit_dice,
         ImportantLevels&& important_levels, std::unique_ptr<Spellcasting>&& spellcasting = nullptr

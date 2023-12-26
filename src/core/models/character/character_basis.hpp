@@ -12,10 +12,10 @@
 namespace dnd {
 
 class Content;
-class CharacterSpecies;
-class CharacterSubspecies;
-class CharacterClass;
-class CharacterSubclass;
+class Species;
+class Subspecies;
+class Class;
+class Subclass;
 
 class CharacterBasis {
 public:
@@ -28,23 +28,23 @@ public:
      */
     static CharacterBasis create(CharacterBasisData&& data, const Content& content);
 
-    const CharacterSpecies& get_species() const noexcept;
-    OptCRef<CharacterSubspecies> get_subspecies() const noexcept;
-    const CharacterClass& get_class() const noexcept;
-    OptCRef<CharacterSubclass> get_subclass() const noexcept;
+    const Species& get_species() const noexcept;
+    OptCRef<Subspecies> get_subspecies() const noexcept;
+    const Class& get_class() const noexcept;
+    OptCRef<Subclass> get_subclass() const noexcept;
 
     bool has_subspecies() const noexcept;
     bool has_subclass() const noexcept;
 private:
     CharacterBasis(
-        const CharacterSpecies& species, OptCRef<CharacterSubspecies> subspecies, const CharacterClass& cls,
-        OptCRef<CharacterSubclass> subclass
+        const Species& species, OptCRef<Subspecies> subspecies, const Class& cls,
+        OptCRef<Subclass> subclass
     ) noexcept;
 
-    std::reference_wrapper<const CharacterSpecies> species;
-    OptCRef<CharacterSubspecies> subspecies;
-    std::reference_wrapper<const CharacterClass> cls;
-    OptCRef<CharacterSubclass> subclass;
+    std::reference_wrapper<const Species> species;
+    OptCRef<Subspecies> subspecies;
+    std::reference_wrapper<const Class> cls;
+    OptCRef<Subclass> subclass;
 };
 
 } // namespace dnd

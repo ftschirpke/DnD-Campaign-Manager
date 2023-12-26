@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include "character_subspecies_parser.hpp"
+#include "subspecies_parser.hpp"
 
 #include <filesystem>
 #include <utility>
@@ -10,15 +10,15 @@
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
-#include <core/models/character_subspecies/character_subspecies.hpp>
+#include <core/models/subspecies/subspecies.hpp>
 #include <core/parsing/effects_provider/feature_parser.hpp>
 #include <core/parsing/file_parser.hpp>
-#include <core/validation/character_subspecies/character_subspecies_data.hpp>
+#include <core/validation/subspecies/subspecies_data.hpp>
 
-dnd::CharacterSubspeciesParser::CharacterSubspeciesParser(const std::filesystem::path& filepath) noexcept
+dnd::SubspeciesParser::SubspeciesParser(const std::filesystem::path& filepath) noexcept
     : FileParser(filepath, false), feature_parser(filepath), data() {}
 
-dnd::Errors dnd::CharacterSubspeciesParser::parse() {
+dnd::Errors dnd::SubspeciesParser::parse() {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
@@ -44,12 +44,12 @@ dnd::Errors dnd::CharacterSubspeciesParser::parse() {
     return errors;
 }
 
-dnd::Errors dnd::CharacterSubspeciesParser::validate(const dnd::Content& content) const {
+dnd::Errors dnd::SubspeciesParser::validate(const dnd::Content& content) const {
     Errors errors = data.validate();
     errors += data.validate_relations(content);
     return errors;
 }
 
-void dnd::CharacterSubspeciesParser::save_result(dnd::Content& content) {
-    content.add_character_subspecies(CharacterSubspecies::create(std::move(data), content));
+void dnd::SubspeciesParser::save_result(dnd::Content& content) {
+    content.add_subspecies(Subspecies::create(std::move(data), content));
 }

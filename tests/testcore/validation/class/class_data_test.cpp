@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include <core/validation/character_class/character_class_data.hpp>
+#include <core/validation/class/class_data.hpp>
 
 #include <catch2/catch_test_macros.hpp>
 
@@ -9,10 +9,10 @@
 #include <testcore/minimal_testing_content.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
-static constexpr const char* tags = "[core][validation][character_class]";
+static constexpr const char* tags = "[core][validation][class]";
 
-TEST_CASE("dnd::CharacterClassData::validate and ::validate_relations // valid class data", tags) {
-    dnd::CharacterClassData data;
+TEST_CASE("dnd::ClassData::validate and ::validate_relations // valid class data", tags) {
+    dnd::ClassData data;
     dndtest::set_valid_mock_values(data, "Class");
     data.hit_dice_data.str = "d6";
     data.important_levels_data.feat_levels = {4, 8, 12, 16, 19};
@@ -43,8 +43,8 @@ TEST_CASE("dnd::CharacterClassData::validate and ::validate_relations // valid c
     }
 }
 
-TEST_CASE("dnd::CharacterClassData::validate // invalid class data", tags) {
-    dnd::CharacterClassData data;
+TEST_CASE("dnd::ClassData::validate // invalid class data", tags) {
+    dnd::ClassData data;
     dndtest::set_valid_mock_values(data, "Class");
     data.hit_dice_data.str = "d6";
     data.important_levels_data.feat_levels = {4, 8, 12, 16, 19};
@@ -78,8 +78,8 @@ TEST_CASE("dnd::CharacterClassData::validate // invalid class data", tags) {
     }
 }
 
-TEST_CASE("dnd::CharacterClassData::validate_relations // invalid class data relations", tags) {
-    dnd::CharacterClassData data;
+TEST_CASE("dnd::ClassData::validate_relations // invalid class data relations", tags) {
+    dnd::ClassData data;
     dndtest::set_valid_mock_values(data, "Class");
     data.hit_dice_data.str = "d6";
     data.important_levels_data.feat_levels = {4, 8, 12, 16, 19};
