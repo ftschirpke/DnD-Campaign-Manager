@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <map>
 #include <string>
 
 namespace dnd {
@@ -10,7 +11,7 @@ namespace dnd {
 /**
  * @brief An enum for the types of typical tabletop dice.
  */
-enum class Dice {
+enum class DiceType {
     D4 = 4,
     D6 = 6,
     D8 = 8,
@@ -20,43 +21,70 @@ enum class Dice {
     D100 = 100,
 };
 
-/**
- * @brief Returns the maximum value for a type of dice
- * @param dice_type a type tabletop dice
- * @return the maximum value for that type of dice
- */
-int dice_to_int(Dice dice_type);
+class DiceData;
 
-/**
- * @brief Returns the type of dice for a given number
- * @param number the maximum value of the type of dice
- * @return the type of dice that has the number as the maximum value
- * @throws std::invalid_argument if no such dice exist (i.e. number is not 4, 6, 8, 10, 12, or 20)
- */
-Dice int_to_dice(int number);
+class Dice {
+public:
+    /**
+     * @brief Constructs a dice object with one die of the given type
+     * @param dice_type the type of die to construct the dice object with
+     * @return the constructed dice object
+     * @throws invalid_data if the dice type is invalid
+     */
+    static Dice single_from_int(int dice_number);
+    /**
+     * @brief Constructs a dice object with one die of the given type and a modifier
+     * @param dice_type the type of die to construct the dice object with
+     * @param modifier the modifier to add to the dice roll
+     * @return the constructed dice object
+     * @throws invalid_data if the dice type is invalid
+     */
+    static Dice single_from_int_with_modifier(int dice_number, int modifier);
+    /**
+     * @brief Constructs a dice object with multiple dice of the given type
+     * @param dice_type the type of die to construct the dice object with
+     * @param dice_count the number of dice to construct the dice object with
+     * @return the constructed dice object
+     * @throws invalid_data if the dice type is invalid
+     */
+    static Dice multi_from_int(int dice_number, int dice_count);
+    /**
+     * @brief Constructs a dice object with multiple dice of the given type and a modifier
+     * @param dice_type the type of die to construct the dice object with
+     * @param dice_count the number of dice to construct the dice object with
+     * @param modifier the modifier to add to the dice roll
+     * @return the constructed dice object
+     * @throws invalid_data if the dice type is invalid
+     */
+    static Dice multi_from_int_with_modifier(int dice_number, int dice_count, int modifier);
+    /**
+     * @brief Constructs a dice object from the given string
+     * @param str the string to construct the dice object from
+     * @return the constructed dice object
+     * @throw invalid_data if the string is invalid
+     */
+    static Dice from_string(std::string&& str);
 
-/**
- * @brief Returns the string representation for a type of dice
- * @param dice_type a type tabletop dice
- * @return the string representation for that type of dice
- */
-std::string dice_to_string(Dice dice_type);
+    /**
+     * @brief Constructs a dice object from the given data
+     * @param data the data to construct the dice object from
+     * @return the constructed dice object
+     * @throw invalid_data if the data is invalid
+     */
+    static Dice create(DiceData&& data);
 
-/**
- * @brief Returns a type of dice given its string representation
- * @param dice_type a string representation for a type of dice (e.g. "d6")
- * @return the type of tabletop dice that this string represents
- * @throws std::invalid_argument if no such dice exist (i.e. is not d4, d6, d8, d10, d12, or d20)
- */
-Dice string_to_dice(const std::string& str);
+    Dice(std::map<DiceType, int> dice_counts);
+    Dice(std::map<DiceType, int> dice_counts, int modifier);
 
-/**
- * @brief Returns whether a value is possible for a type of dice
- * @param value the value to check
- * @param dice_type the type of dice to check
- * @return "true" if the value is possible for the type of dice, "false" otherwise
- */
-bool value_is_possible_for(int value, Dice dice_type);
+    int min_value() const noexcept;
+    int max_value() const noexcept;
+    bool value_is_possible(int value) const noexcept;
+
+    std::string to_string() const noexcept;
+private:
+    std::map<DiceType, int> dice_counts;
+    int modifier;
+};
 
 } // namespace dnd
 

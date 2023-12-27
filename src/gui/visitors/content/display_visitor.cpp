@@ -161,7 +161,7 @@ void DisplayVisitor::operator()(const Class& cls) {
     ImGui::Text("Class");
     source(cls);
     label("Hit Die:");
-    ImGui::Text("%s", dice_to_string(cls.get_hit_dice()).c_str());
+    ImGui::Text("%s", cls.get_hit_dice().to_string().c_str());
     label("Feat Levels:");
     std::string feat_level_str = fmt::format("{}", fmt::join(cls.get_important_levels().get_feat_levels(), ", "));
     ImGui::Text("%s", feat_level_str.c_str());

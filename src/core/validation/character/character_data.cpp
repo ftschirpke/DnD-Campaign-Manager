@@ -98,12 +98,12 @@ Errors CharacterData::validate_relations(const Content& content) const {
         }
 
         for (int hit_dice_roll : progression_data.hit_dice_rolls) {
-            if (!value_is_possible_for(hit_dice_roll, cls.get_hit_dice())) {
+            if (!cls.get_hit_dice().value_is_possible(hit_dice_roll)) {
                 errors.add_validation_error(
                     ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this,
                     fmt::format(
-                        "Character has invalid hit dice roll of {} (cannot be larger than {}).", hit_dice_roll,
-                        dice_to_int(cls.get_hit_dice())
+                        "Character has invalid hit dice roll of {} (must be between {} and {}).", hit_dice_roll,
+                        cls.get_hit_dice().min_value(), cls.get_hit_dice().max_value()
                     )
                 );
             }

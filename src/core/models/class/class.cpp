@@ -12,7 +12,6 @@
 #include <vector>
 
 #include <core/basic_mechanics/dice.hpp>
-#include <core/basic_mechanics/dice_factory.hpp>
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
@@ -68,7 +67,7 @@ Class Class::create(ClassData&& data, const Content& content) {
     assert(subclass_level != -1);
     assert(subclass_feature != nullptr);
 
-    Dice hit_dice = create_dice(std::move(data.hit_dice_data));
+    Dice hit_dice = Dice::create(std::move(data.hit_dice_data));
     ImportantLevels important_levels = ImportantLevels::create(std::move(data.important_levels_data), subclass_level);
 
     return Class(
