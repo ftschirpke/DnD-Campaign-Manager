@@ -8,11 +8,11 @@
 namespace dnd {
 
 ParsingError::ParsingError(
-    ParsingErrorCode error_code, const std::filesystem::path& filepath, const std::string& message
+    ParsingError::Code error_code, const std::filesystem::path& filepath, const std::string& message
 ) noexcept
     : error_code(error_code), filepath(filepath), error_message(message) {}
 
-ParsingErrorCode ParsingError::get_error_code() const noexcept { return error_code; }
+ParsingError::Code ParsingError::get_error_code() const noexcept { return error_code; }
 
 const std::filesystem::path& ParsingError::get_filepath() const noexcept { return filepath; }
 

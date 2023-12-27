@@ -24,7 +24,7 @@ Errors ChoosableGroupParser::parse() {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
-            ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(), "The choosable group json file is not an object."
+            ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(), "The choosable group json file is not an object."
         );
         return errors;
     }
@@ -36,7 +36,7 @@ Errors ChoosableGroupParser::parse() {
     for (auto& [feature_name, feature_json] : json.items()) {
         if (!feature_json.is_object()) {
             errors.add_parsing_error(
-                ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(),
+                ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(),
                 fmt::format("The feature '{}' is not an object.", feature_name)
             );
             continue;

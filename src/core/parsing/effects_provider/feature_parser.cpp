@@ -24,7 +24,7 @@ Errors FeatureParser::parse_into(nlohmann::ordered_json&& json, FeatureData& dat
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
-            ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(), "The feature json is not an object."
+            ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(), "The feature json is not an object."
         );
         return errors;
     }
@@ -43,7 +43,7 @@ Errors FeatureParser::parse_multiple_into(
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
-            ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(), "The feature json is not an object."
+            ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(), "The feature json is not an object."
         );
         return errors;
     }

@@ -24,7 +24,7 @@ Errors ChoosableParser::parse_into(nlohmann::ordered_json&& json, ChoosableData&
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
-            ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(), "The choosable feature json is not an object."
+            ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(), "The choosable feature json is not an object."
         );
         return errors;
     }
@@ -33,7 +33,7 @@ Errors ChoosableParser::parse_into(nlohmann::ordered_json&& json, ChoosableData&
     bool has_prerequisites = json.contains("prerequisites");
     if (has_prerequisite && has_prerequisites) {
         errors.add_parsing_error(
-            ParsingErrorCode::UNEXPECTED_ATTRIBUTE, get_filepath(),
+            ParsingError::Code::UNEXPECTED_ATTRIBUTE, get_filepath(),
             "The effect holder json contains both \"prerequisite\" and \"prerequisites\"."
         );
     } else if (has_prerequisite) {

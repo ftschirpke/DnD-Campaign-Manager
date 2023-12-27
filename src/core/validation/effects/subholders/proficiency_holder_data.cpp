@@ -26,7 +26,7 @@ static Errors string_set_validate(
     for (const std::string& str_item : string_set) {
         if (str_item.empty()) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
                 fmt::format("{} set contains an empty string.", set_name)
             );
         }
@@ -47,7 +47,7 @@ Errors ProficiencyHolderData::validate() const {
     for (const std::string& skill : skills) {
         if (!is_skill(skill)) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
                 fmt::format("Skill proficiencies contain '{}' which is not a valid skill.", skill)
             );
         }
@@ -55,7 +55,7 @@ Errors ProficiencyHolderData::validate() const {
     for (const std::string& saving_throw_ability : saving_throws) {
         if (!is_ability(saving_throw_ability)) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
                 fmt::format(
                     "Saving throw proficiencies contain '{}' which is not a valid ability.", saving_throw_ability
                 )
@@ -74,7 +74,7 @@ static Errors string_group_set_validate_relations(
         if (!content.get_groups().is_part_of_group(str_item, group_name)
             && !content.get_groups().is_subgroup(str_item, group_name)) {
             errors.add_validation_error(
-                ValidationErrorCode::RELATION_NOT_FOUND, parent,
+                ValidationError::Code::RELATION_NOT_FOUND, parent,
                 fmt::format("'{}' ({}) is neither element or subgroup of the {} group.", str_item, set_name, group_name)
             );
         }

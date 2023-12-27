@@ -21,7 +21,7 @@ Errors FileParser::open_json() {
     Errors errors;
     if (get_filepath().extension().string() != ".json") {
         errors.add_parsing_error(
-            ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(),
+            ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(),
             fmt::format("File '{}' is not a \".json\" file.", get_filepath().string())
         );
         return errors;
@@ -32,7 +32,7 @@ Errors FileParser::open_json() {
         json_file >> json;
     } catch (const nlohmann::json::parse_error& e) {
         errors.add_parsing_error(
-            ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(),
+            ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(),
             fmt::format("Error occured while parsing '{}': {} ", get_filepath().string(), e.what())
         );
     }

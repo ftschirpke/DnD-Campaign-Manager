@@ -29,7 +29,7 @@ Errors EffectsParser::parse_into(nlohmann::ordered_json&& json, EffectsData& dat
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
-            ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(), "The effects json is not an object."
+            ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(), "The effects json is not an object."
         );
         return errors;
     }
@@ -53,7 +53,7 @@ Errors EffectsParser::parse_activation_conditions_into(
     bool has_activations = json.contains("activations");
     if (has_activation && has_activations) {
         errors.add_parsing_error(
-            ParsingErrorCode::UNEXPECTED_ATTRIBUTE, get_filepath(),
+            ParsingError::Code::UNEXPECTED_ATTRIBUTE, get_filepath(),
             "The effects json contains both \"activation\" and \"activations\"."
         );
     } else if (has_activation) {
@@ -76,7 +76,7 @@ Errors EffectsParser::parse_choices_into(
     Errors errors;
     if (!json["choose"].is_object()) {
         errors.add_parsing_error(
-            ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(), "The 'choose' json is not an object."
+            ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(), "The 'choose' json is not an object."
         );
         return errors;
     }
@@ -90,7 +90,7 @@ Errors EffectsParser::parse_choices_into(
         bool has_groups = choice_json.contains("groups");
         if (has_group && has_groups) {
             choice_errors.add_parsing_error(
-                ParsingErrorCode::UNEXPECTED_ATTRIBUTE, get_filepath(),
+                ParsingError::Code::UNEXPECTED_ATTRIBUTE, get_filepath(),
                 "The choice json contains both \"group\" and \"groups\"."
             );
         } else if (has_group) {

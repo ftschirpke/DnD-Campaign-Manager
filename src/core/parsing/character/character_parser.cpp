@@ -28,7 +28,7 @@ Errors CharacterParser::parse() {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
-            ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(), "The character json is not an object."
+            ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(), "The character json is not an object."
         );
     }
 
@@ -45,7 +45,9 @@ Errors CharacterParser::parse() {
     bool has_level = json.contains("level");
     bool has_xp = json.contains("xp");
     if (!has_level && !has_xp) {
-        errors.add_parsing_error(ParsingErrorCode::MISSING_ATTRIBUTE, get_filepath(), "Character has no level or xp.");
+        errors.add_parsing_error(
+            ParsingError::Code::MISSING_ATTRIBUTE, get_filepath(), "Character has no level or xp."
+        );
     } else {
         errors += parse_optional_attribute_into(json, "level", data.progression_data.level);
         errors += parse_optional_attribute_into(json, "xp", data.progression_data.xp);
@@ -55,7 +57,7 @@ Errors CharacterParser::parse() {
     if (json.contains("decisions")) {
         if (!json["decisions"].is_object()) {
             errors.add_parsing_error(
-                ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(), "The decisions json is not an object."
+                ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(), "The decisions json is not an object."
             );
         } else {
             for (auto& [feature_name, decisions_for_feature] : json["decisions"].items()) {
@@ -142,7 +144,7 @@ Errors CharacterParser::parse_decision(nlohmann::ordered_json&& decision_json, D
     Errors errors;
     if (!decision_json.is_object()) {
         errors.add_parsing_error(
-            ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(), "The decision json is not an object."
+            ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(), "The decision json is not an object."
         );
         return errors;
     }

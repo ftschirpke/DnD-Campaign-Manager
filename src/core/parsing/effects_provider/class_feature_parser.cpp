@@ -24,7 +24,7 @@ Errors ClassFeatureParser::parse_into(nlohmann::ordered_json&& json, ClassFeatur
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
-            ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(), "The class feature json is not an object."
+            ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(), "The class feature json is not an object."
         );
         return errors;
     }
@@ -46,7 +46,7 @@ Errors ClassFeatureParser::parse_into(nlohmann::ordered_json&& json, ClassFeatur
                 );
                 if (!was_inserted) {
                     errors.add_parsing_error(
-                        ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(),
+                        ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(),
                         "The class feature json's \"higher_levels\" contains multiple effects for the same level. "
                         "Consider merging them if that was intended."
                     );
@@ -56,7 +56,7 @@ Errors ClassFeatureParser::parse_into(nlohmann::ordered_json&& json, ClassFeatur
             }
         } else {
             errors.add_parsing_error(
-                ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(),
+                ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(),
                 "The class feature json's \"higher_levels\" is not an array."
             );
         }
@@ -71,7 +71,7 @@ Errors ClassFeatureParser::parse_multiple_into(
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
-            ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(), "The class feature json is not an object."
+            ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(), "The class feature json is not an object."
         );
         return errors;
     }

@@ -22,7 +22,7 @@ Errors DiceData::validate() const {
     Errors errors;
     if (!std::regex_match(str, dice_regex)) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent, fmt::format("Invalid dice \"{}\"", str)
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent, fmt::format("Invalid dice \"{}\"", str)
         );
     }
     return errors;

@@ -22,7 +22,7 @@ Errors StringGroupParser::parse() {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
-            ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(), "The string group json file is not an object."
+            ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(), "The string group json file is not an object."
         );
         return errors;
     }
@@ -30,7 +30,7 @@ Errors StringGroupParser::parse() {
     for (const auto& [key, value] : json.items()) {
         if (key == "__no_subgroup__") {
             errors.add_parsing_error(
-                ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(),
+                ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(),
                 "The group '__no_subgroup__' is not allowed in the root of the string group file."
             );
         } else if (value.is_array()) {
@@ -39,7 +39,7 @@ Errors StringGroupParser::parse() {
             errors += parse_subgroups(value, key);
         } else {
             errors.add_parsing_error(
-                ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(),
+                ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(),
                 fmt::format("The group '{}' is neither array nor object.", key)
             );
         }
@@ -47,7 +47,7 @@ Errors StringGroupParser::parse() {
         for (const std::string& group_member : members[key]) {
             if (group_member.empty()) {
                 errors.add_parsing_error(
-                    ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(),
+                    ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(),
                     fmt::format("The group '{}' contains an empty string.", key)
                 );
             }
@@ -63,7 +63,7 @@ Errors StringGroupParser::validate(const Content& content) const {
     for (const auto& [group_name, values] : subgroups) {
         if (values.contains("")) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, nullptr,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, nullptr,
                 fmt::format("The group '{}' cannot have a subgroup \"\".", group_name)
             );
         }
@@ -71,7 +71,7 @@ Errors StringGroupParser::validate(const Content& content) const {
     for (const auto& [group_name, values] : members) {
         if (values.contains("")) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, nullptr,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, nullptr,
                 fmt::format("The group '{}' contains an empty string.", group_name)
             );
         }
@@ -94,7 +94,7 @@ Errors StringGroupParser::parse_subgroups(nlohmann::ordered_json& sub_json, cons
         subgroups[parent].insert(key);
         if (members.contains(key)) {
             errors.add_parsing_error(
-                ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(),
+                ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(),
                 fmt::format("The subgroup '{}' is defined multiple times.", key)
             );
         }
@@ -110,7 +110,7 @@ Errors StringGroupParser::parse_subgroups(nlohmann::ordered_json& sub_json, cons
             errors += parse_subgroups(value, key);
         } else {
             errors.add_parsing_error(
-                ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(),
+                ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(),
                 fmt::format("The subgroup '{}' is neither array nor object.", key)
             );
         }

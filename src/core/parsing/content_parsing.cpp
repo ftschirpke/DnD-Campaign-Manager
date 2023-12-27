@@ -62,21 +62,21 @@ ParsingResult parse_content(const std::filesystem::path& content_path, const std
 
     if (!std::filesystem::exists(content_path)) {
         result.errors.add_parsing_error(
-            ParsingErrorCode::FILE_NOT_FOUND, content_path, "The content directory does not exist."
+            ParsingError::Code::FILE_NOT_FOUND, content_path, "The content directory does not exist."
         );
     } else if (!std::filesystem::directory_entry(content_path).is_directory()) {
         result.errors.add_parsing_error(
-            ParsingErrorCode::FILE_NOT_FOUND, content_path, "The content directory is not a directory."
+            ParsingError::Code::FILE_NOT_FOUND, content_path, "The content directory is not a directory."
         );
     } else {
         if (!std::filesystem::exists(content_path / "general")) {
             result.errors.add_parsing_error(
-                ParsingErrorCode::FILE_NOT_FOUND, content_path / "general", "The general directory does not exist."
+                ParsingError::Code::FILE_NOT_FOUND, content_path / "general", "The general directory does not exist."
             );
         }
         if (!std::filesystem::exists(content_path / campaign_dir_name)) {
             result.errors.add_parsing_error(
-                ParsingErrorCode::FILE_NOT_FOUND, content_path / campaign_dir_name,
+                ParsingError::Code::FILE_NOT_FOUND, content_path / campaign_dir_name,
                 "The campaign directory does not exist."
             );
         }
@@ -163,7 +163,7 @@ static Errors parse_file(Content& content, FileParser&& parser) {
             return errors;
         }
     } catch (const std::exception& e) {
-        errors.add_parsing_error(ParsingErrorCode::UNKNOWN_ERROR, parser.get_filepath(), e.what());
+        errors.add_parsing_error(ParsingError::Code::UNKNOWN_ERROR, parser.get_filepath(), e.what());
         return errors;
     }
 
@@ -179,7 +179,7 @@ static Errors parse_file(Content& content, FileParser&& parser) {
 
         parser.save_result(content);
     } catch (const std::exception& e) {
-        errors.add_validation_error(ValidationErrorCode::UNKNOWN_ERROR, nullptr, e.what());
+        errors.add_validation_error(ValidationError::Code::UNKNOWN_ERROR, nullptr, e.what());
     }
     return errors;
 }
@@ -247,7 +247,7 @@ static Errors parse_all_of_type(
         }
         if (!std::filesystem::is_directory(directory)) {
             errors.add_parsing_error(
-                ParsingErrorCode::INVALID_FILE_FORMAT, directory.path(),
+                ParsingError::Code::INVALID_FILE_FORMAT, directory.path(),
                 fmt::format("Expected '{}' to be a directory but it wasn't.", directory.path().string())
             );
             continue;
@@ -255,7 +255,7 @@ static Errors parse_all_of_type(
         for (const auto& entry : std::filesystem::directory_iterator(dir.path() / directory_name)) {
             if (!entry.is_regular_file()) {
                 errors.add_parsing_error(
-                    ParsingErrorCode::INVALID_FILE_FORMAT, entry.path(),
+                    ParsingError::Code::INVALID_FILE_FORMAT, entry.path(),
                     fmt::format("Expected '{}' to be a regular file but it wasn't.", entry.path().string())
                 );
                 continue;
@@ -278,7 +278,7 @@ static Errors parse_string_groups(
                 errors += parse_file(content, StringGroupParser(groups_file.path()));
             } else {
                 errors.add_parsing_error(
-                    ParsingErrorCode::INVALID_FILE_FORMAT, groups_file.path(),
+                    ParsingError::Code::INVALID_FILE_FORMAT, groups_file.path(),
                     fmt::format("Expected '{}' to be a regular file but it wasn't.", groups_file.path().string())
                 );
             }

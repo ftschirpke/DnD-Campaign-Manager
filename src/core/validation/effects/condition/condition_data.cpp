@@ -25,7 +25,8 @@ Errors ConditionData::validate() const {
     Errors errors;
     if (!std::regex_match(condition_str, condition_regex)) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent, fmt::format("Invalid condition \"{}\"", condition_str)
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
+            fmt::format("Invalid condition \"{}\"", condition_str)
         );
     }
     return errors;

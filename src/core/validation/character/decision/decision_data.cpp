@@ -30,21 +30,23 @@ Errors DecisionData::validate() const {
     Errors errors;
     if (parent == nullptr) {
         errors.add_validation_error(
-            ValidationErrorCode::MISSING_ATTRIBUTE, parent, "Decision has no character that it belongs to."
+            ValidationError::Code::MISSING_ATTRIBUTE, parent, "Decision has no character that it belongs to."
         );
     }
     if (target == nullptr) {
         errors.add_validation_error(
-            ValidationErrorCode::MISSING_ATTRIBUTE, parent, "Decision has no target that it belongs to."
+            ValidationError::Code::MISSING_ATTRIBUTE, parent, "Decision has no target that it belongs to."
         );
     }
     if (feature_name.empty()) {
         errors.add_validation_error(
-            ValidationErrorCode::MISSING_ATTRIBUTE, parent, "Decision's feature name is empty."
+            ValidationError::Code::MISSING_ATTRIBUTE, parent, "Decision's feature name is empty."
         );
     }
     if (selections.empty()) {
-        errors.add_validation_error(ValidationErrorCode::MISSING_ATTRIBUTE, parent, "Decision's selections are empty.");
+        errors.add_validation_error(
+            ValidationError::Code::MISSING_ATTRIBUTE, parent, "Decision's selections are empty."
+        );
     }
 
     return errors;
@@ -63,7 +65,7 @@ Errors DecisionData::validate_relations(const Content& content) const {
             choices[choice.get_attribute_name()] = &choice;
         } else {
             errors.add_validation_error(
-                ValidationErrorCode::MISSING_ATTRIBUTE, parent,
+                ValidationError::Code::MISSING_ATTRIBUTE, parent,
                 fmt::format("Decision's selection is missing a decision for '{}'.", choice.get_attribute_name())
             );
         }
@@ -71,7 +73,7 @@ Errors DecisionData::validate_relations(const Content& content) const {
     for (const auto& [attribute_name, selection] : selections) {
         if (!choices.contains(attribute_name)) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
                 fmt::format(
                     "Decision's selection '{}' is not allowed by the choice it is referring to.", attribute_name
                 )
@@ -82,7 +84,7 @@ Errors DecisionData::validate_relations(const Content& content) const {
         for (const std::string& value : selection) {
             if (std::find(possible_values.cbegin(), possible_values.cend(), value) == possible_values.cend()) {
                 errors.add_validation_error(
-                    ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                    ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
                     fmt::format("Decision's selection '{}' has an invalid value '{}'.", attribute_name, value)
                 );
             }
@@ -93,7 +95,7 @@ Errors DecisionData::validate_relations(const Content& content) const {
     std::optional<EffectsProviderVariant> effects_provider_optional = content.get_effects_provider(feature_name);
     if (!effects_provider_optional.has_value()) {
         errors.add_validation_error(
-            ValidationErrorCode::RELATION_NOT_FOUND, parent, "Decision cannot be linked to any existing feature."
+            ValidationError::Code::RELATION_NOT_FOUND, parent, "Decision cannot be linked to any existing feature."
         );
         return errors;
     }
@@ -130,7 +132,7 @@ Errors DecisionData::validate_relations(const Content& content) const {
     bool feature_found = false;
     if (character_data == nullptr) {
         errors.add_validation_error(
-            ValidationErrorCode::MISSING_ATTRIBUTE, parent, "Decision has no character data to validate against."
+            ValidationError::Code::MISSING_ATTRIBUTE, parent, "Decision has no character data to validate against."
         );
     } else if (target_exists) {
         auto has_feature_name = [this](const ContentPiece& effects_provider) {
@@ -187,7 +189,7 @@ Errors DecisionData::validate_relations(const Content& content) const {
         }
         if (!feature_found) {
             errors.add_validation_error(
-                ValidationErrorCode::RELATION_NOT_FOUND, parent,
+                ValidationError::Code::RELATION_NOT_FOUND, parent,
                 fmt::format(
                     "Decision target \"{}\" exists but is not available to the character ({}).", feature_name,
                     character_data->name
@@ -196,7 +198,7 @@ Errors DecisionData::validate_relations(const Content& content) const {
         }
     } else {
         errors.add_validation_error(
-            ValidationErrorCode::RELATION_NOT_FOUND, parent,
+            ValidationError::Code::RELATION_NOT_FOUND, parent,
             fmt::format("Decision has target feature \"{}\" which doesn't seem to exist.", feature_name)
         );
     }

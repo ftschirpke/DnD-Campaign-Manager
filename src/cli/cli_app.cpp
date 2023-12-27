@@ -19,14 +19,25 @@ constexpr const char* separator = "=============================================
 
 CliApp::CliApp() : session("last_cli_session.ini"), output() {}
 
+static std::string get_error_message(const Error& error) {
+    switch (error.index()) {
+        case 0:
+            return fmt::format("Parsing Error: {}", std::get<ParsingError>(error).get_error_message());
+        case 1:
+            return fmt::format("Validation Error: {}", std::get<ValidationError>(error).get_error_message());
+        default:
+            return "";
+    }
+}
+
 void CliApp::initialize(
     const std::filesystem::path& content_directory, const std::string& campaign_name, bool testrun
 ) {
     Errors errors = session.set_content_directory(content_directory);
     if (!errors.ok()) {
         output.formatted_error("Invalid content directory: {}", content_directory.string());
-        for (const ValidationError& e : errors.get_validation_errors()) {
-            output.error(e.get_error_message());
+        for (const Error& e : errors.get_errors()) {
+            output.error(get_error_message(e));
         }
         if (testrun) {
             throw std::invalid_argument("Invalid content directory.");
@@ -39,8 +50,8 @@ void CliApp::initialize(
             errors = session.set_content_directory(content_dir);
             if (!errors.ok()) {
                 output.formatted_error("Invalid content directory: {}", content_dir.string());
-                for (const ValidationError& e : errors.get_validation_errors()) {
-                    output.error(e.get_error_message());
+                for (const Error& e : errors.get_errors()) {
+                    output.error(get_error_message(e));
                 }
             }
         }
@@ -49,8 +60,8 @@ void CliApp::initialize(
     errors = session.set_campaign_name(campaign_name);
     if (!errors.ok()) {
         output.formatted_error("Invalid campaign name: {}", campaign_name);
-        for (const ValidationError& e : errors.get_validation_errors()) {
-            output.error(e.get_error_message());
+        for (const Error& e : errors.get_errors()) {
+            output.error(get_error_message(e));
         }
         if (testrun) {
             throw std::invalid_argument("Invalid campaign name.");
@@ -61,8 +72,8 @@ void CliApp::initialize(
             errors = session.set_campaign_name(campaign_name_str);
             if (!errors.ok()) {
                 output.formatted_error("Invalid campaign name: {}", campaign_name_str);
-                for (const ValidationError& e : errors.get_validation_errors()) {
-                    output.error(e.get_error_message());
+                for (const Error& e : errors.get_errors()) {
+                    output.error(get_error_message(e));
                 }
             }
         }

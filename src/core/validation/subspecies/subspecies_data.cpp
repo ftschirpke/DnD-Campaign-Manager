@@ -26,7 +26,7 @@ Errors SubspeciesData::validate() const {
         errors += feature_data.validate();
         if (unique_feature_names.contains(feature_data.name)) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this,
                 fmt::format("Character class has duplicate feature \"{}\".", feature_data.name)
             );
         } else {
@@ -35,12 +35,12 @@ Errors SubspeciesData::validate() const {
     }
     if (features_data.empty()) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Character subspecies has no features."
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this, "Character subspecies has no features."
         );
     }
     if (species_name.empty()) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Character subspecies has no species name."
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this, "Character subspecies has no species name."
         );
     }
     return errors;
@@ -50,7 +50,7 @@ Errors SubspeciesData::validate_relations(const Content& content) const {
     Errors errors;
     if (content.get_subspecies().contains(name)) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this,
             fmt::format("Subspecies has duplicate name \"{}\".", name)
         );
     }
@@ -58,7 +58,7 @@ Errors SubspeciesData::validate_relations(const Content& content) const {
         errors += feature_data.validate_relations(content);
         if (content.get_features().contains(feature_data.name)) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this,
                 fmt::format("Feature has duplicate name \"{}\".", feature_data.name)
             );
         }
@@ -66,12 +66,12 @@ Errors SubspeciesData::validate_relations(const Content& content) const {
     OptCRef<Species> species_optional = content.get_species().get(species_name);
     if (!species_optional.has_value()) {
         errors.add_validation_error(
-            ValidationErrorCode::RELATION_NOT_FOUND, this,
+            ValidationError::Code::RELATION_NOT_FOUND, this,
             fmt::format("Character species '{}' does not exist.", species_name)
         );
     } else if (!species_optional.value().get().has_subspecies()) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_RELATION, this,
+            ValidationError::Code::INVALID_RELATION, this,
             fmt::format("Character species '{}' does not have subspecies.", species_name)
         );
     }

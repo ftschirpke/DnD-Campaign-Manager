@@ -8,7 +8,22 @@
 
 namespace dnd {
 
-enum class ParsingErrorCode {
+class ParsingError {
+public:
+    enum class Code;
+
+    ParsingError(Code error_code, const std::filesystem::path& filepath, const std::string& message) noexcept;
+
+    Code get_error_code() const noexcept;
+    const std::filesystem::path& get_filepath() const noexcept;
+    const std::string& get_error_message() const noexcept;
+private:
+    Code error_code;
+    std::filesystem::path filepath;
+    std::string error_message;
+};
+
+enum class ParsingError::Code {
     // the file was not found
     FILE_NOT_FOUND,
     // the format of the file was invalid
@@ -21,21 +36,6 @@ enum class ParsingErrorCode {
     UNEXPECTED_ATTRIBUTE,
     // an unknown error occurred
     UNKNOWN_ERROR,
-};
-
-class ParsingError {
-public:
-    ParsingError(
-        ParsingErrorCode error_code, const std::filesystem::path& filepath, const std::string& message
-    ) noexcept;
-
-    ParsingErrorCode get_error_code() const noexcept;
-    const std::filesystem::path& get_filepath() const noexcept;
-    const std::string& get_error_message() const noexcept;
-private:
-    ParsingErrorCode error_code;
-    std::filesystem::path filepath;
-    std::string error_message;
 };
 
 } // namespace dnd

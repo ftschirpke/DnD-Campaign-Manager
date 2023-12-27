@@ -18,14 +18,14 @@ Errors ImportantLevelsData::validate() const {
     Errors errors;
     if (feat_levels.empty()) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
             "Character class has no ability score improvement levels."
         );
         return errors;
     }
     if (*feat_levels.begin() <= 0 || *(--feat_levels.end()) > 20) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
             "Feat levels must all be between 1 and 20 (inclusive)."
         );
     }

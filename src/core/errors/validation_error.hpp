@@ -10,7 +10,22 @@ namespace dnd {
 
 class ValidationData;
 
-enum class ValidationErrorCode {
+class ValidationError {
+public:
+    enum class Code;
+
+    ValidationError(Code error_code, const ValidationData* validation_data, const std::string& message) noexcept;
+
+    Code get_error_code() const noexcept;
+    const ValidationData* get_validation_data() const noexcept;
+    const std::string& get_error_message() const noexcept;
+private:
+    Code error_code;
+    std::unique_ptr<ValidationData> validation_data;
+    std::string error_message;
+};
+
+enum class ValidationError::Code {
     // a required value was not found
     MISSING_ATTRIBUTE,
     // the format of an attribute was invalid
@@ -25,21 +40,6 @@ enum class ValidationErrorCode {
     INVALID_RELATION,
     // an unknown error occurred
     UNKNOWN_ERROR,
-};
-
-class ValidationError {
-public:
-    ValidationError(
-        ValidationErrorCode error_code, const ValidationData* validation_data, const std::string& message
-    ) noexcept;
-
-    ValidationErrorCode get_error_code() const noexcept;
-    const ValidationData* get_validation_data() const noexcept;
-    const std::string& get_error_message() const noexcept;
-private:
-    ValidationErrorCode error_code;
-    std::unique_ptr<ValidationData> validation_data;
-    std::string error_message;
 };
 
 } // namespace dnd

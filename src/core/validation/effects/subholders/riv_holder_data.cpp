@@ -23,7 +23,7 @@ static Errors string_set_validate(
     for (const std::string& str_item : string_set) {
         if (str_item.empty()) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
                 fmt::format("{} set contains an empty string.", set_name)
             );
         }
@@ -48,7 +48,7 @@ static Errors string_group_set_validate_relations(
     for (const std::string& str_item : string_group_set) {
         if (!content.get_groups().is_part_of_group(str_item, group_name)) {
             errors.add_validation_error(
-                ValidationErrorCode::RELATION_NOT_FOUND, parent,
+                ValidationError::Code::RELATION_NOT_FOUND, parent,
                 fmt::format("Invalid value in {}: '{}' is not part of the {} group.", str_item, set_name, group_name)
             );
         }

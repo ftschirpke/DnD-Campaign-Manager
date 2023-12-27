@@ -30,7 +30,7 @@ Errors SpellTypeData::validate() const {
     Errors errors;
     if (!std::regex_match(str, spell_type_regex)) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent, fmt::format("Invalid spell type \"{}\"", str)
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent, fmt::format("Invalid spell type \"{}\"", str)
         );
     }
     return errors;

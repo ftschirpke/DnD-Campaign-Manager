@@ -29,7 +29,7 @@ Errors SubclassData::validate() const {
         errors += feature_data.validate();
         if (unique_feature_names.contains(feature_data.name)) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this,
                 fmt::format("Character class has duplicate feature \"{}\".", feature_data.name)
             );
         } else {
@@ -38,12 +38,12 @@ Errors SubclassData::validate() const {
     }
     if (features_data.empty()) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Character subclass has no features."
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this, "Character subclass has no features."
         );
     }
     if (class_name.empty()) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Character subclass has no class name."
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this, "Character subclass has no class name."
         );
     }
     errors += spellcasting_data.validate();
@@ -54,14 +54,15 @@ Errors SubclassData::validate_relations(const Content& content) const {
     Errors errors;
     if (content.get_subclasses().contains(name)) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, fmt::format("Subclass has duplicate name \"{}\".", name)
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this,
+            fmt::format("Subclass has duplicate name \"{}\".", name)
         );
     }
     for (const ClassFeatureData& feature_data : features_data) {
         errors += feature_data.validate_relations(content);
         if (content.get_class_features().contains(feature_data.name)) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this,
                 fmt::format("Feature has duplicate name \"{}\".", feature_data.name)
             );
         }
@@ -69,12 +70,12 @@ Errors SubclassData::validate_relations(const Content& content) const {
     OptCRef<Class> class_optional = content.get_classes().get(class_name);
     if (!class_optional.has_value()) {
         errors.add_validation_error(
-            ValidationErrorCode::RELATION_NOT_FOUND, this,
+            ValidationError::Code::RELATION_NOT_FOUND, this,
             fmt::format("Character class '{}' does not exist.", class_name)
         );
     } else if (spellcasting_data.is_spellcaster && class_optional.value().get().has_spellcasting()) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_RELATION, this,
+            ValidationError::Code::INVALID_RELATION, this,
             fmt::format(
                 "Character class '{}' has spellcasting. Its subclass '{}' cannot have spellcasting as well.",
                 class_name, name

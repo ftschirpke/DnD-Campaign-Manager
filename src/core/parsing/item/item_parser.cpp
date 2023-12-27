@@ -25,7 +25,7 @@ Errors ItemParser::parse() {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
-            ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(), "The item file is not a json object"
+            ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(), "The item file is not a json object"
         );
         return errors;
     }
@@ -33,7 +33,7 @@ Errors ItemParser::parse() {
     for (auto& [item_name, item_json] : json.items()) {
         if (!item_json.is_object()) {
             errors.add_parsing_error(
-                ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(),
+                ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(),
                 fmt::format("The item '{}' is not a json object", item_name)
             );
             continue;
