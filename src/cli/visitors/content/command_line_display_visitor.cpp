@@ -88,16 +88,16 @@ void DisplayVisitor::operator()(const Character& character) {
 }
 
 void DisplayVisitor::operator()(const Class& cls) {
-    output.text(class.get_name());
+    output.text(cls.get_name());
     output.text("Type: Class");
-    display_source_info(output, class.get_source_info());
-    output.formatted_text("Hit Die: {}", dice_to_string(class.get_hit_dice()));
+    display_source_info(output, cls.get_source_info());
+    output.formatted_text("Hit Die: {}", cls.get_hit_dice().to_string());
 
-    std::string feat_level_str = fmt::format("{}", fmt::join(class.get_important_levels().get_feat_levels(), ", "));
+    std::string feat_level_str = fmt::format("{}", fmt::join(cls.get_important_levels().get_feat_levels(), ", "));
     output.formatted_text("Feat Levels: {}", feat_level_str);
-    output.formatted_text("Subclass Level: {}", class.get_important_levels().get_subclass_level());
+    output.formatted_text("Subclass Level: {}", cls.get_important_levels().get_subclass_level());
 
-    list_features<ClassFeature>(output, class.get_features());
+    list_features<ClassFeature>(output, cls.get_features());
 }
 
 void DisplayVisitor::operator()(const Subclass& subclass) {

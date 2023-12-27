@@ -3,6 +3,5 @@ target_sources(${DND_CORE}
     abilities.cpp
     character_progression.cpp
     dice.cpp
-    dice_factory.cpp
     skills.cpp
 )

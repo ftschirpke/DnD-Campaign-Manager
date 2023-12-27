@@ -90,7 +90,7 @@ void DisplayVisitor::operator()(const Class& cls) {
     output.text(cls.get_name());
     output.text("Type: Class");
     display_source_info(output, cls.get_source_info());
-    output.formatted_text("Hit Die: {}", dice_to_string(cls.get_hit_dice()));
+    output.formatted_text("Hit Die: {}", cls.get_hit_dice().to_string());
 
     std::string feat_level_str = fmt::format("{}", fmt::join(cls.get_important_levels().get_feat_levels(), ", "));
     output.formatted_text("Feat Levels: {}", feat_level_str);

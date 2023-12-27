@@ -13,7 +13,9 @@
 
 namespace dnd {
 
-static constexpr const char* dice_regex_cstr = "[dD](4|6|8|10|12|20|100)";
+static constexpr const char* dice_regex_cstr = "(([1-9]\\d*)?[dD](4|6|8|10|12|20|100)\\+)*"
+                                               "(([1-9]\\d*)?[dD](4|6|8|10|12|20|100))"
+                                               "([\\+\\-]\\d+)?";
 
 DiceData::DiceData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
 
