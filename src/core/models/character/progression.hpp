@@ -17,7 +17,7 @@ public:
      * @brief Constructs a Progression object
      * @param data the data to construct the Progression object from
      * @return the constructed Progression object
-     * @throws dnd::invalid_data if the given data is invalid
+     * @throws invalid_data if the given data is invalid
      */
     static Progression create(ProgressionData&& data);
 

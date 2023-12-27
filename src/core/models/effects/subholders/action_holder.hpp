@@ -19,7 +19,7 @@ public:
      * @brief Constructs an ActionHolder from the given data
      * @param data the data to construct the ActionHolder from
      * @return the constructed ActionHolder
-     * @throws dnd::invalid_data if the given data is invalid
+     * @throws invalid_data if the given data is invalid
      */
     static ActionHolder create(ActionHolderData&& data);
 

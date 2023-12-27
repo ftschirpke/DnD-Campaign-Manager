@@ -29,7 +29,7 @@ public:
      * @param data the data to construct the Effects object from
      * @param content the content to use for the construction
      * @return the constructed Effects object
-     * @throws dnd::invalid_data if the data is invalid or is incompatible with the given content
+     * @throws invalid_data if the data is invalid or is incompatible with the given content
      */
     static Effects create(EffectsData&& data, const Content& content);
 

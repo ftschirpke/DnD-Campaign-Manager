@@ -55,7 +55,7 @@ private:
 } // namespace dnd
 
 template <typename T>
-void dnd::AdvancedContentSearch::set_filter(T&& new_filter) {
+void AdvancedContentSearch::set_filter(T&& new_filter) {
     filter = std::move(new_filter);
 }
 

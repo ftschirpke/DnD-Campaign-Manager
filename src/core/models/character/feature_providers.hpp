@@ -24,7 +24,7 @@ public:
      * @param data the data to construct the FeatureProviders object from
      * @param content the content to use for the construction
      * @return the constructed FeatureProviders object
-     * @throws dnd::invalid_data if the given data is invalid or is incompatible with the given content
+     * @throws invalid_data if the given data is invalid or is incompatible with the given content
      */
     static FeatureProviders create(FeatureProvidersData&& data, const Content& content);
 

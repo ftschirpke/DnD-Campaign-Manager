@@ -29,7 +29,7 @@ public:
      * @param data the data to construct the choosable feature from
      * @param content the content to use for the construction
      * @return the constructed choosable feature
-     * @throws dnd::invalid_data if the data is invalid or is incompatible with the given content
+     * @throws invalid_data if the data is invalid or is incompatible with the given content
      */
     static Choosable create(ChoosableData&& data, const Content& content);
 
@@ -42,7 +42,7 @@ public:
     const std::string& get_name() const noexcept override;
     const std::string& get_description() const noexcept override;
     const SourceInfo& get_source_info() const noexcept override;
-    const dnd::Effects& get_main_effects() const noexcept override;
+    const Effects& get_main_effects() const noexcept override;
     const std::string& get_type() const noexcept;
     const std::vector<std::unique_ptr<Condition>>& get_prerequisites() const noexcept;
 

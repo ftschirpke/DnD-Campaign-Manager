@@ -15,7 +15,7 @@ public:
      * @brief Constructs a SpellComponents object
      * @param components_data the data to construct the SpellComponents object from
      * @return the constructed SpellComponents object
-     * @throw dnd::invalid_data if the data is invalid
+     * @throw invalid_data if the data is invalid
      */
     static SpellComponents create(SpellComponentsData&& components_data);
 

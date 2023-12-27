@@ -24,7 +24,7 @@ public:
      * @param data the data to construct the character species from
      * @param content the content to use for the construction
      * @return the constructed character species
-     * @throws dnd::invalid_data if the given data is invalid or is incompatible with the given content
+     * @throws invalid_data if the given data is invalid or is incompatible with the given content
      */
     static Species create(SpeciesData&& data, const Content& content);
 

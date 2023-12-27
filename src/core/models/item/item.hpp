@@ -20,7 +20,7 @@ public:
      * @brief Constructs an item
      * @param item_data the data to construct the item from
      * @return the constructed item
-     * @throws dnd::invalid_data if the data is invalid
+     * @throws invalid_data if the data is invalid
      */
     static Item create(ItemData&& item_data);
 

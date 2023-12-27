@@ -33,7 +33,7 @@ bool is_valid_choice_attribute_name(const std::string& attribute_name) noexcept;
  * @return the choice type for the given attribute name
  * @throws std::invalid_argument if the given attribute name is not a valid choice attribute name
  */
-dnd::ChoiceType choice_type_for_attribute_name(const std::string& attribute_name);
+ChoiceType choice_type_for_attribute_name(const std::string& attribute_name);
 
 /**
  * @brief Returns whether the given attribute name implies a group of strings

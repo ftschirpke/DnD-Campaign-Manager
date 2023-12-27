@@ -16,7 +16,7 @@ public:
      * @param data the data to construct the object from
      * @param subclass_level the subclass level
      * @return the constructed object
-     * @throw dnd::invalid_data if the data is invalid or the subclass level is not between 1 and 20 (inclusive)
+     * @throw invalid_data if the data is invalid or the subclass level is not between 1 and 20 (inclusive)
      */
     static ImportantLevels create(ImportantLevelsData&& data, int subclass_level);
 

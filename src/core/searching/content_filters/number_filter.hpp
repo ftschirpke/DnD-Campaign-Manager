@@ -39,55 +39,55 @@ private:
 
 template <typename T>
 requires std::is_arithmetic_v<T>
-dnd::NumberFilter<T>::NumberFilter() noexcept : type(NumberFilterType::NONE), value(0) {}
+NumberFilter<T>::NumberFilter() noexcept : type(NumberFilterType::NONE), value(0) {}
 
 template <typename T>
 requires std::is_arithmetic_v<T>
-bool dnd::NumberFilter<T>::is_set() const noexcept {
+bool NumberFilter<T>::is_set() const noexcept {
     return type != NumberFilterType::NONE;
 }
 
 template <typename T>
 requires std::is_arithmetic_v<T>
-dnd::NumberFilterType dnd::NumberFilter<T>::get_type() const noexcept {
+NumberFilterType NumberFilter<T>::get_type() const noexcept {
     return type;
 }
 
 template <typename T>
 requires std::is_arithmetic_v<T>
-T dnd::NumberFilter<T>::get_value() const noexcept {
+T NumberFilter<T>::get_value() const noexcept {
     return value;
 }
 
 template <typename T>
 requires std::is_arithmetic_v<T>
-void dnd::NumberFilter<T>::set_type(NumberFilterType new_type) noexcept {
+void NumberFilter<T>::set_type(NumberFilterType new_type) noexcept {
     type = new_type;
 }
 
 template <typename T>
 requires std::is_arithmetic_v<T>
-void dnd::NumberFilter<T>::set_value(T new_value) noexcept {
+void NumberFilter<T>::set_value(T new_value) noexcept {
     value = new_value;
 }
 
 template <typename T>
 requires std::is_arithmetic_v<T>
-void dnd::NumberFilter<T>::set(NumberFilterType new_type, T new_value) noexcept {
+void NumberFilter<T>::set(NumberFilterType new_type, T new_value) noexcept {
     set_type(new_type);
     set_value(new_value);
 }
 
 template <typename T>
 requires std::is_arithmetic_v<T>
-void dnd::NumberFilter<T>::clear() noexcept {
+void NumberFilter<T>::clear() noexcept {
     type = NumberFilterType::NONE;
     value = 0;
 }
 
 template <typename T>
 requires std::is_arithmetic_v<T>
-bool dnd::NumberFilter<T>::matches(T number) const noexcept {
+bool NumberFilter<T>::matches(T number) const noexcept {
     switch (type) {
         case NumberFilterType::EQUAL:
             return number == value;

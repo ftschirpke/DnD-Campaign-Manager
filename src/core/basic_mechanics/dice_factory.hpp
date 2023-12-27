@@ -12,7 +12,7 @@ namespace dnd {
  * @brief Constructs a dice object from the given data
  * @param data the data to construct the dice object from
  * @return the constructed dice object
- * @throw dnd::invalid_data if the data is invalid
+ * @throw invalid_data if the data is invalid
  */
 Dice create_dice(DiceData&& data);
 

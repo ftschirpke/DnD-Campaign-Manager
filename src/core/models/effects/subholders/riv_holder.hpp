@@ -22,7 +22,7 @@ public:
      * @param data the data to construct the RIVHolder from
      * @param content the content to use for the resistances, immunities, and vulnerabilities
      * @return the constructed RIVHolder
-     * @throws dnd::invalid_data if the given data is invalid or is incompatible with the given content
+     * @throws invalid_data if the given data is invalid or is incompatible with the given content
      */
     static RIVHolder create(RIVHolderData&& data, const Content& content);
 
