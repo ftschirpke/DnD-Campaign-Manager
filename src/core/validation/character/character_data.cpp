@@ -37,7 +37,7 @@ Errors CharacterData::validate() const {
         errors += feature_data.validate();
         if (unique_feature_names.contains(feature_data.name)) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this,
                 fmt::format("Character has duplicate feature \"{}\".", feature_data.name)
             );
         } else {
@@ -57,7 +57,7 @@ Errors CharacterData::validate_relations(const Content& content) const {
     Errors errors;
     if (content.get_characters().contains(name)) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this,
             fmt::format("Character has duplicate name \"{}\".", name)
         );
     }
@@ -66,7 +66,7 @@ Errors CharacterData::validate_relations(const Content& content) const {
         if (content.get_features().contains(feature_data.name)
             || content.get_class_features().contains(feature_data.name)) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this,
                 fmt::format("Feature has duplicate name \"{}\".", feature_data.name)
             );
         }
@@ -81,7 +81,7 @@ Errors CharacterData::validate_relations(const Content& content) const {
         if (progression_data.level >= cls.get_important_levels().get_subclass_level()
             && feature_providers_data.subclass_name.empty()) {
             errors.add_validation_error(
-                ValidationErrorCode::INCONSISTENT_ATTRIBUTES, this,
+                ValidationError::Code::INCONSISTENT_ATTRIBUTES, this,
                 fmt::format(
                     "{}s of level {} must have a subclass and {} is level {}.", cls.get_name(),
                     cls.get_important_levels().get_subclass_level(), name, progression_data.level
@@ -89,7 +89,7 @@ Errors CharacterData::validate_relations(const Content& content) const {
             );
         } else if (progression_data.level < cls.get_important_levels().get_subclass_level() && !feature_providers_data.subclass_name.empty()) {
             errors.add_validation_error(
-                ValidationErrorCode::INCONSISTENT_ATTRIBUTES, this,
+                ValidationError::Code::INCONSISTENT_ATTRIBUTES, this,
                 fmt::format(
                     "{}s cannot have a subclass before level {} and {} is only level {}.", cls.get_name(),
                     cls.get_important_levels().get_subclass_level(), name, progression_data.level
@@ -100,7 +100,7 @@ Errors CharacterData::validate_relations(const Content& content) const {
         for (int hit_dice_roll : progression_data.hit_dice_rolls) {
             if (!value_is_possible_for(hit_dice_roll, cls.get_hit_dice())) {
                 errors.add_validation_error(
-                    ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
+                    ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this,
                     fmt::format(
                         "Character has invalid hit dice roll of {} (cannot be larger than {}).", hit_dice_roll,
                         dice_to_int(cls.get_hit_dice())

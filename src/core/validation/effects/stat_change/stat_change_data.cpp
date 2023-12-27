@@ -33,10 +33,10 @@ Errors StatChangeData::validate() const {
         } else {
             msg = fmt::format("Invalid stat change \"{}\"", stat_change_str);
         }
-        errors.add_validation_error(ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent, std::move(msg));
+        errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent, std::move(msg));
     } else if (stat_change_str.ends_with("div 0")) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
             fmt::format("Division by zero in stat change \"{}\"", stat_change_str)
         );
     }

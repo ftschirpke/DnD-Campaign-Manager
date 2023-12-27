@@ -26,7 +26,7 @@ Errors SpeciesParser::parse() {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
-            ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(), "The character species json is not an object."
+            ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(), "The character species json is not an object."
         );
         return errors;
     }
@@ -41,7 +41,7 @@ Errors SpeciesParser::parse() {
         errors += feature_parser.parse_multiple_into(std::move(json["features"]), data.features_data, &data);
     } else {
         errors.add_parsing_error(
-            ParsingErrorCode::MISSING_ATTRIBUTE, get_filepath(), "Character species has no features."
+            ParsingError::Code::MISSING_ATTRIBUTE, get_filepath(), "Character species has no features."
         );
     }
 

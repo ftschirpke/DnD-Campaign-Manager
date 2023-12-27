@@ -36,7 +36,7 @@ Errors ClassData::validate() const {
         errors += feature_data.validate();
         if (unique_feature_names.contains(feature_data.name)) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this,
                 fmt::format("Character class has duplicate feature \"{}\".", feature_data.name)
             );
         } else {
@@ -48,12 +48,12 @@ Errors ClassData::validate() const {
     }
     if (features_data.empty()) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Character class has no features."
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this, "Character class has no features."
         );
     }
     if (!has_subclass_feature) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this,
             fmt::format(
                 "The declared subclass feature \"{}\" is not a feature of the character class.", subclass_feature_name
             )
@@ -68,14 +68,14 @@ Errors ClassData::validate_relations(const Content& content) const {
     Errors errors;
     if (content.get_classes().contains(name)) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, fmt::format("Class has duplicate name \"{}\".", name)
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this, fmt::format("Class has duplicate name \"{}\".", name)
         );
     }
     for (const ClassFeatureData& feature_data : features_data) {
         errors += feature_data.validate_relations(content);
         if (content.get_class_features().contains(feature_data.name)) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this,
                 fmt::format("Feature has duplicate name \"{}\".", feature_data.name)
             );
         }

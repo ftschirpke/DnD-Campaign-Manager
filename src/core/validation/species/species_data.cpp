@@ -25,7 +25,7 @@ Errors SpeciesData::validate() const {
         errors += feature_data.validate();
         if (unique_feature_names.contains(feature_data.name)) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this,
                 fmt::format("Character species has duplicate feature \"{}\".", feature_data.name)
             );
         } else {
@@ -34,7 +34,7 @@ Errors SpeciesData::validate() const {
     }
     if (features_data.empty()) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Character species has no features."
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this, "Character species has no features."
         );
     }
     return errors;
@@ -44,14 +44,15 @@ Errors SpeciesData::validate_relations(const Content& content) const {
     Errors errors;
     if (content.get_species().contains(name)) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, fmt::format("Species has duplicate name \"{}\".", name)
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this,
+            fmt::format("Species has duplicate name \"{}\".", name)
         );
     }
     for (const FeatureData& feature_data : features_data) {
         errors += feature_data.validate_relations(content);
         if (content.get_features().contains(feature_data.name)) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this,
                 fmt::format("Feature has duplicate name \"{}\".", feature_data.name)
             );
         }

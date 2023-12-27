@@ -29,16 +29,16 @@ Errors SpellData::validate() const {
     errors += components_data.validate();
     errors += type_data.validate();
     if (casting_time.empty()) {
-        errors.add_validation_error(ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Casting time is empty");
+        errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this, "Casting time is empty");
     }
     if (range.empty()) {
-        errors.add_validation_error(ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Range is empty");
+        errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this, "Range is empty");
     }
     if (duration.empty()) {
-        errors.add_validation_error(ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Duration is empty");
+        errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this, "Duration is empty");
     }
     if (classes.empty()) {
-        errors.add_validation_error(ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Spell has no classes");
+        errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this, "Spell has no classes");
     }
     return errors;
 }

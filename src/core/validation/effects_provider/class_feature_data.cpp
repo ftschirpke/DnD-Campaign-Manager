@@ -21,11 +21,11 @@ Errors ClassFeatureData::validate() const {
     Errors errors = FeatureData::validate();
     if (level <= 0) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, get_parent(), "Feature level must be positive."
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, get_parent(), "Feature level must be positive."
         );
     } else if (level > 20) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, get_parent(), "Feature level must be at most 20."
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, get_parent(), "Feature level must be at most 20."
         );
     }
     for (const auto& [_, effects_data] : higher_level_effects_data) {

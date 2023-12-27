@@ -24,7 +24,7 @@ static Errors spells_set_validate(const std::set<std::string>& spells, const Val
     for (const std::string& spell_name : spells) {
         if (spell_name.empty()) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent, fmt::format("Name of extra spell is empty.")
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent, fmt::format("Name of extra spell is empty.")
             );
         }
     }
@@ -52,11 +52,11 @@ static Errors spells_set_validate_relations(
         OptCRef<Spell> spell_optional = content.get_spells().get(spell_name);
         if (!spell_optional.has_value()) {
             errors.add_validation_error(
-                ValidationErrorCode::RELATION_NOT_FOUND, parent, fmt::format("Spell '{}' does not exist.", spell_name)
+                ValidationError::Code::RELATION_NOT_FOUND, parent, fmt::format("Spell '{}' does not exist.", spell_name)
             );
         } else if (spell_optional.value().get().get_type().get_spell_level() == SpellLevel::CANTRIP) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_RELATION, parent, fmt::format("Spell '{}' is a cantrip.", spell_name)
+                ValidationError::Code::INVALID_RELATION, parent, fmt::format("Spell '{}' is a cantrip.", spell_name)
             );
         }
     }
@@ -69,12 +69,13 @@ Errors ExtraSpellsHolderData::validate_relations(const Content& content) const {
         OptCRef<Spell> cantrip_optional = content.get_spells().get(cantrip_name);
         if (!cantrip_optional.has_value()) {
             errors.add_validation_error(
-                ValidationErrorCode::RELATION_NOT_FOUND, parent,
+                ValidationError::Code::RELATION_NOT_FOUND, parent,
                 fmt::format("Cantrip '{}' does not exist.", cantrip_name)
             );
         } else if (cantrip_optional.value().get().get_type().get_spell_level() != SpellLevel::CANTRIP) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_RELATION, parent, fmt::format("Spell '{}' is not a cantrip.", cantrip_name)
+                ValidationError::Code::INVALID_RELATION, parent,
+                fmt::format("Spell '{}' is not a cantrip.", cantrip_name)
             );
         }
     }

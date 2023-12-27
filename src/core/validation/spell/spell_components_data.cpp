@@ -25,7 +25,7 @@ Errors SpellComponentsData::validate() const {
     Errors errors;
     if (!std::regex_match(str, spell_components_regex)) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent, fmt::format("Invalid spell components \"{}\"", str)
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent, fmt::format("Invalid spell components \"{}\"", str)
         );
     }
     return errors;

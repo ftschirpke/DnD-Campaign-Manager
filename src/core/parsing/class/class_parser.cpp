@@ -27,7 +27,7 @@ Errors ClassParser::parse() {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
-            ParsingErrorCode::INVALID_FILE_FORMAT, get_filepath(), "The character class json is not an object."
+            ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(), "The character class json is not an object."
         );
         return errors;
     }
@@ -90,7 +90,7 @@ Errors ClassParser::parse() {
         errors += class_feature_parser.parse_multiple_into(std::move(json["features"]), data.features_data, &data);
     } else {
         errors.add_parsing_error(
-            ParsingErrorCode::MISSING_ATTRIBUTE, get_filepath(), "Character class has no features."
+            ParsingError::Code::MISSING_ATTRIBUTE, get_filepath(), "Character class has no features."
         );
     }
 

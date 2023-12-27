@@ -19,7 +19,7 @@ Errors ChoosableData::validate() const {
     Errors errors = FeatureData::validate();
     if (type.empty()) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, this, "Choosable Feature has empty type"
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this, "Choosable Feature has empty type"
         );
     }
     for (const ConditionData& prerequisite_data : prerequisites_data) {

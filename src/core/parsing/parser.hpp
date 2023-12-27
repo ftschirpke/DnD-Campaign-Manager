@@ -65,7 +65,7 @@ Errors Parser::parse_optional_attribute_into(const nlohmann::json& json, const c
     } catch (const nlohmann::json::type_error& e) {
         DND_UNUSED(e);
         errors.add_parsing_error(
-            ParsingErrorCode::INVALID_ATTRIBUTE_TYPE, filepath,
+            ParsingError::Code::INVALID_ATTRIBUTE_TYPE, filepath,
             fmt::format("The attribute '{}' is of the wrong type, it should be {}", attribute_name, type_name<T>())
         );
     }
@@ -78,7 +78,8 @@ Errors Parser::parse_required_attribute_into(const nlohmann::json& json, const c
     Errors errors;
     if (!json.contains(attribute_name)) {
         errors.add_parsing_error(
-            ParsingErrorCode::MISSING_ATTRIBUTE, filepath, fmt::format("The attribute '{}' is missing", attribute_name)
+            ParsingError::Code::MISSING_ATTRIBUTE, filepath,
+            fmt::format("The attribute '{}' is missing", attribute_name)
         );
         return errors;
     }
@@ -87,7 +88,7 @@ Errors Parser::parse_required_attribute_into(const nlohmann::json& json, const c
     } catch (const nlohmann::json::type_error& e) {
         DND_UNUSED(e);
         errors.add_parsing_error(
-            ParsingErrorCode::INVALID_ATTRIBUTE_TYPE, filepath,
+            ParsingError::Code::INVALID_ATTRIBUTE_TYPE, filepath,
             fmt::format("The attribute '{}' is of the wrong type, it should be {}", attribute_name, type_name<T>())
         );
     }

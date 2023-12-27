@@ -38,21 +38,21 @@ Errors SpellcastingData::validate() const {
 
     if (!is_ability(ability)) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
             fmt::format("The spellcasting ability '{}' is not a valid ability.", ability)
         );
     }
 
     if (is_spells_known_type && !preparation_spellcasting_type.empty()) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
             "The spellcasting cannot be a spells known spellcasting and preparation spellcasting at the same time."
         );
     } else if (is_spells_known_type) {
         for (int val : spells_known) {
             if (val < 0) {
                 errors.add_validation_error(
-                    ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                    ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
                     "The amount of spells known cannot be negative"
                 );
                 break;
@@ -61,12 +61,12 @@ Errors SpellcastingData::validate() const {
     } else if (!preparation_spellcasting_type.empty()) {
         if (std::any_of(spells_known.begin(), spells_known.end(), [](int val) { return val != 0; })) {
             errors.add_validation_error(
-                ValidationErrorCode::MISSING_ATTRIBUTE, parent,
+                ValidationError::Code::MISSING_ATTRIBUTE, parent,
                 "The spells known must be empty for preparation spellcasting."
             );
         } else if (preparation_spellcasting_type != "full" && preparation_spellcasting_type != "half") {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
                 fmt::format(
                     "The preparation spellcasting type '{}' is not a valid type (must be 'full' of 'half').",
                     preparation_spellcasting_type
@@ -75,7 +75,7 @@ Errors SpellcastingData::validate() const {
         }
     } else {
         errors.add_validation_error(
-            ValidationErrorCode::MISSING_ATTRIBUTE, parent,
+            ValidationError::Code::MISSING_ATTRIBUTE, parent,
             "The spellcasting must be either a spells known spellcasting or a preparation spellcasting."
         );
     }
@@ -83,7 +83,8 @@ Errors SpellcastingData::validate() const {
     for (int val : cantrips_known) {
         if (val < 0) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent, "The amount of cantrips known cannot be negative"
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
+                "The amount of cantrips known cannot be negative"
             );
             break;
         }
@@ -94,7 +95,7 @@ Errors SpellcastingData::validate() const {
         for (int val : arr) {
             if (val < 0) {
                 errors.add_validation_error(
-                    ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                    ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
                     fmt::format("The amount of spell slots of level {} cannot be negative", level)
                 );
                 break;

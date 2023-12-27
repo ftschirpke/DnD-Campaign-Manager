@@ -11,12 +11,12 @@
 namespace dnd {
 
 ValidationError::ValidationError(
-    ValidationErrorCode error_code, const ValidationData* validation_data, const std::string& message
+    ValidationError::Code error_code, const ValidationData* validation_data, const std::string& message
 ) noexcept
     : error_code(error_code), validation_data(validation_data == nullptr ? nullptr : validation_data->pack()),
       error_message(message) {}
 
-ValidationErrorCode ValidationError::get_error_code() const noexcept { return error_code; }
+ValidationError::Code ValidationError::get_error_code() const noexcept { return error_code; }
 
 const ValidationData* ValidationError::get_validation_data() const noexcept { return validation_data.get(); }
 

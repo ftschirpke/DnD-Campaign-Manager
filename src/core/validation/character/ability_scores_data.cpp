@@ -16,7 +16,7 @@ static Errors check_ability_score(int ability_score, const ValidationData* data_
     Errors errors;
     if (ability_score <= 0 || ability_score > 30) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, data_ptr,
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data_ptr,
             fmt::format("Ability score {} ({}) is not between 1 and 30 (inclusive).", name, ability_score)
         );
     }

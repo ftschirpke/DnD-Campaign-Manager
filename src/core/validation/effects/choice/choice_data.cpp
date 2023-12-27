@@ -32,7 +32,7 @@ static Errors validate_ability_choice(const ChoiceData& data, const ValidationDa
         }
         if (!is_ability(explicit_choice)) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
                 fmt::format(
                     "Choice for '{}' cannot have '{}' as an option since that is not an ability.", data.attribute_name,
                     explicit_choice
@@ -42,7 +42,7 @@ static Errors validate_ability_choice(const ChoiceData& data, const ValidationDa
     }
     if (!data.group_names.empty()) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
             fmt::format(
                 "Choice for '{}' implies the selection of an ability which prohibits group names.", data.attribute_name
             )
@@ -59,7 +59,7 @@ static Errors validate_skill_choice(const ChoiceData& data, const ValidationData
         }
         if (!is_skill(explicit_choice)) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
                 fmt::format(
                     "Choice for '{}' cannot have '{}' as an option since that is not a skill.", data.attribute_name,
                     explicit_choice
@@ -69,7 +69,7 @@ static Errors validate_skill_choice(const ChoiceData& data, const ValidationData
     }
     if (!data.group_names.empty()) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
             fmt::format(
                 "Choice for '{}' implies the selection of a skill which prohibits group names.", data.attribute_name
             )
@@ -90,7 +90,7 @@ static Errors validate_stat_change_choice(const ChoiceData& data, const Validati
     }
     if (!data.group_names.empty()) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
             fmt::format(
                 "Choice for '{}' implies the selection of a stat change which prohibits group names.",
                 data.attribute_name
@@ -104,17 +104,17 @@ Errors ChoiceData::validate() const {
     Errors errors;
     if (amount <= 0) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent, "Choice has non-positive amount"
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent, "Choice has non-positive amount"
         );
     }
     if (attribute_name.empty()) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent, "Choice has emtpy attribute name"
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent, "Choice has emtpy attribute name"
         );
         return errors;
     } else if (!is_valid_choice_attribute_name(attribute_name)) {
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
             fmt::format("Choice has invalid attribute name '{}'", attribute_name)
         );
         return errors;
@@ -123,7 +123,7 @@ Errors ChoiceData::validate() const {
     for (const std::string& explicit_choice : explicit_choices) {
         if (explicit_choice.empty()) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
                 fmt::format("Choice for '{}' cannot have an empty string as an option.", attribute_name)
             );
         }
@@ -131,7 +131,7 @@ Errors ChoiceData::validate() const {
     for (const std::string& group_name : group_names) {
         if (group_name.empty()) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
                 fmt::format("Choice for '{}' cannot have an empty string as a group name.", attribute_name)
             );
         }
@@ -160,7 +160,7 @@ static Errors validate_relations_string_choice(
     Errors errors;
     if (!attribute_name_implies_group(data.attribute_name)) {
         errors.add_validation_error(
-            ValidationErrorCode::INCONSISTENT_ATTRIBUTES, parent,
+            ValidationError::Code::INCONSISTENT_ATTRIBUTES, parent,
             fmt::format(
                 "Choice for '{}' implies string selection but no string group which is contradictory.",
                 data.attribute_name
@@ -175,7 +175,7 @@ static Errors validate_relations_string_choice(
         }
         if (!content.get_groups().is_part_of_group(explicit_choice, group_name)) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
                 fmt::format(
                     "Choice for '{}' cannot have '{}' as an option since that is part of the group '{}'.",
                     data.attribute_name, explicit_choice, group_name
@@ -189,7 +189,7 @@ static Errors validate_relations_string_choice(
         }
         if (!content.get_groups().is_subgroup(subgroup_name, group_name)) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
                 fmt::format(
                     "Choice for '{}' cannot have '{}' as a group name since that is not a subgroup of '{}'.",
                     data.attribute_name, subgroup_name, group_name
@@ -210,7 +210,7 @@ static Errors validate_relations_item_choice(
         }
         if (!content.get_items().contains(explicit_choice)) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
                 fmt::format(
                     "Choice for '{}' cannot have '{}' as an option since that is not an item.", data.attribute_name,
                     explicit_choice
@@ -223,7 +223,7 @@ static Errors validate_relations_item_choice(
             continue;
         }
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
             fmt::format(
                 "Choice for '{}' cannot have '{}' as a group name since that is not a name specifying items.",
                 data.attribute_name, group_name
@@ -252,7 +252,7 @@ static Errors validate_relations_spell_choice(
         }
         if (!content.get_spells().contains(explicit_choice)) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
                 fmt::format(
                     "Choice for '{}' cannot have '{}' as an option since that is not a spell.", data.attribute_name,
                     explicit_choice
@@ -271,7 +271,7 @@ static Errors validate_relations_spell_choice(
                 std::string class_name = match_pieces[4];
                 if (!class_name.empty() && !content.get_classes().contains(class_name)) {
                     errors.add_validation_error(
-                        ValidationErrorCode::RELATION_NOT_FOUND, parent,
+                        ValidationError::Code::RELATION_NOT_FOUND, parent,
                         fmt::format(
                             "Choice for '{}' cannot have '{}' as a group name because '{}' is not a character class.",
                             data.attribute_name, group_name, class_name
@@ -280,7 +280,7 @@ static Errors validate_relations_spell_choice(
                 }
             } else {
                 errors.add_validation_error(
-                    ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                    ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
                     fmt::format(
                         "Choice for '{}' cannot have '{}' as a group name because that is not a name specifying "
                         "cantrips.",
@@ -295,7 +295,7 @@ static Errors validate_relations_spell_choice(
                 std::string class_name = match_pieces[6];
                 if (!class_name.empty() && !content.get_classes().contains(class_name)) {
                     errors.add_validation_error(
-                        ValidationErrorCode::RELATION_NOT_FOUND, parent,
+                        ValidationError::Code::RELATION_NOT_FOUND, parent,
                         fmt::format(
                             "Choice for '{}' cannot have '{}' as a group name because '{}' is not a character class.",
                             data.attribute_name, group_name, class_name
@@ -304,7 +304,7 @@ static Errors validate_relations_spell_choice(
                 }
             } else {
                 errors.add_validation_error(
-                    ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                    ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
                     fmt::format(
                         "Choice for '{}' cannot have '{}' as a group name because that is not a name specifying "
                         "spells.",
@@ -327,7 +327,7 @@ static Errors validate_relations_choosable_choice(
         }
         if (!content.get_choosables().contains(explicit_choice)) {
             errors.add_validation_error(
-                ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
                 fmt::format(
                     "Choice for '{}' cannot have '{}' as an option since that is not an choosable feature.",
                     data.attribute_name, explicit_choice
@@ -340,7 +340,7 @@ static Errors validate_relations_choosable_choice(
             continue;
         }
         errors.add_validation_error(
-            ValidationErrorCode::INVALID_ATTRIBUTE_VALUE, parent,
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
             fmt::format(
                 "Choice for '{}' cannot have '{}' as a group name since that is not a name specifying "
                 "choosable features.",
