@@ -23,7 +23,7 @@ public:
      * @brief Constructs a spell
      * @param spell_data the data to construct the spell from
      * @return the constructed spell
-     * @throws dnd::invalid_data if the data is invalid
+     * @throws invalid_data if the data is invalid
      */
     static Spell create(SpellData&& spell_data);
 

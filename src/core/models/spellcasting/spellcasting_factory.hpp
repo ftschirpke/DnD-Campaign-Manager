@@ -16,7 +16,7 @@ namespace dnd {
  * @brief Constructs a spellcasting object from the given data
  * @param data the data to construct the spellcasting object from
  * @return the constructed spellcasting object
- * @throws dnd::invalid_data if the data is invalid
+ * @throws invalid_data if the data is invalid
  */
 std::unique_ptr<Spellcasting> create_spellcasting(SpellcastingData&& data);
 

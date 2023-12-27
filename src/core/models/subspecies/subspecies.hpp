@@ -25,7 +25,7 @@ public:
      * @param data the data to construct the character subspecies from
      * @param content the content to use for the construction
      * @return the constructed character subspecies
-     * @throws dnd::invalid_data if the given data is invalid or is incompatible with the given content
+     * @throws invalid_data if the given data is invalid or is incompatible with the given content
      */
     static Subspecies create(SubspeciesData&& data, const Content& content);
 

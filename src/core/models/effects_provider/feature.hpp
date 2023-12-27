@@ -28,7 +28,7 @@ public:
      * @param data the data to construct the feature from
      * @param content the content to use for the construction
      * @return the constructed feature
-     * @throws dnd::invalid_data if the given data is invalid or is incompatible with the given content
+     * @throws invalid_data if the given data is invalid or is incompatible with the given content
      */
     static Feature create(FeatureData&& data, const Content& content);
 

@@ -28,7 +28,7 @@ public:
      * @param data the data to construct the character class from
      * @param content the content to use for the construction
      * @return the constructed character class
-     * @throws dnd::invalid_data if the given data is invalid or is incompatible with the given content
+     * @throws invalid_data if the given data is invalid or is incompatible with the given content
      */
     static Class create(ClassData&& data, const Content& content);
 

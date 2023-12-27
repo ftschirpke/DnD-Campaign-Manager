@@ -25,7 +25,7 @@ public:
      * @param data the data to construct the choice from
      * @param content the content to use for the construction
      * @return the constructed choice
-     * @throws dnd::invalid_data if the data is invalid or is incompatible with the given content
+     * @throws invalid_data if the data is invalid or is incompatible with the given content
      */
     static Choice create(ChoiceData&& data, const Content& content);
 

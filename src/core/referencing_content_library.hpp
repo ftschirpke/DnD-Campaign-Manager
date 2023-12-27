@@ -52,7 +52,7 @@ private:
 template <typename T>
 requires isContentPieceType<T>
 void ReferencingContentLibrary<T>::save_in_trie(const T* content_piece) {
-    std::string lower_name = dnd::string_lowercase_copy(content_piece->get_name());
+    std::string lower_name = string_lowercase_copy(content_piece->get_name());
 
     trie.insert(lower_name, content_piece);
     for (size_t i = 0; i < lower_name.size(); ++i) {

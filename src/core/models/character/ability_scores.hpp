@@ -14,7 +14,7 @@ public:
      * @brief Constructs an AbilityScores object
      * @param data the data to construct the AbilityScores object from
      * @return the constructed AbilityScores object
-     * @throws dnd::invalid_data if the given data is invalid
+     * @throws invalid_data if the given data is invalid
      */
     static AbilityScores create(AbilityScoresData&& data);
 
