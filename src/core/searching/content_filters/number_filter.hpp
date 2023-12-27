@@ -35,8 +35,6 @@ private:
     T value;
 };
 
-} // namespace dnd
-
 template <typename T>
 requires std::is_arithmetic_v<T>
 NumberFilter<T>::NumberFilter() noexcept : type(NumberFilterType::NONE), value(0) {}
@@ -108,5 +106,6 @@ bool NumberFilter<T>::matches(T number) const noexcept {
     }
 }
 
+} // namespace dnd
 
 #endif // NUMBER_FILTERING_HPP_

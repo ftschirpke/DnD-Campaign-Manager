@@ -52,11 +52,11 @@ private:
     std::vector<const ContentPiece*> search_results;
 };
 
-} // namespace dnd
-
 template <typename T>
 void AdvancedContentSearch::set_filter(T&& new_filter) {
     filter = std::move(new_filter);
 }
+
+} // namespace dnd
 
 #endif // ADVANCED_CONTENT_SEARCH_HPP_

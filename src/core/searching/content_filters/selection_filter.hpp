@@ -34,9 +34,6 @@ private:
     std::vector<T> values;
 };
 
-
-} // namespace dnd
-
 template <typename T>
 SelectionFilter<T>::SelectionFilter() noexcept : type(SelectionFilterType::NONE), values() {}
 
@@ -101,5 +98,7 @@ bool SelectionFilter<T>::matches(const T& selection) const noexcept {
             return false;
     }
 }
+
+} // namespace dnd
 
 #endif // SELECTION_FILTERING_HPP_
