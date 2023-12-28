@@ -11,6 +11,8 @@ namespace dnd {
 
 class ImportantLevels {
 public:
+    using Data = ImportantLevelsData;
+
     /**
      * @brief Constructs an ImportantLevels object from the given data and subclass level
      * @param data the data to construct the object from
@@ -18,7 +20,7 @@ public:
      * @return the constructed object
      * @throw invalid_data if the data is invalid or the subclass level is not between 1 and 20 (inclusive)
      */
-    static ImportantLevels create(ImportantLevelsData&& data, int subclass_level);
+    static ImportantLevels create(Data&& data, int subclass_level);
 
     const std::set<int>& get_feat_levels() const noexcept;
     int get_subclass_level() const noexcept;

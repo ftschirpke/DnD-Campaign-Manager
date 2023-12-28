@@ -20,7 +20,7 @@
 
 namespace dnd {
 
-Subclass Subclass::create(SubclassData&& data, const Content& content) {
+Subclass Subclass::create(Data&& data, const Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create character subclass from invalid data.");
     }
@@ -29,7 +29,7 @@ Subclass Subclass::create(SubclassData&& data, const Content& content) {
     }
     std::vector<ClassFeature> features;
     features.reserve(data.features_data.size());
-    for (ClassFeatureData& feature_data : data.features_data) {
+    for (ClassFeature::Data& feature_data : data.features_data) {
         features.emplace_back(ClassFeature::create(std::move(feature_data), content));
     }
     const Class* cls = &content.get_classes().get(data.class_name).value().get();

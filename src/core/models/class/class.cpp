@@ -42,7 +42,7 @@ static int determine_subclass_level(const FeatureData& subclass_feature_data) {
     return 1;
 }
 
-Class Class::create(ClassData&& data, const Content& content) {
+Class Class::create(Data&& data, const Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create character class from invalid data.");
     }
@@ -55,7 +55,7 @@ Class Class::create(ClassData&& data, const Content& content) {
 
     std::vector<ClassFeature> features;
     features.reserve(data.features_data.size());
-    for (ClassFeatureData& feature_data : data.features_data) {
+    for (ClassFeature::Data& feature_data : data.features_data) {
         if (feature_data.name == data.subclass_feature_name) {
             subclass_level = determine_subclass_level(feature_data);
             features.emplace_back(ClassFeature::create(std::move(feature_data), content));
