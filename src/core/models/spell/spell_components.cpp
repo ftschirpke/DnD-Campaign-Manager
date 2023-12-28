@@ -14,7 +14,7 @@
 
 namespace dnd {
 
-SpellComponents SpellComponents::create(SpellComponentsData&& components_data) {
+SpellComponents SpellComponents::create(Data&& components_data) {
     if (!components_data.validate().ok()) {
         throw invalid_data("Cannot create SpellComponents from invalid data.");
     }

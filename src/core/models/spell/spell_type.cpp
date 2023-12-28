@@ -71,7 +71,7 @@ MagicSchool magic_school_from_name(std::string_view magic_school_name) {
     throw std::out_of_range(fmt::format("The magic school \"{}\" does not exist.", magic_school_name));
 }
 
-SpellType SpellType::create(SpellTypeData&& type_data) {
+SpellType SpellType::create(Data&& type_data) {
     if (!type_data.validate().ok()) {
         throw invalid_data("Cannot create SpellType from invalid data.");
     }

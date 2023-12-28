@@ -16,7 +16,7 @@
 
 namespace dnd {
 
-Spell Spell::create(SpellData&& spell_data) {
+Spell Spell::create(Data&& spell_data) {
     if (!spell_data.validate().ok()) {
         throw invalid_data("Cannot create Spell from invalid data.");
     }

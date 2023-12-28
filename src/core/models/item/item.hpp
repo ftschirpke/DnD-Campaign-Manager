@@ -16,13 +16,15 @@ class ContentVisitor;
 
 class Item : public ContentPiece {
 public:
+    using Data = ItemData;
+
     /**
      * @brief Constructs an item
      * @param item_data the data to construct the item from
      * @return the constructed item
      * @throws invalid_data if the data is invalid
      */
-    static Item create(ItemData&& item_data);
+    static Item create(Data&& item_data);
 
     const std::string& get_name() const noexcept override;
     const std::string& get_description() const noexcept override;

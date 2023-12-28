@@ -42,43 +42,26 @@ enum class MagicSchool {
     TRANSMUTATION
 };
 
-/**
- * @brief Returns whether or not the given string is a valid magic school name
- * @param magic_school_name the name of the magic school
- * @return "true" if the given string is a valid magic school name, "false" otherwise
- */
 bool is_magic_school(const std::string& magic_school_name);
-/**
- * @brief Returns whether or not the given string is a valid magic school name
- * @param magic_school_name the name of the magic school
- * @return "true" if the given string is a valid magic school name, "false" otherwise
- */
 bool is_magic_school(std::string_view magic_school_name);
 /**
- * @brief Returns the name of the given magic school
- * @param magic_school the magic school value
- * @return the name of the given magic school
  * @throws std::out_of_range if no magic school with that value exists
  */
 std::string_view magic_school_name(MagicSchool magic_school);
 /**
- * @brief Returns the magic school given its name
- * @param magic_school_name the name of the magic school
- * @return the name of the magic school with the given name
  * @throws std::out_of_range if no magic school with that name exists
  */
 MagicSchool magic_school_from_name(const std::string& magic_school_name);
 /**
- * @brief Returns the magic school given its name
- * @param magic_school_name the name of the magic school
- * @return the name of the magic school with the given name
  * @throws std::out_of_range if no magic school with that name exists
  */
 MagicSchool magic_school_from_name(std::string_view magic_school_name);
 
 class SpellType {
 public:
-    static SpellType create(SpellTypeData&& type_data);
+    using Data = SpellTypeData;
+
+    static SpellType create(Data&& type_data);
 
     SpellType(SpellLevel spell_level, MagicSchool magic_school, bool is_ritual) noexcept;
 
