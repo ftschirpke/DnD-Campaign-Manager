@@ -20,6 +20,8 @@ class EffectsData;
 
 class Choice {
 public:
+    using Data = ChoiceData;
+
     /**
      * @brief Constructs a choice from the given data and content
      * @param data the data to construct the choice from
@@ -27,7 +29,7 @@ public:
      * @return the constructed choice
      * @throws invalid_data if the data is invalid or is incompatible with the given content
      */
-    static Choice create(ChoiceData&& data, const Content& content);
+    static Choice create_for(Data&& data, const Content& content);
 
     const std::string& get_attribute_name() const noexcept;
     int get_amount() const noexcept;

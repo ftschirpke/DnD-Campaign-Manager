@@ -6,6 +6,8 @@
 #include <map>
 #include <string>
 
+#include <core/validation/basic_mechanics/dice_data.hpp>
+
 namespace dnd {
 
 /**
@@ -25,6 +27,8 @@ class DiceData;
 
 class Dice {
 public:
+    using Data = DiceData;
+
     /**
      * @brief Constructs a dice object with one die of the given type
      * @param dice_type the type of die to construct the dice object with
@@ -71,7 +75,7 @@ public:
      * @return the constructed dice object
      * @throw invalid_data if the data is invalid
      */
-    static Dice create(DiceData&& data);
+    static Dice create(Data&& data);
 
     Dice(std::map<DiceType, int> dice_counts);
     Dice(std::map<DiceType, int> dice_counts, int modifier);

@@ -22,6 +22,8 @@ class ContentVisitor;
 
 class Subclass : public ContentPiece {
 public:
+    using Data = SubclassData;
+
     /**
      * @brief Constructs a character subclass from the given data and content
      * @param data the data to construct the character subclass from
@@ -29,7 +31,7 @@ public:
      * @return the constructed character subclass
      * @throws invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static Subclass create(SubclassData&& data, const Content& content);
+    static Subclass create_for(Data&& data, const Content& content);
 
     Subclass(const Subclass&) = delete;
     Subclass& operator=(const Subclass&) = delete;

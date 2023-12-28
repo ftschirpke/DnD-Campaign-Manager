@@ -17,6 +17,8 @@ class Content;
  */
 class RIVHolder {
 public:
+    using Data = RIVHolderData;
+
     /**
      * @brief Constructs a RIVHolder from the given data and content
      * @param data the data to construct the RIVHolder from
@@ -24,7 +26,7 @@ public:
      * @return the constructed RIVHolder
      * @throws invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static RIVHolder create(RIVHolderData&& data, const Content& content);
+    static RIVHolder create_for(Data&& data, const Content& content);
 
     const std::vector<std::string>& get_damage_resistances() const noexcept;
     const std::vector<std::string>& get_damage_immunities() const noexcept;

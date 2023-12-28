@@ -19,6 +19,8 @@ class ContentVisitor;
 
 class Species : public ContentPiece {
 public:
+    using Data = SpeciesData;
+
     /**
      * @brief Constructs a character species from the given data and content
      * @param data the data to construct the character species from
@@ -26,7 +28,7 @@ public:
      * @return the constructed character species
      * @throws invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static Species create(SpeciesData&& data, const Content& content);
+    static Species create_for(Data&& data, const Content& content);
 
     Species(const Species&) = delete;
     Species& operator=(const Species&) = delete;

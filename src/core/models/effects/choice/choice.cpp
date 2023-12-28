@@ -24,7 +24,6 @@
 
 namespace dnd {
 
-
 static constexpr const char* cantrip_filter_regex_cstr = "(([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|"
                                                          "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation) )?"
                                                          "(([a-zA-Z][a-z]*) )?[cC]antrips";
@@ -102,7 +101,7 @@ static std::vector<std::unique_ptr<ContentFilter>> spell_filters(ChoiceData& dat
     return filters;
 }
 
-Choice Choice::create(ChoiceData&& data, const Content& content) {
+Choice Choice::create_for(Data&& data, const Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create choice from invalid data.");
     }

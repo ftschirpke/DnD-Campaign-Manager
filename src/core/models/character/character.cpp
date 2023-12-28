@@ -26,7 +26,7 @@
 
 namespace dnd {
 
-Character Character::create(CharacterData&& data, const Content& content) {
+Character Character::create_for(Data&& data, const Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create character from invalid data.");
     }
@@ -36,17 +36,17 @@ Character Character::create(CharacterData&& data, const Content& content) {
 
     std::vector<Feature> features;
     features.reserve(data.features_data.size());
-    for (FeatureData& feature_data : data.features_data) {
-        features.emplace_back(Feature::create(std::move(feature_data), content));
+    for (Feature::Data& feature_data : data.features_data) {
+        features.emplace_back(Feature::create_for(std::move(feature_data), content));
     }
 
     AbilityScores base_ability_scores = AbilityScores::create(std::move(data.base_ability_scores_data));
-    FeatureProviders feature_providers = FeatureProviders::create(std::move(data.feature_providers_data), content);
+    FeatureProviders feature_providers = FeatureProviders::create_for(std::move(data.feature_providers_data), content);
     Progression progression = Progression::create(std::move(data.progression_data));
 
     std::vector<Decision> decisions;
-    for (DecisionData& decision_data : data.decisions_data) {
-        decisions.emplace_back(Decision::create(std::move(decision_data), content));
+    for (Decision::Data& decision_data : data.decisions_data) {
+        decisions.emplace_back(Decision::create_for(std::move(decision_data), content));
     }
 
     return Character(

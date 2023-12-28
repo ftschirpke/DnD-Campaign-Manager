@@ -137,7 +137,7 @@ Errors CharacterParser::validate(const Content& content) const {
 }
 
 void CharacterParser::save_result(Content& content) {
-    content.add_character(Character::create(std::move(data), content));
+    content.add_character(Character::create_for(std::move(data), content));
 }
 
 Errors CharacterParser::parse_decision(nlohmann::ordered_json&& decision_json, DecisionData& decision_data) const {

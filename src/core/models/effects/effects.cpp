@@ -27,7 +27,7 @@
 
 namespace dnd {
 
-Effects Effects::create(EffectsData&& data, const Content& content) {
+Effects Effects::create_for(Data&& data, const Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create effects from invalid data.");
     }
@@ -42,7 +42,7 @@ Effects Effects::create(EffectsData&& data, const Content& content) {
     std::vector<Choice> choices;
     choices.reserve(data.choices_data.size());
     for (ChoiceData& choice_data : data.choices_data) {
-        choices.emplace_back(Choice::create(std::move(choice_data), content));
+        choices.emplace_back(Choice::create_for(std::move(choice_data), content));
     }
     std::vector<std::unique_ptr<StatChange>> stat_changes;
     stat_changes.reserve(data.stat_changes_data.size());
@@ -52,9 +52,9 @@ Effects Effects::create(EffectsData&& data, const Content& content) {
     return Effects(
         std::move(activation_conditions), std::move(choices), std::move(stat_changes),
         ActionHolder::create(std::move(data.action_holder_data)),
-        ExtraSpellsHolder::create(std::move(data.extra_spells_holder_data), content),
-        ProficiencyHolder::create(std::move(data.proficiency_holder_data), content),
-        RIVHolder::create(std::move(data.riv_holder_data), content)
+        ExtraSpellsHolder::create_for(std::move(data.extra_spells_holder_data), content),
+        ProficiencyHolder::create_for(std::move(data.proficiency_holder_data), content),
+        RIVHolder::create_for(std::move(data.riv_holder_data), content)
     );
 }
 

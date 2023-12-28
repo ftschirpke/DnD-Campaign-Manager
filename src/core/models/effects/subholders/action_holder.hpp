@@ -15,13 +15,15 @@ namespace dnd {
  */
 class ActionHolder {
 public:
+    using Data = ActionHolderData;
+
     /**
      * @brief Constructs an ActionHolder from the given data
      * @param data the data to construct the ActionHolder from
      * @return the constructed ActionHolder
      * @throws invalid_data if the given data is invalid
      */
-    static ActionHolder create(ActionHolderData&& data);
+    static ActionHolder create(Data&& data);
 
     const std::map<std::string, std::string>& get_actions() const noexcept;
     const std::map<std::string, std::string>& get_bonus_actions() const noexcept;

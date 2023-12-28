@@ -18,7 +18,7 @@
 
 namespace dnd {
 
-std::unique_ptr<Condition> create_condition(ConditionData&& condition_data) {
+std::unique_ptr<Condition> create_condition(Condition::Data&& condition_data) {
     if (!condition_data.validate().ok()) {
         throw invalid_data("Cannot create condition from invalid data.");
     }

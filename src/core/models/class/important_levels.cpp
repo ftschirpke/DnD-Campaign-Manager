@@ -10,10 +10,11 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
+#include <core/validation/class/important_levels_data.hpp>
 
 namespace dnd {
 
-ImportantLevels ImportantLevels::create(ImportantLevelsData&& data, int subclass_level) {
+ImportantLevels ImportantLevels::create(Data&& data, int subclass_level) {
     if (subclass_level <= 0 || subclass_level > 20) {
         throw invalid_data(
             "Cannot create important levels object with a subclass level that is not between 1 and 20 (inclusive)."

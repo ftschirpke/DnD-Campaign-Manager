@@ -14,7 +14,7 @@
 
 namespace dnd {
 
-Item Item::create(ItemData&& item_data) {
+Item Item::create(Data&& item_data) {
     if (!item_data.validate().ok()) {
         throw invalid_data("Cannot create Item from invalid data.");
     }

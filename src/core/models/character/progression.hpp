@@ -13,13 +13,15 @@ class Content;
 
 class Progression {
 public:
+    using Data = ProgressionData;
+
     /**
      * @brief Constructs a Progression object
      * @param data the data to construct the Progression object from
      * @return the constructed Progression object
      * @throws invalid_data if the given data is invalid
      */
-    static Progression create(ProgressionData&& data);
+    static Progression create(Data&& data);
 
     int get_level() const noexcept;
     int get_xp() const noexcept;

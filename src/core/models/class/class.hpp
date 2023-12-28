@@ -23,6 +23,8 @@ class ContentVisitor;
 
 class Class : public ContentPiece {
 public:
+    using Data = ClassData;
+
     /**
      * @brief Constructs a character class from the given data and content
      * @param data the data to construct the character class from
@@ -30,7 +32,7 @@ public:
      * @return the constructed character class
      * @throws invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static Class create(ClassData&& data, const Content& content);
+    static Class create_for(Data&& data, const Content& content);
 
     Class(const Class&) = delete;
     Class& operator=(const Class&) = delete;

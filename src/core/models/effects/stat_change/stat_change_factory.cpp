@@ -19,7 +19,7 @@
 
 namespace dnd {
 
-std::unique_ptr<StatChange> create_stat_change(StatChangeData&& stat_change_data) {
+std::unique_ptr<StatChange> create_stat_change(StatChange::Data&& stat_change_data) {
     if (!stat_change_data.validate().ok()) {
         throw invalid_data("Cannot create stat_change from invalid data.");
     }

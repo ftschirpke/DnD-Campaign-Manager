@@ -53,7 +53,7 @@ Errors SubspeciesParser::validate(const Content& content) const {
 }
 
 void SubspeciesParser::save_result(Content& content) {
-    content.add_subspecies(Subspecies::create(std::move(data), content));
+    content.add_subspecies(Subspecies::create_for(std::move(data), content));
 }
 
 } // namespace dnd

@@ -16,7 +16,7 @@ namespace dnd {
  * @return the constructed stat change
  * @throw invalid_data if the data is invalid
  */
-std::unique_ptr<StatChange> create_stat_change(StatChangeData&& stat_change_data);
+std::unique_ptr<StatChange> create_stat_change(StatChange::Data&& stat_change_data);
 
 } // namespace dnd
 

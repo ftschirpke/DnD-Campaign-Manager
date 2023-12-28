@@ -18,7 +18,7 @@
 
 namespace dnd {
 
-ClassFeature ClassFeature::create(ClassFeatureData&& data, const Content& content) {
+ClassFeature ClassFeature::create_for(Data&& data, const Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create class feature from invalid data.");
     }
@@ -26,7 +26,7 @@ ClassFeature ClassFeature::create(ClassFeatureData&& data, const Content& conten
         throw invalid_data("ClassFeature data is incompatible with the given content.");
     }
 
-    Effects main_effects = Effects::create(std::move(data.main_effects_data), content);
+    Effects main_effects = Effects::create_for(std::move(data.main_effects_data), content);
 
     if (data.higher_level_effects_data.empty()) {
         return ClassFeature(
@@ -37,7 +37,7 @@ ClassFeature ClassFeature::create(ClassFeatureData&& data, const Content& conten
 
     std::map<int, Effects> higher_level_effects;
     for (auto& [level, effects_data] : data.higher_level_effects_data) {
-        higher_level_effects.emplace(level, Effects::create(std::move(effects_data), content));
+        higher_level_effects.emplace(level, Effects::create_for(std::move(effects_data), content));
     }
     return ClassFeature(
         std::move(data.name), std::move(data.description), std::move(data.source_path), data.level,

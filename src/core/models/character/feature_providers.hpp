@@ -19,6 +19,8 @@ class Subclass;
 
 class FeatureProviders {
 public:
+    using Data = FeatureProvidersData;
+
     /**
      * @brief Constructs a FeatureProviders object
      * @param data the data to construct the FeatureProviders object from
@@ -26,7 +28,7 @@ public:
      * @return the constructed FeatureProviders object
      * @throws invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static FeatureProviders create(FeatureProvidersData&& data, const Content& content);
+    static FeatureProviders create_for(Data&& data, const Content& content);
 
     const Species& get_species() const noexcept;
     OptCRef<Subspecies> get_subspecies() const noexcept;

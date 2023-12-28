@@ -24,6 +24,8 @@ namespace dnd {
  */
 class Effects {
 public:
+    using Data = EffectsData;
+
     /**
      * @brief Constructs an Effects object from the given data
      * @param data the data to construct the Effects object from
@@ -31,7 +33,7 @@ public:
      * @return the constructed Effects object
      * @throws invalid_data if the data is invalid or is incompatible with the given content
      */
-    static Effects create(EffectsData&& data, const Content& content);
+    static Effects create_for(Data&& data, const Content& content);
 
     /**
      * @brief Constructs an Effects object

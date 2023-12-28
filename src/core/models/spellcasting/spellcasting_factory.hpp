@@ -18,7 +18,7 @@ namespace dnd {
  * @return the constructed spellcasting object
  * @throws invalid_data if the data is invalid
  */
-std::unique_ptr<Spellcasting> create_spellcasting(SpellcastingData&& data);
+std::unique_ptr<Spellcasting> create_spellcasting(Spellcasting::Data&& data);
 
 } // namespace dnd
 

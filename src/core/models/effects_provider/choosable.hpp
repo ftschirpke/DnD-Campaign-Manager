@@ -24,6 +24,8 @@ class ContentVisitor;
  */
 class Choosable : public ContentPiece, public EffectsProvider {
 public:
+    using Data = ChoosableData;
+
     /**
      * @brief Constructs a choosable from the given data and content
      * @param data the data to construct the choosable feature from
@@ -31,7 +33,7 @@ public:
      * @return the constructed choosable feature
      * @throws invalid_data if the data is invalid or is incompatible with the given content
      */
-    static Choosable create(ChoosableData&& data, const Content& content);
+    static Choosable create_for(Data&& data, const Content& content);
 
     Choosable(const Choosable&) = delete;
     Choosable& operator=(const Choosable&) = delete;

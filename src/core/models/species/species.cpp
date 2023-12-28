@@ -16,7 +16,7 @@
 
 namespace dnd {
 
-Species Species::create(SpeciesData&& data, const Content& content) {
+Species Species::create_for(Data&& data, const Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create character species from invalid data.");
     }
@@ -25,8 +25,8 @@ Species Species::create(SpeciesData&& data, const Content& content) {
     }
     std::vector<Feature> features;
     features.reserve(data.features_data.size());
-    for (FeatureData& feature_data : data.features_data) {
-        features.emplace_back(Feature::create(std::move(feature_data), content));
+    for (Feature::Data& feature_data : data.features_data) {
+        features.emplace_back(Feature::create_for(std::move(feature_data), content));
     }
     return Species(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(features),

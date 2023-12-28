@@ -54,6 +54,8 @@ Errors SpeciesParser::validate(const Content& content) const {
     return errors;
 }
 
-void SpeciesParser::save_result(Content& content) { content.add_species(Species::create(std::move(data), content)); }
+void SpeciesParser::save_result(Content& content) {
+    content.add_species(Species::create_for(std::move(data), content));
+}
 
 } // namespace dnd

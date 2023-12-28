@@ -8,10 +8,14 @@
 #include <string_view>
 #include <unordered_map>
 
+#include <core/validation/effects/condition/condition_data.hpp>
+
 namespace dnd {
 
 class Condition {
 public:
+    using Data = ConditionData;
+
     virtual ~Condition() noexcept = default;
     /**
      * @brief Evaluates the condition for given attributes and constants

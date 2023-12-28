@@ -12,7 +12,7 @@ namespace dnd {
 
 static int calculate_modifier(int score) noexcept { return score / 2 - 5; }
 
-AbilityScores AbilityScores::create(AbilityScoresData&& data) {
+AbilityScores AbilityScores::create(Data&& data) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create ability scores from invalid data.");
     }

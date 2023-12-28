@@ -16,7 +16,7 @@
 
 namespace dnd {
 
-Feature Feature::create(FeatureData&& data, const Content& content) {
+Feature Feature::create_for(Data&& data, const Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create feature from invalid data.");
     }
@@ -24,7 +24,7 @@ Feature Feature::create(FeatureData&& data, const Content& content) {
         throw invalid_data("Feature data is incompatible with the given content.");
     }
 
-    Effects main_part = Effects::create(std::move(data.main_effects_data), content);
+    Effects main_part = Effects::create_for(std::move(data.main_effects_data), content);
     return Feature(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(main_part)
     );
