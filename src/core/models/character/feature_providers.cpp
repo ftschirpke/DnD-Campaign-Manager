@@ -16,7 +16,7 @@
 
 namespace dnd {
 
-FeatureProviders FeatureProviders::create(FeatureProvidersData&& data, const Content& content) {
+FeatureProviders FeatureProviders::create(Data&& data, const Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create FeatureProviders object from invalid data.");
     }

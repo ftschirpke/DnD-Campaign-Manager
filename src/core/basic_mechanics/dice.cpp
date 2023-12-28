@@ -115,7 +115,7 @@ Dice Dice::from_string(std::string&& str) {
     return Dice(dice_counts, modifier);
 }
 
-Dice Dice::create(DiceData&& data) {
+Dice Dice::create(Data&& data) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create dice from invalid data.");
     }

@@ -10,14 +10,15 @@ namespace dnd {
 
 class AbilityScores {
 public:
+    using Data = AbilityScoresData;
+
     /**
      * @brief Constructs an AbilityScores object
      * @param data the data to construct the AbilityScores object from
      * @return the constructed AbilityScores object
      * @throws invalid_data if the given data is invalid
      */
-    static AbilityScores create(AbilityScoresData&& data);
-
+    static AbilityScores create(Data&& data);
 
     int get(Ability ability) const noexcept;
     int get_strength() const noexcept;

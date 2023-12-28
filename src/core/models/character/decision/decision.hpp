@@ -15,6 +15,8 @@ class Content;
  */
 class Decision {
 public:
+    using Data = DecisionData;
+
     /**
      * @brief Constructs a decision from the given data and content
      * @param data the data to construct the decision from
@@ -22,7 +24,7 @@ public:
      * @return the constructed decision
      * @throws invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static Decision create(DecisionData&& data, const Content& content);
+    static Decision create(Data&& data, const Content& content);
 
     Decision(const Decision&) = delete;
     Decision& operator=(const Decision&) = delete;
