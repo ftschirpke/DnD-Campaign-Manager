@@ -24,7 +24,7 @@ static std::vector<const Spell*> find_spells_in_content(
     return spells;
 }
 
-ExtraSpellsHolder ExtraSpellsHolder::create(ExtraSpellsHolderData&& data, const Content& content) {
+ExtraSpellsHolder ExtraSpellsHolder::create(Data&& data, const Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create ExtraSpellsHolderData from invalid data.");
     }

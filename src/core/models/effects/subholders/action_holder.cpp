@@ -11,7 +11,7 @@
 
 namespace dnd {
 
-ActionHolder ActionHolder::create(ActionHolderData&& data) {
+ActionHolder ActionHolder::create(Data&& data) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create ActionHolder from invalid data.");
     }

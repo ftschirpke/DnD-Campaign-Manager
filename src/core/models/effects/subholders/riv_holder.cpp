@@ -23,7 +23,7 @@ static std::vector<std::string> set_to_vector(std::set<std::string>&& set) {
     return vector;
 }
 
-RIVHolder RIVHolder::create(RIVHolderData&& data, const Content& content) {
+RIVHolder RIVHolder::create(Data&& data, const Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create RIVHolder from invalid data.");
     }

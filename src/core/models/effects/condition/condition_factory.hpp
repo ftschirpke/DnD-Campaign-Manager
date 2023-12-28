@@ -18,7 +18,7 @@ namespace dnd {
  * @return the constructed condition
  * @throws invalid_data if the data is invalid
  */
-std::unique_ptr<Condition> create_condition(ConditionData&& condition_data);
+std::unique_ptr<Condition> create_condition(Condition::Data&& condition_data);
 
 } // namespace dnd
 
