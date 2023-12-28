@@ -32,7 +32,7 @@ public:
      * @return the constructed character class
      * @throws invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static Class create(Data&& data, const Content& content);
+    static Class create_for(Data&& data, const Content& content);
 
     Class(const Class&) = delete;
     Class& operator=(const Class&) = delete;

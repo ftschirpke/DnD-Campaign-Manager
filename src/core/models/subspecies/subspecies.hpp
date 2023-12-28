@@ -20,6 +20,8 @@ class ContentVisitor;
 
 class Subspecies : public ContentPiece {
 public:
+    using Data = SubspeciesData;
+
     /**
      * @brief Constructs a character subspecies from the given data and content
      * @param data the data to construct the character subspecies from
@@ -27,7 +29,7 @@ public:
      * @return the constructed character subspecies
      * @throws invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static Subspecies create(SubspeciesData&& data, const Content& content);
+    static Subspecies create_for(Data&& data, const Content& content);
 
     Subspecies(const Subspecies&) = delete;
     Subspecies& operator=(const Subspecies&) = delete;

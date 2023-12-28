@@ -21,7 +21,7 @@ static void ins(std::set<std::string>& set, std::vector<std::string>&& vec) {
     set.insert(std::make_move_iterator(vec.begin()), std::make_move_iterator(vec.end()));
 }
 
-Decision Decision::create(Data&& data, const Content& content) {
+Decision Decision::create_for(Data&& data, const Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create Decision from invalid data.");
     }

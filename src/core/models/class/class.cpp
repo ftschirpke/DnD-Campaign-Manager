@@ -42,7 +42,7 @@ static int determine_subclass_level(const FeatureData& subclass_feature_data) {
     return 1;
 }
 
-Class Class::create(Data&& data, const Content& content) {
+Class Class::create_for(Data&& data, const Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create character class from invalid data.");
     }

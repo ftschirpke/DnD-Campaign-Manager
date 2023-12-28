@@ -36,7 +36,7 @@ public:
      * @return the constructed character
      * @throws invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static Character create(Data&& data, const Content& content);
+    static Character create_for(Data&& data, const Content& content);
 
     Character(const Character&) = delete;
     Character& operator=(const Character&) = delete;
