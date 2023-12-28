@@ -27,7 +27,7 @@
 
 namespace dnd {
 
-Effects Effects::create(EffectsData&& data, const Content& content) {
+Effects Effects::create_for(Data&& data, const Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create effects from invalid data.");
     }

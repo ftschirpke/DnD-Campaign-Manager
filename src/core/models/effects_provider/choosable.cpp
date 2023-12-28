@@ -16,7 +16,7 @@
 
 namespace dnd {
 
-Choosable Choosable::create(ChoosableData&& data, const Content& content) {
+Choosable Choosable::create_for(Data&& data, const Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create choosable feature from invalid data");
     }

@@ -18,7 +18,7 @@
 
 namespace dnd {
 
-ClassFeature ClassFeature::create(ClassFeatureData&& data, const Content& content) {
+ClassFeature ClassFeature::create_for(Data&& data, const Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create class feature from invalid data.");
     }

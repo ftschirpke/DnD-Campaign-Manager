@@ -16,7 +16,7 @@
 
 namespace dnd {
 
-Feature Feature::create(FeatureData&& data, const Content& content) {
+Feature Feature::create_for(Data&& data, const Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create feature from invalid data.");
     }

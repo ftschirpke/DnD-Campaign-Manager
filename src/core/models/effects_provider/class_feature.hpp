@@ -24,6 +24,8 @@ class ContentVisitor;
  */
 class ClassFeature : public Feature {
 public:
+    using Data = ClassFeatureData;
+
     /**
      * @brief Constructs a feature from the given data and content
      * @param data the data to construct the feature from
@@ -31,7 +33,7 @@ public:
      * @return the constructed feature
      * @throws invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static ClassFeature create(ClassFeatureData&& data, const Content& content);
+    static ClassFeature create_for(Data&& data, const Content& content);
 
     ClassFeature(const ClassFeature&) = delete;
     ClassFeature& operator=(const ClassFeature&) = delete;
