@@ -26,7 +26,7 @@ Species Species::create_for(Data&& data, const Content& content) {
     std::vector<Feature> features;
     features.reserve(data.features_data.size());
     for (Feature::Data& feature_data : data.features_data) {
-        features.emplace_back(Feature::create(std::move(feature_data), content));
+        features.emplace_back(Feature::create_for(std::move(feature_data), content));
     }
     return Species(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(features),

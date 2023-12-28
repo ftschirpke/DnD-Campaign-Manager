@@ -9,7 +9,7 @@
 
 namespace dnd {
 
-Progression Progression::create_for(Data&& data) {
+Progression Progression::create(Data&& data) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create Progression object from invalid data.");
     }

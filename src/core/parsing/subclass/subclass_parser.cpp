@@ -100,6 +100,8 @@ Errors SubclassParser::validate(const Content& content) const {
     return errors;
 }
 
-void SubclassParser::save_result(Content& content) { content.add_subclass(Subclass::create(std::move(data), content)); }
+void SubclassParser::save_result(Content& content) {
+    content.add_subclass(Subclass::create_for(std::move(data), content));
+}
 
 } // namespace dnd

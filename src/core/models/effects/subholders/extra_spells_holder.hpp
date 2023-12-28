@@ -26,7 +26,7 @@ public:
      * @return the constructed ExtraSpellsHolder
      * @throws invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static ExtraSpellsHolder create(Data&& data, const Content& content);
+    static ExtraSpellsHolder create_for(Data&& data, const Content& content);
 
     /**
      * @brief Returns the cantrips that do not count against the number of cantrips known

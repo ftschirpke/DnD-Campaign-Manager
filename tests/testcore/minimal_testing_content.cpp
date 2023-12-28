@@ -91,7 +91,7 @@ static void add_classes(Content& content) {
     class_data.important_levels_data.feat_levels = {4, 8, 12, 16, 19};
     assert(class_data.validate().ok());
     assert(class_data.validate_relations(content).ok());
-    content.add_class(Class::create(std::move(class_data), content));
+    content.add_class(Class::create_for(std::move(class_data), content));
 
     ClassData class_data2;
     set_valid_mock_values(class_data2, "Rogue");
@@ -103,7 +103,7 @@ static void add_classes(Content& content) {
     class_data2.important_levels_data.feat_levels = {4, 8, 12, 16, 19};
     assert(class_data2.validate().ok());
     assert(class_data2.validate_relations(content).ok());
-    content.add_class(Class::create(std::move(class_data2), content));
+    content.add_class(Class::create_for(std::move(class_data2), content));
 
     SubclassData subclass_data;
     set_valid_mock_values(subclass_data, "Abjuration Wizard");
@@ -113,7 +113,7 @@ static void add_classes(Content& content) {
     subclass_data.class_name = "Wizard";
     assert(subclass_data.validate().ok());
     assert(subclass_data.validate_relations(content).ok());
-    content.add_subclass(Subclass::create(std::move(subclass_data), content));
+    content.add_subclass(Subclass::create_for(std::move(subclass_data), content));
 
     SubclassData subclass_data2;
     set_valid_mock_values(subclass_data2, "Assassin");
@@ -123,7 +123,7 @@ static void add_classes(Content& content) {
     subclass_data2.class_name = "Rogue";
     assert(subclass_data2.validate().ok());
     assert(subclass_data2.validate_relations(content).ok());
-    content.add_subclass(Subclass::create(std::move(subclass_data2), content));
+    content.add_subclass(Subclass::create_for(std::move(subclass_data2), content));
 }
 
 static void add_species(Content& content) {
@@ -134,7 +134,7 @@ static void add_species(Content& content) {
     species_data1.subspecies = true;
     assert(species_data1.validate().ok());
     assert(species_data1.validate_relations(content).ok());
-    content.add_species(Species::create(std::move(species_data1), content));
+    content.add_species(Species::create_for(std::move(species_data1), content));
 
     SpeciesData species_data2;
     set_valid_mock_values(species_data2, "Human");
@@ -143,7 +143,7 @@ static void add_species(Content& content) {
     species_data2.subspecies = false;
     assert(species_data2.validate().ok());
     assert(species_data2.validate_relations(content).ok());
-    content.add_species(Species::create(std::move(species_data2), content));
+    content.add_species(Species::create_for(std::move(species_data2), content));
 
     SpeciesData species_data3;
     set_valid_mock_values(species_data3, "Elf");
@@ -152,7 +152,7 @@ static void add_species(Content& content) {
     species_data3.subspecies = true;
     assert(species_data3.validate().ok());
     assert(species_data3.validate_relations(content).ok());
-    content.add_species(Species::create(std::move(species_data3), content));
+    content.add_species(Species::create_for(std::move(species_data3), content));
 
     SubspeciesData subspecies_data1;
     set_valid_mock_values(subspecies_data1, "Hill Dwarf");
@@ -161,7 +161,7 @@ static void add_species(Content& content) {
     subspecies_data1.species_name = "Dwarf";
     assert(subspecies_data1.validate().ok());
     assert(subspecies_data1.validate_relations(content).ok());
-    content.add_subspecies(Subspecies::create(std::move(subspecies_data1), content));
+    content.add_subspecies(Subspecies::create_for(std::move(subspecies_data1), content));
 
     SubspeciesData subspecies_data2;
     set_valid_mock_values(subspecies_data2, "High Elf");
@@ -170,7 +170,7 @@ static void add_species(Content& content) {
     subspecies_data2.species_name = "Elf";
     assert(subspecies_data2.validate().ok());
     assert(subspecies_data2.validate_relations(content).ok());
-    content.add_subspecies(Subspecies::create(std::move(subspecies_data2), content));
+    content.add_subspecies(Subspecies::create_for(std::move(subspecies_data2), content));
 }
 
 static void add_characters(Content& content) {
@@ -189,7 +189,7 @@ static void add_characters(Content& content) {
     character_data.progression_data.hit_dice_rolls = {6, 4, 2, 5};
     assert(character_data.validate().ok());
     assert(character_data.validate_relations(content).ok());
-    content.add_character(Character::create(std::move(character_data), content));
+    content.add_character(Character::create_for(std::move(character_data), content));
 }
 
 Content minimal_testing_content() {

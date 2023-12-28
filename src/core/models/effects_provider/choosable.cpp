@@ -29,7 +29,7 @@ Choosable Choosable::create_for(Data&& data, const Content& content) {
         prerequisites.emplace_back(create_condition(std::move(prerequisite_data)));
     }
 
-    Effects main_part = Effects::create(std::move(data.main_effects_data), content);
+    Effects main_part = Effects::create_for(std::move(data.main_effects_data), content);
     return Choosable(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.type),
         std::move(prerequisites), std::move(main_part)

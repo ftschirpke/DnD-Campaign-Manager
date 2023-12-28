@@ -103,6 +103,6 @@ Errors ClassParser::validate(const Content& content) const {
     return errors;
 }
 
-void ClassParser::save_result(Content& content) { content.add_class(Class::create(std::move(data), content)); }
+void ClassParser::save_result(Content& content) { content.add_class(Class::create_for(std::move(data), content)); }
 
 } // namespace dnd

@@ -71,7 +71,7 @@ void ChoosableGroupParser::save_result(Content& content) {
     for (size_t i = 0; i < data.size(); ++i) {
         if (feature_data_valid[i]) {
             snake_case_to_capitalized_spaced_words(data[i].type);
-            content.add_choosable(Choosable::create(std::move(data[i]), content));
+            content.add_choosable(Choosable::create_for(std::move(data[i]), content));
         }
     }
 }

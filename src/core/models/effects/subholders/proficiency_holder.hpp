@@ -26,7 +26,7 @@ public:
      * @return the constructed ProficiencyHolder
      * @throws invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static ProficiencyHolder create(Data&& data, const Content& content);
+    static ProficiencyHolder create_for(Data&& data, const Content& content);
 
     const std::vector<std::string>& get_armor_proficiencies() const noexcept;
     const std::vector<std::string>& get_weapon_proficiencies() const noexcept;

@@ -17,7 +17,7 @@
 
 namespace dnd {
 
-std::unique_ptr<Spellcasting> create_spellcasting(SpellcastingData&& data) {
+std::unique_ptr<Spellcasting> create_spellcasting(Spellcasting::Data&& data) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create spellcasting from invalid data.");
     }

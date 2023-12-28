@@ -21,7 +21,7 @@ static std::vector<std::string> set_to_vector(std::set<std::string>&& set) {
     return vector;
 }
 
-ProficiencyHolder ProficiencyHolder::create(Data&& data, const Content& content) {
+ProficiencyHolder ProficiencyHolder::create_for(Data&& data, const Content& content) {
     if (!data.validate().ok()) {
         throw invalid_data("Cannot create ProficiencyHolder from invalid data.");
     }

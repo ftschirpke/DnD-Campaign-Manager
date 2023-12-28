@@ -58,7 +58,7 @@ Decision Decision::create_for(Data&& data, const Content& content) {
     ins(res_data.riv_holder_data.damage_vulnerabilities, std::move(data.selections["damage_vulnerabilities"]));
     ins(res_data.riv_holder_data.condition_immunities, std::move(data.selections["condition_immunities"]));
 
-    return Decision(data.get_target(), Effects::create(std::move(res_data), content));
+    return Decision(data.get_target(), Effects::create_for(std::move(res_data), content));
 }
 
 const Effects* Decision::get_target() const noexcept { return target; }

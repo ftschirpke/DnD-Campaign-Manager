@@ -31,7 +31,7 @@ public:
      * @return the constructed character subclass
      * @throws invalid_data if the given data is invalid or is incompatible with the given content
      */
-    static Subclass create(Data&& data, const Content& content);
+    static Subclass create_for(Data&& data, const Content& content);
 
     Subclass(const Subclass&) = delete;
     Subclass& operator=(const Subclass&) = delete;

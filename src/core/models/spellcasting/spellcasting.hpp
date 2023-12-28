@@ -8,6 +8,8 @@
 
 #include <core/basic_mechanics/abilities.hpp>
 
+#include <core/validation/spellcasting/spellcasting_data.hpp>
+
 namespace dnd {
 
 /**
@@ -15,6 +17,8 @@ namespace dnd {
  */
 class Spellcasting {
 public:
+    using Data = SpellcastingData;
+
     virtual ~Spellcasting() noexcept = default;
 
     Ability get_ability() const noexcept;
