@@ -35,12 +35,26 @@ private:
 };
 
 // holds a result of an attempt to construct an object from data
+// it either holds the constructed object or the invalid data and the errors that caused it to be invalid
 template <typename T>
 using CreateResult = DataResult<T, typename T::Data>;
 
+template <typename T>
+CreateResult<T> ValidCreate(T&& output) noexcept;
+
+template <typename T>
+CreateResult<T> InvalidCreate(typename T::Data&& data, Errors&& errors) noexcept;
+
 // holds a result of an attempt to construct an object from data where the constructed object is polymorphic
+// it either holds the constructed object or the invalid data and the errors that caused it to be invalid
 template <typename T>
 using FactoryResult = DataResult<std::unique_ptr<T>, typename T::Data>;
+
+template <typename T>
+FactoryResult<T> ValidFactory(std::unique_ptr<T>&& output) noexcept;
+
+template <typename T>
+FactoryResult<T> InvalidFactory(typename T::Data&& data, Errors&& errors) noexcept;
 
 } // namespace dnd
 
