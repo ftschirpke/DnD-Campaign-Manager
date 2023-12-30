@@ -16,22 +16,26 @@
 
 namespace dnd {
 
-Species Species::create_for(Data&& data, const Content& content) {
-    if (!data.validate().ok()) {
-        throw invalid_data("Cannot create character species from invalid data.");
-    }
-    if (!data.validate_relations(content).ok()) {
-        throw invalid_data("Character species data is incompatible with the given content.");
+CreateResult<Species> Species::create_for(Data&& data, const Content& content) {
+    Errors errors = data.validate_nonrecursively();
+    errors += data.validate_relations_nonrecursively(content);
+    if (!errors.ok()) {
+        return InvalidCreate<Species>(std::move(data), std::move(errors));
     }
     std::vector<Feature> features;
     features.reserve(data.features_data.size());
     for (Feature::Data& feature_data : data.features_data) {
-        features.emplace_back(Feature::create_for(std::move(feature_data), content));
+        CreateResult<Feature> feature_result = Feature::create_for(std::move(feature_data), content);
+        if (!feature_result.is_valid()) {
+            auto [_, errors] = feature_result.data_and_errors();
+            return InvalidCreate<Species>(std::move(data), std::move(errors));
+        }
+        features.emplace_back(feature_result.value());
     }
-    return Species(
+    return ValidCreate(Species(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(features),
         data.subspecies
-    );
+    ));
 }
 
 const std::string& Species::get_name() const noexcept { return name; }
