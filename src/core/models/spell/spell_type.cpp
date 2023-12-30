@@ -71,9 +71,10 @@ MagicSchool magic_school_from_name(std::string_view magic_school_name) {
     throw std::out_of_range(fmt::format("The magic school \"{}\" does not exist.", magic_school_name));
 }
 
-SpellType SpellType::create(Data&& type_data) {
-    if (!type_data.validate().ok()) {
-        throw invalid_data("Cannot create SpellType from invalid data.");
+CreateResult<SpellType> SpellType::create(Data&& type_data) {
+    Errors errors = type_data.validate();
+    if (!errors.ok()) {
+        return InvalidCreate<SpellType>(std::move(type_data), std::move(errors));
     }
     bool is_ritual;
     SpellLevel level;
@@ -98,7 +99,7 @@ SpellType SpellType::create(Data&& type_data) {
     }
     string_lowercase_inplace(magic_school_str);
     magic_school = magic_school_from_name(magic_school_str);
-    return SpellType(level, magic_school, is_ritual);
+    return ValidCreate(SpellType(level, magic_school, is_ritual));
 }
 
 SpellType::SpellType(SpellLevel spell_level, MagicSchool magic_school, bool is_ritual) noexcept

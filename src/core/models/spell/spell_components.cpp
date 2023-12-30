@@ -14,9 +14,10 @@
 
 namespace dnd {
 
-SpellComponents SpellComponents::create(Data&& components_data) {
-    if (!components_data.validate().ok()) {
-        throw invalid_data("Cannot create SpellComponents from invalid data.");
+CreateResult<SpellComponents> SpellComponents::create(Data&& components_data) {
+    Errors errors = components_data.validate();
+    if (!errors.ok()) {
+        return InvalidCreate<SpellComponents>(std::move(components_data), std::move(errors));
     }
     bool verbal, somatic, material;
     std::string materials_needed;
@@ -39,14 +40,14 @@ SpellComponents SpellComponents::create(Data&& components_data) {
     } else {
         // this should never happen, if the validation is correct
         assert(false);
-        return SpellComponents(false, false, false, "");
+        return ValidCreate(SpellComponents(false, false, false, ""));
     }
     if (material) {
         materials_needed = components_data.str.substr(
             parentheses_idx + 2, components_data.str.size() - parentheses_idx - 3
         );
     }
-    return SpellComponents(verbal, somatic, material, std::move(materials_needed));
+    return ValidCreate(SpellComponents(verbal, somatic, material, std::move(materials_needed)));
 }
 
 SpellComponents::SpellComponents(

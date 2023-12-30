@@ -6,6 +6,7 @@
 #include <string>
 #include <string_view>
 
+#include <core/utils/data_result.hpp>
 #include <core/validation/spell/spell_type_data.hpp>
 
 namespace dnd {
@@ -61,7 +62,7 @@ class SpellType {
 public:
     using Data = SpellTypeData;
 
-    static SpellType create(Data&& type_data);
+    static CreateResult<SpellType> create(Data&& type_data);
 
     SpellType(SpellLevel spell_level, MagicSchool magic_school, bool is_ritual) noexcept;
 

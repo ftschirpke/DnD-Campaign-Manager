@@ -1,5 +1,6 @@
 #include <dnd_config.hpp>
 
+#include "core/utils/data_result.hpp"
 #include "spell.hpp"
 
 #include <filesystem>
@@ -16,19 +17,31 @@
 
 namespace dnd {
 
-Spell Spell::create(Data&& spell_data) {
-    if (!spell_data.validate().ok()) {
-        throw invalid_data("Cannot create Spell from invalid data.");
+CreateResult<Spell> Spell::create(Data&& spell_data) {
+    Errors errors = spell_data.validate_nonrecursively();
+    if (!errors.ok()) {
+        return InvalidCreate<Spell>(std::move(spell_data), std::move(errors));
     }
 
-    SpellComponents components = SpellComponents::create(std::move(spell_data.components_data));
-    SpellType type = SpellType::create(std::move(spell_data.type_data));
+    CreateResult<SpellComponents> components_result = SpellComponents::create(std::move(spell_data.components_data));
+    if (!components_result.is_valid()) {
+        auto [_, errors] = components_result.data_and_errors();
+        return InvalidCreate<Spell>(std::move(spell_data), std::move(errors));
+    }
+    SpellComponents components = components_result.value();
 
-    return Spell(
+    CreateResult<SpellType> type_result = SpellType::create(std::move(spell_data.type_data));
+    if (!type_result.is_valid()) {
+        auto [_, errors] = type_result.data_and_errors();
+        return InvalidCreate<Spell>(std::move(spell_data), std::move(errors));
+    }
+    SpellType type = type_result.value();
+
+    return ValidCreate(Spell(
         std::move(spell_data.name), std::move(spell_data.description), std::move(spell_data.source_path),
         std::move(components), std::move(type), std::move(spell_data.casting_time), std::move(spell_data.range),
         std::move(spell_data.duration), std::move(spell_data.classes)
-    );
+    ));
 }
 
 const std::string& Spell::get_name() const noexcept { return name; }
