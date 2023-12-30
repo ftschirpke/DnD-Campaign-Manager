@@ -13,17 +13,17 @@
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/source_info.hpp>
 #include <core/models/species/species.hpp>
+#include <core/utils/data_result.hpp>
 #include <core/validation/subspecies/subspecies_data.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
 namespace dnd {
 
-Subspecies Subspecies::create_for(Data&& data, const Content& content) {
-    if (!data.validate().ok()) {
-        throw invalid_data("Cannot create character subspecies from invalid data.");
-    }
-    if (!data.validate_relations(content).ok()) {
-        throw invalid_data("Character subspecies data is incompatible with the given content.");
+CreateResult<Subspecies> Subspecies::create_for(Data&& data, const Content& content) {
+    Errors errors = data.validate();
+    errors += data.validate_relations(content);
+    if (!errors.ok()) {
+        return InvalidCreate<Subspecies>(std::move(data), std::move(errors));
     }
     std::vector<Feature> features;
     features.reserve(data.features_data.size());
@@ -31,9 +31,9 @@ Subspecies Subspecies::create_for(Data&& data, const Content& content) {
         features.emplace_back(Feature::create_for(std::move(feature_data), content));
     }
     const Species* species = &content.get_species().get(data.species_name).value().get();
-    return Subspecies(
+    return ValidCreate(Subspecies(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(features), species
-    );
+    ));
 }
 
 const std::string& Subspecies::get_name() const noexcept { return name; }
