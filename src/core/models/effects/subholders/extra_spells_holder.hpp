@@ -5,6 +5,7 @@
 
 #include <vector>
 
+#include <core/utils/data_result.hpp>
 #include <core/validation/effects/subholders/extra_spells_holder_data.hpp>
 
 namespace dnd {
@@ -19,14 +20,7 @@ class ExtraSpellsHolder {
 public:
     using Data = ExtraSpellsHolderData;
 
-    /**
-     * @brief Constructs an ExtraSpellsHolder from the given data and content
-     * @param data the data to construct the ExtraSpellsHolder from
-     * @param content the content to use for the spells
-     * @return the constructed ExtraSpellsHolder
-     * @throws invalid_data if the given data is invalid or is incompatible with the given content
-     */
-    static ExtraSpellsHolder create_for(Data&& data, const Content& content);
+    static CreateResult<ExtraSpellsHolder> create_for(Data&& data, const Content& content);
 
     /**
      * @brief Returns the cantrips that do not count against the number of cantrips known

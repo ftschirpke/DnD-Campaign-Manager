@@ -6,6 +6,7 @@
 #include <map>
 #include <string>
 
+#include <core/utils/data_result.hpp>
 #include <core/validation/effects/subholders/action_holder_data.hpp>
 
 namespace dnd {
@@ -17,13 +18,7 @@ class ActionHolder {
 public:
     using Data = ActionHolderData;
 
-    /**
-     * @brief Constructs an ActionHolder from the given data
-     * @param data the data to construct the ActionHolder from
-     * @return the constructed ActionHolder
-     * @throws invalid_data if the given data is invalid
-     */
-    static ActionHolder create(Data&& data);
+    static CreateResult<ActionHolder> create(Data&& data);
 
     const std::map<std::string, std::string>& get_actions() const noexcept;
     const std::map<std::string, std::string>& get_bonus_actions() const noexcept;

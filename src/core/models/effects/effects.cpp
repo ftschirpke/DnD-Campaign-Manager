@@ -19,6 +19,7 @@
 #include <core/models/effects/subholders/extra_spells_holder.hpp>
 #include <core/models/effects/subholders/proficiency_holder.hpp>
 #include <core/models/effects/subholders/riv_holder.hpp>
+#include <core/utils/data_result.hpp>
 #include <core/validation/effects/effects_data.hpp>
 #include <core/validation/effects/subholders/action_holder_data.hpp>
 #include <core/validation/effects/subholders/extra_spells_holder_data.hpp>
@@ -28,34 +29,43 @@
 namespace dnd {
 
 Effects Effects::create_for(Data&& data, const Content& content) {
-    if (!data.validate().ok()) {
-        throw invalid_data("Cannot create effects from invalid data.");
-    }
-    if (!data.validate_relations(content).ok()) {
-        throw invalid_data("Effects data is incompatible with the given content.");
-    }
     std::vector<std::unique_ptr<Condition>> activation_conditions;
     activation_conditions.reserve(data.activation_conditions_data.size());
     for (ConditionData& condition_data : data.activation_conditions_data) {
-        activation_conditions.emplace_back(create_condition(std::move(condition_data)));
+        FactoryResult<Condition> condition_result = create_condition(std::move(condition_data));
+        if (!condition_result.is_valid()) {
+            auto [_, errors] = condition_result.data_and_errors();
+            return InvalidCreate<Effects>(std::move(data), std::move(errors));
+        }
+        activation_conditions.emplace_back(condition_result.value());
     }
     std::vector<Choice> choices;
     choices.reserve(data.choices_data.size());
     for (ChoiceData& choice_data : data.choices_data) {
-        choices.emplace_back(Choice::create_for(std::move(choice_data), content));
+        CreateResult<Choice> choice_result = Choice::create_for(std::move(choice_data), content);
+        if (!choice_result.is_valid()) {
+            auto [_, errors] = choice_result.data_and_errors();
+            return InvalidCreate<Effects>(std::move(data), std::move(errors));
+        }
+        choices.emplace_back(choice_result.value());
     }
     std::vector<std::unique_ptr<StatChange>> stat_changes;
     stat_changes.reserve(data.stat_changes_data.size());
     for (StatChangeData& stat_change_data : data.stat_changes_data) {
-        stat_changes.emplace_back(create_stat_change(std::move(stat_change_data)));
+        FactoryResult<StatChange> stat_change_result = create_stat_change(std::move(stat_change_data));
+        if (!stat_change_result.is_valid()) {
+            auto [_, errors] = stat_change_result.data_and_errors();
+            return InvalidCreate<Effects>(std::move(data), std::move(errors));
+        }
+        stat_changes.emplace_back(stat_change_result.value());
     }
-    return Effects(
+    return ValidCreate(Effects(
         std::move(activation_conditions), std::move(choices), std::move(stat_changes),
         ActionHolder::create(std::move(data.action_holder_data)),
         ExtraSpellsHolder::create_for(std::move(data.extra_spells_holder_data), content),
         ProficiencyHolder::create_for(std::move(data.proficiency_holder_data), content),
         RIVHolder::create_for(std::move(data.riv_holder_data), content)
-    );
+    ));
 }
 
 Effects::Effects(

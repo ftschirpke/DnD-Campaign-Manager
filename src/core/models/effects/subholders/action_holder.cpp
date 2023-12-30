@@ -7,15 +7,17 @@
 #include <utility>
 
 #include <core/exceptions/validation_exceptions.hpp>
+#include <core/utils/data_result.hpp>
 #include <core/validation/effects/subholders/action_holder_data.hpp>
 
 namespace dnd {
 
-ActionHolder ActionHolder::create(Data&& data) {
-    if (!data.validate().ok()) {
-        throw invalid_data("Cannot create ActionHolder from invalid data.");
+CreateResult<ActionHolder> ActionHolder::create(Data&& data) {
+    Errors errors = data.validate();
+    if (!errors.ok()) {
+        return InvalidCreate<ActionHolder>(std::move(data), std::move(errors));
     }
-    return ActionHolder(std::move(data.actions), std::move(data.bonus_actions), std::move(data.reactions));
+    return ValidCreate(ActionHolder(std::move(data.actions), std::move(data.bonus_actions), std::move(data.reactions)));
 }
 
 const std::map<std::string, std::string>& ActionHolder::get_actions() const noexcept { return actions; }

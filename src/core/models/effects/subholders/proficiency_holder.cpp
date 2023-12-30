@@ -21,19 +21,18 @@ static std::vector<std::string> set_to_vector(std::set<std::string>&& set) {
     return vector;
 }
 
-ProficiencyHolder ProficiencyHolder::create_for(Data&& data, const Content& content) {
-    if (!data.validate().ok()) {
-        throw invalid_data("Cannot create ProficiencyHolder from invalid data.");
+CreateResult<ProficiencyHolder> ProficiencyHolder::create_for(Data&& data, const Content& content) {
+    Errors errors = data.validate();
+    errors += data.validate_relations(content);
+    if (!errors.ok()) {
+        return InvalidCreate<ProficiencyHolder>(std::move(data), std::move(errors));
     }
-    if (!data.validate_relations(content).ok()) {
-        throw invalid_data("ProficiencyHolderData is incompatible with the given content.");
-    }
-    return ProficiencyHolder(
+    return ValidCreate(ProficiencyHolder(
         set_to_vector(std::move(data.armor)), set_to_vector(std::move(data.weapons)),
         set_to_vector(std::move(data.tools)), set_to_vector(std::move(data.saving_throws)),
         set_to_vector(std::move(data.skills)), set_to_vector(std::move(data.languages)),
         set_to_vector(std::move(data.senses))
-    );
+    ));
 }
 
 const std::vector<std::string>& ProficiencyHolder::get_armor_proficiencies() const noexcept {

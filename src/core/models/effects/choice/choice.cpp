@@ -20,6 +20,7 @@
 #include <core/searching/content_filters/content_filter.hpp>
 #include <core/searching/content_filters/selection_filter.hpp>
 #include <core/searching/content_filters/spell/spell_filter.hpp>
+#include <core/utils/data_result.hpp>
 #include <core/validation/effects/choice/choice_data.hpp>
 
 namespace dnd {
@@ -101,12 +102,11 @@ static std::vector<std::unique_ptr<ContentFilter>> spell_filters(ChoiceData& dat
     return filters;
 }
 
-Choice Choice::create_for(Data&& data, const Content& content) {
-    if (!data.validate().ok()) {
-        throw invalid_data("Cannot create choice from invalid data.");
-    }
-    if (!data.validate_relations(content).ok()) {
-        throw invalid_data("Choice data is incompatible with the given content.");
+CreateResult<Choice> Choice::create_for(Data&& data, const Content& content) {
+    Errors errors = data.validate();
+    errors += data.validate_relations(content);
+    if (!errors.ok()) {
+        return InvalidCreate<Choice>(std::move(data), std::move(errors));
     }
 
     std::vector<std::string> group_names = std::move(data.group_names);
@@ -133,13 +133,13 @@ Choice Choice::create_for(Data&& data, const Content& content) {
         case ChoiceType::CHOOSABLE:
             break;
         default:
-            throw invalid_data("Cannot create choice from invalid data.");
+            break;
     }
 
-    return Choice(
+    return ValidCreate(Choice(
         type, std::move(filters), std::move(data.attribute_name), data.amount, std::move(group_names),
         std::move(data.explicit_choices)
-    );
+    ));
 }
 
 const std::string& Choice::get_attribute_name() const noexcept { return attribute_name; }

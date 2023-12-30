@@ -26,13 +26,6 @@ class Effects {
 public:
     using Data = EffectsData;
 
-    /**
-     * @brief Constructs an Effects object from the given data
-     * @param data the data to construct the Effects object from
-     * @param content the content to use for the construction
-     * @return the constructed Effects object
-     * @throws invalid_data if the data is invalid or is incompatible with the given content
-     */
     static Effects create_for(Data&& data, const Content& content);
 
     /**

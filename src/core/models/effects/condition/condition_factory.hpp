@@ -8,17 +8,12 @@
 #include <string_view>
 
 #include <core/models/effects/condition/condition.hpp>
+#include <core/utils/data_result.hpp>
 #include <core/validation/effects/condition/condition_data.hpp>
 
 namespace dnd {
 
-/**
- * @brief Constructs a condition
- * @param condition_data the data to construct the condition from
- * @return the constructed condition
- * @throws invalid_data if the data is invalid
- */
-std::unique_ptr<Condition> create_condition(Condition::Data&& condition_data);
+FactoryResult<Condition> create_condition(Condition::Data&& condition_data);
 
 } // namespace dnd
 
