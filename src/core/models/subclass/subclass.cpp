@@ -20,23 +20,27 @@
 
 namespace dnd {
 
-Subclass Subclass::create_for(Data&& data, const Content& content) {
-    if (!data.validate().ok()) {
-        throw invalid_data("Cannot create character subclass from invalid data.");
-    }
-    if (!data.validate_relations(content).ok()) {
-        throw invalid_data("Character subclass data is incompatible with the given content.");
+CreateResult<Subclass> Subclass::create_for(Data&& data, const Content& content) {
+    Errors errors = data.validate_nonrecursively();
+    errors += data.validate_relations_nonrecursively(content);
+    if (!errors.ok()) {
+        return InvalidCreate<Subclass>(std::move(data), std::move(errors));
     }
     std::vector<ClassFeature> features;
     features.reserve(data.features_data.size());
     for (ClassFeature::Data& feature_data : data.features_data) {
-        features.emplace_back(ClassFeature::create_for(std::move(feature_data), content));
+        CreateResult<ClassFeature> feature_result = ClassFeature::create_for(std::move(feature_data), content);
+        if (!feature_result.is_valid()) {
+            auto [_, errors] = feature_result.data_and_errors();
+            return InvalidCreate<Subclass>(std::move(data), std::move(errors));
+        }
+        features.emplace_back(feature_result.value());
     }
     const Class* cls = &content.get_classes().get(data.class_name).value().get();
-    return Subclass(
+    return ValidCreate(Subclass(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(features), cls,
         create_spellcasting(std::move(data.spellcasting_data))
-    );
+    ));
 }
 
 const std::string& Subclass::get_name() const noexcept { return name; }

@@ -23,10 +23,18 @@ SubclassData::SubclassData() noexcept : ValidationData(), spellcasting_data(this
 std::unique_ptr<ValidationData> SubclassData::pack() const { return std::make_unique<SubclassData>(*this); }
 
 Errors SubclassData::validate() const {
+    Errors errors = validate_nonrecursively();
+    for (const ClassFeatureData& feature_data : features_data) {
+        errors += feature_data.validate();
+    }
+    errors += spellcasting_data.validate();
+    return errors;
+}
+
+Errors SubclassData::validate_nonrecursively() const {
     Errors errors;
     std::unordered_set<std::string> unique_feature_names;
     for (const ClassFeatureData& feature_data : features_data) {
-        errors += feature_data.validate();
         if (unique_feature_names.contains(feature_data.name)) {
             errors.add_validation_error(
                 ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this,
@@ -46,11 +54,19 @@ Errors SubclassData::validate() const {
             ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this, "Character subclass has no class name."
         );
     }
-    errors += spellcasting_data.validate();
     return errors;
 }
 
 Errors SubclassData::validate_relations(const Content& content) const {
+    Errors errors = validate_relations_nonrecursively(content);
+    for (const ClassFeatureData& feature_data : features_data) {
+        errors += feature_data.validate_relations(content);
+    }
+    errors += spellcasting_data.validate_relations(content);
+    return errors;
+}
+
+Errors SubclassData::validate_relations_nonrecursively(const Content& content) const {
     Errors errors;
     if (content.get_subclasses().contains(name)) {
         errors.add_validation_error(
@@ -59,7 +75,6 @@ Errors SubclassData::validate_relations(const Content& content) const {
         );
     }
     for (const ClassFeatureData& feature_data : features_data) {
-        errors += feature_data.validate_relations(content);
         if (content.get_class_features().contains(feature_data.name)) {
             errors.add_validation_error(
                 ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this,
@@ -82,7 +97,6 @@ Errors SubclassData::validate_relations(const Content& content) const {
             )
         );
     }
-    errors += spellcasting_data.validate_relations(content);
     return errors;
 }
 
