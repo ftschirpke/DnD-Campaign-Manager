@@ -27,13 +27,22 @@ ClassData::ClassData() noexcept
 std::unique_ptr<ValidationData> ClassData::pack() const { return std::make_unique<ClassData>(*this); }
 
 Errors ClassData::validate() const {
-    Errors errors = ValidationData::validate();
+    Errors errors = validate_nonrecursively();
     errors += spellcasting_data.validate();
+    for (const ClassFeatureData& feature_data : features_data) {
+        errors += feature_data.validate();
+    }
+    errors += hit_dice_data.validate();
+    errors += important_levels_data.validate();
+    return errors;
+}
+
+Errors ClassData::validate_nonrecursively() const {
+    Errors errors = ValidationData::validate();
 
     bool has_subclass_feature = false;
     std::unordered_set<std::string> unique_feature_names;
     for (const ClassFeatureData& feature_data : features_data) {
-        errors += feature_data.validate();
         if (unique_feature_names.contains(feature_data.name)) {
             errors.add_validation_error(
                 ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this,
@@ -59,12 +68,18 @@ Errors ClassData::validate() const {
             )
         );
     }
-    errors += hit_dice_data.validate();
-    errors += important_levels_data.validate();
     return errors;
 }
 
 Errors ClassData::validate_relations(const Content& content) const {
+    Errors errors = validate_relations_nonrecursively(content);
+    for (const ClassFeatureData& feature_data : features_data) {
+        errors += feature_data.validate_relations(content);
+    }
+    return errors;
+}
+
+Errors ClassData::validate_relations_nonrecursively(const Content& content) const {
     Errors errors;
     if (content.get_classes().contains(name)) {
         errors.add_validation_error(
@@ -72,7 +87,6 @@ Errors ClassData::validate_relations(const Content& content) const {
         );
     }
     for (const ClassFeatureData& feature_data : features_data) {
-        errors += feature_data.validate_relations(content);
         if (content.get_class_features().contains(feature_data.name)) {
             errors.add_validation_error(
                 ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this,

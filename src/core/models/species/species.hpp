@@ -10,6 +10,7 @@
 #include <core/models/content_piece.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/source_info.hpp>
+#include <core/utils/data_result.hpp>
 #include <core/validation/species/species_data.hpp>
 
 namespace dnd {
