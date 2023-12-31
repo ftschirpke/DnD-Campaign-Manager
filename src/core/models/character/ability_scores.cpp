@@ -12,14 +12,15 @@ namespace dnd {
 
 static int calculate_modifier(int score) noexcept { return score / 2 - 5; }
 
-AbilityScores AbilityScores::create(Data&& data) {
-    if (!data.validate().ok()) {
-        throw invalid_data("Cannot create ability scores from invalid data.");
+CreateResult<AbilityScores> AbilityScores::create(Data&& data) {
+    Errors errors = data.validate();
+    if (!errors.ok()) {
+        return InvalidCreate<AbilityScores>(std::move(data), std::move(errors));
     }
-    return AbilityScores(
+    return ValidCreate(AbilityScores(
         data.ability_scores[0], data.ability_scores[1], data.ability_scores[2], data.ability_scores[3],
         data.ability_scores[4], data.ability_scores[5]
-    );
+    ));
 }
 
 int AbilityScores::get(Ability ability) const noexcept {

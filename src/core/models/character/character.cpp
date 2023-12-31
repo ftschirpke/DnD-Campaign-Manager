@@ -26,33 +26,63 @@
 
 namespace dnd {
 
-Character Character::create_for(Data&& data, const Content& content) {
-    if (!data.validate().ok()) {
-        throw invalid_data("Cannot create character from invalid data.");
-    }
-    if (!data.validate_relations(content).ok()) {
-        throw invalid_data("Character data is incompatible with the given content.");
+CreateResult<Character> Character::create_for(Data&& data, const Content& content) {
+    Errors errors = data.validate();
+    errors += data.validate_relations(content);
+    if (!errors.ok()) {
+        return InvalidCreate<Character>(std::move(data), std::move(errors));
     }
 
     std::vector<Feature> features;
     features.reserve(data.features_data.size());
     for (Feature::Data& feature_data : data.features_data) {
-        features.emplace_back(Feature::create_for(std::move(feature_data), content));
+        CreateResult<Feature> feature_result = Feature::create_for(std::move(feature_data), content);
+        if (!feature_result.is_valid()) {
+            auto [_, errors] = feature_result.data_and_errors();
+            return InvalidCreate<Character>(std::move(data), std::move(errors));
+        }
+        features.emplace_back(feature_result.value());
     }
 
-    AbilityScores base_ability_scores = AbilityScores::create(std::move(data.base_ability_scores_data));
-    FeatureProviders feature_providers = FeatureProviders::create_for(std::move(data.feature_providers_data), content);
-    Progression progression = Progression::create(std::move(data.progression_data));
+    CreateResult<AbilityScores> base_ability_scores_result = AbilityScores::create(
+        std::move(data.base_ability_scores_data)
+    );
+    if (!base_ability_scores_result.is_valid()) {
+        auto [_, errors] = base_ability_scores_result.data_and_errors();
+        return InvalidCreate<Character>(std::move(data), std::move(errors));
+    }
+    AbilityScores base_ability_scores = base_ability_scores_result.value();
+
+    CreateResult<FeatureProviders> feature_providers_result = FeatureProviders::create_for(
+        std::move(data.feature_providers_data), content
+    );
+    if (!feature_providers_result.is_valid()) {
+        auto [_, errors] = feature_providers_result.data_and_errors();
+        return InvalidCreate<Character>(std::move(data), std::move(errors));
+    }
+    FeatureProviders feature_providers = feature_providers_result.value();
+
+    CreateResult<Progression> progression_result = Progression::create(std::move(data.progression_data));
+    if (!progression_result.is_valid()) {
+        auto [_, errors] = progression_result.data_and_errors();
+        return InvalidCreate<Character>(std::move(data), std::move(errors));
+    }
+    Progression progression = progression_result.value();
 
     std::vector<Decision> decisions;
     for (Decision::Data& decision_data : data.decisions_data) {
-        decisions.emplace_back(Decision::create_for(std::move(decision_data), content));
+        CreateResult<Decision> decision_result = Decision::create_for(std::move(decision_data), content);
+        if (!decision_result.is_valid()) {
+            auto [_, errors] = decision_result.data_and_errors();
+            return InvalidCreate<Character>(std::move(data), std::move(errors));
+        }
+        decisions.emplace_back(decision_result.value());
     }
 
-    return Character(
+    return ValidCreate(Character(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(features),
         std::move(base_ability_scores), std::move(feature_providers), std::move(progression), std::move(decisions)
-    );
+    ));
 }
 
 const std::string& Character::get_name() const noexcept { return name; }

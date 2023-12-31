@@ -4,6 +4,7 @@
 #include <dnd_config.hpp>
 
 #include <core/models/effects/effects.hpp>
+#include <core/utils/data_result.hpp>
 #include <core/validation/character/decision/decision_data.hpp>
 
 namespace dnd {
@@ -17,14 +18,7 @@ class Decision {
 public:
     using Data = DecisionData;
 
-    /**
-     * @brief Constructs a decision from the given data and content
-     * @param data the data to construct the decision from
-     * @param content the content to use for the decision
-     * @return the constructed decision
-     * @throws invalid_data if the given data is invalid or is incompatible with the given content
-     */
-    static Decision create_for(Data&& data, const Content& content);
+    static CreateResult<Decision> create_for(Data&& data, const Content& content);
 
     Decision(const Decision&) = delete;
     Decision& operator=(const Decision&) = delete;

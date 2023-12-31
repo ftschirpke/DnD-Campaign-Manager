@@ -5,6 +5,7 @@
 
 #include <vector>
 
+#include <core/utils/data_result.hpp>
 #include <core/validation/character/progression_data.hpp>
 
 namespace dnd {
@@ -15,13 +16,7 @@ class Progression {
 public:
     using Data = ProgressionData;
 
-    /**
-     * @brief Constructs a Progression object
-     * @param data the data to construct the Progression object from
-     * @return the constructed Progression object
-     * @throws invalid_data if the given data is invalid
-     */
-    static Progression create(Data&& data);
+    static CreateResult<Progression> create(Data&& data);
 
     int get_level() const noexcept;
     int get_xp() const noexcept;
