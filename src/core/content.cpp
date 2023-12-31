@@ -84,7 +84,6 @@ void Content::add_group_members(const std::string& group_name, std::set<std::str
 }
 
 OptCRef<Character> Content::add_character(Character&& character) {
-    const std::string name = character.get_name();
     OptCRef<Character> inserted_character = character_libary.add(std::move(character));
     if (inserted_character.has_value()) {
         for (const Feature& feature : inserted_character.value().get().get_features()) {
@@ -95,7 +94,6 @@ OptCRef<Character> Content::add_character(Character&& character) {
 }
 
 OptCRef<Class> Content::add_class(Class&& cls) {
-    const std::string name = cls.get_name();
     OptCRef<Class> inserted_class = class_library.add(std::move(cls));
     if (inserted_class.has_value()) {
         for (const ClassFeature& feature : inserted_class.value().get().get_features()) {
@@ -106,7 +104,6 @@ OptCRef<Class> Content::add_class(Class&& cls) {
 }
 
 OptCRef<Subclass> Content::add_subclass(Subclass&& subclass) {
-    const std::string name = subclass.get_name();
     OptCRef<Subclass> inserted_subclass = subclass_library.add(std::move(subclass));
     if (subclass_library.add(std::move(subclass))) {
         for (const ClassFeature& class_feature : inserted_subclass.value().get().get_features()) {
@@ -117,7 +114,6 @@ OptCRef<Subclass> Content::add_subclass(Subclass&& subclass) {
 }
 
 OptCRef<Species> Content::add_species(Species&& species) {
-    const std::string name = species.get_name();
     OptCRef<Species> inserted_species = species_library.add(std::move(species));
     if (inserted_species.has_value()) {
         for (const Feature& feature : inserted_species.value().get().get_features()) {
@@ -128,7 +124,6 @@ OptCRef<Species> Content::add_species(Species&& species) {
 }
 
 OptCRef<Subspecies> Content::add_subspecies(Subspecies&& subspecies) {
-    const std::string name = subspecies.get_name();
     OptCRef<Subspecies> inserted_subspecies = subspecies_library.add(std::move(subspecies));
     if (inserted_subspecies.has_value()) {
         for (const Feature& feature : inserted_subspecies.value().get().get_features()) {
@@ -143,10 +138,78 @@ OptCRef<Item> Content::add_item(Item&& item) { return item_library.add(std::move
 OptCRef<Spell> Content::add_spell(Spell&& spell) { return spell_library.add(std::move(spell)); }
 
 OptCRef<Choosable> Content::add_choosable(Choosable&& choosable) {
-    const std::string name = choosable.get_name();
-    const std::string type_name = choosable.get_type();
     OptCRef<Choosable> inserted_choosable = choosable_library.add(std::move(choosable));
     if (inserted_choosable.has_value()) {
+        const Choosable& choosable = inserted_choosable.value().get();
+        const std::string name = choosable.get_name();
+        const std::string type_name = choosable.get_type();
+        groups.add(type_name, name);
+    }
+    return inserted_choosable;
+}
+
+OptCRef<Character> Content::add_character_result(CreateResult<Character>&& character) {
+    OptCRef<Character> inserted_character = character_libary.add_result(std::move(character));
+    if (inserted_character.has_value()) {
+        for (const Feature& feature : inserted_character.value().get().get_features()) {
+            feature_library.add(feature);
+        }
+    }
+    return inserted_character;
+}
+
+OptCRef<Class> Content::add_class_result(CreateResult<Class>&& cls) {
+    OptCRef<Class> inserted_class = class_library.add_result(std::move(cls));
+    if (inserted_class.has_value()) {
+        for (const ClassFeature& feature : inserted_class.value().get().get_features()) {
+            class_feature_library.add(feature);
+        }
+    }
+    return inserted_class;
+}
+
+OptCRef<Subclass> Content::add_subclass_result(CreateResult<Subclass>&& subclass) {
+    OptCRef<Subclass> inserted_subclass = subclass_library.add_result(std::move(subclass));
+    if (subclass_library.add_result(std::move(subclass))) {
+        for (const ClassFeature& class_feature : inserted_subclass.value().get().get_features()) {
+            class_feature_library.add(class_feature);
+        }
+    }
+    return inserted_subclass;
+}
+
+OptCRef<Species> Content::add_species_result(CreateResult<Species>&& species) {
+    OptCRef<Species> inserted_species = species_library.add_result(std::move(species));
+    if (inserted_species.has_value()) {
+        for (const Feature& feature : inserted_species.value().get().get_features()) {
+            feature_library.add(feature);
+        }
+    }
+    return inserted_species;
+}
+
+OptCRef<Subspecies> Content::add_subspecies_result(CreateResult<Subspecies>&& subspecies) {
+    OptCRef<Subspecies> inserted_subspecies = subspecies_library.add_result(std::move(subspecies));
+    if (inserted_subspecies.has_value()) {
+        for (const Feature& feature : inserted_subspecies.value().get().get_features()) {
+            feature_library.add(feature);
+        }
+    }
+    return inserted_subspecies;
+}
+
+OptCRef<Item> Content::add_item_result(CreateResult<Item>&& item) { return item_library.add_result(std::move(item)); }
+
+OptCRef<Spell> Content::add_spell_result(CreateResult<Spell>&& spell) {
+    return spell_library.add_result(std::move(spell));
+}
+
+OptCRef<Choosable> Content::add_choosable_result(CreateResult<Choosable>&& choosable) {
+    OptCRef<Choosable> inserted_choosable = choosable_library.add_result(std::move(choosable));
+    if (inserted_choosable.has_value()) {
+        const Choosable& choosable = inserted_choosable.value().get();
+        const std::string name = choosable.get_name();
+        const std::string type_name = choosable.get_type();
         groups.add(type_name, name);
     }
     return inserted_choosable;

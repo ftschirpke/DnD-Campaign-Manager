@@ -130,14 +130,8 @@ void CharacterParser::set_context(const Content& content) {
     }
 }
 
-Errors CharacterParser::validate(const Content& content) const {
-    Errors errors = data.validate();
-    errors += data.validate_relations(content);
-    return errors;
-}
-
 void CharacterParser::save_result(Content& content) {
-    content.add_character(Character::create_for(std::move(data), content));
+    content.add_character_result(Character::create_for(std::move(data), content));
 }
 
 Errors CharacterParser::parse_decision(nlohmann::ordered_json&& decision_json, DecisionData& decision_data) const {

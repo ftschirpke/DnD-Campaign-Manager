@@ -18,7 +18,6 @@ class SubclassParser : public FileParser {
 public:
     explicit SubclassParser(const std::filesystem::path& filepath) noexcept;
     virtual Errors parse() override;
-    virtual Errors validate(const Content& content) const override;
     virtual void save_result(Content& content) override;
 private:
     ClassFeatureParser class_feature_parser;

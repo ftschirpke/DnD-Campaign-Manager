@@ -18,14 +18,11 @@ class ChoosableGroupParser : public FileParser {
 public:
     explicit ChoosableGroupParser(const std::filesystem::path& filepath) noexcept;
     virtual Errors parse() override;
-    virtual Errors validate(const Content& content) const override;
     virtual void save_result(Content& content) override;
 protected:
     ChoosableParser choosable_parser;
     std::string group_name;
     std::vector<ChoosableData> data;
-    size_t choosables_in_file;
-    mutable std::vector<bool> feature_data_valid;
 };
 
 } // namespace dnd

@@ -9,10 +9,13 @@
 #include <string>
 #include <unordered_map>
 #include <utility>
+#include <vector>
 
 #include <core/content_library.hpp>
+#include <core/errors/errors.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/searching/fuzzy_search/trie.hpp>
+#include <core/utils/data_result.hpp>
 #include <core/utils/string_manipulation.hpp>
 #include <core/utils/types.hpp>
 
@@ -32,7 +35,11 @@ public:
     OptCRef<T> get(size_t index) const override;
     OptCRef<T> get(const std::string& name) const override;
     const std::unordered_map<std::string, T>& get_all() const;
+    const std::vector<std::pair<typename T::Data, Errors>>& get_drafts() const;
     OptCRef<T> add(T&& content_piece);
+    void add_draft(std::pair<typename T::Data, Errors>&& draft);
+    void add_draft(T::Data&& draft_data, Errors&& draft_errors);
+    OptCRef<T> add_result(CreateResult<T>&& content_piece_result);
     /**
      * @brief Get the root of the trie
      * @return a pointer to the root of the trie
@@ -43,6 +50,7 @@ private:
 
     std::unordered_map<std::string, T> data;
     Trie<T> trie;
+    std::vector<std::pair<typename T::Data, Errors>> drafts;
 };
 
 template <typename T>
@@ -108,6 +116,12 @@ const std::unordered_map<std::string, T>& StorageContentLibrary<T>::get_all() co
 
 template <typename T>
 requires isContentPieceType<T>
+const std::vector<std::pair<typename T::Data, Errors>>& StorageContentLibrary<T>::get_drafts() const {
+    return drafts;
+}
+
+template <typename T>
+requires isContentPieceType<T>
 OptCRef<T> StorageContentLibrary<T>::add(T&& content_piece) {
     const std::string name = content_piece.get_name();
     auto [it, was_inserted] = data.emplace(name, std::move(content_piece));
@@ -117,6 +131,29 @@ OptCRef<T> StorageContentLibrary<T>::add(T&& content_piece) {
     } else {
         return std::nullopt;
     }
+}
+
+template <typename T>
+requires isContentPieceType<T>
+OptCRef<T> StorageContentLibrary<T>::add_result(CreateResult<T>&& content_piece_result) {
+    if (content_piece_result.is_valid()) {
+        return add(std::move(content_piece_result.value()));
+    } else {
+        add_draft(std::move(content_piece_result.data_and_errors()));
+        return std::nullopt;
+    }
+}
+
+template <typename T>
+requires isContentPieceType<T>
+void StorageContentLibrary<T>::add_draft(std::pair<typename T::Data, Errors>&& draft) {
+    drafts.push_back(std::move(draft));
+}
+
+template <typename T>
+requires isContentPieceType<T>
+void StorageContentLibrary<T>::add_draft(T::Data&& draft_data, Errors&& draft_errors) {
+    drafts.emplace_back(std::move(draft_data), std::move(draft_errors));
 }
 
 template <typename T>

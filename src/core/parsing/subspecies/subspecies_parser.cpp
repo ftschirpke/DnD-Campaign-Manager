@@ -46,14 +46,8 @@ Errors SubspeciesParser::parse() {
     return errors;
 }
 
-Errors SubspeciesParser::validate(const Content& content) const {
-    Errors errors = data.validate();
-    errors += data.validate_relations(content);
-    return errors;
-}
-
 void SubspeciesParser::save_result(Content& content) {
-    content.add_subspecies(Subspecies::create_for(std::move(data), content));
+    content.add_subspecies_result(Subspecies::create_for(std::move(data), content));
 }
 
 } // namespace dnd

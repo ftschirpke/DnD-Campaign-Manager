@@ -20,7 +20,6 @@ public:
     explicit CharacterParser(const std::filesystem::path& filepath) noexcept;
     virtual Errors parse() override;
     virtual void set_context(const Content& content) override;
-    virtual Errors validate(const Content& content) const override;
     virtual void save_result(Content& content) override;
 private:
     Errors parse_decision(nlohmann::ordered_json&& decision_json, DecisionData& decision_data) const;

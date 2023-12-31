@@ -18,7 +18,6 @@ class SpeciesParser : public FileParser {
 public:
     explicit SpeciesParser(const std::filesystem::path& filepath) noexcept;
     virtual Errors parse() override;
-    virtual Errors validate(const Content& content) const override;
     virtual void save_result(Content& content) override;
 private:
     FeatureParser feature_parser;

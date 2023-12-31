@@ -50,29 +50,13 @@ Errors ChoosableGroupParser::parse() {
         }
         errors += std::move(feature_errors);
     }
-    choosables_in_file = data.size();
-    return errors;
-}
-
-Errors ChoosableGroupParser::validate(const Content& content) const {
-    Errors errors;
-    assert(choosables_in_file == data.size());
-    feature_data_valid.resize(choosables_in_file, false);
-    for (size_t i = 0; i < choosables_in_file; ++i) {
-        Errors validation_errors = data[i].validate();
-        validation_errors += data[i].validate_relations(content);
-        feature_data_valid[i] = validation_errors.ok();
-        errors += std::move(validation_errors);
-    }
     return errors;
 }
 
 void ChoosableGroupParser::save_result(Content& content) {
-    for (size_t i = 0; i < data.size(); ++i) {
-        if (feature_data_valid[i]) {
-            snake_case_to_capitalized_spaced_words(data[i].type);
-            content.add_choosable(Choosable::create_for(std::move(data[i]), content));
-        }
+    for (ChoosableData& choosable_data : data) {
+        snake_case_to_capitalized_spaced_words(choosable_data.type);
+        content.add_choosable_result(Choosable::create_for(std::move(choosable_data), content));
     }
 }
 

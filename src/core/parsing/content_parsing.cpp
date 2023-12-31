@@ -147,40 +147,22 @@ ParsingResult parse_content(const std::filesystem::path& content_path, const std
 static Errors parse_file(Content& content, FileParser&& parser) {
     DND_MEASURE_SCOPE(parser.get_filepath().string().c_str());
     Errors errors;
-    bool successful = true;
     try {
-        Errors open_json_errors = parser.open_json();
-        successful = open_json_errors.ok();
-        errors += std::move(open_json_errors);
-        if (!successful) {
+        errors += parser.open_json();
+        if (!errors.ok()) {
             return errors;
         }
 
-        Errors parse_errors = parser.parse();
-        successful = parse_errors.ok();
-        errors += std::move(parse_errors);
-        if (!successful && !parser.continue_after_errors()) {
+        errors += parser.parse();
+        if (!errors.ok() && !parser.continue_after_errors()) {
             return errors;
         }
     } catch (const std::exception& e) {
         errors.add_parsing_error(ParsingError::Code::UNKNOWN_ERROR, parser.get_filepath(), e.what());
         return errors;
     }
-
-    try {
-        parser.set_context(content);
-
-        Errors validation_errors = parser.validate(content);
-        successful = validation_errors.ok();
-        errors += std::move(validation_errors);
-        if (!successful && !parser.continue_after_errors()) {
-            return errors;
-        }
-
-        parser.save_result(content);
-    } catch (const std::exception& e) {
-        errors.add_validation_error(ValidationError::Code::UNKNOWN_ERROR, nullptr, e.what());
-    }
+    parser.set_context(content);
+    parser.save_result(content);
     return errors;
 }
 

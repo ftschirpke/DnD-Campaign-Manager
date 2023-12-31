@@ -16,7 +16,6 @@ class StringGroupParser : public FileParser {
 public:
     explicit StringGroupParser(const std::filesystem::path& file_path);
     virtual Errors parse() override;
-    virtual Errors validate(const Content& content) const override;
     virtual void save_result(Content& content) override;
 private:
     Errors parse_subgroups(nlohmann::ordered_json& json, const std::string& parent);
