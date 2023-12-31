@@ -15,7 +15,7 @@ public:
     RuntimeError(Code code, std::string&& message) noexcept;
 
     Code get_error_code() const noexcept;
-    const std::string& get_message() const noexcept;
+    const std::string& get_error_message() const noexcept;
 private:
     Code code;
     std::string error_message;

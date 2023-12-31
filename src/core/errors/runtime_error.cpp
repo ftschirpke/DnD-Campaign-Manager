@@ -13,6 +13,6 @@ RuntimeError::RuntimeError(Code code, std::string&& message) noexcept : code(cod
 
 RuntimeError::Code RuntimeError::get_error_code() const noexcept { return code; }
 
-const std::string& RuntimeError::get_message() const noexcept { return error_message; }
+const std::string& RuntimeError::get_error_message() const noexcept { return error_message; }
 
 } // namespace dnd
