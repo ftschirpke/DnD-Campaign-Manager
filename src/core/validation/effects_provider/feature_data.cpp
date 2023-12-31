@@ -16,10 +16,12 @@ FeatureData::FeatureData(const ValidationData* parent) noexcept
 std::unique_ptr<ValidationData> FeatureData::pack() const { return std::make_unique<FeatureData>(*this); }
 
 Errors FeatureData::validate() const {
-    Errors errors = ValidationData::validate();
+    Errors errors = validate_nonrecursively();
     errors += main_effects_data.validate();
     return errors;
 }
+
+Errors FeatureData::validate_nonrecursively() const { return ValidationData::validate(); }
 
 Errors FeatureData::validate_relations(const Content& content) const {
     return main_effects_data.validate_relations(content);

@@ -28,7 +28,9 @@
 
 namespace dnd {
 
-Effects Effects::create_for(Data&& data, const Content& content) {
+CreateResult<Effects> Effects::create_for(Data&& data, const Content& content) {
+    // EffectsData validation only validates the subholders, so there is no nonrecursive validation
+
     std::vector<std::unique_ptr<Condition>> activation_conditions;
     activation_conditions.reserve(data.activation_conditions_data.size());
     for (ConditionData& condition_data : data.activation_conditions_data) {
@@ -39,6 +41,7 @@ Effects Effects::create_for(Data&& data, const Content& content) {
         }
         activation_conditions.emplace_back(condition_result.value());
     }
+
     std::vector<Choice> choices;
     choices.reserve(data.choices_data.size());
     for (ChoiceData& choice_data : data.choices_data) {
@@ -49,6 +52,7 @@ Effects Effects::create_for(Data&& data, const Content& content) {
         }
         choices.emplace_back(choice_result.value());
     }
+
     std::vector<std::unique_ptr<StatChange>> stat_changes;
     stat_changes.reserve(data.stat_changes_data.size());
     for (StatChangeData& stat_change_data : data.stat_changes_data) {
@@ -59,12 +63,42 @@ Effects Effects::create_for(Data&& data, const Content& content) {
         }
         stat_changes.emplace_back(stat_change_result.value());
     }
+
+    CreateResult<ActionHolder> action_holder_result = ActionHolder::create(std::move(data.action_holder_data));
+    if (!action_holder_result.is_valid()) {
+        auto [_, errors] = action_holder_result.data_and_errors();
+        return InvalidCreate<Effects>(std::move(data), std::move(errors));
+    }
+    ActionHolder action_holder = action_holder_result.value();
+
+    CreateResult<ExtraSpellsHolder> extra_spells_holder_result = ExtraSpellsHolder::create_for(
+        std::move(data.extra_spells_holder_data), content
+    );
+    if (!extra_spells_holder_result.is_valid()) {
+        auto [_, errors] = extra_spells_holder_result.data_and_errors();
+        return InvalidCreate<Effects>(std::move(data), std::move(errors));
+    }
+    ExtraSpellsHolder extra_spells_holder = extra_spells_holder_result.value();
+
+    CreateResult<ProficiencyHolder> proficiency_holder_result = ProficiencyHolder::create_for(
+        std::move(data.proficiency_holder_data), content
+    );
+    if (!proficiency_holder_result.is_valid()) {
+        auto [_, errors] = proficiency_holder_result.data_and_errors();
+        return InvalidCreate<Effects>(std::move(data), std::move(errors));
+    }
+    ProficiencyHolder proficiency_holder = proficiency_holder_result.value();
+
+    CreateResult<RIVHolder> riv_holder_result = RIVHolder::create_for(std::move(data.riv_holder_data), content);
+    if (!riv_holder_result.is_valid()) {
+        auto [_, errors] = riv_holder_result.data_and_errors();
+        return InvalidCreate<Effects>(std::move(data), std::move(errors));
+    }
+    RIVHolder riv_holder = riv_holder_result.value();
+
     return ValidCreate(Effects(
-        std::move(activation_conditions), std::move(choices), std::move(stat_changes),
-        ActionHolder::create(std::move(data.action_holder_data)),
-        ExtraSpellsHolder::create_for(std::move(data.extra_spells_holder_data), content),
-        ProficiencyHolder::create_for(std::move(data.proficiency_holder_data), content),
-        RIVHolder::create_for(std::move(data.riv_holder_data), content)
+        std::move(activation_conditions), std::move(choices), std::move(stat_changes), std::move(action_holder),
+        std::move(extra_spells_holder), std::move(proficiency_holder), std::move(riv_holder)
     ));
 }
 

@@ -18,31 +18,40 @@
 
 namespace dnd {
 
-ClassFeature ClassFeature::create_for(Data&& data, const Content& content) {
-    if (!data.validate().ok()) {
-        throw invalid_data("Cannot create class feature from invalid data.");
-    }
-    if (!data.validate_relations(content).ok()) {
-        throw invalid_data("ClassFeature data is incompatible with the given content.");
+CreateResult<ClassFeature> ClassFeature::create_for(Data&& data, const Content& content) {
+    Errors errors = data.validate_nonrecursively();
+    errors += data.validate_relations_nonrecursively(content);
+    if (!errors.ok()) {
+        return InvalidCreate<ClassFeature>(std::move(data), std::move(errors));
     }
 
+    CreateResult<Effects> main_effects_result = Effects::create_for(std::move(data.main_effects_data), content);
+    if (!main_effects_result.is_valid()) {
+        auto [_, errors] = main_effects_result.data_and_errors();
+        return InvalidCreate<ClassFeature>(std::move(data), std::move(errors));
+    }
     Effects main_effects = Effects::create_for(std::move(data.main_effects_data), content);
 
     if (data.higher_level_effects_data.empty()) {
-        return ClassFeature(
+        return ValidCreate(ClassFeature(
             std::move(data.name), std::move(data.description), std::move(data.source_path), data.level,
             std::move(main_effects)
-        );
+        ));
     }
 
     std::map<int, Effects> higher_level_effects;
     for (auto& [level, effects_data] : data.higher_level_effects_data) {
-        higher_level_effects.emplace(level, Effects::create_for(std::move(effects_data), content));
+        CreateResult<Effects> effects_result = Effects::create_for(std::move(effects_data), content);
+        if (!effects_result.is_valid()) {
+            auto [_, errors] = effects_result.data_and_errors();
+            return InvalidCreate<ClassFeature>(std::move(data), std::move(errors));
+        }
+        higher_level_effects.emplace(level, effects_result.value());
     }
-    return ClassFeature(
+    return ValidCreate(ClassFeature(
         std::move(data.name), std::move(data.description), std::move(data.source_path), data.level,
         std::move(main_effects), std::move(higher_level_effects)
-    );
+    ));
 }
 
 int ClassFeature::get_level() const noexcept { return level; }

@@ -26,14 +26,7 @@ class ClassFeature : public Feature {
 public:
     using Data = ClassFeatureData;
 
-    /**
-     * @brief Constructs a feature from the given data and content
-     * @param data the data to construct the feature from
-     * @param content the content to use for the construction
-     * @return the constructed feature
-     * @throws invalid_data if the given data is invalid or is incompatible with the given content
-     */
-    static ClassFeature create_for(Data&& data, const Content& content);
+    static CreateResult<ClassFeature> create_for(Data&& data, const Content& content);
 
     ClassFeature(const ClassFeature&) = delete;
     ClassFeature& operator=(const ClassFeature&) = delete;
