@@ -24,8 +24,8 @@ CreateResult<Feature> Feature::create_for(Data&& data, const Content& content) {
 
     CreateResult<Effects> main_effects_result = Effects::create_for(std::move(data.main_effects_data), content);
     if (!main_effects_result.is_valid()) {
-        auto [_, errors] = main_effects_result.data_and_errors();
-        return InvalidCreate<Feature>(std::move(data), std::move(errors));
+        auto [_, sub_errors] = main_effects_result.data_and_errors();
+        return InvalidCreate<Feature>(std::move(data), std::move(sub_errors));
     }
     Effects main_part = main_effects_result.value();
 

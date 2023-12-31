@@ -25,15 +25,15 @@ CreateResult<Spell> Spell::create(Data&& data) {
 
     CreateResult<SpellComponents> components_result = SpellComponents::create(std::move(data.components_data));
     if (!components_result.is_valid()) {
-        auto [_, errors] = components_result.data_and_errors();
-        return InvalidCreate<Spell>(std::move(data), std::move(errors));
+        auto [_, sub_errors] = components_result.data_and_errors();
+        return InvalidCreate<Spell>(std::move(data), std::move(sub_errors));
     }
     SpellComponents components = components_result.value();
 
     CreateResult<SpellType> type_result = SpellType::create(std::move(data.type_data));
     if (!type_result.is_valid()) {
-        auto [_, errors] = type_result.data_and_errors();
-        return InvalidCreate<Spell>(std::move(data), std::move(errors));
+        auto [_, sub_errors] = type_result.data_and_errors();
+        return InvalidCreate<Spell>(std::move(data), std::move(sub_errors));
     }
     SpellType type = type_result.value();
 

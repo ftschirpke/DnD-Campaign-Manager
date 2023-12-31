@@ -59,8 +59,8 @@ CreateResult<Class> Class::create_for(Data&& data, const Content& content) {
     for (ClassFeature::Data& feature_data : data.features_data) {
         CreateResult<ClassFeature> feature_result = ClassFeature::create_for(std::move(feature_data), content);
         if (!feature_result.is_valid()) {
-            auto [_, errors] = feature_result.data_and_errors();
-            return InvalidCreate<Class>(std::move(data), std::move(errors));
+            auto [_, sub_errors] = feature_result.data_and_errors();
+            return InvalidCreate<Class>(std::move(data), std::move(sub_errors));
         }
         ClassFeature feature = feature_result.value();
         if (feature.get_name() == data.subclass_feature_name) {
@@ -76,8 +76,8 @@ CreateResult<Class> Class::create_for(Data&& data, const Content& content) {
 
     CreateResult<Dice> hit_dice_result = Dice::create(std::move(data.hit_dice_data));
     if (!hit_dice_result.is_valid()) {
-        auto [_, errors] = hit_dice_result.data_and_errors();
-        return InvalidCreate<Class>(std::move(data), std::move(errors));
+        auto [_, sub_errors] = hit_dice_result.data_and_errors();
+        return InvalidCreate<Class>(std::move(data), std::move(sub_errors));
     }
     Dice hit_dice = hit_dice_result.value();
 
@@ -85,8 +85,8 @@ CreateResult<Class> Class::create_for(Data&& data, const Content& content) {
         std::move(data.important_levels_data), subclass_level
     );
     if (!important_levels_result.is_valid()) {
-        auto [_, errors] = important_levels_result.data_and_errors();
-        return InvalidCreate<Class>(std::move(data), std::move(errors));
+        auto [_, sub_errors] = important_levels_result.data_and_errors();
+        return InvalidCreate<Class>(std::move(data), std::move(sub_errors));
     }
     ImportantLevels important_levels = important_levels_result.value();
 

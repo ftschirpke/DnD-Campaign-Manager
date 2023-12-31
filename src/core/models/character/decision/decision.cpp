@@ -57,8 +57,8 @@ CreateResult<Decision> Decision::create_for(Data&& data, const Content& content)
 
     CreateResult<Effects> effects_result = Effects::create_for(std::move(res_data), content);
     if (!effects_result.is_valid()) {
-        auto [_, errors] = effects_result.data_and_errors();
-        return InvalidCreate<Decision>(std::move(data), std::move(errors));
+        auto [_, sub_errors] = effects_result.data_and_errors();
+        return InvalidCreate<Decision>(std::move(data), std::move(sub_errors));
     }
     return ValidCreate(Decision(data.get_target(), effects_result.value()));
 }

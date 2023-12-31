@@ -38,8 +38,8 @@ CreateResult<Character> Character::create_for(Data&& data, const Content& conten
     for (Feature::Data& feature_data : data.features_data) {
         CreateResult<Feature> feature_result = Feature::create_for(std::move(feature_data), content);
         if (!feature_result.is_valid()) {
-            auto [_, errors] = feature_result.data_and_errors();
-            return InvalidCreate<Character>(std::move(data), std::move(errors));
+            auto [_, sub_errors] = feature_result.data_and_errors();
+            return InvalidCreate<Character>(std::move(data), std::move(sub_errors));
         }
         features.emplace_back(feature_result.value());
     }
@@ -48,8 +48,8 @@ CreateResult<Character> Character::create_for(Data&& data, const Content& conten
         std::move(data.base_ability_scores_data)
     );
     if (!base_ability_scores_result.is_valid()) {
-        auto [_, errors] = base_ability_scores_result.data_and_errors();
-        return InvalidCreate<Character>(std::move(data), std::move(errors));
+        auto [_, sub_errors] = base_ability_scores_result.data_and_errors();
+        return InvalidCreate<Character>(std::move(data), std::move(sub_errors));
     }
     AbilityScores base_ability_scores = base_ability_scores_result.value();
 
@@ -57,15 +57,15 @@ CreateResult<Character> Character::create_for(Data&& data, const Content& conten
         std::move(data.feature_providers_data), content
     );
     if (!feature_providers_result.is_valid()) {
-        auto [_, errors] = feature_providers_result.data_and_errors();
-        return InvalidCreate<Character>(std::move(data), std::move(errors));
+        auto [_, sub_errors] = feature_providers_result.data_and_errors();
+        return InvalidCreate<Character>(std::move(data), std::move(sub_errors));
     }
     FeatureProviders feature_providers = feature_providers_result.value();
 
     CreateResult<Progression> progression_result = Progression::create(std::move(data.progression_data));
     if (!progression_result.is_valid()) {
-        auto [_, errors] = progression_result.data_and_errors();
-        return InvalidCreate<Character>(std::move(data), std::move(errors));
+        auto [_, sub_errors] = progression_result.data_and_errors();
+        return InvalidCreate<Character>(std::move(data), std::move(sub_errors));
     }
     Progression progression = progression_result.value();
 
@@ -73,8 +73,8 @@ CreateResult<Character> Character::create_for(Data&& data, const Content& conten
     for (Decision::Data& decision_data : data.decisions_data) {
         CreateResult<Decision> decision_result = Decision::create_for(std::move(decision_data), content);
         if (!decision_result.is_valid()) {
-            auto [_, errors] = decision_result.data_and_errors();
-            return InvalidCreate<Character>(std::move(data), std::move(errors));
+            auto [_, sub_errors] = decision_result.data_and_errors();
+            return InvalidCreate<Character>(std::move(data), std::move(sub_errors));
         }
         decisions.emplace_back(decision_result.value());
     }

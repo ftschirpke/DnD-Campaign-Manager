@@ -31,8 +31,8 @@ CreateResult<Subclass> Subclass::create_for(Data&& data, const Content& content)
     for (ClassFeature::Data& feature_data : data.features_data) {
         CreateResult<ClassFeature> feature_result = ClassFeature::create_for(std::move(feature_data), content);
         if (!feature_result.is_valid()) {
-            auto [_, errors] = feature_result.data_and_errors();
-            return InvalidCreate<Subclass>(std::move(data), std::move(errors));
+            auto [_, sub_errors] = feature_result.data_and_errors();
+            return InvalidCreate<Subclass>(std::move(data), std::move(sub_errors));
         }
         features.emplace_back(feature_result.value());
     }

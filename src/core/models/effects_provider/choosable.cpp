@@ -26,16 +26,16 @@ CreateResult<Choosable> Choosable::create_for(Data&& data, const Content& conten
     for (ConditionData& prerequisite_data : data.prerequisites_data) {
         FactoryResult<Condition> prerequisite_result = create_condition(std::move(prerequisite_data));
         if (!prerequisite_result.is_valid()) {
-            auto [_, errors] = prerequisite_result.data_and_errors();
-            return InvalidCreate<Choosable>(std::move(data), std::move(errors));
+            auto [_, sub_errors] = prerequisite_result.data_and_errors();
+            return InvalidCreate<Choosable>(std::move(data), std::move(sub_errors));
         }
         prerequisites.emplace_back(prerequisite_result.value());
     }
 
     CreateResult<Effects> main_part_result = Effects::create_for(std::move(data.main_effects_data), content);
     if (!main_part_result.is_valid()) {
-        auto [_, errors] = main_part_result.data_and_errors();
-        return InvalidCreate<Choosable>(std::move(data), std::move(errors));
+        auto [_, sub_errors] = main_part_result.data_and_errors();
+        return InvalidCreate<Choosable>(std::move(data), std::move(sub_errors));
     }
     Effects main_part = main_part_result.value();
 

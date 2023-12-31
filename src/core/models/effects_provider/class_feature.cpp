@@ -26,8 +26,8 @@ CreateResult<ClassFeature> ClassFeature::create_for(Data&& data, const Content& 
 
     CreateResult<Effects> main_effects_result = Effects::create_for(std::move(data.main_effects_data), content);
     if (!main_effects_result.is_valid()) {
-        auto [_, errors] = main_effects_result.data_and_errors();
-        return InvalidCreate<ClassFeature>(std::move(data), std::move(errors));
+        auto [_, sub_errors] = main_effects_result.data_and_errors();
+        return InvalidCreate<ClassFeature>(std::move(data), std::move(sub_errors));
     }
     Effects main_effects = main_effects_result.value();
 
@@ -42,8 +42,8 @@ CreateResult<ClassFeature> ClassFeature::create_for(Data&& data, const Content& 
     for (auto& [level, effects_data] : data.higher_level_effects_data) {
         CreateResult<Effects> effects_result = Effects::create_for(std::move(effects_data), content);
         if (!effects_result.is_valid()) {
-            auto [_, errors] = effects_result.data_and_errors();
-            return InvalidCreate<ClassFeature>(std::move(data), std::move(errors));
+            auto [_, sub_errors] = effects_result.data_and_errors();
+            return InvalidCreate<ClassFeature>(std::move(data), std::move(sub_errors));
         }
         higher_level_effects.emplace(level, effects_result.value());
     }

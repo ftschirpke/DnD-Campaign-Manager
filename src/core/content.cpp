@@ -140,9 +140,9 @@ OptCRef<Spell> Content::add_spell(Spell&& spell) { return spell_library.add(std:
 OptCRef<Choosable> Content::add_choosable(Choosable&& choosable) {
     OptCRef<Choosable> inserted_choosable = choosable_library.add(std::move(choosable));
     if (inserted_choosable.has_value()) {
-        const Choosable& choosable = inserted_choosable.value().get();
-        const std::string name = choosable.get_name();
-        const std::string type_name = choosable.get_type();
+        const Choosable& choosable_val = inserted_choosable.value().get();
+        const std::string name = choosable_val.get_name();
+        const std::string type_name = choosable_val.get_type();
         groups.add(type_name, name);
     }
     return inserted_choosable;

@@ -36,8 +36,8 @@ CreateResult<Effects> Effects::create_for(Data&& data, const Content& content) {
     for (ConditionData& condition_data : data.activation_conditions_data) {
         FactoryResult<Condition> condition_result = create_condition(std::move(condition_data));
         if (!condition_result.is_valid()) {
-            auto [_, errors] = condition_result.data_and_errors();
-            return InvalidCreate<Effects>(std::move(data), std::move(errors));
+            auto [_, sub_errors] = condition_result.data_and_errors();
+            return InvalidCreate<Effects>(std::move(data), std::move(sub_errors));
         }
         activation_conditions.emplace_back(condition_result.value());
     }
@@ -47,8 +47,8 @@ CreateResult<Effects> Effects::create_for(Data&& data, const Content& content) {
     for (ChoiceData& choice_data : data.choices_data) {
         CreateResult<Choice> choice_result = Choice::create_for(std::move(choice_data), content);
         if (!choice_result.is_valid()) {
-            auto [_, errors] = choice_result.data_and_errors();
-            return InvalidCreate<Effects>(std::move(data), std::move(errors));
+            auto [_, sub_errors] = choice_result.data_and_errors();
+            return InvalidCreate<Effects>(std::move(data), std::move(sub_errors));
         }
         choices.emplace_back(choice_result.value());
     }
@@ -58,16 +58,16 @@ CreateResult<Effects> Effects::create_for(Data&& data, const Content& content) {
     for (StatChangeData& stat_change_data : data.stat_changes_data) {
         FactoryResult<StatChange> stat_change_result = create_stat_change(std::move(stat_change_data));
         if (!stat_change_result.is_valid()) {
-            auto [_, errors] = stat_change_result.data_and_errors();
-            return InvalidCreate<Effects>(std::move(data), std::move(errors));
+            auto [_, sub_errors] = stat_change_result.data_and_errors();
+            return InvalidCreate<Effects>(std::move(data), std::move(sub_errors));
         }
         stat_changes.emplace_back(stat_change_result.value());
     }
 
     CreateResult<ActionHolder> action_holder_result = ActionHolder::create(std::move(data.action_holder_data));
     if (!action_holder_result.is_valid()) {
-        auto [_, errors] = action_holder_result.data_and_errors();
-        return InvalidCreate<Effects>(std::move(data), std::move(errors));
+        auto [_, sub_errors] = action_holder_result.data_and_errors();
+        return InvalidCreate<Effects>(std::move(data), std::move(sub_errors));
     }
     ActionHolder action_holder = action_holder_result.value();
 
@@ -75,8 +75,8 @@ CreateResult<Effects> Effects::create_for(Data&& data, const Content& content) {
         std::move(data.extra_spells_holder_data), content
     );
     if (!extra_spells_holder_result.is_valid()) {
-        auto [_, errors] = extra_spells_holder_result.data_and_errors();
-        return InvalidCreate<Effects>(std::move(data), std::move(errors));
+        auto [_, sub_errors] = extra_spells_holder_result.data_and_errors();
+        return InvalidCreate<Effects>(std::move(data), std::move(sub_errors));
     }
     ExtraSpellsHolder extra_spells_holder = extra_spells_holder_result.value();
 
@@ -84,15 +84,15 @@ CreateResult<Effects> Effects::create_for(Data&& data, const Content& content) {
         std::move(data.proficiency_holder_data), content
     );
     if (!proficiency_holder_result.is_valid()) {
-        auto [_, errors] = proficiency_holder_result.data_and_errors();
-        return InvalidCreate<Effects>(std::move(data), std::move(errors));
+        auto [_, sub_errors] = proficiency_holder_result.data_and_errors();
+        return InvalidCreate<Effects>(std::move(data), std::move(sub_errors));
     }
     ProficiencyHolder proficiency_holder = proficiency_holder_result.value();
 
     CreateResult<RIVHolder> riv_holder_result = RIVHolder::create_for(std::move(data.riv_holder_data), content);
     if (!riv_holder_result.is_valid()) {
-        auto [_, errors] = riv_holder_result.data_and_errors();
-        return InvalidCreate<Effects>(std::move(data), std::move(errors));
+        auto [_, sub_errors] = riv_holder_result.data_and_errors();
+        return InvalidCreate<Effects>(std::move(data), std::move(sub_errors));
     }
     RIVHolder riv_holder = riv_holder_result.value();
 
