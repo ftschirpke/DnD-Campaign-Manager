@@ -20,7 +20,6 @@ namespace dnd {
 
 CreateResult<ClassFeature> ClassFeature::create_for(Data&& data, const Content& content) {
     Errors errors = data.validate_nonrecursively();
-    errors += data.validate_relations_nonrecursively(content);
     if (!errors.ok()) {
         return InvalidCreate<ClassFeature>(std::move(data), std::move(errors));
     }
@@ -30,7 +29,7 @@ CreateResult<ClassFeature> ClassFeature::create_for(Data&& data, const Content& 
         auto [_, errors] = main_effects_result.data_and_errors();
         return InvalidCreate<ClassFeature>(std::move(data), std::move(errors));
     }
-    Effects main_effects = Effects::create_for(std::move(data.main_effects_data), content);
+    Effects main_effects = main_effects_result.value();
 
     if (data.higher_level_effects_data.empty()) {
         return ValidCreate(ClassFeature(

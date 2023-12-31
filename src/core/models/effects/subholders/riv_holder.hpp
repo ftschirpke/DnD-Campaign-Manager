@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 
+#include <core/utils/data_result.hpp>
 #include <core/validation/effects/subholders/riv_holder_data.hpp>
 
 namespace dnd {

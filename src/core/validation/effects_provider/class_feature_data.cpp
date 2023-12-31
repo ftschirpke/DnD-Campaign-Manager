@@ -3,6 +3,7 @@
 #include "class_feature_data.hpp"
 
 #include <memory>
+#include <optional>
 
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
@@ -17,19 +18,37 @@ ClassFeatureData::ClassFeatureData(const ValidationData* parent) noexcept
 
 std::unique_ptr<ValidationData> ClassFeatureData::pack() const { return std::make_unique<ClassFeatureData>(*this); }
 
+static std::optional<ValidationError> validate_level(const ClassFeatureData& feature_data) {
+    if (feature_data.level <= 0) {
+        return ValidationError(
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, feature_data.get_parent(), "Feature level must be positive."
+        );
+    } else if (feature_data.level > 20) {
+        return ValidationError(
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, feature_data.get_parent(),
+            "Feature level must be at most 20."
+        );
+    }
+    return std::nullopt;
+}
+
 Errors ClassFeatureData::validate() const {
     Errors errors = FeatureData::validate();
-    if (level <= 0) {
-        errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, get_parent(), "Feature level must be positive."
-        );
-    } else if (level > 20) {
-        errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, get_parent(), "Feature level must be at most 20."
-        );
+    std::optional<ValidationError> level_error = validate_level(*this);
+    if (level_error.has_value()) {
+        errors.add_validation_error(std::move(level_error.value()));
     }
     for (const auto& [_, effects_data] : higher_level_effects_data) {
         errors += effects_data.validate();
+    }
+    return errors;
+}
+
+Errors ClassFeatureData::validate_nonrecursively() const {
+    Errors errors = FeatureData::validate_nonrecursively();
+    std::optional<ValidationError> level_error = validate_level(*this);
+    if (level_error.has_value()) {
+        errors.add_validation_error(std::move(level_error.value()));
     }
     return errors;
 }

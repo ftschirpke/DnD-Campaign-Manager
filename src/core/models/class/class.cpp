@@ -56,12 +56,18 @@ CreateResult<Class> Class::create_for(Data&& data, const Content& content) {
     std::vector<ClassFeature> features;
     features.reserve(data.features_data.size());
     for (ClassFeature::Data& feature_data : data.features_data) {
+        CreateResult<ClassFeature> feature_result = ClassFeature::create_for(std::move(feature_data), content);
+        if (!feature_result.is_valid()) {
+            auto [_, errors] = feature_result.data_and_errors();
+            return InvalidCreate<Class>(std::move(data), std::move(errors));
+        }
+        ClassFeature feature = feature_result.value();
         if (feature_data.name == data.subclass_feature_name) {
             subclass_level = determine_subclass_level(feature_data);
-            features.emplace_back(ClassFeature::create_for(std::move(feature_data), content));
+            features.emplace_back(std::move(feature));
             subclass_feature = &features.back();
         } else {
-            features.emplace_back(ClassFeature::create_for(std::move(feature_data), content));
+            features.emplace_back(std::move(feature));
         }
     }
     assert(subclass_level != -1);

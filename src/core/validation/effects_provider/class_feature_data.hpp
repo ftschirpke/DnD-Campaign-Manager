@@ -19,6 +19,7 @@ public:
     std::strong_ordering operator<=>(const ClassFeatureData&) const noexcept = default;
     virtual std::unique_ptr<ValidationData> pack() const override;
     virtual Errors validate() const override;
+    virtual Errors validate_nonrecursively() const override;
     virtual Errors validate_relations(const Content& content) const override;
 
     int level;
