@@ -17,6 +17,7 @@ std::unique_ptr<ValidationData> ChoosableData::pack() const { return std::make_u
 
 Errors ChoosableData::validate() const {
     Errors errors = validate_nonrecursively();
+    main_effects_data.validate();
     for (const ConditionData& prerequisite_data : prerequisites_data) {
         errors += prerequisite_data.validate();
     }
@@ -24,7 +25,7 @@ Errors ChoosableData::validate() const {
 }
 
 Errors ChoosableData::validate_nonrecursively() const {
-    Errors errors = FeatureData::validate();
+    Errors errors = FeatureData::validate_nonrecursively();
     if (type.empty()) {
         errors.add_validation_error(
             ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this, "Choosable Feature has empty type"

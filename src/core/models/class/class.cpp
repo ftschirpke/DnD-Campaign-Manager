@@ -27,6 +27,7 @@
 #include <core/validation/effects_provider/feature_data.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
+#include <iostream>
 namespace dnd {
 
 static constexpr const char* level_activation_regex_cstr = "CLASS_LEVEL >= [123456789]\\d?";
@@ -62,7 +63,7 @@ CreateResult<Class> Class::create_for(Data&& data, const Content& content) {
             return InvalidCreate<Class>(std::move(data), std::move(errors));
         }
         ClassFeature feature = feature_result.value();
-        if (feature_data.name == data.subclass_feature_name) {
+        if (feature.get_name() == data.subclass_feature_name) {
             subclass_level = determine_subclass_level(feature_data);
             features.emplace_back(std::move(feature));
             subclass_feature = &features.back();

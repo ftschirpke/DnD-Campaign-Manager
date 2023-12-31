@@ -88,7 +88,7 @@ CreateResult<SpellType> SpellType::create(Data&& data) {
         level = SpellLevel::CANTRIP;
         magic_school_str = data.str.substr(0, cantrip_idx);
     } else {
-        assert(std::isdigit(static_cast<unsigned char>(type_data.str[0])));
+        assert(std::isdigit(static_cast<unsigned char>(data.str[0])));
         level = SpellLevel(data.str[0] - '0');
         size_t i = data.str.find("level ") + 6;
         if (is_ritual) {
