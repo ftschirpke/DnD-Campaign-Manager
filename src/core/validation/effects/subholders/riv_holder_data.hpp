@@ -16,8 +16,6 @@ class RIVHolderData : public ValidationSubdata {
 public:
     RIVHolderData(const ValidationData* parent) noexcept;
     std::strong_ordering operator<=>(const RIVHolderData&) const noexcept = default;
-    virtual Errors validate() const override;
-    virtual Errors validate_relations(const Content& content) const override;
     bool empty() const noexcept;
 
     std::set<std::string> damage_resistances;

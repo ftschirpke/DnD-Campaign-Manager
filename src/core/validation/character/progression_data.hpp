@@ -16,7 +16,6 @@ class ProgressionData : public ValidationSubdata {
 public:
     ProgressionData(const ValidationData* parent) noexcept;
     std::strong_ordering operator<=>(const ProgressionData&) const noexcept = default;
-    virtual Errors validate() const override;
 
     int level;
     int xp;

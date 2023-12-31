@@ -17,7 +17,6 @@ class ActionHolderData : public ValidationSubdata {
 public:
     ActionHolderData(const ValidationData* parent) noexcept;
     std::strong_ordering operator<=>(const ActionHolderData&) const noexcept = default;
-    virtual Errors validate() const override;
     bool empty() const noexcept;
 
     std::map<std::string, std::string> actions;

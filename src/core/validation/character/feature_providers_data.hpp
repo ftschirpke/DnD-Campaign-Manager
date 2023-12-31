@@ -18,8 +18,6 @@ class FeatureProvidersData : public ValidationSubdata {
 public:
     FeatureProvidersData(const ValidationData* parent) noexcept;
     std::strong_ordering operator<=>(const FeatureProvidersData&) const noexcept = default;
-    virtual Errors validate() const override;
-    virtual Errors validate_relations(const Content& content) const override;
 
     std::string species_name;
     std::string subspecies_name;

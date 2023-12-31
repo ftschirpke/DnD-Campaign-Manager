@@ -24,8 +24,6 @@ class EffectsData : public ValidationSubdata {
 public:
     EffectsData(const ValidationData* parent) noexcept;
     std::strong_ordering operator<=>(const EffectsData&) const noexcept = default;
-    virtual Errors validate() const override;
-    virtual Errors validate_relations(const Content& content) const override;
 
     std::vector<ConditionData> activation_conditions_data;
     std::vector<ChoiceData> choices_data;

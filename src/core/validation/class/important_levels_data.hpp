@@ -16,7 +16,6 @@ class ImportantLevelsData : public ValidationSubdata {
 public:
     ImportantLevelsData(const ValidationData* parent) noexcept;
     std::strong_ordering operator<=>(const ImportantLevelsData&) const noexcept = default;
-    virtual Errors validate() const override;
 
     std::set<int> feat_levels;
 };

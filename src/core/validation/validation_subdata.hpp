@@ -16,8 +16,6 @@ class ValidationSubdata {
 public:
     virtual ~ValidationSubdata() noexcept = default;
     std::strong_ordering operator<=>(const ValidationSubdata&) const = default;
-    virtual Errors validate() const = 0;
-    virtual Errors validate_relations(const Content& content) const;
 
     const ValidationData* get_parent() const noexcept;
 protected:

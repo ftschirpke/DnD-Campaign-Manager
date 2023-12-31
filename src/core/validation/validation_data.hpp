@@ -18,8 +18,6 @@ public:
     virtual ~ValidationData() = default;
     std::strong_ordering operator<=>(const ValidationData&) const = default;
     virtual std::unique_ptr<ValidationData> pack() const = 0;
-    virtual Errors validate() const;
-    virtual Errors validate_relations(const Content& content) const;
 
     std::string name;
     std::string description;

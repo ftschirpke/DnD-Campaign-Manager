@@ -17,8 +17,6 @@ class ExtraSpellsHolderData : public ValidationSubdata {
 public:
     ExtraSpellsHolderData(const ValidationData* parent) noexcept;
     std::strong_ordering operator<=>(const ExtraSpellsHolderData&) const noexcept = default;
-    virtual Errors validate() const override;
-    virtual Errors validate_relations(const Content& content) const override;
     bool empty() const noexcept;
 
     // cantrips that do not count against the number of cantrips known

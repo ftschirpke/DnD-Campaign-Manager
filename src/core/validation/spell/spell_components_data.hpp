@@ -16,7 +16,6 @@ class SpellComponentsData : public ValidationSubdata {
 public:
     SpellComponentsData(const ValidationData* parent) noexcept;
     std::strong_ordering operator<=>(const SpellComponentsData&) const noexcept = default;
-    virtual Errors validate() const override;
 
     std::string str;
 };

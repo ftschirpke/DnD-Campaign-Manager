@@ -20,16 +20,6 @@ public:
     SpellData() noexcept;
     std::strong_ordering operator<=>(const SpellData&) const noexcept = default;
     virtual std::unique_ptr<ValidationData> pack() const override;
-    /**
-     * @brief Validates the data and all its children recursively.
-     * @return Errors object containing all the errors found.
-     */
-    virtual Errors validate() const override;
-    /**
-     * @brief Validates the data without validating its children.
-     * @return Errors object containing all the errors found.
-     */
-    virtual Errors validate_nonrecursively() const;
 
     SpellComponentsData components_data;
     SpellTypeData type_data;

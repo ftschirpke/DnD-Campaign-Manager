@@ -19,8 +19,6 @@ class ChoiceData : public ValidationSubdata {
 public:
     ChoiceData(const ValidationData* parent) noexcept;
     std::strong_ordering operator<=>(const ChoiceData&) const noexcept = default;
-    virtual Errors validate() const override;
-    virtual Errors validate_relations(const Content& content) const override;
     ChoiceType determine_type() const;
 
     std::string attribute_name;

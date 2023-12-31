@@ -17,10 +17,6 @@ class SubspeciesData : public ValidationData {
 public:
     std::strong_ordering operator<=>(const SubspeciesData&) const noexcept = default;
     virtual std::unique_ptr<ValidationData> pack() const override;
-    virtual Errors validate() const override;
-    virtual Errors validate_nonrecursively() const;
-    virtual Errors validate_relations(const Content& content) const override;
-    virtual Errors validate_relations_nonrecursively(const Content& content) const;
 
     std::vector<FeatureData> features_data;
     std::string species_name;

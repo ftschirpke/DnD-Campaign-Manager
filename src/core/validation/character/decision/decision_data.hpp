@@ -20,8 +20,6 @@ class DecisionData : public ValidationSubdata {
 public:
     DecisionData(const CharacterData* parent, const Effects* target) noexcept;
     std::strong_ordering operator<=>(const DecisionData&) const noexcept = default;
-    virtual Errors validate() const override;
-    virtual Errors validate_relations(const Content& content) const override;
 
     const CharacterData* get_character_data() const noexcept;
     const Effects* get_target() const noexcept;
@@ -34,6 +32,8 @@ private:
     const CharacterData* character_data;
     const Effects* target;
 };
+
+Errors validate_decision_for(const DecisionData& data, const Content& content);
 
 } // namespace dnd
 

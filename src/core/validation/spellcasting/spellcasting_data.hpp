@@ -17,7 +17,6 @@ class ClassData;
 class SpellcastingData : public ValidationSubdata {
 public:
     SpellcastingData(const ValidationData* parent) noexcept;
-    virtual Errors validate() const override;
 
     bool is_spellcaster;
     std::string ability;

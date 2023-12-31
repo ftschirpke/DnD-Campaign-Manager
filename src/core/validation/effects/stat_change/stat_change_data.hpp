@@ -16,7 +16,6 @@ class StatChangeData : public ValidationSubdata {
 public:
     StatChangeData(const ValidationData* parent) noexcept;
     std::strong_ordering operator<=>(const StatChangeData&) const noexcept = default;
-    virtual Errors validate() const override;
 
     std::string stat_change_str;
 };
