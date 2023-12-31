@@ -10,7 +10,6 @@
 
 #include <core/errors/errors.hpp>
 #include <core/utils/data_result.hpp>
-#include <core/validation/basic_mechanics/dice_data.hpp>
 
 namespace dnd {
 
@@ -29,21 +28,18 @@ enum class DiceType {
 
 class Dice {
 public:
-    using Data = DiceData;
-
     static tl::expected<Dice, Errors> single_from_int(int dice_number) noexcept;
     static tl::expected<Dice, Errors> single_from_int_with_modifier(int dice_number, int modifier) noexcept;
     static tl::expected<Dice, Errors> multi_from_int(int dice_number, int dice_count) noexcept;
     static tl::expected<Dice, Errors> multi_from_int_with_modifier(
         int dice_number, int dice_count, int modifier
     ) noexcept;
+    static tl::expected<Dice, Errors> from_string(const std::string& str) noexcept;
     static tl::expected<Dice, Errors> from_string(std::string&& str) noexcept;
     static tl::expected<Dice, Errors> from_dice_count_map(std::map<DiceType, int>&& dice_counts) noexcept;
     static tl::expected<Dice, Errors> from_dice_count_map_with_modifier(
         std::map<DiceType, int>&& dice_counts, int modifier
     ) noexcept;
-
-    static CreateResult<Dice> create(Data&& data) noexcept;
 
     int min_value() const noexcept;
     int max_value() const noexcept;

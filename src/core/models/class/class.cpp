@@ -1,7 +1,6 @@
 #include <dnd_config.hpp>
 
 #include "class.hpp"
-#include "core/utils/data_result.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -21,6 +20,7 @@
 #include <core/models/effects_provider/class_feature.hpp>
 #include <core/models/source_info.hpp>
 #include <core/models/spellcasting/spellcasting_factory.hpp>
+#include <core/utils/data_result.hpp>
 #include <core/validation/class/class_data.hpp>
 #include <core/validation/effects/condition/condition_data.hpp>
 #include <core/validation/effects/effects_data.hpp>
@@ -74,9 +74,15 @@ CreateResult<Class> Class::create_for(Data&& data, const Content& content) {
     assert(subclass_level != -1);
     assert(subclass_feature != nullptr);
 
-    CreateResult<Dice> hit_dice_result = Dice::create(std::move(data.hit_dice_data));
-    if (!hit_dice_result.is_valid()) {
-        auto [_, sub_errors] = hit_dice_result.data_and_errors();
+    tl::expected<Dice, Errors> hit_dice_result = Dice::from_string(data.hit_dice_str);
+    if (!hit_dice_result.has_value()) {
+        Errors sub_errors;
+        for (const Error& error : hit_dice_result.error().get_errors()) {
+            std::string error_message = std::visit([](const auto& error) { return error.get_error_message(); }, error);
+            sub_errors.add_validation_error(
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, &data, std::move(error_message)
+            );
+        }
         return InvalidCreate<Class>(std::move(data), std::move(sub_errors));
     }
     Dice hit_dice = hit_dice_result.value();

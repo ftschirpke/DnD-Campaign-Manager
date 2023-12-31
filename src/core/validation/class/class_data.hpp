@@ -9,7 +9,6 @@
 #include <vector>
 
 #include <core/errors/errors.hpp>
-#include <core/validation/basic_mechanics/dice_data.hpp>
 #include <core/validation/class/important_levels_data.hpp>
 #include <core/validation/effects_provider/class_feature_data.hpp>
 #include <core/validation/spellcasting/spellcasting_data.hpp>
@@ -24,15 +23,11 @@ public:
     ClassData() noexcept;
     std::strong_ordering operator<=>(const ClassData&) const noexcept = default;
     virtual std::unique_ptr<ValidationData> pack() const override;
-    virtual Errors validate() const override;
-    virtual Errors validate_nonrecursively() const;
-    virtual Errors validate_relations(const Content& content) const override;
-    virtual Errors validate_relations_nonrecursively(const Content& content) const;
 
     SpellcastingData spellcasting_data;
     std::vector<ClassFeatureData> features_data;
     std::string subclass_feature_name;
-    DiceData hit_dice_data;
+    std::string hit_dice_str;
     ImportantLevelsData important_levels_data;
 };
 

@@ -14,7 +14,6 @@
 #include <core/utils/char_manipulation.hpp>
 #include <core/utils/data_result.hpp>
 #include <core/utils/string_manipulation.hpp>
-#include <core/validation/basic_mechanics/dice_data.hpp>
 
 namespace dnd {
 
@@ -130,6 +129,10 @@ tl::expected<Dice, Errors> Dice::multi_from_int_with_modifier(int dice_number, i
     }
 }
 
+tl::expected<Dice, Errors> Dice::from_string(const std::string& str) noexcept {
+    return Dice::from_string(std::string(str));
+}
+
 tl::expected<Dice, Errors> Dice::from_string(std::string&& str) noexcept {
     string_lowercase_inplace(str);
     std::map<DiceType, int> dice_counts;
@@ -138,11 +141,9 @@ tl::expected<Dice, Errors> Dice::from_string(std::string&& str) noexcept {
     size_t d_index = str.find('d');
     size_t plus_index;
     if (d_index == std::string::npos) {
-        Errors errors;
-        errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, nullptr,
-            fmt::format("Invalid dice string '{}': no 'd' (or 'D') found.", str)
-        );
+        Errors errors(RuntimeError(
+            RuntimeError::Code::INVALID_ARGUMENT, fmt::format("Invalid dice string '{}': no 'd' (or 'D') found.", str)
+        ));
         return tl::unexpected(errors);
     }
     do {
@@ -181,11 +182,10 @@ tl::expected<Dice, Errors> Dice::from_string(std::string&& str) noexcept {
     } while (d_index != std::string::npos);
 
     if (str.find('+', current_index) != std::string::npos) {
-        Errors errors;
-        errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, nullptr,
+        Errors errors(RuntimeError(
+            RuntimeError::Code::INVALID_ARGUMENT,
             fmt::format("Invalid dice string '{}': please put the modifier at the end", str)
-        );
+        ));
         return tl::unexpected(errors);
     }
     modifier = std::stoi(str.substr(current_index));
@@ -219,18 +219,6 @@ tl::expected<Dice, Errors> Dice::from_dice_count_map_with_modifier(
         return tl::unexpected(errors);
     }
     return Dice(std::move(dice_counts), modifier);
-}
-
-CreateResult<Dice> Dice::create(Data&& data) noexcept {
-    Errors errors = data.validate();
-    if (!errors.ok()) {
-        return InvalidCreate<Dice>(std::move(data), std::move(errors));
-    }
-    tl::expected<Dice, Errors> dice_result = Dice::from_string(std::move(data.str));
-    if (!dice_result.has_value()) {
-        return InvalidCreate<Dice>(std::move(data), std::move(dice_result.error()));
-    }
-    return ValidCreate(std::move(dice_result.value()));
 }
 
 Dice::Dice(std::map<DiceType, int>&& dice_counts, int modifier) noexcept
