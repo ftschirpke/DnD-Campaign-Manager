@@ -14,17 +14,16 @@
 
 namespace dnd {
 
-CreateResult<SpellComponents> SpellComponents::create(Data&& components_data) {
-    Errors errors = components_data.validate();
+CreateResult<SpellComponents> SpellComponents::create(Data&& data) {
+    Errors errors = data.validate();
     if (!errors.ok()) {
-        return InvalidCreate<SpellComponents>(std::move(components_data), std::move(errors));
+        return InvalidCreate<SpellComponents>(std::move(data), std::move(errors));
     }
     bool verbal, somatic, material;
     std::string materials_needed;
 
-    size_t parentheses_idx = components_data.str.find(" (");
-    std::string first_part = (parentheses_idx == std::string::npos) ? components_data.str
-                                                                    : components_data.str.substr(0, parentheses_idx);
+    size_t parentheses_idx = data.str.find(" (");
+    std::string first_part = (parentheses_idx == std::string::npos) ? data.str : data.str.substr(0, parentheses_idx);
     if (first_part.size() == 7) {
         verbal = true;
         somatic = true;
@@ -43,9 +42,7 @@ CreateResult<SpellComponents> SpellComponents::create(Data&& components_data) {
         return ValidCreate(SpellComponents(false, false, false, ""));
     }
     if (material) {
-        materials_needed = components_data.str.substr(
-            parentheses_idx + 2, components_data.str.size() - parentheses_idx - 3
-        );
+        materials_needed = data.str.substr(parentheses_idx + 2, data.str.size() - parentheses_idx - 3);
     }
     return ValidCreate(SpellComponents(verbal, somatic, material, std::move(materials_needed)));
 }
