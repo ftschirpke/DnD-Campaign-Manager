@@ -19,8 +19,8 @@ using Error = std::variant<ParsingError, ValidationError>;
 class Errors {
 public:
     Errors() noexcept = default;
-    Errors(const Errors&) = delete;
-    Errors& operator=(const Errors&) = delete;
+    Errors(const Errors&) = default;
+    Errors& operator=(const Errors&) = default;
     Errors(Errors&&) noexcept = default;
     Errors& operator=(Errors&&) noexcept = default;
 

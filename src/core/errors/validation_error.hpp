@@ -21,7 +21,7 @@ public:
     const std::string& get_error_message() const noexcept;
 private:
     Code error_code;
-    std::unique_ptr<ValidationData> validation_data;
+    std::shared_ptr<ValidationData> validation_data;
     std::string error_message;
 };
 
