@@ -8,8 +8,10 @@ CMakeSettings.json
 
 # output specific ignores
 build/
-out/
 debug/
+release/
+out/
+bench/
 *.ini
 
 # content specific ignores
