@@ -10,18 +10,20 @@
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/models/source_info.hpp>
+#include <core/utils/data_result.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
 namespace dnd {
 
-Item Item::create(Data&& item_data) {
-    if (!item_data.validate().ok()) {
-        throw invalid_data("Cannot create Item from invalid data.");
+CreateResult<Item> Item::create(Data&& item_data) {
+    Errors errors = item_data.validate();
+    if (!errors.ok()) {
+        return InvalidCreate<Item>(std::move(item_data), std::move(errors));
     }
-    return Item(
+    return ValidCreate(Item(
         std::move(item_data.name), std::move(item_data.description), std::move(item_data.source_path),
         std::move(item_data.cosmetic_description), item_data.requires_attunement
-    );
+    ));
 }
 
 const std::string& Item::get_name() const noexcept { return name; }
