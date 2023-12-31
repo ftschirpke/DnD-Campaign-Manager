@@ -38,7 +38,7 @@ public:
     const std::vector<std::pair<typename T::Data, Errors>>& get_drafts() const;
     OptCRef<T> add(T&& content_piece);
     void add_draft(std::pair<typename T::Data, Errors>&& draft);
-    void add_draft(T::Data&& draft_data, Errors&& draft_errors);
+    void add_draft(typename T::Data&& draft_data, Errors&& draft_errors);
     OptCRef<T> add_result(CreateResult<T>&& content_piece_result);
     /**
      * @brief Get the root of the trie
@@ -152,7 +152,7 @@ void StorageContentLibrary<T>::add_draft(std::pair<typename T::Data, Errors>&& d
 
 template <typename T>
 requires isContentPieceType<T>
-void StorageContentLibrary<T>::add_draft(T::Data&& draft_data, Errors&& draft_errors) {
+void StorageContentLibrary<T>::add_draft(typename T::Data&& draft_data, Errors&& draft_errors) {
     drafts.emplace_back(std::move(draft_data), std::move(draft_errors));
 }
 
