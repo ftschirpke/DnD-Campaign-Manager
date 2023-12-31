@@ -4,6 +4,7 @@
 #include <dnd_config.hpp>
 
 #include <core/basic_mechanics/abilities.hpp>
+#include <core/utils/data_result.hpp>
 #include <core/validation/character/ability_scores_data.hpp>
 
 namespace dnd {
@@ -12,13 +13,7 @@ class AbilityScores {
 public:
     using Data = AbilityScoresData;
 
-    /**
-     * @brief Constructs an AbilityScores object
-     * @param data the data to construct the AbilityScores object from
-     * @return the constructed AbilityScores object
-     * @throws invalid_data if the given data is invalid
-     */
-    static AbilityScores create(Data&& data);
+    static CreateResult<AbilityScores> create(Data&& data);
 
     int get(Ability ability) const noexcept;
     int get_strength() const noexcept;

@@ -9,11 +9,12 @@
 
 namespace dnd {
 
-Progression Progression::create(Data&& data) {
-    if (!data.validate().ok()) {
-        throw invalid_data("Cannot create Progression object from invalid data.");
+CreateResult<Progression> Progression::create(Data&& data) {
+    Errors errors = data.validate();
+    if (!errors.ok()) {
+        return InvalidCreate<Progression>(std::move(data), std::move(errors));
     }
-    return Progression(data.level, data.xp, std::move(data.hit_dice_rolls));
+    return ValidCreate(Progression(data.level, data.xp, std::move(data.hit_dice_rolls)));
 }
 
 int Progression::get_level() const noexcept { return level; }

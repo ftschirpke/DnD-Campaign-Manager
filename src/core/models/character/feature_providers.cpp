@@ -16,24 +16,23 @@
 
 namespace dnd {
 
-FeatureProviders FeatureProviders::create_for(Data&& data, const Content& content) {
-    if (!data.validate().ok()) {
-        throw invalid_data("Cannot create FeatureProviders object from invalid data.");
-    }
-    if (!data.validate_relations(content).ok()) {
-        throw invalid_data("FeatureProviders data is incompatible with the given content.");
+CreateResult<FeatureProviders> FeatureProviders::create_for(Data&& data, const Content& content) {
+    Errors errors = data.validate();
+    errors += data.validate_relations(content);
+    if (!errors.ok()) {
+        return InvalidCreate<FeatureProviders>(std::move(data), std::move(errors));
     }
     const Species& species = content.get_species().get(data.species_name).value().get();
     OptCRef<Subspecies> subspecies;
+    if (!data.subspecies_name.empty()) {
+        subspecies = content.get_subspecies().get(data.subspecies_name);
+    }
     const Class& cls = content.get_classes().get(data.class_name).value().get();
     OptCRef<Subclass> subclass;
-    if (!data.subspecies_name.empty()) {
-        subspecies = content.get_subspecies().get(data.subspecies_name).value().get();
-    }
     if (!data.subclass_name.empty()) {
-        subclass = content.get_subclasses().get(data.subclass_name).value().get();
+        subclass = content.get_subclasses().get(data.subclass_name);
     }
-    return FeatureProviders(species, subspecies, cls, subclass);
+    return ValidCreate(FeatureProviders(species, subspecies, cls, subclass));
 }
 
 const Species& FeatureProviders::get_species() const noexcept { return species; }

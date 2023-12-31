@@ -16,24 +16,33 @@
 
 namespace dnd {
 
-Choosable Choosable::create_for(Data&& data, const Content& content) {
-    if (!data.validate().ok()) {
-        throw invalid_data("Cannot create choosable feature from invalid data");
-    }
-    if (!data.validate_relations(content).ok()) {
-        throw invalid_data("Choosable feature data is incompatible with the given content");
+CreateResult<Choosable> Choosable::create_for(Data&& data, const Content& content) {
+    Errors errors = data.validate_nonrecursively();
+    if (!errors.ok()) {
+        return InvalidCreate<Choosable>(std::move(data), std::move(errors));
     }
     std::vector<std::unique_ptr<Condition>> prerequisites;
     prerequisites.reserve(data.prerequisites_data.size());
     for (ConditionData& prerequisite_data : data.prerequisites_data) {
-        prerequisites.emplace_back(create_condition(std::move(prerequisite_data)));
+        FactoryResult<Condition> prerequisite_result = create_condition(std::move(prerequisite_data));
+        if (!prerequisite_result.is_valid()) {
+            auto [_, sub_errors] = prerequisite_result.data_and_errors();
+            return InvalidCreate<Choosable>(std::move(data), std::move(sub_errors));
+        }
+        prerequisites.emplace_back(prerequisite_result.value());
     }
 
-    Effects main_part = Effects::create_for(std::move(data.main_effects_data), content);
-    return Choosable(
+    CreateResult<Effects> main_part_result = Effects::create_for(std::move(data.main_effects_data), content);
+    if (!main_part_result.is_valid()) {
+        auto [_, sub_errors] = main_part_result.data_and_errors();
+        return InvalidCreate<Choosable>(std::move(data), std::move(sub_errors));
+    }
+    Effects main_part = main_part_result.value();
+
+    return ValidCreate(Choosable(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.type),
         std::move(prerequisites), std::move(main_part)
-    );
+    ));
 }
 
 const std::string& Choosable::get_name() const noexcept { return name; }

@@ -94,14 +94,8 @@ Errors SubclassParser::parse() {
     return errors;
 }
 
-Errors SubclassParser::validate(const Content& content) const {
-    Errors errors = data.validate();
-    errors += data.validate_relations(content);
-    return errors;
-}
-
 void SubclassParser::save_result(Content& content) {
-    content.add_subclass(Subclass::create_for(std::move(data), content));
+    content.add_subclass_result(Subclass::create_for(std::move(data), content));
 }
 
 } // namespace dnd

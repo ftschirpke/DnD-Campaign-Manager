@@ -50,30 +50,12 @@ Errors ItemParser::parse() {
         }
         errors += std::move(item_errors);
     }
-    items_in_file = item_data.size();
-    return errors;
-}
-
-Errors ItemParser::validate(const Content& content) const {
-    Errors errors;
-    assert(items_in_file == item_data.size());
-    item_data_valid.resize(items_in_file, false);
-    for (size_t i = 0; i < items_in_file; ++i) {
-        Errors validation_errors = item_data[i].validate();
-        validation_errors += item_data[i].validate_relations(content);
-        item_data_valid[i] = validation_errors.ok();
-        errors += std::move(validation_errors);
-    }
     return errors;
 }
 
 void ItemParser::save_result(Content& content) {
-    assert(items_in_file == item_data_valid.size());
-    assert(items_in_file == item_data.size());
-    for (size_t i = 0; i < items_in_file; ++i) {
-        if (item_data_valid[i]) {
-            content.add_item(Item::create(std::move(item_data[i])));
-        }
+    for (ItemData& data : item_data) {
+        content.add_item_result(Item::create(std::move(data)));
     }
 }
 

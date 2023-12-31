@@ -48,30 +48,12 @@ Errors SpellParser::parse() {
         }
         errors += std::move(spell_errors);
     }
-    spells_in_file = spell_data.size();
-    return errors;
-}
-
-Errors SpellParser::validate(const Content& content) const {
-    Errors errors;
-    assert(spells_in_file == spell_data.size());
-    spell_data_valid.resize(spells_in_file, false);
-    for (size_t i = 0; i < spells_in_file; ++i) {
-        Errors validation_errors = spell_data[i].validate();
-        validation_errors += spell_data[i].validate_relations(content);
-        spell_data_valid[i] = validation_errors.ok();
-        errors += std::move(validation_errors);
-    }
     return errors;
 }
 
 void SpellParser::save_result(Content& content) {
-    assert(spells_in_file == spell_data_valid.size());
-    assert(spells_in_file == spell_data.size());
-    for (size_t i = 0; i < spells_in_file; ++i) {
-        if (spell_data_valid[i]) {
-            content.add_spell(Spell::create(std::move(spell_data[i])));
-        }
+    for (SpellData& data : spell_data) {
+        content.add_spell_result(Spell::create(std::move(data)));
     }
 }
 

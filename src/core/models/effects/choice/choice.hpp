@@ -11,6 +11,7 @@
 #include <core/errors/errors.hpp>
 #include <core/models/effects/choice/choice_rules.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
+#include <core/utils/data_result.hpp>
 #include <core/validation/effects/choice/choice_data.hpp>
 
 namespace dnd {
@@ -22,14 +23,7 @@ class Choice {
 public:
     using Data = ChoiceData;
 
-    /**
-     * @brief Constructs a choice from the given data and content
-     * @param data the data to construct the choice from
-     * @param content the content to use for the construction
-     * @return the constructed choice
-     * @throws invalid_data if the data is invalid or is incompatible with the given content
-     */
-    static Choice create_for(Data&& data, const Content& content);
+    static CreateResult<Choice> create_for(Data&& data, const Content& content);
 
     const std::string& get_attribute_name() const noexcept;
     int get_amount() const noexcept;

@@ -29,14 +29,7 @@ class Character : public ContentPiece {
 public:
     using Data = CharacterData;
 
-    /**
-     * @brief Constructs a character from the given data and content
-     * @param data the data to construct the character from
-     * @param content the content to use for the construction
-     * @return the constructed character
-     * @throws invalid_data if the given data is invalid or is incompatible with the given content
-     */
-    static Character create_for(Data&& data, const Content& content);
+    static CreateResult<Character> create_for(Data&& data, const Content& content);
 
     Character(const Character&) = delete;
     Character& operator=(const Character&) = delete;

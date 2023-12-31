@@ -16,17 +16,21 @@
 
 namespace dnd {
 
-Feature Feature::create_for(Data&& data, const Content& content) {
-    if (!data.validate().ok()) {
-        throw invalid_data("Cannot create feature from invalid data.");
-    }
-    if (!data.validate_relations(content).ok()) {
-        throw invalid_data("Feature data is incompatible with the given content.");
+CreateResult<Feature> Feature::create_for(Data&& data, const Content& content) {
+    Errors errors = data.validate_nonrecursively();
+    if (!errors.ok()) {
+        return InvalidCreate<Feature>(std::move(data), std::move(errors));
     }
 
-    Effects main_part = Effects::create_for(std::move(data.main_effects_data), content);
-    return Feature(
-        std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(main_part)
+    CreateResult<Effects> main_effects_result = Effects::create_for(std::move(data.main_effects_data), content);
+    if (!main_effects_result.is_valid()) {
+        auto [_, sub_errors] = main_effects_result.data_and_errors();
+        return InvalidCreate<Feature>(std::move(data), std::move(sub_errors));
+    }
+    Effects main_part = main_effects_result.value();
+
+    return ValidCreate(
+        Feature(std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(main_part))
     );
 }
 

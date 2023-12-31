@@ -8,6 +8,7 @@
 
 #include <core/models/content_piece.hpp>
 #include <core/models/source_info.hpp>
+#include <core/utils/data_result.hpp>
 #include <core/validation/item/item_data.hpp>
 
 namespace dnd {
@@ -18,13 +19,7 @@ class Item : public ContentPiece {
 public:
     using Data = ItemData;
 
-    /**
-     * @brief Constructs an item
-     * @param item_data the data to construct the item from
-     * @return the constructed item
-     * @throws invalid_data if the data is invalid
-     */
-    static Item create(Data&& item_data);
+    static CreateResult<Item> create(Data&& item_data);
 
     const std::string& get_name() const noexcept override;
     const std::string& get_description() const noexcept override;

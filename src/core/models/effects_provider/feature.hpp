@@ -25,14 +25,7 @@ class Feature : public ContentPiece, public EffectsProvider {
 public:
     using Data = FeatureData;
 
-    /**
-     * @brief Constructs a feature from the given data and content
-     * @param data the data to construct the feature from
-     * @param content the content to use for the construction
-     * @return the constructed feature
-     * @throws invalid_data if the given data is invalid or is incompatible with the given content
-     */
-    static Feature create_for(Data&& data, const Content& content);
+    static CreateResult<Feature> create_for(Data&& data, const Content& content);
 
     Feature(const Feature&) = delete;
     Feature& operator=(const Feature&) = delete;

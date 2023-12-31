@@ -24,7 +24,7 @@
 
 // runtime measurement if in debug mode
 #if DND_DEBUG_MODE
-#define DND_DEBUG_DIRECTORY "@DND_DEBUG_DIRECTORY@"
+#define DND_BENCH_DIRECTORY "@DND_BENCH_DIRECTORY@"
 
 #include <runtime_measurement/measurer.hpp>
 

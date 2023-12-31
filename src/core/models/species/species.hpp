@@ -10,6 +10,7 @@
 #include <core/models/content_piece.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/source_info.hpp>
+#include <core/utils/data_result.hpp>
 #include <core/validation/species/species_data.hpp>
 
 namespace dnd {
@@ -21,14 +22,7 @@ class Species : public ContentPiece {
 public:
     using Data = SpeciesData;
 
-    /**
-     * @brief Constructs a character species from the given data and content
-     * @param data the data to construct the character species from
-     * @param content the content to use for the construction
-     * @return the constructed character species
-     * @throws invalid_data if the given data is invalid or is incompatible with the given content
-     */
-    static Species create_for(Data&& data, const Content& content);
+    static CreateResult<Species> create_for(Data&& data, const Content& content);
 
     Species(const Species&) = delete;
     Species& operator=(const Species&) = delete;

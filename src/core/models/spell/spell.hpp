@@ -21,13 +21,7 @@ class Spell : public ContentPiece {
 public:
     using Data = SpellData;
 
-    /**
-     * @brief Constructs a spell
-     * @param spell_data the data to construct the spell from
-     * @return the constructed spell
-     * @throws invalid_data if the data is invalid
-     */
-    static Spell create(Data&& spell_data);
+    static CreateResult<Spell> create(Data&& spell_data);
 
     const std::string& get_name() const noexcept override;
     const std::string& get_description() const noexcept override;

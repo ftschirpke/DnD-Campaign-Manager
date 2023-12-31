@@ -24,12 +24,11 @@ static std::vector<const Spell*> find_spells_in_content(
     return spells;
 }
 
-ExtraSpellsHolder ExtraSpellsHolder::create_for(Data&& data, const Content& content) {
-    if (!data.validate().ok()) {
-        throw invalid_data("Cannot create ExtraSpellsHolderData from invalid data.");
-    }
-    if (!data.validate_relations(content).ok()) {
-        throw invalid_data("ExtraSpellsHolderData is incompatible with the given content.");
+CreateResult<ExtraSpellsHolder> ExtraSpellsHolder::create_for(Data&& data, const Content& content) {
+    Errors errors = data.validate();
+    errors += data.validate_relations(content);
+    if (!errors.ok()) {
+        return InvalidCreate<ExtraSpellsHolder>(std::move(data), std::move(errors));
     }
     std::vector<const Spell*> free_cantrips = find_spells_in_content(data.free_cantrips, content);
     std::vector<const Spell*> at_will = find_spells_in_content(data.at_will, content);
@@ -38,10 +37,10 @@ ExtraSpellsHolder ExtraSpellsHolder::create_for(Data&& data, const Content& cont
     std::vector<const Spell*> spells_known = find_spells_in_content(data.spells_known, content);
     std::vector<const Spell*> spells_known_included = find_spells_in_content(data.spells_known_included, content);
     std::vector<const Spell*> added_to_spell_list = find_spells_in_content(data.added_to_spell_list, content);
-    return ExtraSpellsHolder(
+    return ValidCreate(ExtraSpellsHolder(
         std::move(free_cantrips), std::move(at_will), std::move(innate), std::move(free_once_a_day),
         std::move(spells_known), std::move(spells_known_included), std::move(added_to_spell_list)
-    );
+    ));
 }
 
 const std::vector<const Spell*>& ExtraSpellsHolder::get_free_cantrips() const noexcept { return free_cantrips; }

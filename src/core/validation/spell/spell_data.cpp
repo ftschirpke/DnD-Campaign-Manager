@@ -25,9 +25,16 @@ std::unique_ptr<ValidationData> SpellData::pack() const { return std::make_uniqu
 
 Errors SpellData::validate() const {
     DND_MEASURE_FUNCTION();
-    Errors errors = ValidationData::validate();
+
+    Errors errors = validate_nonrecursively();
     errors += components_data.validate();
     errors += type_data.validate();
+    return errors;
+}
+
+Errors SpellData::validate_nonrecursively() const {
+    DND_MEASURE_FUNCTION();
+    Errors errors = ValidationData::validate();
     if (casting_time.empty()) {
         errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this, "Casting time is empty");
     }

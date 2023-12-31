@@ -20,7 +20,6 @@ public:
     virtual Errors parse() = 0;
     bool continue_after_errors() const noexcept;
     virtual void set_context(const Content& content);
-    virtual Errors validate(const Content& content) const = 0;
     virtual void save_result(Content& content) = 0;
 protected:
     nlohmann::ordered_json json;

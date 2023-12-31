@@ -1,6 +1,7 @@
 #include <dnd_config.hpp>
 
 #include "class.hpp"
+#include "core/utils/data_result.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -26,6 +27,7 @@
 #include <core/validation/effects_provider/feature_data.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
+#include <iostream>
 namespace dnd {
 
 static constexpr const char* level_activation_regex_cstr = "CLASS_LEVEL >= [123456789]\\d?";
@@ -42,12 +44,11 @@ static int determine_subclass_level(const FeatureData& subclass_feature_data) {
     return 1;
 }
 
-Class Class::create_for(Data&& data, const Content& content) {
-    if (!data.validate().ok()) {
-        throw invalid_data("Cannot create character class from invalid data.");
-    }
-    if (!data.validate_relations(content).ok()) {
-        throw invalid_data("Character class data is incompatible with the given content.");
+CreateResult<Class> Class::create_for(Data&& data, const Content& content) {
+    Errors errors = data.validate_nonrecursively();
+    errors += data.validate_relations_nonrecursively(content);
+    if (!errors.ok()) {
+        return InvalidCreate<Class>(std::move(data), std::move(errors));
     }
 
     int subclass_level = -1;
@@ -56,25 +57,44 @@ Class Class::create_for(Data&& data, const Content& content) {
     std::vector<ClassFeature> features;
     features.reserve(data.features_data.size());
     for (ClassFeature::Data& feature_data : data.features_data) {
-        if (feature_data.name == data.subclass_feature_name) {
+        CreateResult<ClassFeature> feature_result = ClassFeature::create_for(std::move(feature_data), content);
+        if (!feature_result.is_valid()) {
+            auto [_, sub_errors] = feature_result.data_and_errors();
+            return InvalidCreate<Class>(std::move(data), std::move(sub_errors));
+        }
+        ClassFeature feature = feature_result.value();
+        if (feature.get_name() == data.subclass_feature_name) {
             subclass_level = determine_subclass_level(feature_data);
-            features.emplace_back(ClassFeature::create_for(std::move(feature_data), content));
+            features.emplace_back(std::move(feature));
             subclass_feature = &features.back();
         } else {
-            features.emplace_back(ClassFeature::create_for(std::move(feature_data), content));
+            features.emplace_back(std::move(feature));
         }
     }
     assert(subclass_level != -1);
     assert(subclass_feature != nullptr);
 
-    Dice hit_dice = Dice::create(std::move(data.hit_dice_data));
-    ImportantLevels important_levels = ImportantLevels::create(std::move(data.important_levels_data), subclass_level);
+    CreateResult<Dice> hit_dice_result = Dice::create(std::move(data.hit_dice_data));
+    if (!hit_dice_result.is_valid()) {
+        auto [_, sub_errors] = hit_dice_result.data_and_errors();
+        return InvalidCreate<Class>(std::move(data), std::move(sub_errors));
+    }
+    Dice hit_dice = hit_dice_result.value();
 
-    return Class(
+    CreateResult<ImportantLevels> important_levels_result = ImportantLevels::create(
+        std::move(data.important_levels_data), subclass_level
+    );
+    if (!important_levels_result.is_valid()) {
+        auto [_, sub_errors] = important_levels_result.data_and_errors();
+        return InvalidCreate<Class>(std::move(data), std::move(sub_errors));
+    }
+    ImportantLevels important_levels = important_levels_result.value();
+
+    return ValidCreate(Class(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(features),
         subclass_feature, std::move(hit_dice), std::move(important_levels),
         create_spellcasting(std::move(data.spellcasting_data))
-    );
+    ));
 }
 
 const std::string& Class::get_name() const noexcept { return name; }

@@ -6,6 +6,7 @@
 #include <functional>
 #include <vector>
 
+#include <core/utils/data_result.hpp>
 #include <core/utils/types.hpp>
 #include <core/validation/character/feature_providers_data.hpp>
 
@@ -21,14 +22,7 @@ class FeatureProviders {
 public:
     using Data = FeatureProvidersData;
 
-    /**
-     * @brief Constructs a FeatureProviders object
-     * @param data the data to construct the FeatureProviders object from
-     * @param content the content to use for the construction
-     * @return the constructed FeatureProviders object
-     * @throws invalid_data if the given data is invalid or is incompatible with the given content
-     */
-    static FeatureProviders create_for(Data&& data, const Content& content);
+    static CreateResult<FeatureProviders> create_for(Data&& data, const Content& content);
 
     const Species& get_species() const noexcept;
     OptCRef<Subspecies> get_subspecies() const noexcept;

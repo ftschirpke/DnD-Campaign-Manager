@@ -71,34 +71,35 @@ MagicSchool magic_school_from_name(std::string_view magic_school_name) {
     throw std::out_of_range(fmt::format("The magic school \"{}\" does not exist.", magic_school_name));
 }
 
-SpellType SpellType::create(Data&& type_data) {
-    if (!type_data.validate().ok()) {
-        throw invalid_data("Cannot create SpellType from invalid data.");
+CreateResult<SpellType> SpellType::create(Data&& data) {
+    Errors errors = data.validate();
+    if (!errors.ok()) {
+        return InvalidCreate<SpellType>(std::move(data), std::move(errors));
     }
     bool is_ritual;
     SpellLevel level;
     MagicSchool magic_school;
 
-    size_t ritual_idx = type_data.str.find(" (ritual)");
+    size_t ritual_idx = data.str.find(" (ritual)");
     is_ritual = ritual_idx != std::string::npos;
     std::string magic_school_str;
-    size_t cantrip_idx = type_data.str.find(" cantrip");
+    size_t cantrip_idx = data.str.find(" cantrip");
     if (cantrip_idx != std::string::npos) {
         level = SpellLevel::CANTRIP;
-        magic_school_str = type_data.str.substr(0, cantrip_idx);
+        magic_school_str = data.str.substr(0, cantrip_idx);
     } else {
-        assert(std::isdigit(static_cast<unsigned char>(type_data.str[0])));
-        level = SpellLevel(type_data.str[0] - '0');
-        size_t i = type_data.str.find("level ") + 6;
+        assert(std::isdigit(static_cast<unsigned char>(data.str[0])));
+        level = SpellLevel(data.str[0] - '0');
+        size_t i = data.str.find("level ") + 6;
         if (is_ritual) {
-            magic_school_str = type_data.str.substr(i, ritual_idx - i);
+            magic_school_str = data.str.substr(i, ritual_idx - i);
         } else {
-            magic_school_str = type_data.str.substr(i, type_data.str.size() - i);
+            magic_school_str = data.str.substr(i, data.str.size() - i);
         }
     }
     string_lowercase_inplace(magic_school_str);
     magic_school = magic_school_from_name(magic_school_str);
-    return SpellType(level, magic_school, is_ritual);
+    return ValidCreate(SpellType(level, magic_school, is_ritual));
 }
 
 SpellType::SpellType(SpellLevel spell_level, MagicSchool magic_school, bool is_ritual) noexcept

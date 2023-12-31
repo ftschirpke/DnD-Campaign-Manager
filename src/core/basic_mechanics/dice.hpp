@@ -6,6 +6,7 @@
 #include <map>
 #include <string>
 
+#include <core/utils/data_result.hpp>
 #include <core/validation/basic_mechanics/dice_data.hpp>
 
 namespace dnd {
@@ -69,13 +70,7 @@ public:
      */
     static Dice from_string(std::string&& str);
 
-    /**
-     * @brief Constructs a dice object from the given data
-     * @param data the data to construct the dice object from
-     * @return the constructed dice object
-     * @throw invalid_data if the data is invalid
-     */
-    static Dice create(Data&& data);
+    static CreateResult<Dice> create(Data&& data);
 
     Dice(std::map<DiceType, int> dice_counts);
     Dice(std::map<DiceType, int> dice_counts, int modifier);

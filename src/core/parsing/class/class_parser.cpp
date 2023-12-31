@@ -97,12 +97,8 @@ Errors ClassParser::parse() {
     return errors;
 }
 
-Errors ClassParser::validate(const Content& content) const {
-    Errors errors = data.validate();
-    errors += data.validate_relations(content);
-    return errors;
+void ClassParser::save_result(Content& content) {
+    content.add_class_result(Class::create_for(std::move(data), content));
 }
-
-void ClassParser::save_result(Content& content) { content.add_class(Class::create_for(std::move(data), content)); }
 
 } // namespace dnd

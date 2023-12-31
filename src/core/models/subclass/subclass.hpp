@@ -24,14 +24,7 @@ class Subclass : public ContentPiece {
 public:
     using Data = SubclassData;
 
-    /**
-     * @brief Constructs a character subclass from the given data and content
-     * @param data the data to construct the character subclass from
-     * @param content the content to use for the construction
-     * @return the constructed character subclass
-     * @throws invalid_data if the given data is invalid or is incompatible with the given content
-     */
-    static Subclass create_for(Data&& data, const Content& content);
+    static CreateResult<Subclass> create_for(Data&& data, const Content& content);
 
     Subclass(const Subclass&) = delete;
     Subclass& operator=(const Subclass&) = delete;

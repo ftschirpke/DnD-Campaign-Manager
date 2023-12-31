@@ -6,17 +6,12 @@
 #include <memory>
 
 #include <core/models/effects/stat_change/stat_change.hpp>
+#include <core/utils/data_result.hpp>
 #include <core/validation/effects/stat_change/stat_change_data.hpp>
 
 namespace dnd {
 
-/**
- * @brief Constructs a stat change
- * @param stat_change_data the data to construct the stat change from
- * @return the constructed stat change
- * @throw invalid_data if the data is invalid
- */
-std::unique_ptr<StatChange> create_stat_change(StatChange::Data&& stat_change_data);
+FactoryResult<StatChange> create_stat_change(StatChange::Data&& stat_change_data);
 
 } // namespace dnd
 

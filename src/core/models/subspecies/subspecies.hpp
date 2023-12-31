@@ -11,6 +11,7 @@
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/source_info.hpp>
 #include <core/models/species/species.hpp>
+#include <core/utils/data_result.hpp>
 #include <core/validation/subspecies/subspecies_data.hpp>
 
 namespace dnd {
@@ -22,14 +23,7 @@ class Subspecies : public ContentPiece {
 public:
     using Data = SubspeciesData;
 
-    /**
-     * @brief Constructs a character subspecies from the given data and content
-     * @param data the data to construct the character subspecies from
-     * @param content the content to use for the construction
-     * @return the constructed character subspecies
-     * @throws invalid_data if the given data is invalid or is incompatible with the given content
-     */
-    static Subspecies create_for(Data&& data, const Content& content);
+    static CreateResult<Subspecies> create_for(Data&& data, const Content& content);
 
     Subspecies(const Subspecies&) = delete;
     Subspecies& operator=(const Subspecies&) = delete;

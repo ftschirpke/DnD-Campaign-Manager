@@ -12,6 +12,7 @@
 
 #include <core/content.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
+#include <core/utils/data_result.hpp>
 #include <core/validation/effects/subholders/riv_holder_data.hpp>
 
 namespace dnd {
@@ -23,17 +24,16 @@ static std::vector<std::string> set_to_vector(std::set<std::string>&& set) {
     return vector;
 }
 
-RIVHolder RIVHolder::create_for(Data&& data, const Content& content) {
-    if (!data.validate().ok()) {
-        throw invalid_data("Cannot create RIVHolder from invalid data.");
+CreateResult<RIVHolder> RIVHolder::create_for(Data&& data, const Content& content) {
+    Errors errors = data.validate();
+    errors += data.validate_relations(content);
+    if (!errors.ok()) {
+        return InvalidCreate<RIVHolder>(std::move(data), std::move(errors));
     }
-    if (!data.validate_relations(content).ok()) {
-        throw invalid_data("RIVHolderData is incompatible with the given content.");
-    }
-    return RIVHolder(
+    return ValidCreate(RIVHolder(
         set_to_vector(std::move(data.damage_resistances)), set_to_vector(std::move(data.damage_immunities)),
         set_to_vector(std::move(data.damage_vulnerabilities)), set_to_vector(std::move(data.condition_immunities))
-    );
+    ));
 }
 
 const std::vector<std::string>& RIVHolder::get_damage_resistances() const noexcept { return damage_resistances; }

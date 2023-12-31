@@ -57,28 +57,6 @@ Errors StringGroupParser::parse() {
     return errors;
 }
 
-Errors StringGroupParser::validate(const Content& content) const {
-    DND_UNUSED(content);
-    Errors errors;
-    for (const auto& [group_name, values] : subgroups) {
-        if (values.contains("")) {
-            errors.add_validation_error(
-                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, nullptr,
-                fmt::format("The group '{}' cannot have a subgroup \"\".", group_name)
-            );
-        }
-    }
-    for (const auto& [group_name, values] : members) {
-        if (values.contains("")) {
-            errors.add_validation_error(
-                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, nullptr,
-                fmt::format("The group '{}' contains an empty string.", group_name)
-            );
-        }
-    }
-    return errors;
-}
-
 void StringGroupParser::save_result(Content& content) {
     for (auto& [group_name, values] : subgroups) {
         content.set_subgroups(group_name, std::move(values));

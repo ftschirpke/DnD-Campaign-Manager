@@ -11,6 +11,7 @@
 
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/utils/char_manipulation.hpp>
+#include <core/utils/data_result.hpp>
 #include <core/utils/string_manipulation.hpp>
 #include <core/validation/basic_mechanics/dice_data.hpp>
 
@@ -115,11 +116,12 @@ Dice Dice::from_string(std::string&& str) {
     return Dice(dice_counts, modifier);
 }
 
-Dice Dice::create(Data&& data) {
-    if (!data.validate().ok()) {
-        throw invalid_data("Cannot create dice from invalid data.");
+CreateResult<Dice> Dice::create(Data&& data) {
+    Errors errors = data.validate();
+    if (!errors.ok()) {
+        return InvalidCreate<Dice>(std::move(data), std::move(errors));
     }
-    return from_string(std::move(data.str));
+    return ValidCreate(Dice::from_string(std::move(data.str)));
 }
 
 

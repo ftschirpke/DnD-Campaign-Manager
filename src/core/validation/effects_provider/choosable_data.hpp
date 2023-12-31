@@ -18,6 +18,7 @@ public:
     std::strong_ordering operator<=>(const ChoosableData&) const noexcept = default;
     virtual std::unique_ptr<ValidationData> pack() const override;
     virtual Errors validate() const override;
+    virtual Errors validate_nonrecursively() const override;
 
     std::string type;
     std::vector<ConditionData> prerequisites_data;

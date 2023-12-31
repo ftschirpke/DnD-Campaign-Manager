@@ -18,6 +18,7 @@
 #include <core/models/subspecies/subspecies.hpp>
 #include <core/referencing_content_library.hpp>
 #include <core/storage_content_library.hpp>
+#include <core/utils/data_result.hpp>
 #include <core/utils/types.hpp>
 
 namespace dnd {
@@ -63,6 +64,15 @@ public:
     OptCRef<Item> add_item(Item&& item);
     OptCRef<Spell> add_spell(Spell&& spell);
     OptCRef<Choosable> add_choosable(Choosable&& choosable);
+
+    OptCRef<Character> add_character_result(CreateResult<Character>&& character);
+    OptCRef<Class> add_class_result(CreateResult<Class>&& cls);
+    OptCRef<Subclass> add_subclass_result(CreateResult<Subclass>&& subclass);
+    OptCRef<Species> add_species_result(CreateResult<Species>&& species);
+    OptCRef<Subspecies> add_subspecies_result(CreateResult<Subspecies>&& subspecies);
+    OptCRef<Item> add_item_result(CreateResult<Item>&& item);
+    OptCRef<Spell> add_spell_result(CreateResult<Spell>&& spell);
+    OptCRef<Choosable> add_choosable_result(CreateResult<Choosable>&& choosable);
 private:
     Groups groups;
     StorageContentLibrary<Character> character_libary;

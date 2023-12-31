@@ -26,35 +26,19 @@ class Effects {
 public:
     using Data = EffectsData;
 
-    /**
-     * @brief Constructs an Effects object from the given data
-     * @param data the data to construct the Effects object from
-     * @param content the content to use for the construction
-     * @return the constructed Effects object
-     * @throws invalid_data if the data is invalid or is incompatible with the given content
-     */
-    static Effects create_for(Data&& data, const Content& content);
+    static CreateResult<Effects> create_for(Data&& data, const Content& content);
 
-    /**
-     * @brief Constructs an Effects object
-     * @param activation_conditions the conditions that need to be met for the stat_changes to be activated
-     * @param choices choices that need to be made/are provided
-     * @param stat_changes the stat_changes that are activated when the conditions are met
-     * @param action_holder the actions provided
-     * @param extra_spells_holder the extra spells provided
-     * @param proficiency_holder the proficiencies provided
-     * @param riv_holder the resistances, immunities, and vulnerabilities provided
-     */
     Effects(
         std::vector<std::unique_ptr<Condition>>&& activation_conditions, std::vector<Choice>&& choices,
         std::vector<std::unique_ptr<StatChange>>&& stat_changes, ActionHolder&& action_holder,
         ExtraSpellsHolder&& extra_spells_holder, ProficiencyHolder&& proficiency_holder, RIVHolder&& riv_holder
     ) noexcept;
+    virtual ~Effects() noexcept = default;
+
     Effects(const Effects&) = delete;
     Effects& operator=(const Effects&) = delete;
     Effects(Effects&&) noexcept = default;
     Effects& operator=(Effects&&) noexcept = default;
-    virtual ~Effects() noexcept = default;
 
     const std::vector<std::unique_ptr<Condition>>& get_activation_conditions() const noexcept;
     const std::vector<Choice>& get_choices() const noexcept;
