@@ -12,6 +12,7 @@
 #include <core/models/source_info.hpp>
 #include <core/models/species/species.hpp>
 #include <core/utils/data_result.hpp>
+#include <core/utils/types.hpp>
 #include <core/validation/subspecies/subspecies_data.hpp>
 
 namespace dnd {
@@ -34,20 +35,20 @@ public:
     const std::string& get_description() const noexcept override;
     const SourceInfo& get_source_info() const noexcept override;
     const std::vector<Feature>& get_features() const noexcept;
-    const Species* get_species() const noexcept;
+    CRef<Species> get_species() const noexcept;
 
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Subspecies(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path,
-        std::vector<Feature>&& features, const Species* species
+        std::vector<Feature>&& features, CRef<Species> species
     ) noexcept;
 
     std::string name;
     std::string description;
     SourceInfo source_info;
     std::vector<Feature> features;
-    const Species* species;
+    CRef<Species> species;
 };
 
 } // namespace dnd

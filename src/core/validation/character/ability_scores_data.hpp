@@ -7,14 +7,13 @@
 #include <compare>
 
 #include <core/errors/errors.hpp>
-#include <core/validation/validation_data.hpp>
-#include <core/validation/validation_subdata.hpp>
 
 namespace dnd {
 
-class AbilityScoresData : public ValidationSubdata {
+class Content;
+
+class AbilityScoresData {
 public:
-    AbilityScoresData(std::shared_ptr<const ValidationData> parent) noexcept;
     std::strong_ordering operator<=>(const AbilityScoresData&) const noexcept = default;
 
     std::array<int, 6> ability_scores;

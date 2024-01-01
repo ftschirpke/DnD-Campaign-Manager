@@ -20,9 +20,7 @@ class Content;
 
 class ClassData : public ValidationData {
 public:
-    ClassData() noexcept;
     std::strong_ordering operator<=>(const ClassData&) const noexcept = default;
-    virtual std::unique_ptr<ValidationData> pack() const override;
 
     SpellcastingData spellcasting_data;
     std::vector<ClassFeatureData> features_data;
@@ -30,6 +28,9 @@ public:
     std::string hit_dice_str;
     ImportantLevelsData important_levels_data;
 };
+
+Errors validate_class_nonrecursively_for_content(const ClassData& data, const Content& content);
+Errors validate_class_recursively_for_content(const ClassData& data, const Content& content);
 
 } // namespace dnd
 

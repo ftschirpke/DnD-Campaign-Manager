@@ -20,12 +20,6 @@
 
 namespace dnd {
 
-ClassData::ClassData() noexcept
-    : ValidationData(), spellcasting_data(std::make_shared<ValidationData>(this)), features_data(),
-      subclass_feature_name(), hit_dice_str(), important_levels_data(std::make_shared<ValidationData>(this)) {}
-
-std::unique_ptr<ValidationData> ClassData::pack() const { return std::make_unique<ClassData>(*this); }
-
 static Errors validate_class_raw_nonrecursively(const ClassData& data) {
     Errors errors = validate_name_description_and_source(data);
 
@@ -34,7 +28,7 @@ static Errors validate_class_raw_nonrecursively(const ClassData& data) {
     for (const ClassFeatureData& feature_data : data.features_data) {
         if (unique_feature_names.contains(feature_data.name)) {
             errors.add_validation_error(
-                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(),
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format("Character class has duplicate feature \"{}\".", feature_data.name)
             );
         } else {
@@ -45,13 +39,11 @@ static Errors validate_class_raw_nonrecursively(const ClassData& data) {
         }
     }
     if (data.features_data.empty()) {
-        errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(), "Character class has no features."
-        );
+        errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Character class has no features.");
     }
     if (!has_subclass_feature) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(),
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
             fmt::format(
                 "The declared subclass feature \"{}\" is not a feature of the character class.",
                 data.subclass_feature_name
@@ -65,14 +57,13 @@ static Errors validate_class_relations_nonrecursively(const ClassData& data, con
     Errors errors;
     if (content.get_classes().contains(data.name)) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(),
-            fmt::format("Class has duplicate name \"{}\".", data.name)
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, fmt::format("Class has duplicate name \"{}\".", data.name)
         );
     }
     for (const ClassFeatureData& feature_data : data.features_data) {
         if (content.get_class_features().contains(feature_data.name)) {
             errors.add_validation_error(
-                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(),
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format("Feature has duplicate name \"{}\".", feature_data.name)
             );
         }
@@ -80,8 +71,14 @@ static Errors validate_class_relations_nonrecursively(const ClassData& data, con
     return errors;
 }
 
-Errors validate_class_recursively(const ClassData& data, const Content& content) {
+Errors validate_class_nonrecursively_for_content(const ClassData& data, const Content& content) {
     Errors errors = validate_class_raw_nonrecursively(data);
+    errors += validate_class_relations_nonrecursively(data, content);
+    return errors;
+}
+
+Errors validate_class_recursively_for_content(const ClassData& data, const Content& content) {
+    Errors errors = validate_class_nonrecursively_for_content(data, content);
     errors += validate_spellcasting(data.spellcasting_data);
     for (const ClassFeatureData& feature_data : data.features_data) {
         errors += validate_class_feature_recursively_for_content(feature_data, content);

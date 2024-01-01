@@ -25,8 +25,7 @@ static std::vector<const Spell*> find_spells_in_content(
 }
 
 CreateResult<ExtraSpellsHolder> ExtraSpellsHolder::create_for(Data&& data, const Content& content) {
-    Errors errors = data.validate();
-    errors += data.validate_relations(content);
+    Errors errors = validate_extra_spells_holder_for_content(data, content);
     if (!errors.ok()) {
         return InvalidCreate<ExtraSpellsHolder>(std::move(data), std::move(errors));
     }

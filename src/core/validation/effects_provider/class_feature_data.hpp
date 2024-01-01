@@ -15,9 +15,7 @@ namespace dnd {
 
 class ClassFeatureData : public FeatureData {
 public:
-    explicit ClassFeatureData(std::shared_ptr<const ValidationData> parent = nullptr) noexcept;
     std::strong_ordering operator<=>(const ClassFeatureData&) const noexcept = default;
-    virtual std::unique_ptr<ValidationData> pack() const override;
 
     int level;
     std::map<int, EffectsData> higher_level_effects_data;

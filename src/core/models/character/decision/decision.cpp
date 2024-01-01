@@ -21,16 +21,15 @@ static void ins(std::set<std::string>& set, std::vector<std::string>&& vec) {
     set.insert(std::make_move_iterator(vec.begin()), std::make_move_iterator(vec.end()));
 }
 
-CreateResult<Decision> Decision::create_for(Data&& data, const Content& content) {
-    Errors errors = data.validate();
-    errors += data.validate_relations(content);
+CreateResult<Decision> Decision::create_for(Data&& data, const CharacterData& character_data, const Content& content) {
+    Errors errors = validate_decision_for_character_and_content(data, character_data, content);
     if (!errors.ok()) {
         return InvalidCreate<Decision>(std::move(data), std::move(errors));
     }
 
-    EffectsData res_data(data.get_character_data());
+    EffectsData res_data;
     for (const std::string& stat_change_str : data.selections["stat_changes"]) {
-        StatChangeData stat_change_data(data.get_character_data());
+        StatChangeData stat_change_data;
         stat_change_data.stat_change_str = stat_change_str;
         res_data.stat_changes_data.emplace_back(std::move(stat_change_data));
     }
@@ -60,13 +59,15 @@ CreateResult<Decision> Decision::create_for(Data&& data, const Content& content)
         auto [_, sub_errors] = effects_result.data_and_errors();
         return InvalidCreate<Decision>(std::move(data), std::move(sub_errors));
     }
-    return ValidCreate(Decision(data.get_target(), effects_result.value()));
+
+    assert(data.get_target() != nullptr);
+    return ValidCreate(Decision(*data.get_target(), std::move(effects_result.value())));
 }
 
-const Effects* Decision::get_target() const noexcept { return target; }
+CRef<Effects> Decision::get_target() const noexcept { return target; }
 
 const Effects& Decision::get_effects() const noexcept { return effects; }
 
-Decision::Decision(const Effects* target, Effects effects) noexcept : target(target), effects(std::move(effects)) {}
+Decision::Decision(CRef<Effects> target, Effects&& effects) noexcept : target(target), effects(std::move(effects)) {}
 
 } // namespace dnd

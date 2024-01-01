@@ -20,9 +20,7 @@ class FeatureParser : public Parser {
 public:
     explicit FeatureParser(const std::filesystem::path& filepath) noexcept;
     Errors parse_into(nlohmann::ordered_json&& json, FeatureData& data) const;
-    Errors parse_multiple_into(
-        nlohmann::ordered_json&& json, std::vector<FeatureData>& data, const ValidationData* parent
-    ) const;
+    Errors parse_multiple_into(nlohmann::ordered_json&& json, std::vector<FeatureData>& data) const;
 private:
     EffectsParser effects_parser;
 };

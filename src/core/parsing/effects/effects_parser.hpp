@@ -19,14 +19,9 @@ public:
     explicit EffectsParser(const std::filesystem::path& filepath) noexcept;
     Errors parse_into(nlohmann::ordered_json&& json, EffectsData& data) const;
 private:
-    Errors parse_activation_conditions_into(
-        nlohmann::ordered_json& json, std::vector<ConditionData>& data, const ValidationData* parent
-    ) const;
-    Errors parse_choices_into(nlohmann::ordered_json& json, std::vector<ChoiceData>& data, const ValidationData* parent)
-        const;
-    Errors parse_stat_changes_into(
-        nlohmann::ordered_json& json, std::vector<StatChangeData>& data, const ValidationData* parent
-    ) const;
+    Errors parse_activation_conditions_into(nlohmann::ordered_json& json, std::vector<ConditionData>& data) const;
+    Errors parse_choices_into(nlohmann::ordered_json& json, std::vector<ChoiceData>& data) const;
+    Errors parse_stat_changes_into(nlohmann::ordered_json& json, std::vector<StatChangeData>& data) const;
     Errors parse_action_holder_into(nlohmann::ordered_json& json, ActionHolderData& data) const;
     Errors parse_extra_spells_holder_into(nlohmann::ordered_json& json, ExtraSpellsHolderData& data) const;
     Errors parse_proficiency_holder_into(nlohmann::ordered_json& json, ProficiencyHolderData& data) const;

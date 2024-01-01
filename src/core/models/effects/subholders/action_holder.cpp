@@ -13,7 +13,7 @@
 namespace dnd {
 
 CreateResult<ActionHolder> ActionHolder::create(Data&& data) {
-    Errors errors = data.validate();
+    Errors errors = validate_actions_holder(data);
     if (!errors.ok()) {
         return InvalidCreate<ActionHolder>(std::move(data), std::move(errors));
     }

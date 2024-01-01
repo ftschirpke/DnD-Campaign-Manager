@@ -8,14 +8,13 @@
 #include <vector>
 
 #include <core/errors/errors.hpp>
-#include <core/validation/validation_data.hpp>
-#include <core/validation/validation_subdata.hpp>
 
 namespace dnd {
 
-class ChoiceData : public ValidationSubdata {
+class Content;
+
+class ChoiceData {
 public:
-    ChoiceData(std::shared_ptr<ValidationData> parent) noexcept;
     std::strong_ordering operator<=>(const ChoiceData&) const noexcept = default;
 
     std::string attribute_name;

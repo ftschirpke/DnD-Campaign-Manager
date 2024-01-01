@@ -25,8 +25,7 @@ static std::vector<std::string> set_to_vector(std::set<std::string>&& set) {
 }
 
 CreateResult<RIVHolder> RIVHolder::create_for(Data&& data, const Content& content) {
-    Errors errors = data.validate();
-    errors += data.validate_relations(content);
+    Errors errors = validate_riv_holder_for_content(data, content);
     if (!errors.ok()) {
         return InvalidCreate<RIVHolder>(std::move(data), std::move(errors));
     }

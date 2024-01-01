@@ -25,10 +25,8 @@ void Errors::add_parsing_error(
 
 void Errors::add_parsing_error(ParsingError&& error) { errors.emplace_back(std::move(error)); }
 
-void Errors::add_validation_error(
-    ValidationError::Code error_code, std::shared_ptr<const ValidationData> validation_data, std::string&& message
-) {
-    errors.emplace_back(ValidationError(error_code, validation_data, std::move(message)));
+void Errors::add_validation_error(ValidationError::Code error_code, std::string&& message) {
+    errors.emplace_back(ValidationError(error_code, std::move(message)));
 }
 
 void Errors::add_validation_error(ValidationError&& error) { errors.emplace_back(std::move(error)); }

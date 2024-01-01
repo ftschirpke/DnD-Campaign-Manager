@@ -13,21 +13,11 @@
 
 namespace dnd {
 
-ClassFeatureData::ClassFeatureData(std::shared_ptr<const ValidationData> parent) noexcept
-    : FeatureData(parent), level(1), higher_level_effects_data() {}
-
-std::unique_ptr<ValidationData> ClassFeatureData::pack() const { return std::make_unique<ClassFeatureData>(*this); }
-
 static std::optional<ValidationError> validate_level(const ClassFeatureData& feature_data) {
     if (feature_data.level <= 0) {
-        return ValidationError(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, feature_data.get_parent(), "Feature level must be positive."
-        );
+        return ValidationError(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Feature level must be positive.");
     } else if (feature_data.level > 20) {
-        return ValidationError(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, feature_data.get_parent(),
-            "Feature level must be at most 20."
-        );
+        return ValidationError(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Feature level must be at most 20.");
     }
     return std::nullopt;
 }

@@ -61,14 +61,15 @@ Errors CharacterParser::parse() {
             );
         } else {
             for (auto& [feature_name, decisions_for_feature] : json["decisions"].items()) {
+                std::shared_ptr<CharacterData> parent = std::make_shared<CharacterData>(data);
                 if (decisions_for_feature.is_array()) {
                     for (auto& decision_json : decisions_for_feature) {
-                        DecisionData& decision_data = data.decisions_data.emplace_back(&data, nullptr);
+                        DecisionData& decision_data = data.decisions_data.emplace_back(nullptr);
                         decision_data.feature_name = feature_name;
                         errors += parse_decision(std::move(decision_json), decision_data);
                     }
                 } else {
-                    DecisionData& decision_data = data.decisions_data.emplace_back(&data, nullptr);
+                    DecisionData& decision_data = data.decisions_data.emplace_back(nullptr);
                     decision_data.feature_name = feature_name;
                     errors += parse_decision(std::move(decisions_for_feature), decision_data);
                 }
@@ -77,7 +78,7 @@ Errors CharacterParser::parse() {
     }
 
     if (json.contains("features")) {
-        errors += feature_parser.parse_multiple_into(std::move(json["features"]), data.features_data, &data);
+        errors += feature_parser.parse_multiple_into(std::move(json["features"]), data.features_data);
     }
 
     return errors;

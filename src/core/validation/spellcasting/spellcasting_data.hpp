@@ -7,16 +7,15 @@
 #include <string>
 
 #include <core/errors/errors.hpp>
-#include <core/validation/validation_data.hpp>
-#include <core/validation/validation_subdata.hpp>
 
 namespace dnd {
 
 class ClassData;
 
-class SpellcastingData : public ValidationSubdata {
+class SpellcastingData {
 public:
-    SpellcastingData(std::shared_ptr<const ValidationData> parent) noexcept;
+    explicit SpellcastingData() noexcept;
+    std::strong_ordering operator<=>(const SpellcastingData&) const noexcept = default;
 
     bool is_spellcaster;
     std::string ability;

@@ -16,11 +16,13 @@ namespace dnd {
 class SpeciesData : public ValidationData {
 public:
     std::strong_ordering operator<=>(const SpeciesData&) const noexcept = default;
-    virtual std::unique_ptr<ValidationData> pack() const override;
 
     std::vector<FeatureData> features_data;
     bool subspecies;
 };
+
+Errors validate_species_nonrecursively_for_content(const SpeciesData& data, const Content& content);
+Errors validate_species_recursively_for_content(const SpeciesData& data, const Content& content);
 
 } // namespace dnd
 

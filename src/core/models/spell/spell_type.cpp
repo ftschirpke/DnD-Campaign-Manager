@@ -72,7 +72,7 @@ MagicSchool magic_school_from_name(std::string_view magic_school_name) {
 }
 
 CreateResult<SpellType> SpellType::create(Data&& data) {
-    Errors errors = data.validate();
+    Errors errors = validate_spell_type(data);
     if (!errors.ok()) {
         return InvalidCreate<SpellType>(std::move(data), std::move(errors));
     }

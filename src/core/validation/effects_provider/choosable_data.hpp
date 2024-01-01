@@ -14,13 +14,14 @@ namespace dnd {
 
 class ChoosableData : public FeatureData {
 public:
-    ChoosableData() noexcept;
     std::strong_ordering operator<=>(const ChoosableData&) const noexcept = default;
-    virtual std::unique_ptr<ValidationData> pack() const override;
 
     std::string type;
     std::vector<ConditionData> prerequisites_data;
 };
+
+Errors validate_choosable_nonrecursively(const ChoosableData& data);
+Errors validate_choosable_recursively_for_content(const ChoosableData& data, const Content& content);
 
 } // namespace dnd
 

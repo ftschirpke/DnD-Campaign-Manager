@@ -8,14 +8,13 @@
 #include <string>
 
 #include <core/errors/errors.hpp>
-#include <core/validation/validation_data.hpp>
-#include <core/validation/validation_subdata.hpp>
 
 namespace dnd {
 
-class ExtraSpellsHolderData : public ValidationSubdata {
+class Content;
+
+class ExtraSpellsHolderData {
 public:
-    ExtraSpellsHolderData(std::shared_ptr<const ValidationData> parent) noexcept;
     std::strong_ordering operator<=>(const ExtraSpellsHolderData&) const noexcept = default;
     bool empty() const noexcept;
 

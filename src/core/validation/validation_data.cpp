@@ -4,6 +4,7 @@
 
 #include <filesystem>
 #include <string>
+#include <utility>
 
 #include <fmt/format.h>
 
@@ -15,17 +16,16 @@ namespace dnd {
 Errors validate_name_description_and_source(const ValidationData& data) {
     Errors errors;
     if (data.name.empty()) {
-        errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(), "Name is empty");
+        errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Name is empty");
     }
     if (data.description.empty()) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(),
-            fmt::format("Description for '{}' is empty", data.name)
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, fmt::format("Description for '{}' is empty", data.name)
         );
     }
     if (!std::filesystem::exists(data.source_path)) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(),
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
             fmt::format("Source path '{}' for '{}' does not exist", data.source_path.string(), data.name)
         );
     }

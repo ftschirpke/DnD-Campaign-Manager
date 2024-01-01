@@ -10,14 +10,12 @@
 
 namespace dnd {
 
-class Content;
 class Errors;
 
 class ValidationData {
 public:
     virtual ~ValidationData() = default;
     std::strong_ordering operator<=>(const ValidationData&) const = default;
-    virtual std::unique_ptr<ValidationData> pack() const = 0;
 
     std::string name;
     std::string description;

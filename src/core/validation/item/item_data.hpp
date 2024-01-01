@@ -14,11 +14,12 @@ namespace dnd {
 class ItemData : public ValidationData {
 public:
     std::strong_ordering operator<=>(const ItemData&) const noexcept = default;
-    virtual std::unique_ptr<ValidationData> pack() const override;
 
     std::string cosmetic_description;
     bool requires_attunement;
 };
+
+Errors validate_item(const ItemData& data);
 
 } // namespace dnd
 

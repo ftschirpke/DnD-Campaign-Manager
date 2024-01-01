@@ -17,9 +17,7 @@ namespace dnd {
 
 class SpellData : public ValidationData {
 public:
-    SpellData() noexcept;
     std::strong_ordering operator<=>(const SpellData&) const noexcept = default;
-    virtual std::unique_ptr<ValidationData> pack() const override;
 
     SpellComponentsData components_data;
     SpellTypeData type_data;

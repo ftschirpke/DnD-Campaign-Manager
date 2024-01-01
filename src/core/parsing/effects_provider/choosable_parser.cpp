@@ -37,14 +37,14 @@ Errors ChoosableParser::parse_into(nlohmann::ordered_json&& json, ChoosableData&
             "The effect holder json contains both \"prerequisite\" and \"prerequisites\"."
         );
     } else if (has_prerequisite) {
-        ConditionData& condition_data = data.prerequisites_data.emplace_back(&data);
+        ConditionData& condition_data = data.prerequisites_data.emplace_back();
         errors += parse_optional_attribute_into(json, "prerequisite", condition_data.condition_str);
         json.erase("prerequisite");
     } else if (has_prerequisites) {
         std::vector<std::string> prerequisite_conditions_strs;
         errors += parse_optional_attribute_into(json, "prerequisites", prerequisite_conditions_strs);
         for (const std::string& prerequisite_condition_str : prerequisite_conditions_strs) {
-            ConditionData& condition_data = data.prerequisites_data.emplace_back(&data);
+            ConditionData& condition_data = data.prerequisites_data.emplace_back();
             condition_data.condition_str = prerequisite_condition_str;
         }
         json.erase("prerequisites");

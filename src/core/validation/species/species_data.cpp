@@ -16,15 +16,13 @@
 
 namespace dnd {
 
-std::unique_ptr<ValidationData> SpeciesData::pack() const { return std::make_unique<SpeciesData>(*this); }
-
 static Errors validate_species_raw_nonrecursively(const SpeciesData& data) {
     Errors errors;
     std::unordered_set<std::string> unique_feature_names;
     for (const FeatureData& feature_data : data.features_data) {
         if (unique_feature_names.contains(feature_data.name)) {
             errors.add_validation_error(
-                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(),
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format("Character species has duplicate feature \"{}\".", feature_data.name)
             );
         } else {
@@ -33,7 +31,7 @@ static Errors validate_species_raw_nonrecursively(const SpeciesData& data) {
     }
     if (data.features_data.empty()) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(), "Character species has no features."
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Character species has no features."
         );
     }
     return errors;
@@ -43,14 +41,13 @@ static Errors validate_species_relations_nonrecursively(const SpeciesData& data,
     Errors errors;
     if (content.get_species().contains(data.name)) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(),
-            fmt::format("Species has duplicate name \"{}\".", data.name)
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, fmt::format("Species has duplicate name \"{}\".", data.name)
         );
     }
     for (const FeatureData& feature_data : data.features_data) {
         if (content.get_features().contains(feature_data.name)) {
             errors.add_validation_error(
-                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(),
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format("Feature has duplicate name \"{}\".", feature_data.name)
             );
         }

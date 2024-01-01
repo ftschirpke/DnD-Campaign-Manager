@@ -15,6 +15,7 @@
 #include <core/models/source_info.hpp>
 #include <core/models/spellcasting/spellcasting.hpp>
 #include <core/utils/data_result.hpp>
+#include <core/utils/types.hpp>
 #include <core/validation/class/class_data.hpp>
 
 namespace dnd {
@@ -39,7 +40,7 @@ public:
     const std::vector<ClassFeature>& get_features() const noexcept;
     bool has_spellcasting() const noexcept;
     const Spellcasting* get_spellcasting() const noexcept;
-    const ClassFeature* get_subclass_feature() const noexcept;
+    OptCRef<ClassFeature> get_subclass_feature() const noexcept;
     const Dice& get_hit_dice() const noexcept;
     const ImportantLevels& get_important_levels() const noexcept;
 
@@ -47,7 +48,7 @@ public:
 private:
     Class(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path,
-        std::vector<ClassFeature>&& features, const ClassFeature* subclass_feature, Dice hit_dice,
+        std::vector<ClassFeature>&& features, OptCRef<ClassFeature> subclass_feature, Dice hit_dice,
         ImportantLevels&& important_levels, std::unique_ptr<Spellcasting>&& spellcasting = nullptr
     ) noexcept;
 
@@ -56,7 +57,7 @@ private:
     SourceInfo source_info;
     std::vector<ClassFeature> features;
     std::unique_ptr<Spellcasting> spellcasting;
-    const ClassFeature* subclass_feature;
+    OptCRef<ClassFeature> subclass_feature;
     Dice hit_dice;
     ImportantLevels important_levels;
 };

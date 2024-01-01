@@ -14,13 +14,7 @@ void set_valid_mock_values(dnd::ValidationData& data, const char* data_name = nu
 
 class ValidationDataMock : public dnd::ValidationData {
 public:
-    ValidationDataMock() = default;
     std::strong_ordering operator<=>(const ValidationDataMock&) const noexcept = default;
-    /**
-     * @brief Packs the data into a ValidationData unique pointer
-     * @return the packed data
-     */
-    virtual std::unique_ptr<dnd::ValidationData> pack() const override;
 };
 
 } // namespace dnd::test

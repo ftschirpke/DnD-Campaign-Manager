@@ -14,7 +14,7 @@ namespace dnd::test {
 
 static constexpr const char* tags = "[core][validation]";
 
-TEST_CASE("ValidationData::validate", tags) {
+TEST_CASE("validate_name_description_and_source", tags) {
     ValidationDataMock data;
     const std::filesystem::path dummy_path = std::filesystem::path(DND_MOCK_DIRECTORY) / "dummy_files" / "file1.json";
 
@@ -23,7 +23,7 @@ TEST_CASE("ValidationData::validate", tags) {
         data.name = "Name";
         data.description = "Description";
         data.source_path = dummy_path;
-        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE_NOTHROW(errors = validate_name_description_and_source(data));
         REQUIRE(errors.ok());
     }
 
@@ -31,7 +31,7 @@ TEST_CASE("ValidationData::validate", tags) {
         data.name = "";
         data.description = "Description";
         data.source_path = dummy_path;
-        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE_NOTHROW(errors = validate_name_description_and_source(data));
         REQUIRE_FALSE(errors.ok());
     }
 
@@ -39,7 +39,7 @@ TEST_CASE("ValidationData::validate", tags) {
         data.name = "Name";
         data.description = "";
         data.source_path = dummy_path;
-        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE_NOTHROW(errors = validate_name_description_and_source(data));
         REQUIRE_FALSE(errors.ok());
     }
 
@@ -47,7 +47,7 @@ TEST_CASE("ValidationData::validate", tags) {
         data.name = "Name";
         data.description = "Description";
         data.source_path = std::filesystem::path("");
-        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE_NOTHROW(errors = validate_name_description_and_source(data));
         REQUIRE_FALSE(errors.ok());
     }
 
@@ -55,7 +55,7 @@ TEST_CASE("ValidationData::validate", tags) {
         data.name = "";
         data.description = "";
         data.source_path = std::filesystem::path("");
-        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE_NOTHROW(errors = validate_name_description_and_source(data));
         REQUIRE_FALSE(errors.ok());
     }
 }

@@ -20,8 +20,7 @@
 namespace dnd {
 
 CreateResult<Subspecies> Subspecies::create_for(Data&& data, const Content& content) {
-    Errors errors = data.validate();
-    errors += data.validate_relations(content);
+    Errors errors = validate_subspecies_nonrecursively_for_content(data, content);
     if (!errors.ok()) {
         return InvalidCreate<Subspecies>(std::move(data), std::move(errors));
     }
@@ -35,7 +34,7 @@ CreateResult<Subspecies> Subspecies::create_for(Data&& data, const Content& cont
         }
         features.emplace_back(feature_result.value());
     }
-    const Species* species = &content.get_species().get(data.species_name).value().get();
+    CRef<Species> species = content.get_species().get(data.species_name).value();
     return ValidCreate(Subspecies(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(features), species
     ));
@@ -49,13 +48,13 @@ const SourceInfo& Subspecies::get_source_info() const noexcept { return source_i
 
 const std::vector<Feature>& Subspecies::get_features() const noexcept { return features; }
 
-const Species* Subspecies::get_species() const noexcept { return species; }
+CRef<Species> Subspecies::get_species() const noexcept { return species; }
 
 void Subspecies::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 Subspecies::Subspecies(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::vector<Feature>&& features,
-    const Species* species
+    CRef<Species> species
 ) noexcept
     : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
       features(std::move(features)), species(species) {}

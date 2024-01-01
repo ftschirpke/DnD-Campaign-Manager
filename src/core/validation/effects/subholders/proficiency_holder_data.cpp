@@ -13,26 +13,20 @@
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
-#include <core/validation/validation_subdata.hpp>
 
 namespace dnd {
-
-ProficiencyHolderData::ProficiencyHolderData(std::shared_ptr<const ValidationData> parent) noexcept
-    : ValidationSubdata(parent) {}
 
 bool ProficiencyHolderData::empty() const noexcept {
     return armor.empty() && weapons.empty() && tools.empty() && skills.empty() && saving_throws.empty()
            && languages.empty() && senses.empty();
 }
 
-static Errors string_set_validate(
-    const std::set<std::string>& string_set, std::shared_ptr<const ValidationData> parent, const char* set_name
-) {
+static Errors string_set_validate(const std::set<std::string>& string_set, const char* set_name) {
     Errors errors;
     for (const std::string& str_item : string_set) {
         if (str_item.empty()) {
             errors.add_validation_error(
-                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format("{} set contains an empty string.", set_name)
             );
         }
@@ -42,18 +36,18 @@ static Errors string_set_validate(
 
 static Errors validate_proficiency_holder_raw(const ProficiencyHolderData& data) {
     Errors errors;
-    errors += string_set_validate(data.armor, data.get_parent(), "Armor");
-    errors += string_set_validate(data.weapons, data.get_parent(), "Weapons");
-    errors += string_set_validate(data.tools, data.get_parent(), "Tools");
-    errors += string_set_validate(data.skills, data.get_parent(), "Skills");
-    errors += string_set_validate(data.saving_throws, data.get_parent(), "Saving throws");
-    errors += string_set_validate(data.languages, data.get_parent(), "Languages");
-    errors += string_set_validate(data.senses, data.get_parent(), "Senses");
+    errors += string_set_validate(data.armor, "Armor");
+    errors += string_set_validate(data.weapons, "Weapons");
+    errors += string_set_validate(data.tools, "Tools");
+    errors += string_set_validate(data.skills, "Skills");
+    errors += string_set_validate(data.saving_throws, "Saving throws");
+    errors += string_set_validate(data.languages, "Languages");
+    errors += string_set_validate(data.senses, "Senses");
 
     for (const std::string& skill : data.skills) {
         if (!is_skill(skill)) {
             errors.add_validation_error(
-                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.get_parent(),
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format("Skill proficiencies contain '{}' which is not a valid skill.", skill)
             );
         }
@@ -61,7 +55,7 @@ static Errors validate_proficiency_holder_raw(const ProficiencyHolderData& data)
     for (const std::string& saving_throw_ability : data.saving_throws) {
         if (!is_ability(saving_throw_ability)) {
             errors.add_validation_error(
-                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.get_parent(),
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format(
                     "Saving throw proficiencies contain '{}' which is not a valid ability.", saving_throw_ability
                 )
@@ -72,15 +66,14 @@ static Errors validate_proficiency_holder_raw(const ProficiencyHolderData& data)
 }
 
 static Errors string_group_set_validate_relations(
-    const std::set<std::string>& string_group_set, std::shared_ptr<const ValidationData> parent, const char* set_name,
-    const char* group_name, const Content& content
+    const std::set<std::string>& string_group_set, const char* set_name, const char* group_name, const Content& content
 ) {
     Errors errors;
     for (const std::string& str_item : string_group_set) {
         if (!content.get_groups().is_part_of_group(str_item, group_name)
             && !content.get_groups().is_subgroup(str_item, group_name)) {
             errors.add_validation_error(
-                ValidationError::Code::RELATION_NOT_FOUND, parent,
+                ValidationError::Code::RELATION_NOT_FOUND,
                 fmt::format("'{}' ({}) is neither element or subgroup of the {} group.", str_item, set_name, group_name)
             );
         }
@@ -90,11 +83,11 @@ static Errors string_group_set_validate_relations(
 
 static Errors validate_proficiency_holder_relations(const ProficiencyHolderData& data, const Content& content) {
     Errors errors;
-    errors += string_group_set_validate_relations(data.armor, data.get_parent(), "armor", "armor", content);
-    errors += string_group_set_validate_relations(data.weapons, data.get_parent(), "weapons", "weapons", content);
-    errors += string_group_set_validate_relations(data.tools, data.get_parent(), "tools", "tools", content);
-    errors += string_group_set_validate_relations(data.languages, data.get_parent(), "languages", "languages", content);
-    errors += string_group_set_validate_relations(data.senses, data.get_parent(), "senses", "senses", content);
+    errors += string_group_set_validate_relations(data.armor, "armor", "armor", content);
+    errors += string_group_set_validate_relations(data.weapons, "weapons", "weapons", content);
+    errors += string_group_set_validate_relations(data.tools, "tools", "tools", content);
+    errors += string_group_set_validate_relations(data.languages, "languages", "languages", content);
+    errors += string_group_set_validate_relations(data.senses, "senses", "senses", content);
     return errors;
 }
 

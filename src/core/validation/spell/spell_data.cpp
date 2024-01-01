@@ -19,29 +19,20 @@
 
 namespace dnd {
 
-SpellData::SpellData() noexcept
-    : components_data(std::make_shared<ValidationData>(this)), type_data(std::make_shared<ValidationData>(this)) {}
-
-std::unique_ptr<ValidationData> SpellData::pack() const { return std::make_unique<SpellData>(*this); }
-
 Errors validate_spell_nonrecursively(const SpellData& data) {
     DND_MEASURE_FUNCTION();
     Errors errors = validate_name_description_and_source(data);
     if (data.casting_time.empty()) {
-        errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(), "Casting time is empty"
-        );
+        errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Casting time is empty");
     }
     if (data.range.empty()) {
-        errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(), "Range is empty");
+        errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Range is empty");
     }
     if (data.duration.empty()) {
-        errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(), "Duration is empty");
+        errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Duration is empty");
     }
     if (data.classes.empty()) {
-        errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(), "Spell has no classes"
-        );
+        errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Spell has no classes");
     }
     return errors;
 }

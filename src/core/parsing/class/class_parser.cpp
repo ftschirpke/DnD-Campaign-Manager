@@ -83,11 +83,11 @@ Errors ClassParser::parse() {
     }
 
     errors += parse_required_attribute_into(json, "subclass_feature", data.subclass_feature_name);
-    errors += parse_required_attribute_into(json, "hit_dice", data.hit_dice_data.str);
+    errors += parse_required_attribute_into(json, "hit_dice", data.hit_dice_str);
     errors += parse_required_attribute_into(json, "feat_levels", data.important_levels_data.feat_levels);
 
     if (json.contains("features")) {
-        errors += class_feature_parser.parse_multiple_into(std::move(json["features"]), data.features_data, &data);
+        errors += class_feature_parser.parse_multiple_into(std::move(json["features"]), data.features_data);
     } else {
         errors.add_parsing_error(
             ParsingError::Code::MISSING_ATTRIBUTE, get_filepath(), "Character class has no features."

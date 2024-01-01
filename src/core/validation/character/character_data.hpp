@@ -22,9 +22,7 @@ class Content;
 
 class CharacterData : public ValidationData {
 public:
-    CharacterData() noexcept;
     std::strong_ordering operator<=>(const CharacterData&) const noexcept = default;
-    virtual std::unique_ptr<ValidationData> pack() const override;
 
     std::vector<FeatureData> features_data;
     AbilityScoresData base_ability_scores_data;
@@ -32,6 +30,9 @@ public:
     ProgressionData progression_data;
     std::vector<DecisionData> decisions_data;
 };
+
+Errors validate_character_nonrecursively_for_content(const CharacterData& data, const Content& content);
+Errors validate_character_recursively_for_content(const CharacterData& data, const Content& content);
 
 } // namespace dnd
 

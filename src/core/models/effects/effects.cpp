@@ -29,7 +29,7 @@
 namespace dnd {
 
 CreateResult<Effects> Effects::create_for(Data&& data, const Content& content) {
-    // EffectsData validation only validates the subholders, so there is no nonrecursive validation
+    // there is no nonrecursive EffectsData validation
 
     std::vector<std::unique_ptr<Condition>> activation_conditions;
     activation_conditions.reserve(data.activation_conditions_data.size());

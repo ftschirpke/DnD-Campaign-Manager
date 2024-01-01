@@ -50,9 +50,8 @@ CreateResult<T> InvalidCreate(typename T::Data&& data, Errors&& errors) noexcept
 template <typename T>
 using FactoryResult = DataResult<std::unique_ptr<T>, typename T::Data>;
 
-template <typename T, typename SubT>
-requires std::is_base_of_v<T, SubT>
-FactoryResult<T> ValidFactory(std::unique_ptr<SubT>&& output) noexcept;
+template <typename T>
+FactoryResult<T> ValidFactory(std::unique_ptr<T>&& output) noexcept;
 
 template <typename T>
 FactoryResult<T> InvalidFactory(typename T::Data&& data, Errors&& errors) noexcept;

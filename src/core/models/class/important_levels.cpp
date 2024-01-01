@@ -21,7 +21,7 @@ CreateResult<ImportantLevels> ImportantLevels::create(Data&& data, int subclass_
             "Cannot create important levels object with a subclass level that is not between 1 and 20 (inclusive)."
         ); // TODO: make this a validation error and maybe integrate it into the ImportantLevelsData validation?!
     }
-    Errors errors = data.validate();
+    Errors errors = validate_important_levels(data);
     if (!errors.ok()) {
         return InvalidCreate<ImportantLevels>(std::move(data), std::move(errors));
     }

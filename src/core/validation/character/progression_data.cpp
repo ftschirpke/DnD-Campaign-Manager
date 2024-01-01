@@ -8,11 +8,8 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/validation/validation_data.hpp>
-#include <core/validation/validation_subdata.hpp>
 
 namespace dnd {
-
-ProgressionData::ProgressionData(std::shared_ptr<const ValidationData> parent) noexcept : ValidationSubdata(parent) {}
 
 Errors validate_progression(const ProgressionData& data) {
     Errors errors;
@@ -20,19 +17,19 @@ Errors validate_progression(const ProgressionData& data) {
     bool valid_xp = data.xp >= 0;
     if (!valid_level) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.get_parent(),
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
             fmt::format("Character level ({}) must be between 1 and 20 (inclusive).", data.level)
         );
     }
     if (!valid_xp) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.get_parent(),
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
             fmt::format("Character xp ({}) must be 0 or larger.", data.xp)
         );
     }
     if (valid_level && valid_xp && xp_to_level(data.xp) != data.level) {
         errors.add_validation_error(
-            ValidationError::Code::INCONSISTENT_ATTRIBUTES, data.get_parent(),
+            ValidationError::Code::INCONSISTENT_ATTRIBUTES,
             fmt::format("Character level ({}) and xp ({}) do not match.", data.level, data.xp)
         );
     }
@@ -40,7 +37,7 @@ Errors validate_progression(const ProgressionData& data) {
     for (int hit_dice_roll : data.hit_dice_rolls) {
         if (hit_dice_roll < 1) {
             errors.add_validation_error(
-                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.get_parent(),
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format("Character has invalid hit dice roll {} (must be 1 or larger).", hit_dice_roll)
             );
         }
@@ -48,7 +45,7 @@ Errors validate_progression(const ProgressionData& data) {
 
     if (static_cast<size_t>(data.level) != data.hit_dice_rolls.size()) {
         errors.add_validation_error(
-            ValidationError::Code::INCONSISTENT_ATTRIBUTES, data.get_parent(),
+            ValidationError::Code::INCONSISTENT_ATTRIBUTES,
             fmt::format(
                 "Character level ({}) and hit dice rolls ({}) do not match.", data.level, data.hit_dice_rolls.size()
             )

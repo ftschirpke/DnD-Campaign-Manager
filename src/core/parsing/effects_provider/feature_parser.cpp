@@ -37,9 +37,7 @@ Errors FeatureParser::parse_into(nlohmann::ordered_json&& json, FeatureData& dat
     return errors;
 }
 
-Errors FeatureParser::parse_multiple_into(
-    nlohmann::ordered_json&& json, std::vector<FeatureData>& data, const ValidationData* parent
-) const {
+Errors FeatureParser::parse_multiple_into(nlohmann::ordered_json&& json, std::vector<FeatureData>& data) const {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
@@ -49,7 +47,7 @@ Errors FeatureParser::parse_multiple_into(
     }
 
     for (auto& [feature_name, feature_json] : json.items()) {
-        FeatureData& feature_data = data.emplace_back(parent);
+        FeatureData& feature_data = data.emplace_back();
         feature_data.name = feature_name;
         feature_data.source_path = get_filepath();
         errors += parse_into(std::move(feature_json), feature_data);

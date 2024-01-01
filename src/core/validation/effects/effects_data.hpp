@@ -15,14 +15,13 @@
 #include <core/validation/effects/subholders/extra_spells_holder_data.hpp>
 #include <core/validation/effects/subholders/proficiency_holder_data.hpp>
 #include <core/validation/effects/subholders/riv_holder_data.hpp>
-#include <core/validation/validation_data.hpp>
-#include <core/validation/validation_subdata.hpp>
 
 namespace dnd {
 
-class EffectsData : public ValidationSubdata {
+class Content;
+
+class EffectsData {
 public:
-    EffectsData(std::shared_ptr<const ValidationData> parent) noexcept;
     std::strong_ordering operator<=>(const EffectsData&) const noexcept = default;
 
     std::vector<ConditionData> activation_conditions_data;

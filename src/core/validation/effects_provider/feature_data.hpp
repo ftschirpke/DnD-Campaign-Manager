@@ -13,11 +13,11 @@
 
 namespace dnd {
 
-class FeatureData : public ValidationData, public ValidationSubdata {
+class Content;
+
+class FeatureData : public ValidationData {
 public:
-    explicit FeatureData(std::shared_ptr<const ValidationData> parent = nullptr) noexcept;
     std::strong_ordering operator<=>(const FeatureData&) const noexcept = default;
-    virtual std::unique_ptr<ValidationData> pack() const override;
 
     EffectsData main_effects_data;
 };

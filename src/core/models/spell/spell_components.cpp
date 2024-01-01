@@ -9,13 +9,14 @@
 #include <fmt/format.h>
 
 #include <core/errors/errors.hpp>
+#include <core/errors/runtime_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/validation/spell/spell_components_data.hpp>
 
 namespace dnd {
 
 CreateResult<SpellComponents> SpellComponents::create(Data&& data) {
-    Errors errors = data.validate();
+    Errors errors = validate_spell_components(data);
     if (!errors.ok()) {
         return InvalidCreate<SpellComponents>(std::move(data), std::move(errors));
     }
@@ -37,9 +38,11 @@ CreateResult<SpellComponents> SpellComponents::create(Data&& data) {
         somatic = first_part == "S";
         material = first_part == "M";
     } else {
-        // this should never happen, if the validation is correct
-        assert(false);
-        return ValidCreate(SpellComponents(false, false, false, ""));
+        Errors unreachable_errors(RuntimeError(
+            RuntimeError::Code::UNREACHABLE,
+            fmt::format("Invalid spell components string {} passed validation.", data.str)
+        ));
+        return InvalidCreate<SpellComponents>(std::move(data), std::move(unreachable_errors));
     }
     if (material) {
         materials_needed = data.str.substr(parentheses_idx + 2, data.str.size() - parentheses_idx - 3);

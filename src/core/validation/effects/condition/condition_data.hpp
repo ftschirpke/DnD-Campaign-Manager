@@ -7,14 +7,11 @@
 #include <string>
 
 #include <core/errors/errors.hpp>
-#include <core/validation/validation_data.hpp>
-#include <core/validation/validation_subdata.hpp>
 
 namespace dnd {
 
-class ConditionData : public ValidationSubdata {
+class ConditionData {
 public:
-    ConditionData(std::shared_ptr<const ValidationData> parent) noexcept;
     std::strong_ordering operator<=>(const ConditionData&) const noexcept = default;
 
     std::string condition_str;

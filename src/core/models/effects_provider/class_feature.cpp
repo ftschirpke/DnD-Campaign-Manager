@@ -19,7 +19,7 @@
 namespace dnd {
 
 CreateResult<ClassFeature> ClassFeature::create_for(Data&& data, const Content& content) {
-    Errors errors = data.validate_nonrecursively();
+    Errors errors = validate_class_feature_nonrecursively(data);
     if (!errors.ok()) {
         return InvalidCreate<ClassFeature>(std::move(data), std::move(errors));
     }

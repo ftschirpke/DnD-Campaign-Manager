@@ -16,9 +16,7 @@ namespace dnd {
 
 class SubclassData : public ValidationData {
 public:
-    SubclassData() noexcept;
     std::strong_ordering operator<=>(const SubclassData&) const noexcept = default;
-    virtual std::unique_ptr<ValidationData> pack() const override;
 
     SpellcastingData spellcasting_data;
     std::vector<ClassFeatureData> features_data;

@@ -103,7 +103,7 @@ void DisplayVisitor::operator()(const Subclass& subclass) {
     output.text(subclass.get_name());
     output.text("Type: Subclass");
     display_source_info(output, subclass.get_source_info());
-    output.formatted_text("Class name:", subclass.get_class()->get_name());
+    output.formatted_text("Class name:", subclass.get_class().get().get_name());
 
     list_features<ClassFeature>(output, subclass.get_features());
 }
@@ -122,7 +122,7 @@ void DisplayVisitor::operator()(const Subspecies& subspecies) {
     output.text(subspecies.get_name());
     output.text("Type: Subspecies");
     display_source_info(output, subspecies.get_source_info());
-    output.formatted_text("Species name: {}", subspecies.get_species()->get_name());
+    output.formatted_text("Species name: {}", subspecies.get_species().get().get_name());
 
     list_features<Feature>(output, subspecies.get_features());
 }

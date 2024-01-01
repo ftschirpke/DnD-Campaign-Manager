@@ -8,13 +8,11 @@
 
 #include <core/errors/errors.hpp>
 #include <core/validation/validation_data.hpp>
-#include <core/validation/validation_subdata.hpp>
 
 namespace dnd {
 
-class SpellTypeData : public ValidationSubdata {
+class SpellTypeData {
 public:
-    SpellTypeData(std::shared_ptr<const ValidationData> parent) noexcept;
     std::strong_ordering operator<=>(const SpellTypeData&) const noexcept = default;
 
     std::string str;

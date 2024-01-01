@@ -9,30 +9,31 @@
 #include <vector>
 
 #include <core/errors/errors.hpp>
-#include <core/validation/validation_subdata.hpp>
+#include <core/utils/types.hpp>
 
 namespace dnd {
 
-class CharacterData;
+class Content;
 class Effects;
+class CharacterData;
 
-class DecisionData : public ValidationSubdata {
+class DecisionData {
 public:
-    DecisionData(std::shared_ptr<CharacterData> parent, std::shared_ptr<Effects> target) noexcept;
+    DecisionData(const Effects* target) noexcept;
     std::strong_ordering operator<=>(const DecisionData&) const noexcept = default;
 
-    std::shared_ptr<CharacterData> get_character_data() const noexcept;
-    std::shared_ptr<Effects> get_target() const noexcept;
-    void set_target(std::shared_ptr<Effects> new_target) noexcept;
+    const Effects* get_target() const noexcept;
+    void set_target(const Effects* new_target) noexcept;
 
     std::string feature_name;
     std::map<std::string, std::vector<std::string>> selections;
 private:
-    std::shared_ptr<CharacterData> character_data;
-    std::shared_ptr<Effects> target;
+    const Effects* target;
 };
 
-Errors validate_decision_for_content(const DecisionData& data, const Content& content);
+Errors validate_decision_for_character_and_content(
+    const DecisionData& data, const CharacterData& character_data, const Content& content
+);
 
 } // namespace dnd
 

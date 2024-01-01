@@ -7,14 +7,11 @@
 #include <string>
 
 #include <core/errors/errors.hpp>
-#include <core/validation/validation_data.hpp>
-#include <core/validation/validation_subdata.hpp>
 
 namespace dnd {
 
-class StatChangeData : public ValidationSubdata {
+class StatChangeData {
 public:
-    StatChangeData(std::shared_ptr<const ValidationData> parent) noexcept;
     std::strong_ordering operator<=>(const StatChangeData&) const noexcept = default;
 
     std::string stat_change_str;

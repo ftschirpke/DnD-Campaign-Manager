@@ -11,17 +11,17 @@
 
 namespace dnd {
 
-ChoosableData::ChoosableData() noexcept : FeatureData(std::make_shared<ValidationData>(this)) {}
-
-std::unique_ptr<ValidationData> ChoosableData::pack() const { return std::make_unique<ChoosableData>(*this); }
-
 static Errors validate_choosable_type(const ChoosableData& data) {
     Errors errors;
     if (data.type.empty()) {
-        errors.add_validation_error(
-            ValidationError::Code::MISSING_ATTRIBUTE, data.get_parent(), "Choosable Feature has empty type"
-        );
+        errors.add_validation_error(ValidationError::Code::MISSING_ATTRIBUTE, "Choosable Feature has empty type");
     }
+    return errors;
+}
+
+Errors validate_choosable_nonrecursively(const ChoosableData& data) {
+    Errors errors = validate_feature_nonrecursively(data);
+    errors += validate_choosable_type(data);
     return errors;
 }
 
@@ -33,12 +33,5 @@ Errors validate_choosable_recursively_for_content(const ChoosableData& data, con
     }
     return errors;
 }
-
-Errors validate_choosable_nonrecursively(const ChoosableData& data) {
-    Errors errors = validate_feature_nonrecursively(data);
-    errors += validate_choosable_type(data);
-    return errors;
-}
-
 
 } // namespace dnd

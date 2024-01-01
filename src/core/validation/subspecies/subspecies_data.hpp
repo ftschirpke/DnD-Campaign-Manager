@@ -16,7 +16,6 @@ namespace dnd {
 class SubspeciesData : public ValidationData {
 public:
     std::strong_ordering operator<=>(const SubspeciesData&) const noexcept = default;
-    virtual std::unique_ptr<ValidationData> pack() const override;
 
     std::vector<FeatureData> features_data;
     std::string species_name;

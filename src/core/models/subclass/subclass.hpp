@@ -13,6 +13,7 @@
 #include <core/models/effects_provider/class_feature.hpp>
 #include <core/models/source_info.hpp>
 #include <core/models/spellcasting/spellcasting.hpp>
+#include <core/utils/types.hpp>
 #include <core/validation/subclass/subclass_data.hpp>
 
 namespace dnd {
@@ -37,20 +38,20 @@ public:
     const std::vector<ClassFeature>& get_features() const noexcept;
     bool has_spellcasting() const noexcept;
     const Spellcasting* get_spellcasting() const noexcept;
-    const Class* get_class() const noexcept;
+    CRef<Class> get_class() const noexcept;
 
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Subclass(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path,
-        std::vector<ClassFeature>&& features, const Class* cls, std::unique_ptr<Spellcasting>&& spellcasting = nullptr
+        std::vector<ClassFeature>&& features, CRef<Class> cls, std::unique_ptr<Spellcasting>&& spellcasting = nullptr
     ) noexcept;
 
     std::string name;
     std::string description;
     SourceInfo source_info;
     std::vector<ClassFeature> features;
-    const Class* cls;
+    CRef<Class> cls;
     std::unique_ptr<Spellcasting> spellcasting;
 };
 

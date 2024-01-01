@@ -11,14 +11,14 @@ namespace dnd::test {
 
 static constexpr const char* tags = "[core][validation][class]";
 
-TEST_CASE("SpellcastingData::validate // valid spellcasting data", tags) {
+TEST_CASE("Validate Spellcasting // valid spellcasting data", tags) {
     ValidationDataMock parent;
-    SpellcastingData data(&parent);
+    SpellcastingData data;
     Errors errors;
 
     SECTION("not a spellcaster") {
         data.is_spellcaster = false;
-        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE_NOTHROW(errors = validate_spellcasting(data));
         REQUIRE(errors.ok());
 
         // even with data, it should be ok, and the data should be ignored
@@ -30,7 +30,7 @@ TEST_CASE("SpellcastingData::validate // valid spellcasting data", tags) {
         data.spell_slots[0].fill(3);
         data.spell_slots[1].fill(2);
         data.spell_slots[2].fill(1);
-        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE_NOTHROW(errors = validate_spellcasting(data));
         REQUIRE(errors.ok());
     }
 
@@ -44,7 +44,7 @@ TEST_CASE("SpellcastingData::validate // valid spellcasting data", tags) {
         data.spell_slots[0].fill(3);
         data.spell_slots[1].fill(2);
         data.spell_slots[2].fill(1);
-        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE_NOTHROW(errors = validate_spellcasting(data));
         REQUIRE(errors.ok());
     }
 
@@ -60,7 +60,7 @@ TEST_CASE("SpellcastingData::validate // valid spellcasting data", tags) {
         data.spell_slots[2].fill(2);
         data.spell_slots[3].fill(1);
         data.spell_slots[4] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE_NOTHROW(errors = validate_spellcasting(data));
         REQUIRE(errors.ok());
     }
 
@@ -80,15 +80,15 @@ TEST_CASE("SpellcastingData::validate // valid spellcasting data", tags) {
         data.spell_slots[6].fill(2);
         data.spell_slots[7].fill(1);
         data.spell_slots[8] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE_NOTHROW(errors = validate_spellcasting(data));
         REQUIRE(errors.ok());
     }
 }
 
-TEST_CASE("SpellcastingData::validate // invalid spellcasting data", tags) {
+TEST_CASE("Validate Spellcasting // invalid spellcasting data", tags) {
     ValidationDataMock parent;
 
-    SpellcastingData data1(&parent);
+    SpellcastingData data1;
     data1.is_spellcaster = true;
     data1.ability = "INT";
     data1.ritual_casting = true;
@@ -99,7 +99,7 @@ TEST_CASE("SpellcastingData::validate // invalid spellcasting data", tags) {
     data1.spell_slots[1].fill(2);
     data1.spell_slots[2].fill(1);
 
-    SpellcastingData data2(&parent);
+    SpellcastingData data2;
     data2.is_spellcaster = true;
     data2.ability = "WIS";
     data2.ritual_casting = false;
@@ -113,80 +113,80 @@ TEST_CASE("SpellcastingData::validate // invalid spellcasting data", tags) {
     data2.spell_slots[4] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
     Errors errors;
-    REQUIRE_NOTHROW(errors = data1.validate());
+    REQUIRE_NOTHROW(errors = validate_spellcasting(data1));
     REQUIRE(errors.ok());
-    REQUIRE_NOTHROW(errors = data2.validate());
+    REQUIRE_NOTHROW(errors = validate_spellcasting(data2));
     REQUIRE(errors.ok());
 
     SECTION("spellcaster but no/invalid ability") {
         data1.ability = "";
-        REQUIRE_NOTHROW(errors = data1.validate());
+        REQUIRE_NOTHROW(errors = validate_spellcasting(data1));
         REQUIRE_FALSE(errors.ok());
 
         data2.ability = "int";
-        REQUIRE_NOTHROW(errors = data2.validate());
+        REQUIRE_NOTHROW(errors = validate_spellcasting(data2));
         REQUIRE_FALSE(errors.ok());
 
         data2.ability = "ABC";
-        REQUIRE_NOTHROW(errors = data2.validate());
+        REQUIRE_NOTHROW(errors = validate_spellcasting(data2));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("no/wrong preparation spellcasting type") {
         data2.preparation_spellcasting_type = "";
-        REQUIRE_NOTHROW(errors = data2.validate());
+        REQUIRE_NOTHROW(errors = validate_spellcasting(data2));
         REQUIRE_FALSE(errors.ok());
 
         data2.preparation_spellcasting_type = "something";
-        REQUIRE_NOTHROW(errors = data2.validate());
+        REQUIRE_NOTHROW(errors = validate_spellcasting(data2));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("spells known and preparation spellcasting type") {
         data1.preparation_spellcasting_type = "half";
-        REQUIRE_NOTHROW(errors = data1.validate());
+        REQUIRE_NOTHROW(errors = validate_spellcasting(data1));
         REQUIRE_FALSE(errors.ok());
 
         data1.preparation_spellcasting_type = "full";
-        REQUIRE_NOTHROW(errors = data1.validate());
+        REQUIRE_NOTHROW(errors = validate_spellcasting(data1));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("negative cantrips known") {
         data1.cantrips_known.fill(-1);
-        REQUIRE_NOTHROW(errors = data1.validate());
+        REQUIRE_NOTHROW(errors = validate_spellcasting(data1));
         REQUIRE_FALSE(errors.ok());
 
         data2.cantrips_known[4] = -2;
-        REQUIRE_NOTHROW(errors = data2.validate());
+        REQUIRE_NOTHROW(errors = validate_spellcasting(data2));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("negative spells known") {
         data1.spells_known[6] = -4;
-        REQUIRE_NOTHROW(errors = data1.validate());
+        REQUIRE_NOTHROW(errors = validate_spellcasting(data1));
         REQUIRE_FALSE(errors.ok());
 
         data2.spells_known.fill(-2);
-        REQUIRE_NOTHROW(errors = data2.validate());
+        REQUIRE_NOTHROW(errors = validate_spellcasting(data2));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("negative spell slot amounts") {
         data1.spell_slots[3][4] = -1;
-        REQUIRE_NOTHROW(errors = data1.validate());
+        REQUIRE_NOTHROW(errors = validate_spellcasting(data1));
         REQUIRE_FALSE(errors.ok());
 
         data2.spell_slots[8][19] = -2;
-        REQUIRE_NOTHROW(errors = data2.validate());
+        REQUIRE_NOTHROW(errors = validate_spellcasting(data2));
         REQUIRE_FALSE(errors.ok());
 
         data1.spell_slots[3].fill(-4);
-        REQUIRE_NOTHROW(errors = data1.validate());
+        REQUIRE_NOTHROW(errors = validate_spellcasting(data1));
         REQUIRE_FALSE(errors.ok());
 
         data2.spell_slots[8].fill(-3);
-        REQUIRE_NOTHROW(errors = data2.validate());
+        REQUIRE_NOTHROW(errors = validate_spellcasting(data2));
         REQUIRE_FALSE(errors.ok());
     }
 }

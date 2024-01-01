@@ -17,15 +17,13 @@
 
 namespace dnd {
 
-std::unique_ptr<ValidationData> SubspeciesData::pack() const { return std::make_unique<SubspeciesData>(*this); }
-
 static Errors validate_subspecies_raw_nonrecursively(const SubspeciesData& data) {
     Errors errors;
     std::unordered_set<std::string> unique_feature_names;
     for (const FeatureData& feature_data : data.features_data) {
         if (unique_feature_names.contains(feature_data.name)) {
             errors.add_validation_error(
-                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(),
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format("Character class has duplicate feature \"{}\".", feature_data.name)
             );
         } else {
@@ -34,12 +32,12 @@ static Errors validate_subspecies_raw_nonrecursively(const SubspeciesData& data)
     }
     if (data.features_data.empty()) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(), "Character subspecies has no features."
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Character subspecies has no features."
         );
     }
     if (data.species_name.empty()) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(), "Character subspecies has no species name."
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Character subspecies has no species name."
         );
     }
     return errors;
@@ -49,14 +47,14 @@ Errors validate_subspecies_relations_nonrecursively(const SubspeciesData& data, 
     Errors errors;
     if (content.get_subspecies().contains(data.name)) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(),
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
             fmt::format("Subspecies has duplicate name \"{}\".", data.name)
         );
     }
     for (const FeatureData& feature_data : data.features_data) {
         if (content.get_features().contains(feature_data.name)) {
             errors.add_validation_error(
-                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(),
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format("Feature has duplicate name \"{}\".", feature_data.name)
             );
         }
@@ -64,12 +62,12 @@ Errors validate_subspecies_relations_nonrecursively(const SubspeciesData& data, 
     OptCRef<Species> species_optional = content.get_species().get(data.species_name);
     if (!species_optional.has_value()) {
         errors.add_validation_error(
-            ValidationError::Code::RELATION_NOT_FOUND, data.pack(),
+            ValidationError::Code::RELATION_NOT_FOUND,
             fmt::format("Character species '{}' does not exist.", data.species_name)
         );
     } else if (!species_optional.value().get().has_subspecies()) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_RELATION, data.pack(),
+            ValidationError::Code::INVALID_RELATION,
             fmt::format("Character species '{}' does not have subspecies.", data.species_name)
         );
     }

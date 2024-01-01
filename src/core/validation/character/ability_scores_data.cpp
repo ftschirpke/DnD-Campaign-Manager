@@ -7,19 +7,14 @@
 #include <fmt/format.h>
 
 #include <core/errors/errors.hpp>
-#include <core/validation/validation_data.hpp>
-#include <core/validation/validation_subdata.hpp>
 
 namespace dnd {
 
-AbilityScoresData::AbilityScoresData(std::shared_ptr<const ValidationData> parent) noexcept
-    : ValidationSubdata(parent) {}
-
-static Errors check_ability_score(int ability_score, std::shared_ptr<const ValidationData> parent, const char* name) {
+static Errors check_ability_score(int ability_score, const char* name) {
     Errors errors;
     if (ability_score <= 0 || ability_score > 30) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
             fmt::format("Ability score {} ({}) is not between 1 and 30 (inclusive).", name, ability_score)
         );
     }
@@ -29,12 +24,12 @@ static Errors check_ability_score(int ability_score, std::shared_ptr<const Valid
 
 Errors validate_ability_scores(const AbilityScoresData& data) {
     Errors errors;
-    errors += check_ability_score(data.ability_scores[0], data.get_parent(), "strength");
-    errors += check_ability_score(data.ability_scores[1], data.get_parent(), "dexterity");
-    errors += check_ability_score(data.ability_scores[2], data.get_parent(), "constitution");
-    errors += check_ability_score(data.ability_scores[3], data.get_parent(), "intelligence");
-    errors += check_ability_score(data.ability_scores[4], data.get_parent(), "wisdom");
-    errors += check_ability_score(data.ability_scores[5], data.get_parent(), "charisma");
+    errors += check_ability_score(data.ability_scores[0], "strength");
+    errors += check_ability_score(data.ability_scores[1], "dexterity");
+    errors += check_ability_score(data.ability_scores[2], "constitution");
+    errors += check_ability_score(data.ability_scores[3], "intelligence");
+    errors += check_ability_score(data.ability_scores[4], "wisdom");
+    errors += check_ability_score(data.ability_scores[5], "charisma");
     return errors;
 }
 

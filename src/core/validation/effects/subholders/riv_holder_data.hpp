@@ -8,13 +8,13 @@
 #include <string>
 
 #include <core/errors/errors.hpp>
-#include <core/validation/validation_subdata.hpp>
 
 namespace dnd {
 
-class RIVHolderData : public ValidationSubdata {
+class Content;
+
+class RIVHolderData {
 public:
-    RIVHolderData(std::shared_ptr<const ValidationData> parent) noexcept;
     std::strong_ordering operator<=>(const RIVHolderData&) const noexcept = default;
     bool empty() const noexcept;
 

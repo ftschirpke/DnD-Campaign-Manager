@@ -1,6 +1,7 @@
 #include <dnd_config.hpp>
 
 #include "character_data.hpp"
+#include "core/validation/character/decision/decision_data.hpp"
 
 #include <array>
 #include <memory>
@@ -24,20 +25,13 @@
 
 namespace dnd {
 
-CharacterData::CharacterData() noexcept
-    : ValidationData(), features_data(), base_ability_scores_data(std::make_shared<ValidationData>(this)),
-      feature_providers_data(std::make_shared<ValidationData>(this)),
-      progression_data(std::make_shared<ValidationData>(this)), decisions_data() {}
-
-std::unique_ptr<ValidationData> CharacterData::pack() const { return std::make_unique<CharacterData>(*this); }
-
 static Errors validate_character_raw_nonrecursively(const CharacterData& data) {
     Errors errors = validate_name_description_and_source(data);
     std::unordered_set<std::string> unique_feature_names;
     for (const FeatureData& feature_data : data.features_data) {
         if (unique_feature_names.contains(feature_data.name)) {
             errors.add_validation_error(
-                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(),
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format("Character has duplicate feature \"{}\".", feature_data.name)
             );
         } else {
@@ -51,7 +45,7 @@ static Errors validate_character_relations_nonrecursively(const CharacterData& d
     Errors errors;
     if (content.get_characters().contains(data.name)) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(),
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
             fmt::format("Character has duplicate name \"{}\".", data.name)
         );
     }
@@ -59,7 +53,7 @@ static Errors validate_character_relations_nonrecursively(const CharacterData& d
         if (content.get_features().contains(feature_data.name)
             || content.get_class_features().contains(feature_data.name)) {
             errors.add_validation_error(
-                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(),
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format("Feature has duplicate name \"{}\".", feature_data.name)
             );
         }
@@ -71,7 +65,7 @@ static Errors validate_character_relations_nonrecursively(const CharacterData& d
         if (data.progression_data.level >= cls.get_important_levels().get_subclass_level()
             && data.feature_providers_data.subclass_name.empty()) {
             errors.add_validation_error(
-                ValidationError::Code::INCONSISTENT_ATTRIBUTES, data.pack(),
+                ValidationError::Code::INCONSISTENT_ATTRIBUTES,
                 fmt::format(
                     "{}s of level {} must have a subclass and {} is level {}.", cls.get_name(),
                     cls.get_important_levels().get_subclass_level(), data.name, data.progression_data.level
@@ -79,7 +73,7 @@ static Errors validate_character_relations_nonrecursively(const CharacterData& d
             );
         } else if (data.progression_data.level < cls.get_important_levels().get_subclass_level() && !data.feature_providers_data.subclass_name.empty()) {
             errors.add_validation_error(
-                ValidationError::Code::INCONSISTENT_ATTRIBUTES, data.pack(),
+                ValidationError::Code::INCONSISTENT_ATTRIBUTES,
                 fmt::format(
                     "{}s cannot have a subclass before level {} and {} is only level {}.", cls.get_name(),
                     cls.get_important_levels().get_subclass_level(), data.name, data.progression_data.level
@@ -90,7 +84,7 @@ static Errors validate_character_relations_nonrecursively(const CharacterData& d
         for (int hit_dice_roll : data.progression_data.hit_dice_rolls) {
             if (!cls.get_hit_dice().value_is_possible(hit_dice_roll)) {
                 errors.add_validation_error(
-                    ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(),
+                    ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                     fmt::format(
                         "Character has invalid hit dice roll of {} (must be between {} and {}).", hit_dice_roll,
                         cls.get_hit_dice().min_value(), cls.get_hit_dice().max_value()
@@ -118,7 +112,7 @@ Errors validate_character_recursively_for_content(const CharacterData& data, con
     errors += validate_feature_providers_for_content(data.feature_providers_data, content);
     errors += validate_progression(data.progression_data);
     for (const DecisionData& decision_data : data.decisions_data) {
-        errors += validate_decision_for_content(decision_data, content);
+        errors += validate_decision_for_character_and_content(decision_data, data, content);
     }
     return errors;
 }

@@ -45,14 +45,13 @@ static int determine_subclass_level(const FeatureData& subclass_feature_data) {
 }
 
 CreateResult<Class> Class::create_for(Data&& data, const Content& content) {
-    Errors errors = data.validate_nonrecursively();
-    errors += data.validate_relations_nonrecursively(content);
+    Errors errors = validate_class_nonrecursively_for_content(data, content);
     if (!errors.ok()) {
         return InvalidCreate<Class>(std::move(data), std::move(errors));
     }
 
     int subclass_level = -1;
-    const ClassFeature* subclass_feature = nullptr;
+    OptCRef<ClassFeature> subclass_feature = std::nullopt;
 
     std::vector<ClassFeature> features;
     features.reserve(data.features_data.size());
@@ -66,22 +65,20 @@ CreateResult<Class> Class::create_for(Data&& data, const Content& content) {
         if (feature.get_name() == data.subclass_feature_name) {
             subclass_level = determine_subclass_level(feature_data);
             features.emplace_back(std::move(feature));
-            subclass_feature = &features.back();
+            subclass_feature = features.back();
         } else {
             features.emplace_back(std::move(feature));
         }
     }
     assert(subclass_level != -1);
-    assert(subclass_feature != nullptr);
+    assert(subclass_feature.has_value());
 
     tl::expected<Dice, Errors> hit_dice_result = Dice::from_string(data.hit_dice_str);
     if (!hit_dice_result.has_value()) {
         Errors sub_errors;
         for (const Error& error : hit_dice_result.error().get_errors()) {
             std::string error_message = std::visit([](const auto& error) { return error.get_error_message(); }, error);
-            sub_errors.add_validation_error(
-                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, &data, std::move(error_message)
-            );
+            sub_errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, std::move(error_message));
         }
         return InvalidCreate<Class>(std::move(data), std::move(sub_errors));
     }
@@ -96,10 +93,16 @@ CreateResult<Class> Class::create_for(Data&& data, const Content& content) {
     }
     ImportantLevels important_levels = important_levels_result.value();
 
+    FactoryResult<Spellcasting> spellcasting_result = create_spellcasting(std::move(data.spellcasting_data));
+    if (!spellcasting_result.is_valid()) {
+        auto [_, sub_errors] = spellcasting_result.data_and_errors();
+        return InvalidCreate<Class>(std::move(data), std::move(sub_errors));
+    }
+    std::unique_ptr<Spellcasting> spellcasting = spellcasting_result.value();
+
     return ValidCreate(Class(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(features),
-        subclass_feature, std::move(hit_dice), std::move(important_levels),
-        create_spellcasting(std::move(data.spellcasting_data))
+        subclass_feature, std::move(hit_dice), std::move(important_levels), std::move(spellcasting)
     ));
 }
 
@@ -115,7 +118,7 @@ bool Class::has_spellcasting() const noexcept { return spellcasting != nullptr; 
 
 const Spellcasting* Class::get_spellcasting() const noexcept { return spellcasting.get(); }
 
-const ClassFeature* Class::get_subclass_feature() const noexcept { return subclass_feature; }
+OptCRef<ClassFeature> Class::get_subclass_feature() const noexcept { return subclass_feature; }
 
 const Dice& Class::get_hit_dice() const noexcept { return hit_dice; }
 
@@ -125,7 +128,7 @@ void Class::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 Class::Class(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path,
-    std::vector<ClassFeature>&& features, const ClassFeature* subclass_feature, Dice hit_dice,
+    std::vector<ClassFeature>&& features, OptCRef<ClassFeature> subclass_feature, Dice hit_dice,
     ImportantLevels&& important_levels, std::unique_ptr<Spellcasting>&& spellcasting
 ) noexcept
     : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),

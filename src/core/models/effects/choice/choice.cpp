@@ -103,8 +103,7 @@ static std::vector<std::unique_ptr<ContentFilter>> spell_filters(ChoiceData& dat
 }
 
 CreateResult<Choice> Choice::create_for(Data&& data, const Content& content) {
-    Errors errors = data.validate();
-    errors += data.validate_relations(content);
+    Errors errors = validate_choice_for_content(data, content);
     if (!errors.ok()) {
         return InvalidCreate<Choice>(std::move(data), std::move(errors));
     }

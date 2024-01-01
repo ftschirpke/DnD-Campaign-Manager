@@ -10,7 +10,7 @@
 namespace dnd {
 
 CreateResult<Progression> Progression::create(Data&& data) {
-    Errors errors = data.validate();
+    Errors errors = validate_progression(data);
     if (!errors.ok()) {
         return InvalidCreate<Progression>(std::move(data), std::move(errors));
     }

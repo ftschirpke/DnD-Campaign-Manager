@@ -16,16 +16,10 @@
 #include <core/validation/effects/subholders/proficiency_holder_data.hpp>
 #include <core/validation/effects/subholders/riv_holder_data.hpp>
 #include <core/validation/validation_data.hpp>
-#include <core/validation/validation_subdata.hpp>
 
 namespace dnd {
 
-EffectsData::EffectsData(std::shared_ptr<const ValidationData> parent) noexcept
-    : ValidationSubdata(parent), activation_conditions_data(), choices_data(), stat_changes_data(),
-      action_holder_data(parent), extra_spells_holder_data(parent), proficiency_holder_data(parent),
-      riv_holder_data(parent) {}
-
-Errors validate_effects_for_content_recursively(const EffectsData& data, const Content& content) {
+Errors validate_effects_recursively_for_content(const EffectsData& data, const Content& content) {
     Errors errors;
     for (const ConditionData& condition_data : data.activation_conditions_data) {
         errors += validate_condition(condition_data);

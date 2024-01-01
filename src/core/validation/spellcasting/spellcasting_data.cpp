@@ -10,12 +10,10 @@
 
 #include <core/basic_mechanics/abilities.hpp>
 #include <core/errors/errors.hpp>
-#include <core/validation/validation_data.hpp>
-#include <core/validation/validation_subdata.hpp>
 
 namespace dnd {
 
-SpellcastingData::SpellcastingData(std::shared_ptr<const ValidationData> parent) noexcept : ValidationSubdata(parent) {
+SpellcastingData::SpellcastingData() noexcept {
     for (int& val : spells_known) {
         val = 0;
     }
@@ -37,22 +35,21 @@ Errors validate_spellcasting(const SpellcastingData& data) {
     }
     if (!is_ability(data.ability)) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.get_parent(),
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
             fmt::format("The spellcasting ability '{}' is not a valid ability.", data.ability)
         );
     }
 
     if (data.is_spells_known_type && !data.preparation_spellcasting_type.empty()) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.get_parent(),
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
             "The spellcasting cannot be a spells known spellcasting and preparation spellcasting at the same time."
         );
     } else if (data.is_spells_known_type) {
         for (int val : data.spells_known) {
             if (val < 0) {
                 errors.add_validation_error(
-                    ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.get_parent(),
-                    "The amount of spells known cannot be negative"
+                    ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "The amount of spells known cannot be negative"
                 );
                 break;
             }
@@ -60,12 +57,11 @@ Errors validate_spellcasting(const SpellcastingData& data) {
     } else if (!data.preparation_spellcasting_type.empty()) {
         if (std::any_of(data.spells_known.begin(), data.spells_known.end(), [](int val) { return val != 0; })) {
             errors.add_validation_error(
-                ValidationError::Code::MISSING_ATTRIBUTE, data.get_parent(),
-                "The spells known must be empty for preparation spellcasting."
+                ValidationError::Code::MISSING_ATTRIBUTE, "The spells known must be empty for preparation spellcasting."
             );
         } else if (data.preparation_spellcasting_type != "full" && data.preparation_spellcasting_type != "half") {
             errors.add_validation_error(
-                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.get_parent(),
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format(
                     "The preparation spellcasting type '{}' is not a valid type (must be 'full' of 'half').",
                     data.preparation_spellcasting_type
@@ -74,7 +70,7 @@ Errors validate_spellcasting(const SpellcastingData& data) {
         }
     } else {
         errors.add_validation_error(
-            ValidationError::Code::MISSING_ATTRIBUTE, data.get_parent(),
+            ValidationError::Code::MISSING_ATTRIBUTE,
             "The spellcasting must be either a spells known spellcasting or a preparation spellcasting."
         );
     }
@@ -82,8 +78,7 @@ Errors validate_spellcasting(const SpellcastingData& data) {
     for (int val : data.cantrips_known) {
         if (val < 0) {
             errors.add_validation_error(
-                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.get_parent(),
-                "The amount of cantrips known cannot be negative"
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "The amount of cantrips known cannot be negative"
             );
             break;
         }
@@ -94,7 +89,7 @@ Errors validate_spellcasting(const SpellcastingData& data) {
         for (int val : arr) {
             if (val < 0) {
                 errors.add_validation_error(
-                    ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.get_parent(),
+                    ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                     fmt::format("The amount of spell slots of level {} cannot be negative", level)
                 );
                 break;

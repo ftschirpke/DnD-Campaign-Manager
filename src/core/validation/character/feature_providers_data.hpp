@@ -7,16 +7,13 @@
 #include <string>
 
 #include <core/errors/errors.hpp>
-#include <core/validation/validation_data.hpp>
-#include <core/validation/validation_subdata.hpp>
 
 namespace dnd {
 
 class Content;
 
-class FeatureProvidersData : public ValidationSubdata {
+class FeatureProvidersData {
 public:
-    FeatureProvidersData(std::shared_ptr<const ValidationData>) noexcept;
     std::strong_ordering operator<=>(const FeatureProvidersData&) const noexcept = default;
 
     std::string species_name;

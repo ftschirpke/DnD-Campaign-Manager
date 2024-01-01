@@ -17,7 +17,7 @@
 namespace dnd {
 
 CreateResult<Choosable> Choosable::create_for(Data&& data, const Content& content) {
-    Errors errors = data.validate_nonrecursively();
+    Errors errors = validate_choosable_nonrecursively(data);
     if (!errors.ok()) {
         return InvalidCreate<Choosable>(std::move(data), std::move(errors));
     }
