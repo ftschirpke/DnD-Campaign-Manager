@@ -30,6 +30,9 @@ public:
     std::set<std::string> classes;
 };
 
+Errors validate_spell_nonrecursively(const SpellData& data);
+Errors validate_spell_recursively(const SpellData& data);
+
 } // namespace dnd
 
 #endif // SPELL_DATA_HPP_

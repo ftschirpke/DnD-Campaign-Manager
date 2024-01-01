@@ -14,7 +14,7 @@ namespace dnd {
 
 class ProficiencyHolderData : public ValidationSubdata {
 public:
-    ProficiencyHolderData(const ValidationData* parent) noexcept;
+    ProficiencyHolderData(std::shared_ptr<const ValidationData> parent) noexcept;
     std::strong_ordering operator<=>(const ProficiencyHolderData&) const noexcept = default;
     bool empty() const noexcept;
 
@@ -33,6 +33,8 @@ public:
     // special types of senses the character has e.g. darkvision
     std::set<std::string> senses;
 };
+
+Errors validate_proficiency_holder_for_content(const ProficiencyHolderData& data, const Content& content);
 
 } // namespace dnd
 

@@ -17,10 +17,16 @@
 
 namespace dnd {
 
-ProficiencyHolderData::ProficiencyHolderData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
+ProficiencyHolderData::ProficiencyHolderData(std::shared_ptr<const ValidationData> parent) noexcept
+    : ValidationSubdata(parent) {}
+
+bool ProficiencyHolderData::empty() const noexcept {
+    return armor.empty() && weapons.empty() && tools.empty() && skills.empty() && saving_throws.empty()
+           && languages.empty() && senses.empty();
+}
 
 static Errors string_set_validate(
-    const std::set<std::string>& string_set, const ValidationData* parent, const char* set_name
+    const std::set<std::string>& string_set, std::shared_ptr<const ValidationData> parent, const char* set_name
 ) {
     Errors errors;
     for (const std::string& str_item : string_set) {
@@ -34,28 +40,28 @@ static Errors string_set_validate(
     return errors;
 }
 
-Errors ProficiencyHolderData::validate() const {
+static Errors validate_proficiency_holder_raw(const ProficiencyHolderData& data) {
     Errors errors;
-    errors += string_set_validate(armor, parent, "Armor");
-    errors += string_set_validate(weapons, parent, "Weapons");
-    errors += string_set_validate(tools, parent, "Tools");
-    errors += string_set_validate(skills, parent, "Skills");
-    errors += string_set_validate(saving_throws, parent, "Saving throws");
-    errors += string_set_validate(languages, parent, "Languages");
-    errors += string_set_validate(senses, parent, "Senses");
+    errors += string_set_validate(data.armor, data.get_parent(), "Armor");
+    errors += string_set_validate(data.weapons, data.get_parent(), "Weapons");
+    errors += string_set_validate(data.tools, data.get_parent(), "Tools");
+    errors += string_set_validate(data.skills, data.get_parent(), "Skills");
+    errors += string_set_validate(data.saving_throws, data.get_parent(), "Saving throws");
+    errors += string_set_validate(data.languages, data.get_parent(), "Languages");
+    errors += string_set_validate(data.senses, data.get_parent(), "Senses");
 
-    for (const std::string& skill : skills) {
+    for (const std::string& skill : data.skills) {
         if (!is_skill(skill)) {
             errors.add_validation_error(
-                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.get_parent(),
                 fmt::format("Skill proficiencies contain '{}' which is not a valid skill.", skill)
             );
         }
     }
-    for (const std::string& saving_throw_ability : saving_throws) {
+    for (const std::string& saving_throw_ability : data.saving_throws) {
         if (!is_ability(saving_throw_ability)) {
             errors.add_validation_error(
-                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.get_parent(),
                 fmt::format(
                     "Saving throw proficiencies contain '{}' which is not a valid ability.", saving_throw_ability
                 )
@@ -66,7 +72,7 @@ Errors ProficiencyHolderData::validate() const {
 }
 
 static Errors string_group_set_validate_relations(
-    const std::set<std::string>& string_group_set, const ValidationData* parent, const char* set_name,
+    const std::set<std::string>& string_group_set, std::shared_ptr<const ValidationData> parent, const char* set_name,
     const char* group_name, const Content& content
 ) {
     Errors errors;
@@ -82,19 +88,20 @@ static Errors string_group_set_validate_relations(
     return errors;
 }
 
-Errors ProficiencyHolderData::validate_relations(const Content& content) const {
+static Errors validate_proficiency_holder_relations(const ProficiencyHolderData& data, const Content& content) {
     Errors errors;
-    errors += string_group_set_validate_relations(armor, parent, "armor", "armor", content);
-    errors += string_group_set_validate_relations(weapons, parent, "weapons", "weapons", content);
-    errors += string_group_set_validate_relations(tools, parent, "tools", "tools", content);
-    errors += string_group_set_validate_relations(languages, parent, "languages", "languages", content);
-    errors += string_group_set_validate_relations(senses, parent, "senses", "senses", content);
+    errors += string_group_set_validate_relations(data.armor, data.get_parent(), "armor", "armor", content);
+    errors += string_group_set_validate_relations(data.weapons, data.get_parent(), "weapons", "weapons", content);
+    errors += string_group_set_validate_relations(data.tools, data.get_parent(), "tools", "tools", content);
+    errors += string_group_set_validate_relations(data.languages, data.get_parent(), "languages", "languages", content);
+    errors += string_group_set_validate_relations(data.senses, data.get_parent(), "senses", "senses", content);
     return errors;
 }
 
-bool ProficiencyHolderData::empty() const noexcept {
-    return armor.empty() && weapons.empty() && tools.empty() && skills.empty() && saving_throws.empty()
-           && languages.empty() && senses.empty();
+Errors validate_proficiency_holder_for_content(const ProficiencyHolderData& data, const Content& content) {
+    Errors errors = validate_proficiency_holder_raw(data);
+    errors += validate_proficiency_holder_relations(data, content);
+    return errors;
 }
 
 } // namespace dnd

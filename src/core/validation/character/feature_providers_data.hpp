@@ -16,7 +16,7 @@ class Content;
 
 class FeatureProvidersData : public ValidationSubdata {
 public:
-    FeatureProvidersData(const ValidationData* parent) noexcept;
+    FeatureProvidersData(std::shared_ptr<const ValidationData>) noexcept;
     std::strong_ordering operator<=>(const FeatureProvidersData&) const noexcept = default;
 
     std::string species_name;
@@ -24,6 +24,8 @@ public:
     std::string class_name;
     std::string subclass_name;
 };
+
+Errors validate_feature_providers_for_content(const FeatureProvidersData& data, const Content& content);
 
 } // namespace dnd
 

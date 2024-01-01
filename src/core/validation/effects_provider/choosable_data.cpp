@@ -11,27 +11,34 @@
 
 namespace dnd {
 
-ChoosableData::ChoosableData() noexcept : FeatureData(this) {}
+ChoosableData::ChoosableData() noexcept : FeatureData(std::make_shared<ValidationData>(this)) {}
 
 std::unique_ptr<ValidationData> ChoosableData::pack() const { return std::make_unique<ChoosableData>(*this); }
 
-Errors ChoosableData::validate() const {
-    Errors errors = validate_nonrecursively();
-    main_effects_data.validate();
-    for (const ConditionData& prerequisite_data : prerequisites_data) {
-        errors += prerequisite_data.validate();
-    }
-    return errors;
-}
-
-Errors ChoosableData::validate_nonrecursively() const {
-    Errors errors = FeatureData::validate_nonrecursively();
-    if (type.empty()) {
+static Errors validate_choosable_type(const ChoosableData& data) {
+    Errors errors;
+    if (data.type.empty()) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this, "Choosable Feature has empty type"
+            ValidationError::Code::MISSING_ATTRIBUTE, data.get_parent(), "Choosable Feature has empty type"
         );
     }
     return errors;
 }
+
+Errors validate_choosable_recursively_for_content(const ChoosableData& data, const Content& content) {
+    Errors errors = validate_feature_recursively_for_content(data, content);
+    errors += validate_choosable_type(data);
+    for (const ConditionData& prerequisite_data : data.prerequisites_data) {
+        errors += validate_condition(prerequisite_data);
+    }
+    return errors;
+}
+
+Errors validate_choosable_nonrecursively(const ChoosableData& data) {
+    Errors errors = validate_feature_nonrecursively(data);
+    errors += validate_choosable_type(data);
+    return errors;
+}
+
 
 } // namespace dnd

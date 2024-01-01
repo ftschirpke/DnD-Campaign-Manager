@@ -26,6 +26,8 @@ protected:
     ValidationData() = default;
 };
 
+Errors validate_name_description_and_source(const ValidationData& data);
+
 } // namespace dnd
 
 #endif // VALIDATION_DATA_HPP_

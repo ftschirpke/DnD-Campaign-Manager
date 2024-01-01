@@ -14,11 +14,13 @@ namespace dnd {
 
 class ImportantLevelsData : public ValidationSubdata {
 public:
-    ImportantLevelsData(const ValidationData* parent) noexcept;
+    ImportantLevelsData(std::shared_ptr<const ValidationData> parent) noexcept;
     std::strong_ordering operator<=>(const ImportantLevelsData&) const noexcept = default;
 
     std::set<int> feat_levels;
 };
+
+Errors validate_important_levels(const ImportantLevelsData& data);
 
 } // namespace dnd
 

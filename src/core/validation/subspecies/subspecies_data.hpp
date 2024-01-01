@@ -22,6 +22,9 @@ public:
     std::string species_name;
 };
 
+Errors validate_subspecies_nonrecursively_for_content(const SubspeciesData& data, const Content& content);
+Errors validate_subspecies_recursively_for_content(const SubspeciesData& data, const Content& content);
+
 } // namespace dnd
 
 #endif // SUBSPECIES_DATA_HPP_

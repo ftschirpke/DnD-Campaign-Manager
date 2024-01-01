@@ -14,13 +14,15 @@ namespace dnd {
 
 class ProgressionData : public ValidationSubdata {
 public:
-    ProgressionData(const ValidationData* parent) noexcept;
+    ProgressionData(std::shared_ptr<const ValidationData> parent) noexcept;
     std::strong_ordering operator<=>(const ProgressionData&) const noexcept = default;
 
     int level;
     int xp;
     std::vector<int> hit_dice_rolls;
 };
+
+Errors validate_progression(const ProgressionData& data);
 
 } // namespace dnd
 

@@ -17,16 +17,16 @@ namespace dnd {
 static constexpr const char* condition_regex_cstr = "[A-Z][_A-Z0-9]+ ((==|!=|>=|<=|>|<) "
                                                     "([A-Z][_A-Z0-9]+|-?\\d+(\\.\\d\\d?)?|)|== true|== false)";
 
-ConditionData::ConditionData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
+ConditionData::ConditionData(std::shared_ptr<const ValidationData> parent) noexcept : ValidationSubdata(parent) {}
 
-Errors ConditionData::validate() const {
+Errors validate_condition(const ConditionData& data) {
     DND_MEASURE_FUNCTION();
     static const std::regex condition_regex(condition_regex_cstr);
     Errors errors;
-    if (!std::regex_match(condition_str, condition_regex)) {
+    if (!std::regex_match(data.condition_str, condition_regex)) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
-            fmt::format("Invalid condition \"{}\"", condition_str)
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.get_parent(),
+            fmt::format("Invalid condition \"{}\"", data.condition_str)
         );
     }
     return errors;

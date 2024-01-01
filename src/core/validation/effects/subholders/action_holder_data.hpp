@@ -15,7 +15,7 @@ namespace dnd {
 
 class ActionHolderData : public ValidationSubdata {
 public:
-    ActionHolderData(const ValidationData* parent) noexcept;
+    ActionHolderData(std::shared_ptr<const ValidationData> parent) noexcept;
     std::strong_ordering operator<=>(const ActionHolderData&) const noexcept = default;
     bool empty() const noexcept;
 
@@ -23,6 +23,8 @@ public:
     std::map<std::string, std::string> bonus_actions;
     std::map<std::string, std::string> reactions;
 };
+
+Errors validate_actions_holder(const ActionHolderData& data);
 
 } // namespace dnd
 

@@ -22,7 +22,7 @@ namespace dnd {
 
 class EffectsData : public ValidationSubdata {
 public:
-    EffectsData(const ValidationData* parent) noexcept;
+    EffectsData(std::shared_ptr<const ValidationData> parent) noexcept;
     std::strong_ordering operator<=>(const EffectsData&) const noexcept = default;
 
     std::vector<ConditionData> activation_conditions_data;
@@ -33,6 +33,8 @@ public:
     ProficiencyHolderData proficiency_holder_data;
     RIVHolderData riv_holder_data;
 };
+
+Errors validate_effects_recursively_for_content(const EffectsData& data, const Content& content);
 
 } // namespace dnd
 

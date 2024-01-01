@@ -14,14 +14,16 @@ class ValidationError {
 public:
     enum class Code;
 
-    ValidationError(Code error_code, const ValidationData* validation_data, const std::string& message) noexcept;
+    ValidationError(
+        Code error_code, std::shared_ptr<const ValidationData> validation_data, const std::string& message
+    ) noexcept;
 
     Code get_error_code() const noexcept;
     const ValidationData* get_validation_data() const noexcept;
     const std::string& get_error_message() const noexcept;
 private:
     Code error_code;
-    std::shared_ptr<ValidationData> validation_data;
+    std::shared_ptr<const ValidationData> validation_data;
     std::string error_message;
 };
 

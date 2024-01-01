@@ -14,10 +14,15 @@
 
 namespace dnd {
 
-RIVHolderData::RIVHolderData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
+RIVHolderData::RIVHolderData(std::shared_ptr<const ValidationData> parent) noexcept : ValidationSubdata(parent) {}
+
+bool RIVHolderData::empty() const noexcept {
+    return damage_resistances.empty() && damage_immunities.empty() && damage_vulnerabilities.empty()
+           && condition_immunities.empty();
+}
 
 static Errors string_set_validate(
-    const std::set<std::string>& string_set, const ValidationData* parent, const char* set_name
+    const std::set<std::string>& string_set, std::shared_ptr<const ValidationData> parent, const char* set_name
 ) {
     Errors errors;
     for (const std::string& str_item : string_set) {
@@ -31,17 +36,17 @@ static Errors string_set_validate(
     return errors;
 }
 
-Errors RIVHolderData::validate() const {
+static Errors validate_riv_holder_raw(const RIVHolderData& data) {
     Errors errors;
-    errors += string_set_validate(damage_resistances, parent, "Damage resistances");
-    errors += string_set_validate(damage_immunities, parent, "Damage immunities");
-    errors += string_set_validate(damage_vulnerabilities, parent, "Damage vulnerabilities");
-    errors += string_set_validate(condition_immunities, parent, "Condition immunities");
+    errors += string_set_validate(data.damage_resistances, data.get_parent(), "Damage resistances");
+    errors += string_set_validate(data.damage_immunities, data.get_parent(), "Damage immunities");
+    errors += string_set_validate(data.damage_vulnerabilities, data.get_parent(), "Damage vulnerabilities");
+    errors += string_set_validate(data.condition_immunities, data.get_parent(), "Condition immunities");
     return errors;
 }
 
 static Errors string_group_set_validate_relations(
-    const std::set<std::string>& string_group_set, const ValidationData* parent, const char* set_name,
+    const std::set<std::string>& string_group_set, std::shared_ptr<const ValidationData> parent, const char* set_name,
     const char* group_name, const Content& content
 ) {
     Errors errors;
@@ -56,26 +61,27 @@ static Errors string_group_set_validate_relations(
     return errors;
 }
 
-Errors RIVHolderData::validate_relations(const Content& content) const {
+static Errors validate_riv_holder_relations(const RIVHolderData& data, const Content& content) {
     Errors errors;
     errors += string_group_set_validate_relations(
-        damage_resistances, parent, "damage resistances", "damage types", content
+        data.damage_resistances, data.get_parent(), "damage resistances", "damage types", content
     );
     errors += string_group_set_validate_relations(
-        damage_immunities, parent, "damage immunities", "damage types", content
+        data.damage_immunities, data.get_parent(), "damage immunities", "damage types", content
     );
     errors += string_group_set_validate_relations(
-        damage_vulnerabilities, parent, "damage vulnerabilities", "damage types", content
+        data.damage_vulnerabilities, data.get_parent(), "damage vulnerabilities", "damage types", content
     );
     errors += string_group_set_validate_relations(
-        condition_immunities, parent, "condition immunities", "conditions", content
+        data.condition_immunities, data.get_parent(), "condition immunities", "conditions", content
     );
     return errors;
 }
 
-bool RIVHolderData::empty() const noexcept {
-    return damage_resistances.empty() && damage_immunities.empty() && damage_vulnerabilities.empty()
-           && condition_immunities.empty();
+Errors validate_riv_holder_for_content(const RIVHolderData& data, const Content& content) {
+    Errors errors = validate_riv_holder_raw(data);
+    errors += validate_riv_holder_relations(data, content);
+    return errors;
 }
 
 } // namespace dnd

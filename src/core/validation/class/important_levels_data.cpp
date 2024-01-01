@@ -12,20 +12,21 @@
 
 namespace dnd {
 
-ImportantLevelsData::ImportantLevelsData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
+ImportantLevelsData::ImportantLevelsData(std::shared_ptr<const ValidationData> parent) noexcept
+    : ValidationSubdata(parent) {}
 
-Errors ImportantLevelsData::validate() const {
+Errors validate_important_levels(const ImportantLevelsData& data) {
     Errors errors;
-    if (feat_levels.empty()) {
+    if (data.feat_levels.empty()) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.get_parent(),
             "Character class has no ability score improvement levels."
         );
         return errors;
     }
-    if (*feat_levels.begin() <= 0 || *(--feat_levels.end()) > 20) {
+    if (*data.feat_levels.begin() <= 0 || *(--data.feat_levels.end()) > 20) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.get_parent(),
             "Feat levels must all be between 1 and 20 (inclusive)."
         );
     }

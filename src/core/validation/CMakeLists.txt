@@ -4,6 +4,7 @@ target_sources(${DND_CORE}
     validation_subdata.cpp
 )
 
+add_subdirectory(basic_mechanics)
 add_subdirectory(character)
 add_subdirectory(class)
 add_subdirectory(subclass)

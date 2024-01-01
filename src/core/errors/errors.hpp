@@ -35,7 +35,7 @@ public:
     void add_parsing_error(ParsingError::Code error_code, const std::filesystem::path& filepath, std::string&& message);
     void add_parsing_error(ParsingError&& error);
     void add_validation_error(
-        ValidationError::Code error_code, const ValidationData* validation_data, std::string&& message
+        ValidationError::Code error_code, std::shared_ptr<const ValidationData> validation_data, std::string&& message
     );
     void add_validation_error(ValidationError&& error);
     void add_runtime_error(RuntimeError::Code error_code, std::string&& message);

@@ -15,13 +15,16 @@ namespace dnd {
 
 class ClassFeatureData : public FeatureData {
 public:
-    explicit ClassFeatureData(const ValidationData* parent = nullptr) noexcept;
+    explicit ClassFeatureData(std::shared_ptr<const ValidationData> parent = nullptr) noexcept;
     std::strong_ordering operator<=>(const ClassFeatureData&) const noexcept = default;
     virtual std::unique_ptr<ValidationData> pack() const override;
 
     int level;
     std::map<int, EffectsData> higher_level_effects_data;
 };
+
+Errors validate_class_feature_nonrecursively(const ClassFeatureData& data);
+Errors validate_class_feature_recursively_for_content(const ClassFeatureData& data, const Content& content);
 
 } // namespace dnd
 

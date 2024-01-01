@@ -16,7 +16,7 @@ class ClassData;
 
 class SpellcastingData : public ValidationSubdata {
 public:
-    SpellcastingData(const ValidationData* parent) noexcept;
+    SpellcastingData(std::shared_ptr<const ValidationData> parent) noexcept;
 
     bool is_spellcaster;
     std::string ability;
@@ -27,6 +27,8 @@ public:
     std::array<int, 20> cantrips_known;
     std::array<std::array<int, 20>, 9> spell_slots;
 };
+
+Errors validate_spellcasting(const SpellcastingData& data);
 
 } // namespace dnd
 

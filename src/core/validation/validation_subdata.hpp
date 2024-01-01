@@ -17,11 +17,11 @@ public:
     virtual ~ValidationSubdata() noexcept = default;
     std::strong_ordering operator<=>(const ValidationSubdata&) const = default;
 
-    const ValidationData* get_parent() const noexcept;
+    std::shared_ptr<const ValidationData> get_parent() const noexcept;
 protected:
-    ValidationSubdata(const ValidationData* parent) noexcept;
+    ValidationSubdata(std::shared_ptr<const ValidationData> parent) noexcept;
 
-    const ValidationData* parent;
+    std::shared_ptr<const ValidationData> parent;
 };
 
 } // namespace dnd

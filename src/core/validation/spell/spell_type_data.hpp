@@ -14,11 +14,13 @@ namespace dnd {
 
 class SpellTypeData : public ValidationSubdata {
 public:
-    SpellTypeData(const ValidationData* parent) noexcept;
+    SpellTypeData(std::shared_ptr<const ValidationData> parent) noexcept;
     std::strong_ordering operator<=>(const SpellTypeData&) const noexcept = default;
 
     std::string str;
 };
+
+Errors validate_spell_type(const SpellTypeData& data);
 
 } // namespace dnd
 

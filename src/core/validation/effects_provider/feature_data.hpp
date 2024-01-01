@@ -13,18 +13,17 @@
 
 namespace dnd {
 
-class FeatureData : public ValidationData {
+class FeatureData : public ValidationData, public ValidationSubdata {
 public:
-    explicit FeatureData(const ValidationData* parent = nullptr) noexcept;
+    explicit FeatureData(std::shared_ptr<const ValidationData> parent = nullptr) noexcept;
     std::strong_ordering operator<=>(const FeatureData&) const noexcept = default;
     virtual std::unique_ptr<ValidationData> pack() const override;
 
-    const ValidationData* get_parent() const noexcept;
-
     EffectsData main_effects_data;
-private:
-    const ValidationData* parent;
 };
+
+Errors validate_feature_nonrecursively(const FeatureData& data);
+Errors validate_feature_recursively_for_content(const FeatureData& data, const Content& content);
 
 } // namespace dnd
 

@@ -19,34 +19,38 @@
 
 namespace dnd {
 
-SpellData::SpellData() noexcept : components_data(this), type_data(this) {}
+SpellData::SpellData() noexcept
+    : components_data(std::make_shared<ValidationData>(this)), type_data(std::make_shared<ValidationData>(this)) {}
 
 std::unique_ptr<ValidationData> SpellData::pack() const { return std::make_unique<SpellData>(*this); }
 
-Errors SpellData::validate() const {
+Errors validate_spell_nonrecursively(const SpellData& data) {
     DND_MEASURE_FUNCTION();
-
-    Errors errors = validate_nonrecursively();
-    errors += components_data.validate();
-    errors += type_data.validate();
+    Errors errors = validate_name_description_and_source(data);
+    if (data.casting_time.empty()) {
+        errors.add_validation_error(
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(), "Casting time is empty"
+        );
+    }
+    if (data.range.empty()) {
+        errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(), "Range is empty");
+    }
+    if (data.duration.empty()) {
+        errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(), "Duration is empty");
+    }
+    if (data.classes.empty()) {
+        errors.add_validation_error(
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.pack(), "Spell has no classes"
+        );
+    }
     return errors;
 }
 
-Errors SpellData::validate_nonrecursively() const {
+Errors validate_spell_recursively(const SpellData& data) {
     DND_MEASURE_FUNCTION();
-    Errors errors = ValidationData::validate();
-    if (casting_time.empty()) {
-        errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this, "Casting time is empty");
-    }
-    if (range.empty()) {
-        errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this, "Range is empty");
-    }
-    if (duration.empty()) {
-        errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this, "Duration is empty");
-    }
-    if (classes.empty()) {
-        errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this, "Spell has no classes");
-    }
+    Errors errors = validate_spell_nonrecursively(data);
+    errors += validate_spell_components(data.components_data);
+    errors += validate_spell_type(data.type_data);
     return errors;
 }
 

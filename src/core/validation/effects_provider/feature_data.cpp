@@ -10,23 +10,17 @@
 
 namespace dnd {
 
-FeatureData::FeatureData(const ValidationData* parent) noexcept
-    : ValidationData(), main_effects_data(parent == nullptr ? this : parent), parent(parent) {}
+FeatureData::FeatureData(std::shared_ptr<const ValidationData> parent) noexcept
+    : ValidationData(), ValidationSubdata(parent), main_effects_data(parent) {}
 
 std::unique_ptr<ValidationData> FeatureData::pack() const { return std::make_unique<FeatureData>(*this); }
 
-Errors FeatureData::validate() const {
-    Errors errors = validate_nonrecursively();
-    errors += main_effects_data.validate();
+Errors validate_feature_nonrecursively(const FeatureData& data) { return validate_name_description_and_source(data); }
+
+Errors validate_feature_for_content_recursively(const FeatureData& data, const Content& content) {
+    Errors errors = validate_feature_nonrecursively(data);
+    errors += validate_effects_for_content_recursively(data.main_effects_data, content);
     return errors;
 }
-
-Errors FeatureData::validate_nonrecursively() const { return ValidationData::validate(); }
-
-Errors FeatureData::validate_relations(const Content& content) const {
-    return main_effects_data.validate_relations(content);
-}
-
-const ValidationData* FeatureData::get_parent() const noexcept { return parent; }
 
 } // namespace dnd

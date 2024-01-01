@@ -22,9 +22,9 @@
 
 namespace dnd {
 
-ChoiceData::ChoiceData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
+ChoiceData::ChoiceData(std::shared_ptr<ValidationData> parent) noexcept : ValidationSubdata(parent) {}
 
-static Errors validate_ability_choice(const ChoiceData& data, const ValidationData* parent) {
+static Errors validate_ability_choice(const ChoiceData& data, std::shared_ptr<const ValidationData> parent) {
     Errors errors;
     for (const std::string& explicit_choice : data.explicit_choices) {
         if (explicit_choice.empty()) {
@@ -51,7 +51,7 @@ static Errors validate_ability_choice(const ChoiceData& data, const ValidationDa
     return errors;
 }
 
-static Errors validate_skill_choice(const ChoiceData& data, const ValidationData* parent) {
+static Errors validate_skill_choice(const ChoiceData& data, std::shared_ptr<const ValidationData> parent) {
     Errors errors;
     for (const std::string& explicit_choice : data.explicit_choices) {
         if (explicit_choice.empty()) {
@@ -78,7 +78,7 @@ static Errors validate_skill_choice(const ChoiceData& data, const ValidationData
     return errors;
 }
 
-static Errors validate_stat_change_choice(const ChoiceData& data, const ValidationData* parent) {
+static Errors validate_stat_change_choice(const ChoiceData& data, std::shared_ptr<const ValidationData> parent) {
     Errors errors;
     StatChangeData stat_change_data(parent);
     for (const std::string& explicit_choice : data.explicit_choices) {
@@ -86,7 +86,7 @@ static Errors validate_stat_change_choice(const ChoiceData& data, const Validati
             continue;
         }
         stat_change_data.stat_change_str = explicit_choice;
-        errors += stat_change_data.validate();
+        errors += validate_stat_change(stat_change_data);
     }
     if (!data.group_names.empty()) {
         errors.add_validation_error(
@@ -100,53 +100,53 @@ static Errors validate_stat_change_choice(const ChoiceData& data, const Validati
     return errors;
 }
 
-Errors ChoiceData::validate() const {
+Errors validate_choice_raw(const ChoiceData& data) {
     Errors errors;
-    if (amount <= 0) {
+    if (data.amount <= 0) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent, "Choice has non-positive amount"
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.get_parent(), "Choice has non-positive amount"
         );
     }
-    if (attribute_name.empty()) {
+    if (data.attribute_name.empty()) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent, "Choice has emtpy attribute name"
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.get_parent(), "Choice has emtpy attribute name"
         );
         return errors;
-    } else if (!is_valid_choice_attribute_name(attribute_name)) {
+    } else if (!is_valid_choice_attribute_name(data.attribute_name)) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
-            fmt::format("Choice has invalid attribute name '{}'", attribute_name)
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.get_parent(),
+            fmt::format("Choice has invalid attribute name '{}'", data.attribute_name)
         );
         return errors;
     }
 
-    for (const std::string& explicit_choice : explicit_choices) {
+    for (const std::string& explicit_choice : data.explicit_choices) {
         if (explicit_choice.empty()) {
             errors.add_validation_error(
-                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
-                fmt::format("Choice for '{}' cannot have an empty string as an option.", attribute_name)
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.get_parent(),
+                fmt::format("Choice for '{}' cannot have an empty string as an option.", data.attribute_name)
             );
         }
     }
-    for (const std::string& group_name : group_names) {
+    for (const std::string& group_name : data.group_names) {
         if (group_name.empty()) {
             errors.add_validation_error(
-                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
-                fmt::format("Choice for '{}' cannot have an empty string as a group name.", attribute_name)
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data.get_parent(),
+                fmt::format("Choice for '{}' cannot have an empty string as a group name.", data.attribute_name)
             );
         }
     }
 
-    ChoiceType type = choice_type_for_attribute_name(attribute_name);
+    ChoiceType type = choice_type_for_attribute_name(data.attribute_name);
     switch (type) {
         case ChoiceType::ABILITY:
-            errors += validate_ability_choice(*this, parent);
+            errors += validate_ability_choice(data, data.get_parent());
             break;
         case ChoiceType::SKILL:
-            errors += validate_skill_choice(*this, parent);
+            errors += validate_skill_choice(data, data.get_parent());
             break;
         case ChoiceType::STAT_CHANGE:
-            errors += validate_stat_change_choice(*this, parent);
+            errors += validate_stat_change_choice(data, data.get_parent());
             break;
         default:
             break;
@@ -155,7 +155,7 @@ Errors ChoiceData::validate() const {
 }
 
 static Errors validate_relations_string_choice(
-    const ChoiceData& data, const ValidationData* parent, const Content& content
+    const ChoiceData& data, std::shared_ptr<const ValidationData> parent, const Content& content
 ) {
     Errors errors;
     if (!attribute_name_implies_group(data.attribute_name)) {
@@ -201,7 +201,7 @@ static Errors validate_relations_string_choice(
 }
 
 static Errors validate_relations_item_choice(
-    const ChoiceData& data, const ValidationData* parent, const Content& content
+    const ChoiceData& data, std::shared_ptr<const ValidationData> parent, const Content& content
 ) {
     Errors errors;
     for (const std::string& explicit_choice : data.explicit_choices) {
@@ -243,7 +243,7 @@ static constexpr const char* spell_filter_regex_cstr = "((1st|2nd|3rd|[4-9]th)-l
                                                        "(([a-zA-Z][a-z]*) )?[sS]pells";
 
 static Errors validate_relations_spell_choice(
-    const ChoiceData& data, const ValidationData* parent, const Content& content
+    const ChoiceData& data, std::shared_ptr<const ValidationData> parent, const Content& content
 ) {
     Errors errors;
     for (const std::string& explicit_choice : data.explicit_choices) {
@@ -318,7 +318,7 @@ static Errors validate_relations_spell_choice(
 }
 
 static Errors validate_relations_choosable_choice(
-    const ChoiceData& data, const ValidationData* parent, const Content& content
+    const ChoiceData& data, std::shared_ptr<const ValidationData> parent, const Content& content
 ) {
     Errors errors;
     for (const std::string& explicit_choice : data.explicit_choices) {
@@ -351,30 +351,36 @@ static Errors validate_relations_choosable_choice(
     return errors;
 }
 
-Errors ChoiceData::validate_relations(const Content& content) const {
+static Errors validate_choice_relations(const ChoiceData& data, const Content& content) {
     Errors errors;
-    if (!is_valid_choice_attribute_name(attribute_name)) {
+    if (!is_valid_choice_attribute_name(data.attribute_name)) {
         return errors;
     }
 
-    ChoiceType type = choice_type_for_attribute_name(attribute_name);
+    ChoiceType type = choice_type_for_attribute_name(data.attribute_name);
     switch (type) {
         case ChoiceType::STRING:
-            errors += validate_relations_string_choice(*this, parent, content);
+            errors += validate_relations_string_choice(data, data.get_parent(), content);
             break;
         case ChoiceType::ITEM:
-            errors += validate_relations_item_choice(*this, parent, content);
+            errors += validate_relations_item_choice(data, data.get_parent(), content);
             break;
         case ChoiceType::SPELL:
-            errors += validate_relations_spell_choice(*this, parent, content);
+            errors += validate_relations_spell_choice(data, data.get_parent(), content);
             break;
         case ChoiceType::CHOOSABLE:
-            errors += validate_relations_choosable_choice(*this, parent, content);
+            errors += validate_relations_choosable_choice(data, data.get_parent(), content);
             break;
         default:
             break;
     }
 
+    return errors;
+}
+
+Errors validate_choice_for_content(const ChoiceData& data, const Content& content) {
+    Errors errors = validate_choice_raw(data);
+    errors += validate_choice_relations(data, content);
     return errors;
 }
 

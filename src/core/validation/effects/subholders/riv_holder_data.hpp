@@ -14,7 +14,7 @@ namespace dnd {
 
 class RIVHolderData : public ValidationSubdata {
 public:
-    RIVHolderData(const ValidationData* parent) noexcept;
+    RIVHolderData(std::shared_ptr<const ValidationData> parent) noexcept;
     std::strong_ordering operator<=>(const RIVHolderData&) const noexcept = default;
     bool empty() const noexcept;
 
@@ -23,6 +23,8 @@ public:
     std::set<std::string> damage_vulnerabilities;
     std::set<std::string> condition_immunities;
 };
+
+Errors validate_riv_holder_for_content(const RIVHolderData& data, const Content& content);
 
 } // namespace dnd
 

@@ -25,6 +25,9 @@ public:
     std::string class_name;
 };
 
+Errors validate_subclass_nonrecursively_for_content(const SubclassData& data, const Content& content);
+Errors validate_subclass_recursively_for_content(const SubclassData& data, const Content& content);
+
 } // namespace dnd
 
 #endif // SUBCLASS_DATA_HPP_

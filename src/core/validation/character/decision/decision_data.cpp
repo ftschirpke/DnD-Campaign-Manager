@@ -25,18 +25,18 @@
 
 namespace dnd {
 
-DecisionData::DecisionData(const CharacterData* parent, const Effects* target) noexcept
+DecisionData::DecisionData(std::shared_ptr<CharacterData> parent, std::shared_ptr<Effects> target) noexcept
     : ValidationSubdata(parent), selections(), character_data(parent), target(target) {}
 
-const CharacterData* DecisionData::get_character_data() const noexcept { return character_data; }
+std::shared_ptr<CharacterData> DecisionData::get_character_data() const noexcept { return character_data; }
 
-const Effects* DecisionData::get_target() const noexcept { return target; }
+std::shared_ptr<Effects> DecisionData::get_target() const noexcept { return target; }
 
-void DecisionData::set_target(const Effects* new_target) noexcept { target = new_target; }
+void DecisionData::set_target(std::shared_ptr<Effects> new_target) noexcept { target = new_target; }
 
-static Errors validate_decision_data(const DecisionData& data) {
+static Errors validate_decision_raw(const DecisionData& data) {
     Errors errors;
-    const ValidationData* const parent = data.get_parent();
+    std::shared_ptr<const ValidationData> parent = data.get_parent();
     if (parent == nullptr) {
         errors.add_validation_error(
             ValidationError::Code::MISSING_ATTRIBUTE, parent, "Decision has no character that it belongs to."
@@ -114,16 +114,16 @@ static Errors validate_decision_relations(const DecisionData& data, const Conten
     switch (effects_provider_variant.index()) {
         case 0: {
             const Feature& feature = std::get<0>(effects_provider_variant);
-            target_exists = data.get_target() == &feature.get_main_effects();
+            target_exists = data.get_target().get() == &feature.get_main_effects();
             break;
         }
         case 1: {
             const ClassFeature& class_feature = std::get<1>(effects_provider_variant);
-            if (data.get_target() == &class_feature.get_main_effects()) {
+            if (data.get_target().get() == &class_feature.get_main_effects()) {
                 target_exists = true;
             } else {
                 for (const auto& [_, effects] : class_feature.get_higher_level_effects()) {
-                    if (&effects == data.get_target()) {
+                    if (&effects == data.get_target().get()) {
                         target_exists = true;
                         break;
                     }
@@ -133,7 +133,7 @@ static Errors validate_decision_relations(const DecisionData& data, const Conten
         }
         case 2: {
             const Choosable& choosable = std::get<2>(effects_provider_variant);
-            target_exists = data.get_target() == &choosable.get_main_effects();
+            target_exists = data.get_target().get() == &choosable.get_main_effects();
             break;
         }
     }
@@ -215,8 +215,8 @@ static Errors validate_decision_relations(const DecisionData& data, const Conten
     return errors;
 }
 
-Errors validate_decision_for(const DecisionData& data, const Content& content) {
-    Errors errors = validate_decision_data(data);
+Errors validate_decision_for_content(const DecisionData& data, const Content& content) {
+    Errors errors = validate_decision_raw(data);
     errors += validate_decision_relations(data, content);
     return errors;
 }

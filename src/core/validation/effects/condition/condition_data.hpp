@@ -14,11 +14,13 @@ namespace dnd {
 
 class ConditionData : public ValidationSubdata {
 public:
-    ConditionData(const ValidationData* parent) noexcept;
+    ConditionData(std::shared_ptr<const ValidationData> parent) noexcept;
     std::strong_ordering operator<=>(const ConditionData&) const noexcept = default;
 
     std::string condition_str;
 };
+
+Errors validate_condition(const ConditionData& data);
 
 } // namespace dnd
 

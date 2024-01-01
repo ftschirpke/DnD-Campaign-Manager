@@ -15,7 +15,7 @@ namespace dnd {
 
 class ExtraSpellsHolderData : public ValidationSubdata {
 public:
-    ExtraSpellsHolderData(const ValidationData* parent) noexcept;
+    ExtraSpellsHolderData(std::shared_ptr<const ValidationData> parent) noexcept;
     std::strong_ordering operator<=>(const ExtraSpellsHolderData&) const noexcept = default;
     bool empty() const noexcept;
 
@@ -38,6 +38,8 @@ public:
     // spells that are added to your spell list
     std::set<std::string> added_to_spell_list;
 };
+
+Errors validate_extra_spells_holder_for_content(const ExtraSpellsHolderData& data, const Content& content);
 
 } // namespace dnd
 

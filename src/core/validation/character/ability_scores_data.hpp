@@ -14,11 +14,13 @@ namespace dnd {
 
 class AbilityScoresData : public ValidationSubdata {
 public:
-    AbilityScoresData(const ValidationData* parent) noexcept;
+    AbilityScoresData(std::shared_ptr<const ValidationData> parent) noexcept;
     std::strong_ordering operator<=>(const AbilityScoresData&) const noexcept = default;
 
     std::array<int, 6> ability_scores;
 };
+
+Errors validate_ability_scores(const AbilityScoresData& data);
 
 } // namespace dnd
 
