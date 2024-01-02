@@ -14,7 +14,7 @@ static constexpr const char* tags = "[core][validation][effects]";
 
 TEST_CASE("Validate ProficiencyHolder // valid proficiency holder", tags) {
     ValidationDataMock parent;
-    ProficiencyHolderData data;
+    ProficiencyHolder::Data data;
     Content content = minimal_testing_content();
     Errors errors;
 
@@ -108,7 +108,7 @@ TEST_CASE("Validate ProficiencyHolder // valid proficiency holder", tags) {
 
 TEST_CASE("Validate ProficiencyHolder // invalid proficiency holder", tags) {
     ValidationDataMock parent;
-    ProficiencyHolderData data;
+    ProficiencyHolder::Data data;
     Content content = minimal_testing_content();
     Errors errors;
 
@@ -205,7 +205,7 @@ TEST_CASE("Validate ProficiencyHolder // invalid proficiency holder", tags) {
 
 TEST_CASE("Validate ProficiencyHolder // invalid proficiency holder relations", tags) {
     ValidationDataMock parent;
-    ProficiencyHolderData data;
+    ProficiencyHolder::Data data;
     Content content = minimal_testing_content();
     Errors errors;
 
@@ -260,9 +260,9 @@ TEST_CASE("Validate ProficiencyHolder // invalid proficiency holder relations", 
     }
 }
 
-TEST_CASE("ProficiencyHolderData::empty", tags) {
+TEST_CASE("ProficiencyHolder::Data::empty", tags) {
     ValidationDataMock parent;
-    ProficiencyHolderData data;
+    ProficiencyHolder::Data data;
     Errors errors;
 
     REQUIRE(data.empty());

@@ -11,9 +11,9 @@ namespace dnd::test {
 
 static constexpr const char* tags = "[core][validation][effects]";
 
-TEST_CASE("ActionHolderData::validate // valid action holders", tags) {
+TEST_CASE("Validate ActionHolder // valid action holders", tags) {
     ValidationDataMock parent;
-    ActionHolderData data;
+    ActionHolder::Data data;
     Errors errors;
 
     SECTION("empty action holders") {
@@ -56,9 +56,9 @@ TEST_CASE("ActionHolderData::validate // valid action holders", tags) {
     }
 }
 
-TEST_CASE("ActionHolderData::validate // invalid action holders", tags) {
+TEST_CASE("Validate ActionHolder // invalid action holders", tags) {
     ValidationDataMock parent;
-    ActionHolderData data;
+    ActionHolder::Data data;
     Errors errors;
 
     SECTION("empty action name") {
@@ -119,9 +119,9 @@ TEST_CASE("ActionHolderData::validate // invalid action holders", tags) {
     }
 }
 
-TEST_CASE("ActionHolderData::empty", tags) {
+TEST_CASE("ActionHolder::Data::empty", tags) {
     ValidationDataMock parent;
-    ActionHolderData data;
+    ActionHolder::Data data;
     Errors errors;
 
     REQUIRE(data.empty());

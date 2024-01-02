@@ -9,6 +9,7 @@
 
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
+#include <core/models/effects/condition/condition.hpp>
 #include <core/validation/validation_data.hpp>
 
 namespace dnd {
@@ -16,7 +17,7 @@ namespace dnd {
 static constexpr const char* condition_regex_cstr = "[A-Z][_A-Z0-9]+ ((==|!=|>=|<=|>|<) "
                                                     "([A-Z][_A-Z0-9]+|-?\\d+(\\.\\d\\d?)?|)|== true|== false)";
 
-Errors validate_condition(const ConditionData& data) {
+Errors validate_condition(const Condition::Data& data) {
     DND_MEASURE_FUNCTION();
     static const std::regex condition_regex(condition_regex_cstr);
     Errors errors;

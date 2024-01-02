@@ -9,6 +9,7 @@
 
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
+#include <core/validation/effects/choice/choice_data.hpp>
 #include <core/validation/effects/condition/condition_data.hpp>
 #include <core/validation/effects/stat_change/stat_change_data.hpp>
 #include <core/validation/effects/subholders/action_holder_data.hpp>
@@ -19,15 +20,15 @@
 
 namespace dnd {
 
-Errors validate_effects_recursively_for_content(const EffectsData& data, const Content& content) {
+Errors validate_effects_recursively_for_content(const Effects::Data& data, const Content& content) {
     Errors errors;
-    for (const ConditionData& condition_data : data.activation_conditions_data) {
+    for (const Condition::Data& condition_data : data.activation_conditions_data) {
         errors += validate_condition(condition_data);
     }
-    for (const ChoiceData& choice_data : data.choices_data) {
+    for (const Choice::Data& choice_data : data.choices_data) {
         errors += validate_choice_for_content(choice_data, content);
     }
-    for (const StatChangeData& stat_change_data : data.stat_changes_data) {
+    for (const StatChange::Data& stat_change_data : data.stat_changes_data) {
         errors += validate_stat_change(stat_change_data);
     }
     errors += validate_actions_holder(data.action_holder_data);

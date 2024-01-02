@@ -29,11 +29,11 @@
 namespace dnd {
 
 CreateResult<Effects> Effects::create_for(Data&& data, const Content& content) {
-    // there is no nonrecursive EffectsData validation
+    // there is no nonrecursive Effects::Data validation
 
     std::vector<std::unique_ptr<Condition>> activation_conditions;
     activation_conditions.reserve(data.activation_conditions_data.size());
-    for (ConditionData& condition_data : data.activation_conditions_data) {
+    for (Condition::Data& condition_data : data.activation_conditions_data) {
         FactoryResult<Condition> condition_result = create_condition(std::move(condition_data));
         if (!condition_result.is_valid()) {
             auto [_, sub_errors] = condition_result.data_and_errors();
@@ -44,7 +44,7 @@ CreateResult<Effects> Effects::create_for(Data&& data, const Content& content) {
 
     std::vector<Choice> choices;
     choices.reserve(data.choices_data.size());
-    for (ChoiceData& choice_data : data.choices_data) {
+    for (Choice::Data& choice_data : data.choices_data) {
         CreateResult<Choice> choice_result = Choice::create_for(std::move(choice_data), content);
         if (!choice_result.is_valid()) {
             auto [_, sub_errors] = choice_result.data_and_errors();
@@ -55,7 +55,7 @@ CreateResult<Effects> Effects::create_for(Data&& data, const Content& content) {
 
     std::vector<std::unique_ptr<StatChange>> stat_changes;
     stat_changes.reserve(data.stat_changes_data.size());
-    for (StatChangeData& stat_change_data : data.stat_changes_data) {
+    for (StatChange::Data& stat_change_data : data.stat_changes_data) {
         FactoryResult<StatChange> stat_change_result = create_stat_change(std::move(stat_change_data));
         if (!stat_change_result.is_valid()) {
             auto [_, sub_errors] = stat_change_result.data_and_errors();

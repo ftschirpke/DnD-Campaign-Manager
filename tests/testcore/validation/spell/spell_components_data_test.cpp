@@ -14,7 +14,7 @@ static constexpr const char* tags = "[core][validation][spell]";
 
 TEST_CASE("Validate SpellComponents // valid components", tags) {
     ValidationDataMock parent;
-    SpellComponentsData data;
+    SpellComponents::Data data;
     Errors errors;
 
     std::string components_string = "A bit of this and a bit of that";
@@ -58,7 +58,7 @@ TEST_CASE("Validate SpellComponents // valid components", tags) {
 
 TEST_CASE("Validate SpellComponents // invalid components", tags) {
     ValidationDataMock parent;
-    SpellComponentsData data;
+    SpellComponents::Data data;
     Errors errors;
 
     SECTION("completely wrong letters not allowed") {

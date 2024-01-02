@@ -14,7 +14,7 @@ static constexpr const char* tags = "[core][validation][effects]";
 
 TEST_CASE("Validate RIVHolder", tags) {
     ValidationDataMock parent;
-    RIVHolderData data;
+    RIVHolder::Data data;
     Content content = minimal_testing_content();
     Errors errors;
 
@@ -75,7 +75,7 @@ TEST_CASE("Validate RIVHolder", tags) {
 
 TEST_CASE("Validate RIVHolder // invalid RIV holders") {
     ValidationDataMock parent;
-    RIVHolderData data;
+    RIVHolder::Data data;
     Content content = minimal_testing_content();
     Errors errors;
 
@@ -138,7 +138,7 @@ TEST_CASE("Validate RIVHolder // invalid RIV holders") {
 
 TEST_CASE("Validate RIVHolder // invalid RIV holder relations") {
     ValidationDataMock parent;
-    RIVHolderData data;
+    RIVHolder::Data data;
     Content content = minimal_testing_content();
     Errors errors;
 
@@ -199,9 +199,9 @@ TEST_CASE("Validate RIVHolder // invalid RIV holder relations") {
     }
 }
 
-TEST_CASE("RIVHolderData::empty", tags) {
+TEST_CASE("RIVHolder::Data::empty", tags) {
     ValidationDataMock parent;
-    RIVHolderData data;
+    RIVHolder::Data data;
 
     REQUIRE(data.empty());
 

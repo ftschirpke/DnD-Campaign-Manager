@@ -13,7 +13,7 @@ static constexpr const char* tags = "[core][validation][class]";
 
 TEST_CASE("Validate Spellcasting // valid spellcasting data", tags) {
     ValidationDataMock parent;
-    SpellcastingData data;
+    Spellcasting::Data data;
     Errors errors;
 
     SECTION("not a spellcaster") {
@@ -88,7 +88,7 @@ TEST_CASE("Validate Spellcasting // valid spellcasting data", tags) {
 TEST_CASE("Validate Spellcasting // invalid spellcasting data", tags) {
     ValidationDataMock parent;
 
-    SpellcastingData data1;
+    Spellcasting::Data data1;
     data1.is_spellcaster = true;
     data1.ability = "INT";
     data1.ritual_casting = true;
@@ -99,7 +99,7 @@ TEST_CASE("Validate Spellcasting // invalid spellcasting data", tags) {
     data1.spell_slots[1].fill(2);
     data1.spell_slots[2].fill(1);
 
-    SpellcastingData data2;
+    Spellcasting::Data data2;
     data2.is_spellcaster = true;
     data2.ability = "WIS";
     data2.ritual_casting = false;

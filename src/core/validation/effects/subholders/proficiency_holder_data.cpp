@@ -16,11 +16,6 @@
 
 namespace dnd {
 
-bool ProficiencyHolderData::empty() const noexcept {
-    return armor.empty() && weapons.empty() && tools.empty() && skills.empty() && saving_throws.empty()
-           && languages.empty() && senses.empty();
-}
-
 static Errors string_set_validate(const std::set<std::string>& string_set, const char* set_name) {
     Errors errors;
     for (const std::string& str_item : string_set) {
@@ -34,7 +29,7 @@ static Errors string_set_validate(const std::set<std::string>& string_set, const
     return errors;
 }
 
-static Errors validate_proficiency_holder_raw(const ProficiencyHolderData& data) {
+static Errors validate_proficiency_holder_raw(const ProficiencyHolder::Data& data) {
     Errors errors;
     errors += string_set_validate(data.armor, "Armor");
     errors += string_set_validate(data.weapons, "Weapons");
@@ -81,7 +76,7 @@ static Errors string_group_set_validate_relations(
     return errors;
 }
 
-static Errors validate_proficiency_holder_relations(const ProficiencyHolderData& data, const Content& content) {
+static Errors validate_proficiency_holder_relations(const ProficiencyHolder::Data& data, const Content& content) {
     Errors errors;
     errors += string_group_set_validate_relations(data.armor, "armor", "armor", content);
     errors += string_group_set_validate_relations(data.weapons, "weapons", "weapons", content);
@@ -91,7 +86,7 @@ static Errors validate_proficiency_holder_relations(const ProficiencyHolderData&
     return errors;
 }
 
-Errors validate_proficiency_holder_for_content(const ProficiencyHolderData& data, const Content& content) {
+Errors validate_proficiency_holder_for_content(const ProficiencyHolder::Data& data, const Content& content) {
     Errors errors = validate_proficiency_holder_raw(data);
     errors += validate_proficiency_holder_relations(data, content);
     return errors;

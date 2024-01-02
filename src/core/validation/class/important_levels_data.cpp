@@ -7,11 +7,12 @@
 
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
+#include <core/models/class/important_levels.hpp>
 #include <core/validation/validation_data.hpp>
 
 namespace dnd {
 
-Errors validate_important_levels(const ImportantLevelsData& data) {
+Errors validate_important_levels(const ImportantLevels::Data& data) {
     Errors errors;
     if (data.feat_levels.empty()) {
         errors.add_validation_error(

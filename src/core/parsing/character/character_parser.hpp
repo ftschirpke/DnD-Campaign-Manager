@@ -8,10 +8,10 @@
 #include <nlohmann/json.hpp>
 
 #include <core/errors/errors.hpp>
+#include <core/models/character/character.hpp>
+#include <core/models/character/decision/decision.hpp>
 #include <core/parsing/effects_provider/feature_parser.hpp>
 #include <core/parsing/file_parser.hpp>
-#include <core/validation/character/character_data.hpp>
-#include <core/validation/character/decision/decision_data.hpp>
 
 namespace dnd {
 
@@ -22,10 +22,10 @@ public:
     virtual void set_context(const Content& content) override;
     virtual void save_result(Content& content) override;
 private:
-    Errors parse_decision(nlohmann::ordered_json&& decision_json, DecisionData& decision_data) const;
+    Errors parse_decision(nlohmann::ordered_json&& decision_json, Decision::Data& decision_data) const;
 
     FeatureParser feature_parser;
-    CharacterData data;
+    Character::Data data;
 };
 
 } // namespace dnd

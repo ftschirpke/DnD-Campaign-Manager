@@ -19,16 +19,18 @@
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/species/species.hpp>
 #include <core/referencing_content_library.hpp>
+#include <core/validation/character/ability_scores_data.hpp>
+#include <core/validation/character/feature_providers_data.hpp>
 #include <core/validation/character/progression_data.hpp>
 #include <core/validation/effects_provider/feature_data.hpp>
 #include <core/validation/validation_data.hpp>
 
 namespace dnd {
 
-static Errors validate_character_raw_nonrecursively(const CharacterData& data) {
+static Errors validate_character_raw_nonrecursively(const Character::Data& data) {
     Errors errors = validate_name_description_and_source(data);
     std::unordered_set<std::string> unique_feature_names;
-    for (const FeatureData& feature_data : data.features_data) {
+    for (const Feature::Data& feature_data : data.features_data) {
         if (unique_feature_names.contains(feature_data.name)) {
             errors.add_validation_error(
                 ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
@@ -41,7 +43,7 @@ static Errors validate_character_raw_nonrecursively(const CharacterData& data) {
     return errors;
 }
 
-static Errors validate_character_relations_nonrecursively(const CharacterData& data, const Content& content) {
+static Errors validate_character_relations_nonrecursively(const Character::Data& data, const Content& content) {
     Errors errors;
     if (content.get_characters().contains(data.name)) {
         errors.add_validation_error(
@@ -49,7 +51,7 @@ static Errors validate_character_relations_nonrecursively(const CharacterData& d
             fmt::format("Character has duplicate name \"{}\".", data.name)
         );
     }
-    for (const FeatureData& feature_data : data.features_data) {
+    for (const Feature::Data& feature_data : data.features_data) {
         if (content.get_features().contains(feature_data.name)
             || content.get_class_features().contains(feature_data.name)) {
             errors.add_validation_error(
@@ -97,21 +99,21 @@ static Errors validate_character_relations_nonrecursively(const CharacterData& d
     return errors;
 }
 
-Errors validate_character_nonrecursively_for_content(const CharacterData& data, const Content& content) {
+Errors validate_character_nonrecursively_for_content(const Character::Data& data, const Content& content) {
     Errors errors = validate_character_raw_nonrecursively(data);
     errors += validate_character_relations_nonrecursively(data, content);
     return errors;
 }
 
-Errors validate_character_recursively_for_content(const CharacterData& data, const Content& content) {
+Errors validate_character_recursively_for_content(const Character::Data& data, const Content& content) {
     Errors errors = validate_character_nonrecursively_for_content(data, content);
-    for (const FeatureData& feature_data : data.features_data) {
+    for (const Feature::Data& feature_data : data.features_data) {
         errors += validate_feature_recursively_for_content(feature_data, content);
     }
     errors += validate_ability_scores(data.base_ability_scores_data);
     errors += validate_feature_providers_for_content(data.feature_providers_data, content);
     errors += validate_progression(data.progression_data);
-    for (const DecisionData& decision_data : data.decisions_data) {
+    for (const Decision::Data& decision_data : data.decisions_data) {
         errors += validate_decision_for_character_and_content(decision_data, data, content);
     }
     return errors;

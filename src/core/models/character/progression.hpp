@@ -3,10 +3,10 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <vector>
 
 #include <core/utils/data_result.hpp>
-#include <core/validation/character/progression_data.hpp>
 
 namespace dnd {
 
@@ -14,7 +14,7 @@ class Content;
 
 class Progression {
 public:
-    using Data = ProgressionData;
+    class Data;
 
     static CreateResult<Progression> create(Data&& data);
 
@@ -23,6 +23,15 @@ public:
     const std::vector<int>& get_hit_dice_rolls() const noexcept;
 private:
     Progression(int level, int xp, std::vector<int>&& hit_dice_rolls) noexcept;
+
+    int level;
+    int xp;
+    std::vector<int> hit_dice_rolls;
+};
+
+class Progression::Data {
+public:
+    std::strong_ordering operator<=>(const Data&) const noexcept = default;
 
     int level;
     int xp;

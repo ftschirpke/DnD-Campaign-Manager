@@ -2,18 +2,17 @@
 
 #include "class_feature_data.hpp"
 
-#include <memory>
 #include <optional>
 
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
+#include <core/models/effects_provider/class_feature.hpp>
 #include <core/validation/effects/effects_data.hpp>
 #include <core/validation/effects_provider/feature_data.hpp>
-#include <core/validation/validation_data.hpp>
 
 namespace dnd {
 
-static std::optional<ValidationError> validate_level(const ClassFeatureData& feature_data) {
+static std::optional<ValidationError> validate_level(const ClassFeature::Data& feature_data) {
     if (feature_data.level <= 0) {
         return ValidationError(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Feature level must be positive.");
     } else if (feature_data.level > 20) {
@@ -22,7 +21,7 @@ static std::optional<ValidationError> validate_level(const ClassFeatureData& fea
     return std::nullopt;
 }
 
-Errors validate_class_feature_nonrecursively(const ClassFeatureData& data) {
+Errors validate_class_feature_nonrecursively(const ClassFeature::Data& data) {
     Errors errors = validate_feature_nonrecursively(data);
     std::optional<ValidationError> level_error = validate_level(data);
     if (level_error.has_value()) {
@@ -31,7 +30,7 @@ Errors validate_class_feature_nonrecursively(const ClassFeatureData& data) {
     return errors;
 }
 
-Errors validate_class_feature_recursively_for_content(const ClassFeatureData& data, const Content& content) {
+Errors validate_class_feature_recursively_for_content(const ClassFeature::Data& data, const Content& content) {
     Errors errors = validate_feature_recursively_for_content(data, content);
     std::optional<ValidationError> level_error = validate_level(data);
     if (level_error.has_value()) {

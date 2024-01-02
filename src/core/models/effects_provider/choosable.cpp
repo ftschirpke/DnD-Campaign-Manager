@@ -10,6 +10,7 @@
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/effects/condition/condition.hpp>
 #include <core/models/effects/condition/condition_factory.hpp>
+#include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/validation/effects_provider/choosable_data.hpp>
 #include <core/visitors/content/content_visitor.hpp>
@@ -23,7 +24,7 @@ CreateResult<Choosable> Choosable::create_for(Data&& data, const Content& conten
     }
     std::vector<std::unique_ptr<Condition>> prerequisites;
     prerequisites.reserve(data.prerequisites_data.size());
-    for (ConditionData& prerequisite_data : data.prerequisites_data) {
+    for (Condition::Data& prerequisite_data : data.prerequisites_data) {
         FactoryResult<Condition> prerequisite_result = create_condition(std::move(prerequisite_data));
         if (!prerequisite_result.is_valid()) {
             auto [_, sub_errors] = prerequisite_result.data_and_errors();

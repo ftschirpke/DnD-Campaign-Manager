@@ -16,7 +16,6 @@
 #include <core/models/spellcasting/spellcasting.hpp>
 #include <core/utils/data_result.hpp>
 #include <core/utils/types.hpp>
-#include <core/validation/class/class_data.hpp>
 
 namespace dnd {
 
@@ -25,7 +24,7 @@ class ContentVisitor;
 
 class Class : public ContentPiece {
 public:
-    using Data = ClassData;
+    class Data;
 
     static CreateResult<Class> create_for(Data&& data, const Content& content);
 
@@ -60,6 +59,17 @@ private:
     OptCRef<ClassFeature> subclass_feature;
     Dice hit_dice;
     ImportantLevels important_levels;
+};
+
+class Class::Data : public ValidationData {
+public:
+    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+
+    Spellcasting::Data spellcasting_data;
+    std::vector<ClassFeature::Data> features_data;
+    std::string subclass_feature_name;
+    std::string hit_dice_str;
+    ImportantLevels::Data important_levels_data;
 };
 
 } // namespace dnd

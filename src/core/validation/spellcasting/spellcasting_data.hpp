@@ -1,5 +1,5 @@
-#ifndef SPELLCASTING_DATA_HPP_
-#define SPELLCASTING_DATA_HPP_
+#ifndef SPELLCASTING_VALIDATION_HPP_
+#define SPELLCASTING_VALIDATION_HPP_
 
 #include <dnd_config.hpp>
 
@@ -7,28 +7,12 @@
 #include <string>
 
 #include <core/errors/errors.hpp>
+#include <core/models/spellcasting/spellcasting.hpp>
 
 namespace dnd {
 
-class ClassData;
-
-class SpellcastingData {
-public:
-    explicit SpellcastingData() noexcept;
-    std::strong_ordering operator<=>(const SpellcastingData&) const noexcept = default;
-
-    bool is_spellcaster;
-    std::string ability;
-    bool ritual_casting;
-    bool is_spells_known_type;
-    std::string preparation_spellcasting_type;
-    std::array<int, 20> spells_known;
-    std::array<int, 20> cantrips_known;
-    std::array<std::array<int, 20>, 9> spell_slots;
-};
-
-Errors validate_spellcasting(const SpellcastingData& data);
+Errors validate_spellcasting(const Spellcasting::Data& data);
 
 } // namespace dnd
 
-#endif // SPELLCASTING_DATA_HPP_
+#endif // SPELLCASTING_VALIDATION_HPP_

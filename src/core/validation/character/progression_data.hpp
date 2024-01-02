@@ -1,26 +1,15 @@
-#ifndef PROGRESSION_DATA_HPP_
-#define PROGRESSION_DATA_HPP_
+#ifndef PROGRESSION_VALIDATION_HPP_
+#define PROGRESSION_VALIDATION_HPP_
 
 #include <dnd_config.hpp>
 
-#include <compare>
-#include <vector>
-
 #include <core/errors/errors.hpp>
+#include <core/models/character/progression.hpp>
 
 namespace dnd {
 
-class ProgressionData {
-public:
-    std::strong_ordering operator<=>(const ProgressionData&) const noexcept = default;
-
-    int level;
-    int xp;
-    std::vector<int> hit_dice_rolls;
-};
-
-Errors validate_progression(const ProgressionData& data);
+Errors validate_progression(const Progression::Data& data);
 
 } // namespace dnd
 
-#endif // PROGRESSION_DATA_HPP_
+#endif // PROGRESSION_VALIDATION_HPP_

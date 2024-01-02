@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <filesystem>
 #include <memory>
 #include <string>
@@ -11,7 +12,6 @@
 #include <core/models/effects/condition/condition.hpp>
 #include <core/models/effects_provider/effects_provider.hpp>
 #include <core/models/effects_provider/feature.hpp>
-#include <core/validation/effects_provider/choosable_data.hpp>
 
 namespace dnd {
 
@@ -24,7 +24,7 @@ class ContentVisitor;
  */
 class Choosable : public ContentPiece, public EffectsProvider {
 public:
-    using Data = ChoosableData;
+    class Data;
 
     static CreateResult<Choosable> create_for(Data&& data, const Content& content);
 
@@ -53,6 +53,14 @@ private:
     Effects main_effects;
     std::string type;
     std::vector<std::unique_ptr<Condition>> prerequisites;
+};
+
+class Choosable::Data : public Feature::Data {
+public:
+    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+
+    std::string type;
+    std::vector<Condition::Data> prerequisites_data;
 };
 
 } // namespace dnd

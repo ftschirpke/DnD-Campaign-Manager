@@ -5,6 +5,9 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include <core/errors/errors.hpp>
+#include <core/validation/character/ability_scores_data.hpp>
+#include <core/validation/character/feature_providers_data.hpp>
+#include <core/validation/character/progression_data.hpp>
 #include <testcore/minimal_testing_content.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
@@ -12,10 +15,10 @@ namespace dnd::test {
 
 static constexpr const char* tags = "[core][validation][character]";
 
-static CharacterData create_valid_character_data() {
-    CharacterData character_data;
+static Character::Data create_valid_character_data() {
+    Character::Data character_data;
     set_valid_mock_values(character_data, "Valid Character");
-    FeatureData& feature_data = character_data.features_data.emplace_back();
+    Feature::Data& feature_data = character_data.features_data.emplace_back();
     set_valid_mock_values(feature_data, "Valid Character Feature");
     character_data.base_ability_scores_data.ability_scores = {10, 8, 12, 15, 13, 14};
     character_data.feature_providers_data.species_name = "Human";
@@ -29,7 +32,7 @@ static CharacterData create_valid_character_data() {
 }
 
 TEST_CASE("Validate Character", tags) {
-    CharacterData data = create_valid_character_data();
+    Character::Data data = create_valid_character_data();
     Content content = minimal_testing_content();
     Errors errors;
 
@@ -43,9 +46,9 @@ TEST_CASE("Validate Character", tags) {
     }
 
     SECTION("character with duplicate features is invalid") {
-        FeatureData& feature_data1 = data.features_data.emplace_back();
+        Feature::Data& feature_data1 = data.features_data.emplace_back();
         set_valid_mock_values(feature_data1, "Duplicate Feature");
-        FeatureData& feature_data2 = data.features_data.emplace_back();
+        Feature::Data& feature_data2 = data.features_data.emplace_back();
         set_valid_mock_values(feature_data2, "Duplicate Feature");
         REQUIRE_NOTHROW(errors = validate_character_nonrecursively_for_content(data, content));
         REQUIRE_FALSE(errors.ok());

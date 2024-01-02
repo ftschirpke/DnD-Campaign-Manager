@@ -9,6 +9,7 @@
 
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
+#include <core/models/effects/stat_change/stat_change.hpp>
 #include <core/validation/validation_data.hpp>
 
 namespace dnd {
@@ -17,7 +18,7 @@ static constexpr const char*
     stat_change_regex_cstr = "[A-Z][_A-Z0-9]+ (earliest|early|normal|late|latest) ((add|sub|mult|div|set|max|min) "
                              "([A-Z][_A-Z0-9]+|-?[1-9]\\d*(\\.[1-9]|\\.\\d[1-9])?)|(set (false|true)))";
 
-Errors validate_stat_change(const StatChangeData& data) {
+Errors validate_stat_change(const StatChange::Data& data) {
     DND_MEASURE_FUNCTION();
     Errors errors;
     static const std::regex stat_change_regex(stat_change_regex_cstr);

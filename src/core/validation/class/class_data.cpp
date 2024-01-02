@@ -20,12 +20,12 @@
 
 namespace dnd {
 
-static Errors validate_class_raw_nonrecursively(const ClassData& data) {
+static Errors validate_class_raw_nonrecursively(const Class::Data& data) {
     Errors errors = validate_name_description_and_source(data);
 
     bool has_subclass_feature = false;
     std::unordered_set<std::string> unique_feature_names;
-    for (const ClassFeatureData& feature_data : data.features_data) {
+    for (const ClassFeature::Data& feature_data : data.features_data) {
         if (unique_feature_names.contains(feature_data.name)) {
             errors.add_validation_error(
                 ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
@@ -53,14 +53,14 @@ static Errors validate_class_raw_nonrecursively(const ClassData& data) {
     return errors;
 }
 
-static Errors validate_class_relations_nonrecursively(const ClassData& data, const Content& content) {
+static Errors validate_class_relations_nonrecursively(const Class::Data& data, const Content& content) {
     Errors errors;
     if (content.get_classes().contains(data.name)) {
         errors.add_validation_error(
             ValidationError::Code::INVALID_ATTRIBUTE_VALUE, fmt::format("Class has duplicate name \"{}\".", data.name)
         );
     }
-    for (const ClassFeatureData& feature_data : data.features_data) {
+    for (const ClassFeature::Data& feature_data : data.features_data) {
         if (content.get_class_features().contains(feature_data.name)) {
             errors.add_validation_error(
                 ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
@@ -71,16 +71,16 @@ static Errors validate_class_relations_nonrecursively(const ClassData& data, con
     return errors;
 }
 
-Errors validate_class_nonrecursively_for_content(const ClassData& data, const Content& content) {
+Errors validate_class_nonrecursively_for_content(const Class::Data& data, const Content& content) {
     Errors errors = validate_class_raw_nonrecursively(data);
     errors += validate_class_relations_nonrecursively(data, content);
     return errors;
 }
 
-Errors validate_class_recursively_for_content(const ClassData& data, const Content& content) {
+Errors validate_class_recursively_for_content(const Class::Data& data, const Content& content) {
     Errors errors = validate_class_nonrecursively_for_content(data, content);
     errors += validate_spellcasting(data.spellcasting_data);
-    for (const ClassFeatureData& feature_data : data.features_data) {
+    for (const ClassFeature::Data& feature_data : data.features_data) {
         errors += validate_class_feature_recursively_for_content(feature_data, content);
     }
     errors += validate_dice_string(data.hit_dice_str);

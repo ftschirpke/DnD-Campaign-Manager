@@ -13,7 +13,7 @@ static constexpr const char* tags = "[core][validation][effects]";
 
 TEST_CASE("Validate Stat Change // valid stat change", tags) {
     ValidationDataMock parent;
-    StatChangeData data;
+    StatChange::Data data;
     Errors errors;
 
     SECTION("boolean effects") {
@@ -85,7 +85,7 @@ TEST_CASE("Validate Stat Change // valid stat change", tags) {
 
 TEST_CASE("Validate StatChange // invalid effects", tags) {
     ValidationDataMock parent;
-    StatChangeData data;
+    StatChange::Data data;
     Errors errors;
 
     SECTION("invalid attribute format (first word)") {

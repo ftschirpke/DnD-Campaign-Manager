@@ -11,6 +11,7 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
+#include <core/models/character/character.hpp>
 #include <core/models/effects/effects.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/validation/character/decision/decision_data.hpp>
@@ -21,15 +22,17 @@ static void ins(std::set<std::string>& set, std::vector<std::string>&& vec) {
     set.insert(std::make_move_iterator(vec.begin()), std::make_move_iterator(vec.end()));
 }
 
-CreateResult<Decision> Decision::create_for(Data&& data, const CharacterData& character_data, const Content& content) {
+CreateResult<Decision> Decision::create_for(
+    Data&& data, const Character::Data& character_data, const Content& content
+) {
     Errors errors = validate_decision_for_character_and_content(data, character_data, content);
     if (!errors.ok()) {
         return InvalidCreate<Decision>(std::move(data), std::move(errors));
     }
 
-    EffectsData res_data;
+    Effects::Data res_data;
     for (const std::string& stat_change_str : data.selections["stat_changes"]) {
-        StatChangeData stat_change_data;
+        StatChange::Data stat_change_data;
         stat_change_data.stat_change_str = stat_change_str;
         res_data.stat_changes_data.emplace_back(std::move(stat_change_data));
     }

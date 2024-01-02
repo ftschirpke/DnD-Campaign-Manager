@@ -9,17 +9,13 @@
 
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
-#include <core/exceptions/validation_exceptions.hpp>
-#include <core/models/spell/spell_components.hpp>
-#include <core/models/spell/spell_type.hpp>
-#include <core/utils/string_manipulation.hpp>
+#include <core/models/spell/spell.hpp>
 #include <core/validation/spell/spell_components_data.hpp>
 #include <core/validation/spell/spell_type_data.hpp>
-#include <core/validation/validation_data.hpp>
 
 namespace dnd {
 
-Errors validate_spell_nonrecursively(const SpellData& data) {
+Errors validate_spell_nonrecursively(const Spell::Data& data) {
     DND_MEASURE_FUNCTION();
     Errors errors = validate_name_description_and_source(data);
     if (data.casting_time.empty()) {
@@ -37,7 +33,7 @@ Errors validate_spell_nonrecursively(const SpellData& data) {
     return errors;
 }
 
-Errors validate_spell_recursively(const SpellData& data) {
+Errors validate_spell_recursively(const Spell::Data& data) {
     DND_MEASURE_FUNCTION();
     Errors errors = validate_spell_nonrecursively(data);
     errors += validate_spell_components(data.components_data);

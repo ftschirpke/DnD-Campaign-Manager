@@ -1,25 +1,15 @@
-#ifndef SPELL_TYPE_DATA_HPP_
-#define SPELL_TYPE_DATA_HPP_
+#ifndef SPELL_TYPE_VALIDATION_HPP_
+#define SPELL_TYPE_VALIDATION_HPP_
 
 #include <dnd_config.hpp>
 
-#include <compare>
-#include <string>
-
 #include <core/errors/errors.hpp>
-#include <core/validation/validation_data.hpp>
+#include <core/models/spell/spell_type.hpp>
 
 namespace dnd {
 
-class SpellTypeData {
-public:
-    std::strong_ordering operator<=>(const SpellTypeData&) const noexcept = default;
-
-    std::string str;
-};
-
-Errors validate_spell_type(const SpellTypeData& data);
+Errors validate_spell_type(const SpellType::Data& data);
 
 } // namespace dnd
 
-#endif // SPELL_TYPE_DATA_HPP_
+#endif // SPELL_TYPE_VALIDATION_HPP_

@@ -1,5 +1,5 @@
-#ifndef CONDITION_DATA_HPP_
-#define CONDITION_DATA_HPP_
+#ifndef CONDITION_VALIDATION_HPP_
+#define CONDITION_VALIDATION_HPP_
 
 #include <dnd_config.hpp>
 
@@ -7,18 +7,12 @@
 #include <string>
 
 #include <core/errors/errors.hpp>
+#include <core/models/effects/condition/condition.hpp>
 
 namespace dnd {
 
-class ConditionData {
-public:
-    std::strong_ordering operator<=>(const ConditionData&) const noexcept = default;
-
-    std::string condition_str;
-};
-
-Errors validate_condition(const ConditionData& data);
+Errors validate_condition(const Condition::Data& data);
 
 } // namespace dnd
 
-#endif // CONDITION_DATA_HPP_
+#endif // CONDITION_VALIDATION_HPP_

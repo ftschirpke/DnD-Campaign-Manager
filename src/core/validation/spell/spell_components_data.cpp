@@ -8,14 +8,14 @@
 #include <fmt/format.h>
 
 #include <core/errors/errors.hpp>
-#include <core/validation/validation_data.hpp>
+#include <core/models/spell/spell_components.hpp>
 
 namespace dnd {
 
 static constexpr const char*
     spell_components_regex_cstr = "V, S, M \\(.*\\)|V, S|V, M \\(.*\\)|S, M \\(.*\\)|V|S|M \\(.*\\)";
 
-Errors validate_spell_components(const SpellComponentsData& data) {
+Errors validate_spell_components(const SpellComponents::Data& data) {
     DND_MEASURE_FUNCTION();
     static const std::regex spell_components_regex(spell_components_regex_cstr);
     Errors errors;

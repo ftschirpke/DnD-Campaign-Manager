@@ -1,5 +1,5 @@
-#ifndef ACTION_HOLDER_DATA_HPP_
-#define ACTION_HOLDER_DATA_HPP_
+#ifndef ACTION_HOLDER_VALIDATION_HPP_
+#define ACTION_HOLDER_VALIDATION_HPP_
 
 #include <dnd_config.hpp>
 
@@ -8,21 +8,12 @@
 #include <string>
 
 #include <core/errors/errors.hpp>
+#include <core/models/effects/subholders/action_holder.hpp>
 
 namespace dnd {
 
-class ActionHolderData {
-public:
-    std::strong_ordering operator<=>(const ActionHolderData&) const noexcept = default;
-    bool empty() const noexcept;
-
-    std::map<std::string, std::string> actions;
-    std::map<std::string, std::string> bonus_actions;
-    std::map<std::string, std::string> reactions;
-};
-
-Errors validate_actions_holder(const ActionHolderData& data);
+Errors validate_actions_holder(const ActionHolder::Data& data);
 
 } // namespace dnd
 
-#endif // ACTION_HOLDER_DATA_HPP_
+#endif // ACTION_HOLDER_VALIDATION_HPP_

@@ -13,7 +13,7 @@ static constexpr const char* tags = "[core][validation][effects]";
 
 TEST_CASE("Validate Condition // valid conditions", tags) {
     ValidationDataMock parent;
-    ConditionData data;
+    Condition::Data data;
     Errors errors;
 
     SECTION("boolean conditions") {
@@ -81,7 +81,7 @@ TEST_CASE("Validate Condition // valid conditions", tags) {
 
 TEST_CASE("Validate Condition // invalid conditions", tags) {
     ValidationDataMock parent;
-    ConditionData data;
+    Condition::Data data;
     Errors errors;
 
     SECTION("invalid attribute format (left side)") {

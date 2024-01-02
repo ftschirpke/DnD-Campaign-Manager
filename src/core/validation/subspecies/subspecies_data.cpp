@@ -13,14 +13,15 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
+#include <core/models/subspecies/subspecies.hpp>
 #include <core/validation/effects_provider/feature_data.hpp>
 
 namespace dnd {
 
-static Errors validate_subspecies_raw_nonrecursively(const SubspeciesData& data) {
+static Errors validate_subspecies_raw_nonrecursively(const Subspecies::Data& data) {
     Errors errors;
     std::unordered_set<std::string> unique_feature_names;
-    for (const FeatureData& feature_data : data.features_data) {
+    for (const Feature::Data& feature_data : data.features_data) {
         if (unique_feature_names.contains(feature_data.name)) {
             errors.add_validation_error(
                 ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
@@ -43,7 +44,7 @@ static Errors validate_subspecies_raw_nonrecursively(const SubspeciesData& data)
     return errors;
 }
 
-Errors validate_subspecies_relations_nonrecursively(const SubspeciesData& data, const Content& content) {
+Errors validate_subspecies_relations_nonrecursively(const Subspecies::Data& data, const Content& content) {
     Errors errors;
     if (content.get_subspecies().contains(data.name)) {
         errors.add_validation_error(
@@ -51,7 +52,7 @@ Errors validate_subspecies_relations_nonrecursively(const SubspeciesData& data, 
             fmt::format("Subspecies has duplicate name \"{}\".", data.name)
         );
     }
-    for (const FeatureData& feature_data : data.features_data) {
+    for (const Feature::Data& feature_data : data.features_data) {
         if (content.get_features().contains(feature_data.name)) {
             errors.add_validation_error(
                 ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
@@ -74,15 +75,15 @@ Errors validate_subspecies_relations_nonrecursively(const SubspeciesData& data, 
     return errors;
 }
 
-Errors validate_subspecies_nonrecursively_for_content(const SubspeciesData& data, const Content& content) {
+Errors validate_subspecies_nonrecursively_for_content(const Subspecies::Data& data, const Content& content) {
     Errors errors = validate_subspecies_raw_nonrecursively(data);
     errors += validate_subspecies_relations_nonrecursively(data, content);
     return errors;
 }
 
-Errors validate_subspecies_recursively_for_content(const SubspeciesData& data, const Content& content) {
+Errors validate_subspecies_recursively_for_content(const Subspecies::Data& data, const Content& content) {
     Errors errors = validate_subspecies_nonrecursively_for_content(data, content);
-    for (const FeatureData& feature_data : data.features_data) {
+    for (const Feature::Data& feature_data : data.features_data) {
         errors += validate_feature_recursively_for_content(feature_data, content);
     }
     return errors;

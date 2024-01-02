@@ -7,8 +7,8 @@
 #include <vector>
 
 #include <core/errors/errors.hpp>
+#include <core/models/spell/spell.hpp>
 #include <core/parsing/file_parser.hpp>
-#include <core/validation/spell/spell_data.hpp>
 
 namespace dnd {
 
@@ -18,7 +18,7 @@ public:
     virtual Errors parse() override;
     virtual void save_result(Content& content) override;
 private:
-    std::vector<SpellData> spell_data;
+    std::vector<Spell::Data> spell_data;
 };
 
 } // namespace dnd

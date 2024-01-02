@@ -15,7 +15,6 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
 #include <core/models/item/item.hpp>
-#include <core/validation/item/item_data.hpp>
 
 namespace dnd {
 
@@ -39,7 +38,7 @@ Errors ItemParser::parse() {
             continue;
         }
         Errors item_errors;
-        ItemData data;
+        Item::Data data;
         data.name = item_name;
         data.source_path = get_filepath();
         item_errors += parse_required_attribute_into(item_json, "description", data.description);
@@ -54,7 +53,7 @@ Errors ItemParser::parse() {
 }
 
 void ItemParser::save_result(Content& content) {
-    for (ItemData& data : item_data) {
+    for (Item::Data& data : item_data) {
         content.add_item_result(Item::create(std::move(data)));
     }
 }

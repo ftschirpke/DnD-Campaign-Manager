@@ -24,9 +24,9 @@ static constexpr std::array<const char*, 16> allowed_magic_school_spellings = {
 static constexpr std::array<const char*, 9> spell_levels = {"1st", "2nd", "3rd", "4th", "5th",
                                                             "6th", "7th", "8th", "9th"};
 
-TEST_CASE("SpellTypeData::validate // valid spell type", tags) {
+TEST_CASE("SpellType::Data::validate // valid spell type", tags) {
     ValidationDataMock parent;
-    SpellTypeData data;
+    SpellType::Data data;
     Errors errors;
     SECTION("cantrips") {
         for (const char* spelling : allowed_magic_school_spellings) {
@@ -51,9 +51,9 @@ TEST_CASE("SpellTypeData::validate // valid spell type", tags) {
     }
 }
 
-TEST_CASE("SpellTypeData::validate // invalid spell type", tags) {
+TEST_CASE("SpellType::Data::validate // invalid spell type", tags) {
     ValidationDataMock parent;
-    SpellTypeData data;
+    SpellType::Data data;
     Errors errors;
     SECTION("other formats than standard D&D format not allowed") {
         data.str = "Level 9 illusion";

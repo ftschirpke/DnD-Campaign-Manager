@@ -15,7 +15,7 @@ namespace dnd::test {
 static constexpr const char* tags = "[core][validation][spell]";
 
 TEST_CASE("Validate Spell // valid spells", tags) {
-    SpellData data;
+    Spell::Data data;
     set_valid_mock_values(data, "Spell");
     Errors errors;
 
@@ -39,7 +39,7 @@ TEST_CASE("Validate Spell // valid spells", tags) {
 }
 
 TEST_CASE("Validate Spell // invalid spells", tags) {
-    SpellData data;
+    Spell::Data data;
     set_valid_mock_values(data, "Spell");
     Errors errors;
 

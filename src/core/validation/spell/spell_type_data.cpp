@@ -9,7 +9,7 @@
 
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
-#include <core/validation/validation_data.hpp>
+#include <core/models/spell/spell_type.hpp>
 
 namespace dnd {
 
@@ -21,7 +21,7 @@ static constexpr const char* spell_type_regex_cstr = "(1st|2nd|3rd|[4-9]th)-leve
                                                      "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation)"
                                                      " cantrip";
 
-Errors validate_spell_type(const SpellTypeData& data) {
+Errors validate_spell_type(const SpellType::Data& data) {
     DND_MEASURE_FUNCTION();
     static const std::regex spell_type_regex(spell_type_regex_cstr);
     Errors errors;

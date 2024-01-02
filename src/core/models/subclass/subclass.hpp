@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <filesystem>
 #include <memory>
 #include <string>
@@ -14,7 +15,6 @@
 #include <core/models/source_info.hpp>
 #include <core/models/spellcasting/spellcasting.hpp>
 #include <core/utils/types.hpp>
-#include <core/validation/subclass/subclass_data.hpp>
 
 namespace dnd {
 
@@ -23,7 +23,7 @@ class ContentVisitor;
 
 class Subclass : public ContentPiece {
 public:
-    using Data = SubclassData;
+    class Data;
 
     static CreateResult<Subclass> create_for(Data&& data, const Content& content);
 
@@ -53,6 +53,15 @@ private:
     std::vector<ClassFeature> features;
     CRef<Class> cls;
     std::unique_ptr<Spellcasting> spellcasting;
+};
+
+class Subclass::Data : public ValidationData {
+public:
+    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+
+    Spellcasting::Data spellcasting_data;
+    std::vector<ClassFeature::Data> features_data;
+    std::string class_name;
 };
 
 } // namespace dnd

@@ -14,7 +14,7 @@ namespace dnd::test {
 static constexpr const char* tags = "[core][validation][subclass]";
 
 TEST_CASE("Validate Subclass // valid subclass", tags) {
-    SubclassData data;
+    Subclass::Data data;
     set_valid_mock_values(data, "Subclass");
     data.spellcasting_data.is_spellcaster = false;
     Content content = minimal_testing_content();
@@ -22,7 +22,7 @@ TEST_CASE("Validate Subclass // valid subclass", tags) {
 
     SECTION("class with one valid feature") {
         data.class_name = "Wizard";
-        ClassFeatureData& feature_data = data.features_data.emplace_back();
+        ClassFeature::Data& feature_data = data.features_data.emplace_back();
         set_valid_mock_values(feature_data, "Feature");
         REQUIRE_NOTHROW(errors = validate_subclass_nonrecursively_for_content(data, content));
         REQUIRE(errors.ok());
@@ -30,11 +30,11 @@ TEST_CASE("Validate Subclass // valid subclass", tags) {
 
     SECTION("class with multiple differently named features") {
         data.class_name = "Wizard";
-        FeatureData& feature_data1 = data.features_data.emplace_back();
+        Feature::Data& feature_data1 = data.features_data.emplace_back();
         set_valid_mock_values(feature_data1, "Feature 1");
-        FeatureData& feature_data2 = data.features_data.emplace_back();
+        Feature::Data& feature_data2 = data.features_data.emplace_back();
         set_valid_mock_values(feature_data2, "Feature 2");
-        FeatureData& feature_data3 = data.features_data.emplace_back();
+        Feature::Data& feature_data3 = data.features_data.emplace_back();
         set_valid_mock_values(feature_data3, "Feature 3");
         REQUIRE_NOTHROW(errors = validate_subclass_nonrecursively_for_content(data, content));
         REQUIRE(errors.ok());
@@ -42,7 +42,7 @@ TEST_CASE("Validate Subclass // valid subclass", tags) {
 }
 
 TEST_CASE("Validate Subclass // invalid subclass", tags) {
-    SubclassData data;
+    Subclass::Data data;
     set_valid_mock_values(data, "Subclass");
     Content content = minimal_testing_content();
     data.spellcasting_data.is_spellcaster = false;
@@ -50,7 +50,7 @@ TEST_CASE("Validate Subclass // invalid subclass", tags) {
 
     SECTION("subclass without class is invalid") {
         data.class_name = "";
-        ClassFeatureData& feature_data = data.features_data.emplace_back();
+        ClassFeature::Data& feature_data = data.features_data.emplace_back();
         set_valid_mock_values(feature_data, "Feature");
         REQUIRE_NOTHROW(errors = validate_subclass_nonrecursively_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
@@ -70,11 +70,11 @@ TEST_CASE("Validate Subclass // invalid subclass", tags) {
 
     SECTION("subclass with duplicate feature names") {
         data.class_name = "Wizard";
-        FeatureData& feature_data1 = data.features_data.emplace_back();
+        Feature::Data& feature_data1 = data.features_data.emplace_back();
         set_valid_mock_values(feature_data1, "Duplicate Feature");
-        FeatureData& feature_data2 = data.features_data.emplace_back();
+        Feature::Data& feature_data2 = data.features_data.emplace_back();
         set_valid_mock_values(feature_data2, "Duplicate Feature");
-        FeatureData& feature_data3 = data.features_data.emplace_back();
+        Feature::Data& feature_data3 = data.features_data.emplace_back();
         set_valid_mock_values(feature_data3, "Other Feature");
         REQUIRE_NOTHROW(errors = validate_subclass_nonrecursively_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
@@ -82,10 +82,10 @@ TEST_CASE("Validate Subclass // invalid subclass", tags) {
 }
 
 TEST_CASE("Validate Subclass // invalid subclass data relations", tags) {
-    SubclassData data;
+    Subclass::Data data;
     set_valid_mock_values(data, "Subclass");
     data.spellcasting_data.is_spellcaster = false;
-    ClassFeatureData& valid_feature_data = data.features_data.emplace_back();
+    ClassFeature::Data& valid_feature_data = data.features_data.emplace_back();
     set_valid_mock_values(valid_feature_data, "Valid Feature");
     Content content = minimal_testing_content();
     Errors errors;
@@ -100,7 +100,7 @@ TEST_CASE("Validate Subclass // invalid subclass data relations", tags) {
     SECTION("features with duplicate names aren't allowed") {
         data.name = "New Subclass";
         data.class_name = "Wizard";
-        ClassFeatureData& feature_data = data.features_data.emplace_back();
+        ClassFeature::Data& feature_data = data.features_data.emplace_back();
         set_valid_mock_values(feature_data, "Duplicate Feature");
         feature_data.name = "Example Subclass Feature"; // feature with that name already exists in the example content
         REQUIRE_NOTHROW(errors = validate_subclass_nonrecursively_for_content(data, content));

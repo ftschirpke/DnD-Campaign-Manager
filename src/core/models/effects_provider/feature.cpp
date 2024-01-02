@@ -12,6 +12,7 @@
 #include <core/models/content_piece.hpp>
 #include <core/models/effects/effects.hpp>
 #include <core/models/source_info.hpp>
+#include <core/validation/effects_provider/feature_data.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
 namespace dnd {

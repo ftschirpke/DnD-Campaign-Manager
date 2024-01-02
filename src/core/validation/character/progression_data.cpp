@@ -7,11 +7,12 @@
 #include <core/basic_mechanics/character_progression.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
+#include <core/models/character/progression.hpp>
 #include <core/validation/validation_data.hpp>
 
 namespace dnd {
 
-Errors validate_progression(const ProgressionData& data) {
+Errors validate_progression(const Progression::Data& data) {
     Errors errors;
     bool valid_level = data.level >= 1 && data.level <= 20;
     bool valid_xp = data.xp >= 0;

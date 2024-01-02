@@ -1,29 +1,16 @@
-#ifndef CLASS_FEATURE_DATA_HPP_
-#define CLASS_FEATURE_DATA_HPP_
+#ifndef CLASS_FEATURE_VALIDATION_HPP_
+#define CLASS_FEATURE_VALIDATION_HPP_
 
 #include <dnd_config.hpp>
 
-#include <compare>
-#include <map>
-#include <memory>
-
 #include <core/errors/errors.hpp>
-#include <core/validation/effects/effects_data.hpp>
-#include <core/validation/effects_provider/feature_data.hpp>
+#include <core/models/effects_provider/class_feature.hpp>
 
 namespace dnd {
 
-class ClassFeatureData : public FeatureData {
-public:
-    std::strong_ordering operator<=>(const ClassFeatureData&) const noexcept = default;
-
-    int level;
-    std::map<int, EffectsData> higher_level_effects_data;
-};
-
-Errors validate_class_feature_nonrecursively(const ClassFeatureData& data);
-Errors validate_class_feature_recursively_for_content(const ClassFeatureData& data, const Content& content);
+Errors validate_class_feature_nonrecursively(const ClassFeature::Data& data);
+Errors validate_class_feature_recursively_for_content(const ClassFeature::Data& data, const Content& content);
 
 } // namespace dnd
 
-#endif // CLASS_FEATURE_DATA_HPP_
+#endif // CLASS_FEATURE_VALIDATION_HPP_

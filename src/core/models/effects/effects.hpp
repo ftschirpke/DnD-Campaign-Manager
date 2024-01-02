@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -15,7 +16,6 @@
 #include <core/models/effects/subholders/extra_spells_holder.hpp>
 #include <core/models/effects/subholders/proficiency_holder.hpp>
 #include <core/models/effects/subholders/riv_holder.hpp>
-#include <core/validation/effects/effects_data.hpp>
 
 namespace dnd {
 
@@ -24,7 +24,7 @@ namespace dnd {
  */
 class Effects {
 public:
-    using Data = EffectsData;
+    class Data;
 
     static CreateResult<Effects> create_for(Data&& data, const Content& content);
 
@@ -76,6 +76,19 @@ private:
     ExtraSpellsHolder extra_spells;
     ProficiencyHolder proficiencies;
     RIVHolder rivs;
+};
+
+class Effects::Data {
+public:
+    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+
+    std::vector<Condition::Data> activation_conditions_data;
+    std::vector<Choice::Data> choices_data;
+    std::vector<StatChange::Data> stat_changes_data;
+    ActionHolder::Data action_holder_data;
+    ExtraSpellsHolder::Data extra_spells_holder_data;
+    ProficiencyHolder::Data proficiency_holder_data;
+    RIVHolder::Data riv_holder_data;
 };
 
 } // namespace dnd

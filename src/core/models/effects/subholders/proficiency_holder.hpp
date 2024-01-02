@@ -3,11 +3,13 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
+#include <set>
 #include <string>
+
 #include <vector>
 
 #include <core/utils/data_result.hpp>
-#include <core/validation/effects/subholders/proficiency_holder_data.hpp>
 
 namespace dnd {
 
@@ -18,7 +20,7 @@ class Content;
  */
 class ProficiencyHolder {
 public:
-    using Data = ProficiencyHolderData;
+    class Data;
 
     static CreateResult<ProficiencyHolder> create_for(Data&& data, const Content& content);
 
@@ -47,6 +49,32 @@ private:
     std::vector<std::string> known_languages;
     std::vector<std::string> senses;
 };
+
+class ProficiencyHolder::Data {
+public:
+    std::strong_ordering operator<=>(const ProficiencyHolder::Data&) const noexcept = default;
+    bool empty() const noexcept;
+
+    // the types of armor the character is proficient with
+    std::set<std::string> armor;
+    // the types of weapons the character is proficient with
+    std::set<std::string> weapons;
+    // the tools the character is proficient with
+    std::set<std::string> tools;
+    // the skills the character is proficient at
+    std::set<std::string> skills;
+    // the saving throws the character is proficient at
+    std::set<std::string> saving_throws;
+    // the languages the character knows
+    std::set<std::string> languages;
+    // special types of senses the character has e.g. darkvision
+    std::set<std::string> senses;
+};
+
+inline bool ProficiencyHolder::Data::empty() const noexcept {
+    return armor.empty() && weapons.empty() && tools.empty() && skills.empty() && saving_throws.empty()
+           && languages.empty() && senses.empty();
+}
 
 } // namespace dnd
 

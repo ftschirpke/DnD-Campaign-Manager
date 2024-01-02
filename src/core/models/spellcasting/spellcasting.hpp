@@ -8,8 +8,6 @@
 
 #include <core/basic_mechanics/abilities.hpp>
 
-#include <core/validation/spellcasting/spellcasting_data.hpp>
-
 namespace dnd {
 
 /**
@@ -17,7 +15,7 @@ namespace dnd {
  */
 class Spellcasting {
 public:
-    using Data = SpellcastingData;
+    class Data;
 
     virtual ~Spellcasting() noexcept = default;
 
@@ -48,6 +46,36 @@ private:
     std::array<int, 20> cantrips_known;
     std::array<std::array<int, 20>, 9> spell_slots;
 };
+
+class Spellcasting::Data {
+public:
+    explicit Data() noexcept;
+    std::strong_ordering operator<=>(const Spellcasting::Data&) const noexcept = default;
+
+    bool is_spellcaster;
+    std::string ability;
+    bool ritual_casting;
+    bool is_spells_known_type;
+    std::string preparation_spellcasting_type;
+    std::array<int, 20> spells_known;
+    std::array<int, 20> cantrips_known;
+    std::array<std::array<int, 20>, 9> spell_slots;
+};
+
+inline Spellcasting::Data::Data() noexcept {
+    for (int& val : spells_known) {
+        val = 0;
+    }
+    for (int& val : cantrips_known) {
+        val = 0;
+    }
+    for (std::array<int, 20>& arr : spell_slots) {
+        for (int& val : arr) {
+            val = 0;
+        }
+    }
+}
+
 
 } // namespace dnd
 

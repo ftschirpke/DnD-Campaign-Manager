@@ -21,7 +21,7 @@
 
 namespace dnd {
 
-static Errors validate_ability_choice(const ChoiceData& data) {
+static Errors validate_ability_choice(const Choice::Data& data) {
     Errors errors;
     for (const std::string& explicit_choice : data.explicit_choices) {
         if (explicit_choice.empty()) {
@@ -48,7 +48,7 @@ static Errors validate_ability_choice(const ChoiceData& data) {
     return errors;
 }
 
-static Errors validate_skill_choice(const ChoiceData& data) {
+static Errors validate_skill_choice(const Choice::Data& data) {
     Errors errors;
     for (const std::string& explicit_choice : data.explicit_choices) {
         if (explicit_choice.empty()) {
@@ -75,9 +75,9 @@ static Errors validate_skill_choice(const ChoiceData& data) {
     return errors;
 }
 
-static Errors validate_stat_change_choice(const ChoiceData& data) {
+static Errors validate_stat_change_choice(const Choice::Data& data) {
     Errors errors;
-    StatChangeData stat_change_data;
+    StatChange::Data stat_change_data;
     for (const std::string& explicit_choice : data.explicit_choices) {
         if (explicit_choice.empty()) {
             continue;
@@ -97,7 +97,7 @@ static Errors validate_stat_change_choice(const ChoiceData& data) {
     return errors;
 }
 
-Errors validate_choice_raw(const ChoiceData& data) {
+Errors validate_choice_raw(const Choice::Data& data) {
     Errors errors;
     if (data.amount <= 0) {
         errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Choice has non-positive amount");
@@ -147,7 +147,7 @@ Errors validate_choice_raw(const ChoiceData& data) {
     return errors;
 }
 
-static Errors validate_relations_string_choice(const ChoiceData& data, const Content& content) {
+static Errors validate_relations_string_choice(const Choice::Data& data, const Content& content) {
     Errors errors;
     if (!attribute_name_implies_group(data.attribute_name)) {
         errors.add_validation_error(
@@ -191,7 +191,7 @@ static Errors validate_relations_string_choice(const ChoiceData& data, const Con
     return errors;
 }
 
-static Errors validate_relations_item_choice(const ChoiceData& data, const Content& content) {
+static Errors validate_relations_item_choice(const Choice::Data& data, const Content& content) {
     Errors errors;
     for (const std::string& explicit_choice : data.explicit_choices) {
         if (explicit_choice.empty()) {
@@ -231,7 +231,7 @@ static constexpr const char* spell_filter_regex_cstr = "((1st|2nd|3rd|[4-9]th)-l
                                                        "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation) )?"
                                                        "(([a-zA-Z][a-z]*) )?[sS]pells";
 
-static Errors validate_relations_spell_choice(const ChoiceData& data, const Content& content) {
+static Errors validate_relations_spell_choice(const Choice::Data& data, const Content& content) {
     Errors errors;
     for (const std::string& explicit_choice : data.explicit_choices) {
         if (explicit_choice.empty()) {
@@ -304,7 +304,7 @@ static Errors validate_relations_spell_choice(const ChoiceData& data, const Cont
     return errors;
 }
 
-static Errors validate_relations_choosable_choice(const ChoiceData& data, const Content& content) {
+static Errors validate_relations_choosable_choice(const Choice::Data& data, const Content& content) {
     Errors errors;
     for (const std::string& explicit_choice : data.explicit_choices) {
         if (explicit_choice.empty()) {
@@ -336,7 +336,7 @@ static Errors validate_relations_choosable_choice(const ChoiceData& data, const 
     return errors;
 }
 
-static Errors validate_choice_relations(const ChoiceData& data, const Content& content) {
+static Errors validate_choice_relations(const Choice::Data& data, const Content& content) {
     Errors errors;
     if (!is_valid_choice_attribute_name(data.attribute_name)) {
         return errors;
@@ -363,7 +363,7 @@ static Errors validate_choice_relations(const ChoiceData& data, const Content& c
     return errors;
 }
 
-Errors validate_choice_for_content(const ChoiceData& data, const Content& content) {
+Errors validate_choice_for_content(const Choice::Data& data, const Content& content) {
     Errors errors = validate_choice_raw(data);
     errors += validate_choice_relations(data, content);
     return errors;

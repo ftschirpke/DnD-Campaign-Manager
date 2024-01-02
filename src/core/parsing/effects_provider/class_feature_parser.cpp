@@ -9,6 +9,7 @@
 
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
+#include <core/models/effects_provider/class_feature.hpp>
 #include <core/parsing/effects/effects_parser.hpp>
 #include <core/parsing/parser.hpp>
 #include <core/validation/effects/effects_data.hpp>
@@ -20,7 +21,7 @@ namespace dnd {
 ClassFeatureParser::ClassFeatureParser(const std::filesystem::path& filepath) noexcept
     : Parser(filepath), effects_parser(filepath) {}
 
-Errors ClassFeatureParser::parse_into(nlohmann::ordered_json&& json, ClassFeatureData& data) const {
+Errors ClassFeatureParser::parse_into(nlohmann::ordered_json&& json, ClassFeature::Data& data) const {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
@@ -41,7 +42,7 @@ Errors ClassFeatureParser::parse_into(nlohmann::ordered_json&& json, ClassFeatur
             for (auto& effects : json["higher_levels"]) {
                 int level;
                 errors += parse_required_attribute_into(effects, "level", level);
-                auto [inserted_pair_it, was_inserted] = data.higher_level_effects_data.emplace(level, EffectsData());
+                auto [inserted_pair_it, was_inserted] = data.higher_level_effects_data.emplace(level, Effects::Data());
                 if (!was_inserted) {
                     errors.add_parsing_error(
                         ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(),
@@ -63,7 +64,7 @@ Errors ClassFeatureParser::parse_into(nlohmann::ordered_json&& json, ClassFeatur
     return errors;
 }
 
-Errors ClassFeatureParser::parse_multiple_into(nlohmann::ordered_json&& json, std::vector<ClassFeatureData>& data)
+Errors ClassFeatureParser::parse_multiple_into(nlohmann::ordered_json&& json, std::vector<ClassFeature::Data>& data)
     const {
     Errors errors;
     if (!json.is_object()) {
@@ -74,7 +75,7 @@ Errors ClassFeatureParser::parse_multiple_into(nlohmann::ordered_json&& json, st
     }
 
     for (auto& [class_feature_name, class_feature_json] : json.items()) {
-        ClassFeatureData& class_feature_data = data.emplace_back();
+        ClassFeature::Data& class_feature_data = data.emplace_back();
         class_feature_data.name = class_feature_name;
         class_feature_data.source_path = get_filepath();
         errors += parse_into(std::move(class_feature_json), class_feature_data);

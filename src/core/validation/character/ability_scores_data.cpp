@@ -7,6 +7,7 @@
 #include <fmt/format.h>
 
 #include <core/errors/errors.hpp>
+#include <core/models/character/ability_scores.hpp>
 
 namespace dnd {
 
@@ -22,7 +23,7 @@ static Errors check_ability_score(int ability_score, const char* name) {
     return errors;
 }
 
-Errors validate_ability_scores(const AbilityScoresData& data) {
+Errors validate_ability_scores(const AbilityScores::Data& data) {
     Errors errors;
     errors += check_ability_score(data.ability_scores[0], "strength");
     errors += check_ability_score(data.ability_scores[1], "dexterity");

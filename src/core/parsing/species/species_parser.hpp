@@ -8,9 +8,9 @@
 #include <nlohmann/json.hpp>
 
 #include <core/errors/errors.hpp>
+#include <core/models/species/species.hpp>
 #include <core/parsing/effects_provider/feature_parser.hpp>
 #include <core/parsing/file_parser.hpp>
-#include <core/validation/species/species_data.hpp>
 
 namespace dnd {
 
@@ -21,7 +21,7 @@ public:
     virtual void save_result(Content& content) override;
 private:
     FeatureParser feature_parser;
-    SpeciesData data;
+    Species::Data data;
 };
 
 } // namespace dnd

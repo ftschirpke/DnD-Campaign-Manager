@@ -8,6 +8,13 @@
 #include <nlohmann/json.hpp>
 
 #include <core/errors/errors.hpp>
+#include <core/models/effects/choice/choice.hpp>
+#include <core/models/effects/condition/condition.hpp>
+#include <core/models/effects/stat_change/stat_change.hpp>
+#include <core/models/effects/subholders/action_holder.hpp>
+#include <core/models/effects/subholders/extra_spells_holder.hpp>
+#include <core/models/effects/subholders/proficiency_holder.hpp>
+#include <core/models/effects/subholders/riv_holder.hpp>
 #include <core/parsing/parser.hpp>
 #include <core/validation/effects/effects_data.hpp>
 #include <core/validation/validation_data.hpp>
@@ -17,15 +24,15 @@ namespace dnd {
 class EffectsParser : public Parser {
 public:
     explicit EffectsParser(const std::filesystem::path& filepath) noexcept;
-    Errors parse_into(nlohmann::ordered_json&& json, EffectsData& data) const;
+    Errors parse_into(nlohmann::ordered_json&& json, Effects::Data& data) const;
 private:
-    Errors parse_activation_conditions_into(nlohmann::ordered_json& json, std::vector<ConditionData>& data) const;
-    Errors parse_choices_into(nlohmann::ordered_json& json, std::vector<ChoiceData>& data) const;
-    Errors parse_stat_changes_into(nlohmann::ordered_json& json, std::vector<StatChangeData>& data) const;
-    Errors parse_action_holder_into(nlohmann::ordered_json& json, ActionHolderData& data) const;
-    Errors parse_extra_spells_holder_into(nlohmann::ordered_json& json, ExtraSpellsHolderData& data) const;
-    Errors parse_proficiency_holder_into(nlohmann::ordered_json& json, ProficiencyHolderData& data) const;
-    Errors parse_riv_holder_into(nlohmann::ordered_json& json, RIVHolderData& data) const;
+    Errors parse_activation_conditions_into(nlohmann::ordered_json& json, std::vector<Condition::Data>& data) const;
+    Errors parse_choices_into(nlohmann::ordered_json& json, std::vector<Choice::Data>& data) const;
+    Errors parse_stat_changes_into(nlohmann::ordered_json& json, std::vector<StatChange::Data>& data) const;
+    Errors parse_action_holder_into(nlohmann::ordered_json& json, ActionHolder::Data& data) const;
+    Errors parse_extra_spells_holder_into(nlohmann::ordered_json& json, ExtraSpellsHolder::Data& data) const;
+    Errors parse_proficiency_holder_into(nlohmann::ordered_json& json, ProficiencyHolder::Data& data) const;
+    Errors parse_riv_holder_into(nlohmann::ordered_json& json, RIVHolder::Data& data) const;
 };
 
 } // namespace dnd

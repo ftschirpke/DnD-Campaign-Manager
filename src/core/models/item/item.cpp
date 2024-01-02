@@ -11,6 +11,7 @@
 #include <core/models/content_piece.hpp>
 #include <core/models/source_info.hpp>
 #include <core/utils/data_result.hpp>
+#include <core/validation/item/item_data.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
 namespace dnd {

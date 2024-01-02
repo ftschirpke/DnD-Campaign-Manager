@@ -13,21 +13,7 @@
 
 namespace dnd {
 
-SpellcastingData::SpellcastingData() noexcept {
-    for (int& val : spells_known) {
-        val = 0;
-    }
-    for (int& val : cantrips_known) {
-        val = 0;
-    }
-    for (std::array<int, 20>& arr : spell_slots) {
-        for (int& val : arr) {
-            val = 0;
-        }
-    }
-}
-
-Errors validate_spellcasting(const SpellcastingData& data) {
+Errors validate_spellcasting(const Spellcasting::Data& data) {
     Errors errors;
 
     if (!data.is_spellcaster) {

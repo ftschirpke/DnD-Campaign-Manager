@@ -2,23 +2,16 @@
 
 #include "extra_spells_holder_data.hpp"
 
-#include <set>
-#include <string>
-
 #include <fmt/format.h>
 
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
+#include <core/models/effects/subholders/extra_spells_holder.hpp>
 #include <core/models/spell/spell.hpp>
 #include <core/validation/validation_data.hpp>
 
 namespace dnd {
-
-bool ExtraSpellsHolderData::empty() const noexcept {
-    return free_cantrips.empty() && at_will.empty() && innate.empty() && free_once_a_day.empty() && spells_known.empty()
-           && spells_known_included.empty() && added_to_spell_list.empty();
-}
 
 static Errors spells_set_validate(const std::set<std::string>& spells) {
     Errors errors;
@@ -33,7 +26,7 @@ static Errors spells_set_validate(const std::set<std::string>& spells) {
     return errors;
 }
 
-static Errors validate_extra_spells_holder_raw(const ExtraSpellsHolderData& data) {
+static Errors validate_extra_spells_holder_raw(const ExtraSpellsHolder::Data& data) {
     Errors errors;
     errors += spells_set_validate(data.free_cantrips);
     errors += spells_set_validate(data.at_will);
@@ -63,7 +56,7 @@ static Errors spells_set_validate_relations(const std::set<std::string>& spells,
     return errors;
 }
 
-static Errors validate_extra_spells_holder_relations(const ExtraSpellsHolderData& data, const Content& content) {
+static Errors validate_extra_spells_holder_relations(const ExtraSpellsHolder::Data& data, const Content& content) {
     Errors errors;
     for (const std::string& cantrip_name : data.free_cantrips) {
         OptCRef<Spell> cantrip_optional = content.get_spells().get(cantrip_name);
@@ -86,7 +79,7 @@ static Errors validate_extra_spells_holder_relations(const ExtraSpellsHolderData
     return errors;
 }
 
-Errors validate_extra_spells_holder_for_content(const ExtraSpellsHolderData& data, const Content& content) {
+Errors validate_extra_spells_holder_for_content(const ExtraSpellsHolder::Data& data, const Content& content) {
     Errors errors = validate_extra_spells_holder_raw(data);
     errors += validate_extra_spells_holder_relations(data, content);
     return errors;

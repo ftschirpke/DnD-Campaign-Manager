@@ -15,7 +15,7 @@ static constexpr const char* tags = "[core][validation][effects]";
 
 TEST_CASE("Validate Choice // valid choice data", tags) {
     ValidationDataMock parent;
-    ChoiceData data;
+    Choice::Data data;
     Content content = minimal_testing_content();
     Errors errors;
 
@@ -89,7 +89,7 @@ TEST_CASE("Validate Choice // valid choice data", tags) {
 
 TEST_CASE("Validate Choice // invalid choice data", tags) {
     ValidationDataMock parent;
-    ChoiceData data;
+    Choice::Data data;
     Content content = minimal_testing_content();
     Errors errors;
 
@@ -161,7 +161,7 @@ TEST_CASE("Validate Choice // invalid choice data", tags) {
 
 TEST_CASE("Validate Choice // invalid choice data relations", tags) {
     ValidationDataMock parent;
-    ChoiceData data;
+    Choice::Data data;
     Content content = minimal_testing_content();
     Errors errors;
 

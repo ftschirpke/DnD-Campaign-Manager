@@ -13,7 +13,7 @@ namespace dnd::test {
 static constexpr const char* tags = "[core][validation][effects_provider]";
 
 TEST_CASE("Validate Choosable", tags) {
-    ChoosableData data;
+    Choosable::Data data;
     set_valid_mock_values(data, "Choosable Feature");
     Errors errors;
 

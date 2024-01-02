@@ -12,7 +12,7 @@ namespace dnd::test {
 static constexpr const char* tags = "[core][validation][item]";
 
 TEST_CASE("Validate Item", tags) {
-    ItemData data;
+    Item::Data data;
     set_valid_mock_values(data, "Item");
     data.requires_attunement = false;
 

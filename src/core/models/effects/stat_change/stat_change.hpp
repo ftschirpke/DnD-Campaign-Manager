@@ -8,8 +8,6 @@
 #include <string_view>
 #include <unordered_map>
 
-#include <core/validation/effects/stat_change/stat_change_data.hpp>
-
 namespace dnd {
 
 enum class StatChangeTime {
@@ -27,7 +25,7 @@ enum class StatChangeTime {
 
 class StatChange {
 public:
-    using Data = StatChangeData;
+    class Data;
 
     virtual ~StatChange() noexcept = default;
 
@@ -63,6 +61,13 @@ protected:
     std::function<int(int, int)> mathematical_operation;
 private:
     StatChangeTime time;
+};
+
+class StatChange::Data {
+public:
+    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+
+    std::string stat_change_str;
 };
 
 } // namespace dnd

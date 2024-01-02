@@ -1,5 +1,5 @@
-#ifndef IMPORTANT_LEVELS_DATA_HPP_
-#define IMPORTANT_LEVELS_DATA_HPP_
+#ifndef IMPORTANT_LEVELS_VALIDATION_HPP_
+#define IMPORTANT_LEVELS_VALIDATION_HPP_
 
 #include <dnd_config.hpp>
 
@@ -7,18 +7,12 @@
 #include <set>
 
 #include <core/errors/errors.hpp>
+#include <core/models/class/important_levels.hpp>
 
 namespace dnd {
 
-class ImportantLevelsData {
-public:
-    std::strong_ordering operator<=>(const ImportantLevelsData&) const noexcept = default;
-
-    std::set<int> feat_levels;
-};
-
-Errors validate_important_levels(const ImportantLevelsData& data);
+Errors validate_important_levels(const ImportantLevels::Data& data);
 
 } // namespace dnd
 
-#endif // IMPORTANT_LEVELS_DATA_HPP_
+#endif // IMPORTANT_LEVELS_VALIDATION_HPP_

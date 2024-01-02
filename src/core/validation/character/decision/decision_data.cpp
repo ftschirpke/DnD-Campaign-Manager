@@ -24,13 +24,7 @@
 
 namespace dnd {
 
-DecisionData::DecisionData(const Effects* target) noexcept : target(target) {}
-
-const Effects* DecisionData::get_target() const noexcept { return target; }
-
-void DecisionData::set_target(const Effects* new_target) noexcept { target = new_target; }
-
-static Errors validate_decision_raw(const DecisionData& data) {
+static Errors validate_decision_raw(const Decision::Data& data) {
     Errors errors;
     if (data.get_target() == nullptr) {
         errors.add_validation_error(
@@ -47,7 +41,7 @@ static Errors validate_decision_raw(const DecisionData& data) {
     return errors;
 }
 
-static Errors validate_decision_relations(const DecisionData& data, const Content& content) {
+static Errors validate_decision_relations(const Decision::Data& data, const Content& content) {
     Errors errors;
     if (data.get_target() == nullptr) {
         return errors;
@@ -89,7 +83,7 @@ static Errors validate_decision_relations(const DecisionData& data, const Conten
 }
 
 static Errors validate_decision_target_for_character_and_content(
-    const DecisionData& data, const CharacterData& character_data, const Content& content
+    const Decision::Data& data, const Character::Data& character_data, const Content& content
 ) {
     Errors errors;
     const Effects* target = data.get_target();
@@ -202,7 +196,7 @@ static Errors validate_decision_target_for_character_and_content(
 }
 
 Errors validate_decision_for_character_and_content(
-    const DecisionData& data, const CharacterData& character_data, const Content& content
+    const Decision::Data& data, const Character::Data& character_data, const Content& content
 ) {
     Errors errors = validate_decision_raw(data);
     errors += validate_decision_relations(data, content);

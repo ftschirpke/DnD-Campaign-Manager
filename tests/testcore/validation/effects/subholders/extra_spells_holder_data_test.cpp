@@ -12,9 +12,9 @@ namespace dnd::test {
 
 static constexpr const char* tags = "[core][validation][effects]";
 
-TEST_CASE("Validate ExtraSpellsHolderData // valid extra spell holders", tags) {
+TEST_CASE("Validate ExtraSpellsHolder // valid extra spell holders", tags) {
     ValidationDataMock parent;
-    ExtraSpellsHolderData data;
+    ExtraSpellsHolder::Data data;
     Content content = minimal_testing_content();
     Errors errors;
 
@@ -98,9 +98,9 @@ TEST_CASE("Validate ExtraSpellsHolderData // valid extra spell holders", tags) {
     }
 }
 
-TEST_CASE("Validate ExtraSpellsHolderData // invalid extra spell holders", tags) {
+TEST_CASE("Validate ExtraSpellsHolder // invalid extra spell holders", tags) {
     ValidationDataMock parent;
-    ExtraSpellsHolderData data;
+    ExtraSpellsHolder::Data data;
     Content content = minimal_testing_content();
     Errors errors;
 
@@ -177,7 +177,7 @@ TEST_CASE("Validate ExtraSpellsHolderData // invalid extra spell holders", tags)
 
 TEST_CASE("Validate ExtraSpellsHolder // invalid extra spell holder relations", tags) {
     ValidationDataMock parent;
-    ExtraSpellsHolderData data;
+    ExtraSpellsHolder::Data data;
     Content content = minimal_testing_content();
     Errors errors;
 
@@ -297,9 +297,9 @@ TEST_CASE("Validate ExtraSpellsHolder // invalid extra spell holder relations", 
     }
 }
 
-TEST_CASE("ExtraSpellsHolderData::emtpy") {
+TEST_CASE("ExtraSpellsHolder::Data::emtpy") {
     ValidationDataMock parent;
-    ExtraSpellsHolderData data;
+    ExtraSpellsHolder::Data data;
 
     REQUIRE(data.empty());
 

@@ -9,7 +9,6 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
 #include <core/models/spell/spell.hpp>
-#include <core/validation/spell/spell_data.hpp>
 
 namespace dnd {
 
@@ -33,7 +32,7 @@ Errors SpellParser::parse() {
             continue;
         }
         Errors spell_errors;
-        SpellData data;
+        Spell::Data data;
         data.name = spell_name;
         data.source_path = get_filepath();
         spell_errors += parse_required_attribute_into(spell_json, "description", data.description);
@@ -52,7 +51,7 @@ Errors SpellParser::parse() {
 }
 
 void SpellParser::save_result(Content& content) {
-    for (SpellData& data : spell_data) {
+    for (Spell::Data& data : spell_data) {
         content.add_spell_result(Spell::create(std::move(data)));
     }
 }

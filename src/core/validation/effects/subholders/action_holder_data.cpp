@@ -4,13 +4,12 @@
 
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
+#include <core/models/effects/subholders/action_holder.hpp>
 #include <core/validation/validation_data.hpp>
 
 namespace dnd {
 
-bool ActionHolderData::empty() const noexcept { return actions.empty() && bonus_actions.empty() && reactions.empty(); }
-
-Errors validate_actions_holder(const ActionHolderData& data) {
+Errors validate_actions_holder(const ActionHolder::Data& data) {
     Errors errors;
     for (const auto& [action_name, action_description] : data.actions) {
         if (action_name.empty()) {

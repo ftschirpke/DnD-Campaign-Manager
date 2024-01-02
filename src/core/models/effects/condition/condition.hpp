@@ -8,13 +8,11 @@
 #include <string_view>
 #include <unordered_map>
 
-#include <core/validation/effects/condition/condition_data.hpp>
-
 namespace dnd {
 
 class Condition {
 public:
-    using Data = ConditionData;
+    class Data;
 
     virtual ~Condition() noexcept = default;
     /**
@@ -46,6 +44,13 @@ protected:
 
     std::string left_side_identifier;
     std::function<bool(int, int)> comparison_operator;
+};
+
+class Condition::Data {
+public:
+    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+
+    std::string condition_str;
 };
 
 } // namespace dnd

@@ -1,5 +1,5 @@
-#ifndef EFFECT_DATA_HPP_
-#define EFFECT_DATA_HPP_
+#ifndef EFFECT_VALIDATION_HPP_
+#define EFFECT_VALIDATION_HPP_
 
 #include <dnd_config.hpp>
 
@@ -7,18 +7,12 @@
 #include <string>
 
 #include <core/errors/errors.hpp>
+#include <core/models/effects/stat_change/stat_change.hpp>
 
 namespace dnd {
 
-class StatChangeData {
-public:
-    std::strong_ordering operator<=>(const StatChangeData&) const noexcept = default;
-
-    std::string stat_change_str;
-};
-
-Errors validate_stat_change(const StatChangeData& data);
+Errors validate_stat_change(const StatChange::Data& data);
 
 } // namespace dnd
 
-#endif // EFFECT_DATA_HPP_
+#endif // EFFECT_VALIDATION_HPP_

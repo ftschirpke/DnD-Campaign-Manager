@@ -9,11 +9,11 @@
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
-#include <core/validation/validation_data.hpp>
+#include <core/models/character/feature_providers.hpp>
 
 namespace dnd {
 
-static Errors validate_feature_providers_raw(const FeatureProvidersData& data) {
+static Errors validate_feature_providers_raw(const FeatureProviders::Data& data) {
     Errors errors;
     if (data.species_name.empty()) {
         errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Species name cannot be empty.");
@@ -24,7 +24,7 @@ static Errors validate_feature_providers_raw(const FeatureProvidersData& data) {
     return errors;
 }
 
-static Errors validate_feature_providers_relations(const FeatureProvidersData& data, const Content& content) {
+static Errors validate_feature_providers_relations(const FeatureProviders::Data& data, const Content& content) {
     Errors errors;
     OptCRef<Species> species_optional = content.get_species().get(data.species_name);
     if (!species_optional.has_value()) {
@@ -82,7 +82,7 @@ static Errors validate_feature_providers_relations(const FeatureProvidersData& d
     return errors;
 }
 
-Errors validate_feature_providers_for_content(const FeatureProvidersData& data, const Content& content) {
+Errors validate_feature_providers_for_content(const FeatureProviders::Data& data, const Content& content) {
     Errors errors = validate_feature_providers_raw(data);
     errors += validate_feature_providers_relations(data, content);
     return errors;

@@ -83,7 +83,7 @@ static std::unique_ptr<ContentFilter> create_spell_filter(const std::string& gro
     return std::make_unique<SpellFilter>(std::move(spell_filter));
 }
 
-static std::vector<std::unique_ptr<ContentFilter>> spell_filters(ChoiceData& data) {
+static std::vector<std::unique_ptr<ContentFilter>> spell_filters(Choice::Data& data) {
     std::vector<std::unique_ptr<ContentFilter>> filters;
     if (!data.explicit_choices.empty()) {
         SpellFilter spell_filter;

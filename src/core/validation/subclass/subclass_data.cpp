@@ -2,10 +2,8 @@
 
 #include "subclass_data.hpp"
 
-#include <memory>
 #include <string>
 #include <unordered_set>
-#include <vector>
 
 #include <fmt/format.h>
 
@@ -13,15 +11,16 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
+#include <core/models/subclass/subclass.hpp>
 #include <core/validation/effects_provider/class_feature_data.hpp>
 #include <core/validation/spellcasting/spellcasting_data.hpp>
 
 namespace dnd {
 
-static Errors validate_subclass_raw_nonrecursively(const SubclassData& data) {
+static Errors validate_subclass_raw_nonrecursively(const Subclass::Data& data) {
     Errors errors;
     std::unordered_set<std::string> unique_feature_names;
-    for (const ClassFeatureData& feature_data : data.features_data) {
+    for (const ClassFeature::Data& feature_data : data.features_data) {
         if (unique_feature_names.contains(feature_data.name)) {
             errors.add_validation_error(
                 ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
@@ -44,7 +43,7 @@ static Errors validate_subclass_raw_nonrecursively(const SubclassData& data) {
     return errors;
 }
 
-static Errors validate_subclass_relations_nonrecursively(const SubclassData& data, const Content& content) {
+static Errors validate_subclass_relations_nonrecursively(const Subclass::Data& data, const Content& content) {
     Errors errors;
     if (content.get_subclasses().contains(data.name)) {
         errors.add_validation_error(
@@ -52,7 +51,7 @@ static Errors validate_subclass_relations_nonrecursively(const SubclassData& dat
             fmt::format("Subclass has duplicate name \"{}\".", data.name)
         );
     }
-    for (const ClassFeatureData& feature_data : data.features_data) {
+    for (const ClassFeature::Data& feature_data : data.features_data) {
         if (content.get_class_features().contains(feature_data.name)) {
             errors.add_validation_error(
                 ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
@@ -78,15 +77,15 @@ static Errors validate_subclass_relations_nonrecursively(const SubclassData& dat
     return errors;
 }
 
-Errors validate_subclass_nonrecursively_for_content(const SubclassData& data, const Content& content) {
+Errors validate_subclass_nonrecursively_for_content(const Subclass::Data& data, const Content& content) {
     Errors errors = validate_subclass_raw_nonrecursively(data);
     errors += validate_subclass_relations_nonrecursively(data, content);
     return errors;
 }
 
-Errors validate_subclass_recursively_for_content(const SubclassData& data, const Content& content) {
+Errors validate_subclass_recursively_for_content(const Subclass::Data& data, const Content& content) {
     Errors errors = validate_subclass_nonrecursively_for_content(data, content);
-    for (const ClassFeatureData& feature_data : data.features_data) {
+    for (const ClassFeature::Data& feature_data : data.features_data) {
         errors += validate_class_feature_recursively_for_content(feature_data, content);
     }
     errors += validate_spellcasting(data.spellcasting_data);

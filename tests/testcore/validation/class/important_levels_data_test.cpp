@@ -13,7 +13,7 @@ static constexpr const char* tags = "[core][validation][class]";
 
 TEST_CASE("Validate ImportantLevels", tags) {
     ValidationDataMock parent;
-    ImportantLevelsData data;
+    ImportantLevels::Data data;
     Errors errors;
 
     SECTION("at least one feat level is required") {

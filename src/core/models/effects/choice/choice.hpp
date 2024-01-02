@@ -12,16 +12,14 @@
 #include <core/models/effects/choice/choice_rules.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
 #include <core/utils/data_result.hpp>
-#include <core/validation/effects/choice/choice_data.hpp>
 
 namespace dnd {
 
 class Content;
-class EffectsData;
 
 class Choice {
 public:
-    using Data = ChoiceData;
+    class Data;
 
     static CreateResult<Choice> create_for(Data&& data, const Content& content);
 
@@ -41,6 +39,16 @@ private:
     std::vector<std::string> group_names;
     std::vector<std::string> explicit_choices;
     std::vector<std::unique_ptr<ContentFilter>> filters;
+};
+
+class Choice::Data {
+public:
+    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+
+    std::string attribute_name;
+    int amount;
+    std::vector<std::string> group_names;
+    std::vector<std::string> explicit_choices;
 };
 
 } // namespace dnd

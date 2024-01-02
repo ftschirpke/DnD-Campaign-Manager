@@ -6,13 +6,12 @@
 #include <set>
 
 #include <core/utils/data_result.hpp>
-#include <core/validation/class/important_levels_data.hpp>
 
 namespace dnd {
 
 class ImportantLevels {
 public:
-    using Data = ImportantLevelsData;
+    class Data;
 
     static CreateResult<ImportantLevels> create(Data&& data, int subclass_level);
 
@@ -23,6 +22,13 @@ private:
 
     std::set<int> feat_levels;
     int subclass_level;
+};
+
+class ImportantLevels::Data {
+public:
+    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+
+    std::set<int> feat_levels;
 };
 
 } // namespace dnd

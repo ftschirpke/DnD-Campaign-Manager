@@ -2,9 +2,6 @@
 
 #include "riv_holder_data.hpp"
 
-#include <set>
-#include <string>
-
 #include <fmt/format.h>
 
 #include <core/content.hpp>
@@ -12,11 +9,6 @@
 #include <core/errors/validation_error.hpp>
 
 namespace dnd {
-
-bool RIVHolderData::empty() const noexcept {
-    return damage_resistances.empty() && damage_immunities.empty() && damage_vulnerabilities.empty()
-           && condition_immunities.empty();
-}
 
 static Errors string_set_validate(const std::set<std::string>& string_set, const char* set_name) {
     Errors errors;
@@ -31,7 +23,7 @@ static Errors string_set_validate(const std::set<std::string>& string_set, const
     return errors;
 }
 
-static Errors validate_riv_holder_raw(const RIVHolderData& data) {
+static Errors validate_riv_holder_raw(const RIVHolder::Data& data) {
     Errors errors;
     errors += string_set_validate(data.damage_resistances, "Damage resistances");
     errors += string_set_validate(data.damage_immunities, "Damage immunities");
@@ -55,7 +47,7 @@ static Errors string_group_set_validate_relations(
     return errors;
 }
 
-static Errors validate_riv_holder_relations(const RIVHolderData& data, const Content& content) {
+static Errors validate_riv_holder_relations(const RIVHolder::Data& data, const Content& content) {
     Errors errors;
     errors += string_group_set_validate_relations(
         data.damage_resistances, "damage resistances", "damage types", content
@@ -70,7 +62,7 @@ static Errors validate_riv_holder_relations(const RIVHolderData& data, const Con
     return errors;
 }
 
-Errors validate_riv_holder_for_content(const RIVHolderData& data, const Content& content) {
+Errors validate_riv_holder_for_content(const RIVHolder::Data& data, const Content& content) {
     Errors errors = validate_riv_holder_raw(data);
     errors += validate_riv_holder_relations(data, content);
     return errors;

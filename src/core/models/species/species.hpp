@@ -3,7 +3,9 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <filesystem>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -11,7 +13,6 @@
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/source_info.hpp>
 #include <core/utils/data_result.hpp>
-#include <core/validation/species/species_data.hpp>
 
 namespace dnd {
 
@@ -20,7 +21,7 @@ class ContentVisitor;
 
 class Species : public ContentPiece {
 public:
-    using Data = SpeciesData;
+    class Data;
 
     static CreateResult<Species> create_for(Data&& data, const Content& content);
 
@@ -46,6 +47,14 @@ private:
     std::string description;
     SourceInfo source_info;
     std::vector<Feature> features;
+    bool subspecies;
+};
+
+class Species::Data : public ValidationData {
+public:
+    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+
+    std::vector<Feature::Data> features_data;
     bool subspecies;
 };
 
