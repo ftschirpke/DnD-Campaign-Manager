@@ -1,7 +1,7 @@
 {
     "name": "Tiefling",
     "description": "Individuals with infernal bloodlines, displaying demonic features and having innate magical abilities",
-    "has_subraces": false,
+    "has_subspecies": false,
     "features": {
         "Ability Score Increase (Tiefling)": {
             "description": "Your Intelligence score increases by 1, and your Charisma score increases by 2.",

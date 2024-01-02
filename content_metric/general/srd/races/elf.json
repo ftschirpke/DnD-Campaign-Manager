@@ -1,7 +1,7 @@
 {
     "name": "Elf",
-    "description": "Graceful and long-lived humanoids, with keen senses, mastery of magic, and an affinity for nature",
-    "has_subraces": true,
+    "description": "Gspeciesful and long-lived humanoids, with keen senses, mastery of magic, and an affinity for nature",
+    "has_subspecies": true,
     "features": {
         "Ability Score Increase (Elf)": {
             "description": "Your Dexterity score increases by 2.",
@@ -38,7 +38,7 @@
             "description": "Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is “trance.”) While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep."
         },
         "Languages of an Elf": {
-            "description": "You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other races. Many bards learn their language so they can add Elvish ballads to their repertoires.",
+            "description": "You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other species. Many bards learn their language so they can add Elvish ballads to their repertoires.",
             "languages": [
                 "Common", "Elvish"
             ]

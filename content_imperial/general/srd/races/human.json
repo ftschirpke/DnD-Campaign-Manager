@@ -1,7 +1,7 @@
 {
     "name": "Human",
     "description": "Versatile and adaptable individuals, found in diverse cultures and possessing no inherent racial traits",
-    "has_subraces": false,
+    "has_subspecies": false,
     "features": {
         "Ability Score Increase (Human)": {
             "description": "Your ability scores each increase by 1.",

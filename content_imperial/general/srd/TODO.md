@@ -14,7 +14,7 @@ Content that may not be formatted perfectly or a part of it is not implemented a
 - Special choices such as Eldritch Invocations (Warlock) and Fighting Styles ([Fighter](classes/fighter.json), [Paladin](classes/paladin.json), and [Ranger](classes/ranger.json)), [Sorcerer's](classes/sorcerer.json) Metamagic, [Warlock's](classes/warlock.json) Pact Boon
 
 - how to format features that have multiple steps e.g. something at level 3, something at level 5, and another thing at level 7
-  - [Infernal Legacy (Tiefling)](races/tiefling.json)
+  - [Infernal Legacy (Tiefling)](species/tiefling.json)
   - [Song of Rest (Bard)](classes/bard.json)
   - [Life Domain Spells (Life Domain - Cleric)](subclasses/life_domain.json)
   - [Oath of Devotion Spells (Oath of Devotion - Paladin)](subclasses/oath_of_devotion.json)

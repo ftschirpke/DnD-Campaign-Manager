@@ -1,7 +1,7 @@
 {
     "name": "Dwarf",
     "description": "Stout and hardy humanoids, known for their craftsmanship, resilience, and strong connections to the earth",
-    "has_subraces": true,
+    "has_subspecies": true,
     "features": {
         "Ability Score Increase (Dwarf)": {
             "description": "Your Constitution score increases by 2.",

@@ -1,6 +1,6 @@
 {
     "name": "High Elf",
-    "race": "Elf",
+    "species": "Elf",
     "description": "Elves with a natural inclination for magic and an affinity for the arcane arts.",
     "features": {
         "Ability Score Increase (High Elf)": {

@@ -1,7 +1,7 @@
 {
     "name": "Dragonborn",
     "description": "Dragon-like humanoids with scales, known for their breath weapon and strong ties to draconic heritage",
-    "has_subraces": false,
+    "has_subspecies": false,
     "features": {
         "Ability Score Increase (Dragonborn)": {
             "description": "Your Strength score increases by 2, and your Charisma score increases by 1.",

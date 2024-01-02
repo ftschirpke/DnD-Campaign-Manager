@@ -1,7 +1,7 @@
 {
     "name": "Half-Elf",
-    "description": "Individuals with mixed human and elf heritage, possessing a blend of their parent races' qualities and abilities",
-    "has_subraces": false,
+    "description": "Individuals with mixed human and elf heritage, possessing a blend of their parent species' qualities and abilities",
+    "has_subspecies": false,
     "features": {
         "Ability Score Increase (Half-Elf)": {
             "description": "Your Charisma score increases by 2, and two other ability scores of your choice increase by 1.",

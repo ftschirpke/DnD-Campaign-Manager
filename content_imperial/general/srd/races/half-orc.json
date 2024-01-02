@@ -1,7 +1,7 @@
 {
     "name": "Half-Orc",
     "description": "Individuals with mixed human and orc heritage, often strong and resilient, but with a fierce reputation",
-    "has_subraces": false,
+    "has_subspecies": false,
     "features": {
         "Ability Score Increase (Half-Orc)": {
             "description": "Your Strength score increases by 2, and your Constitution score increases by 1.",

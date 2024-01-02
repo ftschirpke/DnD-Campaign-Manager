@@ -1,6 +1,6 @@
 {
     "name": "Wood Elf",
-    "race": "Elf",
+    "species": "Elf",
     "description": "Elves with heightened speed, keen senses, and a strong connection to nature.",
     "features": {
         "Ability Score Increase (Wood Elf)": {

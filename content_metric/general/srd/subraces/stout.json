@@ -1,6 +1,6 @@
 {
     "name": "Stout",
-    "race": "Halfling",
+    "species": "Halfling",
     "description": "Halflings with exceptional resilience, endurance, and resistance to poison.",
     "features": {
         "Ability Score Increase (Stout)": {

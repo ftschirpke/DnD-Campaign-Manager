@@ -1,6 +1,6 @@
 {
     "name": "Lightfoot",
-    "race": "Halfling",
+    "species": "Halfling",
     "description": "Halflings with a talent for stealth, luck, and blending into diverse communities.",
     "features": {
         "Ability Score Increase (Lightfoot)": {
