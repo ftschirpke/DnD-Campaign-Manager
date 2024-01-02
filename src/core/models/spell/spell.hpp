@@ -3,7 +3,9 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <filesystem>
+#include <memory>
 #include <set>
 #include <string>
 
@@ -11,7 +13,6 @@
 #include <core/models/source_info.hpp>
 #include <core/models/spell/spell_components.hpp>
 #include <core/models/spell/spell_type.hpp>
-#include <core/validation/spell/spell_data.hpp>
 
 namespace dnd {
 
@@ -19,7 +20,7 @@ class ContentVisitor;
 
 class Spell : public ContentPiece {
 public:
-    using Data = SpellData;
+    class Data;
 
     static CreateResult<Spell> create(Data&& spell_data);
 
@@ -46,6 +47,19 @@ private:
     SourceInfo source_info;
     SpellComponents components;
     SpellType type;
+    std::string casting_time;
+    std::string range;
+    std::string duration;
+    std::set<std::string> classes;
+};
+
+class Spell::Data : public ValidationData {
+public:
+    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+
+    SpellComponents::Data components_data;
+    SpellType::Data type_data;
+
     std::string casting_time;
     std::string range;
     std::string duration;

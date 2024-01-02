@@ -11,6 +11,13 @@
 
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
+#include <core/models/effects/choice/choice.hpp>
+#include <core/models/effects/condition/condition.hpp>
+#include <core/models/effects/stat_change/stat_change.hpp>
+#include <core/models/effects/subholders/action_holder.hpp>
+#include <core/models/effects/subholders/extra_spells_holder.hpp>
+#include <core/models/effects/subholders/proficiency_holder.hpp>
+#include <core/models/effects/subholders/riv_holder.hpp>
 #include <core/parsing/parser.hpp>
 #include <core/validation/effects/choice/choice_data.hpp>
 #include <core/validation/effects/condition/condition_data.hpp>
@@ -25,7 +32,7 @@ namespace dnd {
 
 EffectsParser::EffectsParser(const std::filesystem::path& filepath) noexcept : Parser(filepath) {}
 
-Errors EffectsParser::parse_into(nlohmann::ordered_json&& json, EffectsData& data) const {
+Errors EffectsParser::parse_into(nlohmann::ordered_json&& json, Effects::Data& data) const {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
@@ -33,11 +40,11 @@ Errors EffectsParser::parse_into(nlohmann::ordered_json&& json, EffectsData& dat
         );
         return errors;
     }
-    errors += parse_activation_conditions_into(json, data.activation_conditions_data, data.get_parent());
+    errors += parse_activation_conditions_into(json, data.activation_conditions_data);
     if (json.contains("choose")) {
-        errors += parse_choices_into(json, data.choices_data, data.get_parent());
+        errors += parse_choices_into(json, data.choices_data);
     }
-    errors += parse_stat_changes_into(json, data.stat_changes_data, data.get_parent());
+    errors += parse_stat_changes_into(json, data.stat_changes_data);
     errors += parse_action_holder_into(json, data.action_holder_data);
     errors += parse_extra_spells_holder_into(json, data.extra_spells_holder_data);
     errors += parse_proficiency_holder_into(json, data.proficiency_holder_data);
@@ -45,9 +52,8 @@ Errors EffectsParser::parse_into(nlohmann::ordered_json&& json, EffectsData& dat
     return errors;
 }
 
-Errors EffectsParser::parse_activation_conditions_into(
-    nlohmann::ordered_json& json, std::vector<ConditionData>& data, const ValidationData* parent
-) const {
+Errors EffectsParser::parse_activation_conditions_into(nlohmann::ordered_json& json, std::vector<Condition::Data>& data)
+    const {
     Errors errors;
     bool has_activation = json.contains("activation");
     bool has_activations = json.contains("activations");
@@ -57,22 +63,20 @@ Errors EffectsParser::parse_activation_conditions_into(
             "The effects json contains both \"activation\" and \"activations\"."
         );
     } else if (has_activation) {
-        ConditionData& condition_data = data.emplace_back(parent);
+        Condition::Data& condition_data = data.emplace_back();
         errors += parse_optional_attribute_into(json, "activation", condition_data.condition_str);
     } else if (has_activations) {
         std::vector<std::string> activation_conditions_strs;
         errors += parse_optional_attribute_into(json, "activations", activation_conditions_strs);
         for (const std::string& activation_condition_str : activation_conditions_strs) {
-            ConditionData& condition_data = data.emplace_back(parent);
+            Condition::Data& condition_data = data.emplace_back();
             condition_data.condition_str = activation_condition_str;
         }
     }
     return errors;
 }
 
-Errors EffectsParser::parse_choices_into(
-    nlohmann::ordered_json& json, std::vector<ChoiceData>& data, const ValidationData* parent
-) const {
+Errors EffectsParser::parse_choices_into(nlohmann::ordered_json& json, std::vector<Choice::Data>& data) const {
     Errors errors;
     if (!json["choose"].is_object()) {
         errors.add_parsing_error(
@@ -82,7 +86,7 @@ Errors EffectsParser::parse_choices_into(
     }
     for (const auto& [attribute_name, choice_json] : json["choose"].items()) {
         Errors choice_errors;
-        ChoiceData& choice_data = data.emplace_back(parent);
+        Choice::Data& choice_data = data.emplace_back();
         choice_data.attribute_name = attribute_name;
         choice_errors += parse_required_attribute_into(choice_json, "amount", choice_data.amount);
 
@@ -110,19 +114,17 @@ Errors EffectsParser::parse_choices_into(
     return errors;
 }
 
-Errors EffectsParser::parse_stat_changes_into(
-    nlohmann::ordered_json& json, std::vector<StatChangeData>& data, const ValidationData* parent
-) const {
+Errors EffectsParser::parse_stat_changes_into(nlohmann::ordered_json& json, std::vector<StatChange::Data>& data) const {
     std::vector<std::string> stat_change_strings;
     Errors errors = parse_optional_attribute_into(json, "stat_changes", stat_change_strings);
     for (std::string& stat_change_string : stat_change_strings) {
-        StatChangeData& stat_change_data = data.emplace_back(parent);
+        StatChange::Data& stat_change_data = data.emplace_back();
         stat_change_data.stat_change_str = std::move(stat_change_string);
     }
     return errors;
 }
 
-Errors EffectsParser::parse_action_holder_into(nlohmann::ordered_json& json, ActionHolderData& data) const {
+Errors EffectsParser::parse_action_holder_into(nlohmann::ordered_json& json, ActionHolder::Data& data) const {
     Errors errors;
     errors += parse_optional_attribute_into(json, "actions", data.actions);
     errors += parse_optional_attribute_into(json, "bonus_actions", data.bonus_actions);
@@ -130,7 +132,8 @@ Errors EffectsParser::parse_action_holder_into(nlohmann::ordered_json& json, Act
     return errors;
 }
 
-Errors EffectsParser::parse_extra_spells_holder_into(nlohmann::ordered_json& json, ExtraSpellsHolderData& data) const {
+Errors EffectsParser::parse_extra_spells_holder_into(nlohmann::ordered_json& json, ExtraSpellsHolder::Data& data)
+    const {
     Errors errors;
     errors += parse_optional_attribute_into(json, "cantrips_free", data.free_cantrips);
     errors += parse_optional_attribute_into(json, "spells_at_will", data.at_will);
@@ -149,7 +152,7 @@ Errors EffectsParser::parse_extra_spells_holder_into(nlohmann::ordered_json& jso
     return errors;
 }
 
-Errors EffectsParser::parse_proficiency_holder_into(nlohmann::ordered_json& json, ProficiencyHolderData& data) const {
+Errors EffectsParser::parse_proficiency_holder_into(nlohmann::ordered_json& json, ProficiencyHolder::Data& data) const {
     Errors errors;
     errors += parse_optional_attribute_into(json, "armor_proficiencies", data.armor);
     errors += parse_optional_attribute_into(json, "weapon_proficiencies", data.weapons);
@@ -161,7 +164,7 @@ Errors EffectsParser::parse_proficiency_holder_into(nlohmann::ordered_json& json
     return errors;
 }
 
-Errors EffectsParser::parse_riv_holder_into(nlohmann::ordered_json& json, RIVHolderData& data) const {
+Errors EffectsParser::parse_riv_holder_into(nlohmann::ordered_json& json, RIVHolder::Data& data) const {
     Errors errors;
     errors += parse_optional_attribute_into(json, "damage_resistances", data.damage_resistances);
     errors += parse_optional_attribute_into(json, "damage_immunities", data.damage_immunities);

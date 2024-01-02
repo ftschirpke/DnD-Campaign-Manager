@@ -9,6 +9,7 @@
 
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
+#include <core/validation/effects/choice/choice_data.hpp>
 #include <core/validation/effects/condition/condition_data.hpp>
 #include <core/validation/effects/stat_change/stat_change_data.hpp>
 #include <core/validation/effects/subholders/action_holder_data.hpp>
@@ -16,41 +17,24 @@
 #include <core/validation/effects/subholders/proficiency_holder_data.hpp>
 #include <core/validation/effects/subholders/riv_holder_data.hpp>
 #include <core/validation/validation_data.hpp>
-#include <core/validation/validation_subdata.hpp>
 
 namespace dnd {
 
-EffectsData::EffectsData(const ValidationData* parent) noexcept
-    : ValidationSubdata(parent), activation_conditions_data(), choices_data(), stat_changes_data(),
-      action_holder_data(parent), extra_spells_holder_data(parent), proficiency_holder_data(parent),
-      riv_holder_data(parent) {}
-
-Errors EffectsData::validate() const {
+Errors validate_effects_recursively_for_content(const Effects::Data& data, const Content& content) {
     Errors errors;
-    for (const ConditionData& condition_data : activation_conditions_data) {
-        errors += condition_data.validate();
+    for (const Condition::Data& condition_data : data.activation_conditions_data) {
+        errors += validate_condition(condition_data);
     }
-    for (const ChoiceData& choice_data : choices_data) {
-        errors += choice_data.validate();
+    for (const Choice::Data& choice_data : data.choices_data) {
+        errors += validate_choice_for_content(choice_data, content);
     }
-    for (const StatChangeData& stat_change_data : stat_changes_data) {
-        errors += stat_change_data.validate();
+    for (const StatChange::Data& stat_change_data : data.stat_changes_data) {
+        errors += validate_stat_change(stat_change_data);
     }
-    errors += action_holder_data.validate();
-    errors += extra_spells_holder_data.validate();
-    errors += proficiency_holder_data.validate();
-    errors += riv_holder_data.validate();
-    return errors;
-}
-
-Errors EffectsData::validate_relations(const Content& content) const {
-    Errors errors;
-    for (const ChoiceData& choice_data : choices_data) {
-        errors += choice_data.validate_relations(content);
-    }
-    errors += extra_spells_holder_data.validate_relations(content);
-    errors += proficiency_holder_data.validate_relations(content);
-    errors += riv_holder_data.validate_relations(content);
+    errors += validate_actions_holder(data.action_holder_data);
+    errors += validate_extra_spells_holder_for_content(data.extra_spells_holder_data, content);
+    errors += validate_proficiency_holder_for_content(data.proficiency_holder_data, content);
+    errors += validate_riv_holder_for_content(data.riv_holder_data, content);
     return errors;
 }
 

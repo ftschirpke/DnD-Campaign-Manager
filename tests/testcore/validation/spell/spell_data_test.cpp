@@ -14,28 +14,9 @@ namespace dnd::test {
 
 static constexpr const char* tags = "[core][validation][spell]";
 
-static constexpr const char* fixed_components = "V, S, M (a bit of this and a bit of that)";
-static constexpr const char* fixed_type = "Evocation cantrip";
-
-static bool validate_fixed_values() {
-    ValidationDataMock parent;
-    SpellComponentsData components_data(&parent);
-    components_data.str = fixed_components;
-    SpellTypeData type_data(&parent);
-    type_data.str = fixed_type;
-    return components_data.validate().ok() && type_data.validate().ok();
-}
-
-static void set_valid_components_and_type(SpellData& data) {
-    data.components_data.str = fixed_components;
-    data.type_data.str = fixed_type;
-}
-
-TEST_CASE("SpellData::validate // valid spells", tags) {
-    SpellData data;
+TEST_CASE("Validate Spell // valid spells", tags) {
+    Spell::Data data;
     set_valid_mock_values(data, "Spell");
-    REQUIRE(validate_fixed_values());
-    set_valid_components_and_type(data);
     Errors errors;
 
     SECTION("Spell 1") {
@@ -43,8 +24,7 @@ TEST_CASE("SpellData::validate // valid spells", tags) {
         data.range = "120 feet";
         data.duration = "Instantaneous";
         data.classes = {"Sorcerer", "Wizard"};
-        REQUIRE_NOTHROW(errors = data.validate());
-        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE_NOTHROW(errors = validate_spell_nonrecursively(data));
         REQUIRE(errors.ok());
     }
 
@@ -53,15 +33,14 @@ TEST_CASE("SpellData::validate // valid spells", tags) {
         data.range = "150m";
         data.duration = "3 minutes";
         data.classes = {"Bard"};
-        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE_NOTHROW(errors = validate_spell_nonrecursively(data));
         REQUIRE(errors.ok());
     }
 }
 
-TEST_CASE("SpellData::validate // invalid spells", tags) {
-    SpellData data;
+TEST_CASE("Validate Spell // invalid spells", tags) {
+    Spell::Data data;
     set_valid_mock_values(data, "Spell");
-    set_valid_components_and_type(data);
     Errors errors;
 
     SECTION("Empty casting time") {
@@ -69,7 +48,7 @@ TEST_CASE("SpellData::validate // invalid spells", tags) {
         data.range = "range";
         data.duration = "duration";
         data.classes = {"class1", "class2"};
-        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE_NOTHROW(errors = validate_spell_nonrecursively(data));
         REQUIRE_FALSE(errors.ok());
     }
 
@@ -78,7 +57,7 @@ TEST_CASE("SpellData::validate // invalid spells", tags) {
         data.range = "";
         data.duration = "duration";
         data.classes = {"class1", "class2"};
-        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE_NOTHROW(errors = validate_spell_nonrecursively(data));
         REQUIRE_FALSE(errors.ok());
     }
 
@@ -87,7 +66,7 @@ TEST_CASE("SpellData::validate // invalid spells", tags) {
         data.range = "range";
         data.duration = "";
         data.classes = {"class1", "class2"};
-        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE_NOTHROW(errors = validate_spell_nonrecursively(data));
         REQUIRE_FALSE(errors.ok());
     }
 
@@ -96,7 +75,7 @@ TEST_CASE("SpellData::validate // invalid spells", tags) {
         data.range = "range";
         data.duration = "duration";
         data.classes = {};
-        REQUIRE_NOTHROW(errors = data.validate());
+        REQUIRE_NOTHROW(errors = validate_spell_nonrecursively(data));
         REQUIRE_FALSE(errors.ok());
     }
 }

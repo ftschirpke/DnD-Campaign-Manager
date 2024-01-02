@@ -3,13 +3,14 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <filesystem>
+#include <memory>
 #include <string>
 
 #include <core/models/content_piece.hpp>
 #include <core/models/source_info.hpp>
 #include <core/utils/data_result.hpp>
-#include <core/validation/item/item_data.hpp>
 
 namespace dnd {
 
@@ -17,7 +18,7 @@ class ContentVisitor;
 
 class Item : public ContentPiece {
 public:
-    using Data = ItemData;
+    class Data;
 
     static CreateResult<Item> create(Data&& item_data);
 
@@ -39,6 +40,14 @@ private:
     SourceInfo source_info;
     std::string cosmetic_description;
     bool attunement;
+};
+
+class Item::Data : public ValidationData {
+public:
+    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+
+    std::string cosmetic_description;
+    bool requires_attunement;
 };
 
 } // namespace dnd

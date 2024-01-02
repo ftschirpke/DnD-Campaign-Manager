@@ -9,9 +9,9 @@
 #include <nlohmann/json.hpp>
 
 #include <core/errors/errors.hpp>
+#include <core/models/effects_provider/class_feature.hpp>
 #include <core/parsing/effects/effects_parser.hpp>
 #include <core/parsing/parser.hpp>
-#include <core/validation/effects_provider/class_feature_data.hpp>
 #include <core/validation/validation_data.hpp>
 
 namespace dnd {
@@ -19,10 +19,8 @@ namespace dnd {
 class ClassFeatureParser : public Parser {
 public:
     explicit ClassFeatureParser(const std::filesystem::path& filepath) noexcept;
-    Errors parse_into(nlohmann::ordered_json&& json, ClassFeatureData& data) const;
-    Errors parse_multiple_into(
-        nlohmann::ordered_json&& json, std::vector<ClassFeatureData>& data, const ValidationData* parent
-    ) const;
+    Errors parse_into(nlohmann::ordered_json&& json, ClassFeature::Data& data) const;
+    Errors parse_multiple_into(nlohmann::ordered_json&& json, std::vector<ClassFeature::Data>& data) const;
 private:
     EffectsParser effects_parser;
 };

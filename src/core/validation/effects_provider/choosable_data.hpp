@@ -1,29 +1,16 @@
-#ifndef CHOOSABLE_DATA_HPP_
-#define CHOOSABLE_DATA_HPP_
+#ifndef CHOOSABLE_VALIDATION_HPP_
+#define CHOOSABLE_VALIDATION_HPP_
 
 #include <dnd_config.hpp>
 
-#include <compare>
-#include <memory>
-#include <vector>
-
-#include <core/validation/effects/condition/condition_data.hpp>
-#include <core/validation/effects_provider/feature_data.hpp>
+#include <core/errors/errors.hpp>
+#include <core/models/effects_provider/choosable.hpp>
 
 namespace dnd {
 
-class ChoosableData : public FeatureData {
-public:
-    ChoosableData() noexcept;
-    std::strong_ordering operator<=>(const ChoosableData&) const noexcept = default;
-    virtual std::unique_ptr<ValidationData> pack() const override;
-    virtual Errors validate() const override;
-    virtual Errors validate_nonrecursively() const override;
-
-    std::string type;
-    std::vector<ConditionData> prerequisites_data;
-};
+Errors validate_choosable_nonrecursively(const Choosable::Data& data);
+Errors validate_choosable_recursively_for_content(const Choosable::Data& data, const Content& content);
 
 } // namespace dnd
 
-#endif // CHOOSABLE_DATA_HPP_
+#endif // CHOOSABLE_VALIDATION_HPP_

@@ -3,16 +3,16 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <string>
 
 #include <core/utils/data_result.hpp>
-#include <core/validation/spell/spell_components_data.hpp>
 
 namespace dnd {
 
 class SpellComponents {
 public:
-    using Data = SpellComponentsData;
+    class Data;
 
     static CreateResult<SpellComponents> create(Data&& components_data);
 
@@ -41,6 +41,13 @@ private:
     bool somatic;
     bool material;
     std::string material_components;
+};
+
+class SpellComponents::Data {
+public:
+    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+
+    std::string str;
 };
 
 } // namespace dnd

@@ -20,7 +20,7 @@
 namespace dnd {
 
 FactoryResult<StatChange> create_stat_change(StatChange::Data&& data) {
-    Errors errors = data.validate();
+    Errors errors = validate_stat_change(data);
     if (!errors.ok()) {
         return InvalidFactory<StatChange>(std::move(data), std::move(errors));
     }

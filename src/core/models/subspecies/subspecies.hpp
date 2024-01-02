@@ -3,7 +3,9 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <filesystem>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -12,7 +14,7 @@
 #include <core/models/source_info.hpp>
 #include <core/models/species/species.hpp>
 #include <core/utils/data_result.hpp>
-#include <core/validation/subspecies/subspecies_data.hpp>
+#include <core/utils/types.hpp>
 
 namespace dnd {
 
@@ -21,7 +23,7 @@ class ContentVisitor;
 
 class Subspecies : public ContentPiece {
 public:
-    using Data = SubspeciesData;
+    class Data;
 
     static CreateResult<Subspecies> create_for(Data&& data, const Content& content);
 
@@ -34,20 +36,28 @@ public:
     const std::string& get_description() const noexcept override;
     const SourceInfo& get_source_info() const noexcept override;
     const std::vector<Feature>& get_features() const noexcept;
-    const Species* get_species() const noexcept;
+    CRef<Species> get_species() const noexcept;
 
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Subspecies(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path,
-        std::vector<Feature>&& features, const Species* species
+        std::vector<Feature>&& features, CRef<Species> species
     ) noexcept;
 
     std::string name;
     std::string description;
     SourceInfo source_info;
     std::vector<Feature> features;
-    const Species* species;
+    CRef<Species> species;
+};
+
+class Subspecies::Data : public ValidationData {
+public:
+    std::strong_ordering operator<=>(const Subspecies::Data&) const noexcept = default;
+
+    std::vector<Feature::Data> features_data;
+    std::string species_name;
 };
 
 } // namespace dnd

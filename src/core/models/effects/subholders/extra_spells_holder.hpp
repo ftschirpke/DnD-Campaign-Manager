@@ -3,10 +3,12 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
+#include <set>
+#include <string>
 #include <vector>
 
 #include <core/utils/data_result.hpp>
-#include <core/validation/effects/subholders/extra_spells_holder_data.hpp>
 
 namespace dnd {
 
@@ -18,7 +20,7 @@ class Spell;
  */
 class ExtraSpellsHolder {
 public:
-    using Data = ExtraSpellsHolderData;
+    class Data;
 
     static CreateResult<ExtraSpellsHolder> create_for(Data&& data, const Content& content);
 
@@ -91,6 +93,36 @@ private:
     // spells that are added to your spell list
     std::vector<const Spell*> added_to_spell_list;
 };
+
+class ExtraSpellsHolder::Data {
+public:
+    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+    bool empty() const noexcept;
+
+    // cantrips that do not count against the number of cantrips known
+    std::set<std::string> free_cantrips;
+    // spells that you can cast without expending a spell slot or material components
+    std::set<std::string> at_will;
+    // spells that you can cast once a day (or rather once between two long rests)
+    // these spells do not require spell slots
+    std::set<std::string> innate;
+    // spells that you can cast once a day (or rather once between two long rests)
+    // these spells do require spell slots
+    std::set<std::string> free_once_a_day;
+    // spells that are added to your spell list and you know them / you always have them prepared
+    // (these spells do not count to the number of spells you know)
+    std::set<std::string> spells_known;
+    // spells that are added to your spell list and you know them
+    // these spells do count to the number of spells you know
+    std::set<std::string> spells_known_included;
+    // spells that are added to your spell list
+    std::set<std::string> added_to_spell_list;
+};
+
+inline bool ExtraSpellsHolder::Data::empty() const noexcept {
+    return free_cantrips.empty() && at_will.empty() && innate.empty() && free_once_a_day.empty() && spells_known.empty()
+           && spells_known_included.empty() && added_to_spell_list.empty();
+}
 
 } // namespace dnd
 

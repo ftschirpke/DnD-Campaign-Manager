@@ -11,18 +11,19 @@
 #include <core/models/content_piece.hpp>
 #include <core/models/source_info.hpp>
 #include <core/utils/data_result.hpp>
+#include <core/validation/item/item_data.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
 namespace dnd {
 
-CreateResult<Item> Item::create(Data&& item_data) {
-    Errors errors = item_data.validate();
+CreateResult<Item> Item::create(Data&& data) {
+    Errors errors = validate_item(data);
     if (!errors.ok()) {
-        return InvalidCreate<Item>(std::move(item_data), std::move(errors));
+        return InvalidCreate<Item>(std::move(data), std::move(errors));
     }
     return ValidCreate(Item(
-        std::move(item_data.name), std::move(item_data.description), std::move(item_data.source_path),
-        std::move(item_data.cosmetic_description), item_data.requires_attunement
+        std::move(data.name), std::move(data.description), std::move(data.source_path),
+        std::move(data.cosmetic_description), data.requires_attunement
     ));
 }
 

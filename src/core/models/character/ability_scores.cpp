@@ -13,7 +13,7 @@ namespace dnd {
 static int calculate_modifier(int score) noexcept { return score / 2 - 5; }
 
 CreateResult<AbilityScores> AbilityScores::create(Data&& data) {
-    Errors errors = data.validate();
+    Errors errors = validate_ability_scores(data);
     if (!errors.ok()) {
         return InvalidCreate<AbilityScores>(std::move(data), std::move(errors));
     }

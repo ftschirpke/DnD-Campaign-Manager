@@ -84,7 +84,7 @@ Errors SubclassParser::parse() {
     errors += parse_required_attribute_into(json, "class", data.class_name);
 
     if (json.contains("features")) {
-        errors += class_feature_parser.parse_multiple_into(std::move(json["features"]), data.features_data, &data);
+        errors += class_feature_parser.parse_multiple_into(std::move(json["features"]), data.features_data);
     } else {
         errors.add_parsing_error(
             ParsingError::Code::MISSING_ATTRIBUTE, get_filepath(), "Character subclass has no features."

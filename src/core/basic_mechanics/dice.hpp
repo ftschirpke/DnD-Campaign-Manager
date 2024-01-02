@@ -6,8 +6,10 @@
 #include <map>
 #include <string>
 
+#include <tl/expected.hpp>
+
+#include <core/errors/errors.hpp>
 #include <core/utils/data_result.hpp>
-#include <core/validation/basic_mechanics/dice_data.hpp>
 
 namespace dnd {
 
@@ -24,56 +26,20 @@ enum class DiceType {
     D100 = 100,
 };
 
-class DiceData;
-
 class Dice {
 public:
-    using Data = DiceData;
-
-    /**
-     * @brief Constructs a dice object with one die of the given type
-     * @param dice_type the type of die to construct the dice object with
-     * @return the constructed dice object
-     * @throws invalid_data if the dice type is invalid
-     */
-    static Dice single_from_int(int dice_number);
-    /**
-     * @brief Constructs a dice object with one die of the given type and a modifier
-     * @param dice_type the type of die to construct the dice object with
-     * @param modifier the modifier to add to the dice roll
-     * @return the constructed dice object
-     * @throws invalid_data if the dice type is invalid
-     */
-    static Dice single_from_int_with_modifier(int dice_number, int modifier);
-    /**
-     * @brief Constructs a dice object with multiple dice of the given type
-     * @param dice_type the type of die to construct the dice object with
-     * @param dice_count the number of dice to construct the dice object with
-     * @return the constructed dice object
-     * @throws invalid_data if the dice type is invalid
-     */
-    static Dice multi_from_int(int dice_number, int dice_count);
-    /**
-     * @brief Constructs a dice object with multiple dice of the given type and a modifier
-     * @param dice_type the type of die to construct the dice object with
-     * @param dice_count the number of dice to construct the dice object with
-     * @param modifier the modifier to add to the dice roll
-     * @return the constructed dice object
-     * @throws invalid_data if the dice type is invalid
-     */
-    static Dice multi_from_int_with_modifier(int dice_number, int dice_count, int modifier);
-    /**
-     * @brief Constructs a dice object from the given string
-     * @param str the string to construct the dice object from
-     * @return the constructed dice object
-     * @throw invalid_data if the string is invalid
-     */
-    static Dice from_string(std::string&& str);
-
-    static CreateResult<Dice> create(Data&& data);
-
-    Dice(std::map<DiceType, int> dice_counts);
-    Dice(std::map<DiceType, int> dice_counts, int modifier);
+    static tl::expected<Dice, Errors> single_from_int(int dice_number) noexcept;
+    static tl::expected<Dice, Errors> single_from_int_with_modifier(int dice_number, int modifier) noexcept;
+    static tl::expected<Dice, Errors> multi_from_int(int dice_number, int dice_count) noexcept;
+    static tl::expected<Dice, Errors> multi_from_int_with_modifier(
+        int dice_number, int dice_count, int modifier
+    ) noexcept;
+    static tl::expected<Dice, Errors> from_string(const std::string& str) noexcept;
+    static tl::expected<Dice, Errors> from_string(std::string&& str) noexcept;
+    static tl::expected<Dice, Errors> from_dice_count_map(std::map<DiceType, int>&& dice_counts) noexcept;
+    static tl::expected<Dice, Errors> from_dice_count_map_with_modifier(
+        std::map<DiceType, int>&& dice_counts, int modifier
+    ) noexcept;
 
     int min_value() const noexcept;
     int max_value() const noexcept;
@@ -81,6 +47,8 @@ public:
 
     std::string to_string() const noexcept;
 private:
+    Dice(std::map<DiceType, int>&& dice_counts, int modifier) noexcept;
+
     std::map<DiceType, int> dice_counts;
     int modifier;
 };

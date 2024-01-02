@@ -1,5 +1,5 @@
-#ifndef DECISION_DATA_HPP_
-#define DECISION_DATA_HPP_
+#ifndef DECISION_VALIDATION_HPP_
+#define DECISION_VALIDATION_HPP_
 
 #include <dnd_config.hpp>
 
@@ -9,32 +9,19 @@
 #include <vector>
 
 #include <core/errors/errors.hpp>
-#include <core/validation/validation_subdata.hpp>
+#include <core/models/character/character.hpp>
+#include <core/models/character/decision/decision.hpp>
+#include <core/utils/types.hpp>
 
 namespace dnd {
 
-class CharacterData;
+class Content;
 class Effects;
 
-class DecisionData : public ValidationSubdata {
-public:
-    DecisionData(const CharacterData* parent, const Effects* target) noexcept;
-    std::strong_ordering operator<=>(const DecisionData&) const noexcept = default;
-    virtual Errors validate() const override;
-    virtual Errors validate_relations(const Content& content) const override;
-
-    const CharacterData* get_character_data() const noexcept;
-    const Effects* get_target() const noexcept;
-
-    void set_target(const Effects* new_target) noexcept;
-
-    std::string feature_name;
-    std::map<std::string, std::vector<std::string>> selections;
-private:
-    const CharacterData* character_data;
-    const Effects* target;
-};
+Errors validate_decision_for_character_and_content(
+    const Decision::Data& data, const Character::Data& character_data, const Content& content
+);
 
 } // namespace dnd
 
-#endif // DECISION_DATA_HPP_
+#endif // DECISION_VALIDATION_HPP_

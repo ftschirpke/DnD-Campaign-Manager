@@ -9,10 +9,10 @@
 
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
+#include <core/models/effects/effects.hpp>
+#include <core/models/effects_provider/feature.hpp>
 #include <core/parsing/effects/effects_parser.hpp>
 #include <core/parsing/parser.hpp>
-#include <core/validation/effects/effects_data.hpp>
-#include <core/validation/effects_provider/feature_data.hpp>
 #include <core/validation/validation_data.hpp>
 
 namespace dnd {
@@ -20,7 +20,7 @@ namespace dnd {
 FeatureParser::FeatureParser(const std::filesystem::path& filepath) noexcept
     : Parser(filepath), effects_parser(filepath) {}
 
-Errors FeatureParser::parse_into(nlohmann::ordered_json&& json, FeatureData& data) const {
+Errors FeatureParser::parse_into(nlohmann::ordered_json&& json, Feature::Data& data) const {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
@@ -37,9 +37,7 @@ Errors FeatureParser::parse_into(nlohmann::ordered_json&& json, FeatureData& dat
     return errors;
 }
 
-Errors FeatureParser::parse_multiple_into(
-    nlohmann::ordered_json&& json, std::vector<FeatureData>& data, const ValidationData* parent
-) const {
+Errors FeatureParser::parse_multiple_into(nlohmann::ordered_json&& json, std::vector<Feature::Data>& data) const {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(
@@ -49,7 +47,7 @@ Errors FeatureParser::parse_multiple_into(
     }
 
     for (auto& [feature_name, feature_json] : json.items()) {
-        FeatureData& feature_data = data.emplace_back(parent);
+        Feature::Data& feature_data = data.emplace_back();
         feature_data.name = feature_name;
         feature_data.source_path = get_filepath();
         errors += parse_into(std::move(feature_json), feature_data);

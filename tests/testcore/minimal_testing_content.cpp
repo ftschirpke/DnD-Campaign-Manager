@@ -17,6 +17,8 @@
 #include <core/validation/class/class_data.hpp>
 #include <core/validation/species/species_data.hpp>
 #include <core/validation/spell/spell_data.hpp>
+#include <core/validation/subclass/subclass_data.hpp>
+#include <core/validation/subspecies/subspecies_data.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
 namespace dnd::test {
@@ -41,7 +43,7 @@ static void add_groups(Content& content) {
 }
 
 static void add_spells(Content& content) {
-    SpellData spell;
+    Spell::Data spell;
     set_valid_mock_values(spell, "Dancing Lights");
     spell.components_data.str = "V, S, M (a bit of phosphorus or wychwood, or a glowworm)";
     spell.type_data.str = "Evocation cantrip";
@@ -49,11 +51,10 @@ static void add_spells(Content& content) {
     spell.range = "120 feet";
     spell.duration = "Concentration, up to 1 minute";
     spell.classes = {"Bard", "Sorcerer", "Wizard"};
-    assert(spell.validate().ok());
-    assert(spell.validate_relations(content).ok());
+    assert(validate_spell_recursively(spell).ok());
     content.add_spell(Spell::create(std::move(spell)).value());
 
-    SpellData spell2;
+    Spell::Data spell2;
     set_valid_mock_values(spell2, "Fireball");
     spell2.components_data.str = "V, S, M (a tiny ball of bat guano and sulfur)";
     spell2.type_data.str = "3rd-level Evocation";
@@ -61,11 +62,10 @@ static void add_spells(Content& content) {
     spell2.range = "150 feet";
     spell2.duration = "Instantaneous";
     spell2.classes = {"Sorcerer", "Wizard"};
-    assert(spell2.validate().ok());
-    assert(spell2.validate_relations(content).ok());
+    assert(validate_spell_recursively(spell2).ok());
     content.add_spell(Spell::create(std::move(spell2)).value());
 
-    SpellData spell3;
+    Spell::Data spell3;
     set_valid_mock_values(spell3, "Cure Wounds");
     spell3.components_data.str = "V, S";
     spell3.type_data.str = "1st-level Evocation";
@@ -73,111 +73,105 @@ static void add_spells(Content& content) {
     spell3.range = "Touch";
     spell3.duration = "Instantaneous";
     spell3.classes = {"Bard", "Cleric", "Druid", "Paladin", "Ranger"};
-    assert(spell3.validate().ok());
-    assert(spell3.validate_relations(content).ok());
+    assert(validate_spell_recursively(spell3).ok());
     content.add_spell(Spell::create(std::move(spell3)).value());
 }
 
 static void add_classes(Content& content) {
-    ClassData class_data;
+    Class::Data class_data;
     set_valid_mock_values(class_data, "Wizard");
     class_data.spellcasting_data.is_spellcaster = true;
     class_data.spellcasting_data.ability = "INT";
     class_data.spellcasting_data.is_spells_known_type = true;
-    ClassFeatureData& feature_data = class_data.features_data.emplace_back(&class_data);
+    ClassFeature::Data& feature_data = class_data.features_data.emplace_back();
     set_valid_mock_values(feature_data, "Example Class Feature");
+    feature_data.level = 1;
     class_data.subclass_feature_name = "Example Class Feature";
-    class_data.hit_dice_data.str = "d6";
+    class_data.hit_dice_str = "d6";
     class_data.important_levels_data.feat_levels = {4, 8, 12, 16, 19};
-    assert(class_data.validate().ok());
-    assert(class_data.validate_relations(content).ok());
+    assert(validate_class_recursively_for_content(class_data, content).ok());
     content.add_class(Class::create_for(std::move(class_data), content).value());
 
-    ClassData class_data2;
+    Class::Data class_data2;
     set_valid_mock_values(class_data2, "Rogue");
     class_data2.spellcasting_data.is_spellcaster = false;
-    ClassFeatureData& feature_data2 = class_data2.features_data.emplace_back(&class_data2);
+    ClassFeature::Data& feature_data2 = class_data2.features_data.emplace_back();
     set_valid_mock_values(feature_data2, "Example Class Feature 2");
+    feature_data2.level = 20;
     class_data2.subclass_feature_name = "Example Class Feature 2";
-    class_data2.hit_dice_data.str = "d8";
+    class_data2.hit_dice_str = "d8";
     class_data2.important_levels_data.feat_levels = {4, 8, 12, 16, 19};
-    assert(class_data2.validate().ok());
-    assert(class_data2.validate_relations(content).ok());
+    assert(validate_class_recursively_for_content(class_data2, content).ok());
     content.add_class(Class::create_for(std::move(class_data2), content).value());
 
-    SubclassData subclass_data;
+    Subclass::Data subclass_data;
     set_valid_mock_values(subclass_data, "Abjuration Wizard");
     subclass_data.spellcasting_data.is_spellcaster = false;
-    ClassFeatureData& feature_data3 = subclass_data.features_data.emplace_back(&subclass_data);
+    ClassFeature::Data& feature_data3 = subclass_data.features_data.emplace_back();
+    feature_data3.level = 2;
     set_valid_mock_values(feature_data3, "Example Subclass Feature");
     subclass_data.class_name = "Wizard";
-    assert(subclass_data.validate().ok());
-    assert(subclass_data.validate_relations(content).ok());
+    assert(validate_subclass_recursively_for_content(subclass_data, content).ok());
     content.add_subclass(Subclass::create_for(std::move(subclass_data), content).value());
 
-    SubclassData subclass_data2;
+    Subclass::Data subclass_data2;
     set_valid_mock_values(subclass_data2, "Assassin");
     subclass_data2.spellcasting_data.is_spellcaster = false;
-    ClassFeatureData& feature_data4 = subclass_data2.features_data.emplace_back(&subclass_data2);
+    ClassFeature::Data& feature_data4 = subclass_data2.features_data.emplace_back();
+    feature_data4.level = 3;
     set_valid_mock_values(feature_data4, "Example Subclass Feature 2");
     subclass_data2.class_name = "Rogue";
-    assert(subclass_data2.validate().ok());
-    assert(subclass_data2.validate_relations(content).ok());
+    assert(validate_subclass_recursively_for_content(subclass_data2, content).ok());
     content.add_subclass(Subclass::create_for(std::move(subclass_data2), content).value());
 }
 
 static void add_species(Content& content) {
-    SpeciesData species_data1;
+    Species::Data species_data1;
     set_valid_mock_values(species_data1, "Dwarf");
-    FeatureData& feature_data1 = species_data1.features_data.emplace_back(&species_data1);
+    Feature::Data& feature_data1 = species_data1.features_data.emplace_back();
     set_valid_mock_values(feature_data1, "Example Species Feature");
     species_data1.subspecies = true;
-    assert(species_data1.validate().ok());
-    assert(species_data1.validate_relations(content).ok());
+    assert(validate_species_recursively_for_content(species_data1, content).ok());
     content.add_species(Species::create_for(std::move(species_data1), content).value());
 
-    SpeciesData species_data2;
+    Species::Data species_data2;
     set_valid_mock_values(species_data2, "Human");
-    FeatureData& feature_data2 = species_data2.features_data.emplace_back(&species_data2);
+    Feature::Data& feature_data2 = species_data2.features_data.emplace_back();
     set_valid_mock_values(feature_data2, "Example Species Feature 2");
     species_data2.subspecies = false;
-    assert(species_data2.validate().ok());
-    assert(species_data2.validate_relations(content).ok());
+    assert(validate_species_recursively_for_content(species_data2, content).ok());
     content.add_species(Species::create_for(std::move(species_data2), content).value());
 
-    SpeciesData species_data3;
+    Species::Data species_data3;
     set_valid_mock_values(species_data3, "Elf");
-    FeatureData& feature_data3 = species_data3.features_data.emplace_back(&species_data3);
+    Feature::Data& feature_data3 = species_data3.features_data.emplace_back();
     set_valid_mock_values(feature_data3, "Example Species Feature 3");
     species_data3.subspecies = true;
-    assert(species_data3.validate().ok());
-    assert(species_data3.validate_relations(content).ok());
+    assert(validate_species_recursively_for_content(species_data3, content).ok());
     content.add_species(Species::create_for(std::move(species_data3), content).value());
 
-    SubspeciesData subspecies_data1;
+    Subspecies::Data subspecies_data1;
     set_valid_mock_values(subspecies_data1, "Hill Dwarf");
-    FeatureData& feature_data4 = subspecies_data1.features_data.emplace_back(&subspecies_data1);
+    Feature::Data& feature_data4 = subspecies_data1.features_data.emplace_back();
     set_valid_mock_values(feature_data4, "Example Subspecies Feature");
     subspecies_data1.species_name = "Dwarf";
-    assert(subspecies_data1.validate().ok());
-    assert(subspecies_data1.validate_relations(content).ok());
+    assert(validate_subspecies_recursively_for_content(subspecies_data1, content).ok());
     content.add_subspecies(Subspecies::create_for(std::move(subspecies_data1), content).value());
 
-    SubspeciesData subspecies_data2;
+    Subspecies::Data subspecies_data2;
     set_valid_mock_values(subspecies_data2, "High Elf");
-    FeatureData& feature_data5 = subspecies_data2.features_data.emplace_back(&subspecies_data2);
+    Feature::Data& feature_data5 = subspecies_data2.features_data.emplace_back();
     set_valid_mock_values(feature_data5, "Example Subspecies Feature 2");
     subspecies_data2.species_name = "Elf";
-    assert(subspecies_data2.validate().ok());
-    assert(subspecies_data2.validate_relations(content).ok());
+    assert(validate_subspecies_recursively_for_content(subspecies_data2, content).ok());
     content.add_subspecies(Subspecies::create_for(std::move(subspecies_data2), content).value());
 }
 
 static void add_characters(Content& content) {
     DND_UNUSED(content);
-    CharacterData character_data;
+    Character::Data character_data;
     set_valid_mock_values(character_data, "Example Character");
-    FeatureData& feature_data = character_data.features_data.emplace_back(&character_data);
+    Feature::Data& feature_data = character_data.features_data.emplace_back();
     set_valid_mock_values(feature_data, "Example Character Feature");
     character_data.base_ability_scores_data.ability_scores = {10, 8, 12, 15, 13, 14};
     character_data.feature_providers_data.species_name = "Dwarf";
@@ -187,8 +181,7 @@ static void add_characters(Content& content) {
     character_data.progression_data.level = 4;
     character_data.progression_data.xp = 4200;
     character_data.progression_data.hit_dice_rolls = {6, 4, 2, 5};
-    assert(character_data.validate().ok());
-    assert(character_data.validate_relations(content).ok());
+    assert(validate_character_recursively_for_content(character_data, content).ok());
     content.add_character(Character::create_for(std::move(character_data), content).value());
 }
 

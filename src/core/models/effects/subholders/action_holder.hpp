@@ -7,7 +7,6 @@
 #include <string>
 
 #include <core/utils/data_result.hpp>
-#include <core/validation/effects/subholders/action_holder_data.hpp>
 
 namespace dnd {
 
@@ -16,7 +15,7 @@ namespace dnd {
  */
 class ActionHolder {
 public:
-    using Data = ActionHolderData;
+    class Data;
 
     static CreateResult<ActionHolder> create(Data&& data);
 
@@ -36,6 +35,20 @@ private:
     std::map<std::string, std::string> bonus_actions;
     std::map<std::string, std::string> reactions;
 };
+
+class ActionHolder::Data {
+public:
+    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+    bool empty() const noexcept;
+
+    std::map<std::string, std::string> actions;
+    std::map<std::string, std::string> bonus_actions;
+    std::map<std::string, std::string> reactions;
+};
+
+inline bool ActionHolder::Data::empty() const noexcept {
+    return actions.empty() && bonus_actions.empty() && reactions.empty();
+}
 
 } // namespace dnd
 

@@ -1,7 +1,5 @@
 #include <dnd_config.hpp>
 
-#include "core/searching/advanced_search/advanced_content_search.hpp"
-#include "core/utils/types.hpp"
 #include "session.hpp"
 
 #include <chrono>
@@ -19,8 +17,10 @@
 #include <core/models/content_piece.hpp>
 #include <core/models/source_info.hpp>
 #include <core/parsing/content_parsing.hpp>
+#include <core/searching/advanced_search/advanced_content_search.hpp>
 #include <core/searching/fuzzy_search/fuzzy_content_search.hpp>
 #include <core/utils/string_manipulation.hpp>
+#include <core/utils/types.hpp>
 #include <core/visitors/content/collect_open_tabs_visitor.hpp>
 #include <core/visitors/content/list_content_visitor.hpp>
 
@@ -157,16 +157,14 @@ Errors Session::set_campaign_name(const std::string& new_campaign_name) {
     Errors campaign_errors;
     if (campaign_name == new_campaign_name) {
         if (campaign_name.empty()) {
-            campaign_errors.add_validation_error(
-                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, nullptr, "The campaign name is empty."
-            );
+            campaign_errors.add_runtime_error(RuntimeError::Code::INVALID_ARGUMENT, "The campaign name is empty.");
         }
         return campaign_errors;
     }
     std::vector<std::string> possible_names = get_possible_campaign_names();
     if (std::find(possible_names.begin(), possible_names.end(), new_campaign_name) == possible_names.end()) {
-        campaign_errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, nullptr,
+        campaign_errors.add_runtime_error(
+            RuntimeError::Code::INVALID_ARGUMENT,
             fmt::format("The campaign name \"{}\" is not valid.", new_campaign_name)
         );
         return campaign_errors;
@@ -180,21 +178,16 @@ Errors Session::set_campaign_name(const std::string& new_campaign_name) {
 static Errors validate_content_directory(const std::filesystem::path& content_directory) {
     Errors errors;
     if (!std::filesystem::exists(content_directory)) {
-        errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, nullptr, "The content directory does not exist."
-        );
+        errors.add_runtime_error(RuntimeError::Code::INVALID_ARGUMENT, "The content directory does not exist.");
     } else if (!std::filesystem::is_directory(content_directory)) {
-        errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, nullptr, "The content directory is not a directory."
-        );
+        errors.add_runtime_error(RuntimeError::Code::INVALID_ARGUMENT, "The content directory is not a directory.");
     } else if (!std::filesystem::exists(content_directory / "general")) {
-        errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, nullptr,
-            "The content directory does not contain a \"general\" directory."
+        errors.add_runtime_error(
+            RuntimeError::Code::INVALID_ARGUMENT, "The content directory does not contain a \"general\" directory."
         );
     } else if (!std::filesystem::is_directory(content_directory / "general")) {
-        errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, nullptr,
+        errors.add_runtime_error(
+            RuntimeError::Code::INVALID_ARGUMENT,
             "The content directory does not contain a \"general\" directory, but a file with the same name."
         );
     }
@@ -205,9 +198,7 @@ Errors Session::set_content_directory(const std::filesystem::path& new_content_d
     Errors content_dir_errors;
     if (content_directory == new_content_directory) {
         if (content_directory.empty()) {
-            content_dir_errors.add_validation_error(
-                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, nullptr, "The content directory is empty."
-            );
+            errors.add_runtime_error(RuntimeError::Code::INVALID_ARGUMENT, "The content directory is empty.");
         }
         return content_dir_errors;
     }
@@ -348,15 +339,12 @@ void Session::parse_content_and_initialize() {
             }
             case 1: {
                 const ValidationError& validation_error = std::get<ValidationError>(error);
-                if (validation_error.get_validation_data() == nullptr) {
-                    validation_error_messages.emplace_back(validation_error.get_error_message());
-                } else {
-                    SourceInfo source_info(validation_error.get_validation_data()->source_path);
-                    validation_error_messages.emplace_back(fmt::format(
-                        "{} ({} - {} - {})", validation_error.get_error_message(), source_info.get_source_group_name(),
-                        source_info.get_source_type_name(), source_info.get_source_name()
-                    ));
-                }
+                validation_error_messages.emplace_back(validation_error.get_error_message());
+                break;
+            }
+            case 2: {
+                const RuntimeError& runtime_error = std::get<RuntimeError>(error);
+                unknown_error_messages.emplace_back(runtime_error.get_error_message());
                 break;
             }
         }

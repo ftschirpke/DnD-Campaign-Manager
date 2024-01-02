@@ -13,7 +13,6 @@
 #include <core/parsing/effects_provider/choosable_parser.hpp>
 #include <core/parsing/file_parser.hpp>
 #include <core/utils/string_manipulation.hpp>
-#include <core/validation/effects_provider/choosable_data.hpp>
 
 namespace dnd {
 
@@ -42,7 +41,7 @@ Errors ChoosableGroupParser::parse() {
             continue;
         }
         Errors feature_errors;
-        ChoosableData& feature_data = data.emplace_back();
+        Choosable::Data& feature_data = data.emplace_back();
         feature_data.name = feature_name;
         feature_errors += choosable_parser.parse_into(std::move(feature_json), feature_data);
         if (!feature_errors.ok()) {
@@ -54,7 +53,7 @@ Errors ChoosableGroupParser::parse() {
 }
 
 void ChoosableGroupParser::save_result(Content& content) {
-    for (ChoosableData& choosable_data : data) {
+    for (Choosable::Data& choosable_data : data) {
         snake_case_to_capitalized_spaced_words(choosable_data.type);
         content.add_choosable_result(Choosable::create_for(std::move(choosable_data), content));
     }

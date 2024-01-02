@@ -7,8 +7,8 @@
 #include <vector>
 
 #include <core/errors/errors.hpp>
+#include <core/models/item/item.hpp>
 #include <core/parsing/file_parser.hpp>
-#include <core/validation/item/item_data.hpp>
 
 namespace dnd {
 
@@ -18,7 +18,7 @@ public:
     virtual Errors parse() override;
     virtual void save_result(Content& content) override;
 private:
-    std::vector<ItemData> item_data;
+    std::vector<Item::Data> item_data;
 };
 
 } // namespace dnd

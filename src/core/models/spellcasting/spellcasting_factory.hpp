@@ -12,13 +12,7 @@
 
 namespace dnd {
 
-/**
- * @brief Constructs a spellcasting object from the given data
- * @param data the data to construct the spellcasting object from
- * @return the constructed spellcasting object
- * @throws invalid_data if the data is invalid
- */
-std::unique_ptr<Spellcasting> create_spellcasting(Spellcasting::Data&& data);
+FactoryResult<Spellcasting> create_spellcasting(Spellcasting::Data&& data);
 
 } // namespace dnd
 

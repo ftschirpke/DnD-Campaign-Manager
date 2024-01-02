@@ -12,12 +12,13 @@
 #include <core/models/content_piece.hpp>
 #include <core/models/effects/effects.hpp>
 #include <core/models/source_info.hpp>
+#include <core/validation/effects_provider/feature_data.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
 namespace dnd {
 
 CreateResult<Feature> Feature::create_for(Data&& data, const Content& content) {
-    Errors errors = data.validate_nonrecursively();
+    Errors errors = validate_feature_nonrecursively(data);
     if (!errors.ok()) {
         return InvalidCreate<Feature>(std::move(data), std::move(errors));
     }

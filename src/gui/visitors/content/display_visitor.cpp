@@ -180,7 +180,7 @@ void DisplayVisitor::operator()(const Subclass& subclass) {
     ImGui::Text("Subclass");
     source(subclass);
     label("Class name:");
-    ImGui::Text("%s", subclass.get_class()->get_name().c_str());
+    ImGui::Text("%s", subclass.get_class().get().get_name().c_str());
     label("Features:");
     list_features<ClassFeature>(*this, subclass.get_features());
 
@@ -209,7 +209,7 @@ void DisplayVisitor::operator()(const Subspecies& subspecies) {
     ImGui::Text("Subspecies");
     source(subspecies);
     label("Species name:");
-    ImGui::Text("%s", subspecies.get_species()->get_name().c_str());
+    ImGui::Text("%s", subspecies.get_species().get().get_name().c_str());
     label("Features:");
     list_features<Feature>(*this, subspecies.get_features());
 

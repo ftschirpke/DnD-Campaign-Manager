@@ -3,11 +3,11 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <string>
 #include <string_view>
 
 #include <core/utils/data_result.hpp>
-#include <core/validation/spell/spell_type_data.hpp>
 
 namespace dnd {
 
@@ -60,7 +60,7 @@ MagicSchool magic_school_from_name(std::string_view magic_school_name);
 
 class SpellType {
 public:
-    using Data = SpellTypeData;
+    class Data;
 
     static CreateResult<SpellType> create(Data&& type_data);
 
@@ -93,6 +93,13 @@ private:
     SpellLevel spell_level;
     MagicSchool magic_school;
     bool ritual;
+};
+
+class SpellType::Data {
+public:
+    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+
+    std::string str;
 };
 
 } // namespace dnd

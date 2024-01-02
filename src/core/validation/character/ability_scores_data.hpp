@@ -1,26 +1,15 @@
-#ifndef ABILITY_SCORES_DATA_HPP_
-#define ABILITY_SCORES_DATA_HPP_
+#ifndef ABILITY_SCORES_VALIDATION_HPP_
+#define ABILITY_SCORES_VALIDATION_HPP_
 
 #include <dnd_config.hpp>
 
-#include <array>
-#include <compare>
-
 #include <core/errors/errors.hpp>
-#include <core/validation/validation_data.hpp>
-#include <core/validation/validation_subdata.hpp>
+#include <core/models/character/ability_scores.hpp>
 
 namespace dnd {
 
-class AbilityScoresData : public ValidationSubdata {
-public:
-    AbilityScoresData(const ValidationData* parent) noexcept;
-    std::strong_ordering operator<=>(const AbilityScoresData&) const noexcept = default;
-    virtual Errors validate() const override;
-
-    std::array<int, 6> ability_scores;
-};
+Errors validate_ability_scores(const AbilityScores::Data& data);
 
 } // namespace dnd
 
-#endif // ABILITY_SCORES_DATA_HPP_
+#endif // ABILITY_SCORES_VALIDATION_HPP_

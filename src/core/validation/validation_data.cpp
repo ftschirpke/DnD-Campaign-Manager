@@ -4,6 +4,7 @@
 
 #include <filesystem>
 #include <string>
+#include <utility>
 
 #include <fmt/format.h>
 
@@ -12,28 +13,23 @@
 
 namespace dnd {
 
-Errors ValidationData::validate() const {
+Errors validate_name_description_and_source(const ValidationData& data) {
     Errors errors;
-    if (name.empty()) {
-        errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this, "Name is empty");
+    if (data.name.empty()) {
+        errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Name is empty");
     }
-    if (description.empty()) {
+    if (data.description.empty()) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this, fmt::format("Description for '{}' is empty", name)
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, fmt::format("Description for '{}' is empty", data.name)
         );
     }
-    if (!std::filesystem::exists(source_path)) {
+    if (!std::filesystem::exists(data.source_path)) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this,
-            fmt::format("Source path '{}' for '{}' does not exist", source_path.string(), name)
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
+            fmt::format("Source path '{}' for '{}' does not exist", data.source_path.string(), data.name)
         );
     }
     return errors;
-}
-
-Errors ValidationData::validate_relations(const Content& content) const {
-    DND_UNUSED(content);
-    return Errors();
 }
 
 } // namespace dnd

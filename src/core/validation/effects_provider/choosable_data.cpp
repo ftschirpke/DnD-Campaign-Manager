@@ -6,30 +6,31 @@
 
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
+#include <core/models/effects_provider/choosable.hpp>
 #include <core/validation/effects/condition/condition_data.hpp>
 #include <core/validation/effects_provider/feature_data.hpp>
 
 namespace dnd {
 
-ChoosableData::ChoosableData() noexcept : FeatureData(this) {}
-
-std::unique_ptr<ValidationData> ChoosableData::pack() const { return std::make_unique<ChoosableData>(*this); }
-
-Errors ChoosableData::validate() const {
-    Errors errors = validate_nonrecursively();
-    main_effects_data.validate();
-    for (const ConditionData& prerequisite_data : prerequisites_data) {
-        errors += prerequisite_data.validate();
+static Errors validate_choosable_type(const Choosable::Data& data) {
+    Errors errors;
+    if (data.type.empty()) {
+        errors.add_validation_error(ValidationError::Code::MISSING_ATTRIBUTE, "Choosable Feature has empty type");
     }
     return errors;
 }
 
-Errors ChoosableData::validate_nonrecursively() const {
-    Errors errors = FeatureData::validate_nonrecursively();
-    if (type.empty()) {
-        errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this, "Choosable Feature has empty type"
-        );
+Errors validate_choosable_nonrecursively(const Choosable::Data& data) {
+    Errors errors = validate_feature_nonrecursively(data);
+    errors += validate_choosable_type(data);
+    return errors;
+}
+
+Errors validate_choosable_recursively_for_content(const Choosable::Data& data, const Content& content) {
+    Errors errors = validate_feature_recursively_for_content(data, content);
+    errors += validate_choosable_type(data);
+    for (const Condition::Data& prerequisite_data : data.prerequisites_data) {
+        errors += validate_condition(prerequisite_data);
     }
     return errors;
 }

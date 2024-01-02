@@ -2,10 +2,8 @@
 
 #include "subclass_data.hpp"
 
-#include <memory>
 #include <string>
 #include <unordered_set>
-#include <vector>
 
 #include <fmt/format.h>
 
@@ -13,90 +11,84 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
+#include <core/models/subclass/subclass.hpp>
 #include <core/validation/effects_provider/class_feature_data.hpp>
 #include <core/validation/spellcasting/spellcasting_data.hpp>
 
 namespace dnd {
 
-SubclassData::SubclassData() noexcept : ValidationData(), spellcasting_data(this), features_data(), class_name() {}
-
-std::unique_ptr<ValidationData> SubclassData::pack() const { return std::make_unique<SubclassData>(*this); }
-
-Errors SubclassData::validate() const {
-    Errors errors = validate_nonrecursively();
-    for (const ClassFeatureData& feature_data : features_data) {
-        errors += feature_data.validate();
-    }
-    errors += spellcasting_data.validate();
-    return errors;
-}
-
-Errors SubclassData::validate_nonrecursively() const {
+static Errors validate_subclass_raw_nonrecursively(const Subclass::Data& data) {
     Errors errors;
     std::unordered_set<std::string> unique_feature_names;
-    for (const ClassFeatureData& feature_data : features_data) {
+    for (const ClassFeature::Data& feature_data : data.features_data) {
         if (unique_feature_names.contains(feature_data.name)) {
             errors.add_validation_error(
-                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format("Character class has duplicate feature \"{}\".", feature_data.name)
             );
         } else {
             unique_feature_names.insert(feature_data.name);
         }
     }
-    if (features_data.empty()) {
+    if (data.features_data.empty()) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this, "Character subclass has no features."
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Character subclass has no features."
         );
     }
-    if (class_name.empty()) {
+    if (data.class_name.empty()) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this, "Character subclass has no class name."
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Character subclass has no class name."
         );
     }
     return errors;
 }
 
-Errors SubclassData::validate_relations(const Content& content) const {
-    Errors errors = validate_relations_nonrecursively(content);
-    for (const ClassFeatureData& feature_data : features_data) {
-        errors += feature_data.validate_relations(content);
-    }
-    errors += spellcasting_data.validate_relations(content);
-    return errors;
-}
-
-Errors SubclassData::validate_relations_nonrecursively(const Content& content) const {
+static Errors validate_subclass_relations_nonrecursively(const Subclass::Data& data, const Content& content) {
     Errors errors;
-    if (content.get_subclasses().contains(name)) {
+    if (content.get_subclasses().contains(data.name)) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this,
-            fmt::format("Subclass has duplicate name \"{}\".", name)
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
+            fmt::format("Subclass has duplicate name \"{}\".", data.name)
         );
     }
-    for (const ClassFeatureData& feature_data : features_data) {
+    for (const ClassFeature::Data& feature_data : data.features_data) {
         if (content.get_class_features().contains(feature_data.name)) {
             errors.add_validation_error(
-                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, this,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format("Feature has duplicate name \"{}\".", feature_data.name)
             );
         }
     }
-    OptCRef<Class> class_optional = content.get_classes().get(class_name);
+    OptCRef<Class> class_optional = content.get_classes().get(data.class_name);
     if (!class_optional.has_value()) {
         errors.add_validation_error(
-            ValidationError::Code::RELATION_NOT_FOUND, this,
-            fmt::format("Character class '{}' does not exist.", class_name)
+            ValidationError::Code::RELATION_NOT_FOUND,
+            fmt::format("Character class '{}' does not exist.", data.class_name)
         );
-    } else if (spellcasting_data.is_spellcaster && class_optional.value().get().has_spellcasting()) {
+    } else if (data.spellcasting_data.is_spellcaster && class_optional.value().get().has_spellcasting()) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_RELATION, this,
+            ValidationError::Code::INVALID_RELATION,
             fmt::format(
                 "Character class '{}' has spellcasting. Its subclass '{}' cannot have spellcasting as well.",
-                class_name, name
+                data.class_name, data.name
             )
         );
     }
+    return errors;
+}
+
+Errors validate_subclass_nonrecursively_for_content(const Subclass::Data& data, const Content& content) {
+    Errors errors = validate_subclass_raw_nonrecursively(data);
+    errors += validate_subclass_relations_nonrecursively(data, content);
+    return errors;
+}
+
+Errors validate_subclass_recursively_for_content(const Subclass::Data& data, const Content& content) {
+    Errors errors = validate_subclass_nonrecursively_for_content(data, content);
+    for (const ClassFeature::Data& feature_data : data.features_data) {
+        errors += validate_class_feature_recursively_for_content(feature_data, content);
+    }
+    errors += validate_spellcasting(data.spellcasting_data);
     return errors;
 }
 

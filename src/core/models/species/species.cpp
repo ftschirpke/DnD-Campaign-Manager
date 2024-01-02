@@ -17,8 +17,7 @@
 namespace dnd {
 
 CreateResult<Species> Species::create_for(Data&& data, const Content& content) {
-    Errors errors = data.validate_nonrecursively();
-    errors += data.validate_relations_nonrecursively(content);
+    Errors errors = validate_species_nonrecursively_for_content(data, content);
     if (!errors.ok()) {
         return InvalidCreate<Species>(std::move(data), std::move(errors));
     }

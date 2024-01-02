@@ -3,12 +3,13 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <functional>
+#include <string>
 #include <vector>
 
 #include <core/utils/data_result.hpp>
 #include <core/utils/types.hpp>
-#include <core/validation/character/feature_providers_data.hpp>
 
 namespace dnd {
 
@@ -20,7 +21,7 @@ class Subclass;
 
 class FeatureProviders {
 public:
-    using Data = FeatureProvidersData;
+    class Data;
 
     static CreateResult<FeatureProviders> create_for(Data&& data, const Content& content);
 
@@ -41,6 +42,17 @@ private:
     std::reference_wrapper<const Class> cls;
     OptCRef<Subclass> subclass;
 };
+
+class FeatureProviders::Data {
+public:
+    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+
+    std::string species_name;
+    std::string subspecies_name;
+    std::string class_name;
+    std::string subclass_name;
+};
+
 
 } // namespace dnd
 

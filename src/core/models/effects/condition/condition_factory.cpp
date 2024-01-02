@@ -20,7 +20,7 @@
 namespace dnd {
 
 FactoryResult<Condition> create_condition(Condition::Data&& data) {
-    Errors errors = data.validate();
+    Errors errors = validate_condition(data);
     if (!errors.ok()) {
         return InvalidFactory<Condition>(std::move(data), std::move(errors));
     }

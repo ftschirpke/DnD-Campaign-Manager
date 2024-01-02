@@ -10,16 +10,12 @@
 
 namespace dnd {
 
-class Content;
 class Errors;
 
 class ValidationData {
 public:
     virtual ~ValidationData() = default;
     std::strong_ordering operator<=>(const ValidationData&) const = default;
-    virtual std::unique_ptr<ValidationData> pack() const = 0;
-    virtual Errors validate() const;
-    virtual Errors validate_relations(const Content& content) const;
 
     std::string name;
     std::string description;
@@ -27,6 +23,8 @@ public:
 protected:
     ValidationData() = default;
 };
+
+Errors validate_name_description_and_source(const ValidationData& data);
 
 } // namespace dnd
 

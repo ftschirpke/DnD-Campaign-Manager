@@ -7,16 +7,15 @@
 #include <fmt/format.h>
 
 #include <core/errors/errors.hpp>
-#include <core/validation/validation_data.hpp>
-#include <core/validation/validation_subdata.hpp>
+#include <core/models/character/ability_scores.hpp>
 
 namespace dnd {
 
-static Errors check_ability_score(int ability_score, const ValidationData* data_ptr, const char* name) {
+static Errors check_ability_score(int ability_score, const char* name) {
     Errors errors;
     if (ability_score <= 0 || ability_score > 30) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, data_ptr,
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
             fmt::format("Ability score {} ({}) is not between 1 and 30 (inclusive).", name, ability_score)
         );
     }
@@ -24,16 +23,14 @@ static Errors check_ability_score(int ability_score, const ValidationData* data_
     return errors;
 }
 
-AbilityScoresData::AbilityScoresData(const ValidationData* parent) noexcept : ValidationSubdata(parent) {}
-
-Errors AbilityScoresData::validate() const {
+Errors validate_ability_scores(const AbilityScores::Data& data) {
     Errors errors;
-    errors += check_ability_score(ability_scores[0], parent, "strength");
-    errors += check_ability_score(ability_scores[1], parent, "dexterity");
-    errors += check_ability_score(ability_scores[2], parent, "constitution");
-    errors += check_ability_score(ability_scores[3], parent, "intelligence");
-    errors += check_ability_score(ability_scores[4], parent, "wisdom");
-    errors += check_ability_score(ability_scores[5], parent, "charisma");
+    errors += check_ability_score(data.ability_scores[0], "strength");
+    errors += check_ability_score(data.ability_scores[1], "dexterity");
+    errors += check_ability_score(data.ability_scores[2], "constitution");
+    errors += check_ability_score(data.ability_scores[3], "intelligence");
+    errors += check_ability_score(data.ability_scores[4], "wisdom");
+    errors += check_ability_score(data.ability_scores[5], "charisma");
     return errors;
 }
 

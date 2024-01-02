@@ -1,5 +1,5 @@
-#ifndef IMPORTANT_LEVELS_DATA_HPP_
-#define IMPORTANT_LEVELS_DATA_HPP_
+#ifndef IMPORTANT_LEVELS_VALIDATION_HPP_
+#define IMPORTANT_LEVELS_VALIDATION_HPP_
 
 #include <dnd_config.hpp>
 
@@ -7,20 +7,12 @@
 #include <set>
 
 #include <core/errors/errors.hpp>
-#include <core/validation/validation_data.hpp>
-#include <core/validation/validation_subdata.hpp>
+#include <core/models/class/important_levels.hpp>
 
 namespace dnd {
 
-class ImportantLevelsData : public ValidationSubdata {
-public:
-    ImportantLevelsData(const ValidationData* parent) noexcept;
-    std::strong_ordering operator<=>(const ImportantLevelsData&) const noexcept = default;
-    virtual Errors validate() const override;
-
-    std::set<int> feat_levels;
-};
+Errors validate_important_levels(const ImportantLevels::Data& data);
 
 } // namespace dnd
 
-#endif // IMPORTANT_LEVELS_DATA_HPP_
+#endif // IMPORTANT_LEVELS_VALIDATION_HPP_

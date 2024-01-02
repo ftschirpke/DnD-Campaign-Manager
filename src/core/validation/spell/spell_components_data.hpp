@@ -1,26 +1,15 @@
-#ifndef SPELL_COMPONENTS_DATA_HPP_
-#define SPELL_COMPONENTS_DATA_HPP_
+#ifndef SPELL_COMPONENTS_VALIDATION_HPP_
+#define SPELL_COMPONENTS_VALIDATION_HPP_
 
 #include <dnd_config.hpp>
 
-#include <compare>
-#include <string>
-
 #include <core/errors/errors.hpp>
-#include <core/validation/validation_data.hpp>
-#include <core/validation/validation_subdata.hpp>
+#include <core/models/spell/spell_components.hpp>
 
 namespace dnd {
 
-class SpellComponentsData : public ValidationSubdata {
-public:
-    SpellComponentsData(const ValidationData* parent) noexcept;
-    std::strong_ordering operator<=>(const SpellComponentsData&) const noexcept = default;
-    virtual Errors validate() const override;
-
-    std::string str;
-};
+Errors validate_spell_components(const SpellComponents::Data& data);
 
 } // namespace dnd
 
-#endif // SPELL_COMPONENTS_DATA_HPP_
+#endif // SPELL_COMPONENTS_VALIDATION_HPP_

@@ -43,14 +43,10 @@ TEST_CASE("Errors // Construction and Getter Methods", tags) {
     }
 
     SECTION("Add validation error") {
-        ValidationError validation_error1(
-            ValidationError::Code::MISSING_ATTRIBUTE, &validation_data, "Missing attribute"
-        );
+        ValidationError validation_error1(ValidationError::Code::MISSING_ATTRIBUTE, "Missing attribute");
         errors.add_validation_error(std::move(validation_error1));
 
-        errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_FORMAT, &validation_data, "Invalid attribute format"
-        );
+        errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_FORMAT, "Invalid attribute format");
 
         const std::vector<Error>& error_vec = errors.get_errors();
         REQUIRE(error_vec.size() == 2);
@@ -64,9 +60,7 @@ TEST_CASE("Errors // Construction and Getter Methods", tags) {
         ParsingError parsing_error(ParsingError::Code::FILE_NOT_FOUND, "/path/to/file.txt", "File not found");
         other_errors.add_parsing_error(std::move(parsing_error));
 
-        other_errors.add_validation_error(
-            ValidationError::Code::MISSING_ATTRIBUTE, &validation_data, "Missing attribute"
-        );
+        other_errors.add_validation_error(ValidationError::Code::MISSING_ATTRIBUTE, "Missing attribute");
 
         errors.merge(std::move(other_errors));
 
@@ -92,9 +86,7 @@ TEST_CASE("Errors // Construction and Getter Methods", tags) {
 
         other_errors.add_parsing_error(ParsingError::Code::FILE_NOT_FOUND, "/path/to/file.txt", "File not found");
 
-        ValidationError validation_error(
-            ValidationError::Code::MISSING_ATTRIBUTE, &validation_data, "Missing attribute"
-        );
+        ValidationError validation_error(ValidationError::Code::MISSING_ATTRIBUTE, "Missing attribute");
         other_errors.add_validation_error(std::move(validation_error));
 
         errors += std::move(other_errors);
@@ -131,9 +123,7 @@ TEST_CASE("Errors::ok", tags) {
     }
 
     SECTION("Validation errors") {
-        ValidationError validation_error(
-            ValidationError::Code::MISSING_ATTRIBUTE, &validation_data, "Missing attribute"
-        );
+        ValidationError validation_error(ValidationError::Code::MISSING_ATTRIBUTE, "Missing attribute");
         errors.add_validation_error(std::move(validation_error));
 
         REQUIRE_FALSE(errors.ok());
@@ -143,9 +133,7 @@ TEST_CASE("Errors::ok", tags) {
         ParsingError parsing_error(ParsingError::Code::FILE_NOT_FOUND, "/path/to/file.txt", "File not found");
         errors.add_parsing_error(std::move(parsing_error));
 
-        ValidationError validation_error(
-            ValidationError::Code::MISSING_ATTRIBUTE, &validation_data, "Missing attribute"
-        );
+        ValidationError validation_error(ValidationError::Code::MISSING_ATTRIBUTE, "Missing attribute");
         errors.add_validation_error(std::move(validation_error));
 
         REQUIRE_FALSE(errors.ok());

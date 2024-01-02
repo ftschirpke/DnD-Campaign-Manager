@@ -11,24 +11,24 @@ namespace dnd::test {
 
 static constexpr const char* tags = "[core][validation][item]";
 
-TEST_CASE("ItemData::validate", tags) {
-    ItemData item_data;
-    set_valid_mock_values(item_data, "Item");
-    item_data.requires_attunement = false;
+TEST_CASE("Validate Item", tags) {
+    Item::Data data;
+    set_valid_mock_values(data, "Item");
+    data.requires_attunement = false;
 
     Errors errors;
     SECTION("Valid data without optional fields") {
-        REQUIRE_NOTHROW(errors = item_data.validate());
+        REQUIRE_NOTHROW(errors = validate_item(data));
         REQUIRE(errors.ok());
 
-        item_data.requires_attunement = true;
-        REQUIRE_NOTHROW(errors = item_data.validate());
+        data.requires_attunement = true;
+        REQUIRE_NOTHROW(errors = validate_item(data));
         REQUIRE(errors.ok());
     }
 
     SECTION("Valid data with optional fields") {
-        item_data.cosmetic_description = "Cosmetic Description";
-        REQUIRE_NOTHROW(errors = item_data.validate());
+        data.cosmetic_description = "Cosmetic Description";
+        REQUIRE_NOTHROW(errors = validate_item(data));
         REQUIRE(errors.ok());
     }
 }

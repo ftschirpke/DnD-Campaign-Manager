@@ -17,8 +17,7 @@
 namespace dnd {
 
 CreateResult<FeatureProviders> FeatureProviders::create_for(Data&& data, const Content& content) {
-    Errors errors = data.validate();
-    errors += data.validate_relations(content);
+    Errors errors = validate_feature_providers_for_content(data, content);
     if (!errors.ok()) {
         return InvalidCreate<FeatureProviders>(std::move(data), std::move(errors));
     }

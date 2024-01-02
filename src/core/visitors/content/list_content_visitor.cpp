@@ -38,16 +38,16 @@ void ListContentVisitor::operator()(const Class& cls) {
 }
 
 void ListContentVisitor::operator()(const Subclass& subclass) {
-    string_list.emplace_back(fmt::format("{} [{} SUBCLASS]", subclass.get_name(), subclass.get_class()->get_name()));
+    const Class& cls = subclass.get_class();
+    string_list.emplace_back(fmt::format("{} [{} SUBCLASS]", subclass.get_name(), cls.get_name()));
 }
 void ListContentVisitor::operator()(const Species& species) {
     string_list.emplace_back(fmt::format("{} [SPECIES]", species.get_name()));
 }
 
 void ListContentVisitor::operator()(const Subspecies& subspecies) {
-    string_list.emplace_back(
-        fmt::format("{} [{} SUBSPECIES]", subspecies.get_name(), subspecies.get_species()->get_name())
-    );
+    const Species& species = subspecies.get_species();
+    string_list.emplace_back(fmt::format("{} [{} SUBSPECIES]", subspecies.get_name(), species.get_name()));
 }
 
 void ListContentVisitor::operator()(const Item& item) {

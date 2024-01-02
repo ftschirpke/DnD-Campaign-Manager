@@ -1,5 +1,5 @@
-#ifndef CHOICE_DATA_HPP_
-#define CHOICE_DATA_HPP_
+#ifndef CHOICE_VALIDATION_HPP_
+#define CHOICE_VALIDATION_HPP_
 
 #include <dnd_config.hpp>
 
@@ -8,27 +8,14 @@
 #include <vector>
 
 #include <core/errors/errors.hpp>
-#include <core/validation/validation_data.hpp>
-#include <core/validation/validation_subdata.hpp>
+#include <core/models/effects/choice/choice.hpp>
 
 namespace dnd {
 
-enum class ChoiceType;
+class Content;
 
-class ChoiceData : public ValidationSubdata {
-public:
-    ChoiceData(const ValidationData* parent) noexcept;
-    std::strong_ordering operator<=>(const ChoiceData&) const noexcept = default;
-    virtual Errors validate() const override;
-    virtual Errors validate_relations(const Content& content) const override;
-    ChoiceType determine_type() const;
-
-    std::string attribute_name;
-    int amount;
-    std::vector<std::string> group_names;
-    std::vector<std::string> explicit_choices;
-};
+Errors validate_choice_for_content(const Choice::Data& data, const Content& content);
 
 } // namespace dnd
 
-#endif // CHOICE_DATA_HPP_
+#endif // CHOICE_VALIDATION_HPP_

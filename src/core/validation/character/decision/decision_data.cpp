@@ -1,6 +1,5 @@
 #include <dnd_config.hpp>
 
-#include "core/models/subspecies/subspecies.hpp"
 #include "decision_data.hpp"
 
 #include <algorithm>
@@ -18,62 +17,52 @@
 #include <core/models/effects/choice/choice.hpp>
 #include <core/models/effects/effects.hpp>
 #include <core/models/effects_provider/feature.hpp>
+#include <core/models/subspecies/subspecies.hpp>
 #include <core/validation/character/character_data.hpp>
 #include <core/validation/effects/effects_data.hpp>
+#include <core/validation/validation_data.hpp>
 
 namespace dnd {
 
-DecisionData::DecisionData(const CharacterData* parent, const Effects* target) noexcept
-    : ValidationSubdata(parent), selections(), character_data(parent), target(target) {}
-
-Errors DecisionData::validate() const {
+static Errors validate_decision_raw(const Decision::Data& data) {
     Errors errors;
-    if (parent == nullptr) {
+    if (data.get_target() == nullptr) {
         errors.add_validation_error(
-            ValidationError::Code::MISSING_ATTRIBUTE, parent, "Decision has no character that it belongs to."
+            ValidationError::Code::MISSING_ATTRIBUTE, "Decision has no target that it belongs to."
         );
     }
-    if (target == nullptr) {
-        errors.add_validation_error(
-            ValidationError::Code::MISSING_ATTRIBUTE, parent, "Decision has no target that it belongs to."
-        );
+    if (data.feature_name.empty()) {
+        errors.add_validation_error(ValidationError::Code::MISSING_ATTRIBUTE, "Decision's feature name is empty.");
     }
-    if (feature_name.empty()) {
-        errors.add_validation_error(
-            ValidationError::Code::MISSING_ATTRIBUTE, parent, "Decision's feature name is empty."
-        );
-    }
-    if (selections.empty()) {
-        errors.add_validation_error(
-            ValidationError::Code::MISSING_ATTRIBUTE, parent, "Decision's selections are empty."
-        );
+    if (data.selections.empty()) {
+        errors.add_validation_error(ValidationError::Code::MISSING_ATTRIBUTE, "Decision's selections are empty.");
     }
 
     return errors;
 }
 
-Errors DecisionData::validate_relations(const Content& content) const {
+static Errors validate_decision_relations(const Decision::Data& data, const Content& content) {
     Errors errors;
-
-    if (target == nullptr) {
+    if (data.get_target() == nullptr) {
         return errors;
     }
+    const Effects* target = data.get_target();
     std::map<std::string, const Choice*> choices;
     for (const Choice& choice : target->get_choices()) {
         assert(!choices.contains(choice.get_attribute_name()));
-        if (selections.contains(choice.get_attribute_name())) {
+        if (data.selections.contains(choice.get_attribute_name())) {
             choices[choice.get_attribute_name()] = &choice;
         } else {
             errors.add_validation_error(
-                ValidationError::Code::MISSING_ATTRIBUTE, parent,
+                ValidationError::Code::MISSING_ATTRIBUTE,
                 fmt::format("Decision's selection is missing a decision for '{}'.", choice.get_attribute_name())
             );
         }
     }
-    for (const auto& [attribute_name, selection] : selections) {
+    for (const auto& [attribute_name, selection] : data.selections) {
         if (!choices.contains(attribute_name)) {
             errors.add_validation_error(
-                ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format(
                     "Decision's selection '{}' is not allowed by the choice it is referring to.", attribute_name
                 )
@@ -84,22 +73,27 @@ Errors DecisionData::validate_relations(const Content& content) const {
         for (const std::string& value : selection) {
             if (std::find(possible_values.cbegin(), possible_values.cend(), value) == possible_values.cend()) {
                 errors.add_validation_error(
-                    ValidationError::Code::INVALID_ATTRIBUTE_VALUE, parent,
+                    ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                     fmt::format("Decision's selection '{}' has an invalid value '{}'.", attribute_name, value)
                 );
             }
         }
     }
+    return errors;
+}
 
-
-    std::optional<EffectsProviderVariant> effects_provider_optional = content.get_effects_provider(feature_name);
+static Errors validate_decision_target_for_character_and_content(
+    const Decision::Data& data, const Character::Data& character_data, const Content& content
+) {
+    Errors errors;
+    const Effects* target = data.get_target();
+    std::optional<EffectsProviderVariant> effects_provider_optional = content.get_effects_provider(data.feature_name);
     if (!effects_provider_optional.has_value()) {
         errors.add_validation_error(
-            ValidationError::Code::RELATION_NOT_FOUND, parent, "Decision cannot be linked to any existing feature."
+            ValidationError::Code::RELATION_NOT_FOUND, "Decision cannot be linked to any existing feature."
         );
         return errors;
     }
-
     bool target_exists = false;
     EffectsProviderVariant effects_provider_variant = effects_provider_optional.value();
     switch (effects_provider_variant.index()) {
@@ -114,7 +108,7 @@ Errors DecisionData::validate_relations(const Content& content) const {
                 target_exists = true;
             } else {
                 for (const auto& [_, effects] : class_feature.get_higher_level_effects()) {
-                    if (&effects == target) {
+                    if (target == &effects) {
                         target_exists = true;
                         break;
                     }
@@ -130,18 +124,14 @@ Errors DecisionData::validate_relations(const Content& content) const {
     }
 
     bool feature_found = false;
-    if (character_data == nullptr) {
-        errors.add_validation_error(
-            ValidationError::Code::MISSING_ATTRIBUTE, parent, "Decision has no character data to validate against."
-        );
-    } else if (target_exists) {
-        auto has_feature_name = [this](const ContentPiece& effects_provider) {
-            return effects_provider.get_name() == feature_name;
+    if (target_exists) {
+        auto has_feature_name = [&data](const ContentPiece& effects_provider) {
+            return effects_provider.get_name() == data.feature_name;
         };
         switch (effects_provider_variant.index()) {
             // TODO: check character specific features for choices
             case 0: /* Feature */ {
-                const std::string& species_name = character_data->feature_providers_data.species_name;
+                const std::string& species_name = character_data.feature_providers_data.species_name;
                 OptCRef<Species> species_optional = content.get_species().get(species_name);
                 if (species_optional.has_value()) {
                     const Species& species = species_optional.value();
@@ -152,7 +142,7 @@ Errors DecisionData::validate_relations(const Content& content) const {
                         break;
                     }
                 }
-                const std::string& subspecies_name = character_data->feature_providers_data.subspecies_name;
+                const std::string& subspecies_name = character_data.feature_providers_data.subspecies_name;
                 OptCRef<Subspecies> subspecies_optional = content.get_subspecies().get(subspecies_name);
                 if (subspecies_optional.has_value()) {
                     const Subspecies& subspecies = subspecies_optional.value();
@@ -163,7 +153,7 @@ Errors DecisionData::validate_relations(const Content& content) const {
                 break;
             }
             case 1: /* ClassFeature */ {
-                const std::string& class_name = character_data->feature_providers_data.class_name;
+                const std::string& class_name = character_data.feature_providers_data.class_name;
                 OptCRef<Class> class_optional = content.get_classes().get(class_name);
                 if (class_optional.has_value()) {
                     const Class& cls = class_optional.value();
@@ -172,7 +162,7 @@ Errors DecisionData::validate_relations(const Content& content) const {
                         break;
                     }
                 }
-                const std::string& subclass_name = character_data->feature_providers_data.subclass_name;
+                const std::string& subclass_name = character_data.feature_providers_data.subclass_name;
                 OptCRef<Subclass> subclass_optional = content.get_subclasses().get(subclass_name);
                 if (content.get_subclasses().contains(subclass_name)) {
                     const Subclass& subclass = subclass_optional.value();
@@ -189,26 +179,29 @@ Errors DecisionData::validate_relations(const Content& content) const {
         }
         if (!feature_found) {
             errors.add_validation_error(
-                ValidationError::Code::RELATION_NOT_FOUND, parent,
+                ValidationError::Code::RELATION_NOT_FOUND,
                 fmt::format(
-                    "Decision target \"{}\" exists but is not available to the character ({}).", feature_name,
-                    character_data->name
+                    "Decision target \"{}\" exists but is not available to the character ({}).", data.feature_name,
+                    character_data.name
                 )
             );
         }
     } else {
         errors.add_validation_error(
-            ValidationError::Code::RELATION_NOT_FOUND, parent,
-            fmt::format("Decision has target feature \"{}\" which doesn't seem to exist.", feature_name)
+            ValidationError::Code::RELATION_NOT_FOUND,
+            fmt::format("Decision has target feature \"{}\" which doesn't seem to exist.", data.feature_name)
         );
     }
     return errors;
 }
 
-const CharacterData* DecisionData::get_character_data() const noexcept { return character_data; }
-
-const Effects* DecisionData::get_target() const noexcept { return target; }
-
-void DecisionData::set_target(const Effects* new_target) noexcept { target = new_target; }
+Errors validate_decision_for_character_and_content(
+    const Decision::Data& data, const Character::Data& character_data, const Content& content
+) {
+    Errors errors = validate_decision_raw(data);
+    errors += validate_decision_relations(data, content);
+    errors += validate_decision_target_for_character_and_content(data, character_data, content);
+    return errors;
+}
 
 } // namespace dnd

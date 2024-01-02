@@ -4,8 +4,12 @@
 
 #include <memory>
 
+#include <core/errors/errors.hpp>
+#include <core/models/item/item.hpp>
+#include <core/validation/validation_data.hpp>
+
 namespace dnd {
 
-std::unique_ptr<ValidationData> ItemData::pack() const { return std::make_unique<ItemData>(*this); }
+Errors validate_item(const Item::Data& data) { return validate_name_description_and_source(data); }
 
 } // namespace dnd

@@ -1,34 +1,18 @@
-#ifndef SUBCLASS_DATA_HPP_
-#define SUBCLASS_DATA_HPP_
+#ifndef SUBCLASS_VALIDATION_HPP_
+#define SUBCLASS_VALIDATION_HPP_
 
 #include <dnd_config.hpp>
 
-#include <compare>
-#include <memory>
-#include <vector>
-
 #include <core/errors/errors.hpp>
-#include <core/validation/effects_provider/class_feature_data.hpp>
-#include <core/validation/spellcasting/spellcasting_data.hpp>
-#include <core/validation/validation_data.hpp>
+#include <core/models/subclass/subclass.hpp>
 
 namespace dnd {
 
-class SubclassData : public ValidationData {
-public:
-    SubclassData() noexcept;
-    std::strong_ordering operator<=>(const SubclassData&) const noexcept = default;
-    virtual std::unique_ptr<ValidationData> pack() const override;
-    virtual Errors validate() const override;
-    virtual Errors validate_nonrecursively() const;
-    virtual Errors validate_relations(const Content& content) const override;
-    virtual Errors validate_relations_nonrecursively(const Content& content) const;
+class Content;
 
-    SpellcastingData spellcasting_data;
-    std::vector<ClassFeatureData> features_data;
-    std::string class_name;
-};
+Errors validate_subclass_nonrecursively_for_content(const Subclass::Data& data, const Content& content);
+Errors validate_subclass_recursively_for_content(const Subclass::Data& data, const Content& content);
 
 } // namespace dnd
 
-#endif // SUBCLASS_DATA_HPP_
+#endif // SUBCLASS_VALIDATION_HPP_

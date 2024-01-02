@@ -61,14 +61,15 @@ Errors CharacterParser::parse() {
             );
         } else {
             for (auto& [feature_name, decisions_for_feature] : json["decisions"].items()) {
+                std::shared_ptr<Character::Data> parent = std::make_shared<Character::Data>(data);
                 if (decisions_for_feature.is_array()) {
                     for (auto& decision_json : decisions_for_feature) {
-                        DecisionData& decision_data = data.decisions_data.emplace_back(&data, nullptr);
+                        Decision::Data& decision_data = data.decisions_data.emplace_back(nullptr);
                         decision_data.feature_name = feature_name;
                         errors += parse_decision(std::move(decision_json), decision_data);
                     }
                 } else {
-                    DecisionData& decision_data = data.decisions_data.emplace_back(&data, nullptr);
+                    Decision::Data& decision_data = data.decisions_data.emplace_back(nullptr);
                     decision_data.feature_name = feature_name;
                     errors += parse_decision(std::move(decisions_for_feature), decision_data);
                 }
@@ -77,14 +78,14 @@ Errors CharacterParser::parse() {
     }
 
     if (json.contains("features")) {
-        errors += feature_parser.parse_multiple_into(std::move(json["features"]), data.features_data, &data);
+        errors += feature_parser.parse_multiple_into(std::move(json["features"]), data.features_data);
     }
 
     return errors;
 }
 
 static bool evaluate_effects_for_decision(
-    const Effects& effects, DecisionData& decision_data, std::set<const Effects*>& processed_effects
+    const Effects& effects, Decision::Data& decision_data, std::set<const Effects*>& processed_effects
 ) {
     if (!effects.get_choices().empty() && !processed_effects.contains(&effects)) {
         decision_data.set_target(&effects);
@@ -96,7 +97,7 @@ static bool evaluate_effects_for_decision(
 
 void CharacterParser::set_context(const Content& content) {
     std::set<const Effects*> processed_effects;
-    for (DecisionData& decision_data : data.decisions_data) {
+    for (Decision::Data& decision_data : data.decisions_data) {
         std::optional<EffectsProviderVariant> effects_provider_optional = content.get_effects_provider(
             decision_data.feature_name
         );
@@ -134,7 +135,7 @@ void CharacterParser::save_result(Content& content) {
     content.add_character_result(Character::create_for(std::move(data), content));
 }
 
-Errors CharacterParser::parse_decision(nlohmann::ordered_json&& decision_json, DecisionData& decision_data) const {
+Errors CharacterParser::parse_decision(nlohmann::ordered_json&& decision_json, Decision::Data& decision_data) const {
     Errors errors;
     if (!decision_json.is_object()) {
         errors.add_parsing_error(

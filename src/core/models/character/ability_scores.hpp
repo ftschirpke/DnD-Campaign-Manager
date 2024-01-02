@@ -3,15 +3,17 @@
 
 #include <dnd_config.hpp>
 
+#include <array>
+#include <compare>
+
 #include <core/basic_mechanics/abilities.hpp>
 #include <core/utils/data_result.hpp>
-#include <core/validation/character/ability_scores_data.hpp>
 
 namespace dnd {
 
 class AbilityScores {
 public:
-    using Data = AbilityScoresData;
+    class Data;
 
     static CreateResult<AbilityScores> create(Data&& data);
 
@@ -39,6 +41,13 @@ private:
     int intelligence;
     int wisdom;
     int charisma;
+};
+
+class AbilityScores::Data {
+public:
+    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+
+    std::array<int, 6> ability_scores;
 };
 
 } // namespace dnd

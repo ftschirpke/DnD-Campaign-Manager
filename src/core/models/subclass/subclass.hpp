@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <compare>
 #include <filesystem>
 #include <memory>
 #include <string>
@@ -13,7 +14,7 @@
 #include <core/models/effects_provider/class_feature.hpp>
 #include <core/models/source_info.hpp>
 #include <core/models/spellcasting/spellcasting.hpp>
-#include <core/validation/subclass/subclass_data.hpp>
+#include <core/utils/types.hpp>
 
 namespace dnd {
 
@@ -22,7 +23,7 @@ class ContentVisitor;
 
 class Subclass : public ContentPiece {
 public:
-    using Data = SubclassData;
+    class Data;
 
     static CreateResult<Subclass> create_for(Data&& data, const Content& content);
 
@@ -37,21 +38,30 @@ public:
     const std::vector<ClassFeature>& get_features() const noexcept;
     bool has_spellcasting() const noexcept;
     const Spellcasting* get_spellcasting() const noexcept;
-    const Class* get_class() const noexcept;
+    CRef<Class> get_class() const noexcept;
 
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Subclass(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path,
-        std::vector<ClassFeature>&& features, const Class* cls, std::unique_ptr<Spellcasting>&& spellcasting = nullptr
+        std::vector<ClassFeature>&& features, CRef<Class> cls, std::unique_ptr<Spellcasting>&& spellcasting = nullptr
     ) noexcept;
 
     std::string name;
     std::string description;
     SourceInfo source_info;
     std::vector<ClassFeature> features;
-    const Class* cls;
+    CRef<Class> cls;
     std::unique_ptr<Spellcasting> spellcasting;
+};
+
+class Subclass::Data : public ValidationData {
+public:
+    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+
+    Spellcasting::Data spellcasting_data;
+    std::vector<ClassFeature::Data> features_data;
+    std::string class_name;
 };
 
 } // namespace dnd

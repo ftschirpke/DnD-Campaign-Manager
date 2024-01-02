@@ -18,7 +18,7 @@
 namespace dnd {
 
 CreateResult<Spell> Spell::create(Data&& data) {
-    Errors errors = data.validate_nonrecursively();
+    Errors errors = validate_spell_nonrecursively(data);
     if (!errors.ok()) {
         return InvalidCreate<Spell>(std::move(data), std::move(errors));
     }

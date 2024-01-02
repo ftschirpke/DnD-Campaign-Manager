@@ -7,6 +7,14 @@
 
 namespace dnd {
 
+// a shorthand for std::reference_wrapper<T>
+template <typename T>
+using Ref = std::reference_wrapper<T>;
+
+// a shorthand for a std::reference_wrapper<const T>
+template <typename T>
+using CRef = std::reference_wrapper<const T>;
+
 // an optional reference to a T
 template <typename T>
 using OptRef = std::optional<std::reference_wrapper<T>>;

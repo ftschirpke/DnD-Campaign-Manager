@@ -21,8 +21,7 @@
 namespace dnd {
 
 CreateResult<Subclass> Subclass::create_for(Data&& data, const Content& content) {
-    Errors errors = data.validate_nonrecursively();
-    errors += data.validate_relations_nonrecursively(content);
+    Errors errors = validate_subclass_nonrecursively_for_content(data, content);
     if (!errors.ok()) {
         return InvalidCreate<Subclass>(std::move(data), std::move(errors));
     }
@@ -36,10 +35,18 @@ CreateResult<Subclass> Subclass::create_for(Data&& data, const Content& content)
         }
         features.emplace_back(feature_result.value());
     }
-    const Class* cls = &content.get_classes().get(data.class_name).value().get();
+    CRef<Class> cls = content.get_classes().get(data.class_name).value();
+
+    FactoryResult<Spellcasting> spellcasting_result = create_spellcasting(std::move(data.spellcasting_data));
+    if (!spellcasting_result.is_valid()) {
+        auto [_, sub_errors] = spellcasting_result.data_and_errors();
+        return InvalidCreate<Subclass>(std::move(data), std::move(sub_errors));
+    }
+    std::unique_ptr<Spellcasting> spellcasting = spellcasting_result.value();
+
     return ValidCreate(Subclass(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(features), cls,
-        create_spellcasting(std::move(data.spellcasting_data))
+        std::move(spellcasting)
     ));
 }
 
@@ -55,13 +62,13 @@ bool Subclass::has_spellcasting() const noexcept { return spellcasting != nullpt
 
 const Spellcasting* Subclass::get_spellcasting() const noexcept { return spellcasting.get(); }
 
-const Class* Subclass::get_class() const noexcept { return cls; }
+CRef<Class> Subclass::get_class() const noexcept { return cls; }
 
 void Subclass::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 Subclass::Subclass(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path,
-    std::vector<ClassFeature>&& features, const Class* cls, std::unique_ptr<Spellcasting>&& spellcasting
+    std::vector<ClassFeature>&& features, CRef<Class> cls, std::unique_ptr<Spellcasting>&& spellcasting
 ) noexcept
     : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
       features(std::move(features)), cls(cls), spellcasting(std::move(spellcasting)) {}

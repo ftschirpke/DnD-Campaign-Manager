@@ -8,9 +8,9 @@
 #include <vector>
 
 #include <core/errors/errors.hpp>
+#include <core/models/effects_provider/choosable.hpp>
 #include <core/parsing/effects_provider/choosable_parser.hpp>
 #include <core/parsing/file_parser.hpp>
-#include <core/validation/effects_provider/choosable_data.hpp>
 
 namespace dnd {
 
@@ -22,7 +22,7 @@ public:
 protected:
     ChoosableParser choosable_parser;
     std::string group_name;
-    std::vector<ChoosableData> data;
+    std::vector<Choosable::Data> data;
 };
 
 } // namespace dnd

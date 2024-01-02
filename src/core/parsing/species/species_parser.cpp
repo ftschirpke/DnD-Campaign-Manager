@@ -38,7 +38,7 @@ Errors SpeciesParser::parse() {
     errors += parse_required_attribute_into(json, "has_subspecies", data.subspecies);
 
     if (json.contains("features")) {
-        errors += feature_parser.parse_multiple_into(std::move(json["features"]), data.features_data, &data);
+        errors += feature_parser.parse_multiple_into(std::move(json["features"]), data.features_data);
     } else {
         errors.add_parsing_error(
             ParsingError::Code::MISSING_ATTRIBUTE, get_filepath(), "Character species has no features."
