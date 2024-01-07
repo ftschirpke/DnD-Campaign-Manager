@@ -3,6 +3,8 @@
 
 #include <dnd_config.hpp>
 
+#include <vector>
+
 #include <core/models/subclass/subclass.hpp>
 #include <core/searching/content_filters/bool_filter.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>

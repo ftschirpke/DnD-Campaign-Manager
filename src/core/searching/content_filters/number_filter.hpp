@@ -35,6 +35,9 @@ private:
     T value;
 };
 
+
+// === IMPLEMENTATION ===
+
 template <typename T>
 requires std::is_arithmetic_v<T>
 NumberFilter<T>::NumberFilter() noexcept : type(NumberFilterType::NONE), value(0) {}

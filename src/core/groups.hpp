@@ -59,26 +59,10 @@ public:
      * @throws std::out_of_range if group doesn't exist
      */
     void set_subgroups(const std::string& group_name, std::set<std::string>&& subgroup_names);
-    /**
-     * @brief Determines wheteher a group with the given name exists.
-     * @param group_name the name of the group
-     * @return "true" if any group with this name exists, "false" otherwise
-     */
+
     bool is_group(const std::string& group_name) const;
-    /**
-     * @brief Determines wheteher a group with given name exists and is a subgroup of another group.
-     * @param subgroup_name the name of the subgroup
-     * @param group_name the name of the group
-     * @return "true" if it exists and is a subgroup, "false" otherwise
-     */
     bool is_subgroup(const std::string& subgroup_name, const std::string& group_name) const;
-    /**
-     * @brief Determines whether a certain string is part of a given group
-     * @param name the string that is supposed to be a part of the group
-     * @param group_name the name of the group
-     * @return "true" if name is part of the group, "false" otherwise (also when the group does not exist)
-     */
-    bool is_part_of_group(const std::string& name, const std::string& group_name) const;
+    bool is_member_of_group(const std::string& name, const std::string& group_name) const;
     /**
      * @brief Returns a string describing the amounts of groups parsed
      * @return a string describing the current parsed groups

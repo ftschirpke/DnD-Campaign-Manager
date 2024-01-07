@@ -2,7 +2,6 @@
 
 #include "list_content_visitor.hpp"
 
-#include <filesystem>
 #include <string>
 #include <vector>
 

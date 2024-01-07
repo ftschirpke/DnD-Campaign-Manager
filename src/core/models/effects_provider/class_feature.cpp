@@ -6,7 +6,6 @@
 #include <map>
 #include <string>
 #include <utility>
-#include <vector>
 
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>

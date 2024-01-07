@@ -43,8 +43,6 @@ enum class MagicSchool {
     TRANSMUTATION
 };
 
-bool is_magic_school(const std::string& magic_school_name);
-bool is_magic_school(std::string_view magic_school_name);
 /**
  * @throws std::out_of_range if no magic school with that value exists
  */

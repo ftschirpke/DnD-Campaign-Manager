@@ -2,9 +2,8 @@
 
 #include "choosable_group_parser.hpp"
 
-#include <cassert>
 #include <filesystem>
-#include <unordered_map>
+#include <string>
 #include <vector>
 
 #include <core/content.hpp>

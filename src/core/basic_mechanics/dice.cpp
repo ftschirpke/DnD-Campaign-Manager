@@ -2,9 +2,7 @@
 
 #include "dice.hpp"
 
-#include <algorithm>
 #include <map>
-#include <stdexcept>
 #include <string>
 
 #include <fmt/format.h>
@@ -12,7 +10,6 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/runtime_error.hpp>
 #include <core/utils/char_manipulation.hpp>
-#include <core/utils/data_result.hpp>
 #include <core/utils/string_manipulation.hpp>
 
 namespace dnd {

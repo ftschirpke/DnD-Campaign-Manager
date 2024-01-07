@@ -3,17 +3,18 @@
 
 #include <dnd_config.hpp>
 
-namespace dnd {
+#include <core/models/character/character.hpp>
+#include <core/models/class/class.hpp>
+#include <core/models/effects_provider/choosable.hpp>
+#include <core/models/effects_provider/class_feature.hpp>
+#include <core/models/effects_provider/feature.hpp>
+#include <core/models/item/item.hpp>
+#include <core/models/species/species.hpp>
+#include <core/models/spell/spell.hpp>
+#include <core/models/subclass/subclass.hpp>
+#include <core/models/subspecies/subspecies.hpp>
 
-class Character;
-class Class;
-class Subclass;
-class Species;
-class Subspecies;
-class Item;
-class Spell;
-class Feature;
-class Choosable;
+namespace dnd {
 
 class ContentVisitor {
 public:

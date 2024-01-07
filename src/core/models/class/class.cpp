@@ -2,7 +2,6 @@
 
 #include "class.hpp"
 
-#include <algorithm>
 #include <cassert>
 #include <filesystem>
 #include <memory>
@@ -27,7 +26,6 @@
 #include <core/validation/effects_provider/feature_data.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
-#include <iostream>
 namespace dnd {
 
 static constexpr const char* level_activation_regex_cstr = "CLASS_LEVEL >= [123456789]\\d?";

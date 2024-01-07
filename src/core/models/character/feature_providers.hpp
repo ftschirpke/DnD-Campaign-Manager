@@ -6,7 +6,6 @@
 #include <compare>
 #include <functional>
 #include <string>
-#include <vector>
 
 #include <core/utils/data_result.hpp>
 #include <core/utils/types.hpp>

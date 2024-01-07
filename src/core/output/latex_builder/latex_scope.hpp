@@ -5,7 +5,6 @@
 
 #include <memory>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include <core/output/latex_builder/latex_command.hpp>
@@ -27,7 +26,7 @@ struct LatexBeginEnd {
 class LatexScope : virtual public LatexObject {
 public:
     LatexScope();
-    LatexScope* no_enclosing_bspecies();
+    LatexScope* no_enclosing_braces();
     LatexScope* add_line_break();
     LatexScope* add_line_break(const std::string& spacing_argument);
     LatexScope* add_scope();

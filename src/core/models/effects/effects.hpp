@@ -48,11 +48,8 @@ public:
     const ProficiencyHolder& get_proficiencies() const noexcept;
     const RIVHolder& get_rivs() const noexcept;
 
-    /**
-     * @brief Returns whether the effects are empty
-     * @return "true" if the object provides no effect, "false" otherwise
-     */
     bool empty() const;
+
     /**
      * @brief Checks whether the activation conditions are met for given attributes and constants
      * @param attributes the character attributes
@@ -63,10 +60,7 @@ public:
     bool is_active(
         const std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
     ) const;
-    /**
-     * @brief Merge another Effects object into this one
-     * @param other the other Effects object which will be merged into this one
-     */
+
     void merge(Effects&& other);
 private:
     std::vector<std::unique_ptr<Condition>> activation_conditions;

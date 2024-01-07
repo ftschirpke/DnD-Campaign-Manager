@@ -5,7 +5,6 @@
 
 #include <cassert>
 #include <string_view>
-#include <vector>
 
 #include <core/searching/fuzzy_search/trie_node.hpp>
 
@@ -37,6 +36,9 @@ private:
     // the root node of the trie
     TrieNode<T> root;
 };
+
+
+// === IMPLEMENTATION ===
 
 template <typename T>
 Trie<T>::Trie() : root() {}

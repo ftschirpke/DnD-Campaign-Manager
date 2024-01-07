@@ -6,9 +6,9 @@
 
 #include "gui_launcher.hpp"
 
+#include <exception>
 #include <filesystem>
 #include <iostream>
-#include <stdexcept>
 
 #include <imgui/backends/imgui_impl_glfw.h>
 #include <imgui/backends/imgui_impl_opengl3.h>

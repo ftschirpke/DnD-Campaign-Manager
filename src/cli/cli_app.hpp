@@ -8,6 +8,7 @@
 
 #include <cli/output/command_line_output.hpp>
 #include <cli/visitors/content/display_visitor.hpp>
+#include <core/models/content_piece.hpp>
 #include <core/session.hpp>
 
 namespace dnd {

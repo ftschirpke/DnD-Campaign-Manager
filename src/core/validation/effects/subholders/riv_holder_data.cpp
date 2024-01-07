@@ -37,7 +37,7 @@ static Errors string_group_set_validate_relations(
 ) {
     Errors errors;
     for (const std::string& str_item : string_group_set) {
-        if (!content.get_groups().is_part_of_group(str_item, group_name)) {
+        if (!content.get_groups().is_member_of_group(str_item, group_name)) {
             errors.add_validation_error(
                 ValidationError::Code::RELATION_NOT_FOUND,
                 fmt::format("Invalid value in {}: '{}' is not part of the {} group.", str_item, set_name, group_name)

@@ -5,7 +5,10 @@
 
 #include <filesystem>
 #include <set>
+#include <string>
 #include <unordered_map>
+
+#include <nlohmann/json.hpp>
 
 #include <core/errors/errors.hpp>
 #include <core/parsing/file_parser.hpp>

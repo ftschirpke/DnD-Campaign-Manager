@@ -3,7 +3,6 @@
 
 #include <dnd_config.hpp>
 
-#include <memory>
 #include <string>
 
 namespace dnd {

@@ -2,7 +2,6 @@
 
 #include "spellcasting_factory.hpp"
 
-#include <cassert>
 #include <memory>
 #include <string>
 #include <utility>

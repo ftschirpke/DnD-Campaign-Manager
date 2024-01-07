@@ -3,6 +3,8 @@
 
 #include <dnd_config.hpp>
 
+#include <vector>
+
 #include <core/models/subspecies/subspecies.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
 

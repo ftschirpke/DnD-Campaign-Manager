@@ -5,11 +5,8 @@
 
 #include <compare>
 #include <filesystem>
-#include <functional>
 #include <map>
-#include <memory>
 #include <string>
-#include <vector>
 
 #include <core/models/effects/effects.hpp>
 #include <core/models/effects_provider/feature.hpp>

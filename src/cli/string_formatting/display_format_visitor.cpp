@@ -3,6 +3,7 @@
 #include "display_format_visitor.hpp"
 
 #include <algorithm>
+#include <string>
 #include <string_view>
 #include <vector>
 

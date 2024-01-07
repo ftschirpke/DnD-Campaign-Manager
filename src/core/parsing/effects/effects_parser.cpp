@@ -13,6 +13,7 @@
 #include <core/errors/parsing_error.hpp>
 #include <core/models/effects/choice/choice.hpp>
 #include <core/models/effects/condition/condition.hpp>
+#include <core/models/effects/effects.hpp>
 #include <core/models/effects/stat_change/stat_change.hpp>
 #include <core/models/effects/subholders/action_holder.hpp>
 #include <core/models/effects/subholders/extra_spells_holder.hpp>

@@ -2,7 +2,6 @@
 
 #include "filter_setting_visitor.hpp"
 
-#include <algorithm>
 #include <array>
 #include <cstring>
 #include <utility>

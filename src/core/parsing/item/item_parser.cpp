@@ -2,7 +2,6 @@
 
 #include "item_parser.hpp"
 
-#include <cassert>
 #include <filesystem>
 #include <string>
 #include <utility>

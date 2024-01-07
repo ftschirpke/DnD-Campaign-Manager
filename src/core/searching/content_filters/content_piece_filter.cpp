@@ -2,7 +2,6 @@
 
 #include "content_piece_filter.hpp"
 
-#include <string>
 #include <variant>
 #include <vector>
 

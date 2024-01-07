@@ -1,11 +1,7 @@
 #ifndef MEASURER_HPP_
 #define MEASURER_HPP_
 
-#include <dnd_config.hpp>
-
 #include <chrono>
-#include <fstream>
-#include <memory>
 #include <mutex>
 #include <string>
 

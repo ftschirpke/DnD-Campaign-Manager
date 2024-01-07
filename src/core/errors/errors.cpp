@@ -8,14 +8,14 @@
 #include <vector>
 
 #include <core/errors/parsing_error.hpp>
+#include <core/errors/runtime_error.hpp>
 #include <core/errors/validation_error.hpp>
-#include <core/validation/validation_data.hpp>
 
 namespace dnd {
 
 Errors::Errors(Error&& error) noexcept { errors.emplace_back(std::move(error)); }
 
-bool Errors::ok() const { return errors.empty(); }
+bool Errors::ok() const noexcept { return errors.empty(); }
 
 void Errors::add_parsing_error(
     ParsingError::Code error_code, const std::filesystem::path& filepath, std::string&& message

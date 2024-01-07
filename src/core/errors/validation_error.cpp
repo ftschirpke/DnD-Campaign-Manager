@@ -2,9 +2,7 @@
 
 #include "validation_error.hpp"
 
-#include <memory>
 #include <string>
-#include <utility>
 
 #include <core/validation/validation_data.hpp>
 

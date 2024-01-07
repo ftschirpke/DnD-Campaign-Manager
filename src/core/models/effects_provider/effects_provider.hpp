@@ -3,8 +3,6 @@
 
 #include <dnd_config.hpp>
 
-#include <vector>
-
 namespace dnd {
 
 class Effects;

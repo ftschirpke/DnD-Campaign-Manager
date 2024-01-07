@@ -4,7 +4,6 @@
 #include <dnd_config.hpp>
 
 #include <filesystem>
-#include <vector>
 
 #include <nlohmann/json.hpp>
 

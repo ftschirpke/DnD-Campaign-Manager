@@ -3,9 +3,6 @@
 
 #include <dnd_config.hpp>
 
-#include <algorithm>
-#include <cassert>
-#include <stdexcept>
 #include <string>
 #include <unordered_map>
 
@@ -36,11 +33,7 @@ public:
      * @return reference to the inserted content piece, or std::nullopt if a content piece with that name already exists
      */
     OptCRef<T> add(const T& content_piece);
-    /**
-     * @brief Get the root of the fuzzy search trie
-     * @return a pointer to the root of the fuzzy search trie
-     */
-    const TrieNode<T>* get_trie_root() const override;
+    const TrieNode<T>* get_fuzzy_search_trie_root() const override;
 private:
     void save_in_trie(const T* content_piece);
 
@@ -48,6 +41,8 @@ private:
     Trie<T> trie;
 };
 
+
+// === IMPLEMENTATION ===
 
 template <typename T>
 requires isContentPieceType<T>
@@ -125,7 +120,7 @@ OptCRef<T> ReferencingContentLibrary<T>::add(const T& content_piece) {
 
 template <typename T>
 requires isContentPieceType<T>
-const TrieNode<T>* ReferencingContentLibrary<T>::get_trie_root() const {
+const TrieNode<T>* ReferencingContentLibrary<T>::get_fuzzy_search_trie_root() const {
     return trie.get_root();
 }
 

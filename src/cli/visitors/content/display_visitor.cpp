@@ -2,7 +2,6 @@
 
 #include "display_visitor.hpp"
 
-#include <cassert>
 #include <memory>
 #include <string>
 #include <vector>
@@ -10,10 +9,12 @@
 #include <fmt/format.h>
 
 #include <cli/output/command_line_output.hpp>
+#include <cli/string_formatting/display_format_visitor.hpp>
 #include <core/basic_mechanics/dice.hpp>
 #include <core/models/character/character.hpp>
 #include <core/models/class/class.hpp>
 #include <core/models/effects_provider/choosable.hpp>
+#include <core/models/effects_provider/class_feature.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/item/item.hpp>
 #include <core/models/source_info.hpp>

@@ -164,7 +164,7 @@ static Errors validate_relations_string_choice(const Choice::Data& data, const C
         if (explicit_choice.empty()) {
             continue;
         }
-        if (!content.get_groups().is_part_of_group(explicit_choice, group_name)) {
+        if (!content.get_groups().is_member_of_group(explicit_choice, group_name)) {
             errors.add_validation_error(
                 ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format(

@@ -2,7 +2,6 @@
 
 #include "display_visitor.hpp"
 
-#include <cassert>
 #include <memory>
 #include <string>
 #include <vector>
@@ -25,6 +24,8 @@
 #include <core/output/string_formatting/formats/format.hpp>
 #include <core/output/string_formatting/string_formatter.hpp>
 #include <core/visitors/content/content_visitor.hpp>
+#include <gui/string_formatting/display_format_visitor.hpp>
+#include <gui/visitors/content/display_visitor.hpp>
 
 namespace dnd {
 

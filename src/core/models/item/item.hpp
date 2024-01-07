@@ -5,7 +5,6 @@
 
 #include <compare>
 #include <filesystem>
-#include <memory>
 #include <string>
 
 #include <core/models/content_piece.hpp>

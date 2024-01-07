@@ -3,7 +3,6 @@
 
 #include <dnd_config.hpp>
 
-#include <core/models/content_piece.hpp>
 #include <core/session.hpp>
 #include <gui/visitors/content/display_visitor.hpp>
 

@@ -2,10 +2,10 @@
 
 #include "content_parsing.hpp"
 
+#include <exception>
 #include <filesystem>
 #include <functional>
 #include <future>
-#include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>

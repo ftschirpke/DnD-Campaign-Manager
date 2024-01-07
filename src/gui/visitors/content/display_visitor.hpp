@@ -12,9 +12,7 @@
 #include <core/models/spell/spell.hpp>
 #include <core/models/subclass/subclass.hpp>
 #include <core/models/subspecies/subspecies.hpp>
-#include <core/output/string_formatting/string_formatter.hpp>
 #include <core/visitors/content/content_visitor.hpp>
-#include <gui/string_formatting/display_format_visitor.hpp>
 
 namespace dnd {
 
