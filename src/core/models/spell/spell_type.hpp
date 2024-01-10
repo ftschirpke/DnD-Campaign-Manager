@@ -7,6 +7,7 @@
 #include <string>
 #include <string_view>
 
+#include <core/basic_mechanics/magic_schools.hpp>
 #include <core/utils/data_result.hpp>
 
 namespace dnd {
@@ -23,38 +24,6 @@ enum class SpellLevel {
     LEVEL8 = 8,
     LEVEL9 = 9,
 };
-
-enum class MagicSchool {
-    // abjuration - wards and defensive spells
-    ABJURATION,
-    // conjuration - summoning, creation, and teleportation
-    CONJURATION,
-    // divination - knowledge, providing answers, and identification of objects
-    DIVINATION,
-    // enchantment - affecting mind or mental state of friends and foes
-    ENCHANTMENT,
-    // evocation - high-damage combat spells and healing
-    EVOCATION,
-    // illusion - deception and manipulation
-    ILLUSION,
-    // necromancy - manipulation of life itself
-    NECROMANCY,
-    // transmutation - physically alter the form of an object
-    TRANSMUTATION
-};
-
-/**
- * @throws std::out_of_range if no magic school with that value exists
- */
-std::string_view magic_school_name(MagicSchool magic_school);
-/**
- * @throws std::out_of_range if no magic school with that name exists
- */
-MagicSchool magic_school_from_name(const std::string& magic_school_name);
-/**
- * @throws std::out_of_range if no magic school with that name exists
- */
-MagicSchool magic_school_from_name(std::string_view magic_school_name);
 
 class SpellType {
 public:
