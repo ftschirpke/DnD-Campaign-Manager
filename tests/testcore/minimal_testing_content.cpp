@@ -1,6 +1,5 @@
 #include <dnd_config.hpp>
 
-#include "core/validation/effects_provider/class_feature_data.hpp"
 #include "minimal_testing_content.hpp"
 
 #include <cassert>
