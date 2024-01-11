@@ -42,16 +42,8 @@ Errors CharacterParser::parse() {
     errors += parse_optional_attribute_into(json, "subspecies", data.feature_providers_data.subspecies_name);
     errors += parse_optional_attribute_into(json, "subclass", data.feature_providers_data.subclass_name);
 
-    bool has_level = json.contains("level");
-    bool has_xp = json.contains("xp");
-    if (!has_level && !has_xp) {
-        errors.add_parsing_error(
-            ParsingError::Code::MISSING_ATTRIBUTE, get_filepath(), "Character has no level or xp."
-        );
-    } else {
-        errors += parse_optional_attribute_into(json, "level", data.progression_data.level);
-        errors += parse_optional_attribute_into(json, "xp", data.progression_data.xp);
-    }
+    errors += parse_required_attribute_into(json, "level", data.progression_data.level);
+    errors += parse_required_attribute_into(json, "xp", data.progression_data.xp);
     errors += parse_required_attribute_into(json, "hit_dice_rolls", data.progression_data.hit_dice_rolls);
 
     if (json.contains("decisions")) {
