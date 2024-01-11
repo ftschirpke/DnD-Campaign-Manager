@@ -28,7 +28,7 @@ Errors validate_progression(const Progression::Data& data) {
             fmt::format("Character xp ({}) must be 0 or larger.", data.xp)
         );
     }
-    if (valid_level && valid_xp && xp_to_level(data.xp) != data.level) {
+    if (valid_level && valid_xp && level_for_xp(data.xp) != data.level) {
         errors.add_validation_error(
             ValidationError::Code::INCONSISTENT_ATTRIBUTES,
             fmt::format("Character level ({}) and xp ({}) do not match.", data.level, data.xp)

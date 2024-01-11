@@ -3,30 +3,17 @@
 
 #include <dnd_config.hpp>
 
+#include <tl/expected.hpp>
+
+#include <core/errors/runtime_error.hpp>
+
 namespace dnd {
 
-/**
- * @brief Converts a character level to the amount of xp needed to reach that level
- * @param level the character level to convert
- * @return the amount of xp needed to reach the given level
- * @throws std::invalid_argument if the given level is not a valid character level i.e. not between 1 and 20 (inclusive)
- */
-int level_to_xp(int level);
-/**
- * @brief Converts an amount of xp to the character level that amount of xp corresponds to
- * @param xp the amount of xp to convert
- * @return the character level that the given amount of xp corresponds to
- * @throws std::invalid_argument if the given xp amount is negative
- */
-int xp_to_level(int xp);
+tl::expected<int, RuntimeError> xp_for_level(int level);
 
-/**
- * @brief Returns the proficiency bonus for a character of the given level
- * @param level the character level
- * @return the proficiency bonus for a character of the given level
- * @throws std::invalid_argument if the given level is not a valid character level i.e. not between 1 and 20 (inclusive)
- */
-int proficiency_bonus_for_level(int level);
+tl::expected<int, RuntimeError> level_for_xp(int xp);
+
+tl::expected<int, RuntimeError> proficiency_bonus_for_level(int level);
 
 } // namespace dnd
 
