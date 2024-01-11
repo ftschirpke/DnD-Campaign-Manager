@@ -48,8 +48,8 @@ CreateResult<SpellType> SpellType::create(Data&& data) {
     string_lowercase_inplace(magic_school_str);
     tl::expected<MagicSchool, RuntimeError> magic_school_result = magic_school_from_string(magic_school_str);
     if (!magic_school_result.has_value()) {
-        Errors errors(magic_school_result.error());
-        return InvalidCreate<SpellType>(std::move(data), std::move(errors));
+        Errors sub_errors(magic_school_result.error());
+        return InvalidCreate<SpellType>(std::move(data), std::move(sub_errors));
     }
     magic_school = magic_school_result.value();
     return ValidCreate(SpellType(level, magic_school, is_ritual));
