@@ -1,4 +1,4 @@
 target_sources(${DND_TESTS}
     PRIVATE
-    subspecies_data_test.cpp
+    subspecies_validation_test.cpp
 )

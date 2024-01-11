@@ -6,7 +6,7 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
-#include <core/validation/character/ability_scores_data.hpp>
+#include <core/validation/character/ability_scores_validation.hpp>
 
 namespace dnd {
 

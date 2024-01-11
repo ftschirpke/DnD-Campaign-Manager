@@ -1,4 +1,4 @@
 target_sources(${DND_CORE}
     PRIVATE
-    subclass_data.cpp
+    subclass_validation.cpp
 )

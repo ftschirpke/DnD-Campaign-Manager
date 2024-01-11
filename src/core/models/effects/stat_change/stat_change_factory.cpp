@@ -15,7 +15,7 @@
 #include <core/models/effects/stat_change/identifier_stat_change.hpp>
 #include <core/models/effects/stat_change/literal_stat_change.hpp>
 #include <core/utils/string_manipulation.hpp>
-#include <core/validation/effects/stat_change/stat_change_data.hpp>
+#include <core/validation/effects/stat_change/stat_change_validation.hpp>
 
 namespace dnd {
 

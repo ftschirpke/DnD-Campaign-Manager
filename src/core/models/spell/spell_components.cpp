@@ -11,7 +11,7 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/runtime_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
-#include <core/validation/spell/spell_components_data.hpp>
+#include <core/validation/spell/spell_components_validation.hpp>
 
 namespace dnd {
 

@@ -12,7 +12,7 @@
 #include <core/models/species/species.hpp>
 #include <core/models/subclass/subclass.hpp>
 #include <core/models/subspecies/subspecies.hpp>
-#include <core/validation/character/feature_providers_data.hpp>
+#include <core/validation/character/feature_providers_validation.hpp>
 
 namespace dnd {
 

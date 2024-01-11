@@ -14,8 +14,8 @@
 #include <core/models/class/class.hpp>
 #include <core/parsing/effects_provider/class_feature_parser.hpp>
 #include <core/parsing/file_parser.hpp>
-#include <core/validation/class/class_data.hpp>
-#include <core/validation/spellcasting/spellcasting_data.hpp>
+#include <core/validation/class/class_validation.hpp>
+#include <core/validation/spellcasting/spellcasting_validation.hpp>
 
 namespace dnd {
 

@@ -13,7 +13,7 @@
 #include <core/models/spellcasting/spellcasting.hpp>
 #include <core/models/spellcasting/spells_known_spellcasting.hpp>
 #include <core/utils/data_result.hpp>
-#include <core/validation/spellcasting/spellcasting_data.hpp>
+#include <core/validation/spellcasting/spellcasting_validation.hpp>
 
 namespace dnd {
 

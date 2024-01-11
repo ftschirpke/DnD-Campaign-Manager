@@ -10,7 +10,7 @@
 
 #include <core/content.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
-#include <core/validation/effects/subholders/proficiency_holder_data.hpp>
+#include <core/validation/effects/subholders/proficiency_holder_validation.hpp>
 
 namespace dnd {
 

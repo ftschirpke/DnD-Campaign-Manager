@@ -24,7 +24,7 @@
 #include <core/models/species/species.hpp>
 #include <core/models/subclass/subclass.hpp>
 #include <core/models/subspecies/subspecies.hpp>
-#include <core/validation/character/character_data.hpp>
+#include <core/validation/character/character_validation.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
 namespace dnd {

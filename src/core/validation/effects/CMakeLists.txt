@@ -1,6 +1,6 @@
 target_sources(${DND_CORE}
     PRIVATE
-    effects_data.cpp
+    effects_validation.cpp
 )
 
 add_subdirectory(choice)

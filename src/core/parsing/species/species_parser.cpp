@@ -14,7 +14,7 @@
 #include <core/models/species/species.hpp>
 #include <core/parsing/effects_provider/feature_parser.hpp>
 #include <core/parsing/file_parser.hpp>
-#include <core/validation/species/species_data.hpp>
+#include <core/validation/species/species_validation.hpp>
 
 namespace dnd {
 

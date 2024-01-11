@@ -14,7 +14,7 @@
 #include <core/models/subclass/subclass.hpp>
 #include <core/parsing/effects_provider/class_feature_parser.hpp>
 #include <core/parsing/file_parser.hpp>
-#include <core/validation/class/class_data.hpp>
+#include <core/validation/class/class_validation.hpp>
 
 namespace dnd {
 

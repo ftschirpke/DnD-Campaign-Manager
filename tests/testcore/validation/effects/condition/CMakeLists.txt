@@ -1,4 +1,4 @@
 target_sources(${DND_TESTS}
     PRIVATE
-    condition_data_test.cpp
+    condition_validation_test.cpp
 )

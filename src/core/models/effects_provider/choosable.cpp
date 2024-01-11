@@ -12,7 +12,7 @@
 #include <core/models/effects/condition/condition_factory.hpp>
 #include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/feature.hpp>
-#include <core/validation/effects_provider/choosable_data.hpp>
+#include <core/validation/effects_provider/choosable_validation.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
 namespace dnd {

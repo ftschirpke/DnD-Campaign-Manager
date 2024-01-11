@@ -20,10 +20,10 @@
 #include <core/models/source_info.hpp>
 #include <core/models/spellcasting/spellcasting_factory.hpp>
 #include <core/utils/data_result.hpp>
-#include <core/validation/class/class_data.hpp>
-#include <core/validation/effects/condition/condition_data.hpp>
-#include <core/validation/effects/effects_data.hpp>
-#include <core/validation/effects_provider/feature_data.hpp>
+#include <core/validation/class/class_validation.hpp>
+#include <core/validation/effects/condition/condition_validation.hpp>
+#include <core/validation/effects/effects_validation.hpp>
+#include <core/validation/effects_provider/feature_validation.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
 namespace dnd {

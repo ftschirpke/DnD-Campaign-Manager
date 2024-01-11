@@ -11,7 +11,7 @@
 #include <core/models/effects/effects.hpp>
 #include <core/models/effects_provider/effects_provider.hpp>
 #include <core/models/source_info.hpp>
-#include <core/validation/effects/effects_data.hpp>
+#include <core/validation/effects/effects_validation.hpp>
 #include <core/validation/validation_data.hpp>
 
 namespace dnd {

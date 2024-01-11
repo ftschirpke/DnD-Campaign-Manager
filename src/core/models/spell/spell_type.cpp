@@ -15,7 +15,7 @@
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/utils/char_manipulation.hpp>
 #include <core/utils/string_manipulation.hpp>
-#include <core/validation/spell/spell_type_data.hpp>
+#include <core/validation/spell/spell_type_validation.hpp>
 
 namespace dnd {
 
@@ -64,7 +64,7 @@ MagicSchool SpellType::get_magic_school() const noexcept { return magic_school; 
 
 bool SpellType::is_ritual() const noexcept { return ritual; }
 
-int SpellType::get_spell_level_int() const { return static_cast<int>(spell_level); }
+int SpellType::get_spell_level_as_int() const { return static_cast<int>(spell_level); }
 
 std::string_view SpellType::get_magic_school_name() const {
     tl::expected<std::string_view, RuntimeError> magic_school_name_result = magic_school_name(magic_school);
@@ -85,7 +85,7 @@ std::string SpellType::str() const {
         case SpellLevel::LEVEL3:
             return fmt::format("3rd-level spell - School of {}", capitalized_school_name);
         default:
-            return fmt::format("{}th-level spell - School of {}", get_spell_level_int(), capitalized_school_name);
+            return fmt::format("{}th-level spell - School of {}", get_spell_level_as_int(), capitalized_school_name);
     }
 }
 
@@ -100,7 +100,7 @@ std::string SpellType::short_str() const {
         case SpellLevel::LEVEL3:
             return fmt::format("3rd-level {}", get_magic_school_name());
         default:
-            return fmt::format("{}th-level {}", get_spell_level_int(), get_magic_school_name());
+            return fmt::format("{}th-level {}", get_spell_level_as_int(), get_magic_school_name());
     }
 }
 
