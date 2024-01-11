@@ -58,8 +58,8 @@ Each character should be stored in a JSON file as a map (or "object") containing
 | race | yes | string | name of the race |
 | subrace | if race has subraces | string | name of the subrace |
 | base_ability_scores | yes | array of integers | array of initial ability scores **without any modifiers applied** (must be of length 6) |
-| level | if "xp" not provided | integer | level value of character <ul><li>if you provide this, you do not need to provide XP values which is useful for milestone levelling</li><li>but if you do not want a specific XP value (and not the minimum value for that level), you can and *should* still provide the XP value</li></ul> |
-| xp | if "level" not provided | integer | XP value of character <ul><li>if you provide this, you do not need to provide a level, but you can</li></ul> |
+| level | yes | integer | level value of character |
+| xp | yes | integer | XP value of character |
 | hit_dice_rolls | yes | array of integers | hit dice rolls on level-ups for hit points **without any modifiers applied** (should have one value for each level) <ul><li>**be aware:** if you are using the rule that on level 1 everyone gets the maximum value of the hit die as HP, you still have to provide that value in this array</li></ul> |
 | features | no | [features](#features) map | character-specific features |
 

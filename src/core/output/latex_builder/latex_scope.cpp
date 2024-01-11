@@ -15,7 +15,7 @@ namespace dnd {
 
 LatexScope::LatexScope() : enclosing_bspecies(true) {}
 
-LatexScope* LatexScope::no_enclosing_bspecies() {
+LatexScope* LatexScope::no_enclosing_braces() {
     enclosing_bspecies = false;
     return this;
 }
@@ -52,7 +52,7 @@ LatexCommand* LatexScope::add_command(const std::string& name) {
 }
 
 LatexCommand* LatexScope::add_command(const std::string& name, const std::string& argument) {
-    return add_command(name)->add_bspecies_argument(argument);
+    return add_command(name)->add_braces_argument(argument);
 }
 
 LatexBeginEnd LatexScope::add_begin_end(const std::string& name) {
@@ -61,7 +61,7 @@ LatexBeginEnd LatexScope::add_begin_end(const std::string& name) {
     objects.emplace_back(std::move(begin_command));
 
     auto begin_end_scope = std::make_unique<LatexScope>();
-    begin_end_scope->no_enclosing_bspecies();
+    begin_end_scope->no_enclosing_braces();
     LatexScope* scope_ptr = begin_end_scope.get();
     objects.emplace_back(std::move(begin_end_scope));
 

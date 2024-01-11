@@ -10,174 +10,174 @@ static constexpr const char* tags = "[core][basic_mechanics][character][progress
 
 TEST_CASE("level_to_xp", tags) {
     SECTION("Valid character levels") {
-        REQUIRE(level_to_xp(1) == 0);
-        REQUIRE(level_to_xp(2) == 300);
-        REQUIRE(level_to_xp(3) == 900);
-        REQUIRE(level_to_xp(4) == 2700);
-        REQUIRE(level_to_xp(5) == 6500);
-        REQUIRE(level_to_xp(6) == 14000);
-        REQUIRE(level_to_xp(7) == 23000);
-        REQUIRE(level_to_xp(8) == 34000);
-        REQUIRE(level_to_xp(9) == 48000);
-        REQUIRE(level_to_xp(10) == 64000);
-        REQUIRE(level_to_xp(11) == 85000);
-        REQUIRE(level_to_xp(12) == 100000);
-        REQUIRE(level_to_xp(13) == 120000);
-        REQUIRE(level_to_xp(14) == 140000);
-        REQUIRE(level_to_xp(15) == 165000);
-        REQUIRE(level_to_xp(16) == 195000);
-        REQUIRE(level_to_xp(17) == 225000);
-        REQUIRE(level_to_xp(18) == 265000);
-        REQUIRE(level_to_xp(19) == 305000);
-        REQUIRE(level_to_xp(20) == 355000);
+        REQUIRE(xp_for_level(1).value() == 0);
+        REQUIRE(xp_for_level(2).value() == 300);
+        REQUIRE(xp_for_level(3).value() == 900);
+        REQUIRE(xp_for_level(4).value() == 2700);
+        REQUIRE(xp_for_level(5).value() == 6500);
+        REQUIRE(xp_for_level(6).value() == 14000);
+        REQUIRE(xp_for_level(7).value() == 23000);
+        REQUIRE(xp_for_level(8).value() == 34000);
+        REQUIRE(xp_for_level(9).value() == 48000);
+        REQUIRE(xp_for_level(10).value() == 64000);
+        REQUIRE(xp_for_level(11).value() == 85000);
+        REQUIRE(xp_for_level(12).value() == 100000);
+        REQUIRE(xp_for_level(13).value() == 120000);
+        REQUIRE(xp_for_level(14).value() == 140000);
+        REQUIRE(xp_for_level(15).value() == 165000);
+        REQUIRE(xp_for_level(16).value() == 195000);
+        REQUIRE(xp_for_level(17).value() == 225000);
+        REQUIRE(xp_for_level(18).value() == 265000);
+        REQUIRE(xp_for_level(19).value() == 305000);
+        REQUIRE(xp_for_level(20).value() == 355000);
     }
 
     SECTION("Invalid character levels") {
-        REQUIRE_THROWS_AS(level_to_xp(0), std::invalid_argument);
-        REQUIRE_THROWS_AS(level_to_xp(-1), std::invalid_argument);
-        REQUIRE_THROWS_AS(level_to_xp(21), std::invalid_argument);
-        REQUIRE_THROWS_AS(level_to_xp(100), std::invalid_argument);
+        REQUIRE_FALSE(xp_for_level(0).has_value());
+        REQUIRE_FALSE(xp_for_level(-1).has_value());
+        REQUIRE_FALSE(xp_for_level(21).has_value());
+        REQUIRE_FALSE(xp_for_level(100).has_value());
     }
 }
 
 TEST_CASE("xp_to_level", tags) {
     SECTION("Valid xp amounts - level 1") {
-        REQUIRE(xp_to_level(0) == 1);
-        REQUIRE(xp_to_level(60) == 1);
-        REQUIRE(xp_to_level(150) == 1);
-        REQUIRE(xp_to_level(299) == 1);
+        REQUIRE(level_for_xp(0).value() == 1);
+        REQUIRE(level_for_xp(60).value() == 1);
+        REQUIRE(level_for_xp(150).value() == 1);
+        REQUIRE(level_for_xp(299).value() == 1);
     }
     SECTION("Valid xp amounts - level 2") {
-        REQUIRE(xp_to_level(300) == 2);
-        REQUIRE(xp_to_level(450) == 2);
-        REQUIRE(xp_to_level(613) == 2);
-        REQUIRE(xp_to_level(899) == 2);
+        REQUIRE(level_for_xp(300).value() == 2);
+        REQUIRE(level_for_xp(450).value() == 2);
+        REQUIRE(level_for_xp(613).value() == 2);
+        REQUIRE(level_for_xp(899).value() == 2);
     }
     SECTION("Valid xp amounts - level 3") {
-        REQUIRE(xp_to_level(900) == 3);
-        REQUIRE(xp_to_level(1200) == 3);
-        REQUIRE(xp_to_level(1799) == 3);
-        REQUIRE(xp_to_level(2699) == 3);
+        REQUIRE(level_for_xp(900).value() == 3);
+        REQUIRE(level_for_xp(1200).value() == 3);
+        REQUIRE(level_for_xp(1799).value() == 3);
+        REQUIRE(level_for_xp(2699).value() == 3);
     }
     SECTION("Valid xp amounts - level 4") {
-        REQUIRE(xp_to_level(2700) == 4);
-        REQUIRE(xp_to_level(3000) == 4);
-        REQUIRE(xp_to_level(4692) == 4);
-        REQUIRE(xp_to_level(6499) == 4);
+        REQUIRE(level_for_xp(2700).value() == 4);
+        REQUIRE(level_for_xp(3000).value() == 4);
+        REQUIRE(level_for_xp(4692).value() == 4);
+        REQUIRE(level_for_xp(6499).value() == 4);
     }
     SECTION("Valid xp amounts - level 5") {
-        REQUIRE(xp_to_level(6500) == 5);
-        REQUIRE(xp_to_level(7302) == 5);
-        REQUIRE(xp_to_level(9999) == 5);
-        REQUIRE(xp_to_level(13999) == 5);
+        REQUIRE(level_for_xp(6500).value() == 5);
+        REQUIRE(level_for_xp(7302).value() == 5);
+        REQUIRE(level_for_xp(9999).value() == 5);
+        REQUIRE(level_for_xp(13999).value() == 5);
     }
     SECTION("Valid xp amounts - level 6") {
-        REQUIRE(xp_to_level(14000) == 6);
-        REQUIRE(xp_to_level(15000) == 6);
-        REQUIRE(xp_to_level(19398) == 6);
-        REQUIRE(xp_to_level(22999) == 6);
+        REQUIRE(level_for_xp(14000).value() == 6);
+        REQUIRE(level_for_xp(15000).value() == 6);
+        REQUIRE(level_for_xp(19398).value() == 6);
+        REQUIRE(level_for_xp(22999).value() == 6);
     }
     SECTION("Valid xp amounts - level 7") {
-        REQUIRE(xp_to_level(23000) == 7);
-        REQUIRE(xp_to_level(25700) == 7);
-        REQUIRE(xp_to_level(30328) == 7);
-        REQUIRE(xp_to_level(33999) == 7);
+        REQUIRE(level_for_xp(23000).value() == 7);
+        REQUIRE(level_for_xp(25700).value() == 7);
+        REQUIRE(level_for_xp(30328).value() == 7);
+        REQUIRE(level_for_xp(33999).value() == 7);
     }
     SECTION("Valid xp amounts - level 8") {
-        REQUIRE(xp_to_level(34000) == 8);
-        REQUIRE(xp_to_level(37299) == 8);
-        REQUIRE(xp_to_level(39020) == 8);
-        REQUIRE(xp_to_level(41998) == 8);
-        REQUIRE(xp_to_level(47999) == 8);
+        REQUIRE(level_for_xp(34000).value() == 8);
+        REQUIRE(level_for_xp(37299).value() == 8);
+        REQUIRE(level_for_xp(39020).value() == 8);
+        REQUIRE(level_for_xp(41998).value() == 8);
+        REQUIRE(level_for_xp(47999).value() == 8);
     }
     SECTION("Valid xp amounts - level 9") {
-        REQUIRE(xp_to_level(48000) == 9);
-        REQUIRE(xp_to_level(51000) == 9);
-        REQUIRE(xp_to_level(53998) == 9);
-        REQUIRE(xp_to_level(58139) == 9);
-        REQUIRE(xp_to_level(60077) == 9);
-        REQUIRE(xp_to_level(63999) == 9);
+        REQUIRE(level_for_xp(48000).value() == 9);
+        REQUIRE(level_for_xp(51000).value() == 9);
+        REQUIRE(level_for_xp(53998).value() == 9);
+        REQUIRE(level_for_xp(58139).value() == 9);
+        REQUIRE(level_for_xp(60077).value() == 9);
+        REQUIRE(level_for_xp(63999).value() == 9);
     }
     SECTION("Valid xp amounts - level 10") {
-        REQUIRE(xp_to_level(64000) == 10);
-        REQUIRE(xp_to_level(67000) == 10);
-        REQUIRE(xp_to_level(71999) == 10);
-        REQUIRE(xp_to_level(74999) == 10);
-        REQUIRE(xp_to_level(79999) == 10);
-        REQUIRE(xp_to_level(84999) == 10);
+        REQUIRE(level_for_xp(64000).value() == 10);
+        REQUIRE(level_for_xp(67000).value() == 10);
+        REQUIRE(level_for_xp(71999).value() == 10);
+        REQUIRE(level_for_xp(74999).value() == 10);
+        REQUIRE(level_for_xp(79999).value() == 10);
+        REQUIRE(level_for_xp(84999).value() == 10);
     }
     SECTION("Valid xp amounts - level 11") {
-        REQUIRE(xp_to_level(85000) == 11);
-        REQUIRE(xp_to_level(88000) == 11);
-        REQUIRE(xp_to_level(92103) == 11);
-        REQUIRE(xp_to_level(95999) == 11);
-        REQUIRE(xp_to_level(99999) == 11);
+        REQUIRE(level_for_xp(85000).value() == 11);
+        REQUIRE(level_for_xp(88000).value() == 11);
+        REQUIRE(level_for_xp(92103).value() == 11);
+        REQUIRE(level_for_xp(95999).value() == 11);
+        REQUIRE(level_for_xp(99999).value() == 11);
     }
     SECTION("Valid xp amounts - level 12") {
-        REQUIRE(xp_to_level(100000) == 12);
-        REQUIRE(xp_to_level(103000) == 12);
-        REQUIRE(xp_to_level(107471) == 12);
-        REQUIRE(xp_to_level(114321) == 12);
-        REQUIRE(xp_to_level(119999) == 12);
+        REQUIRE(level_for_xp(100000).value() == 12);
+        REQUIRE(level_for_xp(103000).value() == 12);
+        REQUIRE(level_for_xp(107471).value() == 12);
+        REQUIRE(level_for_xp(114321).value() == 12);
+        REQUIRE(level_for_xp(119999).value() == 12);
     }
     SECTION("Valid xp amounts - level 13") {
-        REQUIRE(xp_to_level(120000) == 13);
-        REQUIRE(xp_to_level(123000) == 13);
-        REQUIRE(xp_to_level(129871) == 13);
-        REQUIRE(xp_to_level(134999) == 13);
-        REQUIRE(xp_to_level(139999) == 13);
+        REQUIRE(level_for_xp(120000).value() == 13);
+        REQUIRE(level_for_xp(123000).value() == 13);
+        REQUIRE(level_for_xp(129871).value() == 13);
+        REQUIRE(level_for_xp(134999).value() == 13);
+        REQUIRE(level_for_xp(139999).value() == 13);
     }
     SECTION("Valid xp amounts - level 14") {
-        REQUIRE(xp_to_level(140000) == 14);
-        REQUIRE(xp_to_level(143000) == 14);
-        REQUIRE(xp_to_level(151891) == 14);
-        REQUIRE(xp_to_level(164999) == 14);
+        REQUIRE(level_for_xp(140000).value() == 14);
+        REQUIRE(level_for_xp(143000).value() == 14);
+        REQUIRE(level_for_xp(151891).value() == 14);
+        REQUIRE(level_for_xp(164999).value() == 14);
     }
     SECTION("Valid xp amounts - level 15") {
-        REQUIRE(xp_to_level(165000) == 15);
-        REQUIRE(xp_to_level(168000) == 15);
-        REQUIRE(xp_to_level(181471) == 15);
-        REQUIRE(xp_to_level(194999) == 15);
+        REQUIRE(level_for_xp(165000).value() == 15);
+        REQUIRE(level_for_xp(168000).value() == 15);
+        REQUIRE(level_for_xp(181471).value() == 15);
+        REQUIRE(level_for_xp(194999).value() == 15);
     }
     SECTION("Valid xp amounts - level 16") {
-        REQUIRE(xp_to_level(195000) == 16);
-        REQUIRE(xp_to_level(198000) == 16);
-        REQUIRE(xp_to_level(207929) == 16);
-        REQUIRE(xp_to_level(224999) == 16);
+        REQUIRE(level_for_xp(195000).value() == 16);
+        REQUIRE(level_for_xp(198000).value() == 16);
+        REQUIRE(level_for_xp(207929).value() == 16);
+        REQUIRE(level_for_xp(224999).value() == 16);
     }
     SECTION("Valid xp amounts - level 17") {
-        REQUIRE(xp_to_level(225000) == 17);
-        REQUIRE(xp_to_level(228000) == 17);
-        REQUIRE(xp_to_level(239871) == 17);
-        REQUIRE(xp_to_level(264999) == 17);
+        REQUIRE(level_for_xp(225000).value() == 17);
+        REQUIRE(level_for_xp(228000).value() == 17);
+        REQUIRE(level_for_xp(239871).value() == 17);
+        REQUIRE(level_for_xp(264999).value() == 17);
     }
     SECTION("Valid xp amounts - level 18") {
-        REQUIRE(xp_to_level(265000) == 18);
-        REQUIRE(xp_to_level(268000) == 18);
-        REQUIRE(xp_to_level(290112) == 18);
-        REQUIRE(xp_to_level(304999) == 18);
+        REQUIRE(level_for_xp(265000).value() == 18);
+        REQUIRE(level_for_xp(268000).value() == 18);
+        REQUIRE(level_for_xp(290112).value() == 18);
+        REQUIRE(level_for_xp(304999).value() == 18);
     }
     SECTION("Valid xp amounts - level 19") {
-        REQUIRE(xp_to_level(305000) == 19);
-        REQUIRE(xp_to_level(308000) == 19);
-        REQUIRE(xp_to_level(334871) == 19);
-        REQUIRE(xp_to_level(349999) == 19);
+        REQUIRE(level_for_xp(305000).value() == 19);
+        REQUIRE(level_for_xp(308000).value() == 19);
+        REQUIRE(level_for_xp(334871).value() == 19);
+        REQUIRE(level_for_xp(349999).value() == 19);
     }
     SECTION("Valid xp amounts - level 20") {
-        REQUIRE(xp_to_level(355000) == 20);
-        REQUIRE(xp_to_level(373000) == 20);
-        REQUIRE(xp_to_level(384999) == 20);
-        REQUIRE(xp_to_level(399999) == 20);
-        REQUIRE(xp_to_level(424999) == 20);
-        REQUIRE(xp_to_level(449999) == 20);
-        REQUIRE(xp_to_level(999999) == 20);
+        REQUIRE(level_for_xp(355000).value() == 20);
+        REQUIRE(level_for_xp(373000).value() == 20);
+        REQUIRE(level_for_xp(384999).value() == 20);
+        REQUIRE(level_for_xp(399999).value() == 20);
+        REQUIRE(level_for_xp(424999).value() == 20);
+        REQUIRE(level_for_xp(449999).value() == 20);
+        REQUIRE(level_for_xp(999999).value() == 20);
     }
 
     SECTION("Invalid xp amounts") {
-        REQUIRE_THROWS_AS(xp_to_level(-1), std::invalid_argument);
-        REQUIRE_THROWS_AS(xp_to_level(-37), std::invalid_argument);
-        REQUIRE_THROWS_AS(xp_to_level(-100), std::invalid_argument);
-        REQUIRE_THROWS_AS(xp_to_level(-5000), std::invalid_argument);
+        REQUIRE_FALSE(level_for_xp(-1).has_value());
+        REQUIRE_FALSE(level_for_xp(-37).has_value());
+        REQUIRE_FALSE(level_for_xp(-100).has_value());
+        REQUIRE_FALSE(level_for_xp(-5000).has_value());
     }
 }
 

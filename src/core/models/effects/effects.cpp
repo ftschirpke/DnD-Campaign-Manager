@@ -20,11 +20,11 @@
 #include <core/models/effects/subholders/proficiency_holder.hpp>
 #include <core/models/effects/subholders/riv_holder.hpp>
 #include <core/utils/data_result.hpp>
-#include <core/validation/effects/effects_data.hpp>
-#include <core/validation/effects/subholders/action_holder_data.hpp>
-#include <core/validation/effects/subholders/extra_spells_holder_data.hpp>
-#include <core/validation/effects/subholders/proficiency_holder_data.hpp>
-#include <core/validation/effects/subholders/riv_holder_data.hpp>
+#include <core/validation/effects/effects_validation.hpp>
+#include <core/validation/effects/subholders/action_holder_validation.hpp>
+#include <core/validation/effects/subholders/extra_spells_holder_validation.hpp>
+#include <core/validation/effects/subholders/proficiency_holder_validation.hpp>
+#include <core/validation/effects/subholders/riv_holder_validation.hpp>
 
 namespace dnd {
 

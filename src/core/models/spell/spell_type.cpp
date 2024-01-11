@@ -2,74 +2,22 @@
 
 #include "spell_type.hpp"
 
-#include <array>
 #include <cassert>
-#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <utility>
 
 #include <fmt/format.h>
+#include <tl/expected.hpp>
 
+#include <core/basic_mechanics/magic_schools.hpp>
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/utils/char_manipulation.hpp>
 #include <core/utils/string_manipulation.hpp>
-#include <core/validation/spell/spell_type_data.hpp>
+#include <core/validation/spell/spell_type_validation.hpp>
 
 namespace dnd {
-
-inline constexpr std::array<std::pair<std::string_view, MagicSchool>, 8> magic_schools = {
-    std::pair("abjuration", MagicSchool::ABJURATION), std::pair("conjuration", MagicSchool::CONJURATION),
-    std::pair("divination", MagicSchool::DIVINATION), std::pair("enchantment", MagicSchool::ENCHANTMENT),
-    std::pair("evocation", MagicSchool::EVOCATION),   std::pair("illusion", MagicSchool::ILLUSION),
-    std::pair("necromancy", MagicSchool::NECROMANCY), std::pair("transmutation", MagicSchool::TRANSMUTATION),
-};
-
-bool is_magic_school(const std::string& magic_school_name) {
-    for (const auto& [school_name, school_val] : magic_schools) {
-        if (magic_school_name == school_name) {
-            return true;
-        }
-    }
-    return false;
-}
-
-bool is_magic_school(std::string_view magic_school_name) {
-    for (const auto& [school_name, school_val] : magic_schools) {
-        if (magic_school_name == school_name) {
-            return true;
-        }
-    }
-    return false;
-}
-
-std::string_view magic_school_name(MagicSchool magic_school) {
-    for (const auto& [school_name, school_val] : magic_schools) {
-        if (magic_school == school_val) {
-            return school_name;
-        }
-    }
-    throw std::out_of_range("The magic school does not exist.");
-}
-
-MagicSchool magic_school_from_name(const std::string& magic_school_name) {
-    for (const auto& [school_name, school_val] : magic_schools) {
-        if (magic_school_name == school_name) {
-            return school_val;
-        }
-    }
-    throw std::out_of_range(fmt::format("The magic school \"{}\" does not exist.", magic_school_name));
-}
-
-MagicSchool magic_school_from_name(std::string_view magic_school_name) {
-    for (const auto& [school_name, school_val] : magic_schools) {
-        if (magic_school_name == school_name) {
-            return school_val;
-        }
-    }
-    throw std::out_of_range(fmt::format("The magic school \"{}\" does not exist.", magic_school_name));
-}
 
 CreateResult<SpellType> SpellType::create(Data&& data) {
     Errors errors = validate_spell_type(data);
@@ -98,7 +46,12 @@ CreateResult<SpellType> SpellType::create(Data&& data) {
         }
     }
     string_lowercase_inplace(magic_school_str);
-    magic_school = magic_school_from_name(magic_school_str);
+    tl::expected<MagicSchool, RuntimeError> magic_school_result = magic_school_from_string(magic_school_str);
+    if (!magic_school_result.has_value()) {
+        Errors sub_errors(magic_school_result.error());
+        return InvalidCreate<SpellType>(std::move(data), std::move(sub_errors));
+    }
+    magic_school = magic_school_result.value();
     return ValidCreate(SpellType(level, magic_school, is_ritual));
 }
 
@@ -111,9 +64,13 @@ MagicSchool SpellType::get_magic_school() const noexcept { return magic_school; 
 
 bool SpellType::is_ritual() const noexcept { return ritual; }
 
-int SpellType::get_spell_level_int() const { return static_cast<int>(spell_level); }
+int SpellType::get_spell_level_as_int() const { return static_cast<int>(spell_level); }
 
-std::string_view SpellType::get_magic_school_name() const { return magic_school_name(magic_school); }
+std::string_view SpellType::get_magic_school_name() const {
+    tl::expected<std::string_view, RuntimeError> magic_school_name_result = magic_school_name(magic_school);
+    assert(magic_school_name_result.has_value());
+    return magic_school_name_result.value();
+}
 
 std::string SpellType::str() const {
     std::string capitalized_school_name = std::string(get_magic_school_name());
@@ -128,7 +85,7 @@ std::string SpellType::str() const {
         case SpellLevel::LEVEL3:
             return fmt::format("3rd-level spell - School of {}", capitalized_school_name);
         default:
-            return fmt::format("{}th-level spell - School of {}", get_spell_level_int(), capitalized_school_name);
+            return fmt::format("{}th-level spell - School of {}", get_spell_level_as_int(), capitalized_school_name);
     }
 }
 
@@ -143,7 +100,7 @@ std::string SpellType::short_str() const {
         case SpellLevel::LEVEL3:
             return fmt::format("3rd-level {}", get_magic_school_name());
         default:
-            return fmt::format("{}th-level {}", get_spell_level_int(), get_magic_school_name());
+            return fmt::format("{}th-level {}", get_spell_level_as_int(), get_magic_school_name());
     }
 }
 

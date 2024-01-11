@@ -5,7 +5,6 @@
 
 #include <memory>
 #include <string>
-#include <string_view>
 #include <vector>
 
 #include <core/output/string_formatting/formats/bulleted_list.hpp>

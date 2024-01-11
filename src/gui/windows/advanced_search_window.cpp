@@ -2,7 +2,6 @@
 
 #include "advanced_search_window.hpp"
 
-#include <algorithm>
 #include <cassert>
 #include <string>
 #include <variant>

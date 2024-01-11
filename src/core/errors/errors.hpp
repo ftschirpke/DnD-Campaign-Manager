@@ -27,18 +27,16 @@ public:
     Errors(Errors&&) noexcept = default;
     Errors& operator=(Errors&&) noexcept = default;
 
-    /**
-     * @brief Returns "true" if there are no errors.
-     * @return "true" if there are no errors, "false" otherwise
-     */
-    bool ok() const;
+    bool ok() const noexcept;
+    const std::vector<Error>& get_errors() const noexcept;
+
     void add_parsing_error(ParsingError::Code error_code, const std::filesystem::path& filepath, std::string&& message);
     void add_parsing_error(ParsingError&& error);
     void add_validation_error(ValidationError::Code error_code, std::string&& message);
     void add_validation_error(ValidationError&& error);
     void add_runtime_error(RuntimeError::Code error_code, std::string&& message);
     void add_runtime_error(RuntimeError&& error);
-    const std::vector<Error>& get_errors() const noexcept;
+
     void merge(Errors&& other);
     Errors& operator+=(Errors&& other);
 private:

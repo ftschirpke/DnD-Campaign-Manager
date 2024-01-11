@@ -10,14 +10,13 @@
 #include <core/errors/errors.hpp>
 #include <core/models/effects/choice/choice.hpp>
 #include <core/models/effects/condition/condition.hpp>
+#include <core/models/effects/effects.hpp>
 #include <core/models/effects/stat_change/stat_change.hpp>
 #include <core/models/effects/subholders/action_holder.hpp>
 #include <core/models/effects/subholders/extra_spells_holder.hpp>
 #include <core/models/effects/subholders/proficiency_holder.hpp>
 #include <core/models/effects/subholders/riv_holder.hpp>
 #include <core/parsing/parser.hpp>
-#include <core/validation/effects/effects_data.hpp>
-#include <core/validation/validation_data.hpp>
 
 namespace dnd {
 

@@ -1,4 +1,4 @@
 target_sources(${DND_TESTS}
     PRIVATE
-    item_data_test.cpp
+    item_validation_test.cpp
 )

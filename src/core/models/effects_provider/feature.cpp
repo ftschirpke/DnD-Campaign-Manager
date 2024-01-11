@@ -5,14 +5,13 @@
 #include <filesystem>
 #include <string>
 #include <utility>
-#include <vector>
 
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/models/effects/effects.hpp>
 #include <core/models/source_info.hpp>
-#include <core/validation/effects_provider/feature_data.hpp>
+#include <core/validation/effects_provider/feature_validation.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
 namespace dnd {

@@ -12,7 +12,7 @@ namespace dnd {
 
 class SpellComponents {
 public:
-    class Data;
+    struct Data;
 
     static CreateResult<SpellComponents> create(Data&& components_data);
 
@@ -24,17 +24,9 @@ public:
     bool has_material() const noexcept;
     const std::string& get_material_components() const noexcept;
 
-    /**
-     * @brief Creates a string representation of the spell components
-     * example: "V, M (a pinch of salt)"
-     * @return the string representation of the spell components
-     */
+    // returns a string representation of spell components "V, M (a pinch of salt)"
     std::string str() const;
-    /**
-     * @brief Creates a short string representation of the spell components (without the material components)
-     * example: "V, S, M"
-     * @return the short string representation of the spell components
-     */
+    // returns a short string representation of spell components (without material components) e.g. "V, S, M"
     std::string short_str() const;
 private:
     bool verbal;
@@ -43,8 +35,7 @@ private:
     std::string material_components;
 };
 
-class SpellComponents::Data {
-public:
+struct SpellComponents::Data {
     std::strong_ordering operator<=>(const Data&) const noexcept = default;
 
     std::string str;

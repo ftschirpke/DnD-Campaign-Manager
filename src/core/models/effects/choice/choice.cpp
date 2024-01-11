@@ -2,6 +2,7 @@
 
 #include "choice.hpp"
 
+#include <cassert>
 #include <memory>
 #include <regex>
 #include <set>
@@ -9,7 +10,10 @@
 #include <utility>
 #include <vector>
 
+#include <tl/expected.hpp>
+
 #include <core/basic_mechanics/abilities.hpp>
+#include <core/basic_mechanics/magic_schools.hpp>
 #include <core/basic_mechanics/skills.hpp>
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
@@ -21,7 +25,7 @@
 #include <core/searching/content_filters/selection_filter.hpp>
 #include <core/searching/content_filters/spell/spell_filter.hpp>
 #include <core/utils/data_result.hpp>
-#include <core/validation/effects/choice/choice_data.hpp>
+#include <core/validation/effects/choice/choice_validation.hpp>
 
 namespace dnd {
 
@@ -37,9 +41,12 @@ static std::unique_ptr<ContentFilter> create_cantrip_filter(const std::string& g
     if (!std::regex_match(group_name, match, cantrip_filter_regex)) {
         throw invalid_data("Cannot create choice filter from invalid group name.");
     }
-    const std::string spell_level = match[2].str();
-    if (!spell_level.empty()) {
-        cantrip_filter.magic_school_filter.set(SelectionFilterType::IS_IN, {magic_school_from_name(spell_level)});
+    const std::string spell_magic_school_name = match[2].str();
+    if (!spell_magic_school_name.empty()) {
+        tl::expected<MagicSchool, RuntimeError> magic_school_result = magic_school_from_string(spell_magic_school_name);
+        assert(magic_school_result.has_value());
+        MagicSchool magic_school = magic_school_result.value();
+        cantrip_filter.magic_school_filter.set(SelectionFilterType::IS_IN, {magic_school});
     }
     const std::string spell_class_name = match[4].str();
     if (!spell_class_name.empty()) {
@@ -72,9 +79,12 @@ static std::unique_ptr<ContentFilter> create_spell_filter(const std::string& gro
     } else {
         spell_filter.level_filter.set(NumberFilterType::EQUAL, spell_level[0] - '0');
     }
-    const std::string spell_school_name = match[4].str();
-    if (!spell_school_name.empty()) {
-        spell_filter.magic_school_filter.set(SelectionFilterType::IS_IN, {magic_school_from_name(spell_school_name)});
+    const std::string spell_magic_school_name = match[4].str();
+    if (!spell_magic_school_name.empty()) {
+        tl::expected<MagicSchool, RuntimeError> magic_school_result = magic_school_from_string(spell_magic_school_name);
+        assert(magic_school_result.has_value());
+        MagicSchool magic_school = magic_school_result.value();
+        spell_filter.magic_school_filter.set(SelectionFilterType::IS_IN, {magic_school});
     }
     const std::string spell_class_name = match[6].str();
     if (!spell_class_name.empty()) {

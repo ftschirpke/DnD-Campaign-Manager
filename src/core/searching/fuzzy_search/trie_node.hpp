@@ -15,22 +15,8 @@ namespace dnd {
 template <typename T>
 class TrieNode {
 public:
-    /**
-     * @brief Get the children of this node
-     * @return the map of children
-     */
     const std::map<char, TrieNode<T>>& get_children() const;
-    /**
-     * @brief Get the child node for the given character if it exists
-     * @param c the character to get the child node for
-     * @return pointer to child node if it exists, else nullptr
-     */
     TrieNode<T>* get_child(char c);
-    /**
-     * @brief Get the child node for the given character if it exists
-     * @param c the character to get the child node for
-     * @return pointer to child node if it exists, else nullptr
-     */
     const TrieNode<T>* get_child(char c) const;
     /**
      * @brief Get the data associated with the end of a word
@@ -59,6 +45,9 @@ private:
     // a pointer to the data associated with the end of a word
     std::vector<const T*> end_words;
 };
+
+
+// === IMPLEMENTATION ===
 
 template <typename T>
 const std::map<char, TrieNode<T>>& TrieNode<T>::get_children() const {

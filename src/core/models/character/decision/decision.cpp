@@ -14,7 +14,7 @@
 #include <core/models/character/character.hpp>
 #include <core/models/effects/effects.hpp>
 #include <core/models/effects_provider/feature.hpp>
-#include <core/validation/character/decision/decision_data.hpp>
+#include <core/validation/character/decision/decision_validation.hpp>
 
 namespace dnd {
 

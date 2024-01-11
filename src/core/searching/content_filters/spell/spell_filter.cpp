@@ -26,8 +26,8 @@ bool SpellFilter::matches(const Spell& spell) const noexcept {
     return ContentPieceFilter::matches(spell) && verbal_component_filter.matches(components.has_verbal())
            && somatic_component_filter.matches(components.has_somatic())
            && material_component_filter.matches(components.has_material())
-           && level_filter.matches(spell.get_type().get_spell_level_int()) && magic_school_filter.matches(magic_school)
-           && ritual_filter.matches(spell.get_type().is_ritual())
+           && level_filter.matches(spell.get_type().get_spell_level_as_int())
+           && magic_school_filter.matches(magic_school) && ritual_filter.matches(spell.get_type().is_ritual())
            && casting_time_filter.matches(spell.get_casting_time()) && range_filter.matches(spell.get_range())
            && duration_filter.matches(spell.get_duration())
            && std::any_of(

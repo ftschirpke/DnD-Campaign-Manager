@@ -9,13 +9,9 @@
 #include <tl/expected.hpp>
 
 #include <core/errors/errors.hpp>
-#include <core/utils/data_result.hpp>
 
 namespace dnd {
 
-/**
- * @brief An enum for the types of typical tabletop dice.
- */
 enum class DiceType {
     D4 = 4,
     D6 = 6,

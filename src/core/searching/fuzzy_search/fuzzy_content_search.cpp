@@ -26,15 +26,15 @@ namespace dnd {
 
 FuzzyContentSearch::FuzzyContentSearch(const Content& content) {
     query.reserve(40);
-    character_search_path.push(content.get_characters().get_trie_root());
-    class_search_path.push(content.get_classes().get_trie_root());
-    subclass_search_path.push(content.get_subclasses().get_trie_root());
-    species_search_path.push(content.get_species().get_trie_root());
-    subspecies_search_path.push(content.get_subspecies().get_trie_root());
-    item_search_path.push(content.get_items().get_trie_root());
-    spell_search_path.push(content.get_spells().get_trie_root());
-    feature_search_path.push(content.get_features().get_trie_root());
-    choosable_search_path.push(content.get_choosables().get_trie_root());
+    character_search_path.push(content.get_characters().get_fuzzy_search_trie_root());
+    class_search_path.push(content.get_classes().get_fuzzy_search_trie_root());
+    subclass_search_path.push(content.get_subclasses().get_fuzzy_search_trie_root());
+    species_search_path.push(content.get_species().get_fuzzy_search_trie_root());
+    subspecies_search_path.push(content.get_subspecies().get_fuzzy_search_trie_root());
+    item_search_path.push(content.get_items().get_fuzzy_search_trie_root());
+    spell_search_path.push(content.get_spells().get_fuzzy_search_trie_root());
+    feature_search_path.push(content.get_features().get_fuzzy_search_trie_root());
+    choosable_search_path.push(content.get_choosables().get_fuzzy_search_trie_root());
 }
 
 FuzzyContentSearch::FuzzyContentSearch(const Content& content, const std::string& initial_query)

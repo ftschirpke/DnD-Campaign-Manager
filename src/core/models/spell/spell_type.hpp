@@ -7,6 +7,7 @@
 #include <string>
 #include <string_view>
 
+#include <core/basic_mechanics/magic_schools.hpp>
 #include <core/utils/data_result.hpp>
 
 namespace dnd {
@@ -24,43 +25,9 @@ enum class SpellLevel {
     LEVEL9 = 9,
 };
 
-enum class MagicSchool {
-    // abjuration - wards and defensive spells
-    ABJURATION,
-    // conjuration - summoning, creation, and teleportation
-    CONJURATION,
-    // divination - knowledge, providing answers, and identification of objects
-    DIVINATION,
-    // enchantment - affecting mind or mental state of friends and foes
-    ENCHANTMENT,
-    // evocation - high-damage combat spells and healing
-    EVOCATION,
-    // illusion - deception and manipulation
-    ILLUSION,
-    // necromancy - manipulation of life itself
-    NECROMANCY,
-    // transmutation - physically alter the form of an object
-    TRANSMUTATION
-};
-
-bool is_magic_school(const std::string& magic_school_name);
-bool is_magic_school(std::string_view magic_school_name);
-/**
- * @throws std::out_of_range if no magic school with that value exists
- */
-std::string_view magic_school_name(MagicSchool magic_school);
-/**
- * @throws std::out_of_range if no magic school with that name exists
- */
-MagicSchool magic_school_from_name(const std::string& magic_school_name);
-/**
- * @throws std::out_of_range if no magic school with that name exists
- */
-MagicSchool magic_school_from_name(std::string_view magic_school_name);
-
 class SpellType {
 public:
-    class Data;
+    struct Data;
 
     static CreateResult<SpellType> create(Data&& type_data);
 
@@ -70,24 +37,12 @@ public:
     MagicSchool get_magic_school() const noexcept;
     bool is_ritual() const noexcept;
 
-    /**
-     * @brief Returns the spell level as an integer (0 for cantrips, 1 for level 1 spells, etc.)
-     * @return the spell level as an integer
-     */
-    int get_spell_level_int() const;
+    int get_spell_level_as_int() const;
     std::string_view get_magic_school_name() const;
 
-    /**
-     * @brief Creates a string representation of the spell type
-     * examples: "Cantrip - School of Illusion" or "3rd-level spell - School of Necromancy (ritual)"
-     * @return a string representation of the spell type
-     */
+    // returns string of form: "Cantrip - School of Illusion" or "3rd-level spell - School of Necromancy (ritual)"
     std::string str() const;
-    /**
-     * @brief Creates a short string representation of the spell type
-     * examples: "illusion cantrip" or "3rd level necromancy (ritual)"
-     * @return a short string representation of the spell type
-     */
+    // returns string of form: "illusion cantrip" or "3rd level necromancy (ritual)"
     std::string short_str() const;
 private:
     SpellLevel spell_level;
@@ -95,8 +50,7 @@ private:
     bool ritual;
 };
 
-class SpellType::Data {
-public:
+struct SpellType::Data {
     std::strong_ordering operator<=>(const Data&) const noexcept = default;
 
     std::string str;

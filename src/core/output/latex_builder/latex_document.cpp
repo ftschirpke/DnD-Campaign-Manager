@@ -11,9 +11,9 @@ namespace dnd {
 
 LatexDocument::LatexDocument(const std::string& document_class_type)
     : header(), body(), document_class("documentclass") {
-    header.no_enclosing_bspecies();
-    body.no_enclosing_bspecies();
-    document_class.add_bspecies_argument(document_class_type);
+    header.no_enclosing_braces();
+    body.no_enclosing_braces();
+    document_class.add_braces_argument(document_class_type);
 }
 
 LatexCommand* LatexDocument::use_package(const std::string& package_name) {
@@ -26,9 +26,9 @@ std::string LatexDocument::str() const {
 
     document_string += document_class.str();
     document_string += header.str();
-    document_string += LatexCommand("begin").add_bspecies_argument("document")->str();
+    document_string += LatexCommand("begin").add_braces_argument("document")->str();
     document_string += body.str();
-    document_string += LatexCommand("end").add_bspecies_argument("document")->str();
+    document_string += LatexCommand("end").add_braces_argument("document")->str();
 
     return document_string;
 }

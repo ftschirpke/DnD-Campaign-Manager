@@ -2,12 +2,14 @@
 
 #include "fuzzy_search_window.hpp"
 
+#include <array>
+#include <string>
+
 #include <fmt/format.h>
 #include <imgui/imgui.h>
 #include <imgui/misc/cpp/imgui_stdlib.h>
 
-#include <array>
-#include <string>
+#include <core/session.hpp>
 
 namespace dnd {
 

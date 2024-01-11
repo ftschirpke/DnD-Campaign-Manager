@@ -1,10 +1,11 @@
 #include <dnd_config.hpp>
 
 #include "content_window.hpp"
-#include "gui/visitors/content/display_visitor.hpp"
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
+
+#include <gui/visitors/content/display_visitor.hpp>
 
 namespace dnd {
 

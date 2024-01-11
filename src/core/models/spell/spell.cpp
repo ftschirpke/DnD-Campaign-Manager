@@ -12,7 +12,7 @@
 #include <core/models/content_piece.hpp>
 #include <core/models/spell/spell_components.hpp>
 #include <core/models/spell/spell_type.hpp>
-#include <core/validation/spell/spell_data.hpp>
+#include <core/validation/spell/spell_validation.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
 namespace dnd {

@@ -15,7 +15,7 @@ namespace dnd {
  */
 class ActionHolder {
 public:
-    class Data;
+    struct Data;
 
     static CreateResult<ActionHolder> create(Data&& data);
 
@@ -36,8 +36,7 @@ private:
     std::map<std::string, std::string> reactions;
 };
 
-class ActionHolder::Data {
-public:
+struct ActionHolder::Data {
     std::strong_ordering operator<=>(const Data&) const noexcept = default;
     bool empty() const noexcept;
 

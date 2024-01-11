@@ -5,7 +5,6 @@
 
 #include <compare>
 #include <filesystem>
-#include <memory>
 #include <string>
 
 #include <core/models/content_piece.hpp>
@@ -18,7 +17,7 @@ class ContentVisitor;
 
 class Item : public ContentPiece {
 public:
-    class Data;
+    struct Data;
 
     static CreateResult<Item> create(Data&& item_data);
 
@@ -42,8 +41,7 @@ private:
     bool attunement;
 };
 
-class Item::Data : public ValidationData {
-public:
+struct Item::Data : public ValidationData {
     std::strong_ordering operator<=>(const Data&) const noexcept = default;
 
     std::string cosmetic_description;

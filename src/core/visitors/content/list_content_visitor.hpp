@@ -4,7 +4,6 @@
 #include <dnd_config.hpp>
 
 #include <string>
-#include <utility>
 #include <vector>
 
 #include <core/models/character/character.hpp>

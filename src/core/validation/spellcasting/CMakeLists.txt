@@ -1,4 +1,4 @@
 target_sources(${DND_CORE}
     PRIVATE
-    spellcasting_data.cpp
+    spellcasting_validation.cpp
 )

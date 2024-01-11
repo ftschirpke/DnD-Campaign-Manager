@@ -24,24 +24,8 @@ public:
     const std::filesystem::path& get_filepath() const noexcept;
 protected:
     explicit Parser(const std::filesystem::path& filepath) noexcept;
-    /**
-     * @brief Parses an optional attribute from a json and adding it into the output variable if it exists
-     * @tparam T the type the attribute value is supposed to be
-     * @param json the json the attribute may be in
-     * @param attribute_name the name of the attribute in the json
-     * @param out the output to write the attribute value to
-     * @return the errors that occured while parsing
-     */
     template <typename T>
     Errors parse_optional_attribute_into(const nlohmann::json& json, const char* attribute_name, T& out) const;
-    /**
-     * @brief Parses a required attribute from a json and adding it into the output variable
-     * @tparam T the type the attribute value is supposed to be
-     * @param json the json the attribute is supposed to be in
-     * @param attribute_name the name of the attribute in the json
-     * @param out the output to write the attribute value to
-     * @return the errors that occured while parsing
-     */
     template <typename T>
     Errors parse_required_attribute_into(const nlohmann::json& json, const char* attribute_name, T& out) const;
 private:

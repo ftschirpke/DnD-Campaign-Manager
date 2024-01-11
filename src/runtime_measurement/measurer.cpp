@@ -1,5 +1,3 @@
-#include <dnd_config.hpp>
-
 #include "measurer.hpp"
 
 #include <algorithm>

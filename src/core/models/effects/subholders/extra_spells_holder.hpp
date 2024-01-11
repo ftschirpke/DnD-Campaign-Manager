@@ -20,7 +20,7 @@ class Spell;
  */
 class ExtraSpellsHolder {
 public:
-    class Data;
+    struct Data;
 
     static CreateResult<ExtraSpellsHolder> create_for(Data&& data, const Content& content);
 
@@ -94,8 +94,7 @@ private:
     std::vector<const Spell*> added_to_spell_list;
 };
 
-class ExtraSpellsHolder::Data {
-public:
+struct ExtraSpellsHolder::Data {
     std::strong_ordering operator<=>(const Data&) const noexcept = default;
     bool empty() const noexcept;
 

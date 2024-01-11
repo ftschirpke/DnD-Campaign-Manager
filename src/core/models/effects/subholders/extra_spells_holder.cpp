@@ -9,7 +9,7 @@
 #include <core/content.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/spell/spell.hpp>
-#include <core/validation/effects/subholders/extra_spells_holder_data.hpp>
+#include <core/validation/effects/subholders/extra_spells_holder_validation.hpp>
 
 namespace dnd {
 

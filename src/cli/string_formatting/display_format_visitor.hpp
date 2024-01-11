@@ -3,8 +3,6 @@
 
 #include <dnd_config.hpp>
 
-#include <string_view>
-
 #include <cli/output/command_line_output.hpp>
 #include <core/output/string_formatting/formats/bulleted_list.hpp>
 #include <core/output/string_formatting/formats/paragraph.hpp>

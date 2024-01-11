@@ -14,7 +14,7 @@
 
 namespace dnd {
 
-class Character::Data : public ValidationData {
+struct Character::Data : public ValidationData {
 public:
     std::strong_ordering operator<=>(const Character::Data&) const noexcept = default;
 

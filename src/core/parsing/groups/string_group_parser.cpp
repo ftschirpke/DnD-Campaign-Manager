@@ -13,6 +13,7 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
 #include <core/errors/validation_error.hpp>
+#include <core/parsing/file_parser.hpp>
 
 namespace dnd {
 

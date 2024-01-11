@@ -3,8 +3,6 @@
 
 #include <dnd_config.hpp>
 
-#include <imgui/imgui.h>
-
 #include <core/session.hpp>
 
 namespace dnd {

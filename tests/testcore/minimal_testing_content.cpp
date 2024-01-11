@@ -1,6 +1,5 @@
 #include <dnd_config.hpp>
 
-#include "core/validation/effects_provider/class_feature_data.hpp"
 #include "minimal_testing_content.hpp"
 
 #include <cassert>
@@ -13,12 +12,12 @@
 #include <core/models/spell/spell.hpp>
 #include <core/models/subclass/subclass.hpp>
 #include <core/models/subspecies/subspecies.hpp>
-#include <core/validation/character/character_data.hpp>
-#include <core/validation/class/class_data.hpp>
-#include <core/validation/species/species_data.hpp>
-#include <core/validation/spell/spell_data.hpp>
-#include <core/validation/subclass/subclass_data.hpp>
-#include <core/validation/subspecies/subspecies_data.hpp>
+#include <core/validation/character/character_validation.hpp>
+#include <core/validation/class/class_validation.hpp>
+#include <core/validation/species/species_validation.hpp>
+#include <core/validation/spell/spell_validation.hpp>
+#include <core/validation/subclass/subclass_validation.hpp>
+#include <core/validation/subspecies/subspecies_validation.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
 namespace dnd::test {

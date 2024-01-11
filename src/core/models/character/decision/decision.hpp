@@ -17,7 +17,7 @@ class Content;
  */
 class Decision {
 public:
-    class Data;
+    struct Data;
 
     static CreateResult<Decision> create_for(
         Data&& data, const Character::Data& character_data, const Content& content
@@ -29,14 +29,10 @@ public:
     Decision& operator=(Decision&&) = default;
 
     /**
-     * @brief Returns the target of the decision i.e. the choice that the decision is for
+     * @brief Returns the target of the decision i.e. the effects with the choice that the decision is for
      * @return the target of the decision
      */
     CRef<Effects> get_target() const noexcept;
-    /**
-     * @brief Returns the effects of the decision
-     * @return the effects of the decision
-     */
     const Effects& get_effects() const noexcept;
 private:
     Decision(CRef<Effects> target, Effects&& effects) noexcept;
@@ -45,8 +41,7 @@ private:
     Effects effects;
 };
 
-class Decision::Data {
-public:
+struct Decision::Data {
     Data(const Effects* target) noexcept;
     std::strong_ordering operator<=>(const Data&) const noexcept = default;
 

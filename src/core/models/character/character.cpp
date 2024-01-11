@@ -2,10 +2,13 @@
 
 #include "character.hpp"
 
+#include <cassert>
 #include <filesystem>
 #include <string>
 #include <utility>
 #include <vector>
+
+#include <tl/expected.hpp>
 
 #include <core/basic_mechanics/character_progression.hpp>
 #include <core/errors/errors.hpp>
@@ -21,7 +24,7 @@
 #include <core/models/species/species.hpp>
 #include <core/models/subclass/subclass.hpp>
 #include <core/models/subspecies/subspecies.hpp>
-#include <core/validation/character/character_data.hpp>
+#include <core/validation/character/character_validation.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
 namespace dnd {
@@ -139,7 +142,11 @@ void Character::for_all_effects_do(std::function<void(const Effects&)> func) con
     }
 }
 
-int Character::get_proficiency_bonus() const noexcept { return proficiency_bonus_for_level(progression.get_level()); }
+int Character::get_proficiency_bonus() const noexcept {
+    tl::expected<int, RuntimeError> proficiency_bonus_result = proficiency_bonus_for_level(progression.get_level());
+    assert(proficiency_bonus_result.has_value());
+    return proficiency_bonus_result.value();
+}
 
 void Character::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 

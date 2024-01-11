@@ -5,7 +5,6 @@
 
 #include <compare>
 #include <filesystem>
-#include <memory>
 #include <string>
 #include <vector>
 
@@ -23,7 +22,7 @@ class ContentVisitor;
 
 class Subspecies : public ContentPiece {
 public:
-    class Data;
+    struct Data;
 
     static CreateResult<Subspecies> create_for(Data&& data, const Content& content);
 
@@ -52,8 +51,7 @@ private:
     CRef<Species> species;
 };
 
-class Subspecies::Data : public ValidationData {
-public:
+struct Subspecies::Data : public ValidationData {
     std::strong_ordering operator<=>(const Subspecies::Data&) const noexcept = default;
 
     std::vector<Feature::Data> features_data;

@@ -15,7 +15,7 @@ public:
      * @brief Add to the list of spells we want to create cards for
      * @param spell a spell to create a card for
      */
-    void addSpell(const Spell* spell);
+    void add_spell(const Spell* spell);
     /**
      * @brief Creates a LaTeX file that allows printing the cards with the timestamp as the file name
      */

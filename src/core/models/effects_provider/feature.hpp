@@ -5,16 +5,13 @@
 
 #include <compare>
 #include <filesystem>
-#include <functional>
-#include <map>
-#include <memory>
 #include <string>
 
 #include <core/models/content_piece.hpp>
 #include <core/models/effects/effects.hpp>
 #include <core/models/effects_provider/effects_provider.hpp>
 #include <core/models/source_info.hpp>
-#include <core/validation/effects/effects_data.hpp>
+#include <core/validation/effects/effects_validation.hpp>
 #include <core/validation/validation_data.hpp>
 
 namespace dnd {
@@ -27,7 +24,7 @@ class ContentVisitor;
  */
 class Feature : public ContentPiece, public EffectsProvider {
 public:
-    class Data;
+    struct Data;
 
     static CreateResult<Feature> create_for(Data&& data, const Content& content);
 
@@ -53,8 +50,7 @@ private:
     Effects main_effects;
 };
 
-class Feature::Data : public ValidationData {
-public:
+struct Feature::Data : public ValidationData {
     std::strong_ordering operator<=>(const Data&) const noexcept = default;
 
     Effects::Data main_effects_data;

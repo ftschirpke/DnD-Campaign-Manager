@@ -13,7 +13,7 @@
 #include <core/models/subspecies/subspecies.hpp>
 #include <core/parsing/effects_provider/feature_parser.hpp>
 #include <core/parsing/file_parser.hpp>
-#include <core/validation/subspecies/subspecies_data.hpp>
+#include <core/validation/subspecies/subspecies_validation.hpp>
 
 namespace dnd {
 

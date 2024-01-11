@@ -15,7 +15,7 @@
 #include <core/models/source_info.hpp>
 #include <core/models/species/species.hpp>
 #include <core/models/spellcasting/spellcasting_factory.hpp>
-#include <core/validation/subclass/subclass_data.hpp>
+#include <core/validation/subclass/subclass_validation.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
 namespace dnd {

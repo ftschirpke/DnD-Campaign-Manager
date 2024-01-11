@@ -11,7 +11,7 @@
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/source_info.hpp>
-#include <core/validation/species/species_data.hpp>
+#include <core/validation/species/species_validation.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
 namespace dnd {

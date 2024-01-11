@@ -34,6 +34,9 @@ private:
     std::vector<T> values;
 };
 
+
+// === IMPLEMENTATION ===
+
 template <typename T>
 SelectionFilter<T>::SelectionFilter() noexcept : type(SelectionFilterType::NONE), values() {}
 

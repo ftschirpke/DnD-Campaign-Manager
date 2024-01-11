@@ -7,8 +7,8 @@
 
 namespace dnd {
 
-LatexCommand* LatexCommand::add_bspecies_argument(const std::string& argument) {
-    bspecies_arguments.push_back(argument);
+LatexCommand* LatexCommand::add_braces_argument(const std::string& argument) {
+    braces_arguments.push_back(argument);
     return this;
 }
 
@@ -22,7 +22,7 @@ std::string LatexCommand::str() const {
     for (const std::string& bracket_arg : bracket_arguments) {
         command_string += '[' + bracket_arg + ']';
     }
-    for (const std::string& bspecies_arg : bspecies_arguments) {
+    for (const std::string& bspecies_arg : braces_arguments) {
         command_string += '{' + bspecies_arg + '}';
     }
     command_string += '\n';

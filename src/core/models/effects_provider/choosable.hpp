@@ -24,7 +24,7 @@ class ContentVisitor;
  */
 class Choosable : public ContentPiece, public EffectsProvider {
 public:
-    class Data;
+    struct Data;
 
     static CreateResult<Choosable> create_for(Data&& data, const Content& content);
 
@@ -55,8 +55,7 @@ private:
     std::vector<std::unique_ptr<Condition>> prerequisites;
 };
 
-class Choosable::Data : public Feature::Data {
-public:
+struct Choosable::Data : public Feature::Data {
     std::strong_ordering operator<=>(const Data&) const noexcept = default;
 
     std::string type;

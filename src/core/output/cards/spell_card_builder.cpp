@@ -22,7 +22,7 @@ namespace dnd {
 
 constexpr int card_character_cutoff = 750;
 
-void SpellCardBuilder::addSpell(const Spell* spell) { spells.push_back(spell); }
+void SpellCardBuilder::add_spell(const Spell* spell) { spells.push_back(spell); }
 
 void SpellCardBuilder::write_latex_file() {
     std::stringstream sstr;
@@ -57,7 +57,7 @@ static LatexScope* create_card_page(LatexDocument& document) {
 
 static void create_minipage(LatexScope* scope, const std::string& name, const std::string& value) {
     LatexBeginEnd minipage = scope->add_begin_end("minipage");
-    minipage.begin_command->add_bspecies_argument("0.49\\textwidth");
+    minipage.begin_command->add_braces_argument("0.49\\textwidth");
     minipage.scope->add_command("centering");
     minipage.scope->add_command("footnotesize");
     minipage.scope->add_scope()->add_text(name)->add_modifier("scshape");

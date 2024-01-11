@@ -13,7 +13,6 @@
 #include <core/models/effects_provider/feature.hpp>
 #include <core/parsing/effects/effects_parser.hpp>
 #include <core/parsing/parser.hpp>
-#include <core/validation/validation_data.hpp>
 
 namespace dnd {
 

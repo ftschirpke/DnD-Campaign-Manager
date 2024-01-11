@@ -12,7 +12,7 @@ namespace dnd {
 
 class Condition {
 public:
-    class Data;
+    struct Data;
 
     virtual ~Condition() noexcept = default;
     /**
@@ -46,8 +46,7 @@ protected:
     std::function<bool(int, int)> comparison_operator;
 };
 
-class Condition::Data {
-public:
+struct Condition::Data {
     std::strong_ordering operator<=>(const Data&) const noexcept = default;
 
     std::string condition_str;

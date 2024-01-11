@@ -6,7 +6,6 @@
 #include <set>
 #include <string>
 #include <unordered_map>
-#include <utility>
 #include <vector>
 
 #include <fmt/format.h>
@@ -82,7 +81,7 @@ bool Groups::is_subgroup(const std::string& subgroup_name, const std::string& gr
     return false;
 }
 
-bool Groups::is_part_of_group(const std::string& name, const std::string& group_name) const {
+bool Groups::is_member_of_group(const std::string& name, const std::string& group_name) const {
     if (!is_group(group_name)) {
         return false;
     }
@@ -93,7 +92,7 @@ bool Groups::is_part_of_group(const std::string& name, const std::string& group_
         return false;
     }
     for (const std::string& subgroup_name : subgroups.at(group_name)) {
-        if (is_part_of_group(name, subgroup_name)) {
+        if (is_member_of_group(name, subgroup_name)) {
             return true;
         }
     }

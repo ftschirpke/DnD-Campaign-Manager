@@ -11,7 +11,7 @@ namespace dnd {
 
 class ImportantLevels {
 public:
-    class Data;
+    struct Data;
 
     static CreateResult<ImportantLevels> create(Data&& data, int subclass_level);
 
@@ -24,8 +24,7 @@ private:
     int subclass_level;
 };
 
-class ImportantLevels::Data {
-public:
+struct ImportantLevels::Data {
     std::strong_ordering operator<=>(const Data&) const noexcept = default;
 
     std::set<int> feat_levels;

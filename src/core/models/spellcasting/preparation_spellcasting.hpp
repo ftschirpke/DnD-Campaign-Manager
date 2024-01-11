@@ -25,12 +25,6 @@ public:
     ) noexcept;
 
     PreparationSpellcastingType get_type() const noexcept;
-    /**
-     * @brief Gets the amount of spells a character can prepare for a given level
-     * @param ability_scores the character's ability scores
-     * @param level the character's level
-     * @return the amount of spells a character can prepare for the given level
-     */
     int get_prepared_spells_amount(AbilityScores ability_scores, int level) const noexcept;
 private:
     PreparationSpellcastingType type;

@@ -4,8 +4,6 @@
 #include <dnd_config.hpp>
 
 #include <algorithm>
-#include <cassert>
-#include <stdexcept>
 #include <string>
 #include <unordered_map>
 #include <utility>
@@ -36,15 +34,16 @@ public:
     OptCRef<T> get(const std::string& name) const override;
     const std::unordered_map<std::string, T>& get_all() const;
     const std::vector<std::pair<typename T::Data, Errors>>& get_drafts() const;
+    /**
+     * @brief Add a content piece to a content piece to the library
+     * @param content_piece the content piece to add
+     * @return reference to the inserted content piece, or std::nullopt if a content piece with that name already exists
+     */
     OptCRef<T> add(T&& content_piece);
     void add_draft(std::pair<typename T::Data, Errors>&& draft);
     void add_draft(typename T::Data&& draft_data, Errors&& draft_errors);
     OptCRef<T> add_result(CreateResult<T>&& content_piece_result);
-    /**
-     * @brief Get the root of the trie
-     * @return a pointer to the root of the trie
-     */
-    const TrieNode<T>* get_trie_root() const override;
+    const TrieNode<T>* get_fuzzy_search_trie_root() const override;
 private:
     void save_in_trie(const T& content_piece);
 
@@ -52,6 +51,9 @@ private:
     Trie<T> trie;
     std::vector<std::pair<typename T::Data, Errors>> drafts;
 };
+
+
+// === IMPLEMENTATION ===
 
 template <typename T>
 requires isContentPieceType<T>
@@ -158,7 +160,7 @@ void StorageContentLibrary<T>::add_draft(typename T::Data&& draft_data, Errors&&
 
 template <typename T>
 requires isContentPieceType<T>
-const TrieNode<T>* StorageContentLibrary<T>::get_trie_root() const {
+const TrieNode<T>* StorageContentLibrary<T>::get_fuzzy_search_trie_root() const {
     return trie.get_root();
 }
 

@@ -3,7 +3,6 @@
 
 #include <dnd_config.hpp>
 
-#include <filesystem>
 #include <string>
 
 #include <core/models/source_info.hpp>

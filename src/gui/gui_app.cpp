@@ -2,6 +2,7 @@
 
 #include "gui_app.hpp"
 
+#include <algorithm>
 #include <string>
 
 #include <imgui/imgui.h>

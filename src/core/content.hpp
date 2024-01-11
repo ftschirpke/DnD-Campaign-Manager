@@ -4,7 +4,6 @@
 #include <dnd_config.hpp>
 
 #include <string>
-#include <unordered_map>
 
 #include <core/groups.hpp>
 #include <core/models/character/character.hpp>

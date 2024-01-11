@@ -5,16 +5,13 @@
 
 #include <compare>
 #include <filesystem>
-#include <functional>
 #include <map>
-#include <memory>
 #include <string>
-#include <vector>
 
 #include <core/models/effects/effects.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/source_info.hpp>
-#include <core/validation/effects_provider/feature_data.hpp>
+#include <core/validation/effects_provider/feature_validation.hpp>
 
 namespace dnd {
 
@@ -26,7 +23,7 @@ class ContentVisitor;
  */
 class ClassFeature : public Feature {
 public:
-    class Data;
+    struct Data;
 
     static CreateResult<ClassFeature> create_for(Data&& data, const Content& content);
 
@@ -53,8 +50,7 @@ private:
     std::map<int, Effects> higher_level_effects; // careful when changing the type here, some code relies on order
 };
 
-class ClassFeature::Data : public Feature::Data {
-public:
+struct ClassFeature::Data : public Feature::Data {
     std::strong_ordering operator<=>(const Data&) const noexcept = default;
 
     int level;

@@ -4,7 +4,6 @@
 #include <dnd_config.hpp>
 
 #include <stack>
-#include <unordered_set>
 #include <vector>
 
 #include <core/searching/fuzzy_search/trie_node.hpp>
@@ -29,6 +28,9 @@ public:
     requires std::derived_from<T, S>
     bool insert_top_successors_into(std::vector<S*>& vec) const;
 };
+
+
+// === IMPLEMENTATION ===
 
 template <typename T>
 void FuzzySearchPath<T>::push_top_child(char c) {
