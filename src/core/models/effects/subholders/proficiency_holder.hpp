@@ -20,7 +20,7 @@ class Content;
  */
 class ProficiencyHolder {
 public:
-    class Data;
+    struct Data;
 
     static CreateResult<ProficiencyHolder> create_for(Data&& data, const Content& content);
 
@@ -50,8 +50,7 @@ private:
     std::vector<std::string> senses;
 };
 
-class ProficiencyHolder::Data {
-public:
+struct ProficiencyHolder::Data {
     std::strong_ordering operator<=>(const ProficiencyHolder::Data&) const noexcept = default;
     bool empty() const noexcept;
 

@@ -19,7 +19,7 @@ class Content;
 
 class Choice {
 public:
-    class Data;
+    struct Data;
 
     static CreateResult<Choice> create_for(Data&& data, const Content& content);
 
@@ -41,8 +41,7 @@ private:
     std::vector<std::unique_ptr<ContentFilter>> filters;
 };
 
-class Choice::Data {
-public:
+struct Choice::Data {
     std::strong_ordering operator<=>(const Data&) const noexcept = default;
 
     std::string attribute_name;

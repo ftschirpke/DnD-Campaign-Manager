@@ -24,7 +24,7 @@ class ContentVisitor;
 
 class Class : public ContentPiece {
 public:
-    class Data;
+    struct Data;
 
     static CreateResult<Class> create_for(Data&& data, const Content& content);
 
@@ -61,8 +61,7 @@ private:
     ImportantLevels important_levels;
 };
 
-class Class::Data : public ValidationData {
-public:
+struct Class::Data : public ValidationData {
     std::strong_ordering operator<=>(const Data&) const noexcept = default;
 
     Spellcasting::Data spellcasting_data;

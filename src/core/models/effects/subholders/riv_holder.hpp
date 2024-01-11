@@ -19,7 +19,7 @@ class Content;
  */
 class RIVHolder {
 public:
-    class Data;
+    struct Data;
 
     static CreateResult<RIVHolder> create_for(Data&& data, const Content& content);
 
@@ -42,8 +42,7 @@ private:
     std::vector<std::string> condition_immunities;
 };
 
-class RIVHolder::Data {
-public:
+struct RIVHolder::Data {
     std::strong_ordering operator<=>(const RIVHolder::Data&) const noexcept = default;
     bool empty() const noexcept;
 

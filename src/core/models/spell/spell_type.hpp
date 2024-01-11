@@ -27,7 +27,7 @@ enum class SpellLevel {
 
 class SpellType {
 public:
-    class Data;
+    struct Data;
 
     static CreateResult<SpellType> create(Data&& type_data);
 
@@ -50,8 +50,7 @@ private:
     bool ritual;
 };
 
-class SpellType::Data {
-public:
+struct SpellType::Data {
     std::strong_ordering operator<=>(const Data&) const noexcept = default;
 
     std::string str;

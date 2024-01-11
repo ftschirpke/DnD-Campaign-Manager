@@ -25,7 +25,7 @@ enum class StatChangeTime {
 
 class StatChange {
 public:
-    class Data;
+    struct Data;
 
     virtual ~StatChange() noexcept = default;
 
@@ -63,8 +63,7 @@ private:
     StatChangeTime time;
 };
 
-class StatChange::Data {
-public:
+struct StatChange::Data {
     std::strong_ordering operator<=>(const Data&) const noexcept = default;
 
     std::string stat_change_str;

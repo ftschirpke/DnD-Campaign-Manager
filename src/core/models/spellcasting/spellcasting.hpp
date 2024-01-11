@@ -12,7 +12,7 @@ namespace dnd {
 
 class Spellcasting {
 public:
-    class Data;
+    struct Data;
 
     virtual ~Spellcasting() noexcept = default;
 
@@ -33,8 +33,7 @@ private:
     std::array<std::array<int, 20>, 9> spell_slots;
 };
 
-class Spellcasting::Data {
-public:
+struct Spellcasting::Data {
     explicit Data() noexcept;
     std::strong_ordering operator<=>(const Spellcasting::Data&) const noexcept = default;
 

@@ -23,7 +23,7 @@ class ContentVisitor;
  */
 class ClassFeature : public Feature {
 public:
-    class Data;
+    struct Data;
 
     static CreateResult<ClassFeature> create_for(Data&& data, const Content& content);
 
@@ -50,8 +50,7 @@ private:
     std::map<int, Effects> higher_level_effects; // careful when changing the type here, some code relies on order
 };
 
-class ClassFeature::Data : public Feature::Data {
-public:
+struct ClassFeature::Data : public Feature::Data {
     std::strong_ordering operator<=>(const Data&) const noexcept = default;
 
     int level;

@@ -13,7 +13,7 @@ namespace dnd {
 
 class AbilityScores {
 public:
-    class Data;
+    struct Data;
 
     static CreateResult<AbilityScores> create(Data&& data);
 
@@ -43,8 +43,7 @@ private:
     int charisma;
 };
 
-class AbilityScores::Data {
-public:
+struct AbilityScores::Data {
     std::strong_ordering operator<=>(const Data&) const noexcept = default;
 
     std::array<int, 6> ability_scores;

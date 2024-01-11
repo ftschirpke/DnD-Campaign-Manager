@@ -17,7 +17,7 @@ class Content;
  */
 class Decision {
 public:
-    class Data;
+    struct Data;
 
     static CreateResult<Decision> create_for(
         Data&& data, const Character::Data& character_data, const Content& content
@@ -41,8 +41,7 @@ private:
     Effects effects;
 };
 
-class Decision::Data {
-public:
+struct Decision::Data {
     Data(const Effects* target) noexcept;
     std::strong_ordering operator<=>(const Data&) const noexcept = default;
 

@@ -24,7 +24,7 @@ class ContentVisitor;
  */
 class Feature : public ContentPiece, public EffectsProvider {
 public:
-    class Data;
+    struct Data;
 
     static CreateResult<Feature> create_for(Data&& data, const Content& content);
 
@@ -50,8 +50,7 @@ private:
     Effects main_effects;
 };
 
-class Feature::Data : public ValidationData {
-public:
+struct Feature::Data : public ValidationData {
     std::strong_ordering operator<=>(const Data&) const noexcept = default;
 
     Effects::Data main_effects_data;

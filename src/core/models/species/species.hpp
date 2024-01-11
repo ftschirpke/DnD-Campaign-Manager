@@ -20,7 +20,7 @@ class ContentVisitor;
 
 class Species : public ContentPiece {
 public:
-    class Data;
+    struct Data;
 
     static CreateResult<Species> create_for(Data&& data, const Content& content);
 
@@ -49,8 +49,7 @@ private:
     bool subspecies;
 };
 
-class Species::Data : public ValidationData {
-public:
+struct Species::Data : public ValidationData {
     std::strong_ordering operator<=>(const Data&) const noexcept = default;
 
     std::vector<Feature::Data> features_data;

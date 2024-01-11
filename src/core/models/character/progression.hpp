@@ -14,7 +14,7 @@ class Content;
 
 class Progression {
 public:
-    class Data;
+    struct Data;
 
     static CreateResult<Progression> create(Data&& data);
 
@@ -29,8 +29,7 @@ private:
     std::vector<int> hit_dice_rolls;
 };
 
-class Progression::Data {
-public:
+struct Progression::Data {
     std::strong_ordering operator<=>(const Data&) const noexcept = default;
 
     int level;

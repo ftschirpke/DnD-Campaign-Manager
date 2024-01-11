@@ -24,7 +24,7 @@ namespace dnd {
  */
 class Effects {
 public:
-    class Data;
+    struct Data;
 
     static CreateResult<Effects> create_for(Data&& data, const Content& content);
 
@@ -72,8 +72,7 @@ private:
     RIVHolder rivs;
 };
 
-class Effects::Data {
-public:
+struct Effects::Data {
     std::strong_ordering operator<=>(const Data&) const noexcept = default;
 
     std::vector<Condition::Data> activation_conditions_data;

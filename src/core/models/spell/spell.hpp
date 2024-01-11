@@ -19,7 +19,7 @@ class ContentVisitor;
 
 class Spell : public ContentPiece {
 public:
-    class Data;
+    struct Data;
 
     static CreateResult<Spell> create(Data&& spell_data);
 
@@ -52,8 +52,7 @@ private:
     std::set<std::string> classes;
 };
 
-class Spell::Data : public ValidationData {
-public:
+struct Spell::Data : public ValidationData {
     std::strong_ordering operator<=>(const Data&) const noexcept = default;
 
     SpellComponents::Data components_data;

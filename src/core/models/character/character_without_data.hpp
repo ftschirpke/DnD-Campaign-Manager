@@ -27,7 +27,7 @@ class Decision;
 
 class Character : public ContentPiece {
 public:
-    class Data;
+    struct Data;
 
     static CreateResult<Character> create_for(Data&& data, const Content& content);
 

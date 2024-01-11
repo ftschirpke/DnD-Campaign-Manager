@@ -20,7 +20,7 @@ class Subclass;
 
 class FeatureProviders {
 public:
-    class Data;
+    struct Data;
 
     static CreateResult<FeatureProviders> create_for(Data&& data, const Content& content);
 
@@ -42,8 +42,7 @@ private:
     OptCRef<Subclass> subclass;
 };
 
-class FeatureProviders::Data {
-public:
+struct FeatureProviders::Data {
     std::strong_ordering operator<=>(const Data&) const noexcept = default;
 
     std::string species_name;

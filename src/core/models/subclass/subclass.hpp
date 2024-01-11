@@ -23,7 +23,7 @@ class ContentVisitor;
 
 class Subclass : public ContentPiece {
 public:
-    class Data;
+    struct Data;
 
     static CreateResult<Subclass> create_for(Data&& data, const Content& content);
 
@@ -55,8 +55,7 @@ private:
     std::unique_ptr<Spellcasting> spellcasting;
 };
 
-class Subclass::Data : public ValidationData {
-public:
+struct Subclass::Data : public ValidationData {
     std::strong_ordering operator<=>(const Data&) const noexcept = default;
 
     Spellcasting::Data spellcasting_data;
