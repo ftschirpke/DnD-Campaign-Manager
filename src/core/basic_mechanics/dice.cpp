@@ -88,7 +88,7 @@ static tl::expected<const char*, Errors> dice_type_to_string(DiceType dice_type)
 }
 
 
-tl::expected<Dice, Errors> Dice::single_from_int(int dice_number) noexcept {
+tl::expected<Dice, Errors> Dice::single_from_int(int dice_number) {
     tl::expected<DiceType, Errors> dice_type = int_to_dice_type(dice_number);
     if (dice_type.has_value()) {
         return Dice::from_dice_count_map(std::map<DiceType, int>{{dice_type.value(), 1}});
@@ -97,7 +97,7 @@ tl::expected<Dice, Errors> Dice::single_from_int(int dice_number) noexcept {
     }
 }
 
-tl::expected<Dice, Errors> Dice::single_from_int_with_modifier(int dice_number, int modifier) noexcept {
+tl::expected<Dice, Errors> Dice::single_from_int_with_modifier(int dice_number, int modifier) {
     tl::expected<DiceType, Errors> dice_type = int_to_dice_type(dice_number);
     if (dice_type.has_value()) {
         return Dice::from_dice_count_map_with_modifier(std::map<DiceType, int>{{dice_type.value(), 1}}, modifier);
@@ -106,7 +106,7 @@ tl::expected<Dice, Errors> Dice::single_from_int_with_modifier(int dice_number, 
     }
 }
 
-tl::expected<Dice, Errors> Dice::multi_from_int(int dice_number, int dice_count) noexcept {
+tl::expected<Dice, Errors> Dice::multi_from_int(int dice_number, int dice_count) {
     tl::expected<DiceType, Errors> dice_type = int_to_dice_type(dice_number);
     if (dice_type.has_value()) {
         return Dice::from_dice_count_map(std::map<DiceType, int>{{dice_type.value(), dice_count}});
@@ -115,7 +115,7 @@ tl::expected<Dice, Errors> Dice::multi_from_int(int dice_number, int dice_count)
     }
 }
 
-tl::expected<Dice, Errors> Dice::multi_from_int_with_modifier(int dice_number, int dice_count, int modifier) noexcept {
+tl::expected<Dice, Errors> Dice::multi_from_int_with_modifier(int dice_number, int dice_count, int modifier) {
     tl::expected<DiceType, Errors> dice_type = int_to_dice_type(dice_number);
     if (dice_type.has_value()) {
         return Dice::from_dice_count_map_with_modifier(
@@ -126,11 +126,9 @@ tl::expected<Dice, Errors> Dice::multi_from_int_with_modifier(int dice_number, i
     }
 }
 
-tl::expected<Dice, Errors> Dice::from_string(const std::string& str) noexcept {
-    return Dice::from_string(std::string(str));
-}
+tl::expected<Dice, Errors> Dice::from_string(const std::string& str) { return Dice::from_string(std::string(str)); }
 
-tl::expected<Dice, Errors> Dice::from_string(std::string&& str) noexcept {
+tl::expected<Dice, Errors> Dice::from_string(std::string&& str) {
     string_lowercase_inplace(str);
     std::map<DiceType, int> dice_counts;
     int modifier = 0;
@@ -189,13 +187,13 @@ tl::expected<Dice, Errors> Dice::from_string(std::string&& str) noexcept {
     return Dice::from_dice_count_map_with_modifier(std::move(dice_counts), modifier);
 }
 
-tl::expected<Dice, Errors> Dice::from_dice_count_map(std::map<DiceType, int>&& dice_counts) noexcept {
+tl::expected<Dice, Errors> Dice::from_dice_count_map(std::map<DiceType, int>&& dice_counts) {
     return Dice::from_dice_count_map_with_modifier(std::move(dice_counts), 0);
 }
 
 tl::expected<Dice, Errors> Dice::from_dice_count_map_with_modifier(
     std::map<DiceType, int>&& dice_counts, int modifier
-) noexcept {
+) {
     Errors errors;
     for (const auto& [dice_type, dice_count] : dice_counts) {
         if (dice_count < 0) {
@@ -218,10 +216,9 @@ tl::expected<Dice, Errors> Dice::from_dice_count_map_with_modifier(
     return Dice(std::move(dice_counts), modifier);
 }
 
-Dice::Dice(std::map<DiceType, int>&& dice_counts, int modifier) noexcept
-    : dice_counts(dice_counts), modifier(modifier) {}
+Dice::Dice(std::map<DiceType, int>&& dice_counts, int modifier) : dice_counts(dice_counts), modifier(modifier) {}
 
-int Dice::min_value() const noexcept {
+int Dice::min_value() const {
     int min_value = modifier;
     for (const auto& [dice_type, dice_count] : dice_counts) {
         min_value += dice_count;
@@ -229,7 +226,7 @@ int Dice::min_value() const noexcept {
     return min_value;
 }
 
-int Dice::max_value() const noexcept {
+int Dice::max_value() const {
     int max_value = modifier;
     for (const auto& [dice_type, dice_count] : dice_counts) {
         max_value += static_cast<int>(dice_type) * dice_count;
@@ -237,9 +234,9 @@ int Dice::max_value() const noexcept {
     return max_value;
 }
 
-bool Dice::value_is_possible(int value) const noexcept { return value >= min_value() && value <= max_value(); }
+bool Dice::value_is_possible(int value) const { return value >= min_value() && value <= max_value(); }
 
-std::string Dice::to_string() const noexcept {
+std::string Dice::to_string() const {
     std::string str;
     bool first = true;
     for (const auto& [dice_type, dice_count] : dice_counts) {

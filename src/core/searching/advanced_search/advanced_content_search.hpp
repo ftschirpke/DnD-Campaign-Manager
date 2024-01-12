@@ -31,11 +31,11 @@ using ContentFilterVariant = std::variant<
  */
 class AdvancedContentSearch {
 public:
-    AdvancedContentSearch(const Content& content) noexcept;
+    AdvancedContentSearch(const Content& content);
     template <typename T>
     void set_filter(T&& new_filter);
     ContentFilterVariant& get_filter();
-    const std::vector<const ContentPiece*>& get_search_results() const noexcept;
+    const std::vector<const ContentPiece*>& get_search_results() const;
 
     void start_searching();
     /**

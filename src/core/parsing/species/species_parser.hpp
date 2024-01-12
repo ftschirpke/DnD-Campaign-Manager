@@ -16,7 +16,7 @@ namespace dnd {
 
 class SpeciesParser : public FileParser {
 public:
-    explicit SpeciesParser(const std::filesystem::path& filepath) noexcept;
+    explicit SpeciesParser(const std::filesystem::path& filepath);
     virtual Errors parse() override;
     virtual void save_result(Content& content) override;
 private:

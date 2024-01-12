@@ -24,26 +24,24 @@ enum class DiceType {
 
 class Dice {
 public:
-    static tl::expected<Dice, Errors> single_from_int(int dice_number) noexcept;
-    static tl::expected<Dice, Errors> single_from_int_with_modifier(int dice_number, int modifier) noexcept;
-    static tl::expected<Dice, Errors> multi_from_int(int dice_number, int dice_count) noexcept;
-    static tl::expected<Dice, Errors> multi_from_int_with_modifier(
-        int dice_number, int dice_count, int modifier
-    ) noexcept;
-    static tl::expected<Dice, Errors> from_string(const std::string& str) noexcept;
-    static tl::expected<Dice, Errors> from_string(std::string&& str) noexcept;
-    static tl::expected<Dice, Errors> from_dice_count_map(std::map<DiceType, int>&& dice_counts) noexcept;
+    static tl::expected<Dice, Errors> single_from_int(int dice_number);
+    static tl::expected<Dice, Errors> single_from_int_with_modifier(int dice_number, int modifier);
+    static tl::expected<Dice, Errors> multi_from_int(int dice_number, int dice_count);
+    static tl::expected<Dice, Errors> multi_from_int_with_modifier(int dice_number, int dice_count, int modifier);
+    static tl::expected<Dice, Errors> from_string(const std::string& str);
+    static tl::expected<Dice, Errors> from_string(std::string&& str);
+    static tl::expected<Dice, Errors> from_dice_count_map(std::map<DiceType, int>&& dice_counts);
     static tl::expected<Dice, Errors> from_dice_count_map_with_modifier(
         std::map<DiceType, int>&& dice_counts, int modifier
-    ) noexcept;
+    );
 
-    int min_value() const noexcept;
-    int max_value() const noexcept;
-    bool value_is_possible(int value) const noexcept;
+    int min_value() const;
+    int max_value() const;
+    bool value_is_possible(int value) const;
 
-    std::string to_string() const noexcept;
+    std::string to_string() const;
 private:
-    Dice(std::map<DiceType, int>&& dice_counts, int modifier) noexcept;
+    Dice(std::map<DiceType, int>&& dice_counts, int modifier);
 
     std::map<DiceType, int> dice_counts;
     int modifier;

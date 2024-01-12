@@ -15,8 +15,8 @@ public:
     Groups() = default;
     Groups(const Groups&) = delete;
     Groups& operator=(const Groups&) = delete;
-    Groups(Groups&&) = default;
-    Groups& operator=(Groups&&) = default;
+    Groups(Groups&&) noexcept = default;
+    Groups& operator=(Groups&&) noexcept = default;
 
     std::set<std::string> get_group(const std::string& group_name) const;
     std::vector<std::string> get_all_group_names() const;

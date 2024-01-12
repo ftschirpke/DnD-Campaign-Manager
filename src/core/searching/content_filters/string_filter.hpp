@@ -21,18 +21,18 @@ enum class StringFilterType {
 
 class StringFilter {
 public:
-    StringFilter() noexcept;
-    bool is_set() const noexcept;
-    StringFilterType get_type() const noexcept;
-    std::string& get_value_mutable() noexcept;
-    const std::string& get_value() const noexcept;
-    void set_type(StringFilterType new_type) noexcept;
-    void set_value(const std::string& new_value) noexcept;
-    void set_value(std::string&& new_value) noexcept;
-    void set(StringFilterType new_type, const std::string& new_value) noexcept;
-    void set(StringFilterType new_type, std::string&& new_value) noexcept;
-    void clear() noexcept;
-    bool matches(const std::string& str) const noexcept;
+    StringFilter();
+    bool is_set() const;
+    StringFilterType get_type() const;
+    std::string& get_value_mutable();
+    const std::string& get_value() const;
+    void set_type(StringFilterType new_type);
+    void set_value(const std::string& new_value);
+    void set_value(std::string&& new_value);
+    void set(StringFilterType new_type, const std::string& new_value);
+    void set(StringFilterType new_type, std::string&& new_value);
+    void clear();
+    bool matches(const std::string& str) const;
 private:
     StringFilterType type;
     std::string value;

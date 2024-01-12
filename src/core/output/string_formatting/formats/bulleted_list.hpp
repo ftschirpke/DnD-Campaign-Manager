@@ -12,9 +12,9 @@ namespace dnd {
 
 class BulletedList : public Format {
 public:
-    explicit BulletedList() noexcept;
+    explicit BulletedList();
     void add_item(std::string_view item);
-    std::vector<std::string_view> get_items() const noexcept;
+    std::vector<std::string_view> get_items() const;
     virtual void accept(const FormatVisitor& visitor) const override;
 private:
     std::vector<std::string_view> items;

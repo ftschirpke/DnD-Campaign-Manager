@@ -31,11 +31,11 @@ public:
 
     static CreateResult<SpellType> create(Data&& type_data);
 
-    SpellType(SpellLevel spell_level, MagicSchool magic_school, bool is_ritual) noexcept;
+    SpellType(SpellLevel spell_level, MagicSchool magic_school, bool is_ritual);
 
-    SpellLevel get_spell_level() const noexcept;
-    MagicSchool get_magic_school() const noexcept;
-    bool is_ritual() const noexcept;
+    SpellLevel get_spell_level() const;
+    MagicSchool get_magic_school() const;
+    bool is_ritual() const;
 
     int get_spell_level_as_int() const;
     std::string_view get_magic_school_name() const;
@@ -51,7 +51,7 @@ private:
 };
 
 struct SpellType::Data {
-    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+    std::strong_ordering operator<=>(const Data&) const = default;
 
     std::string str;
 };

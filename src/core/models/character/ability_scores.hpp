@@ -17,23 +17,23 @@ public:
 
     static CreateResult<AbilityScores> create(Data&& data);
 
-    int get(Ability ability) const noexcept;
-    int get_strength() const noexcept;
-    int get_dexterity() const noexcept;
-    int get_constitution() const noexcept;
-    int get_intelligence() const noexcept;
-    int get_wisdom() const noexcept;
-    int get_charisma() const noexcept;
+    int get(Ability ability) const;
+    int get_strength() const;
+    int get_dexterity() const;
+    int get_constitution() const;
+    int get_intelligence() const;
+    int get_wisdom() const;
+    int get_charisma() const;
 
-    int get_modifier(Ability ability) const noexcept;
-    int get_strength_modifier() const noexcept;
-    int get_dexterity_modifier() const noexcept;
-    int get_constitution_modifier() const noexcept;
-    int get_intelligence_modifier() const noexcept;
-    int get_wisdom_modifier() const noexcept;
-    int get_charisma_modifier() const noexcept;
+    int get_modifier(Ability ability) const;
+    int get_strength_modifier() const;
+    int get_dexterity_modifier() const;
+    int get_constitution_modifier() const;
+    int get_intelligence_modifier() const;
+    int get_wisdom_modifier() const;
+    int get_charisma_modifier() const;
 private:
-    AbilityScores(int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma) noexcept;
+    AbilityScores(int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma);
 
     int strength;
     int dexterity;
@@ -44,7 +44,7 @@ private:
 };
 
 struct AbilityScores::Data {
-    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+    std::strong_ordering operator<=>(const Data&) const = default;
 
     std::array<int, 6> ability_scores;
 };

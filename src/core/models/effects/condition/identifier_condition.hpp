@@ -28,7 +28,7 @@ public:
     IdentifierCondition(
         const std::string& left_side_identifier, const std::string& operator_name,
         const std::string& right_side_identifier
-    ) noexcept;
+    );
     /**
      * @brief Constructs a condition with the given identifiers and operator
      * CAREFUL: if the operator is not found, the construction doesn't fail, but the condition will always evaluate to
@@ -39,7 +39,7 @@ public:
      */
     IdentifierCondition(
         std::string_view left_side_identifier, std::string_view operator_name, std::string_view right_side_identifier
-    ) noexcept;
+    );
     /**
      * @brief Evaluates the condition for given attributes and constants
      * @param attributes a map of attributes

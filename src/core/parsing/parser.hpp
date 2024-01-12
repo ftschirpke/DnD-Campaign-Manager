@@ -19,11 +19,11 @@ namespace dnd {
 
 class Parser {
 public:
-    virtual ~Parser() noexcept = default;
+    virtual ~Parser() = default;
 
-    const std::filesystem::path& get_filepath() const noexcept;
+    const std::filesystem::path& get_filepath() const;
 protected:
-    explicit Parser(const std::filesystem::path& filepath) noexcept;
+    explicit Parser(const std::filesystem::path& filepath);
     template <typename T>
     Errors parse_optional_attribute_into(const nlohmann::json& json, const char* attribute_name, T& out) const;
     template <typename T>

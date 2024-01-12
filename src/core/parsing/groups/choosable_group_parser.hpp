@@ -16,7 +16,7 @@ namespace dnd {
 
 class ChoosableGroupParser : public FileParser {
 public:
-    explicit ChoosableGroupParser(const std::filesystem::path& filepath) noexcept;
+    explicit ChoosableGroupParser(const std::filesystem::path& filepath);
     virtual Errors parse() override;
     virtual void save_result(Content& content) override;
 protected:

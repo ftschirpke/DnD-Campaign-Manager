@@ -33,7 +33,7 @@ static constexpr std::array<std::pair<std::string_view, ChoiceType>, 22> valid_a
     std::pair("condition_immunities", ChoiceType::STRING),
 };
 
-bool is_valid_choice_attribute_name(const std::string& attribute_name) noexcept {
+bool is_valid_choice_attribute_name(const std::string& attribute_name) {
     for (const auto& [valid_attribute_name, _] : valid_attribute_names) {
         if (valid_attribute_name == attribute_name) {
             return true;
@@ -63,7 +63,7 @@ static constexpr std::array<std::pair<std::string_view, std::string_view>, 9> va
     std::pair("condition_immunities", "conditions"),
 };
 
-bool attribute_name_implies_group(const std::string& attribute_name) noexcept {
+bool attribute_name_implies_group(const std::string& attribute_name) {
     for (const auto& [group_name, _] : valid_group_names) {
         if (group_name == attribute_name) {
             return true;

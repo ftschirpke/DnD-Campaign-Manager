@@ -20,16 +20,16 @@ namespace dnd {
 template <typename OutputT, typename DataT>
 class DataResult {
 public:
-    static DataResult valid(OutputT&& output) noexcept;
-    static DataResult invalid(DataT&& data, Errors&& errors) noexcept;
+    static DataResult valid(OutputT&& output);
+    static DataResult invalid(DataT&& data, Errors&& errors);
 
-    bool is_valid() const noexcept;
+    bool is_valid() const;
     const OutputT& value_ref() const;
     OutputT&& value();
     const std::pair<DataT, Errors>& data_and_errors_ref() const;
     std::pair<DataT, Errors>&& data_and_errors();
 private:
-    DataResult(tl::expected<OutputT, std::pair<DataT, Errors>>&& inner) noexcept;
+    DataResult(tl::expected<OutputT, std::pair<DataT, Errors>>&& inner);
 
     tl::expected<OutputT, std::pair<DataT, Errors>> inner;
 };
@@ -40,10 +40,10 @@ template <typename T>
 using CreateResult = DataResult<T, typename T::Data>;
 
 template <typename T>
-CreateResult<T> ValidCreate(T&& output) noexcept;
+CreateResult<T> ValidCreate(T&& output);
 
 template <typename T>
-CreateResult<T> InvalidCreate(typename T::Data&& data, Errors&& errors) noexcept;
+CreateResult<T> InvalidCreate(typename T::Data&& data, Errors&& errors);
 
 // holds a result of an attempt to construct an object from data where the constructed object is polymorphic
 // it either holds the constructed object or the invalid data and the errors that caused it to be invalid
@@ -51,26 +51,26 @@ template <typename T>
 using FactoryResult = DataResult<std::unique_ptr<T>, typename T::Data>;
 
 template <typename T>
-FactoryResult<T> ValidFactory(std::unique_ptr<T>&& output) noexcept;
+FactoryResult<T> ValidFactory(std::unique_ptr<T>&& output);
 
 template <typename T>
-FactoryResult<T> InvalidFactory(typename T::Data&& data, Errors&& errors) noexcept;
+FactoryResult<T> InvalidFactory(typename T::Data&& data, Errors&& errors);
 
 
 // === IMPLEMENTATION ===
 
 template <typename OutputT, typename DataT>
-DataResult<OutputT, DataT> DataResult<OutputT, DataT>::valid(OutputT&& output) noexcept {
+DataResult<OutputT, DataT> DataResult<OutputT, DataT>::valid(OutputT&& output) {
     return DataResult(tl::expected<OutputT, std::pair<DataT, Errors>>(std::move(output)));
 }
 
 template <typename OutputT, typename DataT>
-DataResult<OutputT, DataT> DataResult<OutputT, DataT>::invalid(DataT&& data, Errors&& errors) noexcept {
+DataResult<OutputT, DataT> DataResult<OutputT, DataT>::invalid(DataT&& data, Errors&& errors) {
     return DataResult(tl::unexpected(std::make_pair(std::move(data), std::move(errors))));
 }
 
 template <typename OutputT, typename DataT>
-bool DataResult<OutputT, DataT>::is_valid() const noexcept {
+bool DataResult<OutputT, DataT>::is_valid() const {
     return inner.has_value();
 }
 
@@ -95,27 +95,27 @@ std::pair<DataT, Errors>&& DataResult<OutputT, DataT>::data_and_errors() {
 }
 
 template <typename OutputT, typename DataT>
-DataResult<OutputT, DataT>::DataResult(tl::expected<OutputT, std::pair<DataT, Errors>>&& inner) noexcept
+DataResult<OutputT, DataT>::DataResult(tl::expected<OutputT, std::pair<DataT, Errors>>&& inner)
     : inner(std::move(inner)) {}
 
 
 template <typename T>
-CreateResult<T> ValidCreate(T&& output) noexcept {
+CreateResult<T> ValidCreate(T&& output) {
     return CreateResult<T>::valid(std::move(output));
 }
 
 template <typename T>
-CreateResult<T> InvalidCreate(typename T::Data&& data, Errors&& errors) noexcept {
+CreateResult<T> InvalidCreate(typename T::Data&& data, Errors&& errors) {
     return CreateResult<T>::invalid(std::move(data), std::move(errors));
 }
 
 template <typename T>
-FactoryResult<T> ValidFactory(std::unique_ptr<T>&& output) noexcept {
+FactoryResult<T> ValidFactory(std::unique_ptr<T>&& output) {
     return FactoryResult<T>::valid(std::move(output));
 }
 
 template <typename T>
-FactoryResult<T> InvalidFactory(typename T::Data&& data, Errors&& errors) noexcept {
+FactoryResult<T> InvalidFactory(typename T::Data&& data, Errors&& errors) {
     return FactoryResult<T>::invalid(std::move(data), std::move(errors));
 }
 

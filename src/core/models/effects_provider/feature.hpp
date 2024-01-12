@@ -19,9 +19,6 @@ namespace dnd {
 class Content;
 class ContentVisitor;
 
-/**
- * @brief A class representing a simple feature provided by a class, subclass, species, subspecies, or character.
- */
 class Feature : public ContentPiece, public EffectsProvider {
 public:
     struct Data;
@@ -30,19 +27,17 @@ public:
 
     Feature(const Feature&) = delete;
     Feature& operator=(const Feature&) = delete;
-    Feature(Feature&&) = default;
-    Feature& operator=(Feature&&) = default;
+    Feature(Feature&&) noexcept = default;
+    Feature& operator=(Feature&&) noexcept = default;
 
-    const std::string& get_name() const noexcept override;
-    const std::string& get_description() const noexcept override;
-    const SourceInfo& get_source_info() const noexcept override;
-    const Effects& get_main_effects() const noexcept override;
+    const std::string& get_name() const override;
+    const std::string& get_description() const override;
+    const SourceInfo& get_source_info() const override;
+    const Effects& get_main_effects() const override;
 
     virtual void accept_visitor(ContentVisitor& visitor) const override;
 protected:
-    Feature(
-        std::string&& name, std::string&& description, std::filesystem::path&& source_path, Effects&& main_effects
-    ) noexcept;
+    Feature(std::string&& name, std::string&& description, std::filesystem::path&& source_path, Effects&& main_effects);
 private:
     std::string name;
     std::string description;
@@ -51,7 +46,7 @@ private:
 };
 
 struct Feature::Data : public ValidationData {
-    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+    std::strong_ordering operator<=>(const Data&) const = default;
 
     Effects::Data main_effects_data;
 };

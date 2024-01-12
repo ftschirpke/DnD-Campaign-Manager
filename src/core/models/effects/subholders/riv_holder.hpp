@@ -23,10 +23,10 @@ public:
 
     static CreateResult<RIVHolder> create_for(Data&& data, const Content& content);
 
-    const std::vector<std::string>& get_damage_resistances() const noexcept;
-    const std::vector<std::string>& get_damage_immunities() const noexcept;
-    const std::vector<std::string>& get_damage_vulnerabilities() const noexcept;
-    const std::vector<std::string>& get_condition_immunities() const noexcept;
+    const std::vector<std::string>& get_damage_resistances() const;
+    const std::vector<std::string>& get_damage_immunities() const;
+    const std::vector<std::string>& get_damage_vulnerabilities() const;
+    const std::vector<std::string>& get_condition_immunities() const;
 
     bool empty() const;
     void merge(RIVHolder&& other);
@@ -34,7 +34,7 @@ private:
     RIVHolder(
         std::vector<std::string>&& damage_resistances, std::vector<std::string>&& damage_immunities,
         std::vector<std::string>&& damage_vulnerabilities, std::vector<std::string>&& condition_immunities
-    ) noexcept;
+    );
 
     std::vector<std::string> damage_resistances;
     std::vector<std::string> damage_immunities;
@@ -43,8 +43,8 @@ private:
 };
 
 struct RIVHolder::Data {
-    std::strong_ordering operator<=>(const RIVHolder::Data&) const noexcept = default;
-    bool empty() const noexcept;
+    std::strong_ordering operator<=>(const RIVHolder::Data&) const = default;
+    bool empty() const;
 
     std::set<std::string> damage_resistances;
     std::set<std::string> damage_immunities;
@@ -52,7 +52,7 @@ struct RIVHolder::Data {
     std::set<std::string> condition_immunities;
 };
 
-inline bool RIVHolder::Data::empty() const noexcept {
+inline bool RIVHolder::Data::empty() const {
     return damage_resistances.empty() && damage_immunities.empty() && damage_vulnerabilities.empty()
            && condition_immunities.empty();
 }

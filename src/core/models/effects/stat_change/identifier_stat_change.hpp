@@ -28,7 +28,7 @@ public:
     IdentifierStatChange(
         const std::string& affected_attribute, StatChangeTime time, const std::string& operation_name,
         const std::string& value_identifier
-    ) noexcept;
+    );
     /**
      * @brief Constructs a stat change with the attribute it affects, its execution time, and the name and value
      * identifier for the operation.
@@ -41,7 +41,7 @@ public:
     IdentifierStatChange(
         std::string_view affected_attribute, StatChangeTime time, std::string_view operation_name,
         std::string_view value_identifier
-    ) noexcept;
+    );
     /**
      * @brief Applies the stat change to a character's attributes given the attributes and constants of the character
      * @param attributes character attributes may be used for calculation and one of them will be changed

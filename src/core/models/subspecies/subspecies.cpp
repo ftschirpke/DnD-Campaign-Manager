@@ -32,7 +32,7 @@ CreateResult<Subspecies> Subspecies::create_for(Data&& data, const Content& cont
             auto [_, sub_errors] = feature_result.data_and_errors();
             return InvalidCreate<Subspecies>(std::move(data), std::move(sub_errors));
         }
-        features.emplace_back(feature_result.value());
+        features.push_back(feature_result.value());
     }
     CRef<Species> species = content.get_species().get(data.species_name).value();
     return ValidCreate(Subspecies(
@@ -40,22 +40,22 @@ CreateResult<Subspecies> Subspecies::create_for(Data&& data, const Content& cont
     ));
 }
 
-const std::string& Subspecies::get_name() const noexcept { return name; }
+const std::string& Subspecies::get_name() const { return name; }
 
-const std::string& Subspecies::get_description() const noexcept { return description; }
+const std::string& Subspecies::get_description() const { return description; }
 
-const SourceInfo& Subspecies::get_source_info() const noexcept { return source_info; }
+const SourceInfo& Subspecies::get_source_info() const { return source_info; }
 
-const std::vector<Feature>& Subspecies::get_features() const noexcept { return features; }
+const std::vector<Feature>& Subspecies::get_features() const { return features; }
 
-CRef<Species> Subspecies::get_species() const noexcept { return species; }
+CRef<Species> Subspecies::get_species() const { return species; }
 
 void Subspecies::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 Subspecies::Subspecies(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::vector<Feature>&& features,
     CRef<Species> species
-) noexcept
+)
     : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
       features(std::move(features)), species(species) {}
 

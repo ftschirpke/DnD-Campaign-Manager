@@ -44,23 +44,23 @@ CreateResult<Spell> Spell::create(Data&& data) {
     ));
 }
 
-const std::string& Spell::get_name() const noexcept { return name; }
+const std::string& Spell::get_name() const { return name; }
 
-const std::string& Spell::get_description() const noexcept { return description; }
+const std::string& Spell::get_description() const { return description; }
 
-const SourceInfo& Spell::get_source_info() const noexcept { return source_info; }
+const SourceInfo& Spell::get_source_info() const { return source_info; }
 
-const SpellComponents& Spell::get_components() const noexcept { return components; }
+const SpellComponents& Spell::get_components() const { return components; }
 
-const SpellType& Spell::get_type() const noexcept { return type; }
+const SpellType& Spell::get_type() const { return type; }
 
-const std::string& Spell::get_casting_time() const noexcept { return casting_time; }
+const std::string& Spell::get_casting_time() const { return casting_time; }
 
-const std::string& Spell::get_range() const noexcept { return range; }
+const std::string& Spell::get_range() const { return range; }
 
-const std::string& Spell::get_duration() const noexcept { return duration; }
+const std::string& Spell::get_duration() const { return duration; }
 
-const std::set<std::string>& Spell::get_classes() const noexcept { return classes; }
+const std::set<std::string>& Spell::get_classes() const { return classes; }
 
 void Spell::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
@@ -68,7 +68,7 @@ Spell::Spell(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, SpellComponents&& components,
     SpellType&& type, std::string&& casting_time, std::string&& range, std::string&& duration,
     std::set<std::string>&& classes
-) noexcept
+)
     : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
       components(std::move(components)), type(std::move(type)), casting_time(std::move(casting_time)),
       range(std::move(range)), duration(std::move(duration)), classes(std::move(classes)) {}

@@ -14,7 +14,7 @@
 
 namespace dnd {
 
-StringFormatter::StringFormatter(bool ignore_double_newline) noexcept : ignore_double_newline(ignore_double_newline) {}
+StringFormatter::StringFormatter(bool ignore_double_newline) : ignore_double_newline(ignore_double_newline) {}
 
 std::vector<std::unique_ptr<Format>> StringFormatter::parse_formats(const std::string& text) const {
     std::vector<std::unique_ptr<Format>> formats;
@@ -24,7 +24,7 @@ std::vector<std::unique_ptr<Format>> StringFormatter::parse_formats(const std::s
     while (it != text.end()) {
         // iterator is at the start of a new line
         if (*it == '-') {
-            formats.emplace_back(parse_bulleted_list(it, text.cend()));
+            formats.push_back(parse_bulleted_list(it, text.cend()));
         } else {
             std::string::const_iterator test_it = it;
             bool is_table = false;
@@ -36,9 +36,9 @@ std::vector<std::unique_ptr<Format>> StringFormatter::parse_formats(const std::s
                 ++test_it;
             }
             if (is_table) {
-                formats.emplace_back(parse_table(it, text.cend()));
+                formats.push_back(parse_table(it, text.cend()));
             } else {
-                formats.emplace_back(parse_paragraph(it, text.cend()));
+                formats.push_back(parse_paragraph(it, text.cend()));
             }
         }
         if (it == text.end()) {

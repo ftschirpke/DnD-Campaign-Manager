@@ -14,10 +14,10 @@ class Spellcasting {
 public:
     struct Data;
 
-    virtual ~Spellcasting() noexcept = default;
+    virtual ~Spellcasting() = default;
 
-    Ability get_ability() const noexcept;
-    bool allows_ritual_casting() const noexcept;
+    Ability get_ability() const;
+    bool allows_ritual_casting() const;
 
     int get_cantrips_known(int class_level) const;
     int get_spell_slots(int spell_slot_level, int class_level) const;
@@ -25,7 +25,7 @@ protected:
     Spellcasting(
         Ability spellcasting_ability, bool ritual_casting, std::array<int, 20>&& cantrips_known,
         std::array<std::array<int, 20>, 9>&& spell_slots
-    ) noexcept;
+    );
 private:
     Ability ability;
     bool ritual_casting;
@@ -34,8 +34,8 @@ private:
 };
 
 struct Spellcasting::Data {
-    explicit Data() noexcept;
-    std::strong_ordering operator<=>(const Spellcasting::Data&) const noexcept = default;
+    explicit Data();
+    std::strong_ordering operator<=>(const Spellcasting::Data&) const = default;
 
     bool is_spellcaster;
     std::string ability;
@@ -47,7 +47,7 @@ struct Spellcasting::Data {
     std::array<std::array<int, 20>, 9> spell_slots;
 };
 
-inline Spellcasting::Data::Data() noexcept {
+inline Spellcasting::Data::Data() {
     spells_known.fill(0);
     cantrips_known.fill(0);
     for (std::array<int, 20>& arr : spell_slots) {

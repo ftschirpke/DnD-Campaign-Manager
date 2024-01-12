@@ -11,11 +11,11 @@ class RuntimeError {
 public:
     enum class Code;
 
-    RuntimeError(Code code, const std::string& message) noexcept;
-    RuntimeError(Code code, std::string&& message) noexcept;
+    RuntimeError(Code code, const std::string& message);
+    RuntimeError(Code code, std::string&& message);
 
-    Code get_error_code() const noexcept;
-    const std::string& get_error_message() const noexcept;
+    Code get_error_code() const;
+    const std::string& get_error_message() const;
 private:
     Code code;
     std::string error_message;

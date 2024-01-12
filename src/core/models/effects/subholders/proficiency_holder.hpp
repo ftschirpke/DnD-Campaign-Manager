@@ -24,13 +24,13 @@ public:
 
     static CreateResult<ProficiencyHolder> create_for(Data&& data, const Content& content);
 
-    const std::vector<std::string>& get_armor_proficiencies() const noexcept;
-    const std::vector<std::string>& get_weapon_proficiencies() const noexcept;
-    const std::vector<std::string>& get_tool_proficiencies() const noexcept;
-    const std::vector<std::string>& get_skill_proficiencies() const noexcept;
-    const std::vector<std::string>& get_saving_throw_proficiencies() const noexcept;
-    const std::vector<std::string>& get_known_languages() const noexcept;
-    const std::vector<std::string>& get_senses() const noexcept;
+    const std::vector<std::string>& get_armor_proficiencies() const;
+    const std::vector<std::string>& get_weapon_proficiencies() const;
+    const std::vector<std::string>& get_tool_proficiencies() const;
+    const std::vector<std::string>& get_skill_proficiencies() const;
+    const std::vector<std::string>& get_saving_throw_proficiencies() const;
+    const std::vector<std::string>& get_known_languages() const;
+    const std::vector<std::string>& get_senses() const;
 
     bool empty() const;
     void merge(ProficiencyHolder&& other);
@@ -39,7 +39,7 @@ private:
         std::vector<std::string>&& armor, std::vector<std::string>&& weapons, std::vector<std::string>&& tools,
         std::vector<std::string>&& skills, std::vector<std::string>&& saving_throws,
         std::vector<std::string>&& languages, std::vector<std::string>&& senses
-    ) noexcept;
+    );
 
     std::vector<std::string> armor_proficiencies;
     std::vector<std::string> weapon_proficiencies;
@@ -51,8 +51,8 @@ private:
 };
 
 struct ProficiencyHolder::Data {
-    std::strong_ordering operator<=>(const ProficiencyHolder::Data&) const noexcept = default;
-    bool empty() const noexcept;
+    std::strong_ordering operator<=>(const ProficiencyHolder::Data&) const = default;
+    bool empty() const;
 
     // the types of armor the character is proficient with
     std::set<std::string> armor;
@@ -70,7 +70,7 @@ struct ProficiencyHolder::Data {
     std::set<std::string> senses;
 };
 
-inline bool ProficiencyHolder::Data::empty() const noexcept {
+inline bool ProficiencyHolder::Data::empty() const {
     return armor.empty() && weapons.empty() && tools.empty() && skills.empty() && saving_throws.empty()
            && languages.empty() && senses.empty();
 }

@@ -12,7 +12,7 @@
 
 namespace dnd {
 
-bool SpellFilter::has_all_filters() const noexcept {
+bool SpellFilter::has_all_filters() const {
     return ContentPieceFilter::has_all_filters() && verbal_component_filter.is_set()
            && somatic_component_filter.is_set() && material_component_filter.is_set() && level_filter.is_set()
            && magic_school_filter.is_set() && ritual_filter.is_set() && casting_time_filter.is_set()
@@ -20,7 +20,7 @@ bool SpellFilter::has_all_filters() const noexcept {
 }
 
 
-bool SpellFilter::matches(const Spell& spell) const noexcept {
+bool SpellFilter::matches(const Spell& spell) const {
     const SpellComponents& components = spell.get_components();
     const MagicSchool& magic_school = spell.get_type().get_magic_school();
     return ContentPieceFilter::matches(spell) && verbal_component_filter.matches(components.has_verbal())
@@ -40,7 +40,7 @@ std::vector<const ContentPiece*> SpellFilter::all_matches(const Content& content
     std::vector<const ContentPiece*> matching_content_pieces;
     for (const auto& [_, spell] : content.get_spells().get_all()) {
         if (matches(spell)) {
-            matching_content_pieces.emplace_back(&spell);
+            matching_content_pieces.push_back(&spell);
         }
     }
     return matching_content_pieces;

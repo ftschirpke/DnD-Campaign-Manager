@@ -13,8 +13,8 @@ namespace dnd {
 
 class CharacterFilter : public ContentPieceFilter {
 public:
-    bool has_all_filters() const noexcept override;
-    bool matches(const Character& character) const noexcept;
+    bool has_all_filters() const override;
+    bool matches(const Character& character) const;
     std::vector<const ContentPiece*> all_matches(const Content& content) const override;
     void clear() override;
 

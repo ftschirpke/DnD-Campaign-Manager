@@ -44,7 +44,7 @@ Errors ItemParser::parse() {
         item_errors += parse_required_attribute_into(item_json, "requires_attunement", data.requires_attunement);
         item_errors += parse_optional_attribute_into(item_json, "cosmetic_description", data.cosmetic_description);
         if (item_errors.ok()) {
-            item_data.emplace_back(std::move(data));
+            item_data.push_back(std::move(data));
         }
         errors += std::move(item_errors);
     }

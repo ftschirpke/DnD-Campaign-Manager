@@ -43,7 +43,7 @@ CreateResult<Character> Character::create_for(Data&& data, const Content& conten
             auto [_, sub_errors] = feature_result.data_and_errors();
             return InvalidCreate<Character>(std::move(data), std::move(sub_errors));
         }
-        features.emplace_back(feature_result.value());
+        features.push_back(feature_result.value());
     }
 
     CreateResult<AbilityScores> base_ability_scores_result = AbilityScores::create(
@@ -78,7 +78,7 @@ CreateResult<Character> Character::create_for(Data&& data, const Content& conten
             auto [_, sub_errors] = decision_result.data_and_errors();
             return InvalidCreate<Character>(std::move(data), std::move(sub_errors));
         }
-        decisions.emplace_back(decision_result.value());
+        decisions.push_back(decision_result.value());
     }
 
     return ValidCreate(Character(
@@ -87,23 +87,23 @@ CreateResult<Character> Character::create_for(Data&& data, const Content& conten
     ));
 }
 
-const std::string& Character::get_name() const noexcept { return name; }
+const std::string& Character::get_name() const { return name; }
 
-const std::string& Character::get_description() const noexcept { return description; }
+const std::string& Character::get_description() const { return description; }
 
-const SourceInfo& Character::get_source_info() const noexcept { return source_info; }
+const SourceInfo& Character::get_source_info() const { return source_info; }
 
-const std::vector<Feature>& Character::get_features() const noexcept { return features; }
+const std::vector<Feature>& Character::get_features() const { return features; }
 
-const std::vector<Choosable>& Character::get_choosables() const noexcept { return choosables; }
+const std::vector<Choosable>& Character::get_choosables() const { return choosables; }
 
-const AbilityScores& Character::get_base_ability_scores() const noexcept { return base_ability_scores; }
+const AbilityScores& Character::get_base_ability_scores() const { return base_ability_scores; }
 
-const FeatureProviders& Character::get_feature_providers() const noexcept { return feature_providers; }
+const FeatureProviders& Character::get_feature_providers() const { return feature_providers; }
 
-const Progression& Character::get_progression() const noexcept { return progression; }
+const Progression& Character::get_progression() const { return progression; }
 
-void Character::for_all_effects_do(std::function<void(const Effects&)> func) const noexcept {
+void Character::for_all_effects_do(std::function<void(const Effects&)> func) const {
     for (const Feature& feature : feature_providers.get_species().get_features()) {
         func(feature.get_main_effects());
     }
@@ -142,7 +142,7 @@ void Character::for_all_effects_do(std::function<void(const Effects&)> func) con
     }
 }
 
-int Character::get_proficiency_bonus() const noexcept {
+int Character::get_proficiency_bonus() const {
     tl::expected<int, RuntimeError> proficiency_bonus_result = proficiency_bonus_for_level(progression.get_level());
     assert(proficiency_bonus_result.has_value());
     return proficiency_bonus_result.value();
@@ -154,7 +154,7 @@ Character::Character(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::vector<Feature>&& features,
     AbilityScores&& base_ability_scores, FeatureProviders&& feature_providers, Progression&& progression,
     std::vector<Decision>&& decisions
-) noexcept
+)
     : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
       features(std::move(features)), base_ability_scores(std::move(base_ability_scores)),
       feature_providers(std::move(feature_providers)), progression(std::move(progression)),

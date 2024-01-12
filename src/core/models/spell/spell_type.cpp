@@ -55,14 +55,14 @@ CreateResult<SpellType> SpellType::create(Data&& data) {
     return ValidCreate(SpellType(level, magic_school, is_ritual));
 }
 
-SpellType::SpellType(SpellLevel spell_level, MagicSchool magic_school, bool is_ritual) noexcept
+SpellType::SpellType(SpellLevel spell_level, MagicSchool magic_school, bool is_ritual)
     : spell_level(spell_level), magic_school(magic_school), ritual(is_ritual) {}
 
-SpellLevel SpellType::get_spell_level() const noexcept { return spell_level; }
+SpellLevel SpellType::get_spell_level() const { return spell_level; }
 
-MagicSchool SpellType::get_magic_school() const noexcept { return magic_school; }
+MagicSchool SpellType::get_magic_school() const { return magic_school; }
 
-bool SpellType::is_ritual() const noexcept { return ritual; }
+bool SpellType::is_ritual() const { return ritual; }
 
 int SpellType::get_spell_level_as_int() const { return static_cast<int>(spell_level); }
 

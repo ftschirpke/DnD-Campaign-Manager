@@ -22,10 +22,10 @@ public:
     PreparationSpellcasting(
         Ability spellcasting_ability, bool ritual_casting, std::array<int, 20>&& cantrips_known,
         std::array<std::array<int, 20>, 9>&& spell_slots, PreparationSpellcastingType type
-    ) noexcept;
+    );
 
-    PreparationSpellcastingType get_type() const noexcept;
-    int get_prepared_spells_amount(AbilityScores ability_scores, int level) const noexcept;
+    PreparationSpellcastingType get_type() const;
+    int get_prepared_spells_amount(AbilityScores ability_scores, int level) const;
 private:
     PreparationSpellcastingType type;
 };

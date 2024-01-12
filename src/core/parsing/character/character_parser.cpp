@@ -21,7 +21,7 @@
 
 namespace dnd {
 
-CharacterParser::CharacterParser(const std::filesystem::path& filepath) noexcept
+CharacterParser::CharacterParser(const std::filesystem::path& filepath)
     : FileParser(filepath, false), feature_parser(filepath) {}
 
 Errors CharacterParser::parse() {

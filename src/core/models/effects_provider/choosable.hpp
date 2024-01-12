@@ -30,22 +30,22 @@ public:
 
     Choosable(const Choosable&) = delete;
     Choosable& operator=(const Choosable&) = delete;
-    Choosable(Choosable&&) = default;
-    Choosable& operator=(Choosable&&) = default;
+    Choosable(Choosable&&) noexcept = default;
+    Choosable& operator=(Choosable&&) noexcept = default;
 
-    const std::string& get_name() const noexcept override;
-    const std::string& get_description() const noexcept override;
-    const SourceInfo& get_source_info() const noexcept override;
-    const Effects& get_main_effects() const noexcept override;
-    const std::string& get_type() const noexcept;
-    const std::vector<std::unique_ptr<Condition>>& get_prerequisites() const noexcept;
+    const std::string& get_name() const override;
+    const std::string& get_description() const override;
+    const SourceInfo& get_source_info() const override;
+    const Effects& get_main_effects() const override;
+    const std::string& get_type() const;
+    const std::vector<std::unique_ptr<Condition>>& get_prerequisites() const;
 
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Choosable(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& type,
         std::vector<std::unique_ptr<Condition>>&& prerequisites, Effects&& main_effects
-    ) noexcept;
+    );
 
     std::string name;
     std::string description;
@@ -56,7 +56,7 @@ private:
 };
 
 struct Choosable::Data : public Feature::Data {
-    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+    std::strong_ordering operator<=>(const Data&) const = default;
 
     std::string type;
     std::vector<Condition::Data> prerequisites_data;

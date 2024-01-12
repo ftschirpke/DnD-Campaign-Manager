@@ -11,9 +11,9 @@
 
 namespace dnd {
 
-PreparationSpellcastingType PreparationSpellcasting::get_type() const noexcept { return type; }
+PreparationSpellcastingType PreparationSpellcasting::get_type() const { return type; }
 
-int PreparationSpellcasting::get_prepared_spells_amount(AbilityScores ability_scores, int level) const noexcept {
+int PreparationSpellcasting::get_prepared_spells_amount(AbilityScores ability_scores, int level) const {
     if (level < 1 || level > 20) {
         return 0;
     }
@@ -35,7 +35,7 @@ int PreparationSpellcasting::get_prepared_spells_amount(AbilityScores ability_sc
 PreparationSpellcasting::PreparationSpellcasting(
     Ability spellcasting_ability, bool ritual_casting, std::array<int, 20>&& cantrips_known,
     std::array<std::array<int, 20>, 9>&& spell_slots, PreparationSpellcastingType type
-) noexcept
+)
     : Spellcasting(spellcasting_ability, ritual_casting, std::move(cantrips_known), std::move(spell_slots)),
       type(type) {}
 

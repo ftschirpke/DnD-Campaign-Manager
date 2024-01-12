@@ -52,16 +52,16 @@ CreateResult<ClassFeature> ClassFeature::create_for(Data&& data, const Content& 
     ));
 }
 
-int ClassFeature::get_level() const noexcept { return level; }
+int ClassFeature::get_level() const { return level; }
 
-const std::map<int, Effects>& ClassFeature::get_higher_level_effects() const noexcept { return higher_level_effects; }
+const std::map<int, Effects>& ClassFeature::get_higher_level_effects() const { return higher_level_effects; }
 
 void ClassFeature::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 ClassFeature::ClassFeature(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, int level,
     Effects&& main_effects, std::map<int, Effects>&& higher_level_effects
-) noexcept
+)
     : Feature(std::move(name), std::move(description), std::move(source_path), std::move(main_effects)), level(level),
       higher_level_effects(std::move(higher_level_effects)) {}
 

@@ -34,7 +34,7 @@ CreateResult<Decision> Decision::create_for(
     for (const std::string& stat_change_str : data.selections["stat_changes"]) {
         StatChange::Data stat_change_data;
         stat_change_data.stat_change_str = stat_change_str;
-        res_data.stat_changes_data.emplace_back(std::move(stat_change_data));
+        res_data.stat_changes_data.push_back(std::move(stat_change_data));
     }
     ins(res_data.extra_spells_holder_data.free_cantrips, std::move(data.selections["cantrips_free"]));
     ins(res_data.extra_spells_holder_data.at_will, std::move(data.selections["spells_at_will"]));
@@ -67,10 +67,10 @@ CreateResult<Decision> Decision::create_for(
     return ValidCreate(Decision(*data.get_target(), std::move(effects_result.value())));
 }
 
-CRef<Effects> Decision::get_target() const noexcept { return target; }
+CRef<Effects> Decision::get_target() const { return target; }
 
-const Effects& Decision::get_effects() const noexcept { return effects; }
+const Effects& Decision::get_effects() const { return effects; }
 
-Decision::Decision(CRef<Effects> target, Effects&& effects) noexcept : target(target), effects(std::move(effects)) {}
+Decision::Decision(CRef<Effects> target, Effects&& effects) : target(target), effects(std::move(effects)) {}
 
 } // namespace dnd

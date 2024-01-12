@@ -19,7 +19,7 @@
 
 namespace dnd {
 
-ClassParser::ClassParser(const std::filesystem::path& filepath) noexcept
+ClassParser::ClassParser(const std::filesystem::path& filepath)
     : FileParser(filepath, false), class_feature_parser(filepath), data() {}
 
 Errors ClassParser::parse() {

@@ -8,12 +8,11 @@
 
 namespace dnd {
 
-Paragraph::Paragraph(std::string_view text, bool empty_line_after) noexcept
-    : text(text), empty_line_after(empty_line_after) {}
+Paragraph::Paragraph(std::string_view text, bool empty_line_after) : text(text), empty_line_after(empty_line_after) {}
 
-std::string_view Paragraph::get_text() const noexcept { return text; }
+std::string_view Paragraph::get_text() const { return text; }
 
-bool Paragraph::get_empty_line_after() const noexcept { return empty_line_after; }
+bool Paragraph::get_empty_line_after() const { return empty_line_after; }
 
 void Paragraph::accept(const FormatVisitor& visitor) const { visitor(*this); }
 

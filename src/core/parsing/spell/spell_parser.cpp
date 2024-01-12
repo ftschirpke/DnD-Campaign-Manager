@@ -43,7 +43,7 @@ Errors SpellParser::parse() {
         spell_errors += parse_required_attribute_into(spell_json, "duration", data.duration);
         spell_errors += parse_required_attribute_into(spell_json, "classes", data.classes);
         if (spell_errors.ok()) {
-            spell_data.emplace_back(std::move(data));
+            spell_data.push_back(std::move(data));
         }
         errors += std::move(spell_errors);
     }

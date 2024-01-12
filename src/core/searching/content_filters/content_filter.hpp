@@ -14,7 +14,7 @@ class Content;
 class ContentFilter {
 public:
     virtual ~ContentFilter() = default;
-    virtual bool has_all_filters() const noexcept = 0;
+    virtual bool has_all_filters() const = 0;
     virtual std::vector<const ContentPiece*> all_matches(const Content& content) const = 0;
     virtual void clear() = 0;
 };

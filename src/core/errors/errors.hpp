@@ -19,16 +19,16 @@ using Error = std::variant<ParsingError, ValidationError, RuntimeError>;
 
 class Errors {
 public:
-    Errors() noexcept = default;
-    Errors(Error&& error) noexcept;
+    Errors() = default;
+    Errors(Error&& error);
 
     Errors(const Errors&) = default;
     Errors& operator=(const Errors&) = default;
     Errors(Errors&&) noexcept = default;
     Errors& operator=(Errors&&) noexcept = default;
 
-    bool ok() const noexcept;
-    const std::vector<Error>& get_errors() const noexcept;
+    bool ok() const;
+    const std::vector<Error>& get_errors() const;
 
     void add_parsing_error(ParsingError::Code error_code, const std::filesystem::path& filepath, std::string&& message);
     void add_parsing_error(ParsingError&& error);

@@ -12,14 +12,12 @@
 
 namespace dnd {
 
-AdvancedContentSearch::AdvancedContentSearch(const Content& content) noexcept
+AdvancedContentSearch::AdvancedContentSearch(const Content& content)
     : content(content), filter(ContentPieceFilter()), searching(false), search_future() {}
 
 ContentFilterVariant& AdvancedContentSearch::get_filter() { return filter; }
 
-const std::vector<const ContentPiece*>& AdvancedContentSearch::get_search_results() const noexcept {
-    return search_results;
-}
+const std::vector<const ContentPiece*>& AdvancedContentSearch::get_search_results() const { return search_results; }
 
 static std::vector<const ContentPiece*> search(const Content& content, ContentFilterVariant searching_filter) {
     std::vector<const ContentPiece*> search_results = std::visit(

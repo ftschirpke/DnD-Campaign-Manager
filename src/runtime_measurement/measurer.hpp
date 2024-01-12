@@ -45,7 +45,7 @@ public:
     /**
      * @brief Constructs a Measurer
      */
-    Measurer() noexcept;
+    Measurer();
     /**
      * @brief Starts a measuring session with a certain name
      * @param name a name for the measuring session
@@ -100,7 +100,7 @@ private:
 
 inline std::mutex Measurer::write_profile_mutex;
 
-inline Measurer::Measurer() noexcept : session(nullptr) {}
+inline Measurer::Measurer() : session(nullptr) {}
 
 inline Measurer& Measurer::get() {
     static Measurer instance;

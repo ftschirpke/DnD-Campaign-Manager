@@ -29,11 +29,11 @@ public:
 
     ClassFeature(const ClassFeature&) = delete;
     ClassFeature& operator=(const ClassFeature&) = delete;
-    ClassFeature(ClassFeature&&) = default;
-    ClassFeature& operator=(ClassFeature&&) = default;
+    ClassFeature(ClassFeature&&) noexcept = default;
+    ClassFeature& operator=(ClassFeature&&) noexcept = default;
 
-    int get_level() const noexcept;
-    const std::map<int, Effects>& get_higher_level_effects() const noexcept;
+    int get_level() const;
+    const std::map<int, Effects>& get_higher_level_effects() const;
 
     /**
      * @brief Accepts a visitor
@@ -44,14 +44,14 @@ private:
     ClassFeature(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path, int level,
         Effects&& main_effects, std::map<int, Effects>&& higher_level_parts = {}
-    ) noexcept;
+    );
 
     int level;
     std::map<int, Effects> higher_level_effects; // careful when changing the type here, some code relies on order
 };
 
 struct ClassFeature::Data : public Feature::Data {
-    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+    std::strong_ordering operator<=>(const Data&) const = default;
 
     int level;
     std::map<int, Effects::Data> higher_level_effects_data;

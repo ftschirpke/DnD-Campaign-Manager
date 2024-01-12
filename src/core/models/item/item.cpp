@@ -27,22 +27,22 @@ CreateResult<Item> Item::create(Data&& data) {
     ));
 }
 
-const std::string& Item::get_name() const noexcept { return name; }
+const std::string& Item::get_name() const { return name; }
 
-const std::string& Item::get_description() const noexcept { return description; }
+const std::string& Item::get_description() const { return description; }
 
-const SourceInfo& Item::get_source_info() const noexcept { return source_info; }
+const SourceInfo& Item::get_source_info() const { return source_info; }
 
-const std::string& Item::get_cosmetic_description() const noexcept { return cosmetic_description; }
+const std::string& Item::get_cosmetic_description() const { return cosmetic_description; }
 
-bool Item::requires_attunement() const noexcept { return attunement; }
+bool Item::requires_attunement() const { return attunement; }
 
 void Item::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 Item::Item(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path,
     std::string&& cosmetic_description, bool requires_attunement
-) noexcept
+)
     : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
       cosmetic_description(std::move(cosmetic_description)), attunement(requires_attunement) {}
 

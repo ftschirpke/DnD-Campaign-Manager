@@ -9,11 +9,11 @@
 
 namespace dnd {
 
-Table::Table() noexcept : num_columns(0), current_row(0), rows({{}}) {}
+Table::Table() : num_columns(0), current_row(0), rows({{}}) {}
 
-std::vector<std::vector<std::string_view>> Table::get_rows() const noexcept { return rows; }
+std::vector<std::vector<std::string_view>> Table::get_rows() const { return rows; }
 
-size_t Table::get_num_columns() const noexcept { return num_columns; }
+size_t Table::get_num_columns() const { return num_columns; }
 
 void Table::add_element(std::string_view element) {
     rows[current_row].push_back(element);

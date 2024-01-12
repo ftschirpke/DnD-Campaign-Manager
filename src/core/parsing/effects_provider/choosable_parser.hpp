@@ -16,7 +16,7 @@ namespace dnd {
 
 class ChoosableParser : public Parser {
 public:
-    explicit ChoosableParser(const std::filesystem::path& filepath) noexcept;
+    explicit ChoosableParser(const std::filesystem::path& filepath);
     Errors parse_into(nlohmann::ordered_json&& json, Choosable::Data& data) const;
 private:
     FeatureParser feature_parser;

@@ -34,35 +34,33 @@ Session::Session(const char* last_session_filename)
 
 Session::~Session() { save_session_values(); }
 
-SessionStatus Session::get_status() const noexcept { return status; }
+SessionStatus Session::get_status() const { return status; }
 
-Content& Session::get_content() noexcept { return content; }
+Content& Session::get_content() { return content; }
 
-const Errors& Session::get_errors() const noexcept { return errors; }
+const Errors& Session::get_errors() const { return errors; }
 
-const std::vector<std::string>& Session::get_unknown_error_messages() const noexcept { return unknown_error_messages; }
+const std::vector<std::string>& Session::get_unknown_error_messages() const { return unknown_error_messages; }
 
-const std::vector<std::string>& Session::get_parsing_error_messages() const noexcept { return parsing_error_messages; }
+const std::vector<std::string>& Session::get_parsing_error_messages() const { return parsing_error_messages; }
 
-const std::vector<std::string>& Session::get_validation_error_messages() const noexcept {
-    return validation_error_messages;
-}
+const std::vector<std::string>& Session::get_validation_error_messages() const { return validation_error_messages; }
 
-const std::string& Session::get_campaign_name() const noexcept { return campaign_name; }
+const std::string& Session::get_campaign_name() const { return campaign_name; }
 
-const std::filesystem::path& Session::get_content_directory() const noexcept { return content_directory; }
+const std::filesystem::path& Session::get_content_directory() const { return content_directory; }
 
-std::deque<const ContentPiece*>& Session::get_open_content_pieces() noexcept { return open_content_pieces; }
+std::deque<const ContentPiece*>& Session::get_open_content_pieces() { return open_content_pieces; }
 
-const ContentPiece* Session::get_selected_content_piece() noexcept {
+const ContentPiece* Session::get_selected_content_piece() {
     const ContentPiece* rv = selected_content_piece;
     selected_content_piece = nullptr;
     return rv;
 }
 
-size_t Session::get_fuzzy_search_result_count() const noexcept { return fuzzy_search_result_count; }
+size_t Session::get_fuzzy_search_result_count() const { return fuzzy_search_result_count; }
 
-bool Session::too_many_fuzzy_search_results() const noexcept { return fuzzy_search_result_count > max_search_results; }
+bool Session::too_many_fuzzy_search_results() const { return fuzzy_search_result_count > max_search_results; }
 
 std::vector<std::string> Session::get_possible_campaign_names() const {
     if (content_directory.empty()) {
@@ -73,7 +71,7 @@ std::vector<std::string> Session::get_possible_campaign_names() const {
         if (!entry.is_directory() || entry.path().filename() == "general") {
             continue;
         }
-        campaign_names.emplace_back(entry.path().filename().string());
+        campaign_names.push_back(entry.path().filename().string());
     }
     return campaign_names;
 }
@@ -331,7 +329,7 @@ void Session::parse_content_and_initialize() {
             case 0: {
                 const ParsingError& parsing_error = std::get<ParsingError>(error);
                 SourceInfo source_info(parsing_error.get_filepath());
-                parsing_error_messages.emplace_back(fmt::format(
+                parsing_error_messages.push_back(fmt::format(
                     "{} ({} - {} - {})", parsing_error.get_error_message(), source_info.get_source_group_name(),
                     source_info.get_source_type_name(), source_info.get_source_name()
                 ));
@@ -339,12 +337,12 @@ void Session::parse_content_and_initialize() {
             }
             case 1: {
                 const ValidationError& validation_error = std::get<ValidationError>(error);
-                validation_error_messages.emplace_back(validation_error.get_error_message());
+                validation_error_messages.push_back(validation_error.get_error_message());
                 break;
             }
             case 2: {
                 const RuntimeError& runtime_error = std::get<RuntimeError>(error);
-                unknown_error_messages.emplace_back(runtime_error.get_error_message());
+                unknown_error_messages.push_back(runtime_error.get_error_message());
                 break;
             }
         }

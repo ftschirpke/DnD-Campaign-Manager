@@ -17,7 +17,7 @@ namespace dnd {
 
 class CharacterParser : public FileParser {
 public:
-    explicit CharacterParser(const std::filesystem::path& filepath) noexcept;
+    explicit CharacterParser(const std::filesystem::path& filepath);
     virtual Errors parse() override;
     virtual void set_context(const Content& content) override;
     virtual void save_result(Content& content) override;

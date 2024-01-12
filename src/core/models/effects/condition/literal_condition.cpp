@@ -13,32 +13,32 @@ namespace dnd {
 
 LiteralCondition::LiteralCondition(
     const std::string& left_side_identifier, const std::string& operator_name, bool right_side
-) noexcept
+)
     : Condition(left_side_identifier, operator_name), right_side(right_side) {}
 
 LiteralCondition::LiteralCondition(
     std::string_view left_side_identifier, std::string_view operator_name, bool right_side
-) noexcept
+)
     : Condition(left_side_identifier, operator_name), right_side(right_side) {}
 
 LiteralCondition::LiteralCondition(
     const std::string& left_side_identifier, const std::string& operator_name, int right_side
-) noexcept
+)
     : Condition(left_side_identifier, operator_name), right_side(right_side * 100) {}
 
 LiteralCondition::LiteralCondition(
     std::string_view left_side_identifier, std::string_view operator_name, int right_side
-) noexcept
+)
     : Condition(left_side_identifier, operator_name), right_side(right_side * 100) {}
 
 LiteralCondition::LiteralCondition(
     const std::string& left_side_identifier, const std::string& operator_name, float right_side
-) noexcept
+)
     : Condition(left_side_identifier, operator_name), right_side(static_cast<int>(right_side * 100)) {}
 
 LiteralCondition::LiteralCondition(
     std::string_view left_side_identifier, std::string_view operator_name, float right_side
-) noexcept
+)
     : Condition(left_side_identifier, operator_name), right_side(static_cast<int>(right_side * 100)) {}
 
 bool LiteralCondition::evaluate(

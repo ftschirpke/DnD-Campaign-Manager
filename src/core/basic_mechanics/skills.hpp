@@ -9,11 +9,11 @@
 
 namespace dnd {
 
-bool is_skill(const std::string& skill) noexcept;
+bool is_skill(const std::string& skill);
 
-std::vector<std::string> get_all_skills() noexcept;
+std::vector<std::string> get_all_skills();
 
-std::map<std::string, std::string> get_abilities_for_all_skills() noexcept;
+std::map<std::string, std::string> get_abilities_for_all_skills();
 
 } // namespace dnd
 

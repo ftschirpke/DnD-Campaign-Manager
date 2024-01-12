@@ -27,7 +27,7 @@ public:
      */
     LiteralStatChange(
         const std::string& affected_attribute, StatChangeTime time, const std::string& operation_name, bool value
-    ) noexcept;
+    );
     /**
      * @brief Constructs a stat change with the attribute it affects, its execution time, and the name and boolean value
      * for the operation.
@@ -39,7 +39,7 @@ public:
      */
     LiteralStatChange(
         std::string_view affected_attribute, StatChangeTime time, std::string_view operation_name, bool value
-    ) noexcept;
+    );
     /**
      * @brief Constructs a stat change with the attribute it affects, its execution time, and the name and integer value
      * for the operation.
@@ -51,7 +51,7 @@ public:
      */
     LiteralStatChange(
         const std::string& affected_attribute, StatChangeTime time, const std::string& operation_name, int value
-    ) noexcept;
+    );
     /**
      * @brief Constructs a stat change with the attribute it affects, its execution time, and the name and integer value
      * for the operation.
@@ -63,7 +63,7 @@ public:
      */
     LiteralStatChange(
         std::string_view affected_attribute, StatChangeTime time, std::string_view operation_name, int value
-    ) noexcept;
+    );
     /**
      * @brief Constructs a stat change with the attribute it affects, its execution time, and the name and float value
      * for the operation.
@@ -75,7 +75,7 @@ public:
      */
     LiteralStatChange(
         const std::string& affected_attribute, StatChangeTime time, const std::string& operation_name, float value
-    ) noexcept;
+    );
     /**
      * @brief Constructs a stat change with the attribute it affects, its execution time, and the name and float value
      * for the operation.
@@ -87,7 +87,7 @@ public:
      */
     LiteralStatChange(
         std::string_view affected_attribute, StatChangeTime time, std::string_view operation_name, float value
-    ) noexcept;
+    );
     /**
      * @brief Applies the stat change to a character's attributes given the attributes and constants of the character
      * @param attributes character attributes may be used for calculation and one of them will be changed

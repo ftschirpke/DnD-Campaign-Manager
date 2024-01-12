@@ -21,15 +21,15 @@ template <typename T>
 requires std::is_arithmetic_v<T>
 class NumberFilter {
 public:
-    NumberFilter() noexcept;
-    bool is_set() const noexcept;
-    NumberFilterType get_type() const noexcept;
-    T get_value() const noexcept;
-    void set_type(NumberFilterType new_type) noexcept;
-    void set_value(T new_value) noexcept;
-    void set(NumberFilterType type, T new_value) noexcept;
-    void clear() noexcept;
-    bool matches(T number) const noexcept;
+    NumberFilter();
+    bool is_set() const;
+    NumberFilterType get_type() const;
+    T get_value() const;
+    void set_type(NumberFilterType new_type);
+    void set_value(T new_value);
+    void set(NumberFilterType type, T new_value);
+    void clear();
+    bool matches(T number) const;
 private:
     NumberFilterType type;
     T value;
@@ -40,55 +40,55 @@ private:
 
 template <typename T>
 requires std::is_arithmetic_v<T>
-NumberFilter<T>::NumberFilter() noexcept : type(NumberFilterType::NONE), value(0) {}
+NumberFilter<T>::NumberFilter() : type(NumberFilterType::NONE), value(0) {}
 
 template <typename T>
 requires std::is_arithmetic_v<T>
-bool NumberFilter<T>::is_set() const noexcept {
+bool NumberFilter<T>::is_set() const {
     return type != NumberFilterType::NONE;
 }
 
 template <typename T>
 requires std::is_arithmetic_v<T>
-NumberFilterType NumberFilter<T>::get_type() const noexcept {
+NumberFilterType NumberFilter<T>::get_type() const {
     return type;
 }
 
 template <typename T>
 requires std::is_arithmetic_v<T>
-T NumberFilter<T>::get_value() const noexcept {
+T NumberFilter<T>::get_value() const {
     return value;
 }
 
 template <typename T>
 requires std::is_arithmetic_v<T>
-void NumberFilter<T>::set_type(NumberFilterType new_type) noexcept {
+void NumberFilter<T>::set_type(NumberFilterType new_type) {
     type = new_type;
 }
 
 template <typename T>
 requires std::is_arithmetic_v<T>
-void NumberFilter<T>::set_value(T new_value) noexcept {
+void NumberFilter<T>::set_value(T new_value) {
     value = new_value;
 }
 
 template <typename T>
 requires std::is_arithmetic_v<T>
-void NumberFilter<T>::set(NumberFilterType new_type, T new_value) noexcept {
+void NumberFilter<T>::set(NumberFilterType new_type, T new_value) {
     set_type(new_type);
     set_value(new_value);
 }
 
 template <typename T>
 requires std::is_arithmetic_v<T>
-void NumberFilter<T>::clear() noexcept {
+void NumberFilter<T>::clear() {
     type = NumberFilterType::NONE;
     value = 0;
 }
 
 template <typename T>
 requires std::is_arithmetic_v<T>
-bool NumberFilter<T>::matches(T number) const noexcept {
+bool NumberFilter<T>::matches(T number) const {
     switch (type) {
         case NumberFilterType::EQUAL:
             return number == value;

@@ -13,7 +13,7 @@ class Effects;
 class EffectsProvider {
 public:
     virtual ~EffectsProvider() = default;
-    virtual const Effects& get_main_effects() const noexcept = 0;
+    virtual const Effects& get_main_effects() const = 0;
 };
 
 } // namespace dnd

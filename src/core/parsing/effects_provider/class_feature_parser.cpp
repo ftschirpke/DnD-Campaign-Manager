@@ -15,7 +15,7 @@
 
 namespace dnd {
 
-ClassFeatureParser::ClassFeatureParser(const std::filesystem::path& filepath) noexcept
+ClassFeatureParser::ClassFeatureParser(const std::filesystem::path& filepath)
     : Parser(filepath), effects_parser(filepath) {}
 
 Errors ClassFeatureParser::parse_into(nlohmann::ordered_json&& json, ClassFeature::Data& data) const {

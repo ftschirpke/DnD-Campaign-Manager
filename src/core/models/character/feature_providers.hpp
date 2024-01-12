@@ -24,17 +24,17 @@ public:
 
     static CreateResult<FeatureProviders> create_for(Data&& data, const Content& content);
 
-    const Species& get_species() const noexcept;
-    OptCRef<Subspecies> get_subspecies() const noexcept;
-    const Class& get_class() const noexcept;
-    OptCRef<Subclass> get_subclass() const noexcept;
+    const Species& get_species() const;
+    OptCRef<Subspecies> get_subspecies() const;
+    const Class& get_class() const;
+    OptCRef<Subclass> get_subclass() const;
 
-    bool has_subspecies() const noexcept;
-    bool has_subclass() const noexcept;
+    bool has_subspecies() const;
+    bool has_subclass() const;
 private:
     FeatureProviders(
         const Species& species, OptCRef<Subspecies> subspecies, const Class& cls, OptCRef<Subclass> subclass
-    ) noexcept;
+    );
 
     std::reference_wrapper<const Species> species;
     OptCRef<Subspecies> subspecies;
@@ -43,7 +43,7 @@ private:
 };
 
 struct FeatureProviders::Data {
-    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+    std::strong_ordering operator<=>(const Data&) const = default;
 
     std::string species_name;
     std::string subspecies_name;

@@ -9,9 +9,9 @@
 
 namespace dnd {
 
-Ability Spellcasting::get_ability() const noexcept { return ability; }
+Ability Spellcasting::get_ability() const { return ability; }
 
-bool Spellcasting::allows_ritual_casting() const noexcept { return ritual_casting; }
+bool Spellcasting::allows_ritual_casting() const { return ritual_casting; }
 
 int Spellcasting::get_cantrips_known(int class_level) const {
     if (class_level < 1 || class_level > 20) {
@@ -30,7 +30,7 @@ int Spellcasting::get_spell_slots(int spell_slot_level, int class_level) const {
 Spellcasting::Spellcasting(
     Ability spellcasting_ability, bool ritual_casting, std::array<int, 20>&& cantrips_known,
     std::array<std::array<int, 20>, 9>&& spell_slots
-) noexcept
+)
     : ability(spellcasting_ability), ritual_casting(ritual_casting), cantrips_known(std::move(cantrips_known)),
       spell_slots(std::move(spell_slots)) {}
 

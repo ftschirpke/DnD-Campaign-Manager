@@ -6,8 +6,8 @@
 
 namespace dnd {
 
-const std::filesystem::path& Parser::get_filepath() const noexcept { return filepath; }
+const std::filesystem::path& Parser::get_filepath() const { return filepath; }
 
-Parser::Parser(const std::filesystem::path& filepath) noexcept : filepath(filepath) {}
+Parser::Parser(const std::filesystem::path& filepath) : filepath(filepath) {}
 
 } // namespace dnd

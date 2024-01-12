@@ -33,21 +33,21 @@ public:
 
     Character(const Character&) = delete;
     Character& operator=(const Character&) = delete;
-    Character(Character&&) = default;
-    Character& operator=(Character&&) = default;
+    Character(Character&&) noexcept = default;
+    Character& operator=(Character&&) noexcept = default;
 
-    const std::string& get_name() const noexcept override;
-    const std::string& get_description() const noexcept override;
-    const SourceInfo& get_source_info() const noexcept override;
-    const std::vector<Feature>& get_features() const noexcept;
-    const std::vector<Choosable>& get_choosables() const noexcept;
-    const AbilityScores& get_base_ability_scores() const noexcept;
-    const FeatureProviders& get_feature_providers() const noexcept;
-    const Progression& get_progression() const noexcept;
+    const std::string& get_name() const override;
+    const std::string& get_description() const override;
+    const SourceInfo& get_source_info() const override;
+    const std::vector<Feature>& get_features() const;
+    const std::vector<Choosable>& get_choosables() const;
+    const AbilityScores& get_base_ability_scores() const;
+    const FeatureProviders& get_feature_providers() const;
+    const Progression& get_progression() const;
 
-    int get_proficiency_bonus() const noexcept;
+    int get_proficiency_bonus() const;
 
-    void for_all_effects_do(std::function<void(const Effects&)> func) const noexcept;
+    void for_all_effects_do(std::function<void(const Effects&)> func) const;
 
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
@@ -55,7 +55,7 @@ private:
         std::string&& name, std::string&& description, std::filesystem::path&& source_path,
         std::vector<Feature>&& features, AbilityScores&& base_ability_scores, FeatureProviders&& feature_providers,
         Progression&& progression, std::vector<Decision>&& decisions
-    ) noexcept;
+    );
 
     std::string name;
     std::string description;

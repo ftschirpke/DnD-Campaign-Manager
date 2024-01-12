@@ -18,11 +18,11 @@ public:
 
     static CreateResult<Progression> create(Data&& data);
 
-    int get_level() const noexcept;
-    int get_xp() const noexcept;
-    const std::vector<int>& get_hit_dice_rolls() const noexcept;
+    int get_level() const;
+    int get_xp() const;
+    const std::vector<int>& get_hit_dice_rolls() const;
 private:
-    Progression(int level, int xp, std::vector<int>&& hit_dice_rolls) noexcept;
+    Progression(int level, int xp, std::vector<int>&& hit_dice_rolls);
 
     int level;
     int xp;
@@ -30,7 +30,7 @@ private:
 };
 
 struct Progression::Data {
-    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+    std::strong_ordering operator<=>(const Data&) const = default;
 
     int level;
     int xp;

@@ -11,11 +11,11 @@
 
 namespace dnd {
 
-bool ItemFilter::has_all_filters() const noexcept {
+bool ItemFilter::has_all_filters() const {
     return ContentPieceFilter::has_all_filters() && cosmetic_description_filter.is_set() && attunement_filter.is_set();
 }
 
-bool ItemFilter::matches(const Item& item) const noexcept {
+bool ItemFilter::matches(const Item& item) const {
     return ContentPieceFilter::matches(item) && cosmetic_description_filter.matches(item.get_cosmetic_description())
            && attunement_filter.matches(item.requires_attunement());
 }
@@ -24,7 +24,7 @@ std::vector<const ContentPiece*> ItemFilter::all_matches(const Content& content)
     std::vector<const ContentPiece*> matching_content_pieces;
     for (const auto& [_, item] : content.get_items().get_all()) {
         if (matches(item)) {
-            matching_content_pieces.emplace_back(&item);
+            matching_content_pieces.push_back(&item);
         }
     }
     return matching_content_pieces;

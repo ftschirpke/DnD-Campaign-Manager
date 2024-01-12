@@ -34,19 +34,19 @@ CreateResult<Feature> Feature::create_for(Data&& data, const Content& content) {
     );
 }
 
-const std::string& Feature::get_name() const noexcept { return name; }
+const std::string& Feature::get_name() const { return name; }
 
-const std::string& Feature::get_description() const noexcept { return description; }
+const std::string& Feature::get_description() const { return description; }
 
-const SourceInfo& Feature::get_source_info() const noexcept { return source_info; }
+const SourceInfo& Feature::get_source_info() const { return source_info; }
 
-const Effects& Feature::get_main_effects() const noexcept { return main_effects; }
+const Effects& Feature::get_main_effects() const { return main_effects; }
 
 void Feature::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 Feature::Feature(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, Effects&& main_effects
-) noexcept
+)
     : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
       main_effects(std::move(main_effects)) {}
 
