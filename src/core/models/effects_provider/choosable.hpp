@@ -30,8 +30,8 @@ public:
 
     Choosable(const Choosable&) = delete;
     Choosable& operator=(const Choosable&) = delete;
-    Choosable(Choosable&&) = default;
-    Choosable& operator=(Choosable&&) = default;
+    Choosable(Choosable&&) noexcept = default;
+    Choosable& operator=(Choosable&&) noexcept = default;
 
     const std::string& get_name() const override;
     const std::string& get_description() const override;

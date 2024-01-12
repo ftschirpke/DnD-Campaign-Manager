@@ -25,8 +25,8 @@ public:
 
     Decision(const Decision&) = delete;
     Decision& operator=(const Decision&) = delete;
-    Decision(Decision&&) = default;
-    Decision& operator=(Decision&&) = default;
+    Decision(Decision&&) noexcept = default;
+    Decision& operator=(Decision&&) noexcept = default;
 
     /**
      * @brief Returns the target of the decision i.e. the effects with the choice that the decision is for

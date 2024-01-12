@@ -30,8 +30,8 @@ public:
 
     Feature(const Feature&) = delete;
     Feature& operator=(const Feature&) = delete;
-    Feature(Feature&&) = default;
-    Feature& operator=(Feature&&) = default;
+    Feature(Feature&&) noexcept = default;
+    Feature& operator=(Feature&&) noexcept = default;
 
     const std::string& get_name() const override;
     const std::string& get_description() const override;

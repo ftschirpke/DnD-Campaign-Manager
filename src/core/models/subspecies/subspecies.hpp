@@ -28,8 +28,8 @@ public:
 
     Subspecies(const Subspecies&) = delete;
     Subspecies& operator=(const Subspecies&) = delete;
-    Subspecies(Subspecies&&) = default;
-    Subspecies& operator=(Subspecies&&) = default;
+    Subspecies(Subspecies&&) noexcept = default;
+    Subspecies& operator=(Subspecies&&) noexcept = default;
 
     const std::string& get_name() const override;
     const std::string& get_description() const override;

@@ -29,8 +29,8 @@ public:
 
     ClassFeature(const ClassFeature&) = delete;
     ClassFeature& operator=(const ClassFeature&) = delete;
-    ClassFeature(ClassFeature&&) = default;
-    ClassFeature& operator=(ClassFeature&&) = default;
+    ClassFeature(ClassFeature&&) noexcept = default;
+    ClassFeature& operator=(ClassFeature&&) noexcept = default;
 
     int get_level() const;
     const std::map<int, Effects>& get_higher_level_effects() const;

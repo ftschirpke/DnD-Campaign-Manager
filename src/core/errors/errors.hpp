@@ -24,8 +24,8 @@ public:
 
     Errors(const Errors&) = default;
     Errors& operator=(const Errors&) = default;
-    Errors(Errors&&) = default;
-    Errors& operator=(Errors&&) = default;
+    Errors(Errors&&) noexcept = default;
+    Errors& operator=(Errors&&) noexcept = default;
 
     bool ok() const;
     const std::vector<Error>& get_errors() const;

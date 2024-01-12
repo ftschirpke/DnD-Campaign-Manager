@@ -26,8 +26,8 @@ public:
 
     Species(const Species&) = delete;
     Species& operator=(const Species&) = delete;
-    Species(Species&&) = default;
-    Species& operator=(Species&&) = default;
+    Species(Species&&) noexcept = default;
+    Species& operator=(Species&&) noexcept = default;
 
     const std::string& get_name() const override;
     const std::string& get_description() const override;

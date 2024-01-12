@@ -15,8 +15,8 @@ struct ParsingResult {
     ParsingResult() = default;
     ParsingResult(const ParsingResult&) = delete;
     ParsingResult& operator=(const ParsingResult&) = delete;
-    ParsingResult(ParsingResult&&) = default;
-    ParsingResult& operator=(ParsingResult&&) = default;
+    ParsingResult(ParsingResult&&) noexcept = default;
+    ParsingResult& operator=(ParsingResult&&) noexcept = default;
 
     Content content;
     Errors errors;

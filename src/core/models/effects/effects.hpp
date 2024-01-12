@@ -37,8 +37,8 @@ public:
 
     Effects(const Effects&) = delete;
     Effects& operator=(const Effects&) = delete;
-    Effects(Effects&&) = default;
-    Effects& operator=(Effects&&) = default;
+    Effects(Effects&&) noexcept = default;
+    Effects& operator=(Effects&&) noexcept = default;
 
     const std::vector<std::unique_ptr<Condition>>& get_activation_conditions() const;
     const std::vector<Choice>& get_choices() const;

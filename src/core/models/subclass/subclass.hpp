@@ -29,8 +29,8 @@ public:
 
     Subclass(const Subclass&) = delete;
     Subclass& operator=(const Subclass&) = delete;
-    Subclass(Subclass&&) = default;
-    Subclass& operator=(Subclass&&) = default;
+    Subclass(Subclass&&) noexcept = default;
+    Subclass& operator=(Subclass&&) noexcept = default;
 
     const std::string& get_name() const override;
     const std::string& get_description() const override;

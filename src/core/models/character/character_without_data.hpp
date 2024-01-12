@@ -33,8 +33,8 @@ public:
 
     Character(const Character&) = delete;
     Character& operator=(const Character&) = delete;
-    Character(Character&&) = default;
-    Character& operator=(Character&&) = default;
+    Character(Character&&) noexcept = default;
+    Character& operator=(Character&&) noexcept = default;
 
     const std::string& get_name() const override;
     const std::string& get_description() const override;
