@@ -30,7 +30,7 @@ CreateResult<Choosable> Choosable::create_for(Data&& data, const Content& conten
             auto [_, sub_errors] = prerequisite_result.data_and_errors();
             return InvalidCreate<Choosable>(std::move(data), std::move(sub_errors));
         }
-        prerequisites.emplace_back(prerequisite_result.value());
+        prerequisites.push_back(prerequisite_result.value());
     }
 
     CreateResult<Effects> main_part_result = Effects::create_for(std::move(data.main_effects_data), content);

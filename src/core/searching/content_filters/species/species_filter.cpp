@@ -23,7 +23,7 @@ std::vector<const ContentPiece*> SpeciesFilter::all_matches(const Content& conte
     std::vector<const ContentPiece*> matching_content_pieces;
     for (const auto& [_, species] : content.get_species().get_all()) {
         if (matches(species)) {
-            matching_content_pieces.emplace_back(&species);
+            matching_content_pieces.push_back(&species);
         }
     }
     return matching_content_pieces;

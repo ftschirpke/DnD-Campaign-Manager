@@ -19,7 +19,7 @@ std::vector<const ContentPiece*> FeatureFilter::all_matches(const Content& conte
     std::vector<const ContentPiece*> matching_content_pieces;
     for (const auto& [_, feature] : content.get_features().get_all()) {
         if (matches(feature)) {
-            matching_content_pieces.emplace_back(&feature.get());
+            matching_content_pieces.push_back(&feature.get());
         }
     }
     return matching_content_pieces;

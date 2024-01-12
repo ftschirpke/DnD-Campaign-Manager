@@ -39,7 +39,7 @@ CreateResult<Effects> Effects::create_for(Data&& data, const Content& content) {
             auto [_, sub_errors] = condition_result.data_and_errors();
             return InvalidCreate<Effects>(std::move(data), std::move(sub_errors));
         }
-        activation_conditions.emplace_back(condition_result.value());
+        activation_conditions.push_back(condition_result.value());
     }
 
     std::vector<Choice> choices;
@@ -50,7 +50,7 @@ CreateResult<Effects> Effects::create_for(Data&& data, const Content& content) {
             auto [_, sub_errors] = choice_result.data_and_errors();
             return InvalidCreate<Effects>(std::move(data), std::move(sub_errors));
         }
-        choices.emplace_back(choice_result.value());
+        choices.push_back(choice_result.value());
     }
 
     std::vector<std::unique_ptr<StatChange>> stat_changes;
@@ -61,7 +61,7 @@ CreateResult<Effects> Effects::create_for(Data&& data, const Content& content) {
             auto [_, sub_errors] = stat_change_result.data_and_errors();
             return InvalidCreate<Effects>(std::move(data), std::move(sub_errors));
         }
-        stat_changes.emplace_back(stat_change_result.value());
+        stat_changes.push_back(stat_change_result.value());
     }
 
     CreateResult<ActionHolder> action_holder_result = ActionHolder::create(std::move(data.action_holder_data));

@@ -32,7 +32,7 @@ CreateResult<Subspecies> Subspecies::create_for(Data&& data, const Content& cont
             auto [_, sub_errors] = feature_result.data_and_errors();
             return InvalidCreate<Subspecies>(std::move(data), std::move(sub_errors));
         }
-        features.emplace_back(feature_result.value());
+        features.push_back(feature_result.value());
     }
     CRef<Species> species = content.get_species().get(data.species_name).value();
     return ValidCreate(Subspecies(

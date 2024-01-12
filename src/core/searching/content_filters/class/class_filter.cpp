@@ -23,7 +23,7 @@ std::vector<const ContentPiece*> ClassFilter::all_matches(const Content& content
     std::vector<const ContentPiece*> matching_content_pieces;
     for (const auto& [_, cls] : content.get_classes().get_all()) {
         if (matches(cls)) {
-            matching_content_pieces.emplace_back(&cls);
+            matching_content_pieces.push_back(&cls);
         }
     }
     return matching_content_pieces;

@@ -48,7 +48,7 @@ void Measurer::endSession() {
             long idx = it - thread_ids.begin();
             measurement.at("tid") = idx;
         } else {
-            thread_ids.emplace_back(measurement.at("tid"));
+            thread_ids.push_back(measurement.at("tid"));
             measurement.at("tid") = next_id++;
         }
     }

@@ -73,7 +73,7 @@ std::vector<std::string> Session::get_possible_campaign_names() const {
         if (!entry.is_directory() || entry.path().filename() == "general") {
             continue;
         }
-        campaign_names.emplace_back(entry.path().filename().string());
+        campaign_names.push_back(entry.path().filename().string());
     }
     return campaign_names;
 }
@@ -331,7 +331,7 @@ void Session::parse_content_and_initialize() {
             case 0: {
                 const ParsingError& parsing_error = std::get<ParsingError>(error);
                 SourceInfo source_info(parsing_error.get_filepath());
-                parsing_error_messages.emplace_back(fmt::format(
+                parsing_error_messages.push_back(fmt::format(
                     "{} ({} - {} - {})", parsing_error.get_error_message(), source_info.get_source_group_name(),
                     source_info.get_source_type_name(), source_info.get_source_name()
                 ));
@@ -339,12 +339,12 @@ void Session::parse_content_and_initialize() {
             }
             case 1: {
                 const ValidationError& validation_error = std::get<ValidationError>(error);
-                validation_error_messages.emplace_back(validation_error.get_error_message());
+                validation_error_messages.push_back(validation_error.get_error_message());
                 break;
             }
             case 2: {
                 const RuntimeError& runtime_error = std::get<RuntimeError>(error);
-                unknown_error_messages.emplace_back(runtime_error.get_error_message());
+                unknown_error_messages.push_back(runtime_error.get_error_message());
                 break;
             }
         }

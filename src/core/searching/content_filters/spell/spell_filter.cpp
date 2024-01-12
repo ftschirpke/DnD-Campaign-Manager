@@ -40,7 +40,7 @@ std::vector<const ContentPiece*> SpellFilter::all_matches(const Content& content
     std::vector<const ContentPiece*> matching_content_pieces;
     for (const auto& [_, spell] : content.get_spells().get_all()) {
         if (matches(spell)) {
-            matching_content_pieces.emplace_back(&spell);
+            matching_content_pieces.push_back(&spell);
         }
     }
     return matching_content_pieces;

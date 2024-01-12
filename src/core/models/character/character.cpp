@@ -43,7 +43,7 @@ CreateResult<Character> Character::create_for(Data&& data, const Content& conten
             auto [_, sub_errors] = feature_result.data_and_errors();
             return InvalidCreate<Character>(std::move(data), std::move(sub_errors));
         }
-        features.emplace_back(feature_result.value());
+        features.push_back(feature_result.value());
     }
 
     CreateResult<AbilityScores> base_ability_scores_result = AbilityScores::create(
@@ -78,7 +78,7 @@ CreateResult<Character> Character::create_for(Data&& data, const Content& conten
             auto [_, sub_errors] = decision_result.data_and_errors();
             return InvalidCreate<Character>(std::move(data), std::move(sub_errors));
         }
-        decisions.emplace_back(decision_result.value());
+        decisions.push_back(decision_result.value());
     }
 
     return ValidCreate(Character(

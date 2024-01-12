@@ -29,7 +29,7 @@ CreateResult<Species> Species::create_for(Data&& data, const Content& content) {
             auto [_, sub_errors] = feature_result.data_and_errors();
             return InvalidCreate<Species>(std::move(data), std::move(sub_errors));
         }
-        features.emplace_back(feature_result.value());
+        features.push_back(feature_result.value());
     }
     return ValidCreate(Species(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(features),

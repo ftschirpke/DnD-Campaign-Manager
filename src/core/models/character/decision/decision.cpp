@@ -34,7 +34,7 @@ CreateResult<Decision> Decision::create_for(
     for (const std::string& stat_change_str : data.selections["stat_changes"]) {
         StatChange::Data stat_change_data;
         stat_change_data.stat_change_str = stat_change_str;
-        res_data.stat_changes_data.emplace_back(std::move(stat_change_data));
+        res_data.stat_changes_data.push_back(std::move(stat_change_data));
     }
     ins(res_data.extra_spells_holder_data.free_cantrips, std::move(data.selections["cantrips_free"]));
     ins(res_data.extra_spells_holder_data.at_will, std::move(data.selections["spells_at_will"]));

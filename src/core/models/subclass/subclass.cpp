@@ -33,7 +33,7 @@ CreateResult<Subclass> Subclass::create_for(Data&& data, const Content& content)
             auto [_, sub_errors] = feature_result.data_and_errors();
             return InvalidCreate<Subclass>(std::move(data), std::move(sub_errors));
         }
-        features.emplace_back(feature_result.value());
+        features.push_back(feature_result.value());
     }
     CRef<Class> cls = content.get_classes().get(data.class_name).value();
 

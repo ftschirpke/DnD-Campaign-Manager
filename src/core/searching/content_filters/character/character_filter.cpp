@@ -24,7 +24,7 @@ std::vector<const ContentPiece*> CharacterFilter::all_matches(const Content& con
     std::vector<const ContentPiece*> matching_content_pieces;
     for (const auto& [_, character] : content.get_characters().get_all()) {
         if (matches(character)) {
-            matching_content_pieces.emplace_back(&character);
+            matching_content_pieces.push_back(&character);
         }
     }
     return matching_content_pieces;

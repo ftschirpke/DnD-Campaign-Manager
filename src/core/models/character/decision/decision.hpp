@@ -42,7 +42,7 @@ private:
 };
 
 struct Decision::Data {
-    Data(const Effects* target);
+    Data(const Effects* target) noexcept;
     std::strong_ordering operator<=>(const Data&) const = default;
 
     const Effects* get_target() const;
@@ -54,7 +54,7 @@ private:
     const Effects* target;
 };
 
-inline Decision::Data::Data(const Effects* target) : target(target) {}
+inline Decision::Data::Data(const Effects* target) noexcept : target(target) {}
 
 inline const Effects* Decision::Data::get_target() const { return target; }
 

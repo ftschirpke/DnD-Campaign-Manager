@@ -99,14 +99,14 @@ static std::vector<std::unique_ptr<ContentFilter>> spell_filters(Choice::Data& d
         SpellFilter spell_filter;
         SelectionFilter<std::string>& selection_filter = spell_filter.name_filter.emplace<1>();
         selection_filter.set(SelectionFilterType::IS_IN, data.explicit_choices);
-        filters.emplace_back(std::make_unique<SpellFilter>(std::move(spell_filter)));
+        filters.push_back(std::make_unique<SpellFilter>(std::move(spell_filter)));
     }
     for (const std::string& group_name : data.group_names) {
         SpellFilter spell_filter;
         if (data.attribute_name == "cantrips_free") {
-            filters.emplace_back(create_cantrip_filter(group_name));
+            filters.push_back(create_cantrip_filter(group_name));
         } else {
-            filters.emplace_back(create_spell_filter(group_name));
+            filters.push_back(create_spell_filter(group_name));
         }
     }
     return filters;

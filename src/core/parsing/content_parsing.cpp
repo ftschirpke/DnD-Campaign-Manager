@@ -88,7 +88,7 @@ ParsingResult parse_content(const std::filesystem::path& content_path, const std
     std::vector<std::filesystem::directory_entry> content_directories;
     for (const auto& entry : std::filesystem::directory_iterator(content_path / "general")) {
         if (entry.is_directory()) {
-            content_directories.emplace_back(std::move(entry));
+            content_directories.push_back(std::move(entry));
         }
     }
     content_directories.emplace_back(content_path / campaign_dir_name);

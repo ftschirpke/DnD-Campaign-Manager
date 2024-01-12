@@ -24,7 +24,7 @@ std::vector<const ContentPiece*> ChoosableFilter::all_matches(const Content& con
     std::vector<const ContentPiece*> matching_content_pieces;
     for (const auto& [_, choosable] : content.get_choosables().get_all()) {
         if (matches(choosable)) {
-            matching_content_pieces.emplace_back(&choosable);
+            matching_content_pieces.push_back(&choosable);
         }
     }
     return matching_content_pieces;

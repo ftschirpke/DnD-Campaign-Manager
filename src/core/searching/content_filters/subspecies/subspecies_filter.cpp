@@ -21,7 +21,7 @@ std::vector<const ContentPiece*> SubspeciesFilter::all_matches(const Content& co
     std::vector<const ContentPiece*> matching_content_pieces;
     for (const auto& [_, subspecies] : content.get_subspecies().get_all()) {
         if (matches(subspecies)) {
-            matching_content_pieces.emplace_back(&subspecies);
+            matching_content_pieces.push_back(&subspecies);
         }
     }
     return matching_content_pieces;

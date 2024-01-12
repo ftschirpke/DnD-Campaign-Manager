@@ -62,10 +62,10 @@ CreateResult<Class> Class::create_for(Data&& data, const Content& content) {
         ClassFeature feature = feature_result.value();
         if (feature.get_name() == data.subclass_feature_name) {
             subclass_level = determine_subclass_level(feature_data);
-            features.emplace_back(std::move(feature));
+            features.push_back(std::move(feature));
             subclass_feature = features.back();
         } else {
-            features.emplace_back(std::move(feature));
+            features.push_back(std::move(feature));
         }
     }
     assert(subclass_level != -1);
