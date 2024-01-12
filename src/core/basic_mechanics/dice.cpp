@@ -126,9 +126,7 @@ tl::expected<Dice, Errors> Dice::multi_from_int_with_modifier(int dice_number, i
     }
 }
 
-tl::expected<Dice, Errors> Dice::from_string(const std::string& str) {
-    return Dice::from_string(std::string(str));
-}
+tl::expected<Dice, Errors> Dice::from_string(const std::string& str) { return Dice::from_string(std::string(str)); }
 
 tl::expected<Dice, Errors> Dice::from_string(std::string&& str) {
     string_lowercase_inplace(str);
@@ -218,8 +216,7 @@ tl::expected<Dice, Errors> Dice::from_dice_count_map_with_modifier(
     return Dice(std::move(dice_counts), modifier);
 }
 
-Dice::Dice(std::map<DiceType, int>&& dice_counts, int modifier)
-    : dice_counts(dice_counts), modifier(modifier) {}
+Dice::Dice(std::map<DiceType, int>&& dice_counts, int modifier) : dice_counts(dice_counts), modifier(modifier) {}
 
 int Dice::min_value() const {
     int min_value = modifier;

@@ -7,7 +7,6 @@
 #include <stdexcept>
 #include <string>
 #include <string_view>
-#include <unordered_map>
 #include <utility>
 
 namespace dnd {
@@ -36,9 +35,7 @@ static constexpr std::array<std::pair<const char*, int (*)(int, int)>, 7> mathem
     std::pair("min", [](int a, int b) { return std::min(a, b); }),
 };
 
-StatChange::StatChange(
-    const std::string& affected_attribute, StatChangeTime time, const std::string& operation_name
-)
+StatChange::StatChange(const std::string& affected_attribute, StatChangeTime time, const std::string& operation_name)
     : affected_attribute(affected_attribute), mathematical_operation(nullptr), time(time) {
     for (const auto& [name, operation] : mathematical_operations) {
         if (name == operation_name) {
@@ -48,9 +45,7 @@ StatChange::StatChange(
     }
 }
 
-StatChange::StatChange(
-    std::string_view affected_attribute, StatChangeTime time, std::string_view operation_name
-)
+StatChange::StatChange(std::string_view affected_attribute, StatChangeTime time, std::string_view operation_name)
     : affected_attribute(affected_attribute), mathematical_operation(nullptr), time(time) {
     for (const auto& [name, operation] : mathematical_operations) {
         if (name == operation_name) {

@@ -50,9 +50,7 @@ CreateResult<SpellComponents> SpellComponents::create(Data&& data) {
     return ValidCreate(SpellComponents(verbal, somatic, material, std::move(materials_needed)));
 }
 
-SpellComponents::SpellComponents(
-    bool verbal, bool somatic, bool material, const std::string& material_components
-)
+SpellComponents::SpellComponents(bool verbal, bool somatic, bool material, const std::string& material_components)
     : verbal(verbal), somatic(somatic), material(material), material_components(material_components) {}
 
 SpellComponents::SpellComponents(bool verbal, bool somatic, bool material, std::string&& material_components)

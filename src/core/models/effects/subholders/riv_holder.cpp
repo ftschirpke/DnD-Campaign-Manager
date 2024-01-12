@@ -39,9 +39,7 @@ const std::vector<std::string>& RIVHolder::get_damage_resistances() const { retu
 
 const std::vector<std::string>& RIVHolder::get_damage_immunities() const { return damage_immunities; }
 
-const std::vector<std::string>& RIVHolder::get_damage_vulnerabilities() const {
-    return damage_vulnerabilities;
-}
+const std::vector<std::string>& RIVHolder::get_damage_vulnerabilities() const { return damage_vulnerabilities; }
 
 const std::vector<std::string>& RIVHolder::get_condition_immunities() const { return condition_immunities; }
 

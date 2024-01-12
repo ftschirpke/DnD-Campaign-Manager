@@ -86,9 +86,7 @@ int AbilityScores::get_wisdom_modifier() const { return calculate_modifier(wisdo
 int AbilityScores::get_charisma_modifier() const { return calculate_modifier(charisma); }
 
 
-AbilityScores::AbilityScores(
-    int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma
-)
+AbilityScores::AbilityScores(int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma)
     : strength(strength), dexterity(dexterity), constitution(constitution), intelligence(intelligence), wisdom(wisdom),
       charisma(charisma) {}
 

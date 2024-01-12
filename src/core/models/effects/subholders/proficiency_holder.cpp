@@ -34,21 +34,13 @@ CreateResult<ProficiencyHolder> ProficiencyHolder::create_for(Data&& data, const
     ));
 }
 
-const std::vector<std::string>& ProficiencyHolder::get_armor_proficiencies() const {
-    return armor_proficiencies;
-}
+const std::vector<std::string>& ProficiencyHolder::get_armor_proficiencies() const { return armor_proficiencies; }
 
-const std::vector<std::string>& ProficiencyHolder::get_weapon_proficiencies() const {
-    return weapon_proficiencies;
-}
+const std::vector<std::string>& ProficiencyHolder::get_weapon_proficiencies() const { return weapon_proficiencies; }
 
-const std::vector<std::string>& ProficiencyHolder::get_tool_proficiencies() const {
-    return tool_proficiencies;
-}
+const std::vector<std::string>& ProficiencyHolder::get_tool_proficiencies() const { return tool_proficiencies; }
 
-const std::vector<std::string>& ProficiencyHolder::get_skill_proficiencies() const {
-    return skill_proficiencies;
-}
+const std::vector<std::string>& ProficiencyHolder::get_skill_proficiencies() const { return skill_proficiencies; }
 
 const std::vector<std::string>& ProficiencyHolder::get_saving_throw_proficiencies() const {
     return saving_throw_proficiencies;

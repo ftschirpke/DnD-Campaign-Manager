@@ -44,9 +44,7 @@ const std::vector<std::string>& Session::get_unknown_error_messages() const { re
 
 const std::vector<std::string>& Session::get_parsing_error_messages() const { return parsing_error_messages; }
 
-const std::vector<std::string>& Session::get_validation_error_messages() const {
-    return validation_error_messages;
-}
+const std::vector<std::string>& Session::get_validation_error_messages() const { return validation_error_messages; }
 
 const std::string& Session::get_campaign_name() const { return campaign_name; }
 

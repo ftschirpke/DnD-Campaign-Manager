@@ -24,9 +24,7 @@ public:
      * @param operator_name the name of the operator
      * @param right_side the right side of the condition
      */
-    LiteralCondition(
-        const std::string& left_side_identifier, const std::string& operator_name, bool right_side
-    );
+    LiteralCondition(const std::string& left_side_identifier, const std::string& operator_name, bool right_side);
     /**
      * @brief Constructs a condition with the given left side identifier, operator, and right side boolean
      * CAREFUL: if the operator is not found, the construction doesn't fail, but the condition will always evaluate to
@@ -44,9 +42,7 @@ public:
      * @param operator_name the name of the operator
      * @param right_side the right side of the condition
      */
-    LiteralCondition(
-        const std::string& left_side_identifier, const std::string& operator_name, int right_side
-    );
+    LiteralCondition(const std::string& left_side_identifier, const std::string& operator_name, int right_side);
     /**
      * @brief Constructs a condition with the given left side identifier, operator, and right side integer
      * CAREFUL: if the operator is not found, the construction doesn't fail, but the condition will always evaluate to
@@ -64,9 +60,7 @@ public:
      * @param operator_name the name of the operator
      * @param right_side the right side of the condition
      */
-    LiteralCondition(
-        const std::string& left_side_identifier, const std::string& operator_name, float right_side
-    );
+    LiteralCondition(const std::string& left_side_identifier, const std::string& operator_name, float right_side);
     /**
      * @brief Constructs a condition with the given left side identifier, operator, and right side float
      * CAREFUL: if the operator is not found, the construction doesn't fail, but the condition will always evaluate to

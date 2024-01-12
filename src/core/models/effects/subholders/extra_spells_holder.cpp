@@ -52,13 +52,9 @@ const std::vector<const Spell*>& ExtraSpellsHolder::get_free_once_a_day() const 
 
 const std::vector<const Spell*>& ExtraSpellsHolder::get_spells_known() const { return spells_known; }
 
-const std::vector<const Spell*>& ExtraSpellsHolder::get_spells_known_included() const {
-    return spells_known_included;
-}
+const std::vector<const Spell*>& ExtraSpellsHolder::get_spells_known_included() const { return spells_known_included; }
 
-const std::vector<const Spell*>& ExtraSpellsHolder::get_added_to_spell_list() const {
-    return added_to_spell_list;
-}
+const std::vector<const Spell*>& ExtraSpellsHolder::get_added_to_spell_list() const { return added_to_spell_list; }
 
 bool ExtraSpellsHolder::empty() const {
     return free_cantrips.empty() && at_will.empty() && innate.empty() && free_once_a_day.empty() && spells_known.empty()

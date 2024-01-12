@@ -8,8 +8,7 @@
 
 namespace dnd {
 
-Paragraph::Paragraph(std::string_view text, bool empty_line_after)
-    : text(text), empty_line_after(empty_line_after) {}
+Paragraph::Paragraph(std::string_view text, bool empty_line_after) : text(text), empty_line_after(empty_line_after) {}
 
 std::string_view Paragraph::get_text() const { return text; }
 

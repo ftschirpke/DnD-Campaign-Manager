@@ -17,9 +17,7 @@ AdvancedContentSearch::AdvancedContentSearch(const Content& content)
 
 ContentFilterVariant& AdvancedContentSearch::get_filter() { return filter; }
 
-const std::vector<const ContentPiece*>& AdvancedContentSearch::get_search_results() const {
-    return search_results;
-}
+const std::vector<const ContentPiece*>& AdvancedContentSearch::get_search_results() const { return search_results; }
 
 static std::vector<const ContentPiece*> search(const Content& content, ContentFilterVariant searching_filter) {
     std::vector<const ContentPiece*> search_results = std::visit(

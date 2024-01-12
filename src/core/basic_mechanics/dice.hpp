@@ -27,9 +27,7 @@ public:
     static tl::expected<Dice, Errors> single_from_int(int dice_number);
     static tl::expected<Dice, Errors> single_from_int_with_modifier(int dice_number, int modifier);
     static tl::expected<Dice, Errors> multi_from_int(int dice_number, int dice_count);
-    static tl::expected<Dice, Errors> multi_from_int_with_modifier(
-        int dice_number, int dice_count, int modifier
-    );
+    static tl::expected<Dice, Errors> multi_from_int_with_modifier(int dice_number, int dice_count, int modifier);
     static tl::expected<Dice, Errors> from_string(const std::string& str);
     static tl::expected<Dice, Errors> from_string(std::string&& str);
     static tl::expected<Dice, Errors> from_dice_count_map(std::map<DiceType, int>&& dice_counts);

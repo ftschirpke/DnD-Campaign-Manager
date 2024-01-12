@@ -45,9 +45,7 @@ struct ActionHolder::Data {
     std::map<std::string, std::string> reactions;
 };
 
-inline bool ActionHolder::Data::empty() const {
-    return actions.empty() && bonus_actions.empty() && reactions.empty();
-}
+inline bool ActionHolder::Data::empty() const { return actions.empty() && bonus_actions.empty() && reactions.empty(); }
 
 } // namespace dnd
 

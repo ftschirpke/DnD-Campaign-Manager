@@ -19,9 +19,6 @@ namespace dnd {
 class Content;
 class ContentVisitor;
 
-/**
- * @brief A class representing a simple feature provided by a class, subclass, species, subspecies, or character.
- */
 class Feature : public ContentPiece, public EffectsProvider {
 public:
     struct Data;
@@ -40,9 +37,7 @@ public:
 
     virtual void accept_visitor(ContentVisitor& visitor) const override;
 protected:
-    Feature(
-        std::string&& name, std::string&& description, std::filesystem::path&& source_path, Effects&& main_effects
-    );
+    Feature(std::string&& name, std::string&& description, std::filesystem::path&& source_path, Effects&& main_effects);
 private:
     std::string name;
     std::string description;
