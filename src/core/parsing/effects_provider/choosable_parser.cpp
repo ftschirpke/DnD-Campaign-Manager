@@ -17,7 +17,7 @@
 
 namespace dnd {
 
-ChoosableParser::ChoosableParser(const std::filesystem::path& filepath) noexcept
+ChoosableParser::ChoosableParser(const std::filesystem::path& filepath)
     : Parser(filepath), feature_parser(filepath) {}
 
 Errors ChoosableParser::parse_into(nlohmann::ordered_json&& json, Choosable::Data& data) const {

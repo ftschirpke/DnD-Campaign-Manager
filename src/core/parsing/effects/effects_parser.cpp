@@ -31,7 +31,7 @@
 
 namespace dnd {
 
-EffectsParser::EffectsParser(const std::filesystem::path& filepath) noexcept : Parser(filepath) {}
+EffectsParser::EffectsParser(const std::filesystem::path& filepath) : Parser(filepath) {}
 
 Errors EffectsParser::parse_into(nlohmann::ordered_json&& json, Effects::Data& data) const {
     Errors errors;

@@ -17,7 +17,7 @@ namespace dnd {
 
 class FeatureParser : public Parser {
 public:
-    explicit FeatureParser(const std::filesystem::path& filepath) noexcept;
+    explicit FeatureParser(const std::filesystem::path& filepath);
     Errors parse_into(nlohmann::ordered_json&& json, Feature::Data& data) const;
     Errors parse_multiple_into(nlohmann::ordered_json&& json, std::vector<Feature::Data>& data) const;
 private:

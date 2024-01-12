@@ -19,9 +19,9 @@ public:
 
     static CreateResult<ActionHolder> create(Data&& data);
 
-    const std::map<std::string, std::string>& get_actions() const noexcept;
-    const std::map<std::string, std::string>& get_bonus_actions() const noexcept;
-    const std::map<std::string, std::string>& get_reactions() const noexcept;
+    const std::map<std::string, std::string>& get_actions() const;
+    const std::map<std::string, std::string>& get_bonus_actions() const;
+    const std::map<std::string, std::string>& get_reactions() const;
 
     bool empty() const;
     void merge(ActionHolder&& other);
@@ -29,7 +29,7 @@ private:
     ActionHolder(
         std::map<std::string, std::string>&& actions, std::map<std::string, std::string>&& bonus_actions,
         std::map<std::string, std::string>&& reactions
-    ) noexcept;
+    );
 
     std::map<std::string, std::string> actions;
     std::map<std::string, std::string> bonus_actions;
@@ -37,15 +37,15 @@ private:
 };
 
 struct ActionHolder::Data {
-    std::strong_ordering operator<=>(const Data&) const noexcept = default;
-    bool empty() const noexcept;
+    std::strong_ordering operator<=>(const Data&) const = default;
+    bool empty() const;
 
     std::map<std::string, std::string> actions;
     std::map<std::string, std::string> bonus_actions;
     std::map<std::string, std::string> reactions;
 };
 
-inline bool ActionHolder::Data::empty() const noexcept {
+inline bool ActionHolder::Data::empty() const {
     return actions.empty() && bonus_actions.empty() && reactions.empty();
 }
 

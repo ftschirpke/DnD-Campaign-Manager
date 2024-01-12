@@ -11,11 +11,11 @@
 
 namespace dnd {
 
-bool CharacterFilter::has_all_filters() const noexcept {
+bool CharacterFilter::has_all_filters() const {
     return ContentPieceFilter::has_all_filters() && level_filter.is_set() && xp_filter.is_set();
 }
 
-bool CharacterFilter::matches(const Character& character) const noexcept {
+bool CharacterFilter::matches(const Character& character) const {
     return ContentPieceFilter::matches(character) && level_filter.matches(character.get_progression().get_level())
            && xp_filter.matches(character.get_progression().get_xp());
 }

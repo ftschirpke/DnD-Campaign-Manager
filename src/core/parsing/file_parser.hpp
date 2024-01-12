@@ -15,10 +15,10 @@ class Content;
 
 class FileParser : public Parser {
 public:
-    explicit FileParser(const std::filesystem::path& filepath, bool multiple_pieces_per_file) noexcept;
+    explicit FileParser(const std::filesystem::path& filepath, bool multiple_pieces_per_file);
     virtual Errors open_json() final;
     virtual Errors parse() = 0;
-    bool continue_after_errors() const noexcept;
+    bool continue_after_errors() const;
     virtual void set_context(const Content& content);
     virtual void save_result(Content& content) = 0;
 protected:

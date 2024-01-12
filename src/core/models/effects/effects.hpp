@@ -32,21 +32,21 @@ public:
         std::vector<std::unique_ptr<Condition>>&& activation_conditions, std::vector<Choice>&& choices,
         std::vector<std::unique_ptr<StatChange>>&& stat_changes, ActionHolder&& action_holder,
         ExtraSpellsHolder&& extra_spells_holder, ProficiencyHolder&& proficiency_holder, RIVHolder&& riv_holder
-    ) noexcept;
-    virtual ~Effects() noexcept = default;
+    );
+    virtual ~Effects() = default;
 
     Effects(const Effects&) = delete;
     Effects& operator=(const Effects&) = delete;
-    Effects(Effects&&) noexcept = default;
-    Effects& operator=(Effects&&) noexcept = default;
+    Effects(Effects&&) = default;
+    Effects& operator=(Effects&&) = default;
 
-    const std::vector<std::unique_ptr<Condition>>& get_activation_conditions() const noexcept;
-    const std::vector<Choice>& get_choices() const noexcept;
-    const std::vector<std::unique_ptr<StatChange>>& get_stat_changes() const noexcept;
-    const ActionHolder& get_actions() const noexcept;
-    const ExtraSpellsHolder& get_extra_spells() const noexcept;
-    const ProficiencyHolder& get_proficiencies() const noexcept;
-    const RIVHolder& get_rivs() const noexcept;
+    const std::vector<std::unique_ptr<Condition>>& get_activation_conditions() const;
+    const std::vector<Choice>& get_choices() const;
+    const std::vector<std::unique_ptr<StatChange>>& get_stat_changes() const;
+    const ActionHolder& get_actions() const;
+    const ExtraSpellsHolder& get_extra_spells() const;
+    const ProficiencyHolder& get_proficiencies() const;
+    const RIVHolder& get_rivs() const;
 
     bool empty() const;
 
@@ -73,7 +73,7 @@ private:
 };
 
 struct Effects::Data {
-    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+    std::strong_ordering operator<=>(const Data&) const = default;
 
     std::vector<Condition::Data> activation_conditions_data;
     std::vector<Choice::Data> choices_data;

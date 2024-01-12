@@ -33,20 +33,20 @@ class Session {
 public:
     Session(const char* last_session_filename = "last_session.ini");
     ~Session();
-    SessionStatus get_status() const noexcept;
-    Content& get_content() noexcept;
+    SessionStatus get_status() const;
+    Content& get_content();
 
-    const Errors& get_errors() const noexcept;
-    const std::vector<std::string>& get_unknown_error_messages() const noexcept;
-    const std::vector<std::string>& get_parsing_error_messages() const noexcept;
-    const std::vector<std::string>& get_validation_error_messages() const noexcept;
+    const Errors& get_errors() const;
+    const std::vector<std::string>& get_unknown_error_messages() const;
+    const std::vector<std::string>& get_parsing_error_messages() const;
+    const std::vector<std::string>& get_validation_error_messages() const;
     void clear_unknown_error_messages();
 
-    const std::string& get_campaign_name() const noexcept;
-    const std::filesystem::path& get_content_directory() const noexcept;
+    const std::string& get_campaign_name() const;
+    const std::filesystem::path& get_content_directory() const;
 
-    std::deque<const ContentPiece*>& get_open_content_pieces() noexcept;
-    const ContentPiece* get_selected_content_piece() noexcept;
+    std::deque<const ContentPiece*>& get_open_content_pieces();
+    const ContentPiece* get_selected_content_piece();
 
     std::vector<std::string> get_possible_campaign_names() const;
     void retrieve_last_session_values();
@@ -55,8 +55,8 @@ public:
     Errors set_campaign_name(const std::string& campaign_name);
     Errors set_content_directory(const std::filesystem::path& content_directory);
 
-    size_t get_fuzzy_search_result_count() const noexcept;
-    bool too_many_fuzzy_search_results() const noexcept;
+    size_t get_fuzzy_search_result_count() const;
+    bool too_many_fuzzy_search_results() const;
     std::vector<std::string> get_fuzzy_search_result_strings() const;
     void set_fuzzy_search(const std::string& search_query, const std::array<bool, 9>& search_options);
     void open_fuzzy_search_result(size_t index);

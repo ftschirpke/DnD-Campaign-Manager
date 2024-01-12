@@ -20,11 +20,11 @@ CreateResult<ActionHolder> ActionHolder::create(Data&& data) {
     return ValidCreate(ActionHolder(std::move(data.actions), std::move(data.bonus_actions), std::move(data.reactions)));
 }
 
-const std::map<std::string, std::string>& ActionHolder::get_actions() const noexcept { return actions; }
+const std::map<std::string, std::string>& ActionHolder::get_actions() const { return actions; }
 
-const std::map<std::string, std::string>& ActionHolder::get_bonus_actions() const noexcept { return bonus_actions; }
+const std::map<std::string, std::string>& ActionHolder::get_bonus_actions() const { return bonus_actions; }
 
-const std::map<std::string, std::string>& ActionHolder::get_reactions() const noexcept { return reactions; }
+const std::map<std::string, std::string>& ActionHolder::get_reactions() const { return reactions; }
 
 bool ActionHolder::empty() const { return actions.empty() && bonus_actions.empty() && reactions.empty(); }
 
@@ -37,7 +37,7 @@ void ActionHolder::merge(ActionHolder&& other) {
 ActionHolder::ActionHolder(
     std::map<std::string, std::string>&& actions, std::map<std::string, std::string>&& bonus_actions,
     std::map<std::string, std::string>&& reactions
-) noexcept
+)
     : actions(std::move(actions)), bonus_actions(std::move(bonus_actions)), reactions(std::move(reactions)) {}
 
 } // namespace dnd

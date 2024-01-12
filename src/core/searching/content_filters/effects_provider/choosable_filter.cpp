@@ -11,11 +11,11 @@
 
 namespace dnd {
 
-bool ChoosableFilter::has_all_filters() const noexcept {
+bool ChoosableFilter::has_all_filters() const {
     return ContentPieceFilter::has_all_filters() && type_filter.is_set() && has_prerequisites_filter.is_set();
 }
 
-bool ChoosableFilter::matches(const Choosable& choosable) const noexcept {
+bool ChoosableFilter::matches(const Choosable& choosable) const {
     return ContentPieceFilter::matches(choosable) && type_filter.matches(choosable.get_type())
            && has_prerequisites_filter.matches(!choosable.get_prerequisites().empty());
 }

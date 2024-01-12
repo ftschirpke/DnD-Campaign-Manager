@@ -34,21 +34,21 @@ CreateResult<FeatureProviders> FeatureProviders::create_for(Data&& data, const C
     return ValidCreate(FeatureProviders(species, subspecies, cls, subclass));
 }
 
-const Species& FeatureProviders::get_species() const noexcept { return species; }
+const Species& FeatureProviders::get_species() const { return species; }
 
-OptCRef<Subspecies> FeatureProviders::get_subspecies() const noexcept { return subspecies; }
+OptCRef<Subspecies> FeatureProviders::get_subspecies() const { return subspecies; }
 
-const Class& FeatureProviders::get_class() const noexcept { return cls; }
+const Class& FeatureProviders::get_class() const { return cls; }
 
-OptCRef<Subclass> FeatureProviders::get_subclass() const noexcept { return subclass; }
+OptCRef<Subclass> FeatureProviders::get_subclass() const { return subclass; }
 
-bool FeatureProviders::has_subspecies() const noexcept { return subspecies.has_value(); }
+bool FeatureProviders::has_subspecies() const { return subspecies.has_value(); }
 
-bool FeatureProviders::has_subclass() const noexcept { return subclass.has_value(); }
+bool FeatureProviders::has_subclass() const { return subclass.has_value(); }
 
 FeatureProviders::FeatureProviders(
     const Species& species, OptCRef<Subspecies> subspecies, const Class& cls, OptCRef<Subclass> subclass
-) noexcept
+)
     : species(std::cref(species)), subspecies(subspecies), cls(std::cref(cls)), subclass(subclass) {}
 
 } // namespace dnd

@@ -20,7 +20,7 @@ public:
      * @brief Initialize a new string formatter
      * @param ignore_double_newline whether to ignore double newlines and just treat them as one newline character
      */
-    explicit StringFormatter(bool ignore_double_newline = false) noexcept;
+    explicit StringFormatter(bool ignore_double_newline = false);
     /**
      * @brief Parse the given text into a vector of formats
      * @param text the text to find the formats in

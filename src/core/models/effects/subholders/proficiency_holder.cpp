@@ -34,29 +34,29 @@ CreateResult<ProficiencyHolder> ProficiencyHolder::create_for(Data&& data, const
     ));
 }
 
-const std::vector<std::string>& ProficiencyHolder::get_armor_proficiencies() const noexcept {
+const std::vector<std::string>& ProficiencyHolder::get_armor_proficiencies() const {
     return armor_proficiencies;
 }
 
-const std::vector<std::string>& ProficiencyHolder::get_weapon_proficiencies() const noexcept {
+const std::vector<std::string>& ProficiencyHolder::get_weapon_proficiencies() const {
     return weapon_proficiencies;
 }
 
-const std::vector<std::string>& ProficiencyHolder::get_tool_proficiencies() const noexcept {
+const std::vector<std::string>& ProficiencyHolder::get_tool_proficiencies() const {
     return tool_proficiencies;
 }
 
-const std::vector<std::string>& ProficiencyHolder::get_skill_proficiencies() const noexcept {
+const std::vector<std::string>& ProficiencyHolder::get_skill_proficiencies() const {
     return skill_proficiencies;
 }
 
-const std::vector<std::string>& ProficiencyHolder::get_saving_throw_proficiencies() const noexcept {
+const std::vector<std::string>& ProficiencyHolder::get_saving_throw_proficiencies() const {
     return saving_throw_proficiencies;
 }
 
-const std::vector<std::string>& ProficiencyHolder::get_known_languages() const noexcept { return known_languages; }
+const std::vector<std::string>& ProficiencyHolder::get_known_languages() const { return known_languages; }
 
-const std::vector<std::string>& ProficiencyHolder::get_senses() const noexcept { return senses; }
+const std::vector<std::string>& ProficiencyHolder::get_senses() const { return senses; }
 
 bool ProficiencyHolder::empty() const {
     return armor_proficiencies.empty() && weapon_proficiencies.empty() && tool_proficiencies.empty()
@@ -98,7 +98,7 @@ ProficiencyHolder::ProficiencyHolder(
     std::vector<std::string>&& armor, std::vector<std::string>&& weapons, std::vector<std::string>&& tools,
     std::vector<std::string>&& skills, std::vector<std::string>&& saving_throws, std::vector<std::string>&& languages,
     std::vector<std::string>&& senses
-) noexcept
+)
     : armor_proficiencies(std::move(armor)), weapon_proficiencies(std::move(weapons)),
       tool_proficiencies(std::move(tools)), skill_proficiencies(std::move(skills)),
       saving_throw_proficiencies(std::move(saving_throws)), known_languages(std::move(languages)),

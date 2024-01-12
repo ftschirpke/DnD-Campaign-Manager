@@ -17,9 +17,9 @@ public:
      * @param text the text of the paragraph
      * @param empty_line_after whether to add an empty line after the paragraph
      */
-    explicit Paragraph(std::string_view text, bool empty_line_after = false) noexcept;
-    std::string_view get_text() const noexcept;
-    bool get_empty_line_after() const noexcept;
+    explicit Paragraph(std::string_view text, bool empty_line_after = false);
+    std::string_view get_text() const;
+    bool get_empty_line_after() const;
     virtual void accept(const FormatVisitor& visitor) const override;
 private:
     std::string_view text;

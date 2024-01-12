@@ -18,7 +18,7 @@
 
 namespace dnd {
 
-SubclassParser::SubclassParser(const std::filesystem::path& filepath) noexcept
+SubclassParser::SubclassParser(const std::filesystem::path& filepath)
     : FileParser(filepath, false), class_feature_parser(filepath), data() {}
 
 Errors SubclassParser::parse() {

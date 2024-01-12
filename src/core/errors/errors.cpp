@@ -13,9 +13,9 @@
 
 namespace dnd {
 
-Errors::Errors(Error&& error) noexcept { errors.emplace_back(std::move(error)); }
+Errors::Errors(Error&& error) { errors.emplace_back(std::move(error)); }
 
-bool Errors::ok() const noexcept { return errors.empty(); }
+bool Errors::ok() const { return errors.empty(); }
 
 void Errors::add_parsing_error(
     ParsingError::Code error_code, const std::filesystem::path& filepath, std::string&& message
@@ -37,7 +37,7 @@ void Errors::add_runtime_error(RuntimeError::Code error_code, std::string&& mess
 
 void Errors::add_runtime_error(RuntimeError&& error) { errors.emplace_back(std::move(error)); }
 
-const std::vector<Error>& Errors::get_errors() const noexcept { return errors; }
+const std::vector<Error>& Errors::get_errors() const { return errors; }
 
 void Errors::merge(Errors&& other) {
     errors.insert(

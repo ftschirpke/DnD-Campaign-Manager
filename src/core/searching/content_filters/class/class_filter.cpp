@@ -11,11 +11,11 @@
 
 namespace dnd {
 
-bool ClassFilter::has_all_filters() const noexcept {
+bool ClassFilter::has_all_filters() const {
     return ContentPieceFilter::has_all_filters() && has_spellcasting_filter.is_set();
 }
 
-bool ClassFilter::matches(const Class& cls) const noexcept {
+bool ClassFilter::matches(const Class& cls) const {
     return ContentPieceFilter::matches(cls) && has_spellcasting_filter.matches(cls.has_spellcasting());
 }
 

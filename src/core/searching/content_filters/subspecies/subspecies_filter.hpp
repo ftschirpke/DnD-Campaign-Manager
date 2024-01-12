@@ -12,8 +12,8 @@ namespace dnd {
 
 class SubspeciesFilter : public ContentPieceFilter {
 public:
-    bool has_all_filters() const noexcept override;
-    bool matches(const Subspecies& subspecies) const noexcept;
+    bool has_all_filters() const override;
+    bool matches(const Subspecies& subspecies) const;
     std::vector<const ContentPiece*> all_matches(const Content& content) const override;
     void clear() override;
 };

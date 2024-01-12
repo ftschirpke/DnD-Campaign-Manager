@@ -11,9 +11,9 @@
 
 namespace dnd {
 
-bool FeatureFilter::has_all_filters() const noexcept { return ContentPieceFilter::has_all_filters(); }
+bool FeatureFilter::has_all_filters() const { return ContentPieceFilter::has_all_filters(); }
 
-bool FeatureFilter::matches(const Feature& feature) const noexcept { return ContentPieceFilter::matches(feature); }
+bool FeatureFilter::matches(const Feature& feature) const { return ContentPieceFilter::matches(feature); }
 
 std::vector<const ContentPiece*> FeatureFilter::all_matches(const Content& content) const {
     std::vector<const ContentPiece*> matching_content_pieces;

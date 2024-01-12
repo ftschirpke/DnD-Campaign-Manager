@@ -46,24 +46,24 @@ CreateResult<Choosable> Choosable::create_for(Data&& data, const Content& conten
     ));
 }
 
-const std::string& Choosable::get_name() const noexcept { return name; }
+const std::string& Choosable::get_name() const { return name; }
 
-const std::string& Choosable::get_description() const noexcept { return description; }
+const std::string& Choosable::get_description() const { return description; }
 
-const SourceInfo& Choosable::get_source_info() const noexcept { return source_info; }
+const SourceInfo& Choosable::get_source_info() const { return source_info; }
 
-const Effects& Choosable::get_main_effects() const noexcept { return main_effects; }
+const Effects& Choosable::get_main_effects() const { return main_effects; }
 
-const std::string& Choosable::get_type() const noexcept { return type; }
+const std::string& Choosable::get_type() const { return type; }
 
-const std::vector<std::unique_ptr<Condition>>& Choosable::get_prerequisites() const noexcept { return prerequisites; }
+const std::vector<std::unique_ptr<Condition>>& Choosable::get_prerequisites() const { return prerequisites; }
 
 void Choosable::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 Choosable::Choosable(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& type,
     std::vector<std::unique_ptr<Condition>>&& prerequisites, Effects&& main_effects
-) noexcept
+)
     : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
       main_effects(std::move(main_effects)), type(type), prerequisites(std::move(prerequisites)) {}
 

@@ -16,7 +16,7 @@ namespace dnd {
 
 struct Character::Data : public ValidationData {
 public:
-    std::strong_ordering operator<=>(const Character::Data&) const noexcept = default;
+    std::strong_ordering operator<=>(const Character::Data&) const = default;
 
     std::vector<Feature::Data> features_data;
     AbilityScores::Data base_ability_scores_data;

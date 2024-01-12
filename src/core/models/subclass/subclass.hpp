@@ -32,20 +32,20 @@ public:
     Subclass(Subclass&&) = default;
     Subclass& operator=(Subclass&&) = default;
 
-    const std::string& get_name() const noexcept override;
-    const std::string& get_description() const noexcept override;
-    const SourceInfo& get_source_info() const noexcept override;
-    const std::vector<ClassFeature>& get_features() const noexcept;
-    bool has_spellcasting() const noexcept;
-    const Spellcasting* get_spellcasting() const noexcept;
-    CRef<Class> get_class() const noexcept;
+    const std::string& get_name() const override;
+    const std::string& get_description() const override;
+    const SourceInfo& get_source_info() const override;
+    const std::vector<ClassFeature>& get_features() const;
+    bool has_spellcasting() const;
+    const Spellcasting* get_spellcasting() const;
+    CRef<Class> get_class() const;
 
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Subclass(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path,
         std::vector<ClassFeature>&& features, CRef<Class> cls, std::unique_ptr<Spellcasting>&& spellcasting = nullptr
-    ) noexcept;
+    );
 
     std::string name;
     std::string description;
@@ -56,7 +56,7 @@ private:
 };
 
 struct Subclass::Data : public ValidationData {
-    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+    std::strong_ordering operator<=>(const Data&) const = default;
 
     Spellcasting::Data spellcasting_data;
     std::vector<ClassFeature::Data> features_data;

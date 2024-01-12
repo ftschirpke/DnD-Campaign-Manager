@@ -9,11 +9,11 @@
 
 namespace dnd {
 
-BulletedList::BulletedList() noexcept : items({}) {}
+BulletedList::BulletedList() : items({}) {}
 
 void BulletedList::add_item(std::string_view item) { items.push_back(item); }
 
-std::vector<std::string_view> BulletedList::get_items() const noexcept { return items; }
+std::vector<std::string_view> BulletedList::get_items() const { return items; }
 
 void BulletedList::accept(const FormatVisitor& visitor) const { visitor(*this); }
 

@@ -14,7 +14,7 @@ class Condition {
 public:
     struct Data;
 
-    virtual ~Condition() noexcept = default;
+    virtual ~Condition() = default;
     /**
      * @brief Evaluates the condition for given attributes and constants
      * @param attributes a map of attributes
@@ -33,21 +33,21 @@ protected:
      * @param left_side_identifier the identifier on the left side of the condition
      * @param operator_name the name of the operator
      */
-    Condition(const std::string& left_side_identifier, const std::string& operator_name) noexcept;
+    Condition(const std::string& left_side_identifier, const std::string& operator_name);
     /**
      * @brief Constructs a condition with the given left side identifier and operator
      * CAREFUL: if the operator is not found, the construction doesn't fail
      * @param left_side_identifier the identifier on the left side of the condition
      * @param operator_name the name of the operator
      */
-    Condition(std::string_view left_side_identifier, std::string_view operator_name) noexcept;
+    Condition(std::string_view left_side_identifier, std::string_view operator_name);
 
     std::string left_side_identifier;
     std::function<bool(int, int)> comparison_operator;
 };
 
 struct Condition::Data {
-    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+    std::strong_ordering operator<=>(const Data&) const = default;
 
     std::string condition_str;
 };

@@ -6,38 +6,38 @@
 
 namespace dnd {
 
-StringFilter::StringFilter() noexcept : type(StringFilterType::NONE), value() {}
+StringFilter::StringFilter() : type(StringFilterType::NONE), value() {}
 
-bool StringFilter::is_set() const noexcept { return type != StringFilterType::NONE; }
+bool StringFilter::is_set() const { return type != StringFilterType::NONE; }
 
-StringFilterType StringFilter::get_type() const noexcept { return type; }
+StringFilterType StringFilter::get_type() const { return type; }
 
-std::string& StringFilter::get_value_mutable() noexcept { return value; }
+std::string& StringFilter::get_value_mutable() { return value; }
 
-const std::string& StringFilter::get_value() const noexcept { return value; }
+const std::string& StringFilter::get_value() const { return value; }
 
-void StringFilter::set_type(StringFilterType new_type) noexcept { type = new_type; }
+void StringFilter::set_type(StringFilterType new_type) { type = new_type; }
 
-void StringFilter::set_value(const std::string& new_value) noexcept { value = new_value; }
+void StringFilter::set_value(const std::string& new_value) { value = new_value; }
 
-void StringFilter::set_value(std::string&& new_value) noexcept { value = new_value; }
+void StringFilter::set_value(std::string&& new_value) { value = new_value; }
 
-void StringFilter::set(StringFilterType new_type, const std::string& new_value) noexcept {
+void StringFilter::set(StringFilterType new_type, const std::string& new_value) {
     set_type(new_type);
     set_value(new_value);
 }
 
-void StringFilter::set(StringFilterType new_type, std::string&& new_value) noexcept {
+void StringFilter::set(StringFilterType new_type, std::string&& new_value) {
     set_type(new_type);
     set_value(std::move(new_value));
 }
 
-void StringFilter::clear() noexcept {
+void StringFilter::clear() {
     set_type(StringFilterType::NONE);
     set_value("");
 }
 
-bool StringFilter::matches(const std::string& str) const noexcept {
+bool StringFilter::matches(const std::string& str) const {
     switch (type) {
         case StringFilterType::EQUAL:
             return str == value;

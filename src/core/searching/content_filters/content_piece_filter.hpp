@@ -20,9 +20,9 @@ class ContentPiece;
 
 class ContentPieceFilter : public ContentFilter {
 public:
-    ContentPieceFilter() noexcept;
-    bool has_all_filters() const noexcept override;
-    bool matches(const ContentPiece& content_piece) const noexcept;
+    ContentPieceFilter();
+    bool has_all_filters() const override;
+    bool matches(const ContentPiece& content_piece) const;
     std::vector<const ContentPiece*> all_matches(const Content& content) const override;
     void clear() override;
 

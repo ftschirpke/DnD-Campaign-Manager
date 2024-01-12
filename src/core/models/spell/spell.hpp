@@ -23,15 +23,15 @@ public:
 
     static CreateResult<Spell> create(Data&& spell_data);
 
-    const std::string& get_name() const noexcept override;
-    const std::string& get_description() const noexcept override;
-    const SourceInfo& get_source_info() const noexcept override;
-    const SpellComponents& get_components() const noexcept;
-    const SpellType& get_type() const noexcept;
-    const std::string& get_casting_time() const noexcept;
-    const std::string& get_range() const noexcept;
-    const std::string& get_duration() const noexcept;
-    const std::set<std::string>& get_classes() const noexcept;
+    const std::string& get_name() const override;
+    const std::string& get_description() const override;
+    const SourceInfo& get_source_info() const override;
+    const SpellComponents& get_components() const;
+    const SpellType& get_type() const;
+    const std::string& get_casting_time() const;
+    const std::string& get_range() const;
+    const std::string& get_duration() const;
+    const std::set<std::string>& get_classes() const;
 
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
@@ -39,7 +39,7 @@ private:
         std::string&& name, std::string&& description, std::filesystem::path&& source_path,
         SpellComponents&& components, SpellType&& type, std::string&& casting_time, std::string&& range,
         std::string&& duration, std::set<std::string>&& classes
-    ) noexcept;
+    );
 
     std::string name;
     std::string description;
@@ -53,7 +53,7 @@ private:
 };
 
 struct Spell::Data : public ValidationData {
-    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+    std::strong_ordering operator<=>(const Data&) const = default;
 
     SpellComponents::Data components_data;
     SpellType::Data type_data;

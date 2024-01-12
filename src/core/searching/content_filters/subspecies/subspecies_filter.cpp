@@ -11,9 +11,9 @@
 
 namespace dnd {
 
-bool SubspeciesFilter::has_all_filters() const noexcept { return ContentPieceFilter::has_all_filters(); }
+bool SubspeciesFilter::has_all_filters() const { return ContentPieceFilter::has_all_filters(); }
 
-bool SubspeciesFilter::matches(const Subspecies& subspecies) const noexcept {
+bool SubspeciesFilter::matches(const Subspecies& subspecies) const {
     return ContentPieceFilter::matches(subspecies);
 }
 

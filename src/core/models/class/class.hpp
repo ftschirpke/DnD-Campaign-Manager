@@ -33,15 +33,15 @@ public:
     Class(Class&&) = default;
     Class& operator=(Class&&) = default;
 
-    const std::string& get_name() const noexcept override;
-    const std::string& get_description() const noexcept override;
-    const SourceInfo& get_source_info() const noexcept override;
-    const std::vector<ClassFeature>& get_features() const noexcept;
-    bool has_spellcasting() const noexcept;
-    const Spellcasting* get_spellcasting() const noexcept;
-    OptCRef<ClassFeature> get_subclass_feature() const noexcept;
-    const Dice& get_hit_dice() const noexcept;
-    const ImportantLevels& get_important_levels() const noexcept;
+    const std::string& get_name() const override;
+    const std::string& get_description() const override;
+    const SourceInfo& get_source_info() const override;
+    const std::vector<ClassFeature>& get_features() const;
+    bool has_spellcasting() const;
+    const Spellcasting* get_spellcasting() const;
+    OptCRef<ClassFeature> get_subclass_feature() const;
+    const Dice& get_hit_dice() const;
+    const ImportantLevels& get_important_levels() const;
 
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
@@ -49,7 +49,7 @@ private:
         std::string&& name, std::string&& description, std::filesystem::path&& source_path,
         std::vector<ClassFeature>&& features, OptCRef<ClassFeature> subclass_feature, Dice hit_dice,
         ImportantLevels&& important_levels, std::unique_ptr<Spellcasting>&& spellcasting = nullptr
-    ) noexcept;
+    );
 
     std::string name;
     std::string description;
@@ -62,7 +62,7 @@ private:
 };
 
 struct Class::Data : public ValidationData {
-    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+    std::strong_ordering operator<=>(const Data&) const = default;
 
     Spellcasting::Data spellcasting_data;
     std::vector<ClassFeature::Data> features_data;

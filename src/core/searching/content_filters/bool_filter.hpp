@@ -13,13 +13,13 @@ enum class BoolFilterType {
 
 class BoolFilter {
 public:
-    BoolFilter() noexcept;
-    bool is_set() const noexcept;
-    BoolFilterType get_type() const noexcept;
-    void set_type(BoolFilterType new_type) noexcept;
-    void set(BoolFilterType new_type) noexcept;
-    void clear() noexcept;
-    bool matches(bool boolean) const noexcept;
+    BoolFilter();
+    bool is_set() const;
+    BoolFilterType get_type() const;
+    void set_type(BoolFilterType new_type);
+    void set(BoolFilterType new_type);
+    void clear();
+    bool matches(bool boolean) const;
 private:
     BoolFilterType type;
 };

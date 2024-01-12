@@ -106,27 +106,27 @@ Effects::Effects(
     std::vector<std::unique_ptr<Condition>>&& activation_conditions, std::vector<Choice>&& choices,
     std::vector<std::unique_ptr<StatChange>>&& stat_changes, ActionHolder&& action_holder,
     ExtraSpellsHolder&& extra_spells_holder, ProficiencyHolder&& proficiency_holder, RIVHolder&& riv_holder
-) noexcept
+)
     : activation_conditions(std::move(activation_conditions)), choices(std::move(choices)),
       stat_changes(std::move(stat_changes)), actions(std::move(action_holder)),
       extra_spells(std::move(extra_spells_holder)), proficiencies(std::move(proficiency_holder)),
       rivs(std::move(riv_holder)) {}
 
-const std::vector<std::unique_ptr<Condition>>& Effects::get_activation_conditions() const noexcept {
+const std::vector<std::unique_ptr<Condition>>& Effects::get_activation_conditions() const {
     return activation_conditions;
 }
 
-const std::vector<Choice>& Effects::get_choices() const noexcept { return choices; }
+const std::vector<Choice>& Effects::get_choices() const { return choices; }
 
-const std::vector<std::unique_ptr<StatChange>>& Effects::get_stat_changes() const noexcept { return stat_changes; }
+const std::vector<std::unique_ptr<StatChange>>& Effects::get_stat_changes() const { return stat_changes; }
 
-const ActionHolder& Effects::get_actions() const noexcept { return actions; }
+const ActionHolder& Effects::get_actions() const { return actions; }
 
-const ExtraSpellsHolder& Effects::get_extra_spells() const noexcept { return extra_spells; }
+const ExtraSpellsHolder& Effects::get_extra_spells() const { return extra_spells; }
 
-const ProficiencyHolder& Effects::get_proficiencies() const noexcept { return proficiencies; }
+const ProficiencyHolder& Effects::get_proficiencies() const { return proficiencies; }
 
-const RIVHolder& Effects::get_rivs() const noexcept { return rivs; }
+const RIVHolder& Effects::get_rivs() const { return rivs; }
 
 bool Effects::empty() const {
     return activation_conditions.empty() && stat_changes.empty() && actions.empty() && extra_spells.empty()

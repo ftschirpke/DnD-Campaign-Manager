@@ -35,15 +35,15 @@ CreateResult<RIVHolder> RIVHolder::create_for(Data&& data, const Content& conten
     ));
 }
 
-const std::vector<std::string>& RIVHolder::get_damage_resistances() const noexcept { return damage_resistances; }
+const std::vector<std::string>& RIVHolder::get_damage_resistances() const { return damage_resistances; }
 
-const std::vector<std::string>& RIVHolder::get_damage_immunities() const noexcept { return damage_immunities; }
+const std::vector<std::string>& RIVHolder::get_damage_immunities() const { return damage_immunities; }
 
-const std::vector<std::string>& RIVHolder::get_damage_vulnerabilities() const noexcept {
+const std::vector<std::string>& RIVHolder::get_damage_vulnerabilities() const {
     return damage_vulnerabilities;
 }
 
-const std::vector<std::string>& RIVHolder::get_condition_immunities() const noexcept { return condition_immunities; }
+const std::vector<std::string>& RIVHolder::get_condition_immunities() const { return condition_immunities; }
 
 bool RIVHolder::empty() const {
     return damage_resistances.empty() && damage_immunities.empty() && damage_vulnerabilities.empty()
@@ -72,7 +72,7 @@ void RIVHolder::merge(RIVHolder&& other) {
 RIVHolder::RIVHolder(
     std::vector<std::string>&& damage_resistances, std::vector<std::string>&& damage_immunities,
     std::vector<std::string>&& damage_vulnerabilities, std::vector<std::string>&& condition_immunities
-) noexcept
+)
     : damage_resistances(std::move(damage_resistances)), damage_immunities(std::move(damage_immunities)),
       damage_vulnerabilities(std::move(damage_vulnerabilities)), condition_immunities(std::move(condition_immunities)) {
 }

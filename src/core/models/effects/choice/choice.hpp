@@ -23,15 +23,15 @@ public:
 
     static CreateResult<Choice> create_for(Data&& data, const Content& content);
 
-    const std::string& get_attribute_name() const noexcept;
-    int get_amount() const noexcept;
+    const std::string& get_attribute_name() const;
+    int get_amount() const;
 
     std::set<std::string> possible_values(const Content& content) const;
 private:
     Choice(
         ChoiceType type, std::vector<std::unique_ptr<ContentFilter>>&& filters, std::string&& attribute_name,
         int amount, std::vector<std::string>&& group_names, std::vector<std::string>&& explicit_choices
-    ) noexcept;
+    );
 
     ChoiceType type;
     std::string attribute_name;
@@ -42,7 +42,7 @@ private:
 };
 
 struct Choice::Data {
-    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+    std::strong_ordering operator<=>(const Data&) const = default;
 
     std::string attribute_name;
     int amount;

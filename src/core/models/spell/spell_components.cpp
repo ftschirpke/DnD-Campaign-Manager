@@ -52,19 +52,19 @@ CreateResult<SpellComponents> SpellComponents::create(Data&& data) {
 
 SpellComponents::SpellComponents(
     bool verbal, bool somatic, bool material, const std::string& material_components
-) noexcept
+)
     : verbal(verbal), somatic(somatic), material(material), material_components(material_components) {}
 
-SpellComponents::SpellComponents(bool verbal, bool somatic, bool material, std::string&& material_components) noexcept
+SpellComponents::SpellComponents(bool verbal, bool somatic, bool material, std::string&& material_components)
     : verbal(verbal), somatic(somatic), material(material), material_components(std::move(material_components)) {}
 
-bool SpellComponents::has_verbal() const noexcept { return verbal; }
+bool SpellComponents::has_verbal() const { return verbal; }
 
-bool SpellComponents::has_somatic() const noexcept { return somatic; }
+bool SpellComponents::has_somatic() const { return somatic; }
 
-bool SpellComponents::has_material() const noexcept { return material; }
+bool SpellComponents::has_material() const { return material; }
 
-const std::string& SpellComponents::get_material_components() const noexcept { return material_components; }
+const std::string& SpellComponents::get_material_components() const { return material_components; }
 
 std::string SpellComponents::str() const {
     if (!material || material_components.empty()) {

@@ -104,23 +104,23 @@ CreateResult<Class> Class::create_for(Data&& data, const Content& content) {
     ));
 }
 
-const std::string& Class::get_name() const noexcept { return name; }
+const std::string& Class::get_name() const { return name; }
 
-const std::string& Class::get_description() const noexcept { return description; }
+const std::string& Class::get_description() const { return description; }
 
-const SourceInfo& Class::get_source_info() const noexcept { return source_info; }
+const SourceInfo& Class::get_source_info() const { return source_info; }
 
-const std::vector<ClassFeature>& Class::get_features() const noexcept { return features; }
+const std::vector<ClassFeature>& Class::get_features() const { return features; }
 
-bool Class::has_spellcasting() const noexcept { return spellcasting != nullptr; }
+bool Class::has_spellcasting() const { return spellcasting != nullptr; }
 
-const Spellcasting* Class::get_spellcasting() const noexcept { return spellcasting.get(); }
+const Spellcasting* Class::get_spellcasting() const { return spellcasting.get(); }
 
-OptCRef<ClassFeature> Class::get_subclass_feature() const noexcept { return subclass_feature; }
+OptCRef<ClassFeature> Class::get_subclass_feature() const { return subclass_feature; }
 
-const Dice& Class::get_hit_dice() const noexcept { return hit_dice; }
+const Dice& Class::get_hit_dice() const { return hit_dice; }
 
-const ImportantLevels& Class::get_important_levels() const noexcept { return important_levels; }
+const ImportantLevels& Class::get_important_levels() const { return important_levels; }
 
 void Class::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
@@ -128,7 +128,7 @@ Class::Class(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path,
     std::vector<ClassFeature>&& features, OptCRef<ClassFeature> subclass_feature, Dice hit_dice,
     ImportantLevels&& important_levels, std::unique_ptr<Spellcasting>&& spellcasting
-) noexcept
+)
     : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
       features(std::move(features)), spellcasting(std::move(spellcasting)), subclass_feature(subclass_feature),
       hit_dice(std::move(hit_dice)), important_levels(std::move(important_levels)) {}

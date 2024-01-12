@@ -22,7 +22,7 @@ namespace dnd {
 
 class EffectsParser : public Parser {
 public:
-    explicit EffectsParser(const std::filesystem::path& filepath) noexcept;
+    explicit EffectsParser(const std::filesystem::path& filepath);
     Errors parse_into(nlohmann::ordered_json&& json, Effects::Data& data) const;
 private:
     Errors parse_activation_conditions_into(nlohmann::ordered_json& json, std::vector<Condition::Data>& data) const;

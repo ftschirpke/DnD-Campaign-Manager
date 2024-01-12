@@ -15,13 +15,13 @@ namespace dnd {
 IdentifierStatChange::IdentifierStatChange(
     const std::string& affected_attribute, StatChangeTime time, const std::string& operation_name,
     const std::string& value_identifier
-) noexcept
+)
     : StatChange(affected_attribute, time, operation_name), value_identifier(value_identifier) {}
 
 IdentifierStatChange::IdentifierStatChange(
     std::string_view affected_attribute, StatChangeTime time, std::string_view operation_name,
     std::string_view value_identifier
-) noexcept
+)
     : StatChange(affected_attribute, time, operation_name), value_identifier(value_identifier) {}
 
 void IdentifierStatChange::apply_to(

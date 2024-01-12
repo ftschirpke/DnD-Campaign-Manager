@@ -38,7 +38,7 @@ static constexpr std::array<std::pair<const char*, int (*)(int, int)>, 7> mathem
 
 StatChange::StatChange(
     const std::string& affected_attribute, StatChangeTime time, const std::string& operation_name
-) noexcept
+)
     : affected_attribute(affected_attribute), mathematical_operation(nullptr), time(time) {
     for (const auto& [name, operation] : mathematical_operations) {
         if (name == operation_name) {
@@ -50,7 +50,7 @@ StatChange::StatChange(
 
 StatChange::StatChange(
     std::string_view affected_attribute, StatChangeTime time, std::string_view operation_name
-) noexcept
+)
     : affected_attribute(affected_attribute), mathematical_operation(nullptr), time(time) {
     for (const auto& [name, operation] : mathematical_operations) {
         if (name == operation_name) {
@@ -60,6 +60,6 @@ StatChange::StatChange(
     }
 }
 
-StatChangeTime StatChange::get_time() const noexcept { return time; }
+StatChangeTime StatChange::get_time() const { return time; }
 
 } // namespace dnd

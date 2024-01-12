@@ -12,15 +12,15 @@
 
 namespace dnd {
 
-ContentPieceFilter::ContentPieceFilter() noexcept
+ContentPieceFilter::ContentPieceFilter()
     : name_filter(StringFilter()), description_filter(), is_sourcebook_filter() {}
 
-bool ContentPieceFilter::has_all_filters() const noexcept {
-    return std::visit([](const auto& filter) noexcept { return filter.is_set(); }, name_filter)
+bool ContentPieceFilter::has_all_filters() const {
+    return std::visit([](const auto& filter) { return filter.is_set(); }, name_filter)
            && description_filter.is_set() && is_sourcebook_filter.is_set();
 }
 
-bool ContentPieceFilter::matches(const ContentPiece& content_piece) const noexcept {
+bool ContentPieceFilter::matches(const ContentPiece& content_piece) const {
     return std::visit(
                [&content_piece](const auto& filter) { return filter.matches(content_piece.get_name()); }, name_filter
            )

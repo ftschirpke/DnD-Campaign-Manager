@@ -11,11 +11,11 @@
 
 namespace dnd {
 
-bool SpeciesFilter::has_all_filters() const noexcept {
+bool SpeciesFilter::has_all_filters() const {
     return ContentPieceFilter::has_all_filters() && has_subspecies_filter.is_set();
 }
 
-bool SpeciesFilter::matches(const Species& species) const noexcept {
+bool SpeciesFilter::matches(const Species& species) const {
     return ContentPieceFilter::matches(species) && has_subspecies_filter.matches(species.has_subspecies());
 }
 

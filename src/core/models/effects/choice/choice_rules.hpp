@@ -22,7 +22,7 @@ enum class ChoiceType {
  * @param attribute_name the attribute name to check
  * @return "true" if the given attribute name is a valid choice attribute name, "false" otherwise
  */
-bool is_valid_choice_attribute_name(const std::string& attribute_name) noexcept;
+bool is_valid_choice_attribute_name(const std::string& attribute_name);
 
 /**
  * @brief Determines the choice type for the given attribute name
@@ -37,7 +37,7 @@ ChoiceType choice_type_for_attribute_name(const std::string& attribute_name);
  * @param attribute_name the attribute name to check
  * @return "true" if the given attribute name implies a group of strings, "false" otherwise
  */
-bool attribute_name_implies_group(const std::string& attribute_name) noexcept;
+bool attribute_name_implies_group(const std::string& attribute_name);
 
 /**
  * @brief Determines the group name for the given attribute name if the attribute name implies a group of strings

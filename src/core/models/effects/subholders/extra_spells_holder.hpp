@@ -28,41 +28,41 @@ public:
      * @brief Returns the cantrips that do not count against the number of cantrips known
      * @return the cantrips that do not count against the number of cantrips known
      */
-    const std::vector<const Spell*>& get_free_cantrips() const noexcept;
+    const std::vector<const Spell*>& get_free_cantrips() const;
     /**
      * @brief Returns the spells that you can cast without expending a spell slot or material components
      * @return the spells that you can cast without expending a spell slot or material components
      */
-    const std::vector<const Spell*>& get_at_will() const noexcept;
+    const std::vector<const Spell*>& get_at_will() const;
     /**
      * @brief Returns the spells that you can cast once a day (or rather once between two long rests)
      * these spells do not require spell slots
      * @return the spells that you can cast once a day (or rather once between two long rests)
      */
-    const std::vector<const Spell*>& get_innate() const noexcept;
+    const std::vector<const Spell*>& get_innate() const;
     /**
      * @brief Returns the spells that you can cast once a day (or rather once between two long rests)
      * these spells do require spell slots
      * @return the spells that you can cast once a day (or rather once between two long rests)
      */
-    const std::vector<const Spell*>& get_free_once_a_day() const noexcept;
+    const std::vector<const Spell*>& get_free_once_a_day() const;
     /**
      * @brief Returns the spells that are added to your spell list and you know them / you always have them prepared
      * (these spells do not count to the number of spells you know)
      * @return the spells that are added to your spell list and you know them / you always have them prepared
      */
-    const std::vector<const Spell*>& get_spells_known() const noexcept;
+    const std::vector<const Spell*>& get_spells_known() const;
     /**
      * @brief Returns the spells that are added to your spell list and you know them
      * these spells do count to the number of spells you know
      * @return the spells that are added to your spell list and you know them
      */
-    const std::vector<const Spell*>& get_spells_known_included() const noexcept;
+    const std::vector<const Spell*>& get_spells_known_included() const;
     /**
      * @brief Returns the spells that are added to your spell list
      * @return the spells that are added to your spell list
      */
-    const std::vector<const Spell*>& get_added_to_spell_list() const noexcept;
+    const std::vector<const Spell*>& get_added_to_spell_list() const;
 
     bool empty() const;
     void merge(ExtraSpellsHolder&& other);
@@ -72,7 +72,7 @@ private:
         std::vector<const Spell*>&& innate, std::vector<const Spell*>&& free_once_a_day,
         std::vector<const Spell*>&& spells_known, std::vector<const Spell*>&& spells_known_included,
         std::vector<const Spell*>&& added_to_spell_list
-    ) noexcept;
+    );
 
     // cantrips that do not count against the number of cantrips known
     std::vector<const Spell*> free_cantrips;
@@ -95,8 +95,8 @@ private:
 };
 
 struct ExtraSpellsHolder::Data {
-    std::strong_ordering operator<=>(const Data&) const noexcept = default;
-    bool empty() const noexcept;
+    std::strong_ordering operator<=>(const Data&) const = default;
+    bool empty() const;
 
     // cantrips that do not count against the number of cantrips known
     std::set<std::string> free_cantrips;
@@ -118,7 +118,7 @@ struct ExtraSpellsHolder::Data {
     std::set<std::string> added_to_spell_list;
 };
 
-inline bool ExtraSpellsHolder::Data::empty() const noexcept {
+inline bool ExtraSpellsHolder::Data::empty() const {
     return free_cantrips.empty() && at_will.empty() && innate.empty() && free_once_a_day.empty() && spells_known.empty()
            && spells_known_included.empty() && added_to_spell_list.empty();
 }

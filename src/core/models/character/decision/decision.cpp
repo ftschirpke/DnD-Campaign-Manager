@@ -67,10 +67,10 @@ CreateResult<Decision> Decision::create_for(
     return ValidCreate(Decision(*data.get_target(), std::move(effects_result.value())));
 }
 
-CRef<Effects> Decision::get_target() const noexcept { return target; }
+CRef<Effects> Decision::get_target() const { return target; }
 
-const Effects& Decision::get_effects() const noexcept { return effects; }
+const Effects& Decision::get_effects() const { return effects; }
 
-Decision::Decision(CRef<Effects> target, Effects&& effects) noexcept : target(target), effects(std::move(effects)) {}
+Decision::Decision(CRef<Effects> target, Effects&& effects) : target(target), effects(std::move(effects)) {}
 
 } // namespace dnd

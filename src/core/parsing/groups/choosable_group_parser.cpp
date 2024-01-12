@@ -15,7 +15,7 @@
 
 namespace dnd {
 
-ChoosableGroupParser::ChoosableGroupParser(const std::filesystem::path& filepath) noexcept
+ChoosableGroupParser::ChoosableGroupParser(const std::filesystem::path& filepath)
     : FileParser(filepath, true), choosable_parser(filepath) {}
 
 Errors ChoosableGroupParser::parse() {

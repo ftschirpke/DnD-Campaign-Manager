@@ -23,7 +23,7 @@ static constexpr std::array<std::pair<std::string_view, std::string_view>, 18> s
     std::pair("SLEIGHT_OF_HAND", "DEX"), std::pair("STEALTH", "DEX"),         std::pair("SURVIVAL", "WIS"),
 };
 
-bool is_skill(const std::string& skill) noexcept {
+bool is_skill(const std::string& skill) {
     for (const auto& skill_ability_pair : skill_abilities) {
         std::string_view skill_to_check = skill_ability_pair.first;
         if (skill.size() != skill_to_check.size()) {
@@ -48,7 +48,7 @@ bool is_skill(const std::string& skill) noexcept {
     return false;
 }
 
-std::vector<std::string> get_all_skills() noexcept {
+std::vector<std::string> get_all_skills() {
     std::vector<std::string> skills;
     skills.reserve(skill_abilities.size());
     for (const auto& [skill_name, _] : skill_abilities) {
@@ -63,7 +63,7 @@ std::vector<std::string> get_all_skills() noexcept {
     return skills;
 }
 
-std::map<std::string, std::string> get_abilities_for_all_skills() noexcept {
+std::map<std::string, std::string> get_abilities_for_all_skills() {
     std::map<std::string, std::string> skill_ability_map;
     for (const auto& skill_ability_pair : skill_abilities) {
         skill_ability_map.emplace(skill_ability_pair);

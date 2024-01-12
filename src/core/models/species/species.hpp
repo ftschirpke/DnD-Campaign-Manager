@@ -29,18 +29,18 @@ public:
     Species(Species&&) = default;
     Species& operator=(Species&&) = default;
 
-    const std::string& get_name() const noexcept override;
-    const std::string& get_description() const noexcept override;
-    const SourceInfo& get_source_info() const noexcept override;
-    const std::vector<Feature>& get_features() const noexcept;
-    bool has_subspecies() const noexcept;
+    const std::string& get_name() const override;
+    const std::string& get_description() const override;
+    const SourceInfo& get_source_info() const override;
+    const std::vector<Feature>& get_features() const;
+    bool has_subspecies() const;
 
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Species(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path,
         std::vector<Feature>&& features, bool has_subspecies
-    ) noexcept;
+    );
 
     std::string name;
     std::string description;
@@ -50,7 +50,7 @@ private:
 };
 
 struct Species::Data : public ValidationData {
-    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+    std::strong_ordering operator<=>(const Data&) const = default;
 
     std::vector<Feature::Data> features_data;
     bool subspecies;

@@ -13,7 +13,7 @@
 
 namespace dnd {
 
-FileParser::FileParser(const std::filesystem::path& filepath, bool multiple_pieces_per_file) noexcept
+FileParser::FileParser(const std::filesystem::path& filepath, bool multiple_pieces_per_file)
     : Parser(filepath), multiple_pieces_per_file(multiple_pieces_per_file) {}
 
 Errors FileParser::open_json() {
@@ -39,7 +39,7 @@ Errors FileParser::open_json() {
     return errors;
 }
 
-bool FileParser::continue_after_errors() const noexcept { return multiple_pieces_per_file; }
+bool FileParser::continue_after_errors() const { return multiple_pieces_per_file; }
 
 void FileParser::set_context(const Content& content) { DND_UNUSED(content); }
 

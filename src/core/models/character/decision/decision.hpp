@@ -32,21 +32,21 @@ public:
      * @brief Returns the target of the decision i.e. the effects with the choice that the decision is for
      * @return the target of the decision
      */
-    CRef<Effects> get_target() const noexcept;
-    const Effects& get_effects() const noexcept;
+    CRef<Effects> get_target() const;
+    const Effects& get_effects() const;
 private:
-    Decision(CRef<Effects> target, Effects&& effects) noexcept;
+    Decision(CRef<Effects> target, Effects&& effects);
 
     CRef<Effects> target;
     Effects effects;
 };
 
 struct Decision::Data {
-    Data(const Effects* target) noexcept;
-    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+    Data(const Effects* target);
+    std::strong_ordering operator<=>(const Data&) const = default;
 
-    const Effects* get_target() const noexcept;
-    void set_target(const Effects* new_target) noexcept;
+    const Effects* get_target() const;
+    void set_target(const Effects* new_target);
 
     std::string feature_name;
     std::map<std::string, std::vector<std::string>> selections;
@@ -54,11 +54,11 @@ private:
     const Effects* target;
 };
 
-inline Decision::Data::Data(const Effects* target) noexcept : target(target) {}
+inline Decision::Data::Data(const Effects* target) : target(target) {}
 
-inline const Effects* Decision::Data::get_target() const noexcept { return target; }
+inline const Effects* Decision::Data::get_target() const { return target; }
 
-inline void Decision::Data::set_target(const Effects* new_target) noexcept { target = new_target; }
+inline void Decision::Data::set_target(const Effects* new_target) { target = new_target; }
 
 } // namespace dnd
 

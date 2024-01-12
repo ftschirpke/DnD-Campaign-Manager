@@ -26,11 +26,11 @@ CreateResult<ImportantLevels> ImportantLevels::create(Data&& data, int subclass_
     return ValidCreate(ImportantLevels(std::move(data.feat_levels), subclass_level));
 }
 
-const std::set<int>& ImportantLevels::get_feat_levels() const noexcept { return feat_levels; }
+const std::set<int>& ImportantLevels::get_feat_levels() const { return feat_levels; }
 
-int ImportantLevels::get_subclass_level() const noexcept { return subclass_level; }
+int ImportantLevels::get_subclass_level() const { return subclass_level; }
 
-ImportantLevels::ImportantLevels(std::set<int>&& feat_levels, int subclass_level) noexcept
+ImportantLevels::ImportantLevels(std::set<int>&& feat_levels, int subclass_level)
     : feat_levels(std::move(feat_levels)), subclass_level(subclass_level) {}
 
 } // namespace dnd

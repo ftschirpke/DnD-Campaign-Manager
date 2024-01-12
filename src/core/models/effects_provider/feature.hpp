@@ -33,16 +33,16 @@ public:
     Feature(Feature&&) = default;
     Feature& operator=(Feature&&) = default;
 
-    const std::string& get_name() const noexcept override;
-    const std::string& get_description() const noexcept override;
-    const SourceInfo& get_source_info() const noexcept override;
-    const Effects& get_main_effects() const noexcept override;
+    const std::string& get_name() const override;
+    const std::string& get_description() const override;
+    const SourceInfo& get_source_info() const override;
+    const Effects& get_main_effects() const override;
 
     virtual void accept_visitor(ContentVisitor& visitor) const override;
 protected:
     Feature(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path, Effects&& main_effects
-    ) noexcept;
+    );
 private:
     std::string name;
     std::string description;
@@ -51,7 +51,7 @@ private:
 };
 
 struct Feature::Data : public ValidationData {
-    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+    std::strong_ordering operator<=>(const Data&) const = default;
 
     Effects::Data main_effects_data;
 };

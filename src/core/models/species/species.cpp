@@ -37,22 +37,22 @@ CreateResult<Species> Species::create_for(Data&& data, const Content& content) {
     ));
 }
 
-const std::string& Species::get_name() const noexcept { return name; }
+const std::string& Species::get_name() const { return name; }
 
-const std::string& Species::get_description() const noexcept { return description; }
+const std::string& Species::get_description() const { return description; }
 
-const SourceInfo& Species::get_source_info() const noexcept { return source_info; }
+const SourceInfo& Species::get_source_info() const { return source_info; }
 
-const std::vector<Feature>& Species::get_features() const noexcept { return features; }
+const std::vector<Feature>& Species::get_features() const { return features; }
 
-bool Species::has_subspecies() const noexcept { return subspecies; }
+bool Species::has_subspecies() const { return subspecies; }
 
 void Species::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 Species::Species(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::vector<Feature>&& features,
     bool has_subspecies
-) noexcept
+)
     : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
       features(std::move(features)), subspecies(has_subspecies) {}
 

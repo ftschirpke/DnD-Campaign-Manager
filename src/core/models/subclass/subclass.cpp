@@ -50,26 +50,26 @@ CreateResult<Subclass> Subclass::create_for(Data&& data, const Content& content)
     ));
 }
 
-const std::string& Subclass::get_name() const noexcept { return name; }
+const std::string& Subclass::get_name() const { return name; }
 
-const std::string& Subclass::get_description() const noexcept { return description; }
+const std::string& Subclass::get_description() const { return description; }
 
-const SourceInfo& Subclass::get_source_info() const noexcept { return source_info; }
+const SourceInfo& Subclass::get_source_info() const { return source_info; }
 
-const std::vector<ClassFeature>& Subclass::get_features() const noexcept { return features; }
+const std::vector<ClassFeature>& Subclass::get_features() const { return features; }
 
-bool Subclass::has_spellcasting() const noexcept { return spellcasting != nullptr; }
+bool Subclass::has_spellcasting() const { return spellcasting != nullptr; }
 
-const Spellcasting* Subclass::get_spellcasting() const noexcept { return spellcasting.get(); }
+const Spellcasting* Subclass::get_spellcasting() const { return spellcasting.get(); }
 
-CRef<Class> Subclass::get_class() const noexcept { return cls; }
+CRef<Class> Subclass::get_class() const { return cls; }
 
 void Subclass::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 Subclass::Subclass(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path,
     std::vector<ClassFeature>&& features, CRef<Class> cls, std::unique_ptr<Spellcasting>&& spellcasting
-) noexcept
+)
     : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
       features(std::move(features)), cls(cls), spellcasting(std::move(spellcasting)) {}
 

@@ -151,9 +151,9 @@ CreateResult<Choice> Choice::create_for(Data&& data, const Content& content) {
     ));
 }
 
-const std::string& Choice::get_attribute_name() const noexcept { return attribute_name; }
+const std::string& Choice::get_attribute_name() const { return attribute_name; }
 
-int Choice::get_amount() const noexcept { return amount; }
+int Choice::get_amount() const { return amount; }
 
 std::set<std::string> Choice::possible_values(const Content& content) const {
     std::set<std::string> possible_values;
@@ -205,7 +205,7 @@ std::set<std::string> Choice::possible_values(const Content& content) const {
 Choice::Choice(
     ChoiceType type, std::vector<std::unique_ptr<ContentFilter>>&& filters, std::string&& attribute_name, int amount,
     std::vector<std::string>&& group_names, std::vector<std::string>&& explicit_choices
-) noexcept
+)
     : type(type), attribute_name(std::move(attribute_name)), amount(amount), group_names(std::move(group_names)),
       explicit_choices(std::move(explicit_choices)), filters(std::move(filters)) {}
 

@@ -12,11 +12,11 @@ class ParsingError {
 public:
     enum class Code;
 
-    ParsingError(Code error_code, const std::filesystem::path& filepath, const std::string& message) noexcept;
+    ParsingError(Code error_code, const std::filesystem::path& filepath, const std::string& message);
 
-    Code get_error_code() const noexcept;
-    const std::filesystem::path& get_filepath() const noexcept;
-    const std::string& get_error_message() const noexcept;
+    Code get_error_code() const;
+    const std::filesystem::path& get_filepath() const;
+    const std::string& get_error_message() const;
 private:
     Code error_code;
     std::filesystem::path filepath;

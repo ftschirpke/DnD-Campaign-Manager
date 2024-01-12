@@ -18,7 +18,7 @@
 
 namespace dnd {
 
-SpeciesParser::SpeciesParser(const std::filesystem::path& filepath) noexcept
+SpeciesParser::SpeciesParser(const std::filesystem::path& filepath)
     : FileParser(filepath, false), feature_parser(filepath), data() {}
 
 Errors SpeciesParser::parse() {

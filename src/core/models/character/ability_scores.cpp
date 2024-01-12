@@ -10,7 +10,7 @@
 
 namespace dnd {
 
-static int calculate_modifier(int score) noexcept { return score / 2 - 5; }
+static int calculate_modifier(int score) { return score / 2 - 5; }
 
 CreateResult<AbilityScores> AbilityScores::create(Data&& data) {
     Errors errors = validate_ability_scores(data);
@@ -23,7 +23,7 @@ CreateResult<AbilityScores> AbilityScores::create(Data&& data) {
     ));
 }
 
-int AbilityScores::get(Ability ability) const noexcept {
+int AbilityScores::get(Ability ability) const {
     switch (ability) {
         case Ability::STRENGTH:
             return strength;
@@ -42,19 +42,19 @@ int AbilityScores::get(Ability ability) const noexcept {
     }
 }
 
-int AbilityScores::get_strength() const noexcept { return strength; }
+int AbilityScores::get_strength() const { return strength; }
 
-int AbilityScores::get_dexterity() const noexcept { return dexterity; }
+int AbilityScores::get_dexterity() const { return dexterity; }
 
-int AbilityScores::get_constitution() const noexcept { return constitution; }
+int AbilityScores::get_constitution() const { return constitution; }
 
-int AbilityScores::get_intelligence() const noexcept { return intelligence; }
+int AbilityScores::get_intelligence() const { return intelligence; }
 
-int AbilityScores::get_wisdom() const noexcept { return wisdom; }
+int AbilityScores::get_wisdom() const { return wisdom; }
 
-int AbilityScores::get_charisma() const noexcept { return charisma; }
+int AbilityScores::get_charisma() const { return charisma; }
 
-int AbilityScores::get_modifier(Ability ability) const noexcept {
+int AbilityScores::get_modifier(Ability ability) const {
     switch (ability) {
         case Ability::STRENGTH:
             return get_strength_modifier();
@@ -73,22 +73,22 @@ int AbilityScores::get_modifier(Ability ability) const noexcept {
     }
 }
 
-int AbilityScores::get_strength_modifier() const noexcept { return calculate_modifier(strength); }
+int AbilityScores::get_strength_modifier() const { return calculate_modifier(strength); }
 
-int AbilityScores::get_dexterity_modifier() const noexcept { return calculate_modifier(dexterity); }
+int AbilityScores::get_dexterity_modifier() const { return calculate_modifier(dexterity); }
 
-int AbilityScores::get_constitution_modifier() const noexcept { return calculate_modifier(constitution); }
+int AbilityScores::get_constitution_modifier() const { return calculate_modifier(constitution); }
 
-int AbilityScores::get_intelligence_modifier() const noexcept { return calculate_modifier(intelligence); }
+int AbilityScores::get_intelligence_modifier() const { return calculate_modifier(intelligence); }
 
-int AbilityScores::get_wisdom_modifier() const noexcept { return calculate_modifier(wisdom); }
+int AbilityScores::get_wisdom_modifier() const { return calculate_modifier(wisdom); }
 
-int AbilityScores::get_charisma_modifier() const noexcept { return calculate_modifier(charisma); }
+int AbilityScores::get_charisma_modifier() const { return calculate_modifier(charisma); }
 
 
 AbilityScores::AbilityScores(
     int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma
-) noexcept
+)
     : strength(strength), dexterity(dexterity), constitution(constitution), intelligence(intelligence), wisdom(wisdom),
       charisma(charisma) {}
 

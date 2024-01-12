@@ -15,17 +15,17 @@ public:
 
     static CreateResult<ImportantLevels> create(Data&& data, int subclass_level);
 
-    const std::set<int>& get_feat_levels() const noexcept;
-    int get_subclass_level() const noexcept;
+    const std::set<int>& get_feat_levels() const;
+    int get_subclass_level() const;
 private:
-    ImportantLevels(std::set<int>&& feat_levels, int subclass_level) noexcept;
+    ImportantLevels(std::set<int>&& feat_levels, int subclass_level);
 
     std::set<int> feat_levels;
     int subclass_level;
 };
 
 struct ImportantLevels::Data {
-    std::strong_ordering operator<=>(const Data&) const noexcept = default;
+    std::strong_ordering operator<=>(const Data&) const = default;
 
     std::set<int> feat_levels;
 };

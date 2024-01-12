@@ -14,12 +14,12 @@ namespace dnd {
 
 IdentifierCondition::IdentifierCondition(
     const std::string& left_side_identifier, const std::string& operator_name, const std::string& right_side_identifier
-) noexcept
+)
     : Condition(left_side_identifier, operator_name), right_side_identifier(right_side_identifier) {}
 
 IdentifierCondition::IdentifierCondition(
     std::string_view left_side_identifier, std::string_view operator_name, std::string_view right_side_identifier
-) noexcept
+)
     : Condition(left_side_identifier, operator_name), right_side_identifier(right_side_identifier) {}
 
 bool IdentifierCondition::evaluate(
