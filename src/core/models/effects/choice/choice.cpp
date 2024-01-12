@@ -141,10 +141,7 @@ CreateResult<Choice> Choice::create_for(Data&& data, const Content& content) {
             break;
         case ChoiceType::CHOOSABLE:
             break;
-        default:
-            break;
     }
-
     return ValidCreate(Choice(
         type, std::move(filters), std::move(data.attribute_name), data.amount, std::move(group_names),
         std::move(data.explicit_choices)
@@ -157,17 +154,17 @@ int Choice::get_amount() const { return amount; }
 
 std::set<std::string> Choice::possible_values(const Content& content) const {
     std::set<std::string> possible_values;
-    switch (type) {
+    switch (type) { // TODO: implement correct filters
         case ChoiceType::ABILITY:
             for (const char* ability : ability_cstrings_inorder) {
                 possible_values.emplace(ability);
             }
-            break;
+            return possible_values;
         case ChoiceType::SKILL:
             for (const std::string& skill : get_all_skills()) {
                 possible_values.emplace(skill);
             };
-            break;
+            return possible_values;
         case ChoiceType::STRING:
             for (const std::string& group_name : group_names) {
                 for (const std::string& group_member : content.get_groups().get_group(group_name)) {
@@ -179,26 +176,25 @@ std::set<std::string> Choice::possible_values(const Content& content) const {
             for (const std::string& explicit_choice : explicit_choices) {
                 possible_values.emplace(explicit_choice);
             };
-            break;
+            return possible_values;
         case ChoiceType::ITEM:
             for (const auto& [_, item] : content.get_items().get_all()) {
                 possible_values.emplace(item.get_name());
             };
-            break;
+            return possible_values;
         case ChoiceType::SPELL:
             // TODO: use the spell filters instead of this
             for (const auto& [_, spell] : content.get_spells().get_all()) {
                 possible_values.emplace(spell.get_name());
             };
-            break;
+            return possible_values;
         case ChoiceType::CHOOSABLE:
             for (const auto& [_, choosable] : content.get_choosables().get_all()) {
                 possible_values.emplace(choosable.get_name());
             };
-            break;
-        default:
-            break;
+            return possible_values;
     }
+    assert(false);
     return possible_values;
 }
 

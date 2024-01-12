@@ -33,11 +33,9 @@ std::string ability_to_string(Ability ability) {
             return "WIS";
         case Ability::CHARISMA:
             return "CHA";
-        default:
-            throw std::invalid_argument(
-                "The ability \"" + std::to_string(static_cast<int>(ability)) + "\" does not exist."
-            );
     }
+    assert(false);
+    return "";
 }
 
 bool is_ability(std::string_view attribute_name) {

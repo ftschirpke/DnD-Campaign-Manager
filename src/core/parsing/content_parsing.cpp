@@ -184,10 +184,9 @@ static Errors parse_file_of_type(const std::filesystem::path& file, Content& con
             return parse_file(content, SpellParser(file));
         case ParsingType::CHOOSABLES:
             return parse_file(content, ChoosableGroupParser(file));
-        default:
-            assert(false);
-            return Errors();
     }
+    assert(false);
+    return Errors();
 }
 
 static const char* type_directory_name(ParsingType type) {
@@ -208,10 +207,9 @@ static const char* type_directory_name(ParsingType type) {
             return "spells";
         case ParsingType::CHOOSABLES:
             return "groups";
-        default:
-            assert(false);
-            return "";
     }
+    assert(false);
+    return "";
 }
 
 static Errors parse_all_of_type(

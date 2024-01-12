@@ -25,13 +25,16 @@ void ContentConfigurationWindow::initialize() {
     switch (session.get_status()) {
         case SessionStatus::CONTENT_DIR_SELECTION:
             open_content_directory_selection();
-            break;
+            return;
         case SessionStatus::CAMPAIGN_SELECTION:
             is_selecting_campaign = true;
-            break;
-        default:
-            break;
+            return;
+        case SessionStatus::PARSING:
+        case SessionStatus::READY:
+        case SessionStatus::UNKNOWN_ERROR:
+            return;
     }
+    assert(false);
 }
 
 void ContentConfigurationWindow::open_content_directory_selection() {

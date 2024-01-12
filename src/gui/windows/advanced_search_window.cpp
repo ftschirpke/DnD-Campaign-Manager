@@ -37,6 +37,33 @@ static constexpr std::array<const char*, 10> content_filter_names = {
     "Any", "Characters", "Classes", "Subclasses", "Species", "Subspecies", "Items", "Spells", "Features", "Choosables",
 };
 
+static ContentPieceFilter get_filter_from_filter_index(size_t idx) {
+    switch (idx) {
+        case 0:
+            return ContentPieceFilter();
+        case 1:
+            return CharacterFilter();
+        case 2:
+            return ClassFilter();
+        case 3:
+            return SubclassFilter();
+        case 4:
+            return SpeciesFilter();
+        case 5:
+            return SubspeciesFilter();
+        case 6:
+            return ItemFilter();
+        case 7:
+            return SpellFilter();
+        case 8:
+            return FeatureFilter();
+        case 9:
+            return ChoosableFilter();
+    }
+    assert(false);
+    return ContentPieceFilter();
+}
+
 AdvancedSearchWindow::AdvancedSearchWindow(Session& session) : session(session), result_list() {}
 
 void AdvancedSearchWindow::render() {
@@ -73,40 +100,7 @@ void AdvancedSearchWindow::render() {
         ImGui::EndCombo();
     }
     if (swap_to_idx != content_filter_names.size()) {
-        switch (swap_to_idx) {
-            case 0:
-                filter = ContentPieceFilter();
-                break;
-            case 1:
-                filter = CharacterFilter();
-                break;
-            case 2:
-                filter = ClassFilter();
-                break;
-            case 3:
-                filter = SubclassFilter();
-                break;
-            case 4:
-                filter = SpeciesFilter();
-                break;
-            case 5:
-                filter = SubspeciesFilter();
-                break;
-            case 6:
-                filter = ItemFilter();
-                break;
-            case 7:
-                filter = SpellFilter();
-                break;
-            case 8:
-                filter = FeatureFilter();
-                break;
-            case 9:
-                filter = ChoosableFilter();
-                break;
-            default:
-                assert(false);
-        }
+        filter = get_filter_from_filter_index(swap_to_idx);
     }
 
     std::visit(filter_setting_visitor, filter);

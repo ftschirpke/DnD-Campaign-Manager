@@ -139,16 +139,20 @@ Errors validate_choice_raw(const Choice::Data& data) {
     switch (type) {
         case ChoiceType::ABILITY:
             errors += validate_ability_choice(data);
-            break;
+            return errors;
         case ChoiceType::SKILL:
             errors += validate_skill_choice(data);
-            break;
+            return errors;
         case ChoiceType::STAT_CHANGE:
             errors += validate_stat_change_choice(data);
-            break;
-        default:
-            break;
+            return errors;
+        case ChoiceType::STRING:
+        case ChoiceType::ITEM:
+        case ChoiceType::SPELL:
+        case ChoiceType::CHOOSABLE:
+            return errors;
     }
+    assert(false);
     return errors;
 }
 
@@ -354,20 +358,22 @@ static Errors validate_choice_relations(const Choice::Data& data, const Content&
     switch (type) {
         case ChoiceType::STRING:
             errors += validate_relations_string_choice(data, content);
-            break;
+            return errors;
         case ChoiceType::ITEM:
             errors += validate_relations_item_choice(data, content);
-            break;
+            return errors;
         case ChoiceType::SPELL:
             errors += validate_relations_spell_choice(data, content);
-            break;
+            return errors;
         case ChoiceType::CHOOSABLE:
             errors += validate_relations_choosable_choice(data, content);
-            break;
-        default:
-            break;
+            return errors;
+        case ChoiceType::ABILITY:
+        case ChoiceType::SKILL:
+        case ChoiceType::STAT_CHANGE:
+            return errors;
     }
-
+    assert(false);
     return errors;
 }
 

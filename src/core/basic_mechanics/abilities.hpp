@@ -9,9 +9,6 @@
 
 namespace dnd {
 
-/**
- * @brief An enum for the basic 6 abilities
- */
 enum class Ability {
     STRENGTH,
     DEXTERITY,
@@ -21,12 +18,11 @@ enum class Ability {
     CHARISMA,
 };
 
-// the abilities in order
 inline constexpr std::array<Ability, 6> abilities_inorder = {
     Ability::STRENGTH,     Ability::DEXTERITY, Ability::CONSTITUTION,
     Ability::INTELLIGENCE, Ability::WISDOM,    Ability::CHARISMA,
 };
-// the 3-letter c-style strings for the abilities in order
+
 inline constexpr std::array<const char*, 6> ability_cstrings_inorder = {"STR", "DEX", "CON", "INT", "WIS", "CHA"};
 
 /**

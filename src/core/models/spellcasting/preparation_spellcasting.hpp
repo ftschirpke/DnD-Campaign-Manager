@@ -9,9 +9,6 @@
 
 namespace dnd {
 
-/**
- * @brief An enum for the types of preparation spell casters
- */
 enum class PreparationSpellcastingType {
     HALF,
     FULL,

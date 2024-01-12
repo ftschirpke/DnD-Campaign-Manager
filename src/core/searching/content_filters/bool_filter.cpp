@@ -24,9 +24,9 @@ bool BoolFilter::matches(bool boolean) const {
             return !boolean;
         case BoolFilterType::NONE:
             return true;
-        default:
-            return false;
     }
+    assert(false);
+    return false;
 }
 
 } // namespace dnd

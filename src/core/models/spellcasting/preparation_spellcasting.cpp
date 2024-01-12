@@ -17,19 +17,17 @@ int PreparationSpellcasting::get_prepared_spells_amount(AbilityScores ability_sc
     if (level < 1 || level > 20) {
         return 0;
     }
-    int prepared_spells_amount = 0;
+    int prepared_spells_amount = ability_scores.get_modifier(get_ability());
     switch (type) {
         case PreparationSpellcastingType::HALF:
             prepared_spells_amount += level / 2;
-            break;
+            return prepared_spells_amount;
         case PreparationSpellcastingType::FULL:
             prepared_spells_amount += level;
-            break;
-        default:
-            return 0;
+            return prepared_spells_amount;
     }
-    prepared_spells_amount += ability_scores.get_modifier(get_ability());
-    return prepared_spells_amount;
+    assert(false);
+    return 0;
 }
 
 PreparationSpellcasting::PreparationSpellcasting(

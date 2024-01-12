@@ -104,9 +104,9 @@ bool NumberFilter<T>::matches(T number) const {
             return number >= value;
         case NumberFilterType::NONE:
             return true;
-        default:
-            return false;
     }
+    assert(false);
+    return false;
 }
 
 } // namespace dnd

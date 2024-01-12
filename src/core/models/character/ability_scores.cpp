@@ -2,6 +2,8 @@
 
 #include "ability_scores.hpp"
 
+#include <cassert>
+
 #include <core/basic_mechanics/abilities.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
@@ -37,9 +39,9 @@ int AbilityScores::get(Ability ability) const {
             return wisdom;
         case Ability::CHARISMA:
             return charisma;
-        default:
-            return 0;
     }
+    assert(false);
+    return 0;
 }
 
 int AbilityScores::get_strength() const { return strength; }
@@ -68,9 +70,9 @@ int AbilityScores::get_modifier(Ability ability) const {
             return get_wisdom_modifier();
         case Ability::CHARISMA:
             return get_charisma_modifier();
-        default:
-            return 0;
     }
+    assert(false);
+    return 0;
 }
 
 int AbilityScores::get_strength_modifier() const { return calculate_modifier(strength); }

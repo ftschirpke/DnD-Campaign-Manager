@@ -239,8 +239,6 @@ static void visit_content_piece_filter(ContentPieceFilter& content_piece_filter)
         case 1:
             visit_selection_filter("Name", std::get<1>(name_filter));
             break;
-        default:
-            break;
     }
     visit_string_filter("Description", content_piece_filter.description_filter);
     visit_bool_filter("Is Sourcebook", content_piece_filter.is_sourcebook_filter);
