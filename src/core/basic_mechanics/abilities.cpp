@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cassert>
 #include <stdexcept>
 #include <string>
 #include <string_view>
