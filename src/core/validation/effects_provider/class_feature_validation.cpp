@@ -13,7 +13,7 @@
 namespace dnd {
 
 static std::optional<ValidationError> validate_level(const ClassFeature::Data& feature_validation) {
-    if (feature_validation.level <= 0) {
+    if (feature_validation.level < 0) {
         return ValidationError(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Feature level must be positive.");
     } else if (feature_validation.level > 20) {
         return ValidationError(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Feature level must be at most 20.");
