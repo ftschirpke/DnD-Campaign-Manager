@@ -26,6 +26,7 @@ static std::string get_error_message(const Error& error) {
         case 1:
             return fmt::format("Validation Error: {}", std::get<ValidationError>(error).get_error_message());
     }
+    assert(false);
     return "";
 }
 
