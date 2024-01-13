@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <cassert>
 #include <type_traits>
 
 namespace dnd {

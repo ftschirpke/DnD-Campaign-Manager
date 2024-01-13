@@ -2,6 +2,8 @@
 
 #include "bool_filter.hpp"
 
+#include <cassert>
+
 namespace dnd {
 
 BoolFilter::BoolFilter() : type(BoolFilterType::NONE) {}

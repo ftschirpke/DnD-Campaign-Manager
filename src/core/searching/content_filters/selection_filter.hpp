@@ -4,6 +4,7 @@
 #include <dnd_config.hpp>
 
 #include <algorithm>
+#include <cassert>
 #include <utility>
 #include <vector>
 
