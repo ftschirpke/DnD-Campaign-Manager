@@ -1,0 +1,32 @@
+{
+    "name": "Gnome",
+    "description": "Small and clever humanoids, often known for their tinkering skills, love of pranks, and curiosity",
+    "has_subspecies": true,
+    "features": {
+        "Ability Score Increase (Gnome)": {
+            "description": "Your Intelligence score increases by 2."
+        },
+        "Age of a Gnome": {
+            "description": "Gnomes mature at the same rate humans do, and most are expected to settle down into an adult life by around age 40. They can live 350 to almost 500 years."
+        },
+        "Size of a Gnome": {
+            "description": "Gnomes are between 90cm and 120cm tall and average about 18kg. Your size is Small."
+        },
+        "Speed of a Gnome": {
+            "description": "Your base walking speed is 7.5m.",
+            "stat_changes": [
+                "SPEED earliest max 7.5"
+            ]
+        },
+        "Darkvision of a Gnome": {
+            "description": "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 18m of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+            "senses": [
+                "Darkvision"
+            ]
+        },
+        "Languages of a Gnome": {
+            "description": "You can speak, read, and write Common and Gnomish. The Gnomish language, which uses the Dwarvish script, is renowned for its technical treatises and its catalogs of knowledge about the natural world.",
+            "languages": ["Common", "Gnomish"]
+        }
+    }
+}

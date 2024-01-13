@@ -156,11 +156,6 @@ void GuiApp::render_parsing_error_popup() {
             content_configuration_window.open_campaign_selection();
         }
         ImGui::SameLine();
-        if (ImGui::Button("Retry")) {
-            close = true;
-            // TODO: retry parsing, if that's a wanted feature
-        }
-        ImGui::SameLine();
         if (ImGui::Button("Exit")) {
             close = true;
         }

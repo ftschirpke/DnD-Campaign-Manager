@@ -1,0 +1,35 @@
+{
+    "name": "Human",
+    "description": "Versatile and adaptable individuals, found in diverse cultures and possessing no inherent racial traits",
+    "has_subspecies": false,
+    "features": {
+        "Ability Score Increase (Human)": {
+            "description": "Your ability scores each increase by 1.",
+            "stat_changes": [
+                "STR normal add 1", "DEX normal add 1", "CON normal add 1",
+                "INT normal add 1", "WIS normal add 1", "CHA normal add 1"
+            ]
+        },
+        "Age of a Human": {
+            "description": "Humans reach adulthood in their late teens and live less than a century."
+        },
+        "Size of a Human": {
+            "description": "Humans vary widely in height and build, from barely 150cm to well over 180cm tall. Regardless of your position in that range, your size is Medium."
+        },
+        "Speed of a Human": {
+            "description": "Your base walking speed is 9m.",
+            "stat_changes": [
+                "SPEED earliest max 9"
+            ]
+        },
+        "Languages of a Human": {
+            "description": "You can speak, read, and write Common and one extra language of your choice. Humans typically learn the languages of other peoples they deal with, including obscure dialects. They are fond of sprinkling their speech with words borrowed from other tongues: Orc curses, Elvish musical expressions, Dwarvish military phrases, and so on.",
+            "languages": ["Common"],
+            "choose": {
+                "languages": {
+                    "amount": 1
+                }
+            }
+        }
+    }
+}

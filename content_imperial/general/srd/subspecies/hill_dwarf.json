@@ -1,0 +1,19 @@
+{
+    "name": "Hill Dwarf",
+    "species": "Dwarf",
+    "description": "Dwarves known for their toughness, endurance, and affinity for life and healing.",
+    "features": {
+        "Ability Score Increase (Hill Dwarf)": {
+            "description": "Your Wisdom score increases by 1.",
+            "stat_changes": [
+                "WIS normal add 1"
+            ]
+        },
+        "Dwarven Toughness": {
+            "description": "Your hit point maximum increases by 1, and it increases by 1 every time you gain a level.",
+            "stat_changes": [
+                "MAXHP normal add LEVEL"
+            ]
+        }
+    }
+}

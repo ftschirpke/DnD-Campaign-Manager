@@ -7,7 +7,7 @@ target_include_directories(${DND_GUI_APP}
     SYSTEM PRIVATE
     ${PROJECT_BINARY_DIR}/src
     ${PROJECT_BINARY_DIR}/imgui
-    ${PROJECT_BINARY_DIR}/imgui/imgui # TODO: find a better way to do this (imgui.h)
+    ${PROJECT_BINARY_DIR}/imgui/imgui # HACK: find a better way to do this (imgui.h)
 )
 target_link_libraries(${DND_GUI_APP}
     PUBLIC

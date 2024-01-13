@@ -1,0 +1,17 @@
+{
+    "name": "Mountain Dwarf",
+    "species": "Dwarf",
+    "description": "Dwarves skilled in combat and craftsmanship, with a focus on strength and weaponsmithing.",
+    "features": {
+        "Ability Score Increase (Mountain Dwarf)": {
+            "description": "Your Strength score increases by 2.",
+            "stat_changes": [
+                "STR normal add 2"
+            ]
+        },
+        "Dwarven Armor Training": {
+            "description": "You have proficiency with light and medium armor.",
+            "armor_proficiencies": ["light armor", "medium armor"]
+        }
+    }
+}
