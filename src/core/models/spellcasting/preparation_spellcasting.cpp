@@ -3,6 +3,7 @@
 #include "preparation_spellcasting.hpp"
 
 #include <array>
+#include <cassert>
 #include <utility>
 
 #include <core/basic_mechanics/abilities.hpp>
