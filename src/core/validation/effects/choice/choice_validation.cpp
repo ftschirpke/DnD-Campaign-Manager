@@ -1,9 +1,9 @@
 #include <dnd_config.hpp>
 
 #include "choice_validation.hpp"
-#include "tl/expected.hpp"
 
 #include <cassert>
+#include <optional>
 #include <regex>
 #include <string>
 #include <vector>
@@ -108,13 +108,16 @@ Errors validate_choice_raw(const Choice::Data& data) {
     if (data.attribute_name.empty()) {
         errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Choice has emtpy attribute name");
         return errors;
-    } else if (!is_valid_choice_attribute_name(data.attribute_name)) {
+    }
+    std::optional<ChoiceType> type_optional = choice_type_for_attribute_name(data.attribute_name);
+    if (!type_optional.has_value()) {
         errors.add_validation_error(
             ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
             fmt::format("Choice has invalid attribute name '{}'", data.attribute_name)
         );
         return errors;
     }
+    ChoiceType type = type_optional.value();
 
     for (const std::string& explicit_choice : data.explicit_choices) {
         if (explicit_choice.empty()) {
@@ -133,9 +136,6 @@ Errors validate_choice_raw(const Choice::Data& data) {
         }
     }
 
-    tl::expected<ChoiceType, RuntimeError> type_result = choice_type_for_attribute_name(data.attribute_name);
-    assert(type_result.has_value()); // guaranteed by the check above
-    ChoiceType type = type_result.value();
     switch (type) {
         case ChoiceType::ABILITY:
             errors += validate_ability_choice(data);
@@ -158,7 +158,8 @@ Errors validate_choice_raw(const Choice::Data& data) {
 
 static Errors validate_relations_string_choice(const Choice::Data& data, const Content& content) {
     Errors errors;
-    if (!attribute_name_implies_group(data.attribute_name)) {
+    std::optional<std::string> group_name_optional = group_name_for_attribute_name(data.attribute_name);
+    if (!group_name_optional.has_value()) {
         errors.add_validation_error(
             ValidationError::Code::INCONSISTENT_ATTRIBUTES,
             fmt::format(
@@ -168,9 +169,7 @@ static Errors validate_relations_string_choice(const Choice::Data& data, const C
         );
         return errors;
     }
-    tl::expected<std::string, RuntimeError> group_name_result = group_name_for_attribute_name(data.attribute_name);
-    assert(group_name_result.has_value()); // guaranteed by the check above
-    const std::string group_name = group_name_result.value();
+    const std::string group_name = group_name_optional.value();
     for (const std::string& explicit_choice : data.explicit_choices) {
         if (explicit_choice.empty()) {
             continue;
@@ -349,12 +348,15 @@ static Errors validate_relations_choosable_choice(const Choice::Data& data, cons
 
 static Errors validate_choice_relations(const Choice::Data& data, const Content& content) {
     Errors errors;
-    if (!is_valid_choice_attribute_name(data.attribute_name)) {
+    std::optional<ChoiceType> type_optional = choice_type_for_attribute_name(data.attribute_name);
+    if (!type_optional.has_value()) {
+        errors.add_validation_error(
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
+            fmt::format("Choice has invalid attribute name '{}'", data.attribute_name)
+        );
         return errors;
     }
-    tl::expected<ChoiceType, RuntimeError> type_result = choice_type_for_attribute_name(data.attribute_name);
-    assert(type_result.has_value()); // guaranteed by the check above
-    ChoiceType type = type_result.value();
+    ChoiceType type = type_optional.value();
     switch (type) {
         case ChoiceType::STRING:
             errors += validate_relations_string_choice(data, content);

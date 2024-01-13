@@ -10,6 +10,7 @@
 #include <utility>
 #include <vector>
 
+#include <fmt/format.h>
 #include <tl/expected.hpp>
 
 #include <core/basic_mechanics/abilities.hpp>
@@ -123,7 +124,15 @@ CreateResult<Choice> Choice::create_for(Data&& data, const Content& content) {
         group_names.push_back(data.attribute_name);
     }
 
-    ChoiceType type = choice_type_for_attribute_name(data.attribute_name);
+    std::optional<ChoiceType> type_optional = choice_type_for_attribute_name(data.attribute_name);
+    if (!type_optional.has_value()) {
+        errors.add_validation_error(
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
+            fmt::format("Choice has invalid attribute name '{}'", data.attribute_name)
+        );
+        return InvalidCreate<Choice>(std::move(data), std::move(errors));
+    }
+    ChoiceType type = type_optional.value();
     std::vector<std::unique_ptr<ContentFilter>> filters;
     switch (type) { // TODO: complete this switch
         case ChoiceType::ABILITY:

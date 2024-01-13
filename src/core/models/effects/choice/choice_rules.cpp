@@ -3,7 +3,7 @@
 #include "choice_rules.hpp"
 
 #include <array>
-#include <stdexcept>
+#include <optional>
 #include <string>
 #include <string_view>
 #include <utility>
@@ -42,13 +42,13 @@ bool is_valid_choice_attribute_name(const std::string& attribute_name) {
     return false;
 }
 
-ChoiceType choice_type_for_attribute_name(const std::string& attribute_name) {
+std::optional<ChoiceType> choice_type_for_attribute_name(const std::string& attribute_name) {
     for (const auto& [valid_attribute_name, choice_type] : valid_attribute_names) {
         if (valid_attribute_name == attribute_name) {
             return choice_type;
         }
     }
-    throw std::invalid_argument("Invalid choice attribute name: " + attribute_name);
+    return std::nullopt;
 }
 
 static constexpr std::array<std::pair<std::string_view, std::string_view>, 9> valid_group_names = {
@@ -72,13 +72,13 @@ bool attribute_name_implies_group(const std::string& attribute_name) {
     return false;
 }
 
-std::string group_name_for_attribute_name(const std::string& attribute_name) {
+std::optional<std::string> group_name_for_attribute_name(const std::string& attribute_name) {
     for (const auto& [proficiency_name, group_name] : valid_group_names) {
         if (proficiency_name == attribute_name) {
             return std::string(group_name);
         }
     }
-    throw std::invalid_argument("Attribute name '" + attribute_name + "' does not imply a group of strings");
+    return std::nullopt;
 }
 
 } // namespace dnd

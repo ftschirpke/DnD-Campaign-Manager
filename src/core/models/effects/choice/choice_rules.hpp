@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <optional>
 #include <string>
 
 namespace dnd {
@@ -17,35 +18,11 @@ enum class ChoiceType {
     CHOOSABLE,
 };
 
-/**
- * @brief Returns whether the given attribute name is a valid choice attribute name
- * @param attribute_name the attribute name to check
- * @return "true" if the given attribute name is a valid choice attribute name, "false" otherwise
- */
 bool is_valid_choice_attribute_name(const std::string& attribute_name);
+std::optional<ChoiceType> choice_type_for_attribute_name(const std::string& attribute_name);
 
-/**
- * @brief Determines the choice type for the given attribute name
- * @param attribute_name the attribute name to determine the choice type for
- * @return the choice type for the given attribute name
- * @throws std::invalid_argument if the given attribute name is not a valid choice attribute name
- */
-ChoiceType choice_type_for_attribute_name(const std::string& attribute_name);
-
-/**
- * @brief Returns whether the given attribute name implies a group of strings
- * @param attribute_name the attribute name to check
- * @return "true" if the given attribute name implies a group of strings, "false" otherwise
- */
 bool attribute_name_implies_group(const std::string& attribute_name);
-
-/**
- * @brief Determines the group name for the given attribute name if the attribute name implies a group of strings
- * @param attribute_name the attribute name to determine the group name for
- * @return the group name for the given attribute name if the attribute name implies a group of strings
- * @throws std::invalid_argument if the given attribute name is not a valid choice attribute name
- */
-std::string group_name_for_attribute_name(const std::string& attribute_name);
+std::optional<std::string> group_name_for_attribute_name(const std::string& attribute_name);
 
 } // namespace dnd
 
