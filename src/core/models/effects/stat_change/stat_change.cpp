@@ -2,6 +2,7 @@
 
 #include "stat_change.hpp"
 
+#include <cassert>
 #include <string>
 #include <string_view>
 
