@@ -4,36 +4,34 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-#include <stdexcept>
-
 namespace dnd::test {
 
 static constexpr const char* tags = "[core][basic_mechanics]";
 
 TEST_CASE("string_to_ability", tags) {
     SECTION("Valid ability strings") {
-        REQUIRE(string_to_ability("STR") == Ability::STRENGTH);
-        REQUIRE(string_to_ability("DEX") == Ability::DEXTERITY);
-        REQUIRE(string_to_ability("CON") == Ability::CONSTITUTION);
-        REQUIRE(string_to_ability("INT") == Ability::INTELLIGENCE);
-        REQUIRE(string_to_ability("WIS") == Ability::WISDOM);
-        REQUIRE(string_to_ability("CHA") == Ability::CHARISMA);
+        REQUIRE(ability_from_string("STR").value() == Ability::STRENGTH);
+        REQUIRE(ability_from_string("DEX").value() == Ability::DEXTERITY);
+        REQUIRE(ability_from_string("CON").value() == Ability::CONSTITUTION);
+        REQUIRE(ability_from_string("INT").value() == Ability::INTELLIGENCE);
+        REQUIRE(ability_from_string("WIS").value() == Ability::WISDOM);
+        REQUIRE(ability_from_string("CHA").value() == Ability::CHARISMA);
     }
 
     SECTION("Invalid ability strings") {
-        REQUIRE_THROWS_AS(string_to_ability("XYZ"), std::invalid_argument);
-        REQUIRE_THROWS_AS(string_to_ability("ABCD"), std::invalid_argument);
-        REQUIRE_THROWS_AS(string_to_ability(""), std::invalid_argument);
+        REQUIRE_FALSE(ability_from_string("XYZ").has_value());
+        REQUIRE_FALSE(ability_from_string("ABCD").has_value());
+        REQUIRE_FALSE(ability_from_string("").has_value());
     }
 }
 
 TEST_CASE("ability_to_string", tags) {
-    REQUIRE(ability_to_string(Ability::STRENGTH) == "STR");
-    REQUIRE(ability_to_string(Ability::DEXTERITY) == "DEX");
-    REQUIRE(ability_to_string(Ability::CONSTITUTION) == "CON");
-    REQUIRE(ability_to_string(Ability::INTELLIGENCE) == "INT");
-    REQUIRE(ability_to_string(Ability::WISDOM) == "WIS");
-    REQUIRE(ability_to_string(Ability::CHARISMA) == "CHA");
+    REQUIRE(ability_name(Ability::STRENGTH) == "STR");
+    REQUIRE(ability_name(Ability::DEXTERITY) == "DEX");
+    REQUIRE(ability_name(Ability::CONSTITUTION) == "CON");
+    REQUIRE(ability_name(Ability::INTELLIGENCE) == "INT");
+    REQUIRE(ability_name(Ability::WISDOM) == "WIS");
+    REQUIRE(ability_name(Ability::CHARISMA) == "CHA");
 }
 
 TEST_CASE("is_ability // string_view implementation", tags) {

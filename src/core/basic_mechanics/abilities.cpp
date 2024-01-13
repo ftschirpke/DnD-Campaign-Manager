@@ -5,22 +5,22 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
-#include <stdexcept>
+#include <optional>
 #include <string>
 #include <string_view>
 
 namespace dnd {
 
-Ability string_to_ability(const std::string& ability_str) {
+std::optional<Ability> ability_from_string(const std::string& ability_str) {
     for (size_t i = 0; i < 6; ++i) {
         if (ability_cstrings_inorder[i] == ability_str) {
             return abilities_inorder[i];
         }
     }
-    throw std::invalid_argument("The ability \"" + ability_str + "\" does not exist.");
+    return std::nullopt;
 }
 
-std::string ability_to_string(Ability ability) {
+std::string ability_name(Ability ability) {
     switch (ability) {
         case Ability::STRENGTH:
             return "STR";
