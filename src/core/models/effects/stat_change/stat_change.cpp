@@ -2,59 +2,55 @@
 
 #include "stat_change.hpp"
 
-#include <array>
-#include <functional>
-#include <stdexcept>
 #include <string>
 #include <string_view>
-#include <utility>
+
+#include <core/errors/errors.hpp>
+#include <core/errors/runtime_error.hpp>
+#include <core/models/character/stats.hpp>
 
 namespace dnd {
 
-static constexpr std::array<std::pair<const char*, int (*)(int, int)>, 7> mathematical_operations = {
-    std::pair("add", [](int a, int b) { return a + b; }),
-    std::pair("sub", [](int a, int b) { return a - b; }),
-    std::pair("mult", [](int a, int b) { return static_cast<int>(a * b / 100.0f); }),
-    {
-        "div",
-        [](int a, int b) {
-            if (b == 0) {
-                throw std::invalid_argument("Cannot divide by zero.");
-            }
-            return a * 100 / b;
-        },
-    },
-    std::pair(
-        "set",
-        [](int a, int b) {
-            DND_UNUSED(a);
-            return b;
-        }
-    ),
-    std::pair("max", [](int a, int b) { return std::max(a, b); }),
-    std::pair("min", [](int a, int b) { return std::min(a, b); }),
-};
-
-StatChange::StatChange(const std::string& affected_attribute, StatChangeTime time, const std::string& operation_name)
-    : affected_attribute(affected_attribute), mathematical_operation(nullptr), time(time) {
-    for (const auto& [name, operation] : mathematical_operations) {
-        if (name == operation_name) {
-            mathematical_operation = operation;
-            break;
-        }
-    }
-}
-
-StatChange::StatChange(std::string_view affected_attribute, StatChangeTime time, std::string_view operation_name)
-    : affected_attribute(affected_attribute), mathematical_operation(nullptr), time(time) {
-    for (const auto& [name, operation] : mathematical_operations) {
-        if (name == operation_name) {
-            mathematical_operation = operation;
-            break;
-        }
-    }
-}
-
 StatChangeTime StatChange::get_time() const { return time; }
+
+StatChange::StatChange(const std::string& affected_attribute, StatChangeTime time, StatChangeOperation operation)
+    : affected_attribute(affected_attribute), operation(operation), time(time) {}
+
+StatChange::StatChange(std::string_view affected_attribute, StatChangeTime time, StatChangeOperation operation)
+    : affected_attribute(affected_attribute), operation(operation), time(time) {}
+
+Errors StatChange::apply_with_value(Stats& stats, int value) const {
+    Errors errors;
+    int& affected_stat = stats.get_mut_or_default(affected_attribute);
+    switch (operation) {
+        case StatChangeOperation::ADD:
+            affected_stat += value;
+            return errors;
+        case StatChangeOperation::SUB:
+            affected_stat -= value;
+            return errors;
+        case StatChangeOperation::MULT:
+            affected_stat *= value;
+            return errors;
+        case StatChangeOperation::DIV:
+            if (value == 0) {
+                errors.add_runtime_error(RuntimeError::Code::INVALID_ARGUMENT, "Cannot divide by zero.");
+            } else {
+                value /= value;
+            }
+            return errors;
+        case StatChangeOperation::SET:
+            affected_stat = value;
+            return errors;
+        case StatChangeOperation::MAX:
+            affected_stat = std::max(affected_stat, value);
+            return errors;
+        case StatChangeOperation::MIN:
+            affected_stat = std::min(affected_stat, value);
+            return errors;
+    }
+    assert(false);
+    return errors;
+}
 
 } // namespace dnd
