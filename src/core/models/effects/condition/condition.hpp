@@ -3,47 +3,39 @@
 
 #include <dnd_config.hpp>
 
-#include <functional>
 #include <string>
 #include <string_view>
-#include <unordered_map>
+
+#include <tl/expected.hpp>
+
+#include <core/errors/runtime_error.hpp>
+#include <core/models/character/stats.hpp>
 
 namespace dnd {
+
+enum class ComparisonOperator {
+    EQUAL,
+    NOT_EQUAL,
+    LESS_THAN,
+    LESS_THAN_OR_EQUAL,
+    GREATER_THAN,
+    GREATER_THAN_OR_EQUAL,
+};
 
 class Condition {
 public:
     struct Data;
 
     virtual ~Condition() = default;
-    /**
-     * @brief Evaluates the condition for given attributes and constants
-     * @param attributes a map of attributes
-     * @param constants a map of constants
-     * @return "true" if the condition is fulfilled, "false" otherwise
-     * @throws std::out_of_range if the identifier used in the condition doesn't exist among the given attributes and
-     * constants
-     */
-    virtual bool evaluate(
-        const std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
-    ) const = 0;
+    virtual tl::expected<bool, RuntimeError> evaluate(const Stats& stats) const = 0;
 protected:
-    /**
-     * @brief Constructs a condition with the given left side identifier and operator
-     * CAREFUL: if the operator is not found, the construction doesn't fail
-     * @param left_side_identifier the identifier on the left side of the condition
-     * @param operator_name the name of the operator
-     */
-    Condition(const std::string& left_side_identifier, const std::string& operator_name);
-    /**
-     * @brief Constructs a condition with the given left side identifier and operator
-     * CAREFUL: if the operator is not found, the construction doesn't fail
-     * @param left_side_identifier the identifier on the left side of the condition
-     * @param operator_name the name of the operator
-     */
-    Condition(std::string_view left_side_identifier, std::string_view operator_name);
+    Condition(const std::string& left_side_identifier, ComparisonOperator comparison_operator);
+    Condition(std::string_view left_side_identifier, ComparisonOperator comparison_operator);
+
+    tl::expected<bool, RuntimeError> evaluate_with_right_side(const Stats& stats, int right_side_value) const;
 
     std::string left_side_identifier;
-    std::function<bool(int, int)> comparison_operator;
+    ComparisonOperator comparison_operator;
 };
 
 struct Condition::Data {

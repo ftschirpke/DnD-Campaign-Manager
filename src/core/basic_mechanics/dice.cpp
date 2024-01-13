@@ -2,6 +2,7 @@
 
 #include "dice.hpp"
 
+#include <cassert>
 #include <map>
 #include <string>
 
@@ -30,13 +31,12 @@ static tl::expected<DiceType, Errors> int_to_dice_type(int number) {
             return DiceType::D20;
         case 100:
             return DiceType::D100;
-        default:
-            Errors errors(RuntimeError(
-                RuntimeError::Code::INVALID_ARGUMENT,
-                fmt::format("Invalid dice number '{}' - must be 4, 6, 8, 10, 12, 20, or 100", number)
-            ));
-            return tl::unexpected(errors);
     };
+    Errors errors(RuntimeError(
+        RuntimeError::Code::INVALID_ARGUMENT,
+        fmt::format("Invalid dice number '{}' - must be 4, 6, 8, 10, 12, 20, or 100", number)
+    ));
+    return tl::unexpected(errors);
 }
 
 static tl::expected<DiceType, Errors> string_to_dice_type(const std::string& lowercase_str) {
@@ -63,7 +63,7 @@ static tl::expected<DiceType, Errors> string_to_dice_type(const std::string& low
     }
 }
 
-static tl::expected<const char*, Errors> dice_type_to_string(DiceType dice_type) {
+static const char* dice_type_to_string(DiceType dice_type) {
     switch (dice_type) {
         case DiceType::D4:
             return "d4";
@@ -79,12 +79,9 @@ static tl::expected<const char*, Errors> dice_type_to_string(DiceType dice_type)
             return "d20";
         case DiceType::D100:
             return "d100";
-        default:
-            Errors errors(RuntimeError(
-                RuntimeError::Code::UNREACHABLE, "Invalid dice type in switch statement (dice_type_to_string)"
-            ));
-            return tl::unexpected(errors);
     };
+    assert(false);
+    return "";
 }
 
 

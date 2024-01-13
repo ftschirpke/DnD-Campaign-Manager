@@ -2,37 +2,52 @@
 
 #include "condition.hpp"
 
-#include <array>
+#include <cassert>
+#include <optional>
 #include <string>
 #include <string_view>
-#include <utility>
+
+#include <fmt/format.h>
+#include <tl/expected.hpp>
+
+#include <core/errors/runtime_error.hpp>
+#include <core/models/character/stats.hpp>
 
 namespace dnd {
 
-static constexpr std::array<std::pair<const char*, bool (*)(int, int)>, 6> comparison_operators = {
-    std::pair("==", [](int a, int b) { return a == b; }), std::pair("!=", [](int a, int b) { return a != b; }),
-    std::pair(">=", [](int a, int b) { return a >= b; }), std::pair("<=", [](int a, int b) { return a <= b; }),
-    std::pair(">", [](int a, int b) { return a > b; }),   std::pair("<", [](int a, int b) { return a < b; }),
-};
+Condition::Condition(const std::string& left_side_identifier, ComparisonOperator comparison_operator)
+    : left_side_identifier(left_side_identifier), comparison_operator(comparison_operator) {}
 
-Condition::Condition(const std::string& left_side_identifier, const std::string& operator_name)
-    : left_side_identifier(left_side_identifier), comparison_operator(nullptr) {
-    for (const auto& [op_name, op_func] : comparison_operators) {
-        if (op_name == operator_name) {
-            comparison_operator = op_func;
-            break;
-        }
-    }
-}
+Condition::Condition(std::string_view left_side_identifier, ComparisonOperator comparison_operator)
+    : left_side_identifier(left_side_identifier), comparison_operator(comparison_operator) {}
 
-Condition::Condition(std::string_view left_side_identifier, std::string_view operator_name)
-    : left_side_identifier(left_side_identifier), comparison_operator(nullptr) {
-    for (const auto& [op_name, op_func] : comparison_operators) {
-        if (op_name == operator_name) {
-            comparison_operator = op_func;
-            break;
-        }
+tl::expected<bool, RuntimeError> Condition::evaluate_with_right_side(const Stats& stats, int right_side_value) const {
+    std::optional<int> left_side_optional = stats.get(left_side_identifier);
+    if (!left_side_optional.has_value()) {
+        return tl::unexpected(RuntimeError(
+            RuntimeError::Code::INVALID_ARGUMENT,
+            fmt::format("Condition left side identifier '{}' not found in stats", left_side_identifier)
+        ));
     }
+    int left_side_value = left_side_optional.value();
+    switch (comparison_operator) {
+        case ComparisonOperator::EQUAL:
+            return left_side_value == right_side_value;
+        case ComparisonOperator::NOT_EQUAL:
+            return left_side_value != right_side_value;
+        case ComparisonOperator::LESS_THAN:
+            return left_side_value < right_side_value;
+        case ComparisonOperator::LESS_THAN_OR_EQUAL:
+            return left_side_value <= right_side_value;
+        case ComparisonOperator::GREATER_THAN:
+            return left_side_value > right_side_value;
+        case ComparisonOperator::GREATER_THAN_OR_EQUAL:
+            return left_side_value >= right_side_value;
+    }
+    assert(false);
+    return tl::unexpected(
+        RuntimeError(RuntimeError::Code::UNREACHABLE, "Found unknown comparison operator in condition")
+    );
 }
 
 } // namespace dnd

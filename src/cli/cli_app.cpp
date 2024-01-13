@@ -25,9 +25,9 @@ static std::string get_error_message(const Error& error) {
             return fmt::format("Parsing Error: {}", std::get<ParsingError>(error).get_error_message());
         case 1:
             return fmt::format("Validation Error: {}", std::get<ValidationError>(error).get_error_message());
-        default:
-            return "";
     }
+    assert(false);
+    return "";
 }
 
 void CliApp::initialize(

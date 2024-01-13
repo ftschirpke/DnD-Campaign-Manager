@@ -3,8 +3,11 @@
 #include "spellcasting_factory.hpp"
 
 #include <memory>
+#include <optional>
 #include <string>
 #include <utility>
+
+#include <fmt/format.h>
 
 #include <core/basic_mechanics/abilities.hpp>
 #include <core/errors/errors.hpp>
@@ -27,7 +30,16 @@ FactoryResult<Spellcasting> create_spellcasting(Spellcasting::Data&& data) {
         return ValidFactory<Spellcasting>(nullptr);
     }
 
-    Ability ability = string_to_ability(data.ability);
+    std::optional<Ability> ability_optional = ability_from_string(data.ability);
+    if (!ability_optional.has_value()) {
+        errors.add_validation_error(
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
+            fmt::format("The spellcasting ability '{}' is not a valid ability.", data.ability)
+        );
+        return InvalidFactory<Spellcasting>(std::move(data), std::move(errors));
+    }
+    Ability ability = ability_optional.value();
+
     std::unique_ptr<Spellcasting> spellcasting;
     if (data.is_spells_known_type) {
         spellcasting = std::make_unique<SpellsKnownSpellcasting>(

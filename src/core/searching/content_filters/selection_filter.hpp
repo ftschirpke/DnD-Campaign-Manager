@@ -4,6 +4,7 @@
 #include <dnd_config.hpp>
 
 #include <algorithm>
+#include <cassert>
 #include <utility>
 #include <vector>
 
@@ -97,9 +98,9 @@ bool SelectionFilter<T>::matches(const T& selection) const {
             return std::find(values.begin(), values.end(), selection) == values.end();
         case SelectionFilterType::NONE:
             return true;
-        default:
-            return false;
     }
+    assert(false);
+    return false;
 }
 
 } // namespace dnd

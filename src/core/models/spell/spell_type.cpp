@@ -84,9 +84,16 @@ std::string SpellType::str() const {
             return fmt::format("2nd-level spell - School of {}", capitalized_school_name);
         case SpellLevel::LEVEL3:
             return fmt::format("3rd-level spell - School of {}", capitalized_school_name);
-        default:
+        case SpellLevel::LEVEL4:
+        case SpellLevel::LEVEL5:
+        case SpellLevel::LEVEL6:
+        case SpellLevel::LEVEL7:
+        case SpellLevel::LEVEL8:
+        case SpellLevel::LEVEL9:
             return fmt::format("{}th-level spell - School of {}", get_spell_level_as_int(), capitalized_school_name);
     }
+    assert(false);
+    return "";
 }
 
 std::string SpellType::short_str() const {
@@ -99,9 +106,16 @@ std::string SpellType::short_str() const {
             return fmt::format("2nd-level {}", get_magic_school_name());
         case SpellLevel::LEVEL3:
             return fmt::format("3rd-level {}", get_magic_school_name());
-        default:
+        case SpellLevel::LEVEL4:
+        case SpellLevel::LEVEL5:
+        case SpellLevel::LEVEL6:
+        case SpellLevel::LEVEL7:
+        case SpellLevel::LEVEL8:
+        case SpellLevel::LEVEL9:
             return fmt::format("{}th-level {}", get_spell_level_as_int(), get_magic_school_name());
     }
+    assert(false);
+    return "";
 }
 
 } // namespace dnd

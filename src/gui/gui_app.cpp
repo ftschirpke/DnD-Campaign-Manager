@@ -130,7 +130,8 @@ void GuiApp::render_overview_window() {
         case SessionStatus::READY:
             render_content_count_table(session.get_content());
             break;
-        default:
+        case SessionStatus::UNKNOWN_ERROR:
+            ImGui::Text("An unknown error occurred");
             break;
     }
     ImGui::End();

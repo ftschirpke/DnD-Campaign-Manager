@@ -4,6 +4,7 @@ target_sources(${DND_CORE}
     character.cpp
     feature_providers.cpp
     progression.cpp
+    stats.cpp
 )
 
 add_subdirectory(decision)

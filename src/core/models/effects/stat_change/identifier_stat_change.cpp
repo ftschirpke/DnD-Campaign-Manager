@@ -2,43 +2,40 @@
 
 #include "identifier_stat_change.hpp"
 
-#include <functional>
-#include <stdexcept>
+#include <optional>
 #include <string>
 #include <string_view>
-#include <unordered_map>
 
+#include <fmt/format.h>
+
+#include <core/errors/errors.hpp>
+#include <core/errors/runtime_error.hpp>
+#include <core/models/character/stats.hpp>
 #include <core/models/effects/stat_change/stat_change.hpp>
 
 namespace dnd {
 
 IdentifierStatChange::IdentifierStatChange(
-    const std::string& affected_attribute, StatChangeTime time, const std::string& operation_name,
+    const std::string& affected_attribute, StatChangeTime time, StatChangeOperation operation,
     const std::string& value_identifier
 )
-    : StatChange(affected_attribute, time, operation_name), value_identifier(value_identifier) {}
+    : StatChange(affected_attribute, time, operation), value_identifier(value_identifier) {}
 
 IdentifierStatChange::IdentifierStatChange(
-    std::string_view affected_attribute, StatChangeTime time, std::string_view operation_name,
+    std::string_view affected_attribute, StatChangeTime time, StatChangeOperation operation,
     std::string_view value_identifier
 )
-    : StatChange(affected_attribute, time, operation_name), value_identifier(value_identifier) {}
+    : StatChange(affected_attribute, time, operation), value_identifier(value_identifier) {}
 
-void IdentifierStatChange::apply_to(
-    std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
-) const {
-    if (mathematical_operation == nullptr) {
-        return;
+Errors IdentifierStatChange::apply(Stats& stats) const {
+    std::optional<int> value_optional = stats.get(value_identifier);
+    if (!value_optional.has_value()) {
+        return Errors(RuntimeError(
+            RuntimeError::Code::INVALID_ARGUMENT,
+            fmt::format("Stat change value identifier '{}' not found in stats", value_identifier)
+        ));
     }
-    int value;
-    if (attributes.contains(value_identifier)) {
-        value = attributes.at(value_identifier);
-    } else if (constants.contains(value_identifier)) {
-        value = constants.at(value_identifier);
-    } else {
-        throw std::out_of_range("Identifier \"" + value_identifier + "\" not found.");
-    }
-    attributes[affected_attribute] = mathematical_operation(attributes[affected_attribute], value);
+    return apply_with_value(stats, value_optional.value());
 }
 
 } // namespace dnd

@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <cassert>
 #include <type_traits>
 
 namespace dnd {
@@ -104,9 +105,9 @@ bool NumberFilter<T>::matches(T number) const {
             return number >= value;
         case NumberFilterType::NONE:
             return true;
-        default:
-            return false;
     }
+    assert(false);
+    return false;
 }
 
 } // namespace dnd

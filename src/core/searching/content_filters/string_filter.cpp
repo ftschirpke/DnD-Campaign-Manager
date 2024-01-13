@@ -2,6 +2,7 @@
 
 #include "string_filter.hpp"
 
+#include <cassert>
 #include <string>
 
 namespace dnd {
@@ -57,9 +58,9 @@ bool StringFilter::matches(const std::string& str) const {
             return str.rfind(value) != str.size() - value.size();
         case StringFilterType::NONE:
             return true;
-        default:
-            return false;
     }
+    assert(false);
+    return false;
 }
 
 } // namespace dnd

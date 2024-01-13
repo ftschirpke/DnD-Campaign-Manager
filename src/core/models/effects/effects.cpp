@@ -3,13 +3,14 @@
 #include "effects.hpp"
 
 #include <memory>
-#include <string>
-#include <unordered_map>
 #include <utility>
 #include <vector>
 
+#include <tl/expected.hpp>
+
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
+#include <core/models/character/stats.hpp>
 #include <core/models/effects/choice/choice.hpp>
 #include <core/models/effects/condition/condition.hpp>
 #include <core/models/effects/condition/condition_factory.hpp>
@@ -133,15 +134,23 @@ bool Effects::empty() const {
            && proficiencies.empty() && rivs.empty();
 }
 
-bool Effects::is_active(
-    const std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
-) const {
+tl::expected<bool, Errors> Effects::is_active(const Stats& stats) const {
+    Errors errors;
     for (const std::unique_ptr<Condition>& condition : activation_conditions) {
-        if (!condition->evaluate(attributes, constants)) {
+        tl::expected<bool, RuntimeError> condition_result = condition->evaluate(stats);
+        if (!condition_result.has_value()) {
+            errors.add_runtime_error(std::move(condition_result.error()));
+            continue;
+        }
+        if (!condition_result.value()) {
             return false;
         }
     }
-    return true;
+    if (errors.ok()) {
+        return true;
+    } else {
+        return tl::unexpected(std::move(errors));
+    }
 }
 
 void Effects::merge(Effects&& other) {
