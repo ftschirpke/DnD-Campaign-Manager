@@ -5,10 +5,11 @@
 
 #include <compare>
 #include <memory>
-#include <string>
-#include <unordered_map>
 #include <vector>
 
+#include <tl/expected.hpp>
+
+#include <core/models/character/stats.hpp>
 #include <core/models/effects/choice/choice.hpp>
 #include <core/models/effects/condition/condition.hpp>
 #include <core/models/effects/stat_change/stat_change.hpp>
@@ -40,6 +41,7 @@ public:
     Effects(Effects&&) noexcept = default;
     Effects& operator=(Effects&&) noexcept = default;
 
+    bool empty() const;
     const std::vector<std::unique_ptr<Condition>>& get_activation_conditions() const;
     const std::vector<Choice>& get_choices() const;
     const std::vector<std::unique_ptr<StatChange>>& get_stat_changes() const;
@@ -48,18 +50,7 @@ public:
     const ProficiencyHolder& get_proficiencies() const;
     const RIVHolder& get_rivs() const;
 
-    bool empty() const;
-
-    /**
-     * @brief Checks whether the activation conditions are met for given attributes and constants
-     * @param attributes the character attributes
-     * @param constants the character constants
-     * @return "true" if the activation conditions are met for a character with these attributes and constants,
-     * "false" otherwise
-     */
-    bool is_active(
-        const std::unordered_map<std::string, int>& attributes, const std::unordered_map<std::string, int>& constants
-    ) const;
+    tl::expected<bool, Errors> is_active(const Stats& stats) const;
 
     void merge(Effects&& other);
 private:
