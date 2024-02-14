@@ -170,8 +170,8 @@ std::set<std::string> Choice::possible_values(const Content& content) const {
             }
             return possible_values;
         case ChoiceType::SKILL:
-            for (const std::string& skill : get_all_skills()) {
-                possible_values.emplace(skill);
+            for (const SkillInfo& skill_info : get_all_skill_infos()) {
+                possible_values.emplace(skill_info.config_name);
             };
             return possible_values;
         case ChoiceType::STRING:

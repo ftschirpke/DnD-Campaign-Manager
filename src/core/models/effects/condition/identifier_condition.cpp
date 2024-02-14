@@ -28,7 +28,7 @@ IdentifierCondition::IdentifierCondition(
     : Condition(left_side_identifier, comparison_operator), right_side_identifier(right_side_identifier) {}
 
 tl::expected<bool, RuntimeError> IdentifierCondition::evaluate(const Stats& stats) const {
-    std::optional<int> right_side_optional = stats.get(right_side_identifier);
+    std::optional<int> right_side_optional = stats.get_raw(right_side_identifier);
     if (!right_side_optional.has_value()) {
         return tl::unexpected(RuntimeError(
             RuntimeError::Code::INVALID_ARGUMENT,

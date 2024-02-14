@@ -32,7 +32,6 @@ TEST_CASE("is_skill // valid uppercase underscore", tags) {
 TEST_CASE("is_skill // valid lowercase", tags) {
     REQUIRE(is_skill("acrobatics"));
     REQUIRE(is_skill("animal handling"));
-    REQUIRE(is_skill("animal_handling"));
     REQUIRE(is_skill("arcana"));
     REQUIRE(is_skill("athletics"));
     REQUIRE(is_skill("deception"));
@@ -47,7 +46,6 @@ TEST_CASE("is_skill // valid lowercase", tags) {
     REQUIRE(is_skill("persuasion"));
     REQUIRE(is_skill("religion"));
     REQUIRE(is_skill("sleight of hand"));
-    REQUIRE(is_skill("sleight_of_hand"));
     REQUIRE(is_skill("stealth"));
     REQUIRE(is_skill("survival"));
 }
@@ -76,7 +74,9 @@ TEST_CASE("is_skill // invalid", tags) {
         REQUIRE_FALSE(is_skill("acro"));
         REQUIRE_FALSE(is_skill("athl"));
         REQUIRE_FALSE(is_skill("animal-handling"));
+        REQUIRE_FALSE(is_skill("animal_handling"));
         REQUIRE_FALSE(is_skill("sleight-of-hand"));
+        REQUIRE_FALSE(is_skill("sleight_of_hand"));
     }
 }
 

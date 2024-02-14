@@ -14,6 +14,8 @@ namespace dnd {
 
 StatChangeTime StatChange::get_time() const { return time; }
 
+const std::string& StatChange::get_affected_attribute() const { return affected_attribute; }
+
 StatChange::StatChange(const std::string& affected_attribute, StatChangeTime time, StatChangeOperation operation)
     : affected_attribute(affected_attribute), operation(operation), time(time) {}
 
@@ -22,7 +24,7 @@ StatChange::StatChange(std::string_view affected_attribute, StatChangeTime time,
 
 Errors StatChange::apply_with_value(Stats& stats, int value) const {
     Errors errors;
-    int& affected_stat = stats.get_mut_or_default(affected_attribute);
+    int& affected_stat = stats.get_raw_mut_or_insert(affected_attribute);
     switch (operation) {
         case StatChangeOperation::ADD:
             affected_stat += value;

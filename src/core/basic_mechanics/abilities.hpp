@@ -28,6 +28,7 @@ inline constexpr std::array<const char*, 6> ability_cstrings_inorder = {"STR", "
 
 std::optional<Ability> ability_from_string(const std::string& ability_str);
 std::string ability_name(Ability ability);
+const char* ability_cstr_name(Ability ability);
 
 bool is_ability(std::string_view attribute_name);
 bool is_ability(const std::string& attribute_name);

@@ -10,6 +10,7 @@
 #include <core/models/character/ability_scores.hpp>
 #include <core/models/character/feature_providers.hpp>
 #include <core/models/character/progression.hpp>
+#include <core/models/character/stats.hpp>
 #include <core/models/class/class.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/models/effects_provider/choosable.hpp>
@@ -44,10 +45,12 @@ public:
     const AbilityScores& get_base_ability_scores() const;
     const FeatureProviders& get_feature_providers() const;
     const Progression& get_progression() const;
+    const Stats& get_stats() const;
 
     int get_proficiency_bonus() const;
 
     void for_all_effects_do(std::function<void(const Effects&)> func) const;
+    Errors recalculate_stats();
 
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
@@ -65,6 +68,7 @@ private:
     AbilityScores base_ability_scores;
     FeatureProviders feature_providers;
     Progression progression;
+    Stats stats;
     std::vector<Decision> decisions;
 };
 

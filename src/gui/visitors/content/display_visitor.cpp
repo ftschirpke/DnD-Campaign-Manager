@@ -110,14 +110,13 @@ static void list_features(DisplayVisitor& visitor, const std::vector<T>& feature
     ImGui::Separator();
 }
 
-static constexpr std::array<std::array<const char*, 5>, 6> skills_by_ability{{
-    {"Athletics", "", "", "", ""},
-    {"Acrobatics", "Sleight of Hand", "Stealth", "", ""},
-    {"", "", "", "", ""},
-    {"Arcana", "History", "Investigation", "Nature", "Religion"},
-    {"Animal Handling", "Insight", "Medicine", "Perception", "Survival"},
-    {"Deception", "Intimidation", "Performance", "Persuasion", ""},
-}};
+static void modifier_text(int modifier) {
+    if (modifier >= 0) {
+        ImGui::Text("+%d", modifier);
+    } else {
+        ImGui::Text("%d", modifier);
+    }
+}
 
 static void character_abilities_and_skills_table(const dnd::Character& character) {
     DND_UNUSED(character);
@@ -144,37 +143,66 @@ static void character_abilities_and_skills_table(const dnd::Character& character
         }
         ImGui::TableNextRow();
         column = 0;
-        for (const char* ability_cstr : dnd::ability_cstrings_inorder) {
+        for (Ability ability : abilities_inorder) {
             ImGui::TableSetColumnIndex(column++);
-            ImGui::Text("TODO: %s value", ability_cstr);
+            ImGui::Text("%d", character.get_stats().get_ability_score(ability));
             ImGui::TableSetColumnIndex(column++);
-            ImGui::Text("-1");
+            modifier_text(character.get_stats().get_ability_modifier(ability));
         }
         ImGui::Spacing();
         ImGui::Spacing();
         ImGui::TableNextRow();
         column = 0;
-        for (const char* ability_cstr : dnd::ability_cstrings_inorder) {
-            DND_UNUSED(ability_cstr);
+        for (Ability ability : abilities_inorder) {
             ImGui::TableSetColumnIndex(column++);
-            ImGui::Text("Saving throw");
+            ImGui::Text("Save");
             ImGui::Separator();
             ImGui::TableSetColumnIndex(column++);
-            ImGui::Text("+1");
+            modifier_text(character.get_stats().get_ability_save_modifier(ability));
             ImGui::Separator();
         }
         ImGui::Spacing();
         ImGui::Spacing();
         ImGui::TableNextRow();
+
+        std::array<std::vector<std::pair<const char*, int>>, 6> skill_table;
+        for (const SkillInfo& skill_info : get_all_skill_infos()) {
+            size_t col = 0;
+            switch (skill_info.ability) {
+                case Ability::STRENGTH:
+                    col = 0;
+                    break;
+                case Ability::DEXTERITY:
+                    col = 1;
+                    break;
+                case Ability::CONSTITUTION:
+                    col = 2;
+                    break;
+                case Ability::INTELLIGENCE:
+                    col = 3;
+                    break;
+                case Ability::WISDOM:
+                    col = 4;
+                    break;
+                case Ability::CHARISMA:
+                    col = 5;
+                    break;
+            }
+            int value = character.get_stats().get_ability_modifier(skill_info.ability);
+            skill_table[col].emplace_back(skill_info.display_name, value);
+        }
+
         for (size_t row = 0; row < 5; ++row) {
             size_t column = 0;
             for (size_t ability_col_num = 0; ability_col_num < 6; ++ability_col_num) {
-                const char* skill = skills_by_ability[ability_col_num][row];
                 ImGui::TableSetColumnIndex(column++);
-                ImGui::Text("%s", skill);
-                ImGui::TableSetColumnIndex(column++);
-                if (skill[0] != '\0') {
-                    ImGui::Text("+0");
+                if (row < skill_table[ability_col_num].size()) {
+                    std::pair<const char*, int>& name_value_pair = skill_table[ability_col_num][row];
+                    ImGui::Text("%s", name_value_pair.first);
+                    ImGui::TableSetColumnIndex(column++);
+                    modifier_text(name_value_pair.second);
+                } else {
+                    ImGui::TableSetColumnIndex(column++);
                 }
             }
             ImGui::TableNextRow();
@@ -193,22 +221,23 @@ static void character_progression_list(const dnd::Character& character) {
     ImGui::Text("Initiative: %d", 0);   // TODO
     ImGui::Text("Speed: %.2f", 0.0f);   // TODO
     ImGui::Separator();
-    ImGui::Text("Level %d", level);
+    ImGui::Text("Level: %d", level);
     int xp = character.get_progression().get_xp();
-    ImGui::Text("Experience %d", xp);
     if (level < 20) {
         tl::expected<int, RuntimeError> xp_next_level_result = dnd::xp_for_level(level + 1);
         assert(xp_next_level_result.has_value());
         int xp_next_level = xp_next_level_result.value();
-        ImGui::Text("missing %d XP to next level (at %d)", xp_next_level - xp, xp_next_level);
+        ImGui::Text("XP: %d/%d", xp, xp_next_level);
+        ImGui::Text("(%d XP to next level)", xp_next_level - xp);
     } else {
-        ImGui::Text("Level 20 is the maximum level.");
+        ImGui::Text("Experience %d", xp);
+        ImGui::Text("(Level 20 is the maximum level)");
     }
 }
 
 void dnd::DisplayVisitor::operator()(const Character& character) {
     {
-        ImGui::BeginChild("abilities_and_skills", ImVec2(ImGui::GetContentRegionAvail().x * 0.618f, 260), false);
+        ImGui::BeginChild("abilities_and_skills", ImVec2(ImGui::GetContentRegionAvail().x * 0.8f, 260), false);
         character_abilities_and_skills_table(character);
         ImGui::EndChild();
     }
@@ -226,10 +255,6 @@ void dnd::DisplayVisitor::operator()(const Character& character) {
     label("Type:");
     ImGui::Text("Character");
     source(character);
-    label("Level:");
-    ImGui::Text("%d", character.get_progression().get_level());
-    label("XP:");
-    ImGui::Text("%d", character.get_progression().get_xp());
 
     label("Species:");
     const Species& species = character.get_feature_providers().get_species();

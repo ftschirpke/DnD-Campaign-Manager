@@ -22,7 +22,7 @@ Condition::Condition(std::string_view left_side_identifier, ComparisonOperator c
     : left_side_identifier(left_side_identifier), comparison_operator(comparison_operator) {}
 
 tl::expected<bool, RuntimeError> Condition::evaluate_with_right_side(const Stats& stats, int right_side_value) const {
-    std::optional<int> left_side_optional = stats.get(left_side_identifier);
+    std::optional<int> left_side_optional = stats.get_raw(left_side_identifier);
     if (!left_side_optional.has_value()) {
         return tl::unexpected(RuntimeError(
             RuntimeError::Code::INVALID_ARGUMENT,

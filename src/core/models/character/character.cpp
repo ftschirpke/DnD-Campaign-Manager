@@ -17,6 +17,7 @@
 #include <core/models/character/ability_scores.hpp>
 #include <core/models/character/feature_providers.hpp>
 #include <core/models/character/progression.hpp>
+#include <core/models/character/stats.hpp>
 #include <core/models/class/class.hpp>
 #include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/feature.hpp>
@@ -24,6 +25,7 @@
 #include <core/models/species/species.hpp>
 #include <core/models/subclass/subclass.hpp>
 #include <core/models/subspecies/subspecies.hpp>
+#include <core/utils/data_result.hpp>
 #include <core/validation/character/character_validation.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
@@ -81,10 +83,15 @@ CreateResult<Character> Character::create_for(Data&& data, const Content& conten
         decisions.push_back(decision_result.value());
     }
 
-    return ValidCreate(Character(
+    Character character(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(features),
         std::move(base_ability_scores), std::move(feature_providers), std::move(progression), std::move(decisions)
-    ));
+    );
+    errors = character.recalculate_stats();
+    if (!errors.ok()) {
+        return InvalidCreate<Character>(std::move(data), std::move(errors));
+    }
+    return ValidCreate(std::move(character));
 }
 
 const std::string& Character::get_name() const { return name; }
@@ -102,6 +109,8 @@ const AbilityScores& Character::get_base_ability_scores() const { return base_ab
 const FeatureProviders& Character::get_feature_providers() const { return feature_providers; }
 
 const Progression& Character::get_progression() const { return progression; }
+
+const Stats& Character::get_stats() const { return stats; }
 
 void Character::for_all_effects_do(std::function<void(const Effects&)> func) const {
     for (const Feature& feature : feature_providers.get_species().get_features()) {
@@ -142,6 +151,25 @@ void Character::for_all_effects_do(std::function<void(const Effects&)> func) con
     }
 }
 
+Errors Character::recalculate_stats() {
+    std::vector<CRef<StatChange>> stat_changes;
+    for_all_effects_do([&stat_changes](const Effects& effects) {
+        for (const std::unique_ptr<StatChange>& change : effects.get_stat_changes()) {
+            stat_changes.push_back(*change);
+        }
+    });
+
+    tl::expected<Stats, Errors> result = Stats::create_from_base_scores_and_stat_changes(
+        base_ability_scores, stat_changes
+    );
+    if (!result.has_value()) {
+        return result.error();
+    }
+    stats = result.value();
+
+    return Errors();
+}
+
 int Character::get_proficiency_bonus() const {
     tl::expected<int, RuntimeError> proficiency_bonus_result = proficiency_bonus_for_level(progression.get_level());
     assert(proficiency_bonus_result.has_value());
@@ -158,6 +186,6 @@ Character::Character(
     : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
       features(std::move(features)), base_ability_scores(std::move(base_ability_scores)),
       feature_providers(std::move(feature_providers)), progression(std::move(progression)),
-      decisions(std::move(decisions)) {}
+      stats(Stats::create_default()), decisions(std::move(decisions)) {}
 
 } // namespace dnd
