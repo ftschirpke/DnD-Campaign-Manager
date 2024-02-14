@@ -20,7 +20,9 @@ std::optional<Ability> ability_from_string(const std::string& ability_str) {
     return std::nullopt;
 }
 
-std::string ability_name(Ability ability) {
+std::string ability_name(Ability ability) { return std::string(ability_cstr_name(ability)); }
+
+const char* ability_cstr_name(Ability ability) {
     switch (ability) {
         case Ability::STRENGTH:
             return "STR";

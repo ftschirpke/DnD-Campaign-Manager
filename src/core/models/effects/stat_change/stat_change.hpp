@@ -42,6 +42,7 @@ public:
     virtual ~StatChange() = default;
 
     StatChangeTime get_time() const;
+    const std::string& get_affected_attribute() const;
 
     virtual Errors apply(Stats& stats) const = 0;
 protected:

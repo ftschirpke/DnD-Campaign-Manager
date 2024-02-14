@@ -28,11 +28,11 @@ IdentifierStatChange::IdentifierStatChange(
     : StatChange(affected_attribute, time, operation), value_identifier(value_identifier) {}
 
 Errors IdentifierStatChange::apply(Stats& stats) const {
-    std::optional<int> value_optional = stats.get(value_identifier);
+    std::optional<int> value_optional = stats.get_raw(value_identifier);
     if (!value_optional.has_value()) {
         return Errors(RuntimeError(
             RuntimeError::Code::INVALID_ARGUMENT,
-            fmt::format("Stat change value identifier '{}' not found in stats", value_identifier)
+            fmt::format("Identifier for stat change value '{}' not found in stats", value_identifier)
         ));
     }
     return apply_with_value(stats, value_optional.value());
