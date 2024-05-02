@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.22)
 
+if (NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Debug)
+endif()
+
 project(
     DnD-Campaign-Manager
     DESCRIPTION
