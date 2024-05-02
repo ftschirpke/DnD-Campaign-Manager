@@ -110,11 +110,13 @@ void GuiApp::render_overview_window() {
         }
     }
 
+#if DND_DEBUG_MODE
     ImGui::SeparatorText("Dev-Info");
     ImGui::Checkbox("Show Demo Window", &show_demo_window);
 
     ImGuiIO& io = ImGui::GetIO();
     ImGui::Text("Application average\n%.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+#endif
 
     ImGui::SeparatorText("Status");
     switch (session.get_status()) {
