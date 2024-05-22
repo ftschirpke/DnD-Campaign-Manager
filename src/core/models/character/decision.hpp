@@ -3,7 +3,6 @@
 
 #include <dnd_config.hpp>
 
-#include <core/models/character/character_without_data.hpp>
 #include <core/models/effects/effects.hpp>
 #include <core/utils/data_result.hpp>
 #include <core/utils/types.hpp>
@@ -19,9 +18,7 @@ class Decision {
 public:
     struct Data;
 
-    static CreateResult<Decision> create_for(
-        Data&& data, const Character::Data& character_data, const Content& content
-    );
+    static CreateResult<Decision> create_for(Data&& data, const Content& content);
 
     Decision(const Decision&) = delete;
     Decision& operator=(const Decision&) = delete;

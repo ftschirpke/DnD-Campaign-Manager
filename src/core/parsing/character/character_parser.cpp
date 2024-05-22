@@ -17,7 +17,7 @@
 #include <core/parsing/effects_provider/feature_parser.hpp>
 #include <core/parsing/file_parser.hpp>
 #include <core/validation/character/character_validation.hpp>
-#include <core/validation/character/decision/decision_validation.hpp>
+#include <core/validation/character/decision_validation.hpp>
 
 namespace dnd {
 

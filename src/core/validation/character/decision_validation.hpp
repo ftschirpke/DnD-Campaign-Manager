@@ -5,16 +5,14 @@
 
 #include <core/errors/errors.hpp>
 #include <core/models/character/character.hpp>
-#include <core/models/character/decision/decision.hpp>
+#include <core/utils/data_result.hpp>
 
 namespace dnd {
 
 class Content;
 class Effects;
 
-Errors validate_decision_for_character_and_content(
-    const Decision::Data& data, const Character::Data& character_validation, const Content& content
-);
+Errors validate_decision_for_content(const Decision::Data& data, const Content& content);
 
 } // namespace dnd
 
