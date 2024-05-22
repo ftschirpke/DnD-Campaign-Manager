@@ -5,12 +5,15 @@
 #include <cassert>
 #include <filesystem>
 #include <string>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 
 #include <tl/expected.hpp>
 
+#include <core/attribute_names.hpp>
 #include <core/basic_mechanics/character_progression.hpp>
+#include <core/basic_mechanics/skills.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
@@ -20,6 +23,7 @@
 #include <core/models/character/stats.hpp>
 #include <core/models/class/class.hpp>
 #include <core/models/effects/stat_change/identifier_stat_change.hpp>
+#include <core/models/effects/stat_change/stat_change.hpp>
 #include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/source_info.hpp>
@@ -154,25 +158,47 @@ void Character::for_all_effects_do(std::function<void(const Effects&)> func) con
 
 Errors Character::recalculate_stats() {
     std::vector<CRef<StatChange>> stat_changes;
-    std::vector<IdentifierStatChange> implicit_stat_changes;
-    for_all_effects_do([&stat_changes, &implicit_stat_changes](const Effects& effects) {
+
+    std::unordered_set<std::string> proficient_skills;
+    std::unordered_set<std::string> proficient_saves;
+
+    for_all_effects_do([&stat_changes, &proficient_saves, &proficient_skills](const Effects& effects) {
         for (const std::unique_ptr<StatChange>& change : effects.get_stat_changes()) {
             stat_changes.push_back(*change);
         }
-        std::vector<std::string> proficient_skills = effects.get_proficiencies().get_skill_proficiencies();
-        for (const std::string& proficient_skill : proficient_skills) {
-            implicit_stat_changes.emplace_back(
-                proficient_skill, StatChangeTime::NORMAL, StatChangeOperation::ADD, "PB"
-            );
-        }
-        std::vector<std::string> proficient_saves = effects.get_proficiencies().get_saving_throw_proficiencies();
-        for (const std::string& proficient_save : proficient_saves) {
-            implicit_stat_changes.emplace_back(proficient_save, StatChangeTime::NORMAL, StatChangeOperation::ADD, "PB");
-        }
+        const std::vector<std::string>& saves = effects.get_proficiencies().get_saving_throw_proficiencies();
+        proficient_saves.insert(saves.begin(), saves.end());
+        const std::vector<std::string>& skills = effects.get_proficiencies().get_skill_proficiencies();
+        proficient_skills.insert(skills.begin(), skills.end());
     });
+
+    std::vector<IdentifierStatChange> implicit_stat_changes;
+    implicit_stat_changes.reserve(proficient_saves.size() + proficient_skills.size());
+    for (const std::string& save_ability : proficient_saves) {
+        implicit_stat_changes.emplace_back(
+            attributes::ability_saving_throw(save_ability), StatChangeTime::NORMAL, StatChangeOperation::ADD,
+            attributes::PROFICIENCY_BONUS
+        );
+    }
+    for (const std::string& skill_name : proficient_skills) {
+        std::optional<Skill> skill_opt = skill_from_config_name(skill_name);
+        if (!skill_opt.has_value()) {
+            continue;
+        }
+        Skill skill = skill_opt.value();
+        std::optional<SkillInfo> skill_info_opt = get_skill_info(skill);
+        if (!skill_info_opt.has_value()) {
+            continue;
+        }
+        const SkillInfo& skill_info = skill_info_opt.value();
+        implicit_stat_changes.emplace_back(
+            std::string_view(skill_info.stat_name), StatChangeTime::NORMAL, StatChangeOperation::ADD,
+            attributes::PROFICIENCY_BONUS
+        );
+    }
     stat_changes.insert(stat_changes.end(), implicit_stat_changes.begin(), implicit_stat_changes.end());
 
-    tl::expected<Stats, Errors> result = Stats::create(get_proficiency_bonus(), base_ability_scores, stat_changes);
+    tl::expected<Stats, Errors> result = Stats::create(base_ability_scores, get_proficiency_bonus(), stat_changes);
     if (!result.has_value()) {
         return result.error();
     }

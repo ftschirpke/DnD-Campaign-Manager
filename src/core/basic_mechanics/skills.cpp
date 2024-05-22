@@ -5,29 +5,34 @@
 #include <array>
 #include <string_view>
 
+#include <core/attribute_names.hpp>
 #include <core/basic_mechanics/abilities.hpp>
 
 namespace dnd {
 
 static constexpr std::array<const SkillInfo, 18> skill_infos = {
-    SkillInfo{Skill::ACROBATICS, Ability::DEXTERITY, "ACROBATICS", "Acrobatics", "acrobatics"},
-    SkillInfo{Skill::ANIMAL_HANDLING, Ability::WISDOM, "ANIMAL_HANDLING", "Animal Handling", "animal handling"},
-    SkillInfo{Skill::ARCANA, Ability::INTELLIGENCE, "ARCANA", "Arcana", "arcana"},
-    SkillInfo{Skill::ATHLETICS, Ability::STRENGTH, "ATHLETICS", "Athletics", "athletics"},
-    SkillInfo{Skill::DECEPTION, Ability::CHARISMA, "DECEPTION", "Deception", "deception"},
-    SkillInfo{Skill::HISTORY, Ability::INTELLIGENCE, "HISTORY", "History", "history"},
-    SkillInfo{Skill::INSIGHT, Ability::WISDOM, "INSIGHT", "Insight", "insight"},
-    SkillInfo{Skill::INTIMIDATION, Ability::CHARISMA, "INTIMIDATION", "Intimidation", "intimidation"},
-    SkillInfo{Skill::INVESTIGATION, Ability::INTELLIGENCE, "INVESTIGATION", "Investigation", "investigation"},
-    SkillInfo{Skill::MEDICINE, Ability::WISDOM, "MEDICINE", "Medicine", "medicine"},
-    SkillInfo{Skill::NATURE, Ability::INTELLIGENCE, "NATURE", "Nature", "nature"},
-    SkillInfo{Skill::PERCEPTION, Ability::WISDOM, "PERCEPTION", "Perception", "perception"},
-    SkillInfo{Skill::PERFORMANCE, Ability::CHARISMA, "PERFORMANCE", "Performance", "performance"},
-    SkillInfo{Skill::PERSUASION, Ability::CHARISMA, "PERSUASION", "Persuasion", "persuasion"},
-    SkillInfo{Skill::RELIGION, Ability::INTELLIGENCE, "RELIGION", "Religion", "religion"},
-    SkillInfo{Skill::SLEIGHT_OF_HAND, Ability::DEXTERITY, "SLEIGHT_OF_HAND", "Sleight of Hand", "sleight of hand"},
-    SkillInfo{Skill::STEALTH, Ability::DEXTERITY, "STEALTH", "Stealth", "stealth"},
-    SkillInfo{Skill::SURVIVAL, Ability::WISDOM, "SURVIVAL", "Survival", "survival"},
+    SkillInfo{Skill::ACROBATICS, Ability::DEXTERITY, attributes::ACROBATICS, "Acrobatics", "acrobatics"},
+    SkillInfo{
+        Skill::ANIMAL_HANDLING, Ability::WISDOM, attributes::ANIMAL_HANDLING, "Animal Handling", "animal handling"
+    },
+    SkillInfo{Skill::ARCANA, Ability::INTELLIGENCE, attributes::ARCANA, "Arcana", "arcana"},
+    SkillInfo{Skill::ATHLETICS, Ability::STRENGTH, attributes::ATHLETICS, "Athletics", "athletics"},
+    SkillInfo{Skill::DECEPTION, Ability::CHARISMA, attributes::DECEPTION, "Deception", "deception"},
+    SkillInfo{Skill::HISTORY, Ability::INTELLIGENCE, attributes::HISTORY, "History", "history"},
+    SkillInfo{Skill::INSIGHT, Ability::WISDOM, attributes::INSIGHT, "Insight", "insight"},
+    SkillInfo{Skill::INTIMIDATION, Ability::CHARISMA, attributes::INTIMIDATION, "Intimidation", "intimidation"},
+    SkillInfo{Skill::INVESTIGATION, Ability::INTELLIGENCE, attributes::INVESTIGATION, "Investigation", "investigation"},
+    SkillInfo{Skill::MEDICINE, Ability::WISDOM, attributes::MEDICINE, "Medicine", "medicine"},
+    SkillInfo{Skill::NATURE, Ability::INTELLIGENCE, attributes::NATURE, "Nature", "nature"},
+    SkillInfo{Skill::PERCEPTION, Ability::WISDOM, attributes::PERCEPTION, "Perception", "perception"},
+    SkillInfo{Skill::PERFORMANCE, Ability::CHARISMA, attributes::PERFORMANCE, "Performance", "performance"},
+    SkillInfo{Skill::PERSUASION, Ability::CHARISMA, attributes::PERSUASION, "Persuasion", "persuasion"},
+    SkillInfo{Skill::RELIGION, Ability::INTELLIGENCE, attributes::RELIGION, "Religion", "religion"},
+    SkillInfo{
+        Skill::SLEIGHT_OF_HAND, Ability::DEXTERITY, attributes::SLEIGHT_OF_HAND, "Sleight of Hand", "sleight of hand"
+    },
+    SkillInfo{Skill::STEALTH, Ability::DEXTERITY, attributes::STEALTH, "Stealth", "stealth"},
+    SkillInfo{Skill::SURVIVAL, Ability::WISDOM, attributes::SURVIVAL, "Survival", "survival"},
 };
 
 bool is_skill(std::string_view skill) {

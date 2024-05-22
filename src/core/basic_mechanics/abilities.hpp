@@ -24,8 +24,6 @@ inline constexpr std::array<Ability, 6> abilities_inorder = {
     Ability::INTELLIGENCE, Ability::WISDOM,    Ability::CHARISMA,
 };
 
-inline constexpr std::array<const char*, 6> ability_cstrings_inorder = {"STR", "DEX", "CON", "INT", "WIS", "CHA"};
-
 std::optional<Ability> ability_from_string(const std::string& ability_str);
 std::string ability_name(Ability ability);
 const char* ability_cstr_name(Ability ability);

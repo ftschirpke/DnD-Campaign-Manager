@@ -10,6 +10,8 @@
 
 #include <tl/expected.hpp>
 
+#include <core/basic_mechanics/abilities.hpp>
+#include <core/basic_mechanics/skills.hpp>
 #include <core/models/character/ability_scores.hpp>
 #include <core/models/effects/stat_change/stat_change.hpp>
 #include <core/utils/types.hpp>
@@ -20,7 +22,7 @@ class Stats {
 public:
     static Stats create_default();
     static tl::expected<Stats, Errors> create(
-        int proficiency_bonus, const AbilityScores& base_ability_scores, std::vector<CRef<StatChange>> stat_changes
+        const AbilityScores& base_ability_scores, int proficiency_bonus, std::vector<CRef<StatChange>> stat_changes
     );
 
     bool is_complete() const;
@@ -37,6 +39,7 @@ public:
     int get_ability_max_score(Ability ability) const;
     int get_ability_modifier(Ability ability) const;
     int get_ability_save_modifier(Ability ability) const;
+    int get_skill_modifier(Skill skill) const;
 private:
     Stats();
 
@@ -47,7 +50,6 @@ private:
 
     std::unordered_map<std::string, const int> constant_values;
     std::unordered_map<std::string, int> mutable_values;
-    std::unordered_map<std::string, int> implied_values;
 };
 
 } // namespace dnd

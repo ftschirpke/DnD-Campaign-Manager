@@ -9,6 +9,7 @@
 #include <fmt/format.h>
 #include <imgui/imgui.h>
 
+#include <core/attribute_names.hpp>
 #include <core/basic_mechanics/abilities.hpp>
 #include <core/basic_mechanics/character_progression.hpp>
 #include <core/basic_mechanics/dice.hpp>
@@ -127,13 +128,13 @@ static void character_abilities_and_skills_table(const dnd::Character& character
     big_column = 130.0f;
     small_column = 20.0f;
     if (ImGui::BeginTable("abilities_and_skills_table", 12)) {
-        for (const char* ability_cstr : dnd::ability_cstrings_inorder) {
+        for (const char* ability_cstr : dnd::attributes::ABILITIES) {
             ImGui::TableSetupColumn(ability_cstr, big_column);
             ImGui::TableSetupColumn(fmt::format("##{}", ability_cstr).c_str(), small_column);
         }
         ImGui::TableNextRow();
         size_t column = 0;
-        for (const char* ability_cstr : dnd::ability_cstrings_inorder) {
+        for (const char* ability_cstr : dnd::attributes::ABILITIES) {
             ImGui::TableSetColumnIndex(column++);
             ImGui::Text("%s", ability_cstr);
             ImGui::Separator();
@@ -188,7 +189,7 @@ static void character_abilities_and_skills_table(const dnd::Character& character
                     col = 5;
                     break;
             }
-            int value = character.get_stats().get_ability_modifier(skill_info.ability);
+            int value = character.get_stats().get_skill_modifier(skill_info.skill);
             skill_table[col].emplace_back(skill_info.display_name, value);
         }
 
@@ -214,12 +215,14 @@ static void character_abilities_and_skills_table(const dnd::Character& character
 
 static void character_progression_list(const dnd::Character& character) {
     DND_UNUSED(character);
-    ImGui::Text("HP: %d/%d", 42, 42); // TODO
+    ImGui::Text("HP: %d/%d", 42, 42); // TODO: current and max HP
     int level = character.get_progression().get_level();
     ImGui::Text("Proficiency Bonus: %d", character.get_proficiency_bonus());
-    ImGui::Text("Armor Class: %d", 10); // TODO
-    ImGui::Text("Initiative: %d", 0);   // TODO
-    ImGui::Text("Speed: %.2f", 0.0f);   // TODO
+    ImGui::Text("Armor Class: %d", 10); // TODO: AC
+    ImGui::Text("Initiative: %d", 0);   // TODO: Initiative
+    ImGui::Text(
+        "Speed: %.2f", character.get_stats().get_float(attributes::SPEED).value_or(0.0f)
+    ); // TODO: think about moving part of this to stats
     ImGui::Separator();
     ImGui::Text("Level: %d", level);
     int xp = character.get_progression().get_xp();

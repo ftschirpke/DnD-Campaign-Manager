@@ -10,6 +10,7 @@
 
 #include <fmt/format.h>
 
+#include <core/attribute_names.hpp>
 #include <core/basic_mechanics/abilities.hpp>
 #include <core/basic_mechanics/skills.hpp>
 #include <core/utils/data_result.hpp>
@@ -21,7 +22,7 @@ static int calculate_modifier(int score) { return score / 2 - 5; }
 static bool is_ability_score_change(const StatChange& change) {
     const std::string& affected_attribute = change.get_affected_attribute();
     return std::any_of(
-        ability_cstrings_inorder.begin(), ability_cstrings_inorder.end(),
+        attributes::ABILITIES.begin(), attributes::ABILITIES.end(),
         [&affected_attribute](const char* ability_cstring) { return affected_attribute == ability_cstring; }
     );
 }
@@ -38,23 +39,22 @@ Stats Stats::create_default() {
 }
 
 tl::expected<Stats, Errors> Stats::create(
-    int proficiency_bonus, const AbilityScores& base_ability_scores, std::vector<CRef<StatChange>> stat_changes
+    const AbilityScores& base_ability_scores, int proficiency_bonus, std::vector<CRef<StatChange>> stat_changes
 ) {
     Stats stats;
     Errors errors;
-    stats.mutable_values["PB"] = to_raw(proficiency_bonus);
-    stats.mutable_values["STR_MAX"] = to_raw(20);
-    stats.mutable_values["DEX_MAX"] = to_raw(20);
-    stats.mutable_values["CON_MAX"] = to_raw(20);
-    stats.mutable_values["INT_MAX"] = to_raw(20);
-    stats.mutable_values["WIS_MAX"] = to_raw(20);
-    stats.mutable_values["CHA_MAX"] = to_raw(20);
-    stats.mutable_values["STR"] = to_raw(base_ability_scores.get_strength());
-    stats.mutable_values["DEX"] = to_raw(base_ability_scores.get_dexterity());
-    stats.mutable_values["CON"] = to_raw(base_ability_scores.get_constitution());
-    stats.mutable_values["INT"] = to_raw(base_ability_scores.get_intelligence());
-    stats.mutable_values["WIS"] = to_raw(base_ability_scores.get_wisdom());
-    stats.mutable_values["CHA"] = to_raw(base_ability_scores.get_charisma());
+    stats.mutable_values[attributes::PROFICIENCY_BONUS] = to_raw(proficiency_bonus);
+
+    stats.mutable_values[attributes::STRENGTH] = to_raw(base_ability_scores.get_strength());
+    stats.mutable_values[attributes::DEXTERITY] = to_raw(base_ability_scores.get_dexterity());
+    stats.mutable_values[attributes::CONSTITUTION] = to_raw(base_ability_scores.get_constitution());
+    stats.mutable_values[attributes::INTELLIGENCE] = to_raw(base_ability_scores.get_intelligence());
+    stats.mutable_values[attributes::WISDOM] = to_raw(base_ability_scores.get_wisdom());
+    stats.mutable_values[attributes::CHARISMA] = to_raw(base_ability_scores.get_charisma());
+
+    for (const char* ability_name : attributes::ABILITIES) {
+        stats.mutable_values[attributes::ability_maximum(ability_name)] = to_raw(20);
+    }
 
     for (const StatChange& change : stat_changes) {
         if (is_ability_score_change(change)) {
@@ -85,15 +85,18 @@ tl::expected<Stats, Errors> Stats::create(
 Stats::Stats() {}
 
 bool Stats::is_complete() const {
-    assert(mutable_values.contains("STR"));
-    assert(mutable_values.contains("DEX"));
-    assert(mutable_values.contains("CON"));
-    assert(mutable_values.contains("INT"));
-    assert(mutable_values.contains("WIS"));
-    assert(mutable_values.contains("CHA"));
-    bool has_ability_modifiers = mutable_values.contains("STR_MOD") && mutable_values.contains("DEX_MOD")
-                                 && mutable_values.contains("CON_MOD") && mutable_values.contains("INT_MOD")
-                                 && mutable_values.contains("WIS_MOD") && mutable_values.contains("CHA_MOD");
+    assert(mutable_values.contains(attributes::STRENGTH));
+    assert(mutable_values.contains(attributes::DEXTERITY));
+    assert(mutable_values.contains(attributes::CONSTITUTION));
+    assert(mutable_values.contains(attributes::INTELLIGENCE));
+    assert(mutable_values.contains(attributes::WISDOM));
+    assert(mutable_values.contains(attributes::CHARISMA));
+
+    bool has_ability_modifiers = true;
+    for (const char* ability_name : attributes::ABILITIES) {
+        has_ability_modifiers &= mutable_values.contains(attributes::ability_modifier(ability_name));
+    }
+
     const std::array<const SkillInfo, 18>& all_skill_infos = get_all_skill_infos();
     bool has_skill_modifiers = std::all_of(
         all_skill_infos.begin(), all_skill_infos.end(),
@@ -135,10 +138,6 @@ std::optional<int> Stats::get_raw(const std::string& name) const {
     if (it != mutable_values.end()) {
         return it->second;
     }
-    it = implied_values.find(name);
-    if (it != implied_values.end()) {
-        return it->second;
-    }
     return std::nullopt;
 }
 
@@ -152,132 +151,66 @@ std::optional<Ref<int>> Stats::get_raw_mut(const std::string& name) {
 
 Ref<int> Stats::get_raw_mut_or_insert(const std::string& name) { return mutable_values[name]; }
 
+int Stats::get_skill_modifier(Skill skill) const {
+    const std::optional<SkillInfo> skill_info_opt = get_skill_info(skill);
+    if (!skill_info_opt.has_value()) {
+        return 0;
+    }
+    const SkillInfo& skill_info = skill_info_opt.value();
+    return get_int(skill_info.stat_name).value_or(0);
+}
+
 int Stats::get_ability_score(Ability ability) const {
     const char* name = ability_cstr_name(ability);
-    return get_int(name).value_or(20);
+    return get_int(name).value_or(10);
 }
 
 int Stats::get_ability_max_score(Ability ability) const {
-    const char* max_score_name;
-    switch (ability) {
-        case Ability::STRENGTH:
-            max_score_name = "STR_MAX";
-            break;
-        case Ability::DEXTERITY:
-            max_score_name = "DEX_MAX";
-            break;
-        case Ability::CONSTITUTION:
-            max_score_name = "CON_MAX";
-            break;
-        case Ability::INTELLIGENCE:
-            max_score_name = "INT_MAX";
-            break;
-        case Ability::WISDOM:
-            max_score_name = "WIS_MAX";
-            break;
-        case Ability::CHARISMA:
-            max_score_name = "CHA_MAX";
-            break;
-    }
+    const char* ability_name = ability_cstr_name(ability);
+    const std::string max_score_name = attributes::ability_maximum(ability_name);
     return get_int(max_score_name).value_or(20);
 }
 
 int Stats::get_ability_modifier(Ability ability) const {
-    std::string modifier_name;
-    switch (ability) {
-        case Ability::STRENGTH:
-            modifier_name = "STR_MOD";
-            break;
-        case Ability::DEXTERITY:
-            modifier_name = "DEX_MOD";
-            break;
-        case Ability::CONSTITUTION:
-            modifier_name = "CON_MOD";
-            break;
-        case Ability::INTELLIGENCE:
-            modifier_name = "INT_MOD";
-            break;
-        case Ability::WISDOM:
-            modifier_name = "WIS_MOD";
-            break;
-        case Ability::CHARISMA:
-            modifier_name = "CHA_MOD";
-            break;
-    }
+    const char* ability_name = ability_cstr_name(ability);
+    const std::string modifier_name = attributes::ability_modifier(ability_name);
     return get_int(modifier_name).value_or(0);
 }
 
 int Stats::get_ability_save_modifier(Ability ability) const {
-    std::string save_modifier_name;
-    switch (ability) {
-        case Ability::STRENGTH:
-            save_modifier_name = "STR_SAVE";
-            break;
-        case Ability::DEXTERITY:
-            save_modifier_name = "DEX_SAVE";
-            break;
-        case Ability::CONSTITUTION:
-            save_modifier_name = "CON_SAVE";
-            break;
-        case Ability::INTELLIGENCE:
-            save_modifier_name = "INT_SAVE";
-            break;
-        case Ability::WISDOM:
-            save_modifier_name = "WIS_SAVE";
-            break;
-        case Ability::CHARISMA:
-            save_modifier_name = "CHA_SAVE";
-            break;
-    }
+    const char* ability_name = ability_cstr_name(ability);
+    const std::string save_modifier_name = attributes::ability_saving_throw(ability_name);
     return get_int(save_modifier_name).value_or(0);
 }
 
 void Stats::check_maximum_ability_scores() {
-    if (mutable_values["STR"] > mutable_values["STR_MAX"]) {
-        mutable_values["STR"] = mutable_values["STR_MAX"];
-    }
-    if (mutable_values["DEX"] > mutable_values["DEX_MAX"]) {
-        mutable_values["DEX"] = mutable_values["DEX_MAX"];
-    }
-    if (mutable_values["CON"] > mutable_values["CON_MAX"]) {
-        mutable_values["CON"] = mutable_values["CON_MAX"];
-    }
-    if (mutable_values["INT"] > mutable_values["INT_MAX"]) {
-        mutable_values["INT"] = mutable_values["INT_MAX"];
-    }
-    if (mutable_values["WIS"] > mutable_values["WIS_MAX"]) {
-        mutable_values["WIS"] = mutable_values["WIS_MAX"];
-    }
-    if (mutable_values["CHA"] > mutable_values["CHA_MAX"]) {
-        mutable_values["CHA"] = mutable_values["CHA_MAX"];
+    for (const char* ability_name : attributes::ABILITIES) {
+        if (mutable_values[ability_name] > mutable_values[attributes::ability_maximum(ability_name)]) {
+            mutable_values[ability_name] = mutable_values[attributes::ability_maximum(ability_name)];
+        }
     }
 }
 
 void Stats::calculate_ability_modifiers() {
-    implied_values.insert({
-        {"STR_MOD", to_raw(calculate_modifier(get_ability_score(Ability::STRENGTH)))},
-        {"DEX_MOD", to_raw(calculate_modifier(get_ability_score(Ability::DEXTERITY)))},
-        {"CON_MOD", to_raw(calculate_modifier(get_ability_score(Ability::CONSTITUTION)))},
-        {"INT_MOD", to_raw(calculate_modifier(get_ability_score(Ability::INTELLIGENCE)))},
-        {"WIS_MOD", to_raw(calculate_modifier(get_ability_score(Ability::WISDOM)))},
-        {"CHA_MOD", to_raw(calculate_modifier(get_ability_score(Ability::CHARISMA)))},
-    });
+    for (Ability ability : abilities_inorder) {
+        const char* ability_name = ability_cstr_name(ability);
+        const std::string ability_modifier = attributes::ability_modifier(ability_name);
+        mutable_values[ability_modifier] = to_raw(calculate_modifier(get_ability_score(ability)));
+    }
 }
 
 void Stats::calculate_ability_save_modifiers() {
-    implied_values.insert({
-        {"STR_SAVE", to_raw(get_ability_modifier(Ability::STRENGTH))},
-        {"DEX_SAVE", to_raw(get_ability_modifier(Ability::DEXTERITY))},
-        {"CON_SAVE", to_raw(get_ability_modifier(Ability::CONSTITUTION))},
-        {"INT_SAVE", to_raw(get_ability_modifier(Ability::INTELLIGENCE))},
-        {"WIS_SAVE", to_raw(get_ability_modifier(Ability::WISDOM))},
-        {"CHA_SAVE", to_raw(get_ability_modifier(Ability::CHARISMA))},
-    });
+    for (Ability ability : abilities_inorder) {
+        const char* ability_name = ability_cstr_name(ability);
+        const std::string ability_save = attributes::ability_saving_throw(ability_name);
+        mutable_values[ability_save] = to_raw(get_ability_modifier(ability));
+    }
 }
 
 void Stats::calculate_skill_modifiers() {
     for (const SkillInfo& skill : get_all_skill_infos()) {
-        const std::string ability_modifier = fmt::format("{}_MOD", ability_cstr_name(skill.ability));
+        const char* ability_name = ability_cstr_name(skill.ability);
+        const std::string ability_modifier = attributes::ability_modifier(ability_name);
         mutable_values[skill.stat_name] = to_raw(get_ability_modifier(skill.ability));
     }
 }

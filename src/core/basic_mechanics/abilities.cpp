@@ -9,11 +9,13 @@
 #include <string>
 #include <string_view>
 
+#include <core/attribute_names.hpp>
+
 namespace dnd {
 
 std::optional<Ability> ability_from_string(const std::string& ability_str) {
     for (size_t i = 0; i < 6; ++i) {
-        if (ability_cstrings_inorder[i] == ability_str) {
+        if (attributes::ABILITIES[i] == ability_str) {
             return abilities_inorder[i];
         }
     }
@@ -25,30 +27,30 @@ std::string ability_name(Ability ability) { return std::string(ability_cstr_name
 const char* ability_cstr_name(Ability ability) {
     switch (ability) {
         case Ability::STRENGTH:
-            return "STR";
+            return attributes::STRENGTH;
         case Ability::DEXTERITY:
-            return "DEX";
+            return attributes::DEXTERITY;
         case Ability::CONSTITUTION:
-            return "CON";
+            return attributes::CONSTITUTION;
         case Ability::INTELLIGENCE:
-            return "INT";
+            return attributes::INTELLIGENCE;
         case Ability::WISDOM:
-            return "WIS";
+            return attributes::WISDOM;
         case Ability::CHARISMA:
-            return "CHA";
+            return attributes::CHARISMA;
     }
     assert(false);
     return "";
 }
 
 bool is_ability(std::string_view attribute_name) {
-    return std::find(ability_cstrings_inorder.cbegin(), ability_cstrings_inorder.cend(), attribute_name)
-           != ability_cstrings_inorder.cend();
+    return std::find(attributes::ABILITIES.cbegin(), attributes::ABILITIES.cend(), attribute_name)
+           != attributes::ABILITIES.cend();
 }
 
 bool is_ability(const std::string& attribute_name) {
-    return std::find(ability_cstrings_inorder.cbegin(), ability_cstrings_inorder.cend(), attribute_name)
-           != ability_cstrings_inorder.cend();
+    return std::find(attributes::ABILITIES.cbegin(), attributes::ABILITIES.cend(), attribute_name)
+           != attributes::ABILITIES.cend();
 }
 
 } // namespace dnd
