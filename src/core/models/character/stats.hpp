@@ -19,8 +19,8 @@ namespace dnd {
 class Stats {
 public:
     static Stats create_default();
-    static tl::expected<Stats, Errors> create_from_base_scores_and_stat_changes(
-        const AbilityScores& base_ability_scores, std::vector<CRef<StatChange>> stat_changes
+    static tl::expected<Stats, Errors> create(
+        int proficiency_bonus, const AbilityScores& base_ability_scores, std::vector<CRef<StatChange>> stat_changes
     );
 
     bool is_complete() const;

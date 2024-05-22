@@ -37,11 +37,12 @@ Stats Stats::create_default() {
     return stats;
 }
 
-tl::expected<Stats, Errors> Stats::create_from_base_scores_and_stat_changes(
-    const AbilityScores& base_ability_scores, std::vector<CRef<StatChange>> stat_changes
+tl::expected<Stats, Errors> Stats::create(
+    int proficiency_bonus, const AbilityScores& base_ability_scores, std::vector<CRef<StatChange>> stat_changes
 ) {
     Stats stats;
     Errors errors;
+    stats.mutable_values["PB"] = to_raw(proficiency_bonus);
     stats.mutable_values["STR_MAX"] = to_raw(20);
     stats.mutable_values["DEX_MAX"] = to_raw(20);
     stats.mutable_values["CON_MAX"] = to_raw(20);

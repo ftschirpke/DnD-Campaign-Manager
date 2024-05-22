@@ -19,6 +19,7 @@
 #include <core/models/character/progression.hpp>
 #include <core/models/character/stats.hpp>
 #include <core/models/class/class.hpp>
+#include <core/models/effects/stat_change/identifier_stat_change.hpp>
 #include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/source_info.hpp>
@@ -153,15 +154,28 @@ void Character::for_all_effects_do(std::function<void(const Effects&)> func) con
 
 Errors Character::recalculate_stats() {
     std::vector<CRef<StatChange>> stat_changes;
-    for_all_effects_do([&stat_changes](const Effects& effects) {
+    std::vector<IdentifierStatChange> implicit_stat_changes;
+    for_all_effects_do([&stat_changes, &implicit_stat_changes](const Effects& effects) {
         for (const std::unique_ptr<StatChange>& change : effects.get_stat_changes()) {
             stat_changes.push_back(*change);
         }
+        std::vector<std::string> proficient_skills = effects.get_proficiencies().get_skill_proficiencies();
+        for (const std::string& proficient_skill : proficient_skills) {
+            const IdentifierStatChange& change = implicit_stat_changes.emplace_back(
+                proficient_skill, StatChangeTime::NORMAL, StatChangeOperation::ADD, "PB"
+            );
+            stat_changes.push_back(change);
+        }
+        std::vector<std::string> proficient_saves = effects.get_proficiencies().get_saving_throw_proficiencies();
+        for (const std::string& proficient_save : proficient_saves) {
+            const IdentifierStatChange& change = implicit_stat_changes.emplace_back(
+                proficient_save, StatChangeTime::NORMAL, StatChangeOperation::ADD, "PB"
+            );
+            stat_changes.push_back(change);
+        }
     });
 
-    tl::expected<Stats, Errors> result = Stats::create_from_base_scores_and_stat_changes(
-        base_ability_scores, stat_changes
-    );
+    tl::expected<Stats, Errors> result = Stats::create(get_proficiency_bonus(), base_ability_scores, stat_changes);
     if (!result.has_value()) {
         return result.error();
     }
