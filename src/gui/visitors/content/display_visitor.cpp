@@ -221,7 +221,7 @@ static void character_progression_list(const dnd::Character& character) {
     ImGui::Text("Armor Class: %d", 10); // TODO: AC
     ImGui::Text("Initiative: %d", 0);   // TODO: Initiative
     ImGui::Text(
-        "Speed: %.2f", character.get_stats().get_float(attributes::SPEED).value_or(0.0f)
+        "Speed: %.1f", character.get_stats().get_float(attributes::SPEED).value_or(0.0f)
     ); // TODO: think about moving part of this to stats
     ImGui::Separator();
     ImGui::Text("Level: %d", level);
