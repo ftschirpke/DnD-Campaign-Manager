@@ -161,19 +161,16 @@ Errors Character::recalculate_stats() {
         }
         std::vector<std::string> proficient_skills = effects.get_proficiencies().get_skill_proficiencies();
         for (const std::string& proficient_skill : proficient_skills) {
-            const IdentifierStatChange& change = implicit_stat_changes.emplace_back(
+            implicit_stat_changes.emplace_back(
                 proficient_skill, StatChangeTime::NORMAL, StatChangeOperation::ADD, "PB"
             );
-            stat_changes.push_back(change);
         }
         std::vector<std::string> proficient_saves = effects.get_proficiencies().get_saving_throw_proficiencies();
         for (const std::string& proficient_save : proficient_saves) {
-            const IdentifierStatChange& change = implicit_stat_changes.emplace_back(
-                proficient_save, StatChangeTime::NORMAL, StatChangeOperation::ADD, "PB"
-            );
-            stat_changes.push_back(change);
+            implicit_stat_changes.emplace_back(proficient_save, StatChangeTime::NORMAL, StatChangeOperation::ADD, "PB");
         }
     });
+    stat_changes.insert(stat_changes.end(), implicit_stat_changes.begin(), implicit_stat_changes.end());
 
     tl::expected<Stats, Errors> result = Stats::create(get_proficiency_bonus(), base_ability_scores, stat_changes);
     if (!result.has_value()) {
