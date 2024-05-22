@@ -14,7 +14,7 @@
 #include <core/models/character/character.hpp>
 #include <core/models/effects/effects.hpp>
 #include <core/models/effects_provider/feature.hpp>
-#include <core/validation/character/decision/decision_validation.hpp>
+#include <core/validation/character/decision_validation.hpp>
 
 namespace dnd {
 
@@ -22,10 +22,8 @@ static void ins(std::set<std::string>& set, std::vector<std::string>&& vec) {
     set.insert(std::make_move_iterator(vec.begin()), std::make_move_iterator(vec.end()));
 }
 
-CreateResult<Decision> Decision::create_for(
-    Data&& data, const Character::Data& character_data, const Content& content
-) {
-    Errors errors = validate_decision_for_character_and_content(data, character_data, content);
+CreateResult<Decision> Decision::create_for(Data&& data, const Content& content) {
+    Errors errors = validate_decision_for_content(data, content);
     if (!errors.ok()) {
         return InvalidCreate<Decision>(std::move(data), std::move(errors));
     }

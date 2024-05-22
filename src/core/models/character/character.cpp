@@ -73,7 +73,7 @@ CreateResult<Character> Character::create_for(Data&& data, const Content& conten
 
     std::vector<Decision> decisions;
     for (Decision::Data& decision_data : data.decisions_data) {
-        CreateResult<Decision> decision_result = Decision::create_for(std::move(decision_data), data, content);
+        CreateResult<Decision> decision_result = Decision::create_for(std::move(decision_data), content);
         if (!decision_result.is_valid()) {
             auto [_, sub_errors] = decision_result.data_and_errors();
             return InvalidCreate<Character>(std::move(data), std::move(sub_errors));

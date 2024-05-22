@@ -9,7 +9,7 @@
 
 #include <core/errors/errors.hpp>
 #include <core/models/character/character.hpp>
-#include <core/models/character/decision/decision.hpp>
+#include <core/models/character/decision.hpp>
 #include <core/parsing/effects_provider/feature_parser.hpp>
 #include <core/parsing/file_parser.hpp>
 
