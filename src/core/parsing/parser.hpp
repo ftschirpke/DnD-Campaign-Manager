@@ -85,8 +85,23 @@ inline const char* type_name<std::map<std::string, std::string>>() {
 }
 
 template <>
+inline const char* type_name<std::array<int, 20>>() {
+    return "length-20 array of integers";
+}
+
+template <>
+inline const char* type_name<std::array<int, 6>>() {
+    return "length-6 array of integers";
+}
+
+template <>
 inline const char* type_name<std::vector<std::string>>() {
     return "array of strings";
+}
+
+template <>
+inline const char* type_name<std::vector<int>>() {
+    return "array of integers";
 }
 
 template <>
