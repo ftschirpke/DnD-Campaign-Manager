@@ -42,6 +42,7 @@ public:
     float get_speed() const;
     int get_armor_class() const;
     int get_initiative() const;
+
     int get_ability_score(Ability ability) const;
     int get_ability_max_score(Ability ability) const;
     int get_ability_modifier(Ability ability) const;
