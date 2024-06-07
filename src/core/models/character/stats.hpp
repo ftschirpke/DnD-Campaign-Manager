@@ -56,7 +56,7 @@ private:
     void calculate_ability_save_modifiers();
     void calculate_skill_modifiers();
 
-    std::unordered_map<std::string, const int> constant_values;
+    /* std::unordered_map<std::string, const int> constant_values; */
     std::unordered_map<std::string, int> mutable_values;
 };
 

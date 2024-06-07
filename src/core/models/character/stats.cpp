@@ -144,10 +144,10 @@ std::optional<float> Stats::get_float(const std::string& name) const {
 }
 
 std::optional<int> Stats::get_raw(const std::string& name) const {
-    const auto const_it = constant_values.find(name);
-    if (const_it != constant_values.end()) {
-        return const_it->second;
-    }
+    /* auto const_it = constant_values.find(name); */
+    /* if (const_it != constant_values.end()) { */
+    /*     return const_it->second; */
+    /* } */
     auto it = mutable_values.find(name);
     if (it != mutable_values.end()) {
         return it->second;
