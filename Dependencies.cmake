@@ -29,18 +29,6 @@ FetchContent_Populate(
 FetchContent_MakeAvailable(nlohmann_json fmt)
 
 # ------------------------------------------------------------------------------
-# CLI LIBRARIES
-
-# cxxopts - command line parsing
-FetchContent_Declare(
-    cxxopts
-    GIT_REPOSITORY https://github.com/jarro2783/cxxopts
-    GIT_TAG eb787304d67ec22f7c3a184ee8b4c481d04357fd # Release v3.1.1
-)
-
-FetchContent_MakeAvailable(cxxopts)
-
-# ------------------------------------------------------------------------------
 # GUI LIBRARIES
 
 # GLFW - OpenGL Windowing Library

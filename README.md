@@ -34,6 +34,5 @@ Please have a look at [this](CONTRIBUTING.md).
    1. Build the CMake target "dndmanager_tests"
    2. Execute the tests using ctest
 3. Running
-   1. Build the Cmake target "dndmanager_gui" for the GUI app, or alternatively the "dndmanager_cli" target for the
-      CLI app.
+   1. Build the Cmake target "dndmanager" for the GUI app 
    2. Run the executable
