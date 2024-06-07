@@ -144,7 +144,7 @@ std::optional<float> Stats::get_float(const std::string& name) const {
 }
 
 std::optional<int> Stats::get_raw(const std::string& name) const {
-    auto const_it = constant_values.find(name);
+    const auto const_it = constant_values.find(name);
     if (const_it != constant_values.end()) {
         return const_it->second;
     }
