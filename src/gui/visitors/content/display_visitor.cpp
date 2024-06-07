@@ -121,8 +121,10 @@ static void character_abilities_and_skills_table(const dnd::Character& character
     small_column = 20.0f;
     if (ImGui::BeginTable("abilities_and_skills_table", 12)) {
         for (const char* ability_cstr : dnd::attributes::ABILITIES) {
-            ImGui::TableSetupColumn(ability_cstr, big_column);
-            ImGui::TableSetupColumn(fmt::format("##{}", ability_cstr).c_str(), small_column);
+            ImGui::TableSetupColumn(ability_cstr, ImGuiTableColumnFlags_WidthFixed, big_column);
+            ImGui::TableSetupColumn(
+                fmt::format("##{}", ability_cstr).c_str(), ImGuiTableColumnFlags_WidthFixed, small_column
+            );
         }
         ImGui::TableNextRow();
         size_t column = 0;
