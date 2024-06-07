@@ -111,14 +111,6 @@ static void list_features(DisplayVisitor& visitor, const std::vector<T>& feature
     ImGui::Separator();
 }
 
-static void modifier_text(int modifier) {
-    if (modifier >= 0) {
-        ImGui::Text("+%d", modifier);
-    } else {
-        ImGui::Text("%d", modifier);
-    }
-}
-
 static void character_abilities_and_skills_table(const dnd::Character& character) {
     DND_UNUSED(character);
     float full_width = ImGui::GetContentRegionAvail().x;
@@ -148,7 +140,7 @@ static void character_abilities_and_skills_table(const dnd::Character& character
             ImGui::TableSetColumnIndex(column++);
             ImGui::Text("%d", character.get_stats().get_ability_score(ability));
             ImGui::TableSetColumnIndex(column++);
-            modifier_text(character.get_stats().get_ability_modifier(ability));
+            ImGui::Text("%+d", character.get_stats().get_ability_modifier(ability));
         }
         ImGui::Spacing();
         ImGui::Spacing();
@@ -159,7 +151,7 @@ static void character_abilities_and_skills_table(const dnd::Character& character
             ImGui::Text("Save");
             ImGui::Separator();
             ImGui::TableSetColumnIndex(column++);
-            modifier_text(character.get_stats().get_ability_save_modifier(ability));
+            ImGui::Text("%+d", character.get_stats().get_ability_save_modifier(ability));
             ImGui::Separator();
         }
         ImGui::Spacing();
@@ -201,7 +193,7 @@ static void character_abilities_and_skills_table(const dnd::Character& character
                     std::pair<const char*, int>& name_value_pair = skill_table[ability_col_num][row];
                     ImGui::Text("%s", name_value_pair.first);
                     ImGui::TableSetColumnIndex(column++);
-                    modifier_text(name_value_pair.second);
+                    ImGui::Text("%+d", name_value_pair.second);
                 } else {
                     ImGui::TableSetColumnIndex(column++);
                 }
@@ -215,15 +207,14 @@ static void character_abilities_and_skills_table(const dnd::Character& character
 
 static void character_progression_list(const dnd::Character& character) {
     DND_UNUSED(character);
-    ImGui::Text("HP: %d/%d", 42, 42); // TODO: current and max HP
-    int level = character.get_progression().get_level();
-    ImGui::Text("Proficiency Bonus: %d", character.get_proficiency_bonus());
-    ImGui::Text("Armor Class: %d", 10); // TODO: AC
-    ImGui::Text("Initiative: %d", 0);   // TODO: Initiative
-    ImGui::Text(
-        "Speed: %.1f", character.get_stats().get_float(attributes::SPEED).value_or(0.0f)
-    ); // TODO: think about moving part of this to stats
+    const Stats& stats = character.get_stats();
+    ImGui::Text("HP: %d/%d", stats.get_current_hp(), stats.get_maximum_hp());
+    ImGui::Text("Proficiency Bonus: %+d", character.get_proficiency_bonus());
+    ImGui::Text("Armor Class: %d", stats.get_armor_class());
+    ImGui::Text("Initiative: %+d", stats.get_initiative());
+    ImGui::Text("Speed: %.1f", stats.get_speed());
     ImGui::Separator();
+    int level = character.get_progression().get_level();
     ImGui::Text("Level: %d", level);
     int xp = character.get_progression().get_xp();
     if (level < 20) {

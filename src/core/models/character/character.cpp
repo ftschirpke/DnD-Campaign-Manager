@@ -198,7 +198,10 @@ Errors Character::recalculate_stats() {
     }
     stat_changes.insert(stat_changes.end(), implicit_stat_changes.begin(), implicit_stat_changes.end());
 
-    tl::expected<Stats, Errors> result = Stats::create(base_ability_scores, get_proficiency_bonus(), stat_changes);
+    tl::expected<Stats, Errors> result = Stats::create(
+        base_ability_scores, get_proficiency_bonus(), stat_changes, feature_providers.get_class().get_hit_dice(),
+        progression.get_hit_dice_rolls()
+    );
     if (!result.has_value()) {
         return result.error();
     }

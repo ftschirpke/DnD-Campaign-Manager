@@ -12,6 +12,7 @@ inline constexpr const char* MAXIMUM_HP = "MAX_HP";
 inline constexpr const char* ARMOR_CLASS = "AC";
 inline constexpr const char* SPEED = "SPEED";
 inline constexpr const char* PROFICIENCY_BONUS = "PB";
+inline constexpr const char* INITIATIVE = "INITIATIVE";
 
 inline constexpr const char* STRENGTH = "STR";
 inline constexpr const char* DEXTERITY = "DEX";

@@ -11,6 +11,7 @@
 #include <tl/expected.hpp>
 
 #include <core/basic_mechanics/abilities.hpp>
+#include <core/basic_mechanics/dice.hpp>
 #include <core/basic_mechanics/skills.hpp>
 #include <core/models/character/ability_scores.hpp>
 #include <core/models/effects/stat_change/stat_change.hpp>
@@ -22,7 +23,8 @@ class Stats {
 public:
     static Stats create_default();
     static tl::expected<Stats, Errors> create(
-        const AbilityScores& base_ability_scores, int proficiency_bonus, std::vector<CRef<StatChange>> stat_changes
+        const AbilityScores& base_ability_scores, int proficiency_bonus, std::vector<CRef<StatChange>> stat_changes,
+        Dice class_hit_dice, const std::vector<int>& hit_dice_rolls
     );
 
     bool is_complete() const;
@@ -35,6 +37,11 @@ public:
     std::optional<Ref<int>> get_raw_mut(const std::string& name);
     Ref<int> get_raw_mut_or_insert(const std::string& name);
 
+    int get_current_hp() const;
+    int get_maximum_hp() const;
+    float get_speed() const;
+    int get_armor_class() const;
+    int get_initiative() const;
     int get_ability_score(Ability ability) const;
     int get_ability_max_score(Ability ability) const;
     int get_ability_modifier(Ability ability) const;

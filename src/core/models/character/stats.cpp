@@ -12,6 +12,7 @@
 
 #include <core/attribute_names.hpp>
 #include <core/basic_mechanics/abilities.hpp>
+#include <core/basic_mechanics/dice.hpp>
 #include <core/basic_mechanics/skills.hpp>
 #include <core/utils/data_result.hpp>
 
@@ -39,7 +40,8 @@ Stats Stats::create_default() {
 }
 
 tl::expected<Stats, Errors> Stats::create(
-    const AbilityScores& base_ability_scores, int proficiency_bonus, std::vector<CRef<StatChange>> stat_changes
+    const AbilityScores& base_ability_scores, int proficiency_bonus, std::vector<CRef<StatChange>> stat_changes,
+    Dice class_hit_dice, const std::vector<int>& hit_dice_rolls
 ) {
     Stats stats;
     Errors errors;
@@ -67,6 +69,18 @@ tl::expected<Stats, Errors> Stats::create(
 
     stats.check_maximum_ability_scores();
     stats.calculate_ability_modifiers();
+
+    const int dex_mod = stats.get_ability_modifier(Ability::DEXTERITY);
+    stats.mutable_values[attributes::INITIATIVE] = to_raw(dex_mod);
+    stats.mutable_values[attributes::ARMOR_CLASS] = to_raw(10 + dex_mod);
+
+    const int con_mod = stats.get_ability_modifier(Ability::CONSTITUTION);
+    int max_hp = class_hit_dice.max_value();
+    for (const int hit_dice_roll : hit_dice_rolls) {
+        max_hp += hit_dice_roll + con_mod;
+    }
+    stats.mutable_values[attributes::MAXIMUM_HP] = to_raw(max_hp);
+
     stats.calculate_ability_save_modifiers();
     stats.calculate_skill_modifiers();
 
@@ -150,6 +164,21 @@ std::optional<Ref<int>> Stats::get_raw_mut(const std::string& name) {
 }
 
 Ref<int> Stats::get_raw_mut_or_insert(const std::string& name) { return mutable_values[name]; }
+
+int Stats::get_current_hp() const {
+    // TODO: implement
+    return get_maximum_hp();
+}
+
+int Stats::get_maximum_hp() const { return get_int(attributes::MAXIMUM_HP).value_or(0); }
+
+float Stats::get_speed() const { return get_float(attributes::SPEED).value_or(0.0f); }
+
+int Stats::get_armor_class() const { return get_int(attributes::ARMOR_CLASS).value_or(10); }
+
+int Stats::get_initiative() const {
+    return get_int(attributes::INITIATIVE).value_or(get_ability_modifier(Ability::DEXTERITY));
+}
 
 int Stats::get_skill_modifier(Skill skill) const {
     const std::optional<SkillInfo> skill_info_opt = get_skill_info(skill);
