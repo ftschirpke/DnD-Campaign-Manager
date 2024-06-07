@@ -12,8 +12,7 @@ project(
     VERSION 0.1.2
 )
 
-set(DND_CLI_APP dndmanager_cli)
-set(DND_GUI_APP dndmanager_gui)
+set(DND_GUI_APP dndmanager)
 set(DND_TESTS dndmanager_tests)
 set(DND_CORE dndmanager_core)
 
@@ -32,7 +31,6 @@ include(Dependencies.cmake)
 
 # Targets
 include(DndCore.cmake)
-include(DndCli.cmake)
 include(DndGui.cmake)
 include(DndTests.cmake)
 

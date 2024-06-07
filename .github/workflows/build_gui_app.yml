@@ -8,7 +8,7 @@ on:
 
 env:
   BUILD_TYPE: Release
-  DND_GUI_APP_TARGET: dndmanager_gui
+  DND_GUI_APP_TARGET: dndmanager
 
 jobs:
   build:
