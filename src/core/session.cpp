@@ -7,6 +7,7 @@
 #include <fstream>
 #include <future>
 #include <string>
+#include <unordered_set>
 
 #include <fmt/format.h>
 #include <nlohmann/json.hpp>
@@ -34,8 +35,8 @@ namespace dnd {
 Session::Session(const char* last_session_filename)
     : last_session_filename(last_session_filename), status(SessionStatus::CONTENT_DIR_SELECTION), content_directory(),
       campaign_name(), parsing_future(), errors(), content(), last_session_open_tabs(), open_content_pieces(),
-      selected_content_piece(), fuzzy_search(), fuzzy_search_results(), fuzzy_search_result_count(0),
-      fuzzy_search_result_strings(), advanced_search(content), unknown_error_messages() {}
+      selected_content_piece(), fuzzy_search(), fuzzy_search_results(max_search_results), fuzzy_search_result_count(0),
+      fuzzy_search_result_strings(max_search_results), advanced_search(content), unknown_error_messages() {}
 
 Session::~Session() { save_session_values(); }
 
@@ -263,16 +264,17 @@ private:
 void Session::set_fuzzy_search(const std::string& search_query, const std::array<bool, 9>& search_options) {
     DND_MEASURE_FUNCTION();
     fuzzy_search->set_search_query(search_query);
-    std::vector<const ContentPiece*> vec_search_results = fuzzy_search->get_results(search_options);
-    fuzzy_search_result_count = vec_search_results.size();
+    std::unordered_set<const ContentPiece*> set_search_results = fuzzy_search->get_results(search_options);
+    fuzzy_search_result_count = set_search_results.size();
     if (fuzzy_search_result_count > max_search_results) {
         return;
     }
     ContentPieceComparator comparator(search_query);
-    std::sort(vec_search_results.begin(), vec_search_results.end(), comparator);
-    for (size_t i = 0; i < fuzzy_search_result_count; ++i) {
-        fuzzy_search_results[i] = vec_search_results[i];
-    }
+    fuzzy_search_results.insert(fuzzy_search_results.begin(), set_search_results.begin(), set_search_results.end());
+    std::sort(
+        fuzzy_search_results.begin(),
+        std::vector<const ContentPiece*>::iterator(&fuzzy_search_results[fuzzy_search_result_count]), comparator
+    );
 }
 
 void Session::open_fuzzy_search_result(size_t index) {

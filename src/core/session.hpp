@@ -94,9 +94,9 @@ private:
     const ContentPiece* selected_content_piece;
 
     std::unique_ptr<FuzzyContentSearch> fuzzy_search;
-    std::array<const ContentPiece*, 500> fuzzy_search_results;
+    std::vector<const ContentPiece*> fuzzy_search_results;
     size_t fuzzy_search_result_count;
-    std::array<std::string, 500> fuzzy_search_result_strings;
+    std::vector<std::string> fuzzy_search_result_strings;
 
     AdvancedContentSearch advanced_search;
 

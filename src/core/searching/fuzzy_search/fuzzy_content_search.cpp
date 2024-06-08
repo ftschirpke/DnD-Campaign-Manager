@@ -2,12 +2,10 @@
 
 #include "fuzzy_content_search.hpp"
 
-#include <algorithm>
 #include <array>
 #include <cassert>
-#include <stack>
 #include <string>
-#include <unordered_map>
+#include <unordered_set>
 
 #include <core/content.hpp>
 #include <core/models/character/character.hpp>
@@ -121,10 +119,9 @@ void FuzzyContentSearch::remove_character_from_query() {
     assert(choosable_search_path.size() >= 1);
 }
 
-std::vector<const ContentPiece*> FuzzyContentSearch::get_results(const std::array<bool, 9>& options) const {
+std::unordered_set<const ContentPiece*> FuzzyContentSearch::get_results(const std::array<bool, 9>& options) const {
     DND_MEASURE_FUNCTION();
-    std::vector<const ContentPiece*> results;
-    results.reserve(500);
+    std::unordered_set<const ContentPiece*> results;
 
     if (options[0]) {
         character_search_path.insert_top_successors_into(results);
