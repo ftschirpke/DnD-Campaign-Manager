@@ -5,6 +5,7 @@
 
 #include <array>
 #include <string>
+#include <unordered_set>
 
 #include <core/content.hpp>
 #include <core/models/character/character.hpp>
@@ -35,7 +36,7 @@ public:
     void add_character_to_query(char c);
     void remove_character_from_query();
 
-    std::vector<const ContentPiece*> get_results(const std::array<bool, 9>& options) const;
+    std::unordered_set<const ContentPiece*> get_results(const std::array<bool, 9>& options) const;
 private:
     std::vector<char> query;
     FuzzySearchPath<Character> character_search_path;

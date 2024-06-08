@@ -4,7 +4,7 @@
 #include <dnd_config.hpp>
 
 #include <stack>
-#include <vector>
+#include <unordered_set>
 
 #include <core/searching/fuzzy_search/trie_node.hpp>
 
@@ -26,7 +26,7 @@ public:
      */
     template <typename S>
     requires std::derived_from<T, S>
-    bool insert_top_successors_into(std::vector<S*>& vec) const;
+    bool insert_top_successors_into(std::unordered_set<S*>& set) const;
 };
 
 
@@ -44,7 +44,7 @@ void FuzzySearchPath<T>::push_top_child(char c) {
 template <typename T>
 template <typename S>
 requires std::derived_from<T, S>
-bool FuzzySearchPath<T>::insert_top_successors_into(std::vector<S*>& vec) const {
+bool FuzzySearchPath<T>::insert_top_successors_into(std::unordered_set<S*>& set) const {
     if (this->top() == nullptr) {
         return false;
     }
@@ -52,7 +52,7 @@ bool FuzzySearchPath<T>::insert_top_successors_into(std::vector<S*>& vec) const 
     if (successors.empty()) {
         return false;
     }
-    vec.insert(vec.end(), successors.begin(), successors.end());
+    set.insert(successors.begin(), successors.end());
     return true;
 }
 
