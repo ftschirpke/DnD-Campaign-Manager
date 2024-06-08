@@ -126,10 +126,6 @@ void AdvancedSearchWindow::render() {
     if (session.advanced_search_results_available()) {
         result_list = session.get_advanced_search_result_strings();
     }
-    ImGui::SameLine();
-    if (ImGui::Button("Clear Results", ImVec2(first_column_button_width, 0))) {
-        result_list.clear();
-    }
     ImGui::Spacing();
     ImGui::Separator();
 
