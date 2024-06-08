@@ -9,6 +9,7 @@
 
 #include <imgui/imgui.h>
 
+#include <core/searching/advanced_search/advanced_content_search.hpp>
 #include <core/searching/content_filters/character/character_filter.hpp>
 #include <core/searching/content_filters/class/class_filter.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
@@ -37,7 +38,7 @@ static constexpr std::array<const char*, 10> content_filter_names = {
     "Any", "Characters", "Classes", "Subclasses", "Species", "Subspecies", "Items", "Spells", "Features", "Choosables",
 };
 
-static ContentPieceFilter get_filter_from_filter_index(size_t idx) {
+static ContentFilterVariant get_filter_from_filter_index(size_t idx) {
     switch (idx) {
         case 0:
             return ContentPieceFilter();
@@ -101,6 +102,7 @@ void AdvancedSearchWindow::render() {
     }
     if (swap_to_idx != content_filter_names.size()) {
         filter = get_filter_from_filter_index(swap_to_idx);
+        session.set_advanced_search_filter(std::move(filter));
     }
 
     std::visit(filter_setting_visitor, filter);
@@ -123,10 +125,6 @@ void AdvancedSearchWindow::render() {
     }
     if (session.advanced_search_results_available()) {
         result_list = session.get_advanced_search_result_strings();
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Clear Results", ImVec2(first_column_button_width, 0))) {
-        result_list.clear();
     }
     ImGui::Spacing();
     ImGui::Separator();
