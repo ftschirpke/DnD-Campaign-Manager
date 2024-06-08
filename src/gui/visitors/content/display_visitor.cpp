@@ -188,7 +188,7 @@ static void character_abilities_and_skills_table(const dnd::Character& character
         }
 
         for (size_t row = 0; row < 5; ++row) {
-            int column = 0;
+            column = 0;
             for (size_t ability_col_num = 0; ability_col_num < 6; ++ability_col_num) {
                 ImGui::TableSetColumnIndex(column++);
                 if (row < skill_table[ability_col_num].size()) {
