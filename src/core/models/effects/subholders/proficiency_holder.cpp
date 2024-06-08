@@ -28,8 +28,8 @@ CreateResult<ProficiencyHolder> ProficiencyHolder::create_for(Data&& data, const
     }
     return ValidCreate(ProficiencyHolder(
         set_to_vector(std::move(data.armor)), set_to_vector(std::move(data.weapons)),
-        set_to_vector(std::move(data.tools)), set_to_vector(std::move(data.saving_throws)),
-        set_to_vector(std::move(data.skills)), set_to_vector(std::move(data.languages)),
+        set_to_vector(std::move(data.tools)), set_to_vector(std::move(data.skills)),
+        set_to_vector(std::move(data.saving_throws)), set_to_vector(std::move(data.languages)),
         set_to_vector(std::move(data.senses))
     ));
 }

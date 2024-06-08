@@ -8,7 +8,7 @@ namespace dnd::test {
 
 static constexpr const char* tags = "[core][basic_mechanics][character][progression]";
 
-TEST_CASE("level_to_xp", tags) {
+TEST_CASE("xp_for_level", tags) {
     SECTION("Valid character levels") {
         REQUIRE(xp_for_level(1).value() == 0);
         REQUIRE(xp_for_level(2).value() == 300);
@@ -40,7 +40,7 @@ TEST_CASE("level_to_xp", tags) {
     }
 }
 
-TEST_CASE("xp_to_level", tags) {
+TEST_CASE("level_for_xp", tags) {
     SECTION("Valid xp amounts - level 1") {
         REQUIRE(level_for_xp(0).value() == 1);
         REQUIRE(level_for_xp(60).value() == 1);

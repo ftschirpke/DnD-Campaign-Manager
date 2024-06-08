@@ -13,6 +13,7 @@
 #include <fmt/format.h>
 #include <tl/expected.hpp>
 
+#include <core/attribute_names.hpp>
 #include <core/basic_mechanics/abilities.hpp>
 #include <core/basic_mechanics/magic_schools.hpp>
 #include <core/basic_mechanics/skills.hpp>
@@ -165,13 +166,13 @@ std::set<std::string> Choice::possible_values(const Content& content) const {
     std::set<std::string> possible_values;
     switch (type) { // TODO: implement correct filters
         case ChoiceType::ABILITY:
-            for (const char* ability : ability_cstrings_inorder) {
+            for (const char* ability : attributes::ABILITIES) {
                 possible_values.emplace(ability);
             }
             return possible_values;
         case ChoiceType::SKILL:
-            for (const std::string& skill : get_all_skills()) {
-                possible_values.emplace(skill);
+            for (const SkillInfo& skill_info : get_all_skill_infos()) {
+                possible_values.emplace(skill_info.config_name);
             };
             return possible_values;
         case ChoiceType::STRING:

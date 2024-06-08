@@ -2,73 +2,80 @@
 
 #include "skills.hpp"
 
-#include <algorithm>
 #include <array>
-#include <map>
-#include <string>
 #include <string_view>
-#include <utility>
-#include <vector>
 
-#include <core/utils/char_manipulation.hpp>
+#include <core/attribute_names.hpp>
+#include <core/basic_mechanics/abilities.hpp>
 
 namespace dnd {
 
-static constexpr std::array<std::pair<std::string_view, std::string_view>, 18> skill_abilities = {
-    std::pair("ACROBATICS", "DEX"),      std::pair("ANIMAL_HANDLING", "WIS"), std::pair("ARCANA", "INT"),
-    std::pair("ATHLETICS", "STR"),       std::pair("DECEPTION", "CHA"),       std::pair("HISTORY", "INT"),
-    std::pair("INSIGHT", "WIS"),         std::pair("INTIMIDATION", "CHA"),    std::pair("INVESTIGATION", "INT"),
-    std::pair("MEDICINE", "WIS"),        std::pair("NATURE", "INT"),          std::pair("PERCEPTION", "WIS"),
-    std::pair("PERFORMANCE", "CHA"),     std::pair("PERSUASION", "CHA"),      std::pair("RELIGION", "INT"),
-    std::pair("SLEIGHT_OF_HAND", "DEX"), std::pair("STEALTH", "DEX"),         std::pair("SURVIVAL", "WIS"),
+static constexpr std::array<const SkillInfo, 18> skill_infos = {
+    SkillInfo{Skill::ACROBATICS, Ability::DEXTERITY, attributes::ACROBATICS, "Acrobatics", "acrobatics"},
+    SkillInfo{
+        Skill::ANIMAL_HANDLING, Ability::WISDOM, attributes::ANIMAL_HANDLING, "Animal Handling", "animal handling"
+    },
+    SkillInfo{Skill::ARCANA, Ability::INTELLIGENCE, attributes::ARCANA, "Arcana", "arcana"},
+    SkillInfo{Skill::ATHLETICS, Ability::STRENGTH, attributes::ATHLETICS, "Athletics", "athletics"},
+    SkillInfo{Skill::DECEPTION, Ability::CHARISMA, attributes::DECEPTION, "Deception", "deception"},
+    SkillInfo{Skill::HISTORY, Ability::INTELLIGENCE, attributes::HISTORY, "History", "history"},
+    SkillInfo{Skill::INSIGHT, Ability::WISDOM, attributes::INSIGHT, "Insight", "insight"},
+    SkillInfo{Skill::INTIMIDATION, Ability::CHARISMA, attributes::INTIMIDATION, "Intimidation", "intimidation"},
+    SkillInfo{Skill::INVESTIGATION, Ability::INTELLIGENCE, attributes::INVESTIGATION, "Investigation", "investigation"},
+    SkillInfo{Skill::MEDICINE, Ability::WISDOM, attributes::MEDICINE, "Medicine", "medicine"},
+    SkillInfo{Skill::NATURE, Ability::INTELLIGENCE, attributes::NATURE, "Nature", "nature"},
+    SkillInfo{Skill::PERCEPTION, Ability::WISDOM, attributes::PERCEPTION, "Perception", "perception"},
+    SkillInfo{Skill::PERFORMANCE, Ability::CHARISMA, attributes::PERFORMANCE, "Performance", "performance"},
+    SkillInfo{Skill::PERSUASION, Ability::CHARISMA, attributes::PERSUASION, "Persuasion", "persuasion"},
+    SkillInfo{Skill::RELIGION, Ability::INTELLIGENCE, attributes::RELIGION, "Religion", "religion"},
+    SkillInfo{
+        Skill::SLEIGHT_OF_HAND, Ability::DEXTERITY, attributes::SLEIGHT_OF_HAND, "Sleight of Hand", "sleight of hand"
+    },
+    SkillInfo{Skill::STEALTH, Ability::DEXTERITY, attributes::STEALTH, "Stealth", "stealth"},
+    SkillInfo{Skill::SURVIVAL, Ability::WISDOM, attributes::SURVIVAL, "Survival", "survival"},
 };
 
-bool is_skill(const std::string& skill) {
-    for (const auto& skill_ability_pair : skill_abilities) {
-        std::string_view skill_to_check = skill_ability_pair.first;
-        if (skill.size() != skill_to_check.size()) {
-            continue;
-        }
-        bool equal = true;
-        size_t i = 0;
-        while (equal && i < skill.size()) {
-            if (skill[i] == ' ') {
-                if (skill_to_check[i] != '_' && skill_to_check[i] != ' ') {
-                    equal = false;
-                }
-            } else if (char_to_uppercase(skill[i]) != skill_to_check[i]) {
-                equal = false;
-            }
-            ++i;
-        }
-        if (equal && i == skill.size()) {
-            return true;
-        }
-    }
-    return false;
+bool is_skill(std::string_view skill) {
+    return skill_from_config_name(skill).has_value() || skill_from_display_name(skill).has_value()
+           || skill_from_stat_name(skill).has_value();
 }
 
-std::vector<std::string> get_all_skills() {
-    std::vector<std::string> skills;
-    skills.reserve(skill_abilities.size());
-    for (const auto& [skill_name, _] : skill_abilities) {
-        std::string& skill_str = skills.emplace_back(skill_name);
-        std::transform(skill_str.begin(), skill_str.end(), skill_str.begin(), [](char c) {
-            if (c == '_') {
-                return ' ';
-            }
-            return char_to_lowercase(c);
-        });
+std::optional<SkillInfo> get_skill_info(Skill skill) {
+    for (const SkillInfo& skill_info : skill_infos) {
+        if (skill_info.skill == skill) {
+            return skill_info;
+        }
     }
-    return skills;
+    return std::nullopt;
 }
 
-std::map<std::string, std::string> get_abilities_for_all_skills() {
-    std::map<std::string, std::string> skill_ability_map;
-    for (const auto& skill_ability_pair : skill_abilities) {
-        skill_ability_map.emplace(skill_ability_pair);
+const std::array<const SkillInfo, 18>& get_all_skill_infos() { return skill_infos; }
+
+std::optional<Skill> skill_from_config_name(std::string_view config_name) {
+    for (const SkillInfo& skill_info : skill_infos) {
+        if (skill_info.config_name == config_name) {
+            return skill_info.skill;
+        }
     }
-    return skill_ability_map;
+    return std::nullopt;
+}
+
+std::optional<Skill> skill_from_display_name(std::string_view display_name) {
+    for (const SkillInfo& skill_info : skill_infos) {
+        if (skill_info.display_name == display_name) {
+            return skill_info.skill;
+        }
+    }
+    return std::nullopt;
+}
+
+std::optional<Skill> skill_from_stat_name(std::string_view stat_name) {
+    for (const SkillInfo& skill_info : skill_infos) {
+        if (skill_info.stat_name == stat_name) {
+            return skill_info.skill;
+        }
+    }
+    return std::nullopt;
 }
 
 } // namespace dnd

@@ -24,6 +24,11 @@
 #include <core/visitors/content/collect_open_tabs_visitor.hpp>
 #include <core/visitors/content/list_content_visitor.hpp>
 
+static const char* OPEN_TABS = "open_tabs";
+static const char* CONTENT_DIRECTORY = "content_directory";
+static const char* CAMPAIGN_NAME = "campaign_name";
+static const char* GENERAL_DIR_NAME = "general";
+
 namespace dnd {
 
 Session::Session(const char* last_session_filename)
@@ -68,7 +73,7 @@ std::vector<std::string> Session::get_possible_campaign_names() const {
     }
     std::vector<std::string> campaign_names;
     for (const auto& entry : std::filesystem::directory_iterator(content_directory)) {
-        if (!entry.is_directory() || entry.path().filename() == "general") {
+        if (!entry.is_directory() || entry.path().filename() == GENERAL_DIR_NAME) {
             continue;
         }
         campaign_names.push_back(entry.path().filename().string());
@@ -112,29 +117,29 @@ void Session::retrieve_last_session_values() {
     last_session_file >> last_session;
     last_session_file.close();
 
-    if (!last_session.contains("content_directory")) {
+    if (!last_session.contains(CONTENT_DIRECTORY)) {
         return;
     }
-    set_content_directory(last_session["content_directory"].get<std::filesystem::path>());
-    if (last_session.contains("campaign_name")) {
-        set_campaign_name(last_session["campaign_name"].get<std::string>());
+    set_content_directory(last_session[CONTENT_DIRECTORY].get<std::filesystem::path>());
+    if (last_session.contains(CAMPAIGN_NAME)) {
+        set_campaign_name(last_session[CAMPAIGN_NAME].get<std::string>());
     }
 
-    if (!last_session.contains("open_tabs")) {
+    if (!last_session.contains(OPEN_TABS)) {
         return;
     }
-    if (!last_session["open_tabs"].is_object()) {
+    if (!last_session[OPEN_TABS].is_object()) {
         return;
     }
-    last_session_open_tabs = last_session["open_tabs"].get<std::unordered_map<std::string, std::vector<std::string>>>();
+    last_session_open_tabs = last_session[OPEN_TABS].get<std::unordered_map<std::string, std::vector<std::string>>>();
 }
 
 void Session::save_session_values() {
     nlohmann::json last_session;
     if (!content_directory.empty()) {
-        last_session["content_directory"] = content_directory.string();
+        last_session[CONTENT_DIRECTORY] = content_directory.string();
         if (!campaign_name.empty()) {
-            last_session["campaign_name"] = campaign_name;
+            last_session[CAMPAIGN_NAME] = campaign_name;
         }
     }
 
@@ -142,7 +147,7 @@ void Session::save_session_values() {
     for (const ContentPiece* open_content_piece : open_content_pieces) {
         open_content_piece->accept_visitor(collect_open_tabs_visitor);
     }
-    last_session["open_tabs"] = collect_open_tabs_visitor.get_open_tabs();
+    last_session[OPEN_TABS] = collect_open_tabs_visitor.get_open_tabs();
 
     std::ofstream last_session_file(last_session_filename);
     last_session_file << std::setw(4) << last_session;
@@ -179,14 +184,18 @@ static Errors validate_content_directory(const std::filesystem::path& content_di
         errors.add_runtime_error(RuntimeError::Code::INVALID_ARGUMENT, "The content directory does not exist.");
     } else if (!std::filesystem::is_directory(content_directory)) {
         errors.add_runtime_error(RuntimeError::Code::INVALID_ARGUMENT, "The content directory is not a directory.");
-    } else if (!std::filesystem::exists(content_directory / "general")) {
-        errors.add_runtime_error(
-            RuntimeError::Code::INVALID_ARGUMENT, "The content directory does not contain a \"general\" directory."
-        );
-    } else if (!std::filesystem::is_directory(content_directory / "general")) {
+    } else if (!std::filesystem::exists(content_directory / GENERAL_DIR_NAME)) {
         errors.add_runtime_error(
             RuntimeError::Code::INVALID_ARGUMENT,
-            "The content directory does not contain a \"general\" directory, but a file with the same name."
+            fmt::format("The content directory does not contain a \"{}\" directory.", GENERAL_DIR_NAME)
+        );
+    } else if (!std::filesystem::is_directory(content_directory / GENERAL_DIR_NAME)) {
+        errors.add_runtime_error(
+            RuntimeError::Code::INVALID_ARGUMENT,
+            fmt::format(
+                "The content directory does not contain a \"{}\" directory, but a file with the same name.",
+                GENERAL_DIR_NAME
+            )
         );
     }
     return errors;
@@ -306,6 +315,7 @@ bool Session::parsing_result_available() {
         try {
             parsing_future.get();
             status = SessionStatus::READY;
+            open_last_session();
         } catch (const std::exception& e) {
             unknown_error_messages.push_back(e.what());
             status = SessionStatus::UNKNOWN_ERROR;
@@ -350,19 +360,19 @@ void Session::parse_content_and_initialize() {
 }
 
 void Session::open_last_session() {
-    for (const std::string& character_to_open : last_session_open_tabs["characters"]) {
+    for (const std::string& character_to_open : last_session_open_tabs["character"]) {
         OptCRef<Character> character = content.get_characters().get(character_to_open);
         if (character.has_value()) {
             open_content_pieces.push_back(&character.value().get());
         }
     }
-    for (const std::string& class_to_open : last_session_open_tabs["classes"]) {
+    for (const std::string& class_to_open : last_session_open_tabs["class"]) {
         OptCRef<Class> cls = content.get_classes().get(class_to_open);
         if (cls.has_value()) {
             open_content_pieces.push_back(&cls.value().get());
         }
     }
-    for (const std::string& subclass_to_open : last_session_open_tabs["subclasses"]) {
+    for (const std::string& subclass_to_open : last_session_open_tabs["subclass"]) {
         OptCRef<Subclass> subclass = content.get_subclasses().get(subclass_to_open);
         if (subclass.has_value()) {
             open_content_pieces.push_back(&subclass.value().get());
@@ -380,31 +390,31 @@ void Session::open_last_session() {
             open_content_pieces.push_back(&subspecies.value().get());
         }
     }
-    for (const std::string& item_to_open : last_session_open_tabs["items"]) {
+    for (const std::string& item_to_open : last_session_open_tabs["item"]) {
         OptCRef<Item> item = content.get_items().get(item_to_open);
         if (item.has_value()) {
             open_content_pieces.push_back(&item.value().get());
         }
     }
-    for (const std::string& spell_to_open : last_session_open_tabs["spells"]) {
+    for (const std::string& spell_to_open : last_session_open_tabs["spell"]) {
         OptCRef<Spell> spell = content.get_spells().get(spell_to_open);
         if (spell.has_value()) {
             open_content_pieces.push_back(&spell.value().get());
         }
     }
-    for (const std::string& feature_to_open : last_session_open_tabs["features"]) {
+    for (const std::string& feature_to_open : last_session_open_tabs["feature"]) {
         OptCRef<Feature> feature = content.get_features().get(feature_to_open);
         if (feature.has_value()) {
             open_content_pieces.push_back(&feature.value().get());
         }
     }
-    for (const std::string& class_feature_to_open : last_session_open_tabs["class_features"]) {
+    for (const std::string& class_feature_to_open : last_session_open_tabs["class_feature"]) {
         OptCRef<ClassFeature> class_feature = content.get_class_features().get(class_feature_to_open);
         if (class_feature.has_value()) {
             open_content_pieces.push_back(&class_feature.value().get());
         }
     }
-    for (const std::string& choosable_to_open : last_session_open_tabs["choosables"]) {
+    for (const std::string& choosable_to_open : last_session_open_tabs["choosable"]) {
         OptCRef<Choosable> choosable = content.get_choosables().get(choosable_to_open);
         if (choosable.has_value()) {
             open_content_pieces.push_back(&choosable.value().get());

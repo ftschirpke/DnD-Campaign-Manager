@@ -301,7 +301,7 @@ Below, I listed the hard-coded attributes that will always be there, but
 [you can also use and create your own](#custom-attributes).
 ```
 // mutable attributes:
-MAX_HP, AC, SPEED,
+MAX_HP, AC, SPEED, PB, INITIATIVE
 STR,      DEX,      CON,      INT,      WIS,      CHA,
 STR_MAX,  DEX_MAX,  CON_MAX,  INT_MAX,  WIS_MAX,  CHA_MAX,
 STR_MOD,  DEX_MOD,  CON_MOD,  INT_MOD,  WIS_MOD,  CHA_MOD,
