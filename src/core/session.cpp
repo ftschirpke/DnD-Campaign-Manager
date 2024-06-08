@@ -6,6 +6,7 @@
 #include <filesystem>
 #include <fstream>
 #include <future>
+#include <span>
 #include <string>
 #include <unordered_set>
 
@@ -271,10 +272,8 @@ void Session::set_fuzzy_search(const std::string& search_query, const std::array
     }
     ContentPieceComparator comparator(search_query);
     fuzzy_search_results.insert(fuzzy_search_results.begin(), set_search_results.begin(), set_search_results.end());
-    std::sort(
-        fuzzy_search_results.begin(),
-        std::vector<const ContentPiece*>::iterator(&fuzzy_search_results[fuzzy_search_result_count]), comparator
-    );
+    std::span<const ContentPiece*> results_span(fuzzy_search_results.begin(), fuzzy_search_result_count);
+    std::sort(results_span.begin(), results_span.end(), comparator);
 }
 
 void Session::open_fuzzy_search_result(size_t index) {
