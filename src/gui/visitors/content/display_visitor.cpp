@@ -127,7 +127,7 @@ static void character_abilities_and_skills_table(const dnd::Character& character
             );
         }
         ImGui::TableNextRow();
-        size_t column = 0;
+        int column = 0;
         for (const char* ability_cstr : dnd::attributes::ABILITIES) {
             ImGui::TableSetColumnIndex(column++);
             ImGui::Text("%s", ability_cstr);
@@ -188,7 +188,7 @@ static void character_abilities_and_skills_table(const dnd::Character& character
         }
 
         for (size_t row = 0; row < 5; ++row) {
-            size_t column = 0;
+            int column = 0;
             for (size_t ability_col_num = 0; ability_col_num < 6; ++ability_col_num) {
                 ImGui::TableSetColumnIndex(column++);
                 if (row < skill_table[ability_col_num].size()) {
