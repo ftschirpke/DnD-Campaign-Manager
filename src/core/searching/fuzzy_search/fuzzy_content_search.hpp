@@ -3,9 +3,9 @@
 
 #include <dnd_config.hpp>
 
-#include <array>
+#include <compare>
 #include <string>
-#include <unordered_set>
+#include <vector>
 
 #include <core/content.hpp>
 #include <core/models/character/character.hpp>
@@ -20,8 +20,35 @@
 #include <core/models/subspecies/subspecies.hpp>
 #include <core/searching/fuzzy_search/fuzzy_search_path.hpp>
 #include <core/searching/fuzzy_search/trie.hpp>
+#include <core/searching/search_result.hpp>
 
 namespace dnd {
+
+struct FuzzySearchOptions {
+    bool search_characters;
+    bool search_classes;
+    bool search_subclasses;
+    bool search_species;
+    bool search_subspecies;
+    bool search_items;
+    bool search_spells;
+    bool search_features;
+    bool search_choosables;
+
+    std::strong_ordering operator<=>(const FuzzySearchOptions&) const = default;
+
+    void set_all(bool value) {
+        search_characters = value;
+        search_classes = value;
+        search_subclasses = value;
+        search_species = value;
+        search_subspecies = value;
+        search_items = value;
+        search_spells = value;
+        search_features = value;
+        search_choosables = value;
+    }
+};
 
 /**
  * @brief A class representing a content search query
@@ -36,8 +63,10 @@ public:
     void add_character_to_query(char c);
     void remove_character_from_query();
 
-    std::unordered_set<const ContentPiece*> get_results(const std::array<bool, 9>& options) const;
+    std::vector<SearchResult> get_results(const FuzzySearchOptions& options) const;
 private:
+    const Content& content;
+    std::string search_query;
     std::vector<char> query;
     FuzzySearchPath<Character> character_search_path;
     FuzzySearchPath<Class> class_search_path;

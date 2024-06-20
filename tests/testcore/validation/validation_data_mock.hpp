@@ -4,7 +4,6 @@
 #include <dnd_config.hpp>
 
 #include <compare>
-#include <memory>
 
 #include <core/validation/validation_data.hpp>
 
