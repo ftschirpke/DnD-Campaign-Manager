@@ -107,6 +107,10 @@ void FuzzySearchWindow::render() {
     if (search_query.empty()) {
         ImGui::End();
         return;
+    } else if (search_query.size() < 3) {
+        ImGui::Text("Please enter more characters to specify the search.");
+        ImGui::End();
+        return;
     }
     size_t search_result_count = session.get_fuzzy_search_result_count();
     if (search_result_count == 0) {

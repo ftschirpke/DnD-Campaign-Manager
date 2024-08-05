@@ -97,8 +97,7 @@ std::vector<SearchResult> FuzzyContentSearch::get_results(const FuzzySearchOptio
     DND_MEASURE_FUNCTION();
     std::vector<SearchResult> results;
 
-    int64_t min_match_score = static_cast<int64_t>(search_query.size());
-    min_match_score = 0;
+    int64_t min_match_score = 0;
 
     if (options.search_characters) {
         for (const auto& [character_name, character] : content.get_characters().get_all()) {

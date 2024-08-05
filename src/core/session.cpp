@@ -225,6 +225,10 @@ Errors Session::set_content_directory(const std::filesystem::path& new_content_d
 void Session::set_fuzzy_search(const std::string& search_query, const FuzzySearchOptions& search_options) {
     DND_MEASURE_FUNCTION();
     fuzzy_search->set_search_query(search_query);
+    if (search_query.size() < 3) {
+        fuzzy_search_results.clear();
+        return;
+    }
     fuzzy_search_results = fuzzy_search->get_results(search_options);
     std::sort(
         fuzzy_search_results.begin(), fuzzy_search_results.end(),

@@ -2,12 +2,15 @@
 
 #include "fuzzy_string_search.hpp"
 
+#include <array>
 #include <cassert>
+#include <cctype>
 #include <string>
 #include <vector>
 
 #include <iostream>
 
+#include <core/utils/char_manipulation.hpp>
 #include <core/utils/string_manipulation.hpp>
 
 struct LocalMaximum {
@@ -23,7 +26,7 @@ static constexpr int64_t gap_penalty = 0;
 
 // implementation of fuzzy string matching using the Smith-Waterman algorithm
 // see https://en.wikipedia.org/wiki/Smith%E2%80%93Waterman_algorithm for details
-int64_t fuzzy_match_string(const std::string& search_query, const std::string& string_to_match) {
+int64_t fuzzy_match_string_old(const std::string& search_query, const std::string& string_to_match) {
     std::string query = string_lowercase_copy(search_query);
     std::string target = string_lowercase_copy(string_to_match);
 
@@ -103,6 +106,262 @@ int64_t fuzzy_match_string(const std::string& search_query, const std::string& s
 
     std::cout << query << " in " << target << " = " << max_score << '\n';
 
+    return max_score;
+}
+
+enum class CharacterType {
+    LOWER_CHAR,
+    UPPER_CHAR,
+    DIGIT,
+    WHITESPACE,
+    DELIMITER,
+    NON_WORD,
+};
+
+constexpr std::array<char, 5> delimiter_chars = {'-', '(', ')', ':', ','};
+
+constexpr int16_t SCORE_MATCH = 16;
+constexpr int16_t BONUS_BOUNDARY = 8;
+constexpr int16_t BONUS_BOUNDARY_WHITESPACE = 10;
+constexpr int16_t BONUS_BOUNDARY_DELIMITER = 9;
+constexpr int16_t BONUS_NON_WORD = 8;
+constexpr int16_t BONUS_CAMEL_CASE = 7;
+constexpr int16_t BONUS_CONSECUTIVE = 8;
+constexpr int16_t SCORE_GAP_START = -3;
+constexpr int16_t SCORE_GAP_EXTENSION = -1;
+
+static CharacterType char_type(char c) {
+    if (std::isalpha(c)) {
+        if (std::isupper(c)) {
+            return CharacterType::UPPER_CHAR;
+        } else {
+            return CharacterType::LOWER_CHAR;
+        }
+    } else if (std::isdigit(c)) {
+        return CharacterType::DIGIT;
+    } else if (c == '\'') {
+        return CharacterType::LOWER_CHAR; // treat apostrophe as normal character (as it is often used in D&D words)
+    } else if (std::isspace(c)) {
+        return CharacterType::WHITESPACE;
+    } else if (std::find(delimiter_chars.cbegin(), delimiter_chars.cend(), c) != delimiter_chars.cend()) {
+        return CharacterType::DELIMITER;
+    } else {
+        return CharacterType::NON_WORD;
+    }
+}
+
+int16_t bonus_for_types(CharacterType previous_type, CharacterType type) {
+    if (type != CharacterType::NON_WORD) {
+        switch (previous_type) {
+            case CharacterType::WHITESPACE:
+                return BONUS_BOUNDARY_WHITESPACE;
+            case CharacterType::DELIMITER:
+                return BONUS_BOUNDARY_DELIMITER;
+            case CharacterType::NON_WORD:
+                return BONUS_NON_WORD;
+            default:
+                break;
+        }
+    }
+
+    if ((previous_type == CharacterType::LOWER_CHAR && type == CharacterType::UPPER_CHAR)
+        || (previous_type != CharacterType::DIGIT && type == CharacterType::DIGIT)) {
+        return BONUS_CAMEL_CASE;
+    }
+
+    switch (type) {
+        case CharacterType::NON_WORD:
+            [[fallthrough]];
+        case CharacterType::DELIMITER:
+            return BONUS_NON_WORD;
+        case CharacterType::WHITESPACE:
+            return BONUS_BOUNDARY_WHITESPACE;
+        default:
+            return 0;
+    }
+}
+
+// fuzzy search implementation heavily inspired by fzf's algorithm
+// see https://github.com/junegunn/fzf/blob/db01e7dab65423cd1d14e15f5b15dfaabe760283/src/algo/algo.go#L432
+int64_t fuzzy_match_string(const std::string& search_query, const std::string& string_to_match) {
+    if (search_query.empty()) {
+        return 0;
+    }
+    size_t query_len = search_query.size();
+    size_t string_len = string_to_match.size();
+    if (query_len > string_len) {
+        return 0;
+    }
+
+    size_t min_idx = 0;
+    for (char c : string_to_match) {
+        if (char_to_lowercase(c) == char_to_lowercase(search_query[0])) {
+            break;
+        }
+        min_idx++;
+    }
+    if (min_idx == string_len) {
+        return 0;
+    }
+
+    size_t max_idx = string_len;
+    for (char c : string_to_match) {
+        if (char_to_lowercase(c) == char_to_lowercase(search_query[query_len - 1])) {
+            break;
+        }
+        max_idx--;
+    }
+    if (min_idx >= max_idx) {
+        return 0;
+    }
+
+    size_t range_len = max_idx - min_idx;
+    std::vector<int16_t> initial_scores(range_len);
+    std::vector<int16_t> initial_occupation(range_len);
+    std::vector<int16_t> bonus_points(range_len);
+    std::vector<size_t> first_occurences(query_len);
+    std::string search_range = string_to_match.substr(min_idx, range_len);
+    string_lowercase_inplace(search_range);
+
+    int16_t max_score = 0;
+    size_t max_score_idx = 0;
+
+    char first_query_char = char_to_lowercase(search_query[0]);
+    char query_char = char_to_lowercase(search_query[0]);
+    int16_t previous_inital_bonus = 0;
+    CharacterType previous_type = CharacterType::WHITESPACE;
+    bool in_gap = false;
+
+    size_t query_idx = 0;
+    size_t last_idx = 0;
+
+    for (size_t i = 0; i < range_len; ++i) {
+        char c = search_range[i];
+        CharacterType type = char_type(c);
+        if (type == CharacterType::UPPER_CHAR) {
+            c = char_to_lowercase(c);
+            search_range[i] = c;
+        }
+        int16_t bonus = bonus_for_types(previous_type, type);
+        bonus_points[i] = bonus;
+        previous_type = type;
+
+        if (c == query_char) {
+            if (query_idx < query_len) {
+                first_occurences[query_idx] = i;
+                query_idx++;
+                query_char = search_query[std::min(query_idx, query_len - 1)];
+                query_char = char_to_lowercase(query_char);
+            }
+            last_idx = i;
+        }
+
+        if (c == first_query_char) {
+            int16_t score = SCORE_MATCH + bonus * 2;
+            if (min_idx == 0 && i == 0) { // first character of query is at first position of string
+                score *= 2;
+            }
+            initial_scores[i] = score;
+            initial_occupation[i] = 1;
+            if (range_len == 1 && score > max_score) {
+                max_score = score;
+                max_score_idx = i;
+                if (bonus >= BONUS_BOUNDARY) {
+                    break;
+                }
+            }
+            in_gap = false;
+        } else {
+            if (in_gap) {
+                initial_scores[i] = std::max(previous_inital_bonus + SCORE_GAP_EXTENSION, 0);
+            } else {
+                initial_scores[i] = std::max(previous_inital_bonus + SCORE_GAP_START, 0);
+            }
+            initial_occupation[i] = 0;
+            in_gap = true;
+        }
+    }
+
+    if (query_idx != query_len) { // did not match whole query
+        return 0;
+    }
+
+    if (query_len == 1) {
+        return static_cast<int64_t>(min_idx + max_score_idx);
+    }
+
+    size_t very_first_occurence = static_cast<size_t>(first_occurences[0]);
+    size_t match_width = last_idx - very_first_occurence + 1;
+    std::vector<int16_t> scores(match_width * query_len);
+    std::vector<int16_t> occupation(match_width * query_len);
+
+    size_t idx = 0;
+    for (size_t i = very_first_occurence; i <= last_idx; ++i) {
+        scores[idx] = initial_scores[i];
+        occupation[idx] = initial_occupation[i];
+    }
+
+    size_t occurence_count = first_occurences.size() - 1;
+    for (size_t i = 0; i < occurence_count; ++i) {
+        size_t query_idx = i + 1;
+        char query_char = char_to_lowercase(search_query[query_idx]);
+        size_t occurence = first_occurences[query_idx];
+        size_t row = query_idx * match_width;
+        bool in_gap = false;
+
+        char* search_range_subrange = search_range.data() + occurence;
+        int16_t* bonus_points_subrange = bonus_points.data() + occurence;
+        int16_t* occupation_subrange = occupation.data() + row + occurence - very_first_occurence;
+        int16_t* occupation_diagonal = occupation_subrange - 1 - match_width;
+        int16_t* scores_subrange = scores.data() + row + occurence - very_first_occurence;
+        int16_t* scores_diagonal = scores_subrange - 1 - match_width;
+        int16_t* scores_left = scores_subrange - 1;
+        scores_left[0] = 0;
+
+        for (size_t j = 0; j <= last_idx - occurence; ++j) {
+            char c = search_range_subrange[j];
+            size_t col = j + occurence;
+
+            int16_t score1 = 0;
+            int16_t score2 = 0;
+            int16_t consecutive = 0;
+
+            if (in_gap) {
+                score2 = scores_left[j] + SCORE_GAP_EXTENSION;
+            } else {
+                score2 = scores_left[j] + SCORE_GAP_START;
+            }
+
+            if (query_char == c) {
+                score1 = scores_diagonal[j] + SCORE_MATCH;
+                int16_t bonus = bonus_points_subrange[j];
+                consecutive = occupation_diagonal[j] + 1;
+                if (consecutive > 1) {
+                    int16_t occupation_bonus = bonus_points[col - static_cast<size_t>(consecutive) + 1];
+                    if (bonus >= BONUS_BOUNDARY && bonus > occupation_bonus) {
+                        consecutive = 1;
+                    } else {
+                        bonus = std::max(bonus, std::max(BONUS_CONSECUTIVE, occupation_bonus));
+                    }
+                }
+                if (score1 + bonus < score2) {
+                    score1 += bonus_points_subrange[j];
+                    consecutive = 0;
+                } else {
+                    score1 += bonus;
+                }
+            }
+            occupation_subrange[j] = consecutive;
+
+            in_gap = score1 < score2;
+            int16_t score = std::max(static_cast<int16_t>(0), std::max(score1, score2));
+            if (query_idx == query_len - 1 && score > max_score) {
+                max_score = score;
+                max_score_idx = col;
+            }
+            scores_subrange[j] = score;
+        }
+    }
     return max_score;
 }
 
