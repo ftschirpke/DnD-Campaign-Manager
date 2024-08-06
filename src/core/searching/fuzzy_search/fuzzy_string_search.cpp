@@ -121,6 +121,7 @@ enum class CharType {
 constexpr std::array<char, 5> delimiter_chars = {'-', '(', ')', ':', ','};
 
 constexpr int16_t SCORE_MATCH = 16;
+constexpr int16_t BONUS_FIRST = 2;
 constexpr int16_t BONUS_BOUNDARY = 8;
 constexpr int16_t BONUS_BOUNDARY_WHITESPACE = 10;
 constexpr int16_t BONUS_BOUNDARY_DELIMITER = 9;
@@ -261,9 +262,6 @@ int64_t fuzzy_match_string(const std::string& search_query, const std::string& s
 
         if (c == first_query_char) {
             int16_t score = SCORE_MATCH + bonus * 2;
-            if (min_idx == 0 && i == 0) { // first character of query is at first position of string
-                score *= 2;
-            }
             initial_scores[i] = score;
             initial_occupation[i] = 1;
             if (range_len == 1 && score > max_score) {
@@ -365,6 +363,10 @@ int64_t fuzzy_match_string(const std::string& search_query, const std::string& s
             }
             scores_subrange[j] = score;
         }
+    }
+
+    if (char_to_lowercase(search_query[0]) == char_to_lowercase(string_to_match[0])) {
+        max_score += BONUS_FIRST;
     }
 
     return max_score;
