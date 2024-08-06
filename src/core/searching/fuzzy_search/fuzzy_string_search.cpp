@@ -291,7 +291,7 @@ int64_t fuzzy_match_string(const std::string& search_query, const std::string& s
         return static_cast<int64_t>(min_idx + max_score_idx);
     }
 
-    size_t very_first_occurence = static_cast<size_t>(first_occurences[0]);
+    size_t very_first_occurence = first_occurences[0];
     size_t match_width = last_idx - very_first_occurence + 1;
     std::vector<int16_t> scores(match_width * query_len);
     std::vector<int16_t> occupation(match_width * query_len);

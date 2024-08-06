@@ -2,6 +2,7 @@
 
 #include "decision.hpp"
 
+#include <cassert>
 #include <set>
 #include <string>
 #include <utility>
