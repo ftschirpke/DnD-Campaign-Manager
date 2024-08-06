@@ -183,7 +183,12 @@ int64_t fuzzy_match_string(const std::string& search_query, const std::string& s
             in_gap = false;
         } else {
             int16_t gap_penalty = in_gap ? SCORE_GAP_EXTENSION : SCORE_GAP_START;
-            initial_scores[i] = std::max(previous_inital_bonus + gap_penalty, 0);
+            int16_t score = previous_inital_bonus + gap_penalty;
+            if (score < 0) {
+                initial_scores[i] = 0;
+            } else {
+                initial_scores[0] = score;
+            }
             initial_occupation[i] = 0;
             in_gap = true;
         }
