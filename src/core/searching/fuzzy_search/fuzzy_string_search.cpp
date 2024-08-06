@@ -109,7 +109,7 @@ int64_t fuzzy_match_string_old(const std::string& search_query, const std::strin
     return max_score;
 }
 
-enum class CharacterType {
+enum class CharType {
     LOWER_CHAR,
     UPPER_CHAR,
     DIGIT,
@@ -130,51 +130,51 @@ constexpr int16_t BONUS_CONSECUTIVE = 8;
 constexpr int16_t SCORE_GAP_START = -3;
 constexpr int16_t SCORE_GAP_EXTENSION = -1;
 
-static CharacterType char_type(char c) {
+static CharType char_type(char c) {
     if (std::isalpha(c)) {
         if (std::isupper(c)) {
-            return CharacterType::UPPER_CHAR;
+            return CharType::UPPER_CHAR;
         } else {
-            return CharacterType::LOWER_CHAR;
+            return CharType::LOWER_CHAR;
         }
     } else if (std::isdigit(c)) {
-        return CharacterType::DIGIT;
+        return CharType::DIGIT;
     } else if (c == '\'') {
-        return CharacterType::LOWER_CHAR; // treat apostrophe as normal character (as it is often used in D&D words)
+        return CharType::LOWER_CHAR; // treat apostrophe as normal character (as it is often used in D&D words)
     } else if (std::isspace(c)) {
-        return CharacterType::WHITESPACE;
+        return CharType::WHITESPACE;
     } else if (std::find(delimiter_chars.cbegin(), delimiter_chars.cend(), c) != delimiter_chars.cend()) {
-        return CharacterType::DELIMITER;
+        return CharType::DELIMITER;
     } else {
-        return CharacterType::NON_WORD;
+        return CharType::NON_WORD;
     }
 }
 
-int16_t bonus_for_types(CharacterType previous_type, CharacterType type) {
-    if (type != CharacterType::NON_WORD) {
+int16_t bonus_for_types(CharType previous_type, CharType type) {
+    if (type != CharType::NON_WORD) {
         switch (previous_type) {
-            case CharacterType::WHITESPACE:
+            case CharType::WHITESPACE:
                 return BONUS_BOUNDARY_WHITESPACE;
-            case CharacterType::DELIMITER:
+            case CharType::DELIMITER:
                 return BONUS_BOUNDARY_DELIMITER;
-            case CharacterType::NON_WORD:
+            case CharType::NON_WORD:
                 return BONUS_NON_WORD;
             default:
                 break;
         }
     }
 
-    if ((previous_type == CharacterType::LOWER_CHAR && type == CharacterType::UPPER_CHAR)
-        || (previous_type != CharacterType::DIGIT && type == CharacterType::DIGIT)) {
+    if ((previous_type == CharType::LOWER_CHAR && type == CharType::UPPER_CHAR)
+        || (previous_type != CharType::DIGIT && type == CharType::DIGIT)) {
         return BONUS_CAMEL_CASE;
     }
 
     switch (type) {
-        case CharacterType::NON_WORD:
+        case CharType::NON_WORD:
             [[fallthrough]];
-        case CharacterType::DELIMITER:
+        case CharType::DELIMITER:
             return BONUS_NON_WORD;
-        case CharacterType::WHITESPACE:
+        case CharType::WHITESPACE:
             return BONUS_BOUNDARY_WHITESPACE;
         default:
             return 0;
@@ -231,7 +231,7 @@ int64_t fuzzy_match_string(const std::string& search_query, const std::string& s
     char first_query_char = char_to_lowercase(search_query[0]);
     char query_char = char_to_lowercase(search_query[0]);
     int16_t previous_inital_bonus = 0;
-    CharacterType previous_type = CharacterType::WHITESPACE;
+    CharType previous_type = CharType::WHITESPACE;
     bool in_gap = false;
 
     size_t query_idx = 0;
@@ -240,8 +240,8 @@ int64_t fuzzy_match_string(const std::string& search_query, const std::string& s
     // calculate bonus values and initial scores
     for (size_t i = 0; i < range_len; ++i) {
         char c = search_range[i];
-        CharacterType type = char_type(c);
-        if (type == CharacterType::UPPER_CHAR) {
+        CharType type = char_type(c);
+        if (type == CharType::UPPER_CHAR) {
             c = char_to_lowercase(c);
             search_range[i] = c;
         }
