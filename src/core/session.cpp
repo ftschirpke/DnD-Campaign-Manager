@@ -232,7 +232,12 @@ void Session::set_fuzzy_search(const std::string& search_query, const FuzzySearc
     fuzzy_search_results = fuzzy_search->get_results(search_options);
     std::sort(
         fuzzy_search_results.begin(), fuzzy_search_results.end(),
-        [](const SearchResult& a, const SearchResult& b) { return a.significance > b.significance; }
+        [](const SearchResult& a, const SearchResult& b) {
+            if (a.significance == b.significance) {
+                return a.content_piece_ptr->get_name() < b.content_piece_ptr->get_name();
+            }
+            return a.significance > b.significance;
+        }
     );
 }
 

@@ -184,7 +184,7 @@ int16_t bonus_for_types(CharacterType previous_type, CharacterType type) {
 // fuzzy search implementation heavily inspired by fzf's algorithm
 // see https://github.com/junegunn/fzf/blob/db01e7dab65423cd1d14e15f5b15dfaabe760283/src/algo/algo.go#L432
 int64_t fuzzy_match_string(const std::string& search_query, const std::string& string_to_match) {
-    if (search_query.empty()) {
+    if (search_query.empty() || string_to_match.empty()) {
         return 0;
     }
     size_t query_len = search_query.size();
@@ -205,17 +205,19 @@ int64_t fuzzy_match_string(const std::string& search_query, const std::string& s
     }
 
     size_t max_idx = string_len;
-    for (char c : string_to_match) {
+    for (size_t i = string_len - 1; i > 0; --i) {
+        char c = string_to_match[i];
         if (char_to_lowercase(c) == char_to_lowercase(search_query[query_len - 1])) {
             break;
         }
-        max_idx--;
+        max_idx = i;
     }
     if (min_idx >= max_idx) {
         return 0;
     }
 
     size_t range_len = max_idx - min_idx;
+
     std::vector<int16_t> initial_scores(range_len);
     std::vector<int16_t> initial_occupation(range_len);
     std::vector<int16_t> bonus_points(range_len);
@@ -235,6 +237,7 @@ int64_t fuzzy_match_string(const std::string& search_query, const std::string& s
     size_t query_idx = 0;
     size_t last_idx = 0;
 
+    // calculate bonus values and initial scores
     for (size_t i = 0; i < range_len; ++i) {
         char c = search_range[i];
         CharacterType type = char_type(c);
@@ -301,6 +304,7 @@ int64_t fuzzy_match_string(const std::string& search_query, const std::string& s
         occupation[idx] = initial_occupation[i];
     }
 
+    // calculate scores
     size_t occurence_count = first_occurences.size() - 1;
     for (size_t i = 0; i < occurence_count; ++i) {
         size_t query_idx = i + 1;
@@ -362,6 +366,7 @@ int64_t fuzzy_match_string(const std::string& search_query, const std::string& s
             scores_subrange[j] = score;
         }
     }
+
     return max_score;
 }
 
