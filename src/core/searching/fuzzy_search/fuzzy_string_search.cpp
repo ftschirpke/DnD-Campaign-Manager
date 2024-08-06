@@ -121,7 +121,7 @@ enum class CharType {
 constexpr std::array<char, 5> delimiter_chars = {'-', '(', ')', ':', ','};
 
 constexpr int16_t SCORE_MATCH = 16;
-constexpr int16_t BONUS_FIRST = 2;
+constexpr int16_t BONUS_FIRST = 1;
 constexpr int16_t BONUS_BOUNDARY = 8;
 constexpr int16_t BONUS_BOUNDARY_WHITESPACE = 10;
 constexpr int16_t BONUS_BOUNDARY_DELIMITER = 9;
@@ -273,11 +273,8 @@ int64_t fuzzy_match_string(const std::string& search_query, const std::string& s
             }
             in_gap = false;
         } else {
-            if (in_gap) {
-                initial_scores[i] = std::max(previous_inital_bonus + SCORE_GAP_EXTENSION, 0);
-            } else {
-                initial_scores[i] = std::max(previous_inital_bonus + SCORE_GAP_START, 0);
-            }
+            int16_t gap_penalty = in_gap ? SCORE_GAP_EXTENSION : SCORE_GAP_START;
+            initial_scores[i] = std::max(previous_inital_bonus + gap_penalty, 0);
             initial_occupation[i] = 0;
             in_gap = true;
         }
@@ -305,11 +302,11 @@ int64_t fuzzy_match_string(const std::string& search_query, const std::string& s
     // calculate scores
     size_t occurence_count = first_occurences.size() - 1;
     for (size_t i = 0; i < occurence_count; ++i) {
-        size_t query_idx = i + 1;
-        char query_char = char_to_lowercase(search_query[query_idx]);
+        query_idx = i + 1;
+        query_char = char_to_lowercase(search_query[query_idx]);
         size_t occurence = first_occurences[query_idx];
         size_t row = query_idx * match_width;
-        bool in_gap = false;
+        in_gap = false;
 
         char* search_range_subrange = search_range.data() + occurence;
         int16_t* bonus_points_subrange = bonus_points.data() + occurence;
@@ -328,11 +325,8 @@ int64_t fuzzy_match_string(const std::string& search_query, const std::string& s
             int16_t score2 = 0;
             int16_t consecutive = 0;
 
-            if (in_gap) {
-                score2 = scores_left[j] + SCORE_GAP_EXTENSION;
-            } else {
-                score2 = scores_left[j] + SCORE_GAP_START;
-            }
+            int16_t gap_penalty = in_gap ? SCORE_GAP_EXTENSION : SCORE_GAP_START;
+            score2 = scores_left[j] + gap_penalty;
 
             if (query_char == c) {
                 score1 = scores_diagonal[j] + SCORE_MATCH;
@@ -365,8 +359,12 @@ int64_t fuzzy_match_string(const std::string& search_query, const std::string& s
         }
     }
 
-    if (char_to_lowercase(search_query[0]) == char_to_lowercase(string_to_match[0])) {
-        max_score += BONUS_FIRST;
+    for (size_t i = 0; i < query_len; ++i) {
+        if (char_to_lowercase(search_query[i]) == char_to_lowercase(string_to_match[i])) {
+            max_score += BONUS_FIRST;
+        } else {
+            break;
+        }
     }
 
     return max_score;
