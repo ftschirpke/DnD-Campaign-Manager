@@ -6,7 +6,6 @@
 #include <deque>
 #include <filesystem>
 #include <future>
-#include <memory>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -92,7 +91,6 @@ private:
     std::deque<const ContentPiece*> open_content_pieces;
     const ContentPiece* selected_content_piece;
 
-    std::unique_ptr<FuzzyContentSearch> fuzzy_search;
     std::vector<SearchResult> fuzzy_search_results;
     std::vector<std::string> fuzzy_search_result_strings;
 

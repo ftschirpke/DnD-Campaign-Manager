@@ -6,7 +6,6 @@
 #include <string>
 
 #include <core/models/content_piece.hpp>
-#include <core/searching/fuzzy_search/trie_node.hpp>
 #include <core/utils/types.hpp>
 
 namespace dnd {
@@ -24,7 +23,6 @@ public:
     virtual size_t size() const = 0;
     virtual OptCRef<T> get(size_t index) const = 0;
     virtual OptCRef<T> get(const std::string& name) const = 0;
-    virtual const TrieNode<T>* get_fuzzy_search_trie_root() const = 0;
 };
 
 } // namespace dnd

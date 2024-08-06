@@ -36,7 +36,7 @@ namespace dnd {
 Session::Session(const char* last_session_filename)
     : last_session_filename(last_session_filename), status(SessionStatus::CONTENT_DIR_SELECTION), content_directory(),
       campaign_name(), parsing_future(), errors(), content(), last_session_open_tabs(), open_content_pieces(),
-      selected_content_piece(), fuzzy_search(), fuzzy_search_results(max_search_results),
+      selected_content_piece(), fuzzy_search_results(max_search_results),
       fuzzy_search_result_strings(max_search_results), advanced_search(content), unknown_error_messages() {}
 
 Session::~Session() { save_session_values(); }
@@ -224,12 +224,11 @@ Errors Session::set_content_directory(const std::filesystem::path& new_content_d
 
 void Session::set_fuzzy_search(const std::string& search_query, const FuzzySearchOptions& search_options) {
     DND_MEASURE_FUNCTION();
-    fuzzy_search->set_search_query(search_query);
     if (search_query.size() < 3) {
         fuzzy_search_results.clear();
         return;
     }
-    fuzzy_search_results = fuzzy_search->get_results(search_options);
+    fuzzy_search_results = fuzzy_search_content(content, search_query, search_options);
     std::sort(
         fuzzy_search_results.begin(), fuzzy_search_results.end(),
         [](const SearchResult& a, const SearchResult& b) {
@@ -299,7 +298,6 @@ void Session::parse_content_and_initialize() {
     ParsingResult parsing_result = parse_content(content_directory, campaign_name);
     content = std::move(parsing_result.content);
     errors = std::move(parsing_result.errors);
-    fuzzy_search = std::make_unique<FuzzyContentSearch>(content);
     for (const Error& error : errors.get_errors()) {
         switch (error.index()) {
             case 0: {

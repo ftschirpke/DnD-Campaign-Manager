@@ -7,7 +7,6 @@
 #include <unordered_map>
 
 #include <core/content_library.hpp>
-#include <core/searching/fuzzy_search/trie.hpp>
 #include <core/utils/string_manipulation.hpp>
 #include <core/utils/types.hpp>
 
@@ -33,33 +32,12 @@ public:
      * @return reference to the inserted content piece, or std::nullopt if a content piece with that name already exists
      */
     OptCRef<T> add(const T& content_piece);
-    const TrieNode<T>* get_fuzzy_search_trie_root() const override;
 private:
-    void save_in_trie(const T* content_piece);
-
     std::unordered_map<std::string, std::reference_wrapper<const T>> data;
-    Trie<T> trie;
 };
 
 
 // === IMPLEMENTATION ===
-
-template <typename T>
-requires isContentPieceType<T>
-void ReferencingContentLibrary<T>::save_in_trie(const T* content_piece) {
-    std::string lower_name = string_lowercase_copy(content_piece->get_name());
-
-    trie.insert(lower_name, content_piece);
-    for (size_t i = 0; i < lower_name.size(); ++i) {
-        if (lower_name[i] == ' ' || lower_name[i] == '_' || lower_name[i] == '-') {
-            std::string_view after_sep(lower_name.c_str() + i + 1, lower_name.size() - i - 1);
-            trie.insert(after_sep, content_piece);
-        }
-        if (lower_name[i] == '(') { // do not include parentheses in trie
-            break;
-        }
-    }
-}
 
 template <typename T>
 requires isContentPieceType<T>
@@ -111,17 +89,10 @@ OptCRef<T> ReferencingContentLibrary<T>::add(const T& content_piece) {
     const std::string name = content_piece.get_name();
     auto [it, was_inserted] = data.emplace(name, std::cref(content_piece));
     if (was_inserted) {
-        save_in_trie(&it->second.get());
         return std::cref(content_piece);
     } else {
         return std::nullopt;
     }
-}
-
-template <typename T>
-requires isContentPieceType<T>
-const TrieNode<T>* ReferencingContentLibrary<T>::get_fuzzy_search_trie_root() const {
-    return trie.get_root();
 }
 
 } // namespace dnd
