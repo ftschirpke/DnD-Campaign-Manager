@@ -6,9 +6,8 @@
 #include <filesystem>
 #include <fstream>
 #include <future>
-#include <span>
 #include <string>
-#include <unordered_set>
+#include <utility>
 
 #include <fmt/format.h>
 #include <nlohmann/json.hpp>
@@ -21,6 +20,7 @@
 #include <core/parsing/content_parsing.hpp>
 #include <core/searching/advanced_search/advanced_content_search.hpp>
 #include <core/searching/fuzzy_search/fuzzy_content_search.hpp>
+#include <core/searching/search_result.hpp>
 #include <core/utils/string_manipulation.hpp>
 #include <core/utils/types.hpp>
 #include <core/visitors/content/collect_open_tabs_visitor.hpp>
@@ -36,7 +36,7 @@ namespace dnd {
 Session::Session(const char* last_session_filename)
     : last_session_filename(last_session_filename), status(SessionStatus::CONTENT_DIR_SELECTION), content_directory(),
       campaign_name(), parsing_future(), errors(), content(), last_session_open_tabs(), open_content_pieces(),
-      selected_content_piece(), fuzzy_search(), fuzzy_search_results(max_search_results), fuzzy_search_result_count(0),
+      selected_content_piece(), fuzzy_search_results(max_search_results),
       fuzzy_search_result_strings(max_search_results), advanced_search(content), unknown_error_messages() {}
 
 Session::~Session() { save_session_values(); }
@@ -65,9 +65,9 @@ const ContentPiece* Session::get_selected_content_piece() {
     return rv;
 }
 
-size_t Session::get_fuzzy_search_result_count() const { return fuzzy_search_result_count; }
+size_t Session::get_fuzzy_search_result_count() const { return fuzzy_search_results.size(); }
 
-bool Session::too_many_fuzzy_search_results() const { return fuzzy_search_result_count > max_search_results; }
+bool Session::too_many_fuzzy_search_results() const { return fuzzy_search_results.size() > max_search_results; }
 
 std::vector<std::string> Session::get_possible_campaign_names() const {
     if (content_directory.empty()) {
@@ -86,12 +86,12 @@ std::vector<std::string> Session::get_possible_campaign_names() const {
 std::vector<std::string> Session::get_fuzzy_search_result_strings() const {
     DND_MEASURE_FUNCTION();
     ListContentVisitor list_content_visitor;
-    list_content_visitor.reserve(fuzzy_search_result_count);
-    if (fuzzy_search_result_count > max_search_results) {
+    list_content_visitor.reserve(fuzzy_search_results.size());
+    if (fuzzy_search_results.size() > max_search_results) {
         return {};
     }
-    for (size_t i = 0; i < fuzzy_search_result_count; ++i) {
-        fuzzy_search_results[i]->accept_visitor(list_content_visitor);
+    for (size_t i = 0; i < fuzzy_search_results.size(); ++i) {
+        fuzzy_search_results[i].content_piece_ptr->accept_visitor(list_content_visitor);
     }
     return list_content_visitor.get_list();
 }
@@ -222,65 +222,29 @@ Errors Session::set_content_directory(const std::filesystem::path& new_content_d
     return content_dir_errors;
 }
 
-// A comparator for content pieces that sorts them by name and prioritizes those whose name starts with a
-// givencharacter
-class ContentPieceComparator {
-public:
-    explicit ContentPieceComparator(const std::string& search_query)
-        : query_length(search_query.size()), lower_query(string_lowercase_copy(search_query)),
-          upper_query(string_uppercase_copy(search_query)) {}
-
-    bool starts_with_search_query(const std::string& name) const {
-        size_t i = 0;
-        while (i < query_length) {
-            if (name[i] != lower_query[i] && name[i] != upper_query[i]) {
-                return false;
-            }
-            if (++i >= name.size()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    bool operator()(const ContentPiece* a, const ContentPiece* b) const {
-        const std::string& a_name = a->get_name();
-        const std::string& b_name = b->get_name();
-        bool prioritize_a = starts_with_search_query(a_name);
-        bool prioritize_b = starts_with_search_query(b_name);
-        if (prioritize_a && !prioritize_b) {
-            return true;
-        }
-        if (!prioritize_a && prioritize_b) {
-            return false;
-        }
-        return a->get_name() < b->get_name();
-    }
-private:
-    size_t query_length;
-    std::string lower_query;
-    std::string upper_query;
-};
-
-void Session::set_fuzzy_search(const std::string& search_query, const std::array<bool, 9>& search_options) {
+void Session::set_fuzzy_search(const std::string& search_query, const FuzzySearchOptions& search_options) {
     DND_MEASURE_FUNCTION();
-    fuzzy_search->set_search_query(search_query);
-    std::unordered_set<const ContentPiece*> set_search_results = fuzzy_search->get_results(search_options);
-    fuzzy_search_result_count = set_search_results.size();
-    if (fuzzy_search_result_count > max_search_results) {
+    if (search_query.size() < 3) {
+        fuzzy_search_results.clear();
         return;
     }
-    ContentPieceComparator comparator(search_query);
-    fuzzy_search_results.insert(fuzzy_search_results.begin(), set_search_results.begin(), set_search_results.end());
-    std::span<const ContentPiece*> results_span(fuzzy_search_results.begin(), fuzzy_search_result_count);
-    std::sort(results_span.begin(), results_span.end(), comparator);
+    fuzzy_search_results = fuzzy_search_content(content, search_query, search_options);
+    std::sort(
+        fuzzy_search_results.begin(), fuzzy_search_results.end(),
+        [](const SearchResult& a, const SearchResult& b) {
+            if (a.significance == b.significance) {
+                return a.content_piece_ptr->get_name() < b.content_piece_ptr->get_name();
+            }
+            return a.significance > b.significance;
+        }
+    );
 }
 
 void Session::open_fuzzy_search_result(size_t index) {
-    if (index >= fuzzy_search_result_count) {
+    if (index >= fuzzy_search_results.size()) {
         return;
     }
-    open_content_piece(fuzzy_search_results[index]);
+    open_content_piece(fuzzy_search_results[index].content_piece_ptr);
 }
 
 void Session::open_advanced_search_result(size_t index) {
@@ -334,7 +298,6 @@ void Session::parse_content_and_initialize() {
     ParsingResult parsing_result = parse_content(content_directory, campaign_name);
     content = std::move(parsing_result.content);
     errors = std::move(parsing_result.errors);
-    fuzzy_search = std::make_unique<FuzzyContentSearch>(content);
     for (const Error& error : errors.get_errors()) {
         switch (error.index()) {
             case 0: {

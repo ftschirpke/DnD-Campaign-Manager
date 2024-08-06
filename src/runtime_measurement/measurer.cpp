@@ -7,6 +7,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iomanip>
+#include <memory>
 #include <mutex>
 #include <string>
 #include <thread>
@@ -33,7 +34,9 @@ static constexpr std::array<const char*, 12> values_for_human_readable = {
 
 void Measurer::beginSession(const std::string& name, const std::string& filepath = "results.json") {
     session_start_time = std::chrono::system_clock::now();
-    session = new MeasuringSession{name, filepath, {{"tspeciesEvents", nlohmann::json::array()}}};
+    session = std::unique_ptr<MeasuringSession>(
+        new MeasuringSession{.name = name, .filepath = filepath, .json = {{"tspeciesEvents", nlohmann::json::array()}}}
+    );
 }
 
 void Measurer::endSession() {
@@ -90,7 +93,6 @@ void Measurer::endSession() {
     output_stream.open(session->filepath);
     output_stream << std::setw(4) << session->json << std::flush;
     output_stream.close();
-    delete session;
     session = nullptr;
 }
 
@@ -118,7 +120,7 @@ void Timer::stop() {
 
     size_t thread_id = std::hash<std::thread::id>{}(std::this_thread::get_id());
 
-    Measurer::get().writeProfile({name, start, end, thread_id});
+    Measurer::get().writeProfile(TimerResult{name, start, end, thread_id});
 
     stopped = true;
 }

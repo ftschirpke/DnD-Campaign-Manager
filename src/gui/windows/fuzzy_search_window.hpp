@@ -3,7 +3,6 @@
 
 #include <dnd_config.hpp>
 
-#include <array>
 #include <string>
 
 #include <core/session.hpp>
@@ -17,7 +16,7 @@ public:
 private:
     Session& session;
     std::string search_query;
-    std::array<bool, 9> search_options;
+    FuzzySearchOptions search_options;
 };
 
 } // namespace dnd

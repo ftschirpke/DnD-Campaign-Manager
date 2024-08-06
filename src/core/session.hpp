@@ -3,11 +3,9 @@
 
 #include <dnd_config.hpp>
 
-#include <array>
 #include <deque>
 #include <filesystem>
 #include <future>
-#include <memory>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -58,7 +56,7 @@ public:
     size_t get_fuzzy_search_result_count() const;
     bool too_many_fuzzy_search_results() const;
     std::vector<std::string> get_fuzzy_search_result_strings() const;
-    void set_fuzzy_search(const std::string& search_query, const std::array<bool, 9>& search_options);
+    void set_fuzzy_search(const std::string& search_query, const FuzzySearchOptions& search_options);
     void open_fuzzy_search_result(size_t index);
 
     std::vector<std::string> get_advanced_search_result_strings() const;
@@ -75,7 +73,7 @@ private:
     void open_last_session();
     void open_content_piece(const ContentPiece* content_piece);
 
-    static constexpr int max_search_results = 500;
+    static constexpr int max_search_results = 1000;
 
     const char* const last_session_filename;
 
@@ -93,9 +91,7 @@ private:
     std::deque<const ContentPiece*> open_content_pieces;
     const ContentPiece* selected_content_piece;
 
-    std::unique_ptr<FuzzyContentSearch> fuzzy_search;
-    std::vector<const ContentPiece*> fuzzy_search_results;
-    size_t fuzzy_search_result_count;
+    std::vector<SearchResult> fuzzy_search_results;
     std::vector<std::string> fuzzy_search_result_strings;
 
     AdvancedContentSearch advanced_search;

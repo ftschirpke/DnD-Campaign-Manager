@@ -2,7 +2,6 @@
 
 #include "fuzzy_search_window.hpp"
 
-#include <array>
 #include <string>
 
 #include <fmt/format.h>
@@ -14,17 +13,7 @@
 namespace dnd {
 
 FuzzySearchWindow::FuzzySearchWindow(Session& session) : session(session), search_query(), search_options() {
-    search_options.fill(true);
-}
-
-static void fuzzy_search_option_line(size_t index, const char* const name, std::array<bool, 9>& options) {
-    std::string only_button_label = fmt::format("Only##{}", index);
-    if (ImGui::Button(only_button_label.c_str())) {
-        options.fill(false);
-        options[index] = true;
-    }
-    ImGui::SameLine();
-    ImGui::Checkbox(name, &options[index]);
+    search_options.set_all(true);
 }
 
 void FuzzySearchWindow::render() {
@@ -35,20 +24,75 @@ void FuzzySearchWindow::render() {
     if (ImGui::InputText("Search", &search_query, ImGuiInputTextFlags_EscapeClearsAll, nullptr, nullptr)) {
         search_changed = true;
     }
-    const std::array<bool, 9> old_fuzzy_search_options = search_options;
+    FuzzySearchOptions old_fuzzy_search_options = search_options;
     if (ImGui::TreeNode("Search options")) {
         if (ImGui::Button("All", ImVec2(200, 0))) {
-            search_options.fill(true);
+            search_options.set_all(true);
         }
-        fuzzy_search_option_line(0, "Characters", search_options);
-        fuzzy_search_option_line(1, "Species", search_options);
-        fuzzy_search_option_line(3, "Subspecies", search_options);
-        fuzzy_search_option_line(2, "Classes", search_options);
-        fuzzy_search_option_line(4, "Subclasses", search_options);
-        fuzzy_search_option_line(5, "Items", search_options);
-        fuzzy_search_option_line(6, "Spells", search_options);
-        fuzzy_search_option_line(7, "Features", search_options);
-        fuzzy_search_option_line(8, "Choosables", search_options);
+
+        if (ImGui::Button("Only##Characters")) {
+            search_options.set_all(false);
+            search_options.search_characters = true;
+        }
+        ImGui::SameLine();
+        ImGui::Checkbox("Characters", &search_options.search_characters);
+
+        if (ImGui::Button("Only##Species")) {
+            search_options.set_all(false);
+            search_options.search_species = true;
+        }
+        ImGui::SameLine();
+        ImGui::Checkbox("Species", &search_options.search_species);
+
+        if (ImGui::Button("Only##Subspecies")) {
+            search_options.set_all(false);
+            search_options.search_subspecies = true;
+        }
+        ImGui::SameLine();
+        ImGui::Checkbox("Subspecies", &search_options.search_subspecies);
+
+        if (ImGui::Button("Only##Classes")) {
+            search_options.set_all(false);
+            search_options.search_classes = true;
+        }
+        ImGui::SameLine();
+        ImGui::Checkbox("Classes", &search_options.search_classes);
+
+        if (ImGui::Button("Only##Subclasses")) {
+            search_options.set_all(false);
+            search_options.search_subclasses = true;
+        }
+        ImGui::SameLine();
+        ImGui::Checkbox("Subclasses", &search_options.search_subclasses);
+
+        if (ImGui::Button("Only##Items")) {
+            search_options.set_all(false);
+            search_options.search_items = true;
+        }
+        ImGui::SameLine();
+        ImGui::Checkbox("Items", &search_options.search_items);
+
+        if (ImGui::Button("Only##Spells")) {
+            search_options.set_all(false);
+            search_options.search_spells = true;
+        }
+        ImGui::SameLine();
+        ImGui::Checkbox("Spells", &search_options.search_spells);
+
+        if (ImGui::Button("Only##Features")) {
+            search_options.set_all(false);
+            search_options.search_features = true;
+        }
+        ImGui::SameLine();
+        ImGui::Checkbox("Features", &search_options.search_features);
+
+        if (ImGui::Button("Only##Choosables")) {
+            search_options.set_all(false);
+            search_options.search_choosables = true;
+        }
+        ImGui::SameLine();
+        ImGui::Checkbox("Choosables", &search_options.search_choosables);
+
         ImGui::TreePop();
     }
     if (old_fuzzy_search_options != search_options) {
@@ -59,7 +103,12 @@ void FuzzySearchWindow::render() {
         session.set_fuzzy_search(search_query, search_options);
     }
     ImGui::Separator();
+
     if (search_query.empty()) {
+        ImGui::End();
+        return;
+    } else if (search_query.size() < 3) {
+        ImGui::Text("Please enter more characters to specify the search.");
         ImGui::End();
         return;
     }

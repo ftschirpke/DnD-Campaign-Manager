@@ -12,7 +12,6 @@
 #include <core/content_library.hpp>
 #include <core/errors/errors.hpp>
 #include <core/models/content_piece.hpp>
-#include <core/searching/fuzzy_search/trie.hpp>
 #include <core/utils/data_result.hpp>
 #include <core/utils/string_manipulation.hpp>
 #include <core/utils/types.hpp>
@@ -43,34 +42,13 @@ public:
     void add_draft(std::pair<typename T::Data, Errors>&& draft);
     void add_draft(typename T::Data&& draft_data, Errors&& draft_errors);
     OptCRef<T> add_result(CreateResult<T>&& content_piece_result);
-    const TrieNode<T>* get_fuzzy_search_trie_root() const override;
 private:
-    void save_in_trie(const T& content_piece);
-
     std::unordered_map<std::string, T> data;
-    Trie<T> trie;
     std::vector<std::pair<typename T::Data, Errors>> drafts;
 };
 
 
 // === IMPLEMENTATION ===
-
-template <typename T>
-requires isContentPieceType<T>
-void StorageContentLibrary<T>::save_in_trie(const T& content_piece) {
-    std::string lower_name = string_lowercase_copy(content_piece.get_name());
-
-    trie.insert(lower_name, &content_piece);
-    for (size_t i = 0; i < lower_name.size(); ++i) {
-        if (lower_name[i] == ' ' || lower_name[i] == '_' || lower_name[i] == '-') {
-            std::string_view after_sep(lower_name.c_str() + i + 1, lower_name.size() - i - 1);
-            trie.insert(after_sep, &content_piece);
-        }
-        if (lower_name[i] == '(') { // do not include parentheses in trie
-            break;
-        }
-    }
-}
 
 template <typename T>
 requires isContentPieceType<T>
@@ -128,7 +106,6 @@ OptCRef<T> StorageContentLibrary<T>::add(T&& content_piece) {
     const std::string name = content_piece.get_name();
     auto [it, was_inserted] = data.emplace(name, std::move(content_piece));
     if (was_inserted) {
-        save_in_trie(it->second);
         return std::cref(it->second);
     } else {
         return std::nullopt;
@@ -156,12 +133,6 @@ template <typename T>
 requires isContentPieceType<T>
 void StorageContentLibrary<T>::add_draft(typename T::Data&& draft_data, Errors&& draft_errors) {
     drafts.emplace_back(std::move(draft_data), std::move(draft_errors));
-}
-
-template <typename T>
-requires isContentPieceType<T>
-const TrieNode<T>* StorageContentLibrary<T>::get_fuzzy_search_trie_root() const {
-    return trie.get_root();
 }
 
 } // namespace dnd
