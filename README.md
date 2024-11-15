@@ -11,12 +11,13 @@ This tool is supposed to be a simple cross-platform tool that allows:
 - access to information about characters and spells at any time (e.g. while DM-ing a session)
 
 Ideas for future improvements include:
-- add character-sheet-like view of characters to the GUI app
-- add monsters and NPCs
+- add character-sheet-like view of characters to the GUI app (partially implemented)
+- automatic creation of character sheets and other helpful character documents for example as PDFs (partially implemented)
 - allow in-app creation of content (as an alternative to manually writing JSON files) in the GUI app
-    - keep track of a character's resources (such as spell slots, HP, Ki, or exhaustion) while playing
+- support 2024 rule changes
+- add monsters and NPCs
 - support multiclassing
-- automatic creation of character sheets and other helpful character documents for example as PDFs
+- keep track of a character's resources (such as spell slots, HP, Ki, or exhaustion) while playing
 
 ## You want to use the software?
 
@@ -30,9 +31,9 @@ Please have a look at [this](CONTRIBUTING.md).
 ## Building from source code
 
 1. Clone the repository
-2. Testing (optional)
-   1. Build the CMake target "dndmanager_tests"
-   2. Execute the tests using ctest
+2. Optionally: Testing the code 
+   1. Build the `dndmanager_tests` CMake target
+   2. Execute the tests using ctest / Run the `dndmanager_tests` executable
 3. Running
-   1. Build the Cmake target "dndmanager" for the GUI app 
-   2. Run the executable
+   1. Build the `dndmanager` Cmake target for the GUI app 
+   2. Run the `dndmanager` executable
