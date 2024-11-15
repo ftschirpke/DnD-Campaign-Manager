@@ -12,7 +12,7 @@
 
 I am excited you are considering contributing to this project.
 
-**Please contact me on GitHub or preferably [via email](mailto:friedrich.tschirpke@student.hu-berlin.de).**
+**Please contact me on GitHub or preferably [via email](mailto:friedrich.tschirpke@live.de).**
 
 This is especially important because the project is still in its beginnings and only managed by myself right now.
 Thus, the documentation is lacking.
