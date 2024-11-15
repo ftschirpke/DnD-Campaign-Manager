@@ -31,7 +31,7 @@ enum class CharType {
 constexpr std::array<char, 5> delimiter_chars = {'-', '(', ')', ':', ','};
 
 constexpr int16_t SCORE_MATCH = 16;
-constexpr int16_t BONUS_FIRST = 1;
+constexpr int16_t BONUS_FIRST = 6;
 constexpr int16_t BONUS_BOUNDARY = 8;
 constexpr int16_t BONUS_BOUNDARY_WHITESPACE = 10;
 constexpr int16_t BONUS_BOUNDARY_DELIMITER = 9;
