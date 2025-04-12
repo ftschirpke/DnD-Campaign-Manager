@@ -11,6 +11,8 @@
 
 namespace dnd {
 
+constexpr uint32_t FUZZY_SEARCH_MINIMUM_QUERY_LENGTH = 1;
+
 struct FuzzySearchOptions {
     bool search_characters;
     bool search_classes;
