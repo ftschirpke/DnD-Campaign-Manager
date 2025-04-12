@@ -41,7 +41,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - uses: lukka/get-cmake@latest
+    - uses: lukka/get-cmake@v4.0.1
 
     - name: Download ccache
       run: ${{ matrix.config.install_command }} install ccache
@@ -72,6 +72,7 @@ jobs:
         ${{ matrix.config.install_command }} install libxinerama-dev
         ${{ matrix.config.install_command }} install libxcursor-dev
         ${{ matrix.config.install_command }} install libxi-dev
+        ${{ matrix.config.install_command }} install libxkbcommon-x11-dev
         ${{ matrix.config.install_command }} install libwayland-dev
 
     - name: Configure
