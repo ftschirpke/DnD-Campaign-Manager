@@ -62,7 +62,7 @@ jobs:
           ${{ matrix.config.name }}-ccache-${{ env.DND_GUI_APP_TARGET }}-
           ${{ matrix.config.name }}-
 
-    - name: Install X11 components explicitly (ubuntu only)
+    - name: (Ubuntu only) Install missing components explicitly (X11, wayland)
       if: matrix.config.os == 'ubuntu-latest'
       shell: bash
       run: |
@@ -72,6 +72,7 @@ jobs:
         ${{ matrix.config.install_command }} install libxinerama-dev
         ${{ matrix.config.install_command }} install libxcursor-dev
         ${{ matrix.config.install_command }} install libxi-dev
+        ${{ matrix.config.install_command }} install libwayland-dev
 
     - name: Configure
       shell: cmake -P {0}
