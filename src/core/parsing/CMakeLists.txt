@@ -3,6 +3,7 @@ target_sources(${DND_CORE}
     content_parsing.cpp
     file_parser.cpp
     parser.cpp
+    v2_file_parser.cpp
 )
 
 add_subdirectory(character)
