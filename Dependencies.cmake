@@ -8,14 +8,14 @@ include(FetchContent)
 FetchContent_Declare(
     nlohmann_json
     GIT_REPOSITORY https://github.com/nlohmann/json
-    GIT_TAG bc889afb4c5bf1c0d8ee29ef35eaaf4c8bef8a5d # Release Aug 12, 2022
+    GIT_TAG 55f93686c01528224f448c19128836e7df245f72 # Release Apr 11, 2025
 )
 
 # fmt - string formatting
 FetchContent_Declare(
     fmt
     GIT_REPOSITORY https://github.com/fmtlib/fmt
-    GIT_TAG f5e54359df4c26b6230fc61d38aa294581393084 # Release 10.1.1
+    GIT_TAG 123913715afeb8a437e6388b4473fcc4753e1c9a # Release 11.1.4
 )
 
 # tl::expected - expected monad
@@ -39,7 +39,7 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 FetchContent_Declare(
     glfw
     GIT_REPOSITORY https://github.com/glfw/glfw
-    GIT_TAG 7482de6071d21db77a7236155da44c172a7f6c9e # Release 3.3.8
+    GIT_TAG 7b6aead9fb88b3623e3b3725ebb42670cbe4c579 # Release 3.4
 )
 
 FetchContent_MakeAvailable(glfw)
@@ -51,7 +51,7 @@ find_package(OpenGL REQUIRED)
 FetchContent_Populate(
     imgui
     GIT_REPOSITORY https://github.com/ocornut/imgui
-    GIT_TAG 64b1e448d20c9be9275af731c34b4c7bf14a8e95
+    GIT_TAG 4806a1924ff6181180bf5e4b8b79ab4394118875 # Release 1.91.9b-docking
     SOURCE_DIR imgui/imgui
 )
 
@@ -82,7 +82,7 @@ target_link_libraries(imgui PUBLIC ${OPENGL_LIBRARIES} glfw)
 FetchContent_Populate(
     imgui-filebrowser
     GIT_REPOSITORY https://github.com/AirGuanZ/imgui-filebrowser
-    GIT_TAG 29f2e22d8fe033d7b5e78621ee9f3f0a753d7c47
+    GIT_TAG 347dda538f37fb71be3767e66930e0d7bc5d5f52 # Commit Feb 17, 2025
     SOURCE_DIR imgui/imgui_filebrowser
 )
 
@@ -93,7 +93,7 @@ FetchContent_Populate(
 FetchContent_Declare(
     catch2
     GIT_REPOSITORY https://github.com/catchorg/Catch2
-    GIT_TAG 3f0283de7a9c43200033da996ff9093be3ac84dc
+    GIT_TAG 2b60af89e23d28eefc081bc930831ee9d45ea58b # Release 3.8.1
 )
 
 FetchContent_MakeAvailable(catch2)

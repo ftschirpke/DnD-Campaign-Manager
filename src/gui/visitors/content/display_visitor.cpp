@@ -3,10 +3,12 @@
 #include "display_visitor.hpp"
 
 #include <memory>
+#include <set>
 #include <string>
 #include <vector>
 
 #include <fmt/format.h>
+#include <fmt/ranges.h>
 #include <imgui/imgui.h>
 
 #include <core/attribute_names.hpp>
@@ -297,7 +299,8 @@ void DisplayVisitor::operator()(const Class& cls) {
     label("Hit Die:");
     ImGui::Text("%s", cls.get_hit_dice().to_string().c_str());
     label("Feat Levels:");
-    std::string feat_level_str = fmt::format("{}", fmt::join(cls.get_important_levels().get_feat_levels(), ", "));
+    const std::set<int>& feat_levels = cls.get_important_levels().get_feat_levels();
+    std::string feat_level_str = fmt::format("{}", fmt::join(feat_levels.begin(), feat_levels.end(), ", "));
     ImGui::Text("%s", feat_level_str.c_str());
     label("Subclass Level:");
     ImGui::Text("%d", cls.get_important_levels().get_subclass_level());
