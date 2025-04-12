@@ -2,6 +2,7 @@
 
 #include "fuzzy_string_search.hpp"
 
+#include <algorithm>
 #include <array>
 #include <cassert>
 #include <cctype>
