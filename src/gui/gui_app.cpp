@@ -34,7 +34,7 @@ void GuiApp::initialize() {
 
 void GuiApp::render() {
     DND_MEASURE_FUNCTION();
-    ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+    ImGui::DockSpaceOverViewport(0, ImGui::GetMainViewport());
 
     if (show_demo_window) {
         ImGui::ShowDemoWindow(&show_demo_window);
