@@ -55,6 +55,16 @@ ParsingResult parse_content(const std::filesystem::path& content_path, const std
     ParsingResult result;
     result.content_path = content_path;
     result.campaign_directory_name = campaign_dir_name;
+
+    if (!std::filesystem::exists(content_path)) {
+        result.errors.add_parsing_error(
+            ParsingError::Code::FILE_NOT_FOUND, content_path, "The content directory does not exist."
+        );
+    } else if (!std::filesystem::directory_entry(content_path).is_directory()) {
+        result.errors.add_parsing_error(
+            ParsingError::Code::FILE_NOT_FOUND, content_path, "The content directory is not a directory."
+        );
+    }
     if (!result.errors.ok()) {
         return result;
     }
