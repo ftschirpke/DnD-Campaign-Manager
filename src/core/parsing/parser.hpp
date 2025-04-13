@@ -24,6 +24,7 @@ public:
     const std::filesystem::path& get_filepath() const;
 protected:
     explicit Parser(const std::filesystem::path& filepath);
+    bool contains_required_attribute(const nlohmann::json& json, const char* attribute_name, Errors& errors) const;
     template <typename T>
     Errors parse_optional_attribute_into(const nlohmann::json& json, const char* attribute_name, T& out) const;
     template <typename T>
@@ -60,11 +61,7 @@ template <typename T>
 Errors Parser::parse_required_attribute_into(const nlohmann::json& json, const char* attribute_name, T& out) const {
     assert(json.is_object());
     Errors errors;
-    if (!json.contains(attribute_name)) {
-        errors.add_parsing_error(
-            ParsingError::Code::MISSING_ATTRIBUTE, filepath,
-            fmt::format("The attribute '{}' is missing", attribute_name)
-        );
+    if (!contains_required_attribute(json, attribute_name, errors)) {
         return errors;
     }
     try {

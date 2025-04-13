@@ -101,6 +101,55 @@ Errors V2FileParser::parse_object(nlohmann::ordered_json& obj, ParseType parse_t
                 errors += parse_required_attribute_into(
                     obj, "spellsKnownProgression", class_data.spellcasting_data.spells_known
                 );
+                if (contains_required_attribute(obj, "classTableGroups", errors)) {
+                    nlohmann::ordered_json& table_groups = obj["classTableGroups"];
+                    if (table_groups.is_array()) {
+                        bool done = false;
+                        for (nlohmann::ordered_json& table_group : table_groups) {
+                            if (done) {
+                                break;
+                            }
+                            if (!table_group.is_object()) {
+                                continue;
+                            }
+                            if (table_group.contains("title")
+                                && table_group["title"] == "Spell Slots per Spell Level") {
+                                errors += parse_required_attribute_into(
+                                    table_group, "rowsSpellProgression", class_data.spellcasting_data.spell_slots
+                                );
+                                done = true;
+                            } else if (table_group.contains("colLabels") && table_group["colLabels"].is_array()) {
+                                size_t slot_count_idx = 0;
+                                size_t slot_level_idx = 0;
+                                nlohmann::ordered_json& col_labels = table_group["colLabels"];
+                                size_t len = col_labels.size();
+                                std::string label;
+                                for (size_t i = 0; i < len; i++) {
+                                    nlohmann::ordered_json& label_json = col_labels[i];
+                                    if (!label_json.is_string()) {
+                                        errors.add_parsing_error(
+                                            ParsingError::Code::INVALID_ATTRIBUTE_TYPE, get_filepath(),
+                                            "Column labels must be strings"
+                                        );
+                                        break;
+                                    }
+                                    label = label_json.get<std::string>();
+                                    if (label == "Spell Slots") {
+                                        slot_count_idx = i;
+                                    } else if (label == "Spell Level") {
+                                        slot_level_idx = i;
+                                    }
+                                }
+                                // TODO: parse the respective columns for spell slot counts and levels
+                            }
+                        }
+                    } else {
+                        errors.add_parsing_error(
+                            ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(),
+                            fmt::format("'classTableGroups'-entry is not an array.")
+                        );
+                    }
+                }
             }
             break;
         }
