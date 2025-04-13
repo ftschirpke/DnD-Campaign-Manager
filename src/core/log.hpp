@@ -3,11 +3,11 @@
 
 #include <dnd_config.hpp>
 
+#include <fmt/format.h>
+
 namespace dnd {
 
 #if DND_DEBUG_MODE
-
-#include <fmt/format.h>
 
 class Logger {
 public:
