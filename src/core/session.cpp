@@ -186,19 +186,6 @@ static Errors validate_content_directory(const std::filesystem::path& content_di
         errors.add_runtime_error(RuntimeError::Code::INVALID_ARGUMENT, "The content directory does not exist.");
     } else if (!std::filesystem::is_directory(content_directory)) {
         errors.add_runtime_error(RuntimeError::Code::INVALID_ARGUMENT, "The content directory is not a directory.");
-    } else if (!std::filesystem::exists(content_directory / GENERAL_DIR_NAME)) {
-        errors.add_runtime_error(
-            RuntimeError::Code::INVALID_ARGUMENT,
-            fmt::format("The content directory does not contain a \"{}\" directory.", GENERAL_DIR_NAME)
-        );
-    } else if (!std::filesystem::is_directory(content_directory / GENERAL_DIR_NAME)) {
-        errors.add_runtime_error(
-            RuntimeError::Code::INVALID_ARGUMENT,
-            fmt::format(
-                "The content directory does not contain a \"{}\" directory, but a file with the same name.",
-                GENERAL_DIR_NAME
-            )
-        );
     }
     return errors;
 }
@@ -303,10 +290,9 @@ void Session::parse_content_and_initialize() {
             case 0: {
                 const ParsingError& parsing_error = std::get<ParsingError>(error);
                 SourceInfo source_info(parsing_error.get_filepath());
-                parsing_error_messages.push_back(fmt::format(
-                    "{} ({} - {} - {})", parsing_error.get_error_message(), source_info.get_source_group_name(),
-                    source_info.get_source_type_name(), source_info.get_source_name()
-                ));
+                parsing_error_messages.push_back(
+                    fmt::format("{} ({})", parsing_error.get_error_message(), source_info.name)
+                );
                 break;
             }
             case 1: {

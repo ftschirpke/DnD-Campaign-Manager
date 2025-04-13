@@ -62,15 +62,11 @@ void ListContentVisitor::operator()(const Spell& spell) {
 }
 
 void ListContentVisitor::operator()(const Feature& feature) {
-    string_list.push_back(
-        fmt::format("{} [FEATURE] : {}", feature.get_name(), feature.get_source_info().get_beautified_source_path())
-    );
+    string_list.push_back(fmt::format("{} [FEATURE] : {}", feature.get_name(), feature.get_source_info().name));
 }
 
 void ListContentVisitor::operator()(const Choosable& choosable) {
-    string_list.push_back(fmt::format(
-        "{} [CHOOSABLE] : {}", choosable.get_name(), choosable.get_source_info().get_beautified_source_path()
-    ));
+    string_list.push_back(fmt::format("{} [CHOOSABLE] : {}", choosable.get_name(), choosable.get_source_info().name));
 }
 
 } // namespace dnd

@@ -62,11 +62,7 @@ static void source(const ContentPiece& content_piece) {
     ImGui::TableSetColumnIndex(0);
     ImGui::Text("Source:");
     ImGui::TableSetColumnIndex(1);
-    ImGui::TextWrapped(
-        "%s / %s / %s", content_piece.get_source_info().get_source_group_name().c_str(),
-        content_piece.get_source_info().get_source_type_name().c_str(),
-        content_piece.get_source_info().get_source_name().c_str()
-    );
+    ImGui::TextWrapped("%s", content_piece.get_source_info().name.c_str());
     ImGui::TableNextRow();
     ImGui::TableSetColumnIndex(0);
     ImGui::Separator();

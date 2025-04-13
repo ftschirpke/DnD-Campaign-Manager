@@ -39,7 +39,7 @@ Errors V2FileParser::parse() {
 
         size_t type_index = std::find(parse_types.begin(), parse_types.end(), category) - parse_types.begin();
         if (type_index >= parse_types.size()) {
-            LOGWARN("Found unknown category '{}'", category);
+            LOGWARN("Found unknown category '{}' in {}", category, get_filepath().c_str());
             continue;
         }
         ParseType parse_type = static_cast<ParseType>(type_index);
@@ -86,6 +86,22 @@ Errors V2FileParser::parse_object(nlohmann::ordered_json& obj, ParseType parse_t
             Class::Data class_data;
             class_data.source_path = get_filepath();
             errors += parse_required_attribute_into(obj, "name", class_data.name);
+            errors += parse_required_attribute_into(obj, "source", class_data.source_name);
+            class_data.spellcasting_data.is_spellcaster = obj.contains("spellcastingAbility");
+            if (class_data.spellcasting_data.is_spellcaster) {
+                errors += parse_required_attribute_into(
+                    obj, "spellcastingAbility", class_data.spellcasting_data.ability
+                );
+                errors += parse_required_attribute_into(
+                    obj, "casterProgression", class_data.spellcasting_data.preparation_spellcasting_type
+                );
+                errors += parse_required_attribute_into(
+                    obj, "cantripProgression", class_data.spellcasting_data.cantrips_known
+                );
+                errors += parse_required_attribute_into(
+                    obj, "spellsKnownProgression", class_data.spellcasting_data.spells_known
+                );
+            }
             break;
         }
         default: {

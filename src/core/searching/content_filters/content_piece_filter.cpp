@@ -23,8 +23,7 @@ bool ContentPieceFilter::matches(const ContentPiece& content_piece) const {
     return std::visit(
                [&content_piece](const auto& filter) { return filter.matches(content_piece.get_name()); }, name_filter
            )
-           && description_filter.matches(content_piece.get_description())
-           && is_sourcebook_filter.matches(content_piece.get_source_info().is_from_source_book());
+           && description_filter.matches(content_piece.get_description());
 }
 
 std::vector<const ContentPiece*> ContentPieceFilter::all_matches(const Content& content) const {

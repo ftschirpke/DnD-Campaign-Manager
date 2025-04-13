@@ -19,6 +19,7 @@ public:
     std::string name;
     std::string description;
     std::filesystem::path source_path;
+    std::string source_name;
 protected:
     ValidationData() = default;
 };
