@@ -25,10 +25,15 @@ public:
 protected:
     explicit Parser(const std::filesystem::path& filepath);
     bool contains_required_attribute(const nlohmann::json& json, const char* attribute_name, Errors& errors) const;
+    bool contains_required_index(const nlohmann::json& json, size_t index, Errors& errors) const;
     template <typename T>
     Errors parse_optional_attribute_into(const nlohmann::json& json, const char* attribute_name, T& out) const;
     template <typename T>
     Errors parse_required_attribute_into(const nlohmann::json& json, const char* attribute_name, T& out) const;
+    template <typename T>
+    Errors parse_optional_index_into(const nlohmann::json& json, size_t index, T& out) const;
+    template <typename T>
+    Errors parse_required_index_into(const nlohmann::json& json, size_t index, T& out) const;
 private:
     const std::filesystem::path& filepath;
 };
@@ -71,6 +76,44 @@ Errors Parser::parse_required_attribute_into(const nlohmann::json& json, const c
         errors.add_parsing_error(
             ParsingError::Code::INVALID_ATTRIBUTE_TYPE, filepath,
             fmt::format("The attribute '{}' is of the wrong type, it should be {}", attribute_name, type_name<T>())
+        );
+    }
+    return errors;
+}
+
+template <typename T>
+Errors Parser::parse_optional_index_into(const nlohmann::json& json, size_t index, T& out) const {
+    assert(json.is_array());
+    Errors errors;
+    if (json.size() <= index) {
+        return errors;
+    }
+    try {
+        out = json[index].get<T>();
+    } catch (const nlohmann::json::type_error& e) {
+        DND_UNUSED(e);
+        errors.add_parsing_error(
+            ParsingError::Code::INVALID_ATTRIBUTE_TYPE, filepath,
+            fmt::format("The value at index {} is of the wrong type, it should be {}", index, type_name<T>())
+        );
+    }
+    return errors;
+}
+
+template <typename T>
+Errors Parser::parse_required_index_into(const nlohmann::json& json, size_t index, T& out) const {
+    assert(json.is_object());
+    Errors errors;
+    if (!contains_required_index(json, index, errors)) {
+        return errors;
+    }
+    try {
+        out = json[index].get<T>();
+    } catch (const nlohmann::json::type_error& e) {
+        DND_UNUSED(e);
+        errors.add_parsing_error(
+            ParsingError::Code::INVALID_ATTRIBUTE_TYPE, filepath,
+            fmt::format("The value at index {} is of the wrong type, it should be {}", index, type_name<T>())
         );
     }
     return errors;

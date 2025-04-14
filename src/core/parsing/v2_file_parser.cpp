@@ -87,6 +87,12 @@ Errors V2FileParser::parse_object(nlohmann::ordered_json& obj, ParseType parse_t
             class_data.source_path = get_filepath();
             errors += parse_required_attribute_into(obj, "name", class_data.name);
             errors += parse_required_attribute_into(obj, "source", class_data.source_name);
+            if (contains_required_attribute(obj, "hd", errors)) {
+                int hit_dice_number, hit_dice_faces;
+                errors += parse_required_attribute_into(obj["hd"], "number", hit_dice_number);
+                errors += parse_required_attribute_into(obj["hd"], "faces", hit_dice_faces);
+                class_data.hit_dice_str = fmt::format("{}d{}", hit_dice_number, hit_dice_faces);
+            }
             class_data.spellcasting_data.is_spellcaster = obj.contains("spellcastingAbility");
             if (class_data.spellcasting_data.is_spellcaster) {
                 errors += parse_required_attribute_into(
@@ -140,17 +146,55 @@ Errors V2FileParser::parse_object(nlohmann::ordered_json& obj, ParseType parse_t
                                         slot_level_idx = i;
                                     }
                                 }
-                                // TODO: parse the respective columns for spell slot counts and levels
+
+                                if (slot_count_idx != slot_level_idx) {
+                                    if (table_group.contains("rows") && table_group["rows"].is_array()
+                                        && table_group["rows"].size() == 20) {
+                                        nlohmann::ordered_json& table_rows = table_group["rows"];
+                                        for (size_t i = 0; i < 20; i++) {
+                                            if (table_rows[i].is_array() && table_rows[i].size() == len) {
+                                                int slot_count;
+                                                size_t slot_level;
+                                                errors += parse_required_index_into(
+                                                    table_rows[i], slot_count_idx, slot_count
+                                                );
+                                                errors += parse_required_index_into(
+                                                    table_rows[i], slot_level_idx, slot_level
+                                                );
+                                                for (size_t lv = 0; lv < 9; lv++) {
+                                                    class_data.spellcasting_data.spell_slots[i][lv] = (lv == slot_level)
+                                                                                                          ? slot_count
+                                                                                                          : 0;
+                                                }
+                                            } else {
+                                                errors.add_parsing_error(
+                                                    ParsingError::Code::MISSING_ATTRIBUTE, get_filepath(),
+                                                    fmt::format(
+                                                        "Table group 'rows' entry must contain arrays of of length {}",
+                                                        len
+                                                    )
+                                                );
+                                            }
+                                        }
+
+                                    } else {
+                                        errors.add_parsing_error(
+                                            ParsingError::Code::MISSING_ATTRIBUTE, get_filepath(),
+                                            "Table group must have 'rows' array of length 20"
+                                        );
+                                    }
+                                }
+                            } else {
+                                errors.add_parsing_error(
+                                    ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(),
+                                    fmt::format("'classTableGroups'-entry is not an array.")
+                                );
                             }
                         }
-                    } else {
-                        errors.add_parsing_error(
-                            ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(),
-                            fmt::format("'classTableGroups'-entry is not an array.")
-                        );
                     }
                 }
             }
+            parsed_data.class_data.push_back(class_data);
             break;
         }
         default: {

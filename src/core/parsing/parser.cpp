@@ -21,5 +21,14 @@ bool Parser::contains_required_attribute(const nlohmann::json& json, const char*
     return true;
 }
 
+bool Parser::contains_required_index(const nlohmann::json& json, size_t index, Errors& errors) const {
+    if (json.size() >= index) {
+        errors.add_parsing_error(
+            ParsingError::Code::MISSING_ATTRIBUTE, filepath, fmt::format("Array does not have index {}", index)
+        );
+        return false;
+    }
+    return true;
+}
 
 } // namespace dnd
