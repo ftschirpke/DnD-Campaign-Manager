@@ -56,19 +56,23 @@ void ContentConfigurationWindow::render() {
 void ContentConfigurationWindow::render_content_dir_selection() {
     DND_MEASURE_FUNCTION();
     content_dir_dialog.Display();
+    Errors errors;
     if (content_dir_dialog.HasSelected()) {
         content_dir_dialog.Close();
-        bool valid = session.set_content_directory(content_dir_dialog.GetSelected()).ok();
-        if (!valid) {
+        errors = session.set_content_directory(content_dir_dialog.GetSelected());
+        if (!errors.ok()) {
             ImGui::OpenPopup("Invalid content directory");
         }
-        if (valid && session.get_status() == SessionStatus::CAMPAIGN_SELECTION) {
+        if (errors.ok() && session.get_status() == SessionStatus::CAMPAIGN_SELECTION) {
             is_selecting_campaign = true;
         }
     }
 
     if (ImGui::BeginPopupModal("Invalid content directory", nullptr, error_popup_options)) {
         ImGui::Text("Selected directory: %s", content_dir_dialog.GetSelected().string().c_str());
+        for (const Error& error : errors.get_errors()) {
+            std::visit([](const auto& err) { ImGui::Text("Error: %s", err.get_error_message().c_str()); }, error);
+        }
         if (ImGui::Button("Select other directory")) {
             ImGui::CloseCurrentPopup();
             open_content_directory_selection();

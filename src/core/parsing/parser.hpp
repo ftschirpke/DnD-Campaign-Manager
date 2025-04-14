@@ -102,7 +102,7 @@ Errors Parser::parse_optional_index_into(const nlohmann::json& json, size_t inde
 
 template <typename T>
 Errors Parser::parse_required_index_into(const nlohmann::json& json, size_t index, T& out) const {
-    assert(json.is_object());
+    assert(json.is_array());
     Errors errors;
     if (!contains_required_index(json, index, errors)) {
         return errors;

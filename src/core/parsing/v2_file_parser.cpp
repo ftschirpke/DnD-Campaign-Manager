@@ -68,6 +68,7 @@ Errors V2FileParser::parse() {
             std::string name;
             parse_required_attribute_into(element, "name", name);
             LOGINFO("[{}] object '{}' found of type '{}'", get_filepath().string(), name, category);
+            errors += parse_object(element, parse_type);
         }
     }
     return errors;
@@ -85,7 +86,7 @@ Errors V2FileParser::parse_object(nlohmann::ordered_json& obj, ParseType parse_t
         case ParseType::class_type: {
             Class::Data class_data;
             class_data.source_path = get_filepath();
-            errors += parse_required_attribute_into(obj, "name", class_data.name);
+            errors = parse_required_attribute_into(obj, "name", class_data.name);
             errors += parse_required_attribute_into(obj, "source", class_data.source_name);
             if (contains_required_attribute(obj, "hd", errors)) {
                 int hit_dice_number, hit_dice_faces;
@@ -142,7 +143,7 @@ Errors V2FileParser::parse_object(nlohmann::ordered_json& obj, ParseType parse_t
                                     label = label_json.get<std::string>();
                                     if (label == "Spell Slots") {
                                         slot_count_idx = i;
-                                    } else if (label == "Spell Level") {
+                                    } else if (label == "Slot Level") {
                                         slot_level_idx = i;
                                     }
                                 }
