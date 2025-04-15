@@ -86,7 +86,7 @@ Errors V2FileParser::parse_object(nlohmann::ordered_json& obj, ParseType parse_t
         case ParseType::class_type: {
             Class::Data class_data;
             class_data.source_path = get_filepath();
-            errors = parse_required_attribute_into(obj, "name", class_data.name);
+            errors += parse_required_attribute_into(obj, "name", class_data.name);
             errors += parse_required_attribute_into(obj, "source", class_data.source_name);
             if (contains_required_attribute(obj, "hd", errors)) {
                 int hit_dice_number, hit_dice_faces;
@@ -163,7 +163,7 @@ Errors V2FileParser::parse_object(nlohmann::ordered_json& obj, ParseType parse_t
                                                     table_rows[i], slot_level_idx, slot_level
                                                 );
                                                 for (size_t lv = 0; lv < 9; lv++) {
-                                                    class_data.spellcasting_data.spell_slots[i][lv] = (lv == slot_level)
+                                                    class_data.spellcasting_data.spell_slots[lv][i] = (lv == slot_level)
                                                                                                           ? slot_count
                                                                                                           : 0;
                                                 }
