@@ -3,7 +3,6 @@
 #include "validation_data_mock.hpp"
 
 #include <filesystem>
-#include <memory>
 
 #include <fmt/format.h>
 
@@ -20,6 +19,7 @@ void set_valid_mock_values(ValidationData& data, const char* data_name) {
         data.description = fmt::format("{} Description", data_name);
     }
     data.source_path = std::filesystem::path(DND_MOCK_DIRECTORY) / "dummy_files" / "file1.json";
+    data.source_name = "dummy";
 }
 
 } // namespace dnd::test

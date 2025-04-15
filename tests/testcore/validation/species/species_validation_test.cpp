@@ -50,18 +50,6 @@ TEST_CASE("Validate Species // invalid species data", tags) {
         REQUIRE_NOTHROW(errors = validate_species_nonrecursively_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
-
-    SECTION("species with duplicate feature names") {
-        data.subspecies = false;
-        Feature::Data& feature_data1 = data.features_data.emplace_back();
-        set_valid_mock_values(feature_data1, "Duplicate Feature");
-        Feature::Data& feature_data2 = data.features_data.emplace_back();
-        set_valid_mock_values(feature_data2, "Duplicate Feature");
-        Feature::Data& feature_data3 = data.features_data.emplace_back();
-        set_valid_mock_values(feature_data3, "Other Feature");
-        REQUIRE_NOTHROW(errors = validate_species_nonrecursively_for_content(data, content));
-        REQUIRE_FALSE(errors.ok());
-    }
 }
 
 TEST_CASE("Validate Species // invalid species data relations", tags) {

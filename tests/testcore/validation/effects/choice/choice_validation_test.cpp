@@ -58,7 +58,7 @@ TEST_CASE("Validate Choice // valid choice data", tags) {
 
     SECTION("explicit choices") {
         data.attribute_name = "stat_changes";
-        data.explicit_choices = {"CHA normal add 2", "INT normal add 2"};
+        data.explicit_choices = {"cha normal add 2", "int normal add 2"};
         data.amount = 1;
         REQUIRE_NOTHROW(errors = validate_choice_for_content(data, content));
         REQUIRE(errors.ok());
@@ -73,7 +73,7 @@ TEST_CASE("Validate Choice // valid choice data", tags) {
     SECTION("group names and explicit choices") {
         data.attribute_name = "spells_known";
         data.group_names = {"Wizard spells"};
-        data.explicit_choices = {"Cure Wounds"};
+        data.explicit_choices = {"Cure Wounds|dummy"};
         data.amount = 2;
         REQUIRE_NOTHROW(errors = validate_choice_for_content(data, content));
         REQUIRE(errors.ok());

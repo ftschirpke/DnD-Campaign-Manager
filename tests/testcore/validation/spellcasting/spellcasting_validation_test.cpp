@@ -13,7 +13,7 @@ static constexpr const char* tags = "[core][validation][class]";
 
 TEST_CASE("Validate Spellcasting // valid spellcasting data", tags) {
     ValidationDataMock parent;
-    Spellcasting::Data data;
+    Spellcasting::Data data{};
     Errors errors;
 
     SECTION("not a spellcaster") {
@@ -22,7 +22,7 @@ TEST_CASE("Validate Spellcasting // valid spellcasting data", tags) {
         REQUIRE(errors.ok());
 
         // even with data, it should be ok, and the data should be ignored
-        data.ability = "INT";
+        data.ability = "int";
         data.ritual_casting = true;
         data.is_spells_known_type = true;
         data.spells_known.fill(10);
@@ -36,7 +36,7 @@ TEST_CASE("Validate Spellcasting // valid spellcasting data", tags) {
 
     SECTION("spells known spellcaster") {
         data.is_spellcaster = true;
-        data.ability = "INT";
+        data.ability = "int";
         data.ritual_casting = true;
         data.is_spells_known_type = true;
         data.spells_known.fill(10);
@@ -50,7 +50,7 @@ TEST_CASE("Validate Spellcasting // valid spellcasting data", tags) {
 
     SECTION("half preparation caster") {
         data.is_spellcaster = true;
-        data.ability = "WIS";
+        data.ability = "wis";
         data.ritual_casting = false;
         data.is_spells_known_type = false;
         data.preparation_spellcasting_type = "half";
@@ -66,7 +66,7 @@ TEST_CASE("Validate Spellcasting // valid spellcasting data", tags) {
 
     SECTION("full preparation caster") {
         data.is_spellcaster = true;
-        data.ability = "CHA";
+        data.ability = "cha";
         data.ritual_casting = true;
         data.is_spells_known_type = false;
         data.preparation_spellcasting_type = "full";
@@ -88,9 +88,9 @@ TEST_CASE("Validate Spellcasting // valid spellcasting data", tags) {
 TEST_CASE("Validate Spellcasting // invalid spellcasting data", tags) {
     ValidationDataMock parent;
 
-    Spellcasting::Data data1;
+    Spellcasting::Data data1{};
     data1.is_spellcaster = true;
-    data1.ability = "INT";
+    data1.ability = "int";
     data1.ritual_casting = true;
     data1.is_spells_known_type = true;
     data1.spells_known.fill(10);
@@ -99,9 +99,9 @@ TEST_CASE("Validate Spellcasting // invalid spellcasting data", tags) {
     data1.spell_slots[1].fill(2);
     data1.spell_slots[2].fill(1);
 
-    Spellcasting::Data data2;
+    Spellcasting::Data data2{};
     data2.is_spellcaster = true;
-    data2.ability = "WIS";
+    data2.ability = "wis";
     data2.ritual_casting = false;
     data2.is_spells_known_type = false;
     data2.preparation_spellcasting_type = "half";
@@ -123,11 +123,11 @@ TEST_CASE("Validate Spellcasting // invalid spellcasting data", tags) {
         REQUIRE_NOTHROW(errors = validate_spellcasting(data1));
         REQUIRE_FALSE(errors.ok());
 
-        data2.ability = "int";
+        data2.ability = "INT";
         REQUIRE_NOTHROW(errors = validate_spellcasting(data2));
         REQUIRE_FALSE(errors.ok());
 
-        data2.ability = "ABC";
+        data2.ability = "abc";
         REQUIRE_NOTHROW(errors = validate_spellcasting(data2));
         REQUIRE_FALSE(errors.ok());
     }
