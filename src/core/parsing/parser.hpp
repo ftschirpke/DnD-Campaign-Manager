@@ -5,6 +5,7 @@
 
 #include <cassert>
 #include <filesystem>
+#include <optional>
 #include <set>
 #include <string>
 #include <vector>
@@ -24,99 +25,112 @@ public:
     const std::filesystem::path& get_filepath() const;
 protected:
     explicit Parser(const std::filesystem::path& filepath);
-    bool contains_required_attribute(const nlohmann::json& json, const char* attribute_name, Errors& errors) const;
-    bool contains_required_index(const nlohmann::json& json, size_t index, Errors& errors) const;
-    template <typename T>
-    Errors parse_optional_attribute_into(const nlohmann::json& json, const char* attribute_name, T& out) const;
-    template <typename T>
-    Errors parse_required_attribute_into(const nlohmann::json& json, const char* attribute_name, T& out) const;
-    template <typename T>
-    Errors parse_optional_index_into(const nlohmann::json& json, size_t index, T& out) const;
-    template <typename T>
-    Errors parse_required_index_into(const nlohmann::json& json, size_t index, T& out) const;
 private:
     const std::filesystem::path& filepath;
 };
 
-template <typename T>
-inline const char* type_name() {
-    return typeid(T).name();
-}
+std::optional<Error> write_formatted_description_into(
+    const nlohmann::json& json, std::string& out, const std::filesystem::path& filepath
+);
+
+std::optional<Error> check_required_attribute(
+    const nlohmann::json& json, const char* attribute_name, const std::filesystem::path& filepath
+);
+
+std::optional<Error> check_required_index(
+    const nlohmann::json& json, size_t index, const std::filesystem::path& filepath
+);
 
 template <typename T>
-Errors Parser::parse_optional_attribute_into(const nlohmann::json& json, const char* attribute_name, T& out) const {
+const char* type_name();
+
+template <typename T>
+std::optional<Error> parse_optional_attribute_into(
+    const nlohmann::json& json, const char* attribute_name, T& out, const std::filesystem::path& filepath
+) {
     assert(json.is_object());
     Errors errors;
     if (!json.contains(attribute_name)) {
-        return errors;
+        return std::nullopt;
     }
     try {
         out = json[attribute_name].get<T>();
     } catch (const nlohmann::json::type_error& e) {
         DND_UNUSED(e);
-        errors.add_parsing_error(
+        return ParsingError(
             ParsingError::Code::INVALID_ATTRIBUTE_TYPE, filepath,
             fmt::format("The attribute '{}' is of the wrong type, it should be {}", attribute_name, type_name<T>())
         );
     }
-    return errors;
+    return std::nullopt;
 }
 
 template <typename T>
-Errors Parser::parse_required_attribute_into(const nlohmann::json& json, const char* attribute_name, T& out) const {
+std::optional<Error> parse_required_attribute_into(
+    const nlohmann::json& json, const char* attribute_name, T& out, const std::filesystem::path& filepath
+) {
     assert(json.is_object());
-    Errors errors;
-    if (!contains_required_attribute(json, attribute_name, errors)) {
-        return errors;
+    std::optional<Error> check_error = check_required_attribute(json, attribute_name, filepath);
+    if (check_error) {
+        return check_error;
     }
     try {
         out = json[attribute_name].get<T>();
     } catch (const nlohmann::json::type_error& e) {
         DND_UNUSED(e);
-        errors.add_parsing_error(
+        return ParsingError(
             ParsingError::Code::INVALID_ATTRIBUTE_TYPE, filepath,
             fmt::format("The attribute '{}' is of the wrong type, it should be {}", attribute_name, type_name<T>())
         );
     }
-    return errors;
+    return std::nullopt;
 }
 
 template <typename T>
-Errors Parser::parse_optional_index_into(const nlohmann::json& json, size_t index, T& out) const {
+std::optional<Error> parse_optional_index_into(
+    const nlohmann::json& json, size_t index, T& out, const std::filesystem::path& filepath
+) {
     assert(json.is_array());
     Errors errors;
     if (json.size() <= index) {
-        return errors;
+        return std::nullopt;
     }
     try {
         out = json[index].get<T>();
     } catch (const nlohmann::json::type_error& e) {
         DND_UNUSED(e);
-        errors.add_parsing_error(
+        return ParsingError(
             ParsingError::Code::INVALID_ATTRIBUTE_TYPE, filepath,
             fmt::format("The value at index {} is of the wrong type, it should be {}", index, type_name<T>())
         );
     }
-    return errors;
+    return std::nullopt;
 }
 
 template <typename T>
-Errors Parser::parse_required_index_into(const nlohmann::json& json, size_t index, T& out) const {
+std::optional<Error> parse_required_index_into(
+    const nlohmann::json& json, size_t index, T& out, const std::filesystem::path& filepath
+) {
     assert(json.is_array());
-    Errors errors;
-    if (!contains_required_index(json, index, errors)) {
-        return errors;
+    std::optional<Error> check_error = check_required_index(json, index, filepath);
+    if (check_error.has_value()) {
+        return check_error;
     }
     try {
         out = json[index].get<T>();
     } catch (const nlohmann::json::type_error& e) {
         DND_UNUSED(e);
-        errors.add_parsing_error(
+        return ParsingError(
             ParsingError::Code::INVALID_ATTRIBUTE_TYPE, filepath,
             fmt::format("The value at index {} is of the wrong type, it should be {}", index, type_name<T>())
         );
     }
-    return errors;
+    return std::nullopt;
+}
+
+template <typename T>
+inline const char* type_name() {
+    return typeid(T).name();
 }
 
 template <>
@@ -127,6 +141,11 @@ inline const char* type_name<std::map<std::string, std::string>>() {
 template <>
 inline const char* type_name<std::array<int, 20>>() {
     return "length-20 array of integers";
+}
+
+template <>
+inline const char* type_name<std::array<int, 9>>() {
+    return "length-9 array of integers";
 }
 
 template <>

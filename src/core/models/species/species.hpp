@@ -38,7 +38,7 @@ public:
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Species(
-        std::string&& name, std::string&& description, std::filesystem::path&& source_path,
+        std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
         std::vector<Feature>&& features, bool has_subspecies
     );
 

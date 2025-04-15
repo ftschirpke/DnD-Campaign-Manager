@@ -1,6 +1,8 @@
 #ifndef RICH_TEXT_HPP_
 #define RICH_TEXT_HPP_
 
+#include <dnd_config.hpp>
+
 #include <compare>
 #include <optional>
 #include <string>

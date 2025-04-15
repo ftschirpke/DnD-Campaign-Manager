@@ -43,8 +43,8 @@ public:
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Choosable(
-        std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& type,
-        std::vector<std::unique_ptr<Condition>>&& prerequisites, Effects&& main_effects
+        std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
+        std::string&& type, std::vector<std::unique_ptr<Condition>>&& prerequisites, Effects&& main_effects
     );
 
     std::string name;

@@ -2,7 +2,16 @@
 
 #include "parser.hpp"
 
+#include <deque>
 #include <filesystem>
+#include <optional>
+#include <string>
+#include <vector>
+
+#include <fmt/format.h>
+#include <fmt/ranges.h>
+
+#include <core/utils/types.hpp>
 
 namespace dnd {
 
@@ -10,25 +19,64 @@ const std::filesystem::path& Parser::get_filepath() const { return filepath; }
 
 Parser::Parser(const std::filesystem::path& filepath) : filepath(filepath) {}
 
-bool Parser::contains_required_attribute(const nlohmann::json& json, const char* attribute_name, Errors& errors) const {
+std::optional<Error> write_formatted_description_into(
+    const nlohmann::json& json, std::string& out, const std::filesystem::path& filepath
+) {
+    std::vector<std::string> entries;
+
+    if (!json.contains("entries")) {
+        return ParsingError(
+            ParsingError::Code::MISSING_ATTRIBUTE, filepath,
+            "To create a description, the attribute 'entries' is required"
+        );
+    }
+
+    std::deque<CRef<nlohmann::json>> stack;
+    stack.push_back(json);
+
+    while (!stack.empty()) {
+        const nlohmann::json& obj = stack.back();
+        stack.pop_back();
+        assert(obj.is_object());
+
+        if (!(obj.contains("entries") && obj["entries"].is_array())) {
+            continue;
+        }
+
+        for (const nlohmann::json& entry : obj["entries"]) {
+            if (entry.is_string()) {
+                entries.emplace_back(entry.get<std::string>());
+            } else if (entry.is_object()) {
+                stack.push_back(entry);
+            }
+        }
+    }
+
+    out = fmt::format("{}", fmt::join(entries.begin(), entries.end(), "\n"));
+    return std::nullopt;
+}
+
+std::optional<Error> check_required_attribute(
+    const nlohmann::json& json, const char* attribute_name, const std::filesystem::path& filepath
+) {
     if (!json.contains(attribute_name)) {
-        errors.add_parsing_error(
+        return ParsingError(
             ParsingError::Code::MISSING_ATTRIBUTE, filepath,
             fmt::format("The attribute '{}' is missing", attribute_name)
         );
-        return false;
     }
-    return true;
+    return std::nullopt;
 }
 
-bool Parser::contains_required_index(const nlohmann::json& json, size_t index, Errors& errors) const {
+std::optional<Error> check_required_index(
+    const nlohmann::json& json, size_t index, const std::filesystem::path& filepath
+) {
     if (json.size() <= index) {
-        errors.add_parsing_error(
+        return ParsingError(
             ParsingError::Code::MISSING_ATTRIBUTE, filepath, fmt::format("Array does not have index {}", index)
         );
-        return false;
     }
-    return true;
+    return std::nullopt;
 }
 
 } // namespace dnd

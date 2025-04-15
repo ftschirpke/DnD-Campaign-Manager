@@ -13,7 +13,6 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
 #include <core/errors/validation_error.hpp>
-#include <core/log.hpp>
 #include <core/parsing/character/character_parser.hpp>
 #include <core/parsing/class/class_parser.hpp>
 #include <core/parsing/file_parser.hpp>
@@ -25,6 +24,7 @@
 #include <core/parsing/subclass/subclass_parser.hpp>
 #include <core/parsing/subspecies/subspecies_parser.hpp>
 #include <core/parsing/v2_file_parser.hpp>
+#include <log.hpp>
 
 namespace dnd {
 
@@ -50,6 +50,20 @@ static Errors parse_file(Content& content, FileParser&& parser) {
     return errors;
 }
 
+static bool skip_file(const std::filesystem::path& filepath) {
+    std::string filename = filepath.filename().string();
+    if (filename.size() >= 7 && filename.substr(0, 7) == "foundry") {
+        return true;
+    }
+    if (filename.size() >= 10 && filename.substr(filename.size() - 10) == "index.json") {
+        return true;
+    }
+    if (filepath.parent_path().filename() != "class") { // HACK: only parse certain files to increase debugging speed
+        return true;
+    }
+    return false;
+}
+
 ParsingResult parse_content(const std::filesystem::path& content_path, const std::string& campaign_dir_name) {
     DND_MEASURE_FUNCTION();
     ParsingResult result;
@@ -70,7 +84,7 @@ ParsingResult parse_content(const std::filesystem::path& content_path, const std
     }
 
     for (const auto& dir_entry : std::filesystem::recursive_directory_iterator(content_path)) {
-        if (std::filesystem::is_directory(dir_entry)) {
+        if (std::filesystem::is_directory(dir_entry) || skip_file(dir_entry.path())) {
             continue;
         }
         result.errors += parse_file(result.content, V2FileParser(dir_entry.path()));

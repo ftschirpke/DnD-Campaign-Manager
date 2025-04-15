@@ -23,24 +23,8 @@ std::vector<std::unique_ptr<Format>> StringFormatter::parse_formats(const std::s
 
     while (it != text.end()) {
         // iterator is at the start of a new line
-        if (*it == '-') {
-            formats.push_back(parse_bulleted_list(it, text.cend()));
-        } else {
-            std::string::const_iterator test_it = it;
-            bool is_table = false;
-            while (test_it != text.end() && *test_it != '\n') {
-                if (*test_it == '|') {
-                    is_table = true;
-                    break;
-                }
-                ++test_it;
-            }
-            if (is_table) {
-                formats.push_back(parse_table(it, text.cend()));
-            } else {
-                formats.push_back(parse_paragraph(it, text.cend()));
-            }
-        }
+        // HACK: for now, disable all fancy structures
+        formats.push_back(parse_paragraph(it, text.cend()));
         if (it == text.end()) {
             break;
         }

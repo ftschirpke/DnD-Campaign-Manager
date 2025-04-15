@@ -89,8 +89,9 @@ CreateResult<Character> Character::create_for(Data&& data, const Content& conten
     }
 
     Character character(
-        std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(features),
-        std::move(base_ability_scores), std::move(feature_providers), std::move(progression), std::move(decisions)
+        std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.source_name),
+        std::move(features), std::move(base_ability_scores), std::move(feature_providers), std::move(progression),
+        std::move(decisions)
     );
     errors = character.recalculate_stats();
     if (!errors.ok()) {
@@ -219,13 +220,13 @@ int Character::get_proficiency_bonus() const {
 void Character::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 Character::Character(
-    std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::vector<Feature>&& features,
-    AbilityScores&& base_ability_scores, FeatureProviders&& feature_providers, Progression&& progression,
-    std::vector<Decision>&& decisions
+    std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
+    std::vector<Feature>&& features, AbilityScores&& base_ability_scores, FeatureProviders&& feature_providers,
+    Progression&& progression, std::vector<Decision>&& decisions
 )
-    : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
-      features(std::move(features)), base_ability_scores(std::move(base_ability_scores)),
-      feature_providers(std::move(feature_providers)), progression(std::move(progression)),
-      stats(Stats::create_default()), decisions(std::move(decisions)) {}
+    : name(std::move(name)), description(std::move(description)),
+      source_info({.path = std::move(source_path), .name = std::move(source_name)}), features(std::move(features)),
+      base_ability_scores(std::move(base_ability_scores)), feature_providers(std::move(feature_providers)),
+      progression(std::move(progression)), stats(Stats::create_default()), decisions(std::move(decisions)) {}
 
 } // namespace dnd

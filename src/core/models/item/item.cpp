@@ -22,7 +22,7 @@ CreateResult<Item> Item::create(Data&& data) {
         return InvalidCreate<Item>(std::move(data), std::move(errors));
     }
     return ValidCreate(Item(
-        std::move(data.name), std::move(data.description), std::move(data.source_path),
+        std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.source_name),
         std::move(data.cosmetic_description), data.requires_attunement
     ));
 }
@@ -40,10 +40,11 @@ bool Item::requires_attunement() const { return attunement; }
 void Item::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 Item::Item(
-    std::string&& name, std::string&& description, std::filesystem::path&& source_path,
+    std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
     std::string&& cosmetic_description, bool requires_attunement
 )
-    : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
+    : name(std::move(name)), description(std::move(description)),
+      source_info({.path = std::move(source_path), .name = std::move(source_name)}),
       cosmetic_description(std::move(cosmetic_description)), attunement(requires_attunement) {}
 
 } // namespace dnd

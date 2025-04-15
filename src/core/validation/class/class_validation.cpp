@@ -3,7 +3,6 @@
 #include "class_validation.hpp"
 
 #include <string>
-#include <unordered_set>
 #include <vector>
 
 #include <fmt/format.h>
@@ -23,16 +22,7 @@ static Errors validate_class_raw_nonrecursively(const Class::Data& data) {
     Errors errors = validate_name_description_and_source(data);
 
     bool has_subclass_feature = false;
-    std::unordered_set<std::string> unique_feature_names;
     for (const ClassFeature::Data& feature_data : data.features_data) {
-        if (unique_feature_names.contains(feature_data.name)) {
-            errors.add_validation_error(
-                ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
-                fmt::format("Character class has duplicate feature \"{}\".", feature_data.name)
-            );
-        } else {
-            unique_feature_names.insert(feature_data.name);
-        }
         if (feature_data.name == data.subclass_feature_name) {
             has_subclass_feature = true;
         }
@@ -54,16 +44,17 @@ static Errors validate_class_raw_nonrecursively(const Class::Data& data) {
 
 static Errors validate_class_relations_nonrecursively(const Class::Data& data, const Content& content) {
     Errors errors;
-    if (content.get_classes().contains(data.name)) {
+    if (content.get_classes().contains(data.get_key())) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, fmt::format("Class has duplicate name \"{}\".", data.name)
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
+            fmt::format("Class has duplicate key \"{}\".", data.get_key())
         );
     }
     for (const ClassFeature::Data& feature_data : data.features_data) {
-        if (content.get_class_features().contains(feature_data.name)) {
+        if (content.get_class_features().contains(feature_data.get_key())) {
             errors.add_validation_error(
                 ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
-                fmt::format("Feature has duplicate name \"{}\".", feature_data.name)
+                fmt::format("Feature has duplicate key \"{}\".", feature_data.get_key())
             );
         }
     }

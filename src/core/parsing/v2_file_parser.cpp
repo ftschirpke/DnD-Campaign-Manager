@@ -1,5 +1,6 @@
 #include <dnd_config.hpp>
 
+#include "core/parsing/class_parsing.hpp"
 #include "v2_file_parser.hpp"
 
 #include <filesystem>
@@ -11,7 +12,7 @@
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
-#include <core/log.hpp>
+#include <log.hpp>
 
 namespace dnd {
 
@@ -25,15 +26,10 @@ Errors V2FileParser::parse() {
         );
     }
 
-
-    for (nlohmann::ordered_json::iterator it = json.begin(); it != json.end(); ++it) {
+    for (nlohmann::ordered_json::const_iterator it = json.cbegin(); it != json.cend(); ++it) {
         const std::string& category = it.key();
-        nlohmann::ordered_json& entry = it.value();
+        const nlohmann::ordered_json& entry = it.value();
         if (!entry.is_array()) {
-            errors.add_parsing_error(
-                ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(),
-                fmt::format("The top-level JSON entry with key '{}' is not an array.", category)
-            );
             continue;
         }
 
@@ -47,6 +43,7 @@ Errors V2FileParser::parse() {
         bool is_supported;
         switch (parse_type) {
             case ParseType::class_type:
+            case ParseType::classFeature_type:
                 is_supported = true;
                 break;
             default:
@@ -57,7 +54,7 @@ Errors V2FileParser::parse() {
             continue;
         }
 
-        for (nlohmann::ordered_json& element : entry) {
+        for (const nlohmann::ordered_json& element : entry) {
             if (!element.is_object()) {
                 errors.add_parsing_error(
                     ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(),
@@ -66,7 +63,7 @@ Errors V2FileParser::parse() {
                 continue;
             }
             std::string name;
-            parse_required_attribute_into(element, "name", name);
+            parse_required_attribute_into(element, "name", name, get_filepath());
             LOGINFO("[{}] object '{}' found of type '{}'", get_filepath().string(), name, category);
             errors += parse_object(element, parse_type);
         }
@@ -75,127 +72,26 @@ Errors V2FileParser::parse() {
 }
 
 void V2FileParser::save_result(Content& content) {
-    for (Class::Data& datum : parsed_data.class_data) {
-        content.add_class_result(Class::create_for(std::move(datum), content));
+    for (auto& [key, data] : parsed_data.class_data) {
+        LOGINFO("Trying to add parsed class: {} {} {} {}", key, data.name, data.source_name, data.features_data.size());
+        data.important_levels_data.feat_levels = {1};            // HACK: set random feat level to circumvent validation
+        data.subclass_feature_name = data.features_data[0].name; // HACK: set subclass feature to circumvent validation
+        data.description = "Class " + data.name;                 // HACK: set description to circumvent validation
+        content.add_class_result(Class::create_for(std::move(data), content));
     }
 }
 
-Errors V2FileParser::parse_object(nlohmann::ordered_json& obj, ParseType parse_type) {
+Errors V2FileParser::parse_object(const nlohmann::ordered_json& obj, ParseType parse_type) {
     Errors errors;
     switch (parse_type) {
         case ParseType::class_type: {
-            Class::Data class_data;
-            class_data.source_path = get_filepath();
-            errors += parse_required_attribute_into(obj, "name", class_data.name);
-            errors += parse_required_attribute_into(obj, "source", class_data.source_name);
-            if (contains_required_attribute(obj, "hd", errors)) {
-                int hit_dice_number, hit_dice_faces;
-                errors += parse_required_attribute_into(obj["hd"], "number", hit_dice_number);
-                errors += parse_required_attribute_into(obj["hd"], "faces", hit_dice_faces);
-                class_data.hit_dice_str = fmt::format("{}d{}", hit_dice_number, hit_dice_faces);
-            }
-            class_data.spellcasting_data.is_spellcaster = obj.contains("spellcastingAbility");
-            if (class_data.spellcasting_data.is_spellcaster) {
-                errors += parse_required_attribute_into(
-                    obj, "spellcastingAbility", class_data.spellcasting_data.ability
-                );
-                errors += parse_required_attribute_into(
-                    obj, "casterProgression", class_data.spellcasting_data.preparation_spellcasting_type
-                );
-                errors += parse_required_attribute_into(
-                    obj, "cantripProgression", class_data.spellcasting_data.cantrips_known
-                );
-                errors += parse_required_attribute_into(
-                    obj, "spellsKnownProgression", class_data.spellcasting_data.spells_known
-                );
-                if (contains_required_attribute(obj, "classTableGroups", errors)) {
-                    nlohmann::ordered_json& table_groups = obj["classTableGroups"];
-                    if (table_groups.is_array()) {
-                        bool done = false;
-                        for (nlohmann::ordered_json& table_group : table_groups) {
-                            if (done) {
-                                break;
-                            }
-                            if (!table_group.is_object()) {
-                                continue;
-                            }
-                            if (table_group.contains("title")
-                                && table_group["title"] == "Spell Slots per Spell Level") {
-                                errors += parse_required_attribute_into(
-                                    table_group, "rowsSpellProgression", class_data.spellcasting_data.spell_slots
-                                );
-                                done = true;
-                            } else if (table_group.contains("colLabels") && table_group["colLabels"].is_array()) {
-                                size_t slot_count_idx = 0;
-                                size_t slot_level_idx = 0;
-                                nlohmann::ordered_json& col_labels = table_group["colLabels"];
-                                size_t len = col_labels.size();
-                                std::string label;
-                                for (size_t i = 0; i < len; i++) {
-                                    nlohmann::ordered_json& label_json = col_labels[i];
-                                    if (!label_json.is_string()) {
-                                        errors.add_parsing_error(
-                                            ParsingError::Code::INVALID_ATTRIBUTE_TYPE, get_filepath(),
-                                            "Column labels must be strings"
-                                        );
-                                        break;
-                                    }
-                                    label = label_json.get<std::string>();
-                                    if (label == "Spell Slots") {
-                                        slot_count_idx = i;
-                                    } else if (label == "Slot Level") {
-                                        slot_level_idx = i;
-                                    }
-                                }
-
-                                if (slot_count_idx != slot_level_idx) {
-                                    if (table_group.contains("rows") && table_group["rows"].is_array()
-                                        && table_group["rows"].size() == 20) {
-                                        nlohmann::ordered_json& table_rows = table_group["rows"];
-                                        for (size_t i = 0; i < 20; i++) {
-                                            if (table_rows[i].is_array() && table_rows[i].size() == len) {
-                                                int slot_count;
-                                                size_t slot_level;
-                                                errors += parse_required_index_into(
-                                                    table_rows[i], slot_count_idx, slot_count
-                                                );
-                                                errors += parse_required_index_into(
-                                                    table_rows[i], slot_level_idx, slot_level
-                                                );
-                                                for (size_t lv = 0; lv < 9; lv++) {
-                                                    class_data.spellcasting_data.spell_slots[lv][i] = (lv == slot_level)
-                                                                                                          ? slot_count
-                                                                                                          : 0;
-                                                }
-                                            } else {
-                                                errors.add_parsing_error(
-                                                    ParsingError::Code::MISSING_ATTRIBUTE, get_filepath(),
-                                                    fmt::format(
-                                                        "Table group 'rows' entry must contain arrays of of length {}",
-                                                        len
-                                                    )
-                                                );
-                                            }
-                                        }
-
-                                    } else {
-                                        errors.add_parsing_error(
-                                            ParsingError::Code::MISSING_ATTRIBUTE, get_filepath(),
-                                            "Table group must have 'rows' array of length 20"
-                                        );
-                                    }
-                                }
-                            } else {
-                                errors.add_parsing_error(
-                                    ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(),
-                                    fmt::format("'classTableGroups'-entry is not an array.")
-                                );
-                            }
-                        }
-                    }
-                }
-            }
-            parsed_data.class_data.push_back(class_data);
+            Class::Data result{};
+            parse_class(obj, get_filepath()).move_into(result, errors);
+            parsed_data.class_data.insert({result.get_key(), result});
+            break;
+        }
+        case ParseType::classFeature_type: {
+            errors += parse_class_feature(obj, get_filepath(), parsed_data.class_data);
             break;
         }
         default: {

@@ -37,7 +37,10 @@ public:
 
     virtual void accept_visitor(ContentVisitor& visitor) const override;
 protected:
-    Feature(std::string&& name, std::string&& description, std::filesystem::path&& source_path, Effects&& main_effects);
+    Feature(
+        std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
+        Effects&& main_effects
+    );
 private:
     std::string name;
     std::string description;

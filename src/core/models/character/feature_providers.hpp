@@ -45,10 +45,10 @@ private:
 struct FeatureProviders::Data {
     std::strong_ordering operator<=>(const Data&) const = default;
 
-    std::string species_name;
-    std::string subspecies_name;
-    std::string class_name;
-    std::string subclass_name;
+    std::string species_key;
+    std::string subspecies_key;
+    std::string class_key;
+    std::string subclass_key;
 };
 
 

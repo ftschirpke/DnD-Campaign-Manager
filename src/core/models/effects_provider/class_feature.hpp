@@ -35,6 +35,8 @@ public:
     int get_level() const;
     const std::map<int, Effects>& get_higher_level_effects() const;
 
+    std::string get_key() const override;
+
     /**
      * @brief Accepts a visitor
      * @param visitor reference to the visitor
@@ -42,8 +44,8 @@ public:
     virtual void accept_visitor(ContentVisitor& visitor) const override;
 private:
     ClassFeature(
-        std::string&& name, std::string&& description, std::filesystem::path&& source_path, int level,
-        Effects&& main_effects, std::map<int, Effects>&& higher_level_parts = {}
+        std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
+        int level, Effects&& main_effects, std::map<int, Effects>&& higher_level_parts = {}
     );
 
     int level;
@@ -52,6 +54,7 @@ private:
 
 struct ClassFeature::Data : public Feature::Data {
     std::strong_ordering operator<=>(const Data&) const = default;
+    std::string get_key() const override;
 
     int level;
     std::map<int, Effects::Data> higher_level_effects_data;

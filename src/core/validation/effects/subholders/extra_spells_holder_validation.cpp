@@ -41,15 +41,15 @@ static Errors validate_extra_spells_holder_raw(const ExtraSpellsHolder::Data& da
 static Errors spells_set_validate_relations(const std::set<std::string>& spells, const Content& content) {
     Errors errors;
 
-    for (const std::string& spell_name : spells) {
-        OptCRef<Spell> spell_optional = content.get_spells().get(spell_name);
+    for (const std::string& spell_key : spells) {
+        OptCRef<Spell> spell_optional = content.get_spells().get(spell_key);
         if (!spell_optional.has_value()) {
             errors.add_validation_error(
-                ValidationError::Code::RELATION_NOT_FOUND, fmt::format("Spell '{}' does not exist.", spell_name)
+                ValidationError::Code::RELATION_NOT_FOUND, fmt::format("Spell '{}' does not exist.", spell_key)
             );
         } else if (spell_optional.value().get().get_type().get_spell_level() == SpellLevel::CANTRIP) {
             errors.add_validation_error(
-                ValidationError::Code::INVALID_RELATION, fmt::format("Spell '{}' is a cantrip.", spell_name)
+                ValidationError::Code::INVALID_RELATION, fmt::format("Spell '{}' is a cantrip.", spell_key)
             );
         }
     }

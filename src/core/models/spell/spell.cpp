@@ -38,9 +38,9 @@ CreateResult<Spell> Spell::create(Data&& data) {
     SpellType type = type_result.value();
 
     return ValidCreate(Spell(
-        std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(components),
-        std::move(type), std::move(data.casting_time), std::move(data.range), std::move(data.duration),
-        std::move(data.classes)
+        std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.source_name),
+        std::move(components), std::move(type), std::move(data.casting_time), std::move(data.range),
+        std::move(data.duration), std::move(data.classes)
     ));
 }
 
@@ -65,12 +65,13 @@ const std::set<std::string>& Spell::get_classes() const { return classes; }
 void Spell::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 Spell::Spell(
-    std::string&& name, std::string&& description, std::filesystem::path&& source_path, SpellComponents&& components,
-    SpellType&& type, std::string&& casting_time, std::string&& range, std::string&& duration,
-    std::set<std::string>&& classes
+    std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
+    SpellComponents&& components, SpellType&& type, std::string&& casting_time, std::string&& range,
+    std::string&& duration, std::set<std::string>&& classes
 )
-    : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
-      components(std::move(components)), type(std::move(type)), casting_time(std::move(casting_time)),
-      range(std::move(range)), duration(std::move(duration)), classes(std::move(classes)) {}
+    : name(std::move(name)), description(std::move(description)),
+      source_info({.path = std::move(source_path), .name = std::move(source_name)}), components(std::move(components)),
+      type(std::move(type)), casting_time(std::move(casting_time)), range(std::move(range)),
+      duration(std::move(duration)), classes(std::move(classes)) {}
 
 } // namespace dnd

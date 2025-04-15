@@ -4,7 +4,7 @@
 #include <dnd_config.hpp>
 
 #include <filesystem>
-#include <vector>
+#include <map>
 
 #include <core/errors/errors.hpp>
 #include <core/models/class/class.hpp>
@@ -42,13 +42,13 @@ class Content;
 class V2FileParser : public FileParser {
 public:
     struct Data {
-        std::vector<Class::Data> class_data;
+        std::map<std::string, Class::Data> class_data;
     };
     explicit V2FileParser(const std::filesystem::path& filepath);
     virtual Errors parse();
     virtual void save_result(Content& content);
 private:
-    Errors parse_object(nlohmann::ordered_json& obj, ParseType parse_type);
+    Errors parse_object(const nlohmann::ordered_json& obj, ParseType parse_type);
 
     Data parsed_data;
 };

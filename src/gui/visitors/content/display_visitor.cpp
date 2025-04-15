@@ -11,6 +11,7 @@
 #include <fmt/ranges.h>
 #include <imgui/imgui.h>
 
+#include <constants.hpp>
 #include <core/attribute_names.hpp>
 #include <core/basic_mechanics/abilities.hpp>
 #include <core/basic_mechanics/character_progression.hpp>
@@ -217,7 +218,7 @@ static void character_progression_list(const dnd::Character& character) {
     int level = character.get_progression().get_level();
     ImGui::Text("Level: %d", level);
     int xp = character.get_progression().get_xp();
-    if (level < 20) {
+    if (level < MAX_CHARACTER_LEVEL) {
         tl::expected<int, RuntimeError> xp_next_level_result = dnd::xp_for_level(level + 1);
         assert(xp_next_level_result.has_value());
         int xp_next_level = xp_next_level_result.value();

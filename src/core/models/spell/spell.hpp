@@ -36,7 +36,7 @@ public:
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Spell(
-        std::string&& name, std::string&& description, std::filesystem::path&& source_path,
+        std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
         SpellComponents&& components, SpellType&& type, std::string&& casting_time, std::string&& range,
         std::string&& duration, std::set<std::string>&& classes
     );

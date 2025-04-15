@@ -43,7 +43,7 @@ public:
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Subclass(
-        std::string&& name, std::string&& description, std::filesystem::path&& source_path,
+        std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
         std::vector<ClassFeature>&& features, CRef<Class> cls, std::unique_ptr<Spellcasting>&& spellcasting = nullptr
     );
 
@@ -60,7 +60,7 @@ struct Subclass::Data : public ValidationData {
 
     Spellcasting::Data spellcasting_data;
     std::vector<ClassFeature::Data> features_data;
-    std::string class_name;
+    std::string class_key;
 };
 
 } // namespace dnd

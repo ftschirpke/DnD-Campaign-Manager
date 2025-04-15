@@ -14,12 +14,12 @@ inline constexpr const char* SPEED = "SPEED";
 inline constexpr const char* PROFICIENCY_BONUS = "PB";
 inline constexpr const char* INITIATIVE = "INITIATIVE";
 
-inline constexpr const char* STRENGTH = "STR";
-inline constexpr const char* DEXTERITY = "DEX";
-inline constexpr const char* CONSTITUTION = "CON";
-inline constexpr const char* INTELLIGENCE = "INT";
-inline constexpr const char* WISDOM = "WIS";
-inline constexpr const char* CHARISMA = "CHA";
+inline constexpr const char* STRENGTH = "str";
+inline constexpr const char* DEXTERITY = "dex";
+inline constexpr const char* CONSTITUTION = "con";
+inline constexpr const char* INTELLIGENCE = "int";
+inline constexpr const char* WISDOM = "wis";
+inline constexpr const char* CHARISMA = "cha";
 
 inline constexpr const std::array<const char*, 6> ABILITIES = {STRENGTH,     DEXTERITY, CONSTITUTION,
                                                                INTELLIGENCE, WISDOM,    CHARISMA};

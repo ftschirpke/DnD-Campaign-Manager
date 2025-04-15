@@ -21,15 +21,15 @@ CreateResult<FeatureProviders> FeatureProviders::create_for(Data&& data, const C
     if (!errors.ok()) {
         return InvalidCreate<FeatureProviders>(std::move(data), std::move(errors));
     }
-    OptCRef<Species> species = content.get_species().get(data.species_name);
+    OptCRef<Species> species = content.get_species().get(data.species_key);
     OptCRef<Subspecies> subspecies;
-    if (!data.subspecies_name.empty()) {
-        subspecies = content.get_subspecies().get(data.subspecies_name);
+    if (!data.subspecies_key.empty()) {
+        subspecies = content.get_subspecies().get(data.subspecies_key);
     }
-    OptCRef<Class> cls = content.get_classes().get(data.class_name);
+    OptCRef<Class> cls = content.get_classes().get(data.class_key);
     OptCRef<Subclass> subclass;
-    if (!data.subclass_name.empty()) {
-        subclass = content.get_subclasses().get(data.subclass_name);
+    if (!data.subclass_key.empty()) {
+        subclass = content.get_subclasses().get(data.subclass_key);
     }
     return ValidCreate(FeatureProviders(species.value().get(), subspecies, cls.value().get(), subclass));
 }

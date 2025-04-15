@@ -32,8 +32,8 @@ CreateResult<ClassFeature> ClassFeature::create_for(Data&& data, const Content& 
 
     if (data.higher_level_effects_data.empty()) {
         return ValidCreate(ClassFeature(
-            std::move(data.name), std::move(data.description), std::move(data.source_path), data.level,
-            std::move(main_effects)
+            std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.source_name),
+            data.level, std::move(main_effects)
         ));
     }
 
@@ -47,8 +47,8 @@ CreateResult<ClassFeature> ClassFeature::create_for(Data&& data, const Content& 
         higher_level_effects.emplace(level, effects_result.value());
     }
     return ValidCreate(ClassFeature(
-        std::move(data.name), std::move(data.description), std::move(data.source_path), data.level,
-        std::move(main_effects), std::move(higher_level_effects)
+        std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.source_name),
+        data.level, std::move(main_effects), std::move(higher_level_effects)
     ));
 }
 
@@ -56,13 +56,20 @@ int ClassFeature::get_level() const { return level; }
 
 const std::map<int, Effects>& ClassFeature::get_higher_level_effects() const { return higher_level_effects; }
 
+std::string ClassFeature::get_key() const { return fmt::format("{}|{}|{}", get_name(), get_source_info().name, level); }
+
 void ClassFeature::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 ClassFeature::ClassFeature(
-    std::string&& name, std::string&& description, std::filesystem::path&& source_path, int level,
-    Effects&& main_effects, std::map<int, Effects>&& higher_level_effects
+    std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
+    int level, Effects&& main_effects, std::map<int, Effects>&& higher_level_effects
 )
-    : Feature(std::move(name), std::move(description), std::move(source_path), std::move(main_effects)), level(level),
-      higher_level_effects(std::move(higher_level_effects)) {}
+    : Feature(
+          std::move(name), std::move(description), std::move(source_path), std::move(source_name),
+          std::move(main_effects)
+      ),
+      level(level), higher_level_effects(std::move(higher_level_effects)) {}
+
+std::string ClassFeature::Data::get_key() const { return fmt::format("{}|{}|{}", name, source_name, level); }
 
 } // namespace dnd
