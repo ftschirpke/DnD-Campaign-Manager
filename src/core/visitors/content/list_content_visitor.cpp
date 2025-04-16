@@ -33,7 +33,7 @@ void ListContentVisitor::operator()(const Character& character) {
 }
 
 void ListContentVisitor::operator()(const Class& cls) {
-    string_list.push_back(fmt::format("{} ({}) [CLASS]", cls.get_source_info().name, cls.get_name()));
+    string_list.push_back(fmt::format("{} ({}) [CLASS]", cls.get_name(), cls.get_source_info().name));
 }
 
 void ListContentVisitor::operator()(const Subclass& subclass) {
