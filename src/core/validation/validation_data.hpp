@@ -27,8 +27,6 @@ protected:
     ValidationData() = default;
 };
 
-inline std::string ValidationData::get_key() const { return fmt::format("{}|{}", name, source_name); }
-
 Errors validate_name_description_and_source(const ValidationData& data);
 
 } // namespace dnd

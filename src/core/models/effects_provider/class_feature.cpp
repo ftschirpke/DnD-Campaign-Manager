@@ -7,6 +7,7 @@
 #include <string>
 #include <utility>
 
+#include <core/content_keys.hpp>
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/content_piece.hpp>
@@ -56,7 +57,7 @@ int ClassFeature::get_level() const { return level; }
 
 const std::map<int, Effects>& ClassFeature::get_higher_level_effects() const { return higher_level_effects; }
 
-std::string ClassFeature::get_key() const { return fmt::format("{}|{}|{}", get_name(), get_source_info().name, level); }
+std::string ClassFeature::get_key() const { return class_feature_key(get_name(), get_source_info().name, level); }
 
 void ClassFeature::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
@@ -70,6 +71,6 @@ ClassFeature::ClassFeature(
       ),
       level(level), higher_level_effects(std::move(higher_level_effects)) {}
 
-std::string ClassFeature::Data::get_key() const { return fmt::format("{}|{}|{}", name, source_name, level); }
+std::string ClassFeature::Data::get_key() const { return class_feature_key(name, source_name, level); }
 
 } // namespace dnd

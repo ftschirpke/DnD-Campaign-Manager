@@ -7,6 +7,7 @@
 
 #include <fmt/format.h>
 
+#include <core/content_keys.hpp>
 #include <core/models/source_info.hpp>
 
 namespace dnd {
@@ -26,7 +27,7 @@ public:
     virtual void accept_visitor(ContentVisitor& visitor) const = 0;
 };
 
-inline std::string ContentPiece::get_key() const { return fmt::format("{}|{}", get_name(), get_source_info().name); }
+inline std::string ContentPiece::get_key() const { return default_key(get_name(), get_source_info().name); }
 
 template <typename T>
 concept isContentPieceType = std::is_base_of_v<ContentPiece, T>;
