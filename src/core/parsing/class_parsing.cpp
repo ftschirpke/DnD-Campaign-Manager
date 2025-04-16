@@ -15,7 +15,6 @@
 #include <core/models/effects_provider/class_feature.hpp>
 #include <core/parsing/parser.hpp>
 #include <core/utils/rich_text.hpp>
-#include <log.hpp>
 
 namespace dnd {
 
@@ -23,7 +22,7 @@ static WithErrors<std::array<std::array<int, MAX_CHARACTER_LEVEL>, MAX_SPELL_LEV
 parse_heterogeneous_spell_slots_from_table(
     const nlohmann::ordered_json& table_group, const std::filesystem::path& filepath
 ) {
-    WithErrors<std::array<std::array<int, MAX_CHARACTER_LEVEL>, MAX_SPELL_LEVEL>> result;
+    WithErrors<std::array<std::array<int, MAX_CHARACTER_LEVEL>, MAX_SPELL_LEVEL>> result{};
     std::array<std::array<int, MAX_CHARACTER_LEVEL>, MAX_SPELL_LEVEL>& spell_slots = result.value;
     Errors& errors = result.errors;
 
@@ -73,7 +72,7 @@ static WithErrors<std::array<std::array<int, MAX_CHARACTER_LEVEL>, MAX_SPELL_LEV
 parse_homogeneous_spell_slots_from_table(
     const nlohmann::ordered_json& table_group, const std::filesystem::path& filepath
 ) {
-    WithErrors<std::array<std::array<int, MAX_CHARACTER_LEVEL>, MAX_SPELL_LEVEL>> result;
+    WithErrors<std::array<std::array<int, MAX_CHARACTER_LEVEL>, MAX_SPELL_LEVEL>> result{};
     std::array<std::array<int, MAX_CHARACTER_LEVEL>, MAX_SPELL_LEVEL>& spell_slots = result.value;
     Errors& errors = result.errors;
 
@@ -168,9 +167,6 @@ parse_homogeneous_spell_slots_from_table(
         }
 
         for (size_t lv = 0; lv < MAX_SPELL_LEVEL; lv++) {
-            if (slot_count) {
-                LOGINFO("{} {}", slot_count, filepath.string());
-            }
             spell_slots[lv][i] = (lv == slot_level) ? slot_count : 0;
         }
     }
@@ -179,9 +175,9 @@ parse_homogeneous_spell_slots_from_table(
 }
 
 static WithErrors<std::array<std::array<int, MAX_CHARACTER_LEVEL>, MAX_SPELL_LEVEL>> parse_spell_slots(
-    const nlohmann::ordered_json& obj, const std::filesystem::path& filepath
+    const nlohmann::ordered_json& obj, const std::filesystem::path& filepath, bool is_required
 ) {
-    WithErrors<std::array<std::array<int, MAX_CHARACTER_LEVEL>, MAX_SPELL_LEVEL>> result;
+    WithErrors<std::array<std::array<int, MAX_CHARACTER_LEVEL>, MAX_SPELL_LEVEL>> result{};
     std::array<std::array<int, MAX_CHARACTER_LEVEL>, MAX_SPELL_LEVEL>& spell_slots = result.value;
     Errors& errors = result.errors;
 
@@ -233,7 +229,7 @@ static WithErrors<std::array<std::array<int, MAX_CHARACTER_LEVEL>, MAX_SPELL_LEV
         }
     }
 
-    if (!done) {
+    if (!done && is_required) {
         errors.add_parsing_error(
             ParsingError::Code::MISSING_ATTRIBUTE, filepath, "Could not find spell slot information"
         );
@@ -243,7 +239,7 @@ static WithErrors<std::array<std::array<int, MAX_CHARACTER_LEVEL>, MAX_SPELL_LEV
 }
 
 static WithErrors<Spellcasting::Data> parse_spellcasting(
-    const nlohmann::ordered_json& obj, const std::filesystem::path& filepath
+    const nlohmann::ordered_json& obj, const std::filesystem::path& filepath, bool is_subclass
 ) {
     WithErrors<Spellcasting::Data> result{};
     Spellcasting::Data& spellcasting_data = result.value;
@@ -255,8 +251,8 @@ static WithErrors<Spellcasting::Data> parse_spellcasting(
     }
 
     errors += parse_required_attribute_into(obj, "spellcastingAbility", spellcasting_data.ability, filepath);
-    errors += parse_required_attribute_into(
-        obj, "casterProgression", spellcasting_data.preparation_spellcasting_type, filepath
+    errors += parse_attribute_into(
+        obj, "casterProgression", spellcasting_data.preparation_spellcasting_type, filepath, !is_subclass
     );
     errors += parse_optional_attribute_into(obj, "cantripProgression", spellcasting_data.cantrips_known, filepath);
     errors += parse_optional_attribute_into(obj, "spellsKnownProgression", spellcasting_data.spells_known, filepath);
@@ -265,8 +261,8 @@ static WithErrors<Spellcasting::Data> parse_spellcasting(
         spellcasting_data.preparation_spellcasting_type = "";
     } else {
         spellcasting_data.is_spells_known_type = false;
-        errors += parse_required_attribute_into(
-            obj, "casterProgression", spellcasting_data.preparation_spellcasting_type, filepath
+        errors += parse_attribute_into(
+            obj, "casterProgression", spellcasting_data.preparation_spellcasting_type, filepath, !is_subclass
         );
         if (spellcasting_data.preparation_spellcasting_type == "1/2"
             || spellcasting_data.preparation_spellcasting_type == "artificer"
@@ -274,9 +270,14 @@ static WithErrors<Spellcasting::Data> parse_spellcasting(
             // HACK: hard-code transformations to "half" until better implementation found
             spellcasting_data.preparation_spellcasting_type = "half";
         }
+        if (spellcasting_data.preparation_spellcasting_type == "1/3"
+            || spellcasting_data.preparation_spellcasting_type == "") {
+            // HACK: hard-code transformations to "half" until better implementation found
+            spellcasting_data.preparation_spellcasting_type = "subclass";
+        }
     }
 
-    parse_spell_slots(obj, filepath).move_into(spellcasting_data.spell_slots, errors);
+    parse_spell_slots(obj, filepath, !is_subclass).move_into(spellcasting_data.spell_slots, errors);
 
     return result;
 }
@@ -299,7 +300,7 @@ WithErrors<Class::Data> parse_class(const nlohmann::ordered_json& obj, const std
         class_data.hit_dice_str = fmt::format("{}d{}", hit_dice_number, hit_dice_faces);
     }
 
-    parse_spellcasting(obj, filepath).move_into(class_data.spellcasting_data, errors);
+    parse_spellcasting(obj, filepath, false).move_into(class_data.spellcasting_data, errors);
 
     return result;
 }
@@ -310,11 +311,10 @@ Errors parse_class_feature(
 ) {
     Errors errors;
 
-    Class::Data assumed_class_data;
-
-    errors += parse_required_attribute_into(obj, "className", assumed_class_data.name, filepath);
-    errors += parse_required_attribute_into(obj, "classSource", assumed_class_data.source_name, filepath);
-    std::string key = assumed_class_data.get_key();
+    std::string class_name, class_source_name;
+    errors += parse_required_attribute_into(obj, "className", class_name, filepath);
+    errors += parse_required_attribute_into(obj, "classSource", class_source_name, filepath);
+    std::string key = Class::key(class_name, class_source_name);
 
     if (!parsed_classes.contains(key)) {
         errors.add_parsing_error(
@@ -331,6 +331,71 @@ Errors parse_class_feature(
     errors += parse_required_attribute_into(obj, "source", feature_data.source_name, filepath);
     errors += parse_required_attribute_into(obj, "level", feature_data.level, filepath);
     errors += write_formatted_description_into(obj, feature_data.description, filepath);
+
+    return errors;
+}
+
+WithErrors<Subclass::Data> parse_subclass(const nlohmann::ordered_json& obj, const std::filesystem::path& filepath) {
+    WithErrors<Subclass::Data> result;
+    Subclass::Data& subclass_data = result.value;
+    Errors& errors = result.errors;
+
+    subclass_data.source_path = filepath;
+    errors += parse_required_attribute_into(obj, "name", subclass_data.name, filepath);
+    errors += parse_required_attribute_into(obj, "source", subclass_data.source_name, filepath);
+    errors += parse_required_attribute_into(obj, "shortName", subclass_data.short_name, filepath);
+
+    std::string class_name, class_source_name;
+    errors += parse_required_attribute_into(obj, "className", class_name, filepath);
+    errors += parse_required_attribute_into(obj, "classSource", class_source_name, filepath);
+    subclass_data.class_key = Class::key(class_name, class_source_name);
+
+    parse_spellcasting(obj, filepath, true).move_into(subclass_data.spellcasting_data, errors);
+
+    return result;
+}
+
+Errors parse_subclass_feature(
+    const nlohmann::ordered_json& obj, const std::filesystem::path& filepath,
+    std::map<std::string, Subclass::Data>& parsed_subclasses
+) {
+    Errors errors;
+
+    std::string subclass_short_name, subclass_source_name;
+    errors += parse_required_attribute_into(obj, "subclassShortName", subclass_short_name, filepath);
+    errors += parse_required_attribute_into(obj, "subclassSource", subclass_source_name, filepath);
+    std::string key = Subclass::key(subclass_short_name, subclass_source_name);
+
+    if (!parsed_subclasses.contains(key)) {
+        errors.add_parsing_error(
+            ParsingError::Code::UNEXPECTED_ATTRIBUTE, filepath,
+            fmt::format("Found subclass feature for '{}' but the subclass does not exist", key)
+        );
+        return errors;
+    }
+    Subclass::Data& subclass_data = parsed_subclasses.at(key);
+    ClassFeature::Data& feature_data = subclass_data.features_data.emplace_back();
+
+    feature_data.source_path = filepath;
+    errors += parse_required_attribute_into(obj, "name", feature_data.name, filepath);
+    errors += parse_required_attribute_into(obj, "source", feature_data.source_name, filepath);
+    errors += parse_required_attribute_into(obj, "level", feature_data.level, filepath);
+    if (obj.contains("_copy")) {
+        // TODO: handle this case more gracefully
+        std::string name, source, class_name, class_source, subclass_short_name, subclass_source;
+        errors += parse_required_attribute_into(obj, "name", name, filepath);
+        errors += parse_required_attribute_into(obj, "source", source, filepath);
+        errors += parse_required_attribute_into(obj, "className", class_name, filepath);
+        errors += parse_required_attribute_into(obj, "classSource", class_source, filepath);
+        errors += parse_required_attribute_into(obj, "subclassShortName", subclass_short_name, filepath);
+        errors += parse_required_attribute_into(obj, "subclassSource", subclass_source, filepath);
+        feature_data.description = fmt::format(
+            "Copy of {}-{} of {}-{} ({}-{})", name, source, subclass_short_name, subclass_source, class_name,
+            class_source
+        );
+    } else {
+        errors += write_formatted_description_into(obj, feature_data.description, filepath);
+    }
 
     return errors;
 }

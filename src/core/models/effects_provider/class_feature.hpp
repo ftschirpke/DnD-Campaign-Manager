@@ -26,7 +26,9 @@ public:
     struct Data;
 
     static CreateResult<ClassFeature> create_for(Data&& data, const Content& content);
-    static std::string key(const std::string& name, const std::string& source_name, int level);
+    static std::string key(
+        const std::string& name, const std::string& source_name, const std::filesystem::path& source_path, int level
+    );
 
     ClassFeature(const ClassFeature&) = delete;
     ClassFeature& operator=(const ClassFeature&) = delete;
@@ -54,7 +56,9 @@ private:
 };
 
 struct ClassFeature::Data : public Feature::Data {
-    static std::string key(const std::string& name, const std::string& source_name, int level);
+    static std::string key(
+        const std::string& name, const std::string& source_name, const std::filesystem::path& source_path, int level
+    );
 
     std::strong_ordering operator<=>(const Data&) const = default;
     std::string get_key() const override;

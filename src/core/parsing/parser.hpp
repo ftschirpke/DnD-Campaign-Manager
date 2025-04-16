@@ -87,6 +87,19 @@ std::optional<Error> parse_required_attribute_into(
 }
 
 template <typename T>
+std::optional<Error> parse_attribute_into(
+    const nlohmann::json& json, const char* attribute_name, T& out, const std::filesystem::path& filepath,
+    bool is_required
+) {
+    if (is_required) {
+        return parse_required_attribute_into(json, attribute_name, out, filepath);
+    } else {
+        return parse_optional_attribute_into(json, attribute_name, out, filepath);
+    }
+}
+
+
+template <typename T>
 std::optional<Error> parse_optional_index_into(
     const nlohmann::json& json, size_t index, T& out, const std::filesystem::path& filepath
 ) {
@@ -127,6 +140,18 @@ std::optional<Error> parse_required_index_into(
     }
     return std::nullopt;
 }
+
+template <typename T>
+std::optional<Error> parse_index_into(
+    const nlohmann::json& json, size_t index, T& out, const std::filesystem::path& filepath, bool is_required
+) {
+    if (is_required) {
+        return parse_required_index_into(json, index, out, filepath);
+    } else {
+        return parse_optional_index_into(json, index, out, filepath);
+    }
+}
+
 
 template <typename T>
 inline const char* type_name() {

@@ -44,6 +44,8 @@ Errors V2FileParser::parse() {
         switch (parse_type) {
             case ParseType::class_type:
             case ParseType::classFeature_type:
+            case ParseType::subclass_type:
+            case ParseType::subclassFeature_type:
                 is_supported = true;
                 break;
             default:
@@ -73,11 +75,14 @@ Errors V2FileParser::parse() {
 
 void V2FileParser::save_result(Content& content) {
     for (auto& [key, data] : parsed_data.class_data) {
-        LOGINFO("Trying to add parsed class: {} {} {} {}", key, data.name, data.source_name, data.features_data.size());
         data.important_levels_data.feat_levels = {1};            // HACK: set random feat level to circumvent validation
         data.subclass_feature_name = data.features_data[0].name; // HACK: set subclass feature to circumvent validation
         data.description = "Class " + data.name;                 // HACK: set description to circumvent validation
         content.add_class_result(Class::create_for(std::move(data), content));
+    }
+    for (auto& [key, data] : parsed_data.subclass_data) {
+        data.description = "Subclass " + data.name; // HACK: set description to circumvent validation
+        content.add_subclass_result(Subclass::create_for(std::move(data), content));
     }
 }
 
@@ -92,6 +97,16 @@ Errors V2FileParser::parse_object(const nlohmann::ordered_json& obj, ParseType p
         }
         case ParseType::classFeature_type: {
             errors += parse_class_feature(obj, get_filepath(), parsed_data.class_data);
+            break;
+        }
+        case ParseType::subclass_type: {
+            Subclass::Data result{};
+            parse_subclass(obj, get_filepath()).move_into(result, errors);
+            parsed_data.subclass_data.insert({result.get_key(), result});
+            break;
+        }
+        case ParseType::subclassFeature_type: {
+            errors += parse_subclass_feature(obj, get_filepath(), parsed_data.subclass_data);
             break;
         }
         default: {

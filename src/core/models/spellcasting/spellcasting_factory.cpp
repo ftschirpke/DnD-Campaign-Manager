@@ -46,7 +46,8 @@ FactoryResult<Spellcasting> create_spellcasting(Spellcasting::Data&& data) {
             ability, data.ritual_casting, std::move(data.cantrips_known), std::move(data.spell_slots),
             std::move(data.spells_known)
         );
-    } else if (data.preparation_spellcasting_type == "half") {
+    } else if (data.preparation_spellcasting_type == "half" || data.preparation_spellcasting_type == "subclass") {
+        // HACK: for now, put all subclass spellcaster into "half" bucket - needs to be implemented separetely
         spellcasting = std::make_unique<PreparationSpellcasting>(
             ability, data.ritual_casting, std::move(data.cantrips_known), std::move(data.spell_slots),
             PreparationSpellcastingType::HALF

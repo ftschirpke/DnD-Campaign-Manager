@@ -39,15 +39,23 @@ std::optional<Error> write_formatted_description_into(
         stack.pop_back();
         assert(obj.is_object());
 
-        if (!(obj.contains("entries") && obj["entries"].is_array())) {
-            continue;
-        }
-
-        for (const nlohmann::json& entry : obj["entries"]) {
-            if (entry.is_string()) {
-                entries.emplace_back(entry.get<std::string>());
-            } else if (entry.is_object()) {
-                stack.push_back(entry);
+        if (obj.contains("entries") && obj["entries"].is_array()) {
+            for (const nlohmann::json& entry : obj["entries"]) {
+                if (entry.is_string()) {
+                    entries.emplace_back(entry.get<std::string>());
+                } else if (entry.is_object()) {
+                    stack.push_back(entry);
+                }
+            }
+        } else if (obj.contains("items") && obj["items"].is_array()) {
+            // HACK: this is a hacky way to make lists visible for now
+            // TODO: should be handled as special format to allow for better formatting in frontend
+            for (const nlohmann::json& entry : obj["items"]) {
+                if (entry.is_string()) {
+                    entries.emplace_back(fmt::format("- {}", entry.get<std::string>()));
+                } else if (entry.is_object()) {
+                    stack.push_back(entry);
+                }
             }
         }
     }

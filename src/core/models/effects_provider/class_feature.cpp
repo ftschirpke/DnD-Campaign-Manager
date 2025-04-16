@@ -52,20 +52,27 @@ CreateResult<ClassFeature> ClassFeature::create_for(Data&& data, const Content& 
     ));
 }
 
-std::string ClassFeature::key(const std::string& name, const std::string& source_name, int level) {
-    return std::format("{}|{}|{}", name, source_name, level);
+std::string ClassFeature::key(
+    const std::string& name, const std::string& source_name, const std::filesystem::path& source_path, int level
+) {
+    // TODO: make this key independent of the filesystem path
+    return std::format("{}|{}|{}|{}", name, source_name, source_path.stem().string(), level);
 }
 
 int ClassFeature::get_level() const { return level; }
 
 const std::map<int, Effects>& ClassFeature::get_higher_level_effects() const { return higher_level_effects; }
 
-std::string ClassFeature::get_key() const { return key(get_name(), get_source_info().name, level); }
+std::string ClassFeature::get_key() const {
+    return key(get_name(), get_source_info().name, get_source_info().path, level);
+}
 
 void ClassFeature::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
-std::string ClassFeature::Data::key(const std::string& name, const std::string& source_name, int level) {
-    return ClassFeature::key(name, source_name, level);
+std::string ClassFeature::Data::key(
+    const std::string& name, const std::string& source_name, const std::filesystem::path& source_path, int level
+) {
+    return ClassFeature::key(name, source_name, source_path, level);
 }
 
 ClassFeature::ClassFeature(
@@ -78,6 +85,6 @@ ClassFeature::ClassFeature(
       ),
       level(level), higher_level_effects(std::move(higher_level_effects)) {}
 
-std::string ClassFeature::Data::get_key() const { return key(name, source_name, level); }
+std::string ClassFeature::Data::get_key() const { return key(name, source_name, source_path, level); }
 
 } // namespace dnd

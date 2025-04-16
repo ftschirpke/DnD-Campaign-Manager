@@ -8,6 +8,7 @@
 
 #include <core/errors/errors.hpp>
 #include <core/models/class/class.hpp>
+#include <core/models/subclass/subclass.hpp>
 #include <core/parsing/file_parser.hpp>
 
 namespace dnd {
@@ -43,6 +44,7 @@ class V2FileParser : public FileParser {
 public:
     struct Data {
         std::map<std::string, Class::Data> class_data;
+        std::map<std::string, Subclass::Data> subclass_data;
     };
     explicit V2FileParser(const std::filesystem::path& filepath);
     virtual Errors parse();

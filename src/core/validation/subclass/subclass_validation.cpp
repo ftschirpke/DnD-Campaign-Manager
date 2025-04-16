@@ -18,6 +18,11 @@ namespace dnd {
 
 static Errors validate_subclass_raw_nonrecursively(const Subclass::Data& data) {
     Errors errors;
+    if (data.short_name.empty()) {
+        errors.add_validation_error(
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Character subclass has short name."
+        );
+    }
     if (data.features_data.empty()) {
         errors.add_validation_error(
             ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Character subclass has no features."
