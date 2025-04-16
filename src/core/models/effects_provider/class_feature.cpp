@@ -7,7 +7,6 @@
 #include <string>
 #include <utility>
 
-#include <core/content_keys.hpp>
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/content_piece.hpp>
@@ -53,13 +52,21 @@ CreateResult<ClassFeature> ClassFeature::create_for(Data&& data, const Content& 
     ));
 }
 
+std::string ClassFeature::key(const std::string& name, const std::string& source_name, int level) {
+    return std::format("{}|{}|{}", name, source_name, level);
+}
+
 int ClassFeature::get_level() const { return level; }
 
 const std::map<int, Effects>& ClassFeature::get_higher_level_effects() const { return higher_level_effects; }
 
-std::string ClassFeature::get_key() const { return class_feature_key(get_name(), get_source_info().name, level); }
+std::string ClassFeature::get_key() const { return key(get_name(), get_source_info().name, level); }
 
 void ClassFeature::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
+
+std::string ClassFeature::Data::key(const std::string& name, const std::string& source_name, int level) {
+    return ClassFeature::key(name, source_name, level);
+}
 
 ClassFeature::ClassFeature(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
@@ -71,6 +78,6 @@ ClassFeature::ClassFeature(
       ),
       level(level), higher_level_effects(std::move(higher_level_effects)) {}
 
-std::string ClassFeature::Data::get_key() const { return class_feature_key(name, source_name, level); }
+std::string ClassFeature::Data::get_key() const { return key(name, source_name, level); }
 
 } // namespace dnd

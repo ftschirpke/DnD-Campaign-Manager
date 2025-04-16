@@ -15,6 +15,8 @@ class Errors;
 
 class ValidationData {
 public:
+    static std::string key(const std::string& name, const std::string& source_name);
+
     virtual ~ValidationData() = default;
     std::strong_ordering operator<=>(const ValidationData&) const = default;
     virtual std::string get_key() const;

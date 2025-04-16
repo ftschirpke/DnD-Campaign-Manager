@@ -1,3 +1,8 @@
+target_sources(${DND_CORE}
+    PRIVATE
+    content_piece.cpp
+)
+
 add_subdirectory(character)
 add_subdirectory(class)
 add_subdirectory(species)

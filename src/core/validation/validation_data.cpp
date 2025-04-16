@@ -7,13 +7,17 @@
 
 #include <fmt/format.h>
 
-#include <core/content_keys.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
+#include <core/models/content_piece.hpp>
 
 namespace dnd {
 
-std::string ValidationData::get_key() const { return default_key(name, source_name); }
+std::string ValidationData::key(const std::string& name, const std::string& source_name) {
+    return ContentPiece::key(name, source_name);
+}
+
+std::string ValidationData::get_key() const { return key(name, source_name); }
 
 Errors validate_name_description_and_source(const ValidationData& data) {
     Errors errors;
