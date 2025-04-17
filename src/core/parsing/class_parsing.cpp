@@ -183,7 +183,9 @@ static WithErrors<std::array<std::array<int, MAX_CHARACTER_LEVEL>, MAX_SPELL_LEV
 
     std::optional<Error> table_groups_check_error = check_required_attribute(obj, "classTableGroups", filepath);
     if (table_groups_check_error.has_value()) {
-        errors += table_groups_check_error.value();
+        if (is_required) {
+            errors += table_groups_check_error.value();
+        }
         return result;
     }
 
