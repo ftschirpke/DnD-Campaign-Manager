@@ -1,6 +1,5 @@
 #include <dnd_config.hpp>
 
-#include "core/parsing/class_parsing.hpp"
 #include "v2_file_parser.hpp"
 
 #include <filesystem>
@@ -12,6 +11,8 @@
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
+#include <core/parsing/class_parsing.hpp>
+#include <core/parsing/species_parsing.hpp>
 #include <log.hpp>
 
 namespace dnd {
@@ -46,6 +47,8 @@ Errors V2FileParser::parse() {
             case ParseType::classFeature_type:
             case ParseType::subclass_type:
             case ParseType::subclassFeature_type:
+            case ParseType::race_type:
+            case ParseType::subrace_type:
                 is_supported = true;
                 break;
             default:
@@ -84,6 +87,12 @@ void V2FileParser::save_result(Content& content) {
         data.description = "Subclass " + data.name; // HACK: set description to circumvent validation
         content.add_subclass_result(Subclass::create_for(std::move(data), content));
     }
+    for (auto& [key, data] : parsed_data.species_data) {
+        content.add_species_result(Species::create_for(std::move(data), content));
+    }
+    for (auto& [key, data] : parsed_data.subspecies_data) {
+        content.add_subspecies_result(Subspecies::create_for(std::move(data), content));
+    }
 }
 
 Errors V2FileParser::parse_object(const nlohmann::ordered_json& obj, ParseType parse_type) {
@@ -107,6 +116,21 @@ Errors V2FileParser::parse_object(const nlohmann::ordered_json& obj, ParseType p
         }
         case ParseType::subclassFeature_type: {
             errors += parse_subclass_feature(obj, get_filepath(), parsed_data.subclass_data);
+            break;
+        }
+        case ParseType::race_type: {
+            Species::Data result{};
+            parse_species(obj, get_filepath()).move_into(result, errors);
+            parsed_data.species_data.insert({result.get_key(), result});
+            break;
+        }
+        case ParseType::subrace_type: {
+            if (!obj.contains("name")) { // empty subclasses
+                break;
+            }
+            Subspecies::Data result{};
+            parse_subspecies(obj, get_filepath()).move_into(result, errors);
+            parsed_data.subspecies_data.insert({result.get_key(), result});
             break;
         }
         default: {

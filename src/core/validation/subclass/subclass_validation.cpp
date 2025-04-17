@@ -30,7 +30,7 @@ static Errors validate_subclass_raw_nonrecursively(const Subclass::Data& data) {
     }
     if (data.class_key.empty()) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Character subclass has no class name."
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Character subclass has no class key."
         );
     }
     return errors;

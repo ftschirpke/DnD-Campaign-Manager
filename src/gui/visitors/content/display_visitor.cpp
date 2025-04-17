@@ -213,7 +213,7 @@ static void character_progression_list(const dnd::Character& character) {
     ImGui::Text("Proficiency Bonus: %+d", character.get_proficiency_bonus());
     ImGui::Text("Armor Class: %d", stats.get_armor_class());
     ImGui::Text("Initiative: %+d", stats.get_initiative());
-    ImGui::Text("Speed: %.1f", stats.get_speed());
+    ImGui::Text("Speed: %d", stats.get_speed());
     ImGui::Separator();
     int level = character.get_progression().get_level();
     ImGui::Text("Level: %d", level);

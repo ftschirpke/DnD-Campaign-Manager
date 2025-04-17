@@ -8,7 +8,9 @@
 
 #include <core/errors/errors.hpp>
 #include <core/models/class/class.hpp>
+#include <core/models/species/species.hpp>
 #include <core/models/subclass/subclass.hpp>
+#include <core/models/subspecies/subspecies.hpp>
 #include <core/parsing/file_parser.hpp>
 
 namespace dnd {
@@ -45,6 +47,8 @@ public:
     struct Data {
         std::map<std::string, Class::Data> class_data;
         std::map<std::string, Subclass::Data> subclass_data;
+        std::map<std::string, Species::Data> species_data;
+        std::map<std::string, Subspecies::Data> subspecies_data;
     };
     explicit V2FileParser(const std::filesystem::path& filepath);
     virtual Errors parse();

@@ -2,8 +2,6 @@
 
 #include "species_validation.hpp"
 
-#include <string>
-
 #include <fmt/format.h>
 
 #include <core/content.hpp>
@@ -16,11 +14,8 @@ namespace dnd {
 
 static Errors validate_species_raw_nonrecursively(const Species::Data& data) {
     Errors errors;
-    if (data.features_data.empty()) {
-        errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Character species has no features."
-        );
-    }
+    DND_UNUSED(data);
+    // TODO: re-evaluate whether species without features should be allowed
     return errors;
 }
 

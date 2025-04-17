@@ -4,5 +4,6 @@ target_sources(${DND_CORE}
     content_parsing.cpp
     file_parser.cpp
     parser.cpp
+    species_parsing.cpp
     v2_file_parser.cpp
 )

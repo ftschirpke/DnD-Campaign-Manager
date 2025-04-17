@@ -3,8 +3,6 @@
 #include "subspecies_validation.hpp"
 
 #include <string>
-#include <unordered_set>
-#include <vector>
 
 #include <fmt/format.h>
 
@@ -19,14 +17,11 @@ namespace dnd {
 
 static Errors validate_subspecies_raw_nonrecursively(const Subspecies::Data& data) {
     Errors errors;
-    if (data.features_data.empty()) {
-        errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Character subspecies has no features."
-        );
-    }
+    DND_UNUSED(data);
+    // TODO: re-evaluate whether species without features should be allowed
     if (data.species_key.empty()) {
         errors.add_validation_error(
-            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Character subspecies has no species name."
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Character subspecies has no species key."
         );
     }
     return errors;

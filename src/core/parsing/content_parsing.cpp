@@ -58,7 +58,8 @@ static bool skip_file(const std::filesystem::path& filepath) {
     if (filename.size() >= 10 && filename.substr(filename.size() - 10) == "index.json") {
         return true;
     }
-    if (filepath.parent_path().filename() != "class") { // HACK: only parse certain files to increase debugging speed
+    if (filepath.parent_path().filename() != "class" && filepath.filename() != "races.json") {
+        // HACK: only parse certain files to increase debugging speed
         return true;
     }
     return false;
