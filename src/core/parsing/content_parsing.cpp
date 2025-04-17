@@ -13,17 +13,9 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
 #include <core/errors/validation_error.hpp>
-#include <core/parsing/character/character_parser.hpp>
-#include <core/parsing/class/class_parser.hpp>
 #include <core/parsing/file_parser.hpp>
-#include <core/parsing/groups/choosable_group_parser.hpp>
-#include <core/parsing/groups/string_group_parser.hpp>
-#include <core/parsing/item/item_parser.hpp>
-#include <core/parsing/species/species_parser.hpp>
 #include <core/parsing/spell_file_parser.hpp>
 #include <core/parsing/spell_sources_file_parser.hpp>
-#include <core/parsing/subclass/subclass_parser.hpp>
-#include <core/parsing/subspecies/subspecies_parser.hpp>
 #include <core/parsing/v2_file_parser.hpp>
 #include <log.hpp>
 
