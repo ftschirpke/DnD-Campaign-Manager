@@ -304,7 +304,7 @@ TEST_CASE("Validate ExtraSpellsHolder // invalid extra spell holder relations", 
     }
 }
 
-TEST_CASE("ExtraSpellsHolder::Data::emtpy") {
+TEST_CASE("ExtraSpellsHolder::Data::empty") {
     ValidationDataMock parent;
     ExtraSpellsHolder::Data data;
 

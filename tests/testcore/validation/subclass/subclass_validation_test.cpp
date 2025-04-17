@@ -15,6 +15,7 @@ static constexpr const char* tags = "[core][validation][subclass]";
 TEST_CASE("Validate Subclass // valid subclass", tags) {
     Subclass::Data data;
     set_valid_mock_values(data, "Subclass");
+    data.short_name = "Subcls";
     data.spellcasting_data.is_spellcaster = false;
     Content content = minimal_testing_content();
     Errors errors;
@@ -43,6 +44,7 @@ TEST_CASE("Validate Subclass // valid subclass", tags) {
 TEST_CASE("Validate Subclass // invalid subclass", tags) {
     Subclass::Data data;
     set_valid_mock_values(data, "Subclass");
+    data.short_name = "Subcls";
     Content content = minimal_testing_content();
     data.spellcasting_data.is_spellcaster = false;
     Errors errors;
@@ -71,6 +73,7 @@ TEST_CASE("Validate Subclass // invalid subclass", tags) {
 TEST_CASE("Validate Subclass // invalid subclass data relations", tags) {
     Subclass::Data data;
     set_valid_mock_values(data, "Subclass");
+    data.short_name = "Subcls";
     data.spellcasting_data.is_spellcaster = false;
     ClassFeature::Data& valid_feature_data = data.features_data.emplace_back();
     set_valid_mock_values(valid_feature_data, "Valid Feature");
@@ -78,7 +81,8 @@ TEST_CASE("Validate Subclass // invalid subclass data relations", tags) {
     Errors errors;
 
     SECTION("subclass with a name that already exists in the content") {
-        data.name = "Abjuration Wizard"; // already exists in the example content
+        data.name = "Abjuration Wizard";
+        data.short_name = "Abjuration"; // already exists in the example content
         data.class_key = "Wizard|dummy";
         REQUIRE_NOTHROW(errors = validate_subclass_nonrecursively_for_content(data, content));
         REQUIRE_FALSE(errors.ok());

@@ -107,6 +107,7 @@ static void add_classes(Content& content) {
 
     Subclass::Data subclass_data{};
     set_valid_mock_values(subclass_data, "Abjuration Wizard");
+    subclass_data.short_name = "Abjuration";
     subclass_data.spellcasting_data.is_spellcaster = false;
     ClassFeature::Data& feature_data3 = subclass_data.features_data.emplace_back();
     feature_data3.level = 2;
@@ -117,6 +118,7 @@ static void add_classes(Content& content) {
 
     Subclass::Data subclass_data2{};
     set_valid_mock_values(subclass_data2, "Assassin");
+    subclass_data2.short_name = "Assassin";
     subclass_data2.spellcasting_data.is_spellcaster = false;
     ClassFeature::Data& feature_data4 = subclass_data2.features_data.emplace_back();
     feature_data4.level = 3;
@@ -178,7 +180,7 @@ static void add_characters(Content& content) {
     character_data.feature_providers_data.species_key = "Dwarf|dummy";
     character_data.feature_providers_data.subspecies_key = "Hill Dwarf|dummy";
     character_data.feature_providers_data.class_key = "Wizard|dummy";
-    character_data.feature_providers_data.subclass_key = "Abjuration Wizard|dummy";
+    character_data.feature_providers_data.subclass_key = "Abjuration|dummy";
     character_data.progression_data.level = 4;
     character_data.progression_data.xp = 4200;
     character_data.progression_data.hit_dice_rolls = {6, 4, 2, 5};

@@ -106,7 +106,7 @@ Errors validate_choice_raw(const Choice::Data& data) {
         errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Choice has non-positive amount");
     }
     if (data.attribute_name.empty()) {
-        errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Choice has emtpy attribute name");
+        errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Choice has empty attribute name");
         return errors;
     }
     std::optional<ChoiceType> type_optional = choice_type_for_attribute_name(data.attribute_name);
@@ -234,12 +234,12 @@ static Errors validate_relations_item_choice(const Choice::Data& data, const Con
 
 static constexpr const char* cantrip_filter_regex_cstr = "(([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|"
                                                          "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation) )?"
-                                                         "(([a-zA-Z][a-z]*) )?[cC]antrips";
+                                                         "(([a-zA-Z][a-z|]*) )?[cC]antrips";
 
 static constexpr const char* spell_filter_regex_cstr = "((1st|2nd|3rd|[4-9]th)-level )?"
                                                        "(([aA]bjuration|[cC]onjuration|[dD]ivination|[eE]nchantment|"
                                                        "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation) )?"
-                                                       "(([a-zA-Z][a-z]*) )?[sS]pells";
+                                                       "(([a-zA-Z][a-z|]*) )?[sS]pells";
 
 static Errors validate_relations_spell_choice(const Choice::Data& data, const Content& content) {
     Errors errors;
