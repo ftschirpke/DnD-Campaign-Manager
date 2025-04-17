@@ -19,7 +19,6 @@ TEST_CASE("Validate Species // valid species data", tags) {
     Errors errors;
 
     SECTION("species with one valid feature") {
-        data.subspecies = false;
         Feature::Data& feature_data = data.features_data.emplace_back();
         set_valid_mock_values(feature_data, "Feature");
         REQUIRE_NOTHROW(errors = validate_species_nonrecursively_for_content(data, content));
@@ -27,7 +26,6 @@ TEST_CASE("Validate Species // valid species data", tags) {
     }
 
     SECTION("species with multiple differently named features") {
-        data.subspecies = true;
         Feature::Data& feature_data1 = data.features_data.emplace_back();
         set_valid_mock_values(feature_data1, "Feature 1");
         Feature::Data& feature_data2 = data.features_data.emplace_back();
@@ -46,7 +44,6 @@ TEST_CASE("Validate Species // invalid species data", tags) {
     Errors errors;
 
     SECTION("species without features is invalid") {
-        data.subspecies = true;
         REQUIRE_NOTHROW(errors = validate_species_nonrecursively_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }

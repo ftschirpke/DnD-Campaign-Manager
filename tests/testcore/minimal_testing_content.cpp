@@ -133,7 +133,6 @@ static void add_species(Content& content) {
     set_valid_mock_values(species_data1, "Dwarf");
     Feature::Data& feature_data1 = species_data1.features_data.emplace_back();
     set_valid_mock_values(feature_data1, "Example Species Feature");
-    species_data1.subspecies = true;
     assert(validate_species_recursively_for_content(species_data1, content).ok());
     content.add_species(Species::create_for(std::move(species_data1), content).value());
 
@@ -141,7 +140,6 @@ static void add_species(Content& content) {
     set_valid_mock_values(species_data2, "Human");
     Feature::Data& feature_data2 = species_data2.features_data.emplace_back();
     set_valid_mock_values(feature_data2, "Example Species Feature 2");
-    species_data2.subspecies = false;
     assert(validate_species_recursively_for_content(species_data2, content).ok());
     content.add_species(Species::create_for(std::move(species_data2), content).value());
 
@@ -149,7 +147,6 @@ static void add_species(Content& content) {
     set_valid_mock_values(species_data3, "Elf");
     Feature::Data& feature_data3 = species_data3.features_data.emplace_back();
     set_valid_mock_values(feature_data3, "Example Species Feature 3");
-    species_data3.subspecies = true;
     assert(validate_species_recursively_for_content(species_data3, content).ok());
     content.add_species(Species::create_for(std::move(species_data3), content).value());
 

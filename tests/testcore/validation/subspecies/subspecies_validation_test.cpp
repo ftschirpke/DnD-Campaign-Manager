@@ -97,12 +97,6 @@ TEST_CASE("Validate Subspecies // invalid subspecies data relations", tags) {
         REQUIRE_NOTHROW(errors = validate_subspecies_nonrecursively_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
-
-    SECTION("the species with the given species name must allow subspecies") {
-        data.species_key = "Human|dummy"; // doesn't allow subspecies
-        REQUIRE_NOTHROW(errors = validate_subspecies_nonrecursively_for_content(data, content));
-        REQUIRE_FALSE(errors.ok());
-    }
 }
 
 } // namespace dnd::test
