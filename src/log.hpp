@@ -27,15 +27,20 @@ inline Logger::Logger(const char* log_type, const char* file, const char* func, 
 
 template <typename... T>
 inline void Logger::operator()(fmt::format_string<T...> fmt, T&&... args) {
-#if DND_DEBUG_MODE
     log_helper(fmt, fmt::make_format_args(args...));
-#else
-    DND_UNUSED(fmt, args...);
-#endif
 }
 
 inline void Logger::log_helper(fmt::string_view fmt, fmt::format_args args) {
+#if DND_DEBUG_MODE
     fmt::print("[{}] ({}:{}:{}): {}\n", log_type, file, line, func, fmt::vformat(fmt, args));
+#else
+    DND_UNUSED(log_type);
+    DND_UNUSED(file);
+    DND_UNUSED(line);
+    DND_UNUSED(func);
+    DND_UNUSED(fmt);
+    DND_UNUSED(args);
+#endif
 }
 
 #define _DND_LOG(log_type) Logger(log_type, __FILE__, __func__, __LINE__)
