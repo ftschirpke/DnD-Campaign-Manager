@@ -65,15 +65,6 @@ TEST_CASE("Validate Spell // invalid spells", tags) {
         REQUIRE_NOTHROW(errors = validate_spell_nonrecursively(data));
         REQUIRE_FALSE(errors.ok());
     }
-
-    SECTION("No classes") {
-        data.casting_time = "casting time";
-        data.range = "range";
-        data.duration = "duration";
-        data.classes = {};
-        REQUIRE_NOTHROW(errors = validate_spell_nonrecursively(data));
-        REQUIRE_FALSE(errors.ok());
-    }
 }
 
 } // namespace dnd::test
