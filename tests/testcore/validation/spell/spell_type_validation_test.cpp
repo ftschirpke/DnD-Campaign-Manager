@@ -22,6 +22,9 @@ TEST_CASE("SpellType::Data::validate // valid spell type", tags) {
     ValidationDataMock parent;
     SpellType::Data data;
     Errors errors;
+
+    data.ritual = false;
+
     SECTION("cantrips") {
         for (char c : allowed_magic_school_chars) {
             data.level = 0;
@@ -51,6 +54,9 @@ TEST_CASE("SpellType::Data::validate // invalid spell type", tags) {
     ValidationDataMock parent;
     SpellType::Data data;
     Errors errors;
+
+    data.ritual = false;
+
     SECTION("unknown magic school") {
         data.level = 0;
         data.magic_school_char = 'O';
