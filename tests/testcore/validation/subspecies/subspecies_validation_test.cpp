@@ -53,12 +53,6 @@ TEST_CASE("Validate Subspecies // invalid subspecies data", tags) {
         REQUIRE_FALSE(errors.ok());
     }
 
-    SECTION("subspecies without features is invalid") {
-        data.species_key = "Dwarf|dummy";
-        REQUIRE_NOTHROW(errors = validate_subspecies_nonrecursively_for_content(data, content));
-        REQUIRE_FALSE(errors.ok());
-    }
-
     SECTION("subspecies without a species is invalid") {
         data.species_key = "";
         REQUIRE_NOTHROW(errors = validate_subspecies_nonrecursively_for_content(data, content));

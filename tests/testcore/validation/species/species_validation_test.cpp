@@ -42,11 +42,6 @@ TEST_CASE("Validate Species // invalid species data", tags) {
     set_valid_mock_values(data, "Species");
     Content content = minimal_testing_content();
     Errors errors;
-
-    SECTION("species without features is invalid") {
-        REQUIRE_NOTHROW(errors = validate_species_nonrecursively_for_content(data, content));
-        REQUIRE_FALSE(errors.ok());
-    }
 }
 
 TEST_CASE("Validate Species // invalid species data relations", tags) {

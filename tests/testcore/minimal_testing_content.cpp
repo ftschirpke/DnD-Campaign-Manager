@@ -45,8 +45,12 @@ static void add_groups(Content& content) {
 static void add_spells(Content& content) {
     Spell::Data spell;
     set_valid_mock_values(spell, "Dancing Lights");
-    spell.components_data.str = "V, S, M (a bit of phosphorus or wychwood, or a glowworm)";
-    spell.type_data.str = "Evocation cantrip";
+    spell.components_data.verbal = true;
+    spell.components_data.somatic = true;
+    spell.components_data.material_components = "a bit of phosphorus or wychwood, or a glowworm";
+    spell.type_data.magic_school_char = 'V';
+    spell.type_data.level = 0;
+    spell.type_data.ritual = false;
     spell.casting_time = "1 action";
     spell.range = "120 feet";
     spell.duration = "Concentration, up to 1 minute";
@@ -56,8 +60,12 @@ static void add_spells(Content& content) {
 
     Spell::Data spell2;
     set_valid_mock_values(spell2, "Fireball");
-    spell2.components_data.str = "V, S, M (a tiny ball of bat guano and sulfur)";
-    spell2.type_data.str = "3rd-level Evocation";
+    spell2.components_data.verbal = true;
+    spell2.components_data.somatic = true;
+    spell2.components_data.material_components = "a tiny ball of bat guano and sulfur";
+    spell2.type_data.magic_school_char = 'V';
+    spell2.type_data.level = 2;
+    spell2.type_data.ritual = false;
     spell2.casting_time = "1 action";
     spell2.range = "150 feet";
     spell2.duration = "Instantaneous";
@@ -67,8 +75,11 @@ static void add_spells(Content& content) {
 
     Spell::Data spell3;
     set_valid_mock_values(spell3, "Cure Wounds");
-    spell3.components_data.str = "V, S";
-    spell3.type_data.str = "1st-level Evocation";
+    spell3.components_data.verbal = true;
+    spell3.components_data.somatic = true;
+    spell3.type_data.magic_school_char = 'V';
+    spell3.type_data.level = 1;
+    spell3.type_data.ritual = false;
     spell3.casting_time = "1 action";
     spell3.range = "Touch";
     spell3.duration = "Instantaneous";

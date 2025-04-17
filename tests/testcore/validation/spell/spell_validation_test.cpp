@@ -1,6 +1,5 @@
 #include <dnd_config.hpp>
 
-#include <core/validation/spell/spell_components_validation.hpp>
 
 #include <catch2/catch_test_macros.hpp>
 
