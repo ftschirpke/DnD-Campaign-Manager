@@ -172,7 +172,7 @@ int Stats::get_current_hp() const {
 
 int Stats::get_maximum_hp() const { return get_int(attributes::MAXIMUM_HP).value_or(0); }
 
-float Stats::get_speed() const { return get_float(attributes::SPEED).value_or(0.0f); }
+int Stats::get_speed() const { return get_int(attributes::SPEED).value_or(0); }
 
 int Stats::get_armor_class() const { return get_int(attributes::ARMOR_CLASS).value_or(10); }
 

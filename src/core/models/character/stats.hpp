@@ -39,7 +39,7 @@ public:
 
     int get_current_hp() const;
     int get_maximum_hp() const;
-    float get_speed() const;
+    int get_speed() const;
     int get_armor_class() const;
     int get_initiative() const;
 
