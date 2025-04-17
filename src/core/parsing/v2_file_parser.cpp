@@ -136,6 +136,7 @@ Errors V2FileParser::parse_object(const nlohmann::ordered_json& obj, ParseType p
             size_t translated_index = static_cast<size_t>(parse_type);
             const char* invalid_value = translated_index < parse_types.size() ? parse_types[translated_index]
                                                                               : "<null>";
+            DND_UNUSED(invalid_value);
             LOGWARN("Unexpected parsing type \"{}\"", invalid_value);
             break;
         }

@@ -3,52 +3,25 @@
 
 #include <dnd_config.hpp>
 
+#if DND_DEBUG_MODE
+
 #include <fmt/format.h>
 
-namespace dnd {
+#define _DND_LOG(log_type, msg, ...)                                                                                   \
+    do {                                                                                                               \
+        fmt::print("[" log_type "] ({}:{}:{}): " msg "\n", __FILE__, __func__, __LINE__, __VA_ARGS__);                 \
+    } while (false)
 
-class Logger {
-public:
-    Logger(const char* log_type, const char* file, const char* func, int line);
-    template <typename... T>
-    void operator()(fmt::format_string<T...> fmt, T&&... args);
-private:
-    void log_helper(fmt::string_view fmt, fmt::format_args args);
-
-    const char* log_type;
-    const char* file;
-    const char* func;
-    int line;
-};
-
-
-inline Logger::Logger(const char* log_type, const char* file, const char* func, int line)
-    : log_type(log_type), file(file), func(func), line(line) {}
-
-template <typename... T>
-inline void Logger::operator()(fmt::format_string<T...> fmt, T&&... args) {
-    log_helper(fmt, fmt::make_format_args(args...));
-}
-
-inline void Logger::log_helper(fmt::string_view fmt, fmt::format_args args) {
-#if DND_DEBUG_MODE
-    fmt::print("[{}] ({}:{}:{}): {}\n", log_type, file, line, func, fmt::vformat(fmt, args));
 #else
-    DND_UNUSED(log_type);
-    DND_UNUSED(file);
-    DND_UNUSED(line);
-    DND_UNUSED(func);
-    DND_UNUSED(fmt);
-    DND_UNUSED(args);
+
+#define _DND_LOG(...)                                                                                                  \
+    do {                                                                                                               \
+    } while (false)
+
 #endif
-}
 
-#define _DND_LOG(log_type) Logger(log_type, __FILE__, __func__, __LINE__)
-
-#define LOGINFO _DND_LOG("INFO")
-#define LOGDEBUG _DND_LOG("DEBUG")
-#define LOGWARN _DND_LOG("WARN")
-
-} // namespace dnd
+#define LOGINFO(...) _DND_LOG("INFO", __VA_ARGS__)
+#define LOGDEBUG(...) _DND_LOG("DEBUG", __VA_ARGS__)
+#define LOGWARN(...) _DND_LOG("WARN", __VA_ARGS__)
 
 #endif // LOG_HPP_
