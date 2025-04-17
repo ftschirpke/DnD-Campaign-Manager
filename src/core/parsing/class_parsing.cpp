@@ -386,16 +386,17 @@ Errors parse_subclass_feature(
     errors += parse_required_attribute_into(obj, "level", feature_data.level, filepath);
     if (obj.contains("_copy")) {
         // TODO: handle this case more gracefully
-        std::string name, source, class_name, class_source, subclass_short_name, subclass_source;
-        errors += parse_required_attribute_into(obj, "name", name, filepath);
-        errors += parse_required_attribute_into(obj, "source", source, filepath);
-        errors += parse_required_attribute_into(obj, "className", class_name, filepath);
-        errors += parse_required_attribute_into(obj, "classSource", class_source, filepath);
-        errors += parse_required_attribute_into(obj, "subclassShortName", subclass_short_name, filepath);
-        errors += parse_required_attribute_into(obj, "subclassSource", subclass_source, filepath);
+        std::string copy_name, copy_source, copy_class_name, copy_class_source, copy_subclass_short_name,
+            copy_subclass_source;
+        errors += parse_required_attribute_into(obj, "name", copy_name, filepath);
+        errors += parse_required_attribute_into(obj, "source", copy_source, filepath);
+        errors += parse_required_attribute_into(obj, "className", copy_class_name, filepath);
+        errors += parse_required_attribute_into(obj, "classSource", copy_class_source, filepath);
+        errors += parse_required_attribute_into(obj, "subclassShortName", copy_subclass_short_name, filepath);
+        errors += parse_required_attribute_into(obj, "subclassSource", copy_subclass_source, filepath);
         feature_data.description = fmt::format(
-            "Copy of {}-{} of {}-{} ({}-{})", name, source, subclass_short_name, subclass_source, class_name,
-            class_source
+            "Copy of {}-{} of {}-{} ({}-{})", copy_name, copy_source, copy_subclass_short_name, copy_subclass_source,
+            copy_class_name, copy_class_source
         );
     } else {
         errors += write_formatted_description_into(obj, feature_data.description, filepath);
