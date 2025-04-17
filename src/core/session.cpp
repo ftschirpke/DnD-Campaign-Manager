@@ -289,9 +289,8 @@ void Session::parse_content_and_initialize() {
         switch (error.index()) {
             case 0: {
                 const ParsingError& parsing_error = std::get<ParsingError>(error);
-                SourceInfo source_info(parsing_error.get_filepath());
                 parsing_error_messages.push_back(
-                    fmt::format("{} ({})", parsing_error.get_error_message(), source_info.path.string())
+                    fmt::format("{} ({})", parsing_error.get_error_message(), parsing_error.get_filepath().string())
                 );
                 break;
             }

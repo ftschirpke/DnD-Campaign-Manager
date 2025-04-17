@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <optional>
 #include <string>
 #include <string_view>
 
