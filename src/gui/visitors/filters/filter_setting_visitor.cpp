@@ -363,7 +363,6 @@ void FilterSettingVisitor::operator()(SpeciesFilter& species_filter) {
     DND_MEASURE_FUNCTION();
     ImGui::TableSetColumnIndex(1);
     visit_content_piece_filter(species_filter);
-    visit_bool_filter("Has Subspecies", species_filter.has_subspecies_filter);
 
     ImGui::TableSetColumnIndex(1);
     if (!species_filter.has_all_filters() && ImGui::Button("Add Value Filter")) {
@@ -372,7 +371,6 @@ void FilterSettingVisitor::operator()(SpeciesFilter& species_filter) {
     if (ImGui::BeginPopup("value_filter_popup")) {
         DND_MEASURE_SCOPE("SpeciesFilter - Add Value Filter Popup");
         content_piece_filter_menu_items(species_filter);
-        bool_menu_item("Has Subspecies", species_filter.has_subspecies_filter, BoolFilterType::IS_TRUE);
         ImGui::EndPopup();
     }
 }

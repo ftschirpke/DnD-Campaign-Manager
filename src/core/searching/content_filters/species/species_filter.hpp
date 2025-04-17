@@ -16,8 +16,6 @@ public:
     bool matches(const Species& species) const;
     std::vector<const ContentPiece*> all_matches(const Content& content) const override;
     void clear() override;
-
-    BoolFilter has_subspecies_filter;
 };
 
 } // namespace dnd

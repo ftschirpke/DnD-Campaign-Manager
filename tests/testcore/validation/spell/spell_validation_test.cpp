@@ -1,6 +1,5 @@
 #include <dnd_config.hpp>
 
-#include <core/validation/spell/spell_components_validation.hpp>
 
 #include <catch2/catch_test_macros.hpp>
 
@@ -63,15 +62,6 @@ TEST_CASE("Validate Spell // invalid spells", tags) {
         data.range = "range";
         data.duration = "";
         data.classes = {"class1", "class2"};
-        REQUIRE_NOTHROW(errors = validate_spell_nonrecursively(data));
-        REQUIRE_FALSE(errors.ok());
-    }
-
-    SECTION("No classes") {
-        data.casting_time = "casting time";
-        data.range = "range";
-        data.duration = "duration";
-        data.classes = {};
         REQUIRE_NOTHROW(errors = validate_spell_nonrecursively(data));
         REQUIRE_FALSE(errors.ok());
     }

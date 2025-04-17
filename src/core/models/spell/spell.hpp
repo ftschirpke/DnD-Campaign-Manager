@@ -28,6 +28,7 @@ public:
     const SourceInfo& get_source_info() const override;
     const SpellComponents& get_components() const;
     const SpellType& get_type() const;
+    bool requires_concentration() const;
     const std::string& get_casting_time() const;
     const std::string& get_range() const;
     const std::string& get_duration() const;
@@ -36,9 +37,9 @@ public:
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Spell(
-        std::string&& name, std::string&& description, std::filesystem::path&& source_path,
-        SpellComponents&& components, SpellType&& type, std::string&& casting_time, std::string&& range,
-        std::string&& duration, std::set<std::string>&& classes
+        std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
+        SpellComponents&& components, SpellType&& type, bool concentration, std::string&& casting_time,
+        std::string&& range, std::string&& duration, std::set<std::string>&& classes
     );
 
     std::string name;
@@ -46,6 +47,7 @@ private:
     SourceInfo source_info;
     SpellComponents components;
     SpellType type;
+    bool concentration;
     std::string casting_time;
     std::string range;
     std::string duration;
@@ -58,6 +60,7 @@ struct Spell::Data : public ValidationData {
     SpellComponents::Data components_data;
     SpellType::Data type_data;
 
+    bool concentration;
     std::string casting_time;
     std::string range;
     std::string duration;

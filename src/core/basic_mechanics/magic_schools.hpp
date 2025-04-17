@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <optional>
 #include <string>
 #include <string_view>
 
@@ -30,6 +31,8 @@ enum class MagicSchool {
     // transmutation - physically alter the form of an object
     TRANSMUTATION
 };
+
+std::optional<MagicSchool> magic_school_from_char(char c);
 
 bool is_magic_school(std::string_view magic_school_name);
 bool is_magic_school(const std::string& magic_school_name);

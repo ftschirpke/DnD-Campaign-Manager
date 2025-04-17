@@ -4,6 +4,7 @@
 #include <dnd_config.hpp>
 
 #include <filesystem>
+#include <optional>
 #include <string>
 #include <variant>
 #include <vector>
@@ -37,11 +38,35 @@ public:
     void add_runtime_error(RuntimeError::Code error_code, std::string&& message);
     void add_runtime_error(RuntimeError&& error);
 
+    void add_error(Error&& error);
+    Errors& operator+=(Error&& error);
+    Errors& operator+=(std::optional<Error>&& error);
+
     void merge(Errors&& other);
     Errors& operator+=(Errors&& other);
 private:
     std::vector<Error> errors;
 };
+
+template <typename T>
+struct WithErrors {
+    T value;
+    Errors errors;
+
+    bool ok() const;
+    void move_into(T& value_target, Errors& errors_target);
+};
+
+template <typename T>
+inline bool WithErrors<T>::ok() const {
+    return errors.ok();
+}
+
+template <typename T>
+inline void WithErrors<T>::move_into(T& value_target, Errors& errors_target) {
+    value_target = std::move(value);
+    errors_target += std::move(errors);
+}
 
 } // namespace dnd
 

@@ -10,6 +10,13 @@
 
 namespace dnd::test {
 
+static constexpr const char* valid_cantrip1 = "Dancing Lights|dummy";
+static constexpr const char* valid_spell1 = "Fireball|dummy";
+static constexpr const char* valid_spell2 = "Cure Wounds|dummy";
+
+static constexpr const char* invalid_cantrip1 = "Some other cantrip|dummy";
+static constexpr const char* invalid_spell1 = "Some other spell|dummy";
+
 static constexpr const char* tags = "[core][validation][effects]";
 
 TEST_CASE("Validate ExtraSpellsHolder // valid extra spell holders", tags) {
@@ -24,75 +31,75 @@ TEST_CASE("Validate ExtraSpellsHolder // valid extra spell holders", tags) {
     }
 
     SECTION("free cantrips only") {
-        data.free_cantrips = {"Dancing Lights"};
+        data.free_cantrips = {valid_cantrip1};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE(errors.ok());
     }
 
     SECTION("at will spells only") {
-        data.at_will = {"Fireball"};
+        data.at_will = {valid_spell1};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE(errors.ok());
 
-        data.at_will.insert("Cure Wounds");
+        data.at_will.insert(valid_spell2);
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE(errors.ok());
     }
 
     SECTION("innate spells only") {
-        data.innate = {"Cure Wounds"};
+        data.innate = {valid_spell2};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE(errors.ok());
 
-        data.innate.insert("Fireball");
+        data.innate.insert(valid_spell1);
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE(errors.ok());
     }
 
     SECTION("free once a day spells only") {
-        data.free_once_a_day = {"Fireball"};
+        data.free_once_a_day = {valid_spell1};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE(errors.ok());
 
-        data.free_once_a_day.insert("Cure Wounds");
+        data.free_once_a_day.insert(valid_spell2);
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE(errors.ok());
     }
 
     SECTION("known spells only") {
-        data.spells_known = {"Cure Wounds"};
+        data.spells_known = {valid_spell2};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE(errors.ok());
 
-        data.spells_known.insert("Fireball");
+        data.spells_known.insert(valid_spell1);
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE(errors.ok());
     }
 
     SECTION("known spells (included) only") {
-        data.spells_known_included = {"Fireball"};
+        data.spells_known_included = {valid_spell1};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE(errors.ok());
 
-        data.spells_known_included.insert("Cure Wounds");
+        data.spells_known_included.insert(valid_spell2);
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE(errors.ok());
     }
 
     SECTION("spells added to spell list only") {
-        data.added_to_spell_list = {"Cure Wounds"};
+        data.added_to_spell_list = {valid_spell2};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE(errors.ok());
 
-        data.added_to_spell_list.insert("Fireball");
+        data.added_to_spell_list.insert(valid_spell1);
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE(errors.ok());
     }
 
     SECTION("combination") {
-        data.free_cantrips = {"Dancing Lights"};
-        data.spells_known = {"Cure Wounds"};
-        data.added_to_spell_list = {"Fireball"};
+        data.free_cantrips = {valid_cantrip1};
+        data.spells_known = {valid_spell2};
+        data.added_to_spell_list = {valid_spell1};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE(errors.ok());
     }
@@ -109,7 +116,7 @@ TEST_CASE("Validate ExtraSpellsHolder // invalid extra spell holders", tags) {
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
 
-        data.free_cantrips = {"", "Dancing Lights"};
+        data.free_cantrips = {"", valid_cantrip1};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
@@ -119,7 +126,7 @@ TEST_CASE("Validate ExtraSpellsHolder // invalid extra spell holders", tags) {
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
 
-        data.at_will = {"", "Fireball"};
+        data.at_will = {"", valid_spell1};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
@@ -129,7 +136,7 @@ TEST_CASE("Validate ExtraSpellsHolder // invalid extra spell holders", tags) {
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
 
-        data.innate = {"", "Cure Wounds"};
+        data.innate = {"", valid_spell2};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
@@ -139,7 +146,7 @@ TEST_CASE("Validate ExtraSpellsHolder // invalid extra spell holders", tags) {
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
 
-        data.free_once_a_day = {"", "Fireball"};
+        data.free_once_a_day = {"", valid_spell1};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
@@ -149,7 +156,7 @@ TEST_CASE("Validate ExtraSpellsHolder // invalid extra spell holders", tags) {
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
 
-        data.spells_known = {"", "Cure Wounds"};
+        data.spells_known = {"", valid_spell2};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
@@ -159,7 +166,7 @@ TEST_CASE("Validate ExtraSpellsHolder // invalid extra spell holders", tags) {
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
 
-        data.spells_known_included = {"", "Fireball"};
+        data.spells_known_included = {"", valid_spell1};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
@@ -169,7 +176,7 @@ TEST_CASE("Validate ExtraSpellsHolder // invalid extra spell holders", tags) {
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
 
-        data.added_to_spell_list = {"", "Cure Wounds"};
+        data.added_to_spell_list = {"", valid_spell2};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
@@ -185,163 +192,163 @@ TEST_CASE("Validate ExtraSpellsHolder // invalid extra spell holder relations", 
     REQUIRE(errors.ok());
 
     SECTION("unknown free cantrips") {
-        data.free_cantrips = {"Dancing Lights", "Some other cantrip"};
+        data.free_cantrips = {valid_cantrip1, invalid_cantrip1};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("unknown at will spells") {
-        data.at_will = {"Fireball", "Some other spell"};
+        data.at_will = {valid_spell1, invalid_spell1};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("unknown innate spells") {
-        data.innate = {"Cure Wounds", "Some other spell"};
+        data.innate = {valid_spell2, invalid_spell1};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("unknown free once a day spells") {
-        data.free_once_a_day = {"Fireball", "Some other spell"};
+        data.free_once_a_day = {valid_spell1, invalid_spell1};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("unknown known spells") {
-        data.spells_known = {"Cure Wounds", "Some other spell"};
+        data.spells_known = {valid_spell2, invalid_spell1};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("unknown known spells (included)") {
-        data.spells_known_included = {"Fireball", "Some other spell"};
+        data.spells_known_included = {valid_spell1, invalid_spell1};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("unknown spells added to spell list") {
-        data.added_to_spell_list = {"Cure Wounds", "Some other spell"};
+        data.added_to_spell_list = {valid_spell2, invalid_spell1};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("non-cantrip spell as free cantrip") {
-        data.free_cantrips = {"Cure Wounds"};
+        data.free_cantrips = {valid_spell2};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
 
-        data.free_cantrips = {"Cure Wounds", "Dancing Lights"};
+        data.free_cantrips = {valid_spell2, valid_cantrip1};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("cantrip as at will spell") {
-        data.at_will = {"Dancing Lights"};
+        data.at_will = {valid_cantrip1};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
 
-        data.at_will = {"Dancing Lights", "Fireball"};
+        data.at_will = {valid_cantrip1, valid_spell1};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("cantrip as at innate spell") {
-        data.innate = {"Dancing Lights"};
+        data.innate = {valid_cantrip1};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
 
-        data.innate = {"Dancing Lights", "Fireball"};
+        data.innate = {valid_cantrip1, valid_spell1};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("cantrip as free once a day spell") {
-        data.free_once_a_day = {"Dancing Lights"};
+        data.free_once_a_day = {valid_cantrip1};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
 
-        data.free_once_a_day = {"Dancing Lights", "Cure Wounds"};
+        data.free_once_a_day = {valid_cantrip1, valid_spell2};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("cantrip as known spell") {
-        data.spells_known = {"Dancing Lights"};
+        data.spells_known = {valid_cantrip1};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
 
-        data.spells_known = {"Dancing Lights", "Cure Wounds"};
+        data.spells_known = {valid_cantrip1, valid_spell2};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("cantrip as known spell (included)") {
-        data.spells_known_included = {"Dancing Lights"};
+        data.spells_known_included = {valid_cantrip1};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
 
-        data.spells_known_included = {"Dancing Lights", "Fireball"};
+        data.spells_known_included = {valid_cantrip1, valid_spell1};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("cantrip added to spell list") {
-        data.added_to_spell_list = {"Dancing Lights"};
+        data.added_to_spell_list = {valid_cantrip1};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
 
-        data.added_to_spell_list = {"Dancing Lights", "Cure Wounds"};
+        data.added_to_spell_list = {valid_cantrip1, valid_spell2};
         REQUIRE_NOTHROW(errors = validate_extra_spells_holder_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
 }
 
-TEST_CASE("ExtraSpellsHolder::Data::emtpy") {
+TEST_CASE("ExtraSpellsHolder::Data::empty") {
     ValidationDataMock parent;
     ExtraSpellsHolder::Data data;
 
     REQUIRE(data.empty());
 
     SECTION("free cantrips") {
-        data.free_cantrips = {"Dancing Lights"};
+        data.free_cantrips = {valid_cantrip1};
         REQUIRE_FALSE(data.empty());
     }
 
     SECTION("at will spells") {
-        data.at_will = {"Fireball"};
+        data.at_will = {valid_spell1};
         REQUIRE_FALSE(data.empty());
     }
 
     SECTION("innate spells") {
-        data.innate = {"Cure Wounds"};
+        data.innate = {valid_spell2};
         REQUIRE_FALSE(data.empty());
     }
 
     SECTION("free once a day spells") {
-        data.free_once_a_day = {"Fireball"};
+        data.free_once_a_day = {valid_spell1};
         REQUIRE_FALSE(data.empty());
     }
 
     SECTION("known spells") {
-        data.spells_known = {"Cure Wounds"};
+        data.spells_known = {valid_spell2};
         REQUIRE_FALSE(data.empty());
     }
 
     SECTION("known spells (included)") {
-        data.spells_known_included = {"Fireball"};
+        data.spells_known_included = {valid_spell1};
         REQUIRE_FALSE(data.empty());
     }
 
     SECTION("spells added to spell list") {
-        data.added_to_spell_list = {"Cure Wounds"};
+        data.added_to_spell_list = {valid_spell2};
         REQUIRE_FALSE(data.empty());
     }
 
     SECTION("combination") {
-        data.free_cantrips = {"Dancing Lights"};
-        data.spells_known = {"Cure Wounds"};
-        data.added_to_spell_list = {"Fireball"};
+        data.free_cantrips = {valid_cantrip1};
+        data.spells_known = {valid_spell2};
+        data.added_to_spell_list = {valid_spell1};
         REQUIRE_FALSE(data.empty());
     }
 }

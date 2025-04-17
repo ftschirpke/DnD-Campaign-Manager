@@ -11,6 +11,7 @@
 #include <fmt/ranges.h>
 #include <imgui/imgui.h>
 
+#include <constants.hpp>
 #include <core/attribute_names.hpp>
 #include <core/basic_mechanics/abilities.hpp>
 #include <core/basic_mechanics/character_progression.hpp>
@@ -62,11 +63,7 @@ static void source(const ContentPiece& content_piece) {
     ImGui::TableSetColumnIndex(0);
     ImGui::Text("Source:");
     ImGui::TableSetColumnIndex(1);
-    ImGui::TextWrapped(
-        "%s / %s / %s", content_piece.get_source_info().get_source_group_name().c_str(),
-        content_piece.get_source_info().get_source_type_name().c_str(),
-        content_piece.get_source_info().get_source_name().c_str()
-    );
+    ImGui::TextWrapped("%s", content_piece.get_source_info().name.c_str());
     ImGui::TableNextRow();
     ImGui::TableSetColumnIndex(0);
     ImGui::Separator();
@@ -216,12 +213,12 @@ static void character_progression_list(const dnd::Character& character) {
     ImGui::Text("Proficiency Bonus: %+d", character.get_proficiency_bonus());
     ImGui::Text("Armor Class: %d", stats.get_armor_class());
     ImGui::Text("Initiative: %+d", stats.get_initiative());
-    ImGui::Text("Speed: %.1f", stats.get_speed());
+    ImGui::Text("Speed: %d", stats.get_speed());
     ImGui::Separator();
     int level = character.get_progression().get_level();
     ImGui::Text("Level: %d", level);
     int xp = character.get_progression().get_xp();
-    if (level < 20) {
+    if (level < MAX_CHARACTER_LEVEL) {
         tl::expected<int, RuntimeError> xp_next_level_result = dnd::xp_for_level(level + 1);
         assert(xp_next_level_result.has_value());
         int xp_next_level = xp_next_level_result.value();
@@ -304,6 +301,8 @@ void DisplayVisitor::operator()(const Class& cls) {
     ImGui::Text("%s", feat_level_str.c_str());
     label("Subclass Level:");
     ImGui::Text("%d", cls.get_important_levels().get_subclass_level());
+    label("Description:");
+    display_formatted_text(cls.get_description());
     label("Features:");
     list_features<ClassFeature>(*this, cls.get_features());
 
@@ -318,6 +317,8 @@ void DisplayVisitor::operator()(const Subclass& subclass) {
     source(subclass);
     label("Class name:");
     ImGui::Text("%s", subclass.get_class().get().get_name().c_str());
+    label("Description:");
+    display_formatted_text(subclass.get_description());
     label("Features:");
     list_features<ClassFeature>(*this, subclass.get_features());
 
@@ -330,9 +331,8 @@ void DisplayVisitor::operator()(const Species& species) {
     label("Type:");
     ImGui::Text("Species");
     source(species);
-    const char* has_subspecies_cstr = species.has_subspecies() ? "yes" : "no";
-    label("Has Subspecies:");
-    ImGui::Text("%s", has_subspecies_cstr);
+    label("Description:");
+    display_formatted_text(species.get_description());
     label("Features:");
     list_features<Feature>(*this, species.get_features());
 
@@ -347,6 +347,8 @@ void DisplayVisitor::operator()(const Subspecies& subspecies) {
     source(subspecies);
     label("Species name:");
     ImGui::Text("%s", subspecies.get_species().get().get_name().c_str());
+    label("Description:");
+    display_formatted_text(subspecies.get_description());
     label("Features:");
     list_features<Feature>(*this, subspecies.get_features());
 
@@ -383,6 +385,9 @@ void DisplayVisitor::operator()(const Spell& spell) {
     label("Ritual:");
     const char* ritual = spell.get_type().is_ritual() ? "yes" : "no";
     ImGui::Text("%s", ritual);
+    label("Concentration:");
+    const char* concentration = spell.requires_concentration() ? "yes" : "no";
+    ImGui::Text("%s", concentration);
     label("Casting Time:");
     ImGui::Text("%s", spell.get_casting_time().c_str());
     label("Range:");

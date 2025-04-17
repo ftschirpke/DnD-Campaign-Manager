@@ -10,34 +10,34 @@ static constexpr const char* tags = "[core][basic_mechanics]";
 
 TEST_CASE("string_to_ability", tags) {
     SECTION("Valid ability strings") {
-        REQUIRE(ability_from_string("STR").value() == Ability::STRENGTH);
-        REQUIRE(ability_from_string("DEX").value() == Ability::DEXTERITY);
-        REQUIRE(ability_from_string("CON").value() == Ability::CONSTITUTION);
-        REQUIRE(ability_from_string("INT").value() == Ability::INTELLIGENCE);
-        REQUIRE(ability_from_string("WIS").value() == Ability::WISDOM);
-        REQUIRE(ability_from_string("CHA").value() == Ability::CHARISMA);
+        REQUIRE(ability_from_string("str").value() == Ability::STRENGTH);
+        REQUIRE(ability_from_string("dex").value() == Ability::DEXTERITY);
+        REQUIRE(ability_from_string("con").value() == Ability::CONSTITUTION);
+        REQUIRE(ability_from_string("int").value() == Ability::INTELLIGENCE);
+        REQUIRE(ability_from_string("wis").value() == Ability::WISDOM);
+        REQUIRE(ability_from_string("cha").value() == Ability::CHARISMA);
     }
 
     SECTION("Invalid ability strings") {
-        REQUIRE_FALSE(ability_from_string("XYZ").has_value());
-        REQUIRE_FALSE(ability_from_string("ABCD").has_value());
+        REQUIRE_FALSE(ability_from_string("xyz").has_value());
+        REQUIRE_FALSE(ability_from_string("abcd").has_value());
         REQUIRE_FALSE(ability_from_string("").has_value());
     }
 }
 
 TEST_CASE("ability_to_string", tags) {
-    REQUIRE(ability_name(Ability::STRENGTH) == "STR");
-    REQUIRE(ability_name(Ability::DEXTERITY) == "DEX");
-    REQUIRE(ability_name(Ability::CONSTITUTION) == "CON");
-    REQUIRE(ability_name(Ability::INTELLIGENCE) == "INT");
-    REQUIRE(ability_name(Ability::WISDOM) == "WIS");
-    REQUIRE(ability_name(Ability::CHARISMA) == "CHA");
+    REQUIRE(ability_name(Ability::STRENGTH) == "str");
+    REQUIRE(ability_name(Ability::DEXTERITY) == "dex");
+    REQUIRE(ability_name(Ability::CONSTITUTION) == "con");
+    REQUIRE(ability_name(Ability::INTELLIGENCE) == "int");
+    REQUIRE(ability_name(Ability::WISDOM) == "wis");
+    REQUIRE(ability_name(Ability::CHARISMA) == "cha");
 }
 
 TEST_CASE("is_ability // string_view implementation", tags) {
-    std::string_view valid_ability1 = "DEX";
-    std::string_view valid_ability2 = "CON";
-    std::string_view invalid_ability = "XYZ";
+    std::string_view valid_ability1 = "dex";
+    std::string_view valid_ability2 = "con";
+    std::string_view invalid_ability = "xyz";
     std::string_view empty_string;
 
     REQUIRE(is_ability(valid_ability1));
@@ -47,9 +47,9 @@ TEST_CASE("is_ability // string_view implementation", tags) {
 }
 
 TEST_CASE("is_ability // string implementation", tags) {
-    std::string valid_ability1 = "STR";
-    std::string valid_ability2 = "CHA";
-    std::string invalid_ability = "ABCD";
+    std::string valid_ability1 = "str";
+    std::string valid_ability2 = "cha";
+    std::string invalid_ability = "abcd";
     std::string empty_string;
 
     REQUIRE(is_ability(valid_ability1));

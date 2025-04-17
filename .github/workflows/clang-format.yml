@@ -14,11 +14,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Install clang-format-17
+    - name: Install clang-format-19
       run: |
         wget https://apt.llvm.org/llvm.sh
-        sudo bash llvm.sh 17 all
-        clang-format-17 --version
+        sudo bash llvm.sh 19 all
+        clang-format-19 --version
 
     - name: Check format of C++ files
       working-directory: ${{ github.workspace }}

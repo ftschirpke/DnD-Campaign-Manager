@@ -53,7 +53,9 @@ private:
 struct SpellType::Data {
     std::strong_ordering operator<=>(const Data&) const = default;
 
-    std::string str;
+    int level;
+    char magic_school_char;
+    bool ritual;
 };
 
 } // namespace dnd

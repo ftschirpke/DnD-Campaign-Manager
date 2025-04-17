@@ -45,11 +45,13 @@ Errors validate_spellcasting(const Spellcasting::Data& data) {
             errors.add_validation_error(
                 ValidationError::Code::MISSING_ATTRIBUTE, "The spells known must be empty for preparation spellcasting."
             );
-        } else if (data.preparation_spellcasting_type != "full" && data.preparation_spellcasting_type != "half") {
+        } else if (data.preparation_spellcasting_type != "full" && data.preparation_spellcasting_type != "half"
+                   && data.preparation_spellcasting_type != "subclass") {
             errors.add_validation_error(
                 ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format(
-                    "The preparation spellcasting type '{}' is not a valid type (must be 'full' of 'half').",
+                    "The preparation spellcasting type '{}' is not a valid type (must be 'full', 'half', or "
+                    "'subclass').",
                     data.preparation_spellcasting_type
                 )
             );
@@ -76,7 +78,7 @@ Errors validate_spellcasting(const Spellcasting::Data& data) {
             if (val < 0) {
                 errors.add_validation_error(
                     ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
-                    fmt::format("The amount of spell slots of level {} cannot be negative", level)
+                    fmt::format("The number of spell slots of level {} cannot be negative", level)
                 );
                 break;
             }

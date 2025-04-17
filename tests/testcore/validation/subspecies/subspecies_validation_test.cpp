@@ -19,7 +19,7 @@ TEST_CASE("Validate Subspecies // valid subspecies data", tags) {
     Errors errors;
 
     SECTION("species with one valid feature") {
-        data.species_name = "Dwarf";
+        data.species_key = "Dwarf|dummy";
         Feature::Data& feature_data = data.features_data.emplace_back();
         set_valid_mock_values(feature_data, "Feature");
         REQUIRE_NOTHROW(errors = validate_subspecies_nonrecursively_for_content(data, content));
@@ -27,7 +27,7 @@ TEST_CASE("Validate Subspecies // valid subspecies data", tags) {
     }
 
     SECTION("species with multiple differently named features") {
-        data.species_name = "Dwarf";
+        data.species_key = "Dwarf|dummy";
         Feature::Data& feature_data1 = data.features_data.emplace_back();
         set_valid_mock_values(feature_data1, "Feature 1");
         Feature::Data& feature_data2 = data.features_data.emplace_back();
@@ -46,33 +46,15 @@ TEST_CASE("Validate Subspecies // invalid subspecies data", tags) {
     Errors errors;
 
     SECTION("subspecies without species is invalid") {
-        data.species_name = "";
+        data.species_key = "";
         Feature::Data& feature_data = data.features_data.emplace_back();
         set_valid_mock_values(feature_data, "Feature");
         REQUIRE_NOTHROW(errors = validate_subspecies_nonrecursively_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
 
-    SECTION("subspecies without features is invalid") {
-        data.species_name = "Dwarf";
-        REQUIRE_NOTHROW(errors = validate_subspecies_nonrecursively_for_content(data, content));
-        REQUIRE_FALSE(errors.ok());
-    }
-
     SECTION("subspecies without a species is invalid") {
-        data.species_name = "";
-        REQUIRE_NOTHROW(errors = validate_subspecies_nonrecursively_for_content(data, content));
-        REQUIRE_FALSE(errors.ok());
-    }
-
-    SECTION("subspecies with duplicate feature names") {
-        data.species_name = "Dwarf";
-        Feature::Data& feature_data1 = data.features_data.emplace_back();
-        set_valid_mock_values(feature_data1, "Duplicate Feature");
-        Feature::Data& feature_data2 = data.features_data.emplace_back();
-        set_valid_mock_values(feature_data2, "Duplicate Feature");
-        Feature::Data& feature_data3 = data.features_data.emplace_back();
-        set_valid_mock_values(feature_data3, "Other Feature");
+        data.species_key = "";
         REQUIRE_NOTHROW(errors = validate_subspecies_nonrecursively_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
@@ -88,14 +70,14 @@ TEST_CASE("Validate Subspecies // invalid subspecies data relations", tags) {
 
     SECTION("subspecies with a name that already exists in the content") {
         data.name = "Hill Dwarf"; // already exists in the example content
-        data.species_name = "Dwarf";
+        data.species_key = "Dwarf|dummy";
         REQUIRE_NOTHROW(errors = validate_subspecies_nonrecursively_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("features with duplicate names aren't allowed") {
         data.name = "New Subspecies";
-        data.species_name = "Dwarf";
+        data.species_key = "Dwarf|dummy";
         Feature::Data& feature_data = data.features_data.emplace_back();
         set_valid_mock_values(feature_data, "Duplicate Feature");
         feature_data
@@ -105,13 +87,7 @@ TEST_CASE("Validate Subspecies // invalid subspecies data relations", tags) {
     }
 
     SECTION("a species with the given species name must exist") {
-        data.species_name = "Nonexistent species";
-        REQUIRE_NOTHROW(errors = validate_subspecies_nonrecursively_for_content(data, content));
-        REQUIRE_FALSE(errors.ok());
-    }
-
-    SECTION("the species with the given species name must allow subspecies") {
-        data.species_name = "Human"; // doesn't allow subspecies
+        data.species_key = "Nonexistent species|dummy";
         REQUIRE_NOTHROW(errors = validate_subspecies_nonrecursively_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }

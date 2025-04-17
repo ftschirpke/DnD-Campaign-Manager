@@ -46,7 +46,7 @@ public:
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Class(
-        std::string&& name, std::string&& description, std::filesystem::path&& source_path,
+        std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
         std::vector<ClassFeature>&& features, OptCRef<ClassFeature> subclass_feature, Dice hit_dice,
         ImportantLevels&& important_levels, std::unique_ptr<Spellcasting>&& spellcasting = nullptr
     );

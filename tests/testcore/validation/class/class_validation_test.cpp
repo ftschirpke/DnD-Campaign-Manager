@@ -64,18 +64,6 @@ TEST_CASE("Validate Class // invalid class data", tags) {
         REQUIRE_NOTHROW(errors = validate_class_nonrecursively_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
-
-    SECTION("class with duplicate features is invalid") {
-        Feature::Data& feature_data1 = data.features_data.emplace_back();
-        set_valid_mock_values(feature_data1, "Duplicate Feature");
-        Feature::Data& feature_data2 = data.features_data.emplace_back();
-        set_valid_mock_values(feature_data2, "Duplicate Feature");
-        Feature::Data& feature_data3 = data.features_data.emplace_back();
-        set_valid_mock_values(feature_data3, "Other Feature");
-        data.subclass_feature_name = "Duplicate Feature";
-        REQUIRE_NOTHROW(errors = validate_class_nonrecursively_for_content(data, content));
-        REQUIRE_FALSE(errors.ok());
-    }
 }
 
 TEST_CASE("Validate Class // invalid class data relations", tags) {

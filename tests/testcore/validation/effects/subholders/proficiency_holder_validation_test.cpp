@@ -64,11 +64,11 @@ TEST_CASE("Validate ProficiencyHolder // valid proficiency holder", tags) {
     }
 
     SECTION("only saving throws") {
-        data.saving_throws = {"STR"};
+        data.saving_throws = {"str"};
         REQUIRE_NOTHROW(errors = validate_proficiency_holder_for_content(data, content));
         REQUIRE(errors.ok());
 
-        data.saving_throws = {"DEX", "CON"};
+        data.saving_throws = {"dex", "con"};
         REQUIRE_NOTHROW(errors = validate_proficiency_holder_for_content(data, content));
         REQUIRE(errors.ok());
     }
@@ -98,7 +98,7 @@ TEST_CASE("Validate ProficiencyHolder // valid proficiency holder", tags) {
         data.weapons = {"simple weapons", "shortsword"};
         data.tools = {"thieves' tools", "disguise kit"};
         data.skills = {"Athletics", "Stealth"};
-        data.saving_throws = {"DEX", "CON"};
+        data.saving_throws = {"dex", "con"};
         data.languages = {"Common", "Dwarvish", "Elvish"};
         data.senses = {"Blindsight", "Truesight"};
         REQUIRE_NOTHROW(errors = validate_proficiency_holder_for_content(data, content));

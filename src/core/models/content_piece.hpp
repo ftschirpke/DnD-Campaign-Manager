@@ -5,6 +5,8 @@
 
 #include <string>
 
+#include <fmt/format.h>
+
 #include <core/models/source_info.hpp>
 
 namespace dnd {
@@ -16,10 +18,12 @@ class ContentVisitor;
  */
 class ContentPiece {
 public:
+    static std::string key(const std::string& name, const std::string& source_name);
     virtual ~ContentPiece() = default;
     virtual const std::string& get_name() const = 0;
     virtual const std::string& get_description() const = 0;
     virtual const SourceInfo& get_source_info() const = 0;
+    virtual std::string get_key() const;
     virtual void accept_visitor(ContentVisitor& visitor) const = 0;
 };
 

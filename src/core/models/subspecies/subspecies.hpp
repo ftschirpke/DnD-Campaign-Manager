@@ -40,7 +40,7 @@ public:
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Subspecies(
-        std::string&& name, std::string&& description, std::filesystem::path&& source_path,
+        std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
         std::vector<Feature>&& features, CRef<Species> species
     );
 
@@ -55,7 +55,7 @@ struct Subspecies::Data : public ValidationData {
     std::strong_ordering operator<=>(const Subspecies::Data&) const = default;
 
     std::vector<Feature::Data> features_data;
-    std::string species_name;
+    std::string species_key;
 };
 
 } // namespace dnd

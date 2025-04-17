@@ -34,12 +34,14 @@ Errors StatChange::apply_with_value(Stats& stats, int value) const {
             return errors;
         case StatChangeOperation::MULT:
             affected_stat *= value;
+            affected_stat /= 100; // HACK: balance the '* 100' applied to values
             return errors;
         case StatChangeOperation::DIV:
             if (value == 0) {
                 errors.add_runtime_error(RuntimeError::Code::INVALID_ARGUMENT, "Cannot divide by zero.");
             } else {
-                value /= value;
+                affected_stat *= 100; // HACK: balance the '* 100' applied to values
+                affected_stat /= value;
             }
             return errors;
         case StatChangeOperation::SET:

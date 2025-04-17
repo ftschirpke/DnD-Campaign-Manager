@@ -3,6 +3,7 @@
 #include "errors.hpp"
 
 #include <iterator>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -16,6 +17,8 @@ namespace dnd {
 Errors::Errors(Error&& error) : errors({std::move(error)}) {}
 
 bool Errors::ok() const { return errors.empty(); }
+
+const std::vector<Error>& Errors::get_errors() const { return errors; }
 
 void Errors::add_parsing_error(
     ParsingError::Code error_code, const std::filesystem::path& filepath, std::string&& message
@@ -37,7 +40,19 @@ void Errors::add_runtime_error(RuntimeError::Code error_code, std::string&& mess
 
 void Errors::add_runtime_error(RuntimeError&& error) { errors.push_back(std::move(error)); }
 
-const std::vector<Error>& Errors::get_errors() const { return errors; }
+void Errors::add_error(Error&& error) { errors.push_back(std::move(error)); }
+
+Errors& Errors::operator+=(Error&& error) {
+    add_error(std::move(error));
+    return *this;
+}
+
+Errors& Errors::operator+=(std::optional<Error>&& error) {
+    if (error.has_value()) {
+        add_error(std::move(error.value()));
+    }
+    return *this;
+}
 
 void Errors::merge(Errors&& other) {
     errors.insert(

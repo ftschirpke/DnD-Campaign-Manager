@@ -9,6 +9,8 @@
 #include <utility>
 #include <vector>
 
+#include <fmt/format.h>
+
 #include <core/content_library.hpp>
 #include <core/errors/errors.hpp>
 #include <core/models/content_piece.hpp>
@@ -103,8 +105,8 @@ const std::vector<std::pair<typename T::Data, Errors>>& StorageContentLibrary<T>
 template <typename T>
 requires isContentPieceType<T>
 OptCRef<T> StorageContentLibrary<T>::add(T&& content_piece) {
-    const std::string name = content_piece.get_name();
-    auto [it, was_inserted] = data.emplace(name, std::move(content_piece));
+    const std::string key = content_piece.get_key();
+    auto [it, was_inserted] = data.emplace(key, std::move(content_piece));
     if (was_inserted) {
         return std::cref(it->second);
     } else {

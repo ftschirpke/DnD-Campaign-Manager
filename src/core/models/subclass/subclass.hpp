@@ -39,17 +39,20 @@ public:
     bool has_spellcasting() const;
     const Spellcasting* get_spellcasting() const;
     CRef<Class> get_class() const;
+    std::string get_key() const override;
 
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Subclass(
-        std::string&& name, std::string&& description, std::filesystem::path&& source_path,
-        std::vector<ClassFeature>&& features, CRef<Class> cls, std::unique_ptr<Spellcasting>&& spellcasting = nullptr
+        std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
+        std::string&& short_name, std::vector<ClassFeature>&& features, CRef<Class> cls,
+        std::unique_ptr<Spellcasting>&& spellcasting = nullptr
     );
 
     std::string name;
     std::string description;
     SourceInfo source_info;
+    std::string short_name;
     std::vector<ClassFeature> features;
     CRef<Class> cls;
     std::unique_ptr<Spellcasting> spellcasting;
@@ -57,10 +60,12 @@ private:
 
 struct Subclass::Data : public ValidationData {
     std::strong_ordering operator<=>(const Data&) const = default;
+    std::string get_key() const override;
 
+    std::string short_name;
     Spellcasting::Data spellcasting_data;
     std::vector<ClassFeature::Data> features_data;
-    std::string class_name;
+    std::string class_key;
 };
 
 } // namespace dnd

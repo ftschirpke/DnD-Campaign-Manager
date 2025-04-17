@@ -38,7 +38,9 @@ private:
 struct SpellComponents::Data {
     std::strong_ordering operator<=>(const Data&) const = default;
 
-    std::string str;
+    bool verbal;
+    bool somatic;
+    std::string material_components;
 };
 
 } // namespace dnd

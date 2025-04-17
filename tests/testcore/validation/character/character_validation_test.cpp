@@ -21,10 +21,10 @@ static Character::Data create_valid_character_data() {
     Feature::Data& feature_data = character_data.features_data.emplace_back();
     set_valid_mock_values(feature_data, "Valid Character Feature");
     character_data.base_ability_scores_data.ability_scores = {10, 8, 12, 15, 13, 14};
-    character_data.feature_providers_data.species_name = "Human";
-    character_data.feature_providers_data.subspecies_name = "";
-    character_data.feature_providers_data.class_name = "Rogue";
-    character_data.feature_providers_data.subclass_name = "Assassin";
+    character_data.feature_providers_data.species_key = "Human|dummy";
+    character_data.feature_providers_data.subspecies_key = "";
+    character_data.feature_providers_data.class_key = "Rogue|dummy";
+    character_data.feature_providers_data.subclass_key = "Assassin|dummy";
     character_data.progression_data.level = 5;
     character_data.progression_data.xp = 7100;
     character_data.progression_data.hit_dice_rolls = {8, 2, 5, 7, 3};
@@ -45,15 +45,6 @@ TEST_CASE("Validate Character", tags) {
         REQUIRE(errors.ok());
     }
 
-    SECTION("character with duplicate features is invalid") {
-        Feature::Data& feature_data1 = data.features_data.emplace_back();
-        set_valid_mock_values(feature_data1, "Duplicate Feature");
-        Feature::Data& feature_data2 = data.features_data.emplace_back();
-        set_valid_mock_values(feature_data2, "Duplicate Feature");
-        REQUIRE_NOTHROW(errors = validate_character_nonrecursively_for_content(data, content));
-        REQUIRE_FALSE(errors.ok());
-    }
-
     SECTION("character ability scores must be between 1 and 30 (inclusive)") {
         data.base_ability_scores_data.ability_scores = {-1, 0, 1, 30, 31, 32};
         REQUIRE_NOTHROW(errors = validate_ability_scores(data.base_ability_scores_data));
@@ -61,46 +52,46 @@ TEST_CASE("Validate Character", tags) {
     }
 
     SECTION("character species must exist") {
-        data.feature_providers_data.species_name = "Nonexistent";
+        data.feature_providers_data.species_key = "Nonexistent|dummy";
         REQUIRE_NOTHROW(errors = validate_feature_providers_for_content(data.feature_providers_data, content));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("character cannot have subspecies if species does not have subspecies") {
-        data.feature_providers_data.species_name = "Human";
-        data.feature_providers_data.subspecies_name = "Hill Dwarf";
+        data.feature_providers_data.species_key = "Human|dummy";
+        data.feature_providers_data.subspecies_key = "Hill Dwarf|dummy";
         REQUIRE_NOTHROW(errors = validate_feature_providers_for_content(data.feature_providers_data, content));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("character subspecies must exist") {
-        data.feature_providers_data.subspecies_name = "Nonexistent";
+        data.feature_providers_data.subspecies_key = "Nonexistent|dummy";
         REQUIRE_NOTHROW(errors = validate_feature_providers_for_content(data.feature_providers_data, content));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("character subspecies must be a subspecies of the character's species") {
-        data.feature_providers_data.species_name = "Dwarf";
-        data.feature_providers_data.subspecies_name = "High Elf";
+        data.feature_providers_data.species_key = "Dwarf|dummy";
+        data.feature_providers_data.subspecies_key = "High Elf|dummy";
         REQUIRE_NOTHROW(errors = validate_feature_providers_for_content(data.feature_providers_data, content));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("character class must exist") {
-        data.feature_providers_data.class_name = "Nonexistent";
+        data.feature_providers_data.class_key = "Nonexistent|dummy";
         REQUIRE_NOTHROW(errors = validate_feature_providers_for_content(data.feature_providers_data, content));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("character subclass must exist") {
-        data.feature_providers_data.subclass_name = "Nonexistent";
+        data.feature_providers_data.subclass_key = "Nonexistent|dummy";
         REQUIRE_NOTHROW(errors = validate_feature_providers_for_content(data.feature_providers_data, content));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("character subclass must be a subclass of the character's class") {
-        data.feature_providers_data.class_name = "Wizard";
-        data.feature_providers_data.subclass_name = "Assassin"; // subclass of Rogue
+        data.feature_providers_data.class_key = "Wizard|dummy";
+        data.feature_providers_data.subclass_key = "Assassin|dummy"; // subclass of Rogue
         REQUIRE_NOTHROW(errors = validate_feature_providers_for_content(data.feature_providers_data, content));
         REQUIRE_FALSE(errors.ok());
     }

@@ -35,7 +35,7 @@ CreateResult<Subclass> Subclass::create_for(Data&& data, const Content& content)
         }
         features.push_back(feature_result.value());
     }
-    CRef<Class> cls = content.get_classes().get(data.class_name).value();
+    CRef<Class> cls = content.get_classes().get(data.class_key).value();
 
     FactoryResult<Spellcasting> spellcasting_result = create_spellcasting(std::move(data.spellcasting_data));
     if (!spellcasting_result.is_valid()) {
@@ -45,8 +45,8 @@ CreateResult<Subclass> Subclass::create_for(Data&& data, const Content& content)
     std::unique_ptr<Spellcasting> spellcasting = spellcasting_result.value();
 
     return ValidCreate(Subclass(
-        std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(features), cls,
-        std::move(spellcasting)
+        std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.source_name),
+        std::move(data.short_name), std::move(features), cls, std::move(spellcasting)
     ));
 }
 
@@ -66,11 +66,17 @@ CRef<Class> Subclass::get_class() const { return cls; }
 
 void Subclass::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
+std::string Subclass::get_key() const { return key(short_name, get_source_info().name); }
+
 Subclass::Subclass(
-    std::string&& name, std::string&& description, std::filesystem::path&& source_path,
-    std::vector<ClassFeature>&& features, CRef<Class> cls, std::unique_ptr<Spellcasting>&& spellcasting
+    std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
+    std::string&& short_name, std::vector<ClassFeature>&& features, CRef<Class> cls,
+    std::unique_ptr<Spellcasting>&& spellcasting
 )
-    : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
+    : name(std::move(name)), description(std::move(description)),
+      source_info({.path = std::move(source_path), .name = std::move(source_name)}), short_name(std::move(short_name)),
       features(std::move(features)), cls(cls), spellcasting(std::move(spellcasting)) {}
+
+std::string Subclass::Data::get_key() const { return key(short_name, source_name); }
 
 } // namespace dnd

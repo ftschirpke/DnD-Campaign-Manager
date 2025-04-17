@@ -99,8 +99,8 @@ CreateResult<Class> Class::create_for(Data&& data, const Content& content) {
     std::unique_ptr<Spellcasting> spellcasting = spellcasting_result.value();
 
     return ValidCreate(Class(
-        std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(features),
-        subclass_feature, std::move(hit_dice), std::move(important_levels), std::move(spellcasting)
+        std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.source_name),
+        std::move(features), subclass_feature, std::move(hit_dice), std::move(important_levels), std::move(spellcasting)
     ));
 }
 
@@ -125,12 +125,13 @@ const ImportantLevels& Class::get_important_levels() const { return important_le
 void Class::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 Class::Class(
-    std::string&& name, std::string&& description, std::filesystem::path&& source_path,
+    std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
     std::vector<ClassFeature>&& features, OptCRef<ClassFeature> subclass_feature, Dice hit_dice,
     ImportantLevels&& important_levels, std::unique_ptr<Spellcasting>&& spellcasting
 )
-    : name(std::move(name)), description(std::move(description)), source_info(std::move(source_path)),
-      features(std::move(features)), spellcasting(std::move(spellcasting)), subclass_feature(subclass_feature),
-      hit_dice(std::move(hit_dice)), important_levels(std::move(important_levels)) {}
+    : name(std::move(name)), description(std::move(description)),
+      source_info({.path = std::move(source_path), .name = std::move(source_name)}), features(std::move(features)),
+      spellcasting(std::move(spellcasting)), subclass_feature(subclass_feature), hit_dice(std::move(hit_dice)),
+      important_levels(std::move(important_levels)) {}
 
 } // namespace dnd

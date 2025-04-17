@@ -34,7 +34,6 @@ private:
 };
 
 struct Spellcasting::Data {
-    explicit Data();
     std::strong_ordering operator<=>(const Spellcasting::Data&) const = default;
 
     bool is_spellcaster;
@@ -46,15 +45,6 @@ struct Spellcasting::Data {
     std::array<int, 20> cantrips_known;
     std::array<std::array<int, 20>, 9> spell_slots;
 };
-
-inline Spellcasting::Data::Data() {
-    spells_known.fill(0);
-    cantrips_known.fill(0);
-    for (std::array<int, 20>& arr : spell_slots) {
-        arr.fill(0);
-    }
-}
-
 
 } // namespace dnd
 

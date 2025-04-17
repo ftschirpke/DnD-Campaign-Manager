@@ -7,18 +7,24 @@
 #include <filesystem>
 #include <string>
 
+#include <fmt/format.h>
+
 namespace dnd {
 
 class Errors;
 
 class ValidationData {
 public:
+    static std::string key(const std::string& name, const std::string& source_name);
+
     virtual ~ValidationData() = default;
     std::strong_ordering operator<=>(const ValidationData&) const = default;
+    virtual std::string get_key() const;
 
     std::string name;
     std::string description;
     std::filesystem::path source_path;
+    std::string source_name;
 protected:
     ValidationData() = default;
 };
