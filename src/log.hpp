@@ -37,17 +37,15 @@ inline void Logger::log_helper(fmt::string_view fmt, fmt::format_args args) {
 
 #define _DND_LOG(log_type) Logger(log_type, __FILE__, __func__, __LINE__)
 
+#else
+
+#define _DND_LOG(log_type) DND_UNUSED
+
+#endif
+
 #define LOGINFO _DND_LOG("INFO")
 #define LOGDEBUG _DND_LOG("DEBUG")
 #define LOGWARN _DND_LOG("WARN")
-
-#else
-
-#define LOG(logging_type, format_message, ...)                                                                         \
-    do {                                                                                                               \
-    } while (false)
-
-#endif
 
 } // namespace dnd
 

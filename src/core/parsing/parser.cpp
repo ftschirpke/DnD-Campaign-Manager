@@ -74,13 +74,16 @@ static const char* json_attribute_type_name(JsonType typ) {
             return "object";
         case JsonType::ANY:
             return "any";
+        default:
+            assert(false);
+            return "";
     }
 }
 
 static std::optional<Error> check_type(
     const nlohmann::json& json, JsonType typ, const std::filesystem::path& filepath, std::string&& error_msg
 ) {
-    bool is_required_type;
+    bool is_required_type = false;
     switch (typ) {
         case JsonType::STRING:
             is_required_type = json.is_string();
@@ -93,6 +96,9 @@ static std::optional<Error> check_type(
             break;
         case JsonType::ANY:
             is_required_type = true;
+            break;
+        default:
+            assert(false);
             break;
     }
     if (!is_required_type) {
