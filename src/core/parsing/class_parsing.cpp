@@ -134,7 +134,9 @@ parse_homogeneous_spell_slots_from_table(
         int slot_count;
         errors += parse_required_index_into(rows[i], slot_count_idx, slot_count, filepath);
 
-        std::optional<Error> index_check_error = check_required_index(rows[i], slot_level_idx, filepath);
+        std::optional<Error> index_check_error = check_required_index(
+            rows[i], slot_level_idx, filepath, JsonType::ARRAY
+        );
         if (index_check_error.has_value()) {
             errors += index_check_error.value();
             continue;
@@ -181,7 +183,9 @@ static WithErrors<std::array<std::array<int, MAX_CHARACTER_LEVEL>, MAX_SPELL_LEV
     std::array<std::array<int, MAX_CHARACTER_LEVEL>, MAX_SPELL_LEVEL>& spell_slots = result.value;
     Errors& errors = result.errors;
 
-    std::optional<Error> table_groups_check_error = check_required_attribute(obj, "classTableGroups", filepath);
+    std::optional<Error> table_groups_check_error = check_required_attribute(
+        obj, "classTableGroups", filepath, JsonType::OBJECT
+    );
     if (table_groups_check_error.has_value()) {
         if (is_required) {
             errors += table_groups_check_error.value();
@@ -292,7 +296,7 @@ WithErrors<Class::Data> parse_class(const nlohmann::ordered_json& obj, const std
     class_data.source_path = filepath;
     errors += parse_required_attribute_into(obj, "name", class_data.name, filepath);
     errors += parse_required_attribute_into(obj, "source", class_data.source_name, filepath);
-    std::optional<Error> hit_dice_check_error = check_required_attribute(obj, "hd", filepath);
+    std::optional<Error> hit_dice_check_error = check_required_attribute(obj, "hd", filepath, JsonType::OBJECT);
     if (hit_dice_check_error.has_value()) {
         errors += hit_dice_check_error.value();
     } else {

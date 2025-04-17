@@ -33,12 +33,19 @@ std::optional<Error> write_formatted_description_into(
     const nlohmann::json& json, std::string& out, const std::filesystem::path& filepath
 );
 
+enum class JsonType {
+    STRING,
+    OBJECT,
+    ARRAY,
+    ANY,
+};
+
 std::optional<Error> check_required_attribute(
-    const nlohmann::json& json, const char* attribute_name, const std::filesystem::path& filepath
+    const nlohmann::json& json, const char* attribute_name, const std::filesystem::path& filepath, JsonType typ
 );
 
 std::optional<Error> check_required_index(
-    const nlohmann::json& json, size_t index, const std::filesystem::path& filepath
+    const nlohmann::json& json, size_t index, const std::filesystem::path& filepath, JsonType typ
 );
 
 template <typename T>
@@ -70,7 +77,7 @@ std::optional<Error> parse_required_attribute_into(
     const nlohmann::json& json, const char* attribute_name, T& out, const std::filesystem::path& filepath
 ) {
     assert(json.is_object());
-    std::optional<Error> check_error = check_required_attribute(json, attribute_name, filepath);
+    std::optional<Error> check_error = check_required_attribute(json, attribute_name, filepath, JsonType::ANY);
     if (check_error) {
         return check_error;
     }
@@ -125,7 +132,7 @@ std::optional<Error> parse_required_index_into(
     const nlohmann::json& json, size_t index, T& out, const std::filesystem::path& filepath
 ) {
     assert(json.is_array());
-    std::optional<Error> check_error = check_required_index(json, index, filepath);
+    std::optional<Error> check_error = check_required_index(json, index, filepath, JsonType::ANY);
     if (check_error.has_value()) {
         return check_error;
     }
