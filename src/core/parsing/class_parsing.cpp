@@ -134,9 +134,7 @@ parse_homogeneous_spell_slots_from_table(
         int slot_count;
         errors += parse_required_index_into(rows[i], slot_count_idx, slot_count, filepath);
 
-        std::optional<Error> index_check_error = check_required_index(
-            rows[i], slot_level_idx, filepath, JsonType::ARRAY
-        );
+        std::optional<Error> index_check_error = check_required_index(rows[i], slot_level_idx, filepath, JsonType::ANY);
         if (index_check_error.has_value()) {
             errors += index_check_error.value();
             continue;
@@ -184,7 +182,7 @@ static WithErrors<std::array<std::array<int, MAX_CHARACTER_LEVEL>, MAX_SPELL_LEV
     Errors& errors = result.errors;
 
     std::optional<Error> table_groups_check_error = check_required_attribute(
-        obj, "classTableGroups", filepath, JsonType::OBJECT
+        obj, "classTableGroups", filepath, JsonType::ARRAY
     );
     if (table_groups_check_error.has_value()) {
         if (is_required) {

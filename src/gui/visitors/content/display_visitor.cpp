@@ -385,6 +385,9 @@ void DisplayVisitor::operator()(const Spell& spell) {
     label("Ritual:");
     const char* ritual = spell.get_type().is_ritual() ? "yes" : "no";
     ImGui::Text("%s", ritual);
+    label("Concentration:");
+    const char* concentration = spell.requires_concentration() ? "yes" : "no";
+    ImGui::Text("%s", concentration);
     label("Casting Time:");
     ImGui::Text("%s", spell.get_casting_time().c_str());
     label("Range:");

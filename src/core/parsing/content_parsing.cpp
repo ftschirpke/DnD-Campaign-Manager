@@ -20,7 +20,8 @@
 #include <core/parsing/groups/string_group_parser.hpp>
 #include <core/parsing/item/item_parser.hpp>
 #include <core/parsing/species/species_parser.hpp>
-#include <core/parsing/spell/spell_parser.hpp>
+#include <core/parsing/spell_file_parser.hpp>
+#include <core/parsing/spell_sources_file_parser.hpp>
 #include <core/parsing/subclass/subclass_parser.hpp>
 #include <core/parsing/subspecies/subspecies_parser.hpp>
 #include <core/parsing/v2_file_parser.hpp>
@@ -28,7 +29,7 @@
 
 namespace dnd {
 
-static Errors parse_file(Content& content, FileParser&& parser) {
+static Errors parse_file(Content& content, FileParser& parser) {
     DND_MEASURE_SCOPE(parser.get_filepath().string().c_str());
     Errors errors;
     try {
@@ -50,16 +51,14 @@ static Errors parse_file(Content& content, FileParser&& parser) {
     return errors;
 }
 
+static Errors parse_file(Content& content, FileParser&& parser) { return parse_file(content, parser); }
+
 static bool skip_file(const std::filesystem::path& filepath) {
     std::string filename = filepath.filename().string();
     if (filename.size() >= 7 && filename.substr(0, 7) == "foundry") {
         return true;
     }
     if (filename.size() >= 10 && filename.substr(filename.size() - 10) == "index.json") {
-        return true;
-    }
-    if (filepath.parent_path().filename() != "class" && filepath.filename() != "races.json") {
-        // HACK: only parse certain files to increase debugging speed
         return true;
     }
     return false;
@@ -84,11 +83,33 @@ ParsingResult parse_content(const std::filesystem::path& content_path, const std
         return result;
     }
 
-    for (const auto& dir_entry : std::filesystem::recursive_directory_iterator(content_path)) {
-        if (std::filesystem::is_directory(dir_entry) || skip_file(dir_entry.path())) {
-            continue;
+    if (std::filesystem::exists(content_path / "class") && std::filesystem::is_directory(content_path / "class")) {
+        for (const auto& dir_entry : std::filesystem::directory_iterator(content_path / "class")) {
+            if (std::filesystem::is_directory(dir_entry) || skip_file(dir_entry.path())) {
+                continue;
+            }
+            result.errors += parse_file(result.content, V2FileParser(dir_entry.path()));
         }
-        result.errors += parse_file(result.content, V2FileParser(dir_entry.path()));
+    }
+
+    if (std::filesystem::exists(content_path / "races.json")
+        && std::filesystem::is_regular_file(content_path / "races.json")) {
+        result.errors += parse_file(result.content, V2FileParser(content_path / "races.json"));
+    }
+
+    if (std::filesystem::exists(content_path / "spells") && std::filesystem::is_directory(content_path / "spells")) {
+        std::filesystem::path sources_path = content_path / "spells" / "sources.json";
+        SpellSourcesFileParser source_parser(sources_path);
+        result.errors += parse_file(result.content, source_parser);
+
+        for (const auto& dir_entry : std::filesystem::directory_iterator(content_path / "spells")) {
+            if (std::filesystem::is_directory(dir_entry) || skip_file(dir_entry.path())) {
+                continue;
+            }
+            result.errors += parse_file(
+                result.content, SpellFileParser(dir_entry.path(), source_parser.spell_classes_by_source)
+            );
+        }
     }
 
     return result;

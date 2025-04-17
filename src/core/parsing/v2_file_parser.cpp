@@ -69,7 +69,6 @@ Errors V2FileParser::parse() {
             }
             std::string name;
             parse_required_attribute_into(element, "name", name, get_filepath());
-            LOGINFO("[{}] object '{}' found of type '{}'", get_filepath().string(), name, category);
             errors += parse_object(element, parse_type);
         }
     }

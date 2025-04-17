@@ -39,7 +39,7 @@ CreateResult<Spell> Spell::create(Data&& data) {
 
     return ValidCreate(Spell(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.source_name),
-        std::move(components), std::move(type), std::move(data.casting_time), std::move(data.range),
+        std::move(components), std::move(type), data.concentration, std::move(data.casting_time), std::move(data.range),
         std::move(data.duration), std::move(data.classes)
     ));
 }
@@ -54,6 +54,8 @@ const SpellComponents& Spell::get_components() const { return components; }
 
 const SpellType& Spell::get_type() const { return type; }
 
+bool Spell::requires_concentration() const { return concentration; }
+
 const std::string& Spell::get_casting_time() const { return casting_time; }
 
 const std::string& Spell::get_range() const { return range; }
@@ -66,12 +68,12 @@ void Spell::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 Spell::Spell(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
-    SpellComponents&& components, SpellType&& type, std::string&& casting_time, std::string&& range,
+    SpellComponents&& components, SpellType&& type, bool concentration, std::string&& casting_time, std::string&& range,
     std::string&& duration, std::set<std::string>&& classes
 )
     : name(std::move(name)), description(std::move(description)),
       source_info({.path = std::move(source_path), .name = std::move(source_name)}), components(std::move(components)),
-      type(std::move(type)), casting_time(std::move(casting_time)), range(std::move(range)),
-      duration(std::move(duration)), classes(std::move(classes)) {}
+      type(std::move(type)), concentration(concentration), casting_time(std::move(casting_time)),
+      range(std::move(range)), duration(std::move(duration)), classes(std::move(classes)) {}
 
 } // namespace dnd
