@@ -55,11 +55,6 @@ Errors validate_subspecies_relations_nonrecursively(const Subspecies::Data& data
             ValidationError::Code::RELATION_NOT_FOUND,
             fmt::format("Character species '{}' does not exist.", data.species_key)
         );
-    } else if (!species_optional.value().get().has_subspecies()) {
-        errors.add_validation_error(
-            ValidationError::Code::INVALID_RELATION,
-            fmt::format("Character species '{}' does not have subspecies.", data.species_key)
-        );
     }
     return errors;
 }

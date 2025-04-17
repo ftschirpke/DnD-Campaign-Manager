@@ -11,13 +11,9 @@
 
 namespace dnd {
 
-bool SpeciesFilter::has_all_filters() const {
-    return ContentPieceFilter::has_all_filters() && has_subspecies_filter.is_set();
-}
+bool SpeciesFilter::has_all_filters() const { return ContentPieceFilter::has_all_filters(); }
 
-bool SpeciesFilter::matches(const Species& species) const {
-    return ContentPieceFilter::matches(species) && has_subspecies_filter.matches(species.has_subspecies());
-}
+bool SpeciesFilter::matches(const Species& species) const { return ContentPieceFilter::matches(species); }
 
 std::vector<const ContentPiece*> SpeciesFilter::all_matches(const Content& content) const {
     std::vector<const ContentPiece*> matching_content_pieces;
@@ -29,9 +25,6 @@ std::vector<const ContentPiece*> SpeciesFilter::all_matches(const Content& conte
     return matching_content_pieces;
 }
 
-void SpeciesFilter::clear() {
-    ContentPieceFilter::clear();
-    has_subspecies_filter.clear();
-}
+void SpeciesFilter::clear() { ContentPieceFilter::clear(); }
 
 } // namespace dnd

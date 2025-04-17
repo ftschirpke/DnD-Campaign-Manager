@@ -327,9 +327,6 @@ void DisplayVisitor::operator()(const Species& species) {
     label("Type:");
     ImGui::Text("Species");
     source(species);
-    const char* has_subspecies_cstr = species.has_subspecies() ? "yes" : "no";
-    label("Has Subspecies:");
-    ImGui::Text("%s", has_subspecies_cstr);
     label("Features:");
     list_features<Feature>(*this, species.get_features());
 

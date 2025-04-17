@@ -34,12 +34,6 @@ static Errors validate_feature_providers_relations(const FeatureProviders::Data&
         );
     } else if (!data.subspecies_key.empty()) {
         const Species& species = species_optional.value();
-        if (!species.has_subspecies()) {
-            errors.add_validation_error(
-                ValidationError::Code::INVALID_RELATION,
-                fmt::format("Species '{}' does not have subspecies.", data.species_key)
-            );
-        }
         OptCRef<Subspecies> subspecies_optional = content.get_subspecies().get(data.subspecies_key);
         if (!subspecies_optional.has_value()) {
             errors.add_validation_error(
@@ -54,11 +48,8 @@ static Errors validate_feature_providers_relations(const FeatureProviders::Data&
                 )
             );
         }
-    } else if (species_optional.value().get().has_subspecies()) {
-        errors.add_validation_error(
-            ValidationError::Code::INVALID_RELATION, fmt::format("Species '{}' requires subspecies.", data.species_key)
-        );
     }
+    // TODO: potentially check for missing subspecies
 
     OptCRef<Class> class_optional = content.get_classes().get(data.class_key);
     if (!class_optional.has_value()) {
