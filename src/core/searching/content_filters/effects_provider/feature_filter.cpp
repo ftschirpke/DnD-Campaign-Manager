@@ -22,6 +22,12 @@ std::vector<const ContentPiece*> FeatureFilter::all_matches(const Content& conte
             matching_content_pieces.push_back(&feature.get());
         }
     }
+    // TODO: consider separating features and class features
+    for (const auto& [_, feature] : content.get_class_features().get_all()) {
+        if (matches(feature)) {
+            matching_content_pieces.push_back(&feature.get());
+        }
+    }
     return matching_content_pieces;
 }
 

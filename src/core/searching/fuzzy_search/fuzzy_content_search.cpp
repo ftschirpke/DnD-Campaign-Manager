@@ -84,6 +84,13 @@ std::vector<SearchResult> fuzzy_search_content(
                 results.emplace_back(&feature.get(), match_score);
             }
         }
+        // TODO: consider separating features and class features
+        for (const auto& [feature_name, feature] : content.get_class_features().get_all()) {
+            int64_t match_score = fuzzy_match_string(search_query, feature_name);
+            if (match_score > min_match_score) {
+                results.emplace_back(&feature.get(), match_score);
+            }
+        }
     }
     if (options.search_choosables) {
         for (const auto& [choosable_name, choosable] : content.get_choosables().get_all()) {
