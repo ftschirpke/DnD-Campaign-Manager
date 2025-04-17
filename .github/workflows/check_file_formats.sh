@@ -8,7 +8,7 @@ files=$(find src tests -type f -not -path "src/lib/*" \( -name "*.cpp" -o -name 
 
 for file in $files
 do
-    clang-format-17 -style=file -output-replacements-xml $file | grep -c "<replacement " >/dev/null
+    clang-format-19 -style=file -output-replacements-xml $file | grep -c "<replacement " >/dev/null
 
     if [ $? -eq 0 ]; then
         echo "formatted incorrectly: $file"
