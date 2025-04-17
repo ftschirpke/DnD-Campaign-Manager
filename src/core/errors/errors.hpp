@@ -4,6 +4,7 @@
 #include <dnd_config.hpp>
 
 #include <filesystem>
+#include <optional>
 #include <string>
 #include <variant>
 #include <vector>
