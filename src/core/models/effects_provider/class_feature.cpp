@@ -56,7 +56,7 @@ std::string ClassFeature::key(
     const std::string& name, const std::string& source_name, const std::filesystem::path& source_path, int level
 ) {
     // TODO: make this key independent of the filesystem path
-    return std::format("{}|{}|{}|{}", name, source_name, source_path.stem().string(), level);
+    return fmt::format("{}|{}|{}|{}", name, source_name, source_path.stem().string(), level);
 }
 
 int ClassFeature::get_level() const { return level; }
