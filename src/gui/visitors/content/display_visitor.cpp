@@ -301,6 +301,8 @@ void DisplayVisitor::operator()(const Class& cls) {
     ImGui::Text("%s", feat_level_str.c_str());
     label("Subclass Level:");
     ImGui::Text("%d", cls.get_important_levels().get_subclass_level());
+    label("Description:");
+    display_formatted_text(cls.get_description());
     label("Features:");
     list_features<ClassFeature>(*this, cls.get_features());
 
@@ -315,6 +317,8 @@ void DisplayVisitor::operator()(const Subclass& subclass) {
     source(subclass);
     label("Class name:");
     ImGui::Text("%s", subclass.get_class().get().get_name().c_str());
+    label("Description:");
+    display_formatted_text(subclass.get_description());
     label("Features:");
     list_features<ClassFeature>(*this, subclass.get_features());
 
@@ -327,6 +331,8 @@ void DisplayVisitor::operator()(const Species& species) {
     label("Type:");
     ImGui::Text("Species");
     source(species);
+    label("Description:");
+    display_formatted_text(species.get_description());
     label("Features:");
     list_features<Feature>(*this, species.get_features());
 
@@ -341,6 +347,8 @@ void DisplayVisitor::operator()(const Subspecies& subspecies) {
     source(subspecies);
     label("Species name:");
     ImGui::Text("%s", subspecies.get_species().get().get_name().c_str());
+    label("Description:");
+    display_formatted_text(subspecies.get_description());
     label("Features:");
     list_features<Feature>(*this, subspecies.get_features());
 
