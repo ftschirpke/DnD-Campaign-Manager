@@ -118,7 +118,7 @@ void GuiApp::render_overview_window() {
     ImGui::SeparatorText("Status");
     switch (session.get_status()) {
         case SessionStatus::CONTENT_DIR_SELECTION:
-            ImGui::Text("You need to select a content directory");
+            ImGui::Text("Select one or more content directories and start parsing.");
             break;
         case SessionStatus::PARSING:
             ImGui::Text("Parsing...");
