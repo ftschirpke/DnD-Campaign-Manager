@@ -40,11 +40,11 @@ static Errors validate_feature_providers_relations(const FeatureProviders::Data&
                 ValidationError::Code::RELATION_NOT_FOUND,
                 fmt::format("Subspecies '{}' does not exist.", data.subspecies_key)
             );
-        } else if (&subspecies_optional.value().get().get_species().get() != &species) {
+        } else if (subspecies_optional.value().get().get_species().get().get_name() != species.get_name()) {
             errors.add_validation_error(
                 ValidationError::Code::INVALID_RELATION,
                 fmt::format(
-                    "Subspecies '{}' is not a subspecies of species '{}'.", data.subspecies_key, data.species_key
+                    "Subspecies '{}' is not a subspecies of species '{}'.", data.subspecies_key, species.get_name()
                 )
             );
         }
@@ -64,10 +64,10 @@ static Errors validate_feature_providers_relations(const FeatureProviders::Data&
                 ValidationError::Code::RELATION_NOT_FOUND,
                 fmt::format("Subclass '{}' does not exist.", data.subclass_key)
             );
-        } else if (&subclass_optional.value().get().get_class().get() != &cls) {
+        } else if (subclass_optional.value().get().get_class().get().get_name() != cls.get_name()) {
             errors.add_validation_error(
                 ValidationError::Code::INVALID_RELATION,
-                fmt::format("Subclass '{}' is not a subclass of class '{}'.", data.subclass_key, data.class_key)
+                fmt::format("Subclass '{}' is not a subclass of class '{}'.", data.subclass_key, cls.get_name())
             );
         }
     }

@@ -160,6 +160,14 @@ static Errors validate_character_relations_nonrecursively(const Character::Data&
             );
         }
     }
+    for (const std::string& choosable_key : data.choosable_keys) {
+        if (!content.get_choosables().contains(choosable_key)) {
+            errors.add_validation_error(
+                ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
+                fmt::format("Choosable '{}' does not exist.", choosable_key)
+            );
+        }
+    }
 
     OptCRef<Class> class_optional = content.get_classes().get(data.feature_providers_data.class_key);
     if (!data.feature_providers_data.class_key.empty() && class_optional.has_value()) {

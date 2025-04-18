@@ -14,6 +14,7 @@
 #include <core/attribute_names.hpp>
 #include <core/basic_mechanics/character_progression.hpp>
 #include <core/basic_mechanics/skills.hpp>
+#include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
@@ -31,6 +32,7 @@
 #include <core/models/subclass/subclass.hpp>
 #include <core/models/subspecies/subspecies.hpp>
 #include <core/utils/data_result.hpp>
+#include <core/utils/types.hpp>
 #include <core/validation/character/character_validation.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
@@ -51,6 +53,19 @@ CreateResult<Character> Character::create_for(Data&& data, const Content& conten
             return InvalidCreate<Character>(std::move(data), std::move(sub_errors));
         }
         features.push_back(feature_result.value());
+    }
+
+    std::vector<CRef<Choosable>> choosables;
+    features.reserve(data.choosable_keys.size());
+    for (std::string& choosable_key : data.choosable_keys) {
+        OptCRef<Choosable> choosable = content.get_choosables().get(choosable_key);
+        if (!choosable.has_value()) {
+            errors.add_runtime_error(
+                RuntimeError::Code::UNREACHABLE, "Invalid choosable key was not caught by validation"
+            );
+            return InvalidCreate<Character>(std::move(data), std::move(errors));
+        }
+        choosables.push_back(choosable.value());
     }
 
     CreateResult<AbilityScores> base_ability_scores_result = AbilityScores::create(
@@ -90,8 +105,8 @@ CreateResult<Character> Character::create_for(Data&& data, const Content& conten
 
     Character character(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.source_name),
-        std::move(features), std::move(base_ability_scores), std::move(feature_providers), std::move(progression),
-        std::move(decisions)
+        std::move(features), std::move(choosables), std::move(base_ability_scores), std::move(feature_providers),
+        std::move(progression), std::move(decisions)
     );
     errors = character.recalculate_stats();
     if (!errors.ok()) {
@@ -108,7 +123,7 @@ const SourceInfo& Character::get_source_info() const { return source_info; }
 
 const std::vector<Feature>& Character::get_features() const { return features; }
 
-const std::vector<Choosable>& Character::get_choosables() const { return choosables; }
+const std::vector<CRef<Choosable>>& Character::get_choosables() const { return choosables; }
 
 const AbilityScores& Character::get_base_ability_scores() const { return base_ability_scores; }
 
@@ -221,12 +236,13 @@ void Character::accept_visitor(ContentVisitor& visitor) const { visitor(*this); 
 
 Character::Character(
     std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
-    std::vector<Feature>&& features, AbilityScores&& base_ability_scores, FeatureProviders&& feature_providers,
-    Progression&& progression, std::vector<Decision>&& decisions
+    std::vector<Feature>&& features, std::vector<CRef<Choosable>>&& choosables, AbilityScores&& base_ability_scores,
+    FeatureProviders&& feature_providers, Progression&& progression, std::vector<Decision>&& decisions
 )
     : name(std::move(name)), description(std::move(description)),
       source_info({.path = std::move(source_path), .name = std::move(source_name)}), features(std::move(features)),
-      base_ability_scores(std::move(base_ability_scores)), feature_providers(std::move(feature_providers)),
-      progression(std::move(progression)), stats(Stats::create_default()), decisions(std::move(decisions)) {}
+      choosables(std::move(choosables)), base_ability_scores(std::move(base_ability_scores)),
+      feature_providers(std::move(feature_providers)), progression(std::move(progression)),
+      stats(Stats::create_default()), decisions(std::move(decisions)) {}
 
 } // namespace dnd

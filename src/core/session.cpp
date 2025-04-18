@@ -6,6 +6,7 @@
 #include <filesystem>
 #include <fstream>
 #include <future>
+#include <set>
 #include <string>
 #include <utility>
 
@@ -28,16 +29,14 @@
 
 static const char* OPEN_TABS = "open_tabs";
 static const char* CONTENT_DIRECTORY = "content_directory";
-static const char* CAMPAIGN_NAME = "campaign_name";
-static const char* GENERAL_DIR_NAME = "general";
 
 namespace dnd {
 
 Session::Session(const char* last_session_filename)
-    : last_session_filename(last_session_filename), status(SessionStatus::CONTENT_DIR_SELECTION), content_directory(),
-      campaign_name(), parsing_future(), errors(), content(), last_session_open_tabs(), open_content_pieces(),
-      selected_content_piece(), fuzzy_search_results(max_search_results),
-      fuzzy_search_result_strings(max_search_results), advanced_search(content), unknown_error_messages() {}
+    : last_session_filename(last_session_filename), status(SessionStatus::CONTENT_DIR_SELECTION), content_directories(),
+      parsing_future(), errors(), content(), last_session_open_tabs(), open_content_pieces(), selected_content_piece(),
+      fuzzy_search_results(max_search_results), fuzzy_search_result_strings(max_search_results),
+      advanced_search(content), unknown_error_messages() {}
 
 Session::~Session() { save_session_values(); }
 
@@ -53,9 +52,7 @@ const std::vector<std::string>& Session::get_parsing_error_messages() const { re
 
 const std::vector<std::string>& Session::get_validation_error_messages() const { return validation_error_messages; }
 
-const std::string& Session::get_campaign_name() const { return campaign_name; }
-
-const std::filesystem::path& Session::get_content_directory() const { return content_directory; }
+const std::set<std::filesystem::path>& Session::get_content_directories() const { return content_directories; }
 
 std::deque<const ContentPiece*>& Session::get_open_content_pieces() { return open_content_pieces; }
 
@@ -68,20 +65,6 @@ const ContentPiece* Session::get_selected_content_piece() {
 size_t Session::get_fuzzy_search_result_count() const { return fuzzy_search_results.size(); }
 
 bool Session::too_many_fuzzy_search_results() const { return fuzzy_search_results.size() > max_search_results; }
-
-std::vector<std::string> Session::get_possible_campaign_names() const {
-    if (content_directory.empty()) {
-        return {};
-    }
-    std::vector<std::string> campaign_names;
-    for (const auto& entry : std::filesystem::directory_iterator(content_directory)) {
-        if (!entry.is_directory() || entry.path().filename() == GENERAL_DIR_NAME) {
-            continue;
-        }
-        campaign_names.push_back(entry.path().filename().string());
-    }
-    return campaign_names;
-}
 
 std::vector<std::string> Session::get_fuzzy_search_result_strings() const {
     DND_MEASURE_FUNCTION();
@@ -122,9 +105,12 @@ void Session::retrieve_last_session_values() {
     if (!last_session.contains(CONTENT_DIRECTORY)) {
         return;
     }
-    set_content_directory(last_session[CONTENT_DIRECTORY].get<std::filesystem::path>());
-    if (last_session.contains(CAMPAIGN_NAME)) {
-        set_campaign_name(last_session[CAMPAIGN_NAME].get<std::string>());
+    if (last_session[CONTENT_DIRECTORY].is_string()) {
+        add_content_directory(last_session[CONTENT_DIRECTORY].get<std::filesystem::path>());
+    } else if (last_session[CONTENT_DIRECTORY].is_array()) {
+        for (auto& entry : last_session[CONTENT_DIRECTORY]) {
+            add_content_directory(entry.get<std::filesystem::path>());
+        }
     }
 
     if (!last_session.contains(OPEN_TABS)) {
@@ -138,11 +124,8 @@ void Session::retrieve_last_session_values() {
 
 void Session::save_session_values() {
     nlohmann::json last_session;
-    if (!content_directory.empty()) {
-        last_session[CONTENT_DIRECTORY] = content_directory.string();
-        if (!campaign_name.empty()) {
-            last_session[CAMPAIGN_NAME] = campaign_name;
-        }
+    if (!content_directories.empty()) {
+        last_session[CONTENT_DIRECTORY] = content_directories;
     }
 
     CollectOpenTabsVisitor collect_open_tabs_visitor;
@@ -158,28 +141,6 @@ void Session::save_session_values() {
 
 void Session::clear_unknown_error_messages() { unknown_error_messages.clear(); }
 
-Errors Session::set_campaign_name(const std::string& new_campaign_name) {
-    Errors campaign_errors;
-    if (campaign_name == new_campaign_name) {
-        if (campaign_name.empty()) {
-            campaign_errors.add_runtime_error(RuntimeError::Code::INVALID_ARGUMENT, "The campaign name is empty.");
-        }
-        return campaign_errors;
-    }
-    std::vector<std::string> possible_names = get_possible_campaign_names();
-    if (std::find(possible_names.begin(), possible_names.end(), new_campaign_name) == possible_names.end()) {
-        campaign_errors.add_runtime_error(
-            RuntimeError::Code::INVALID_ARGUMENT,
-            fmt::format("The campaign name \"{}\" is not valid.", new_campaign_name)
-        );
-        return campaign_errors;
-    }
-    campaign_name = new_campaign_name;
-    status = SessionStatus::PARSING;
-    start_parsing();
-    return campaign_errors;
-}
-
 static Errors validate_content_directory(const std::filesystem::path& content_directory) {
     Errors errors;
     if (!std::filesystem::exists(content_directory)) {
@@ -190,19 +151,17 @@ static Errors validate_content_directory(const std::filesystem::path& content_di
     return errors;
 }
 
-Errors Session::set_content_directory(const std::filesystem::path& new_content_directory) {
+Errors Session::add_content_directory(const std::filesystem::path& new_content_directory) {
     Errors content_dir_errors;
-    if (content_directory == new_content_directory) {
-        if (content_directory.empty()) {
+    if (content_directories.contains(new_content_directory)) {
+        if (new_content_directory.empty()) {
             errors.add_runtime_error(RuntimeError::Code::INVALID_ARGUMENT, "The content directory is empty.");
         }
         return content_dir_errors;
     }
     content_dir_errors = validate_content_directory(new_content_directory);
     if (content_dir_errors.ok()) {
-        content_directory = new_content_directory;
-        campaign_name.clear();
-        status = SessionStatus::CAMPAIGN_SELECTION;
+        content_directories.insert(new_content_directory);
     } else {
         status = SessionStatus::CONTENT_DIR_SELECTION;
     }
@@ -277,14 +236,19 @@ bool Session::parsing_result_available() {
 }
 
 void Session::start_parsing() {
-    parsing_future = std::async(std::launch::async, &Session::parse_content_and_initialize, this);
-    status = SessionStatus::PARSING;
+    if (status != SessionStatus::PARSING) {
+        parsing_future = std::async(std::launch::async, &Session::parse_content_and_initialize, this);
+        status = SessionStatus::PARSING;
+    }
 }
 
+bool Session::directories_differ() const { return content_directories != parsed_content_directories; }
+
 void Session::parse_content_and_initialize() {
-    ParsingResult parsing_result = parse_content(content_directory, campaign_name);
+    ParsingResult parsing_result = parse_content(content_directories);
     content = std::move(parsing_result.content);
     errors = std::move(parsing_result.errors);
+    parsed_content_directories = std::move(parsing_result.content_paths);
     for (const Error& error : errors.get_errors()) {
         switch (error.index()) {
             case 0: {

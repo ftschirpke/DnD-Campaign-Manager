@@ -59,51 +59,72 @@ static bool skip_file(const std::filesystem::path& filepath) {
     return false;
 }
 
-ParsingResult parse_content(const std::filesystem::path& content_path, const std::string& campaign_dir_name) {
+ParsingResult parse_content(const std::set<std::filesystem::path>& content_paths) {
     DND_MEASURE_FUNCTION();
     ParsingResult result;
-    result.content_path = content_path;
-    result.campaign_directory_name = campaign_dir_name;
+    result.content_paths = content_paths;
 
-    if (!std::filesystem::exists(content_path)) {
-        result.errors.add_parsing_error(
-            ParsingError::Code::FILE_NOT_FOUND, content_path, "The content directory does not exist."
-        );
-    } else if (!std::filesystem::directory_entry(content_path).is_directory()) {
-        result.errors.add_parsing_error(
-            ParsingError::Code::FILE_NOT_FOUND, content_path, "The content directory is not a directory."
-        );
-    }
-    if (!result.errors.ok()) {
-        return result;
-    }
-
-    if (std::filesystem::exists(content_path / "class") && std::filesystem::is_directory(content_path / "class")) {
-        for (const auto& dir_entry : std::filesystem::directory_iterator(content_path / "class")) {
-            if (std::filesystem::is_directory(dir_entry) || skip_file(dir_entry.path())) {
-                continue;
-            }
-            result.errors += parse_file(result.content, V2FileParser(dir_entry.path()));
-        }
-    }
-
-    if (std::filesystem::exists(content_path / "races.json")
-        && std::filesystem::is_regular_file(content_path / "races.json")) {
-        result.errors += parse_file(result.content, V2FileParser(content_path / "races.json"));
-    }
-
-    if (std::filesystem::exists(content_path / "spells") && std::filesystem::is_directory(content_path / "spells")) {
-        std::filesystem::path sources_path = content_path / "spells" / "sources.json";
-        SpellSourcesFileParser source_parser(sources_path);
-        result.errors += parse_file(result.content, source_parser);
-
-        for (const auto& dir_entry : std::filesystem::directory_iterator(content_path / "spells")) {
-            if (std::filesystem::is_directory(dir_entry) || skip_file(dir_entry.path())) {
-                continue;
-            }
-            result.errors += parse_file(
-                result.content, SpellFileParser(dir_entry.path(), source_parser.spell_classes_by_source)
+    for (const std::filesystem::path& content_path : content_paths) {
+        if (!std::filesystem::exists(content_path)) {
+            result.errors.add_parsing_error(
+                ParsingError::Code::FILE_NOT_FOUND, content_path, "The content directory does not exist."
             );
+        } else if (!std::filesystem::directory_entry(content_path).is_directory()) {
+            result.errors.add_parsing_error(
+                ParsingError::Code::FILE_NOT_FOUND, content_path, "The content directory is not a directory."
+            );
+        }
+        if (!result.errors.ok()) {
+            return result;
+        }
+
+        if (std::filesystem::exists(content_path / "feats.json")
+            && std::filesystem::is_regular_file(content_path / "feats.json")) {
+            result.errors += parse_file(result.content, V2FileParser(content_path / "feats.json"));
+        }
+
+        if (std::filesystem::exists(content_path / "races.json")
+            && std::filesystem::is_regular_file(content_path / "races.json")) {
+            result.errors += parse_file(result.content, V2FileParser(content_path / "races.json"));
+        }
+        if (std::filesystem::exists(content_path / "species.json")
+            && std::filesystem::is_regular_file(content_path / "species.json")) {
+            result.errors += parse_file(result.content, V2FileParser(content_path / "species.json"));
+        }
+
+        if (std::filesystem::exists(content_path / "class") && std::filesystem::is_directory(content_path / "class")) {
+            for (const auto& dir_entry : std::filesystem::directory_iterator(content_path / "class")) {
+                if (std::filesystem::is_directory(dir_entry) || skip_file(dir_entry.path())) {
+                    continue;
+                }
+                result.errors += parse_file(result.content, V2FileParser(dir_entry.path()));
+            }
+        }
+
+        if (std::filesystem::exists(content_path / "spells")
+            && std::filesystem::is_directory(content_path / "spells")) {
+            std::filesystem::path sources_path = content_path / "spells" / "sources.json";
+            SpellSourcesFileParser source_parser(sources_path);
+            result.errors += parse_file(result.content, source_parser);
+
+            for (const auto& dir_entry : std::filesystem::directory_iterator(content_path / "spells")) {
+                if (std::filesystem::is_directory(dir_entry) || skip_file(dir_entry.path())) {
+                    continue;
+                }
+                result.errors += parse_file(
+                    result.content, SpellFileParser(dir_entry.path(), source_parser.spell_classes_by_source)
+                );
+            }
+        }
+
+        if (std::filesystem::exists(content_path / "characters")
+            && std::filesystem::is_directory(content_path / "characters")) {
+            for (const auto& dir_entry : std::filesystem::directory_iterator(content_path / "characters")) {
+                if (std::filesystem::is_directory(dir_entry) || skip_file(dir_entry.path())) {
+                    continue;
+                }
+                result.errors += parse_file(result.content, V2FileParser(dir_entry.path()));
+            }
         }
     }
 

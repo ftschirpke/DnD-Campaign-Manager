@@ -20,7 +20,12 @@ static Character::Data create_valid_character_data() {
     set_valid_mock_values(character_data, "Valid Character");
     Feature::Data& feature_data = character_data.features_data.emplace_back();
     set_valid_mock_values(feature_data, "Valid Character Feature");
-    character_data.base_ability_scores_data.ability_scores = {10, 8, 12, 15, 13, 14};
+    character_data.base_ability_scores_data.strength = 10;
+    character_data.base_ability_scores_data.dexterity = 8;
+    character_data.base_ability_scores_data.constitution = 12;
+    character_data.base_ability_scores_data.intelligence = 15;
+    character_data.base_ability_scores_data.wisdom = 13;
+    character_data.base_ability_scores_data.charisma = 14;
     character_data.feature_providers_data.species_key = "Human|dummy";
     character_data.feature_providers_data.subspecies_key = "";
     character_data.feature_providers_data.class_key = "Rogue|dummy";
@@ -46,7 +51,12 @@ TEST_CASE("Validate Character", tags) {
     }
 
     SECTION("character ability scores must be between 1 and 30 (inclusive)") {
-        data.base_ability_scores_data.ability_scores = {-1, 0, 1, 30, 31, 32};
+        data.base_ability_scores_data.strength = -1;
+        data.base_ability_scores_data.dexterity = 0;
+        data.base_ability_scores_data.constitution = 1;
+        data.base_ability_scores_data.intelligence = 30;
+        data.base_ability_scores_data.wisdom = 31;
+        data.base_ability_scores_data.charisma = 32;
         REQUIRE_NOTHROW(errors = validate_ability_scores(data.base_ability_scores_data));
         REQUIRE_FALSE(errors.ok());
     }

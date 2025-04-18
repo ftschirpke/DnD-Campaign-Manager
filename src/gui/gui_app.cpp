@@ -3,6 +3,7 @@
 #include "gui_app.hpp"
 
 #include <algorithm>
+#include <filesystem>
 #include <string>
 
 #include <imgui/imgui.h>
@@ -86,27 +87,23 @@ void GuiApp::render_overview_window() {
 
     ImGui::SeparatorText("Content selection");
 
-    if (!session.get_content_directory().empty()) {
-        ImGui::Text("Content directory:");
-        ImGui::TextWrapped("%s", session.get_content_directory().string().c_str());
+    if (!session.get_content_directories().empty()) {
+        ImGui::Text("Content directories:");
+        for (const std::filesystem ::path& content_dir : session.get_content_directories()) {
+            ImGui::TextWrapped("%s", content_dir.c_str());
+        }
     }
 
-    const char* content_dir_button_text = session.get_content_directory().empty() ? "Select content directory"
-                                                                                  : "Change content directory";
+    const char* content_dir_button_text = session.get_content_directories().empty() ? "Select content directory"
+                                                                                    : "Add content directory";
 
     if (ImGui::Button(content_dir_button_text)) {
         content_configuration_window.open_content_directory_selection();
     }
 
-    if (!session.get_content_directory().empty()) {
-        if (!session.get_campaign_name().empty()) {
-            ImGui::Text("Campaign name: %s", session.get_campaign_name().c_str());
-        }
-
-        const char* campaign_button_text = session.get_campaign_name().empty() ? "Select campaign" : "Change campaign";
-
-        if (ImGui::Button(campaign_button_text)) {
-            content_configuration_window.open_campaign_selection();
+    if (session.get_status() != SessionStatus::PARSING) {
+        if (ImGui::Button("Parse content")) {
+            session.start_parsing();
         }
     }
 
@@ -121,10 +118,7 @@ void GuiApp::render_overview_window() {
     ImGui::SeparatorText("Status");
     switch (session.get_status()) {
         case SessionStatus::CONTENT_DIR_SELECTION:
-            ImGui::Text("You need to select a content directory");
-            break;
-        case SessionStatus::CAMPAIGN_SELECTION:
-            ImGui::Text("You need to select a campaign");
+            ImGui::Text("Select one or more content directories and start parsing.");
             break;
         case SessionStatus::PARSING:
             ImGui::Text("Parsing...");

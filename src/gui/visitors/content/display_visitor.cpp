@@ -251,6 +251,9 @@ void dnd::DisplayVisitor::operator()(const Character& character) {
     ImGui::Text("Character");
     source(character);
 
+    label("Description:");
+    display_formatted_text(character.get_description());
+
     label("Species:");
     const Species& species = character.get_feature_providers().get_species();
     if (ImGui::CollapsingHeader(species.get_name().c_str())) {
@@ -283,6 +286,21 @@ void dnd::DisplayVisitor::operator()(const Character& character) {
 
     label("Features:");
     list_features<Feature>(*this, character.get_features());
+
+    label("Choosables:");
+    if (character.get_choosables().empty()) {
+        ImGui::Text("None");
+    } else {
+        for (CRef<Choosable> choosable : character.get_choosables()) {
+            ImGui::Separator();
+            if (ImGui::TreeNode(choosable.get().get_name().c_str())) {
+                ImGui::Separator();
+                operator()(choosable.get());
+                ImGui::TreePop();
+            }
+        }
+        ImGui::Separator();
+    }
 
     end_content_table();
 }
@@ -319,6 +337,8 @@ void DisplayVisitor::operator()(const Subclass& subclass) {
     ImGui::Text("%s", subclass.get_class().get().get_name().c_str());
     label("Description:");
     display_formatted_text(subclass.get_description());
+    label("Short name:");
+    ImGui::Text("%s", subclass.get_short_name().c_str());
     label("Features:");
     list_features<ClassFeature>(*this, subclass.get_features());
 

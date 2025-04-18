@@ -33,6 +33,7 @@ public:
     Subclass& operator=(Subclass&&) noexcept = default;
 
     const std::string& get_name() const override;
+    const std::string& get_short_name() const;
     const std::string& get_description() const override;
     const SourceInfo& get_source_info() const override;
     const std::vector<ClassFeature>& get_features() const;

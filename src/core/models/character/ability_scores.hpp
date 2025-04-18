@@ -3,7 +3,6 @@
 
 #include <dnd_config.hpp>
 
-#include <array>
 #include <compare>
 
 #include <core/basic_mechanics/abilities.hpp>
@@ -46,7 +45,12 @@ private:
 struct AbilityScores::Data {
     std::strong_ordering operator<=>(const Data&) const = default;
 
-    std::array<int, 6> ability_scores;
+    int strength;
+    int dexterity;
+    int constitution;
+    int intelligence;
+    int wisdom;
+    int charisma;
 };
 
 } // namespace dnd

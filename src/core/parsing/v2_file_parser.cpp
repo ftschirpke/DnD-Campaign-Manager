@@ -11,7 +11,16 @@
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
+#include <core/models/character/character.hpp>
+#include <core/models/class/class.hpp>
+#include <core/models/effects_provider/choosable.hpp>
+#include <core/models/species/species.hpp>
+#include <core/models/subclass/subclass.hpp>
+#include <core/models/subspecies/subspecies.hpp>
+#include <core/parsing/character_parsing.hpp>
+#include <core/parsing/choosable_parsing.hpp>
 #include <core/parsing/class_parsing.hpp>
+#include <core/parsing/file_parser.hpp>
 #include <core/parsing/species_parsing.hpp>
 #include <log.hpp>
 
@@ -49,6 +58,8 @@ Errors V2FileParser::parse() {
             case ParseType::subclassFeature_type:
             case ParseType::race_type:
             case ParseType::subrace_type:
+            case ParseType::character_type:
+            case ParseType::feat_type:
                 is_supported = true;
                 break;
             default:
@@ -92,6 +103,12 @@ void V2FileParser::save_result(Content& content) {
     for (auto& [key, data] : parsed_data.subspecies_data) {
         content.add_subspecies_result(Subspecies::create_for(std::move(data), content));
     }
+    for (auto& [key, data] : parsed_data.character_data) {
+        content.add_character_result(Character::create_for(std::move(data), content));
+    }
+    for (auto& [key, data] : parsed_data.choosable_data) {
+        content.add_choosable_result(Choosable::create_for(std::move(data), content));
+    }
 }
 
 Errors V2FileParser::parse_object(const nlohmann::ordered_json& obj, ParseType parse_type) {
@@ -130,6 +147,18 @@ Errors V2FileParser::parse_object(const nlohmann::ordered_json& obj, ParseType p
             Subspecies::Data result{};
             parse_subspecies(obj, get_filepath()).move_into(result, errors);
             parsed_data.subspecies_data.insert({result.get_key(), result});
+            break;
+        }
+        case ParseType::character_type: {
+            Character::Data result{};
+            parse_character(obj, get_filepath()).move_into(result, errors);
+            parsed_data.character_data.insert({result.get_key(), result});
+            break;
+        }
+        case ParseType::feat_type: {
+            Choosable::Data result{};
+            parse_feat(obj, get_filepath()).move_into(result, errors);
+            parsed_data.choosable_data.insert({result.get_key(), result});
             break;
         }
         default: {

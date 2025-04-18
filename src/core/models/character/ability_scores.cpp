@@ -19,10 +19,9 @@ CreateResult<AbilityScores> AbilityScores::create(Data&& data) {
     if (!errors.ok()) {
         return InvalidCreate<AbilityScores>(std::move(data), std::move(errors));
     }
-    return ValidCreate(AbilityScores(
-        data.ability_scores[0], data.ability_scores[1], data.ability_scores[2], data.ability_scores[3],
-        data.ability_scores[4], data.ability_scores[5]
-    ));
+    return ValidCreate(
+        AbilityScores(data.strength, data.dexterity, data.constitution, data.intelligence, data.wisdom, data.charisma)
+    );
 }
 
 int AbilityScores::get(Ability ability) const {

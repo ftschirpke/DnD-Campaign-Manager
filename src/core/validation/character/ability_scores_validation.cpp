@@ -2,8 +2,6 @@
 
 #include "ability_scores_validation.hpp"
 
-#include <array>
-
 #include <fmt/format.h>
 
 #include <core/errors/errors.hpp>
@@ -25,12 +23,12 @@ static Errors check_ability_score(int ability_score, const char* name) {
 
 Errors validate_ability_scores(const AbilityScores::Data& data) {
     Errors errors;
-    errors += check_ability_score(data.ability_scores[0], "strength");
-    errors += check_ability_score(data.ability_scores[1], "dexterity");
-    errors += check_ability_score(data.ability_scores[2], "constitution");
-    errors += check_ability_score(data.ability_scores[3], "intelligence");
-    errors += check_ability_score(data.ability_scores[4], "wisdom");
-    errors += check_ability_score(data.ability_scores[5], "charisma");
+    errors += check_ability_score(data.strength, "strength");
+    errors += check_ability_score(data.dexterity, "dexterity");
+    errors += check_ability_score(data.constitution, "constitution");
+    errors += check_ability_score(data.intelligence, "intelligence");
+    errors += check_ability_score(data.wisdom, "wisdom");
+    errors += check_ability_score(data.charisma, "charisma");
     return errors;
 }
 
