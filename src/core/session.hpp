@@ -6,6 +6,7 @@
 #include <deque>
 #include <filesystem>
 #include <future>
+#include <set>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -21,7 +22,6 @@ namespace dnd {
 
 enum class SessionStatus {
     CONTENT_DIR_SELECTION,
-    CAMPAIGN_SELECTION,
     PARSING,
     READY,
     UNKNOWN_ERROR,
@@ -40,18 +40,15 @@ public:
     const std::vector<std::string>& get_validation_error_messages() const;
     void clear_unknown_error_messages();
 
-    const std::string& get_campaign_name() const;
-    const std::filesystem::path& get_content_directory() const;
+    const std::set<std::filesystem::path>& get_content_directories() const;
 
     std::deque<const ContentPiece*>& get_open_content_pieces();
     const ContentPiece* get_selected_content_piece();
 
-    std::vector<std::string> get_possible_campaign_names() const;
     void retrieve_last_session_values();
     void save_session_values();
 
-    Errors set_campaign_name(const std::string& campaign_name);
-    Errors set_content_directory(const std::filesystem::path& content_directory);
+    Errors add_content_directory(const std::filesystem::path& content_directory);
 
     size_t get_fuzzy_search_result_count() const;
     bool too_many_fuzzy_search_results() const;
@@ -67,8 +64,10 @@ public:
     ContentFilterVariant& get_advanced_search_filter();
 
     bool parsing_result_available();
-private:
+
     void start_parsing();
+    bool directories_differ() const;
+private:
     void parse_content_and_initialize();
     void open_last_session();
     void open_content_piece(const ContentPiece* content_piece);
@@ -79,13 +78,13 @@ private:
 
     SessionStatus status;
 
-    std::filesystem::path content_directory;
-    std::string campaign_name;
+    std::set<std::filesystem::path> content_directories;
 
     std::future<void> parsing_future;
     Errors errors;
-    // the object holding all the DnD content relevant for the selected campaign
+    // the object holding all selected DnD content
     Content content;
+    std::set<std::filesystem::path> parsed_content_directories;
 
     std::unordered_map<std::string, std::vector<std::string>> last_session_open_tabs;
     std::deque<const ContentPiece*> open_content_pieces;

@@ -20,11 +20,11 @@ struct ParsingResult {
 
     Content content;
     Errors errors;
-    std::filesystem::path content_path;
+    std::set<std::filesystem::path> content_paths;
     std::string campaign_directory_name;
 };
 
-ParsingResult parse_content(const std::filesystem::path& content_path, const std::string& campaign_dir_name);
+ParsingResult parse_content(const std::set<std::filesystem::path>& content_path);
 
 } // namespace dnd
 
