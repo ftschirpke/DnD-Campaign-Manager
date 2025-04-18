@@ -78,6 +78,11 @@ ParsingResult parse_content(const std::set<std::filesystem::path>& content_paths
             return result;
         }
 
+        if (std::filesystem::exists(content_path / "feats.json")
+            && std::filesystem::is_regular_file(content_path / "feats.json")) {
+            result.errors += parse_file(result.content, V2FileParser(content_path / "feats.json"));
+        }
+
         if (std::filesystem::exists(content_path / "races.json")
             && std::filesystem::is_regular_file(content_path / "races.json")) {
             result.errors += parse_file(result.content, V2FileParser(content_path / "races.json"));

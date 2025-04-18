@@ -4,7 +4,6 @@
 #include <dnd_config.hpp>
 
 #include <compare>
-#include <functional>
 #include <string>
 
 #include <core/utils/data_result.hpp>
@@ -36,9 +35,9 @@ private:
         const Species& species, OptCRef<Subspecies> subspecies, const Class& cls, OptCRef<Subclass> subclass
     );
 
-    std::reference_wrapper<const Species> species;
+    CRef<Species> species;
     OptCRef<Subspecies> subspecies;
-    std::reference_wrapper<const Class> cls;
+    CRef<Class> cls;
     OptCRef<Subclass> subclass;
 };
 

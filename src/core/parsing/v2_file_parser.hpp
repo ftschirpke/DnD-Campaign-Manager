@@ -9,6 +9,7 @@
 #include <core/errors/errors.hpp>
 #include <core/models/character/character.hpp>
 #include <core/models/class/class.hpp>
+#include <core/models/effects_provider/choosable.hpp>
 #include <core/models/species/species.hpp>
 #include <core/models/subclass/subclass.hpp>
 #include <core/models/subspecies/subspecies.hpp>
@@ -51,6 +52,7 @@ public:
         std::map<std::string, Species::Data> species_data;
         std::map<std::string, Subspecies::Data> subspecies_data;
         std::map<std::string, Character::Data> character_data;
+        std::map<std::string, Choosable::Data> choosable_data;
     };
     explicit V2FileParser(const std::filesystem::path& filepath);
     virtual Errors parse();

@@ -131,6 +131,40 @@ static WithErrors<AbilityScores::Data> parse_character_base_scores(
     return result;
 }
 
+static WithErrors<std::vector<std::string>> parse_character_feats(
+    const nlohmann::json& obj, const std::filesystem::path& filepath
+) {
+    WithErrors<std::vector<std::string>> result;
+    std::vector<std::string>& feat_keys = result.value;
+    Errors& errors = result.errors;
+
+    if (!obj.contains("feats")) {
+        return result;
+    }
+    errors += check_required_attribute(obj, "feats", filepath, JsonType::ARRAY);
+    if (!errors.ok()) {
+        return result;
+    }
+    const nlohmann::json& feats = obj["feats"];
+
+    for (const nlohmann::json& feat_entry : feats) {
+        if (!feat_entry.is_object()) {
+            errors.add_parsing_error(
+                ParsingError::Code::INVALID_ATTRIBUTE_TYPE, filepath,
+                "Entries of the 'feats' array must be objects containing name and source"
+            );
+            continue;
+        }
+
+        std::string feat_name, feat_source;
+        errors += parse_required_attribute_into(feat_entry, "name", feat_name, filepath);
+        errors += parse_required_attribute_into(feat_entry, "source", feat_source, filepath);
+        feat_keys.emplace_back(Choosable::key(feat_name, feat_source));
+    }
+
+    return result;
+}
+
 
 WithErrors<Character::Data> parse_character(const nlohmann::json& obj, const std::filesystem::path& filepath) {
     WithErrors<Character::Data> result;
@@ -148,6 +182,7 @@ WithErrors<Character::Data> parse_character(const nlohmann::json& obj, const std
     parse_character_progression(obj, filepath).move_into(character_data.progression_data, errors);
     parse_character_feature_providers(obj, filepath).move_into(character_data.feature_providers_data, errors);
     parse_character_base_scores(obj, filepath).move_into(character_data.base_ability_scores_data, errors);
+    parse_character_feats(obj, filepath).move_into(character_data.choosable_keys, errors);
 
     return result;
 }
