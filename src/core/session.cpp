@@ -236,7 +236,7 @@ bool Session::parsing_result_available() {
 }
 
 void Session::start_parsing() {
-    if (status != SessionStatus::PARSING && directories_differ()) {
+    if (status != SessionStatus::PARSING) {
         parsing_future = std::async(std::launch::async, &Session::parse_content_and_initialize, this);
         status = SessionStatus::PARSING;
     }

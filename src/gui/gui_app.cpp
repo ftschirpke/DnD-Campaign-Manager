@@ -101,7 +101,7 @@ void GuiApp::render_overview_window() {
         content_configuration_window.open_content_directory_selection();
     }
 
-    if (session.get_status() != SessionStatus::PARSING && session.directories_differ()) {
+    if (session.get_status() != SessionStatus::PARSING) {
         if (ImGui::Button("Parse content")) {
             session.start_parsing();
         }
