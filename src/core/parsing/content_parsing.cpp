@@ -78,6 +78,15 @@ ParsingResult parse_content(const std::set<std::filesystem::path>& content_paths
             return result;
         }
 
+        if (std::filesystem::exists(content_path / "races.json")
+            && std::filesystem::is_regular_file(content_path / "races.json")) {
+            result.errors += parse_file(result.content, V2FileParser(content_path / "races.json"));
+        }
+        if (std::filesystem::exists(content_path / "species.json")
+            && std::filesystem::is_regular_file(content_path / "species.json")) {
+            result.errors += parse_file(result.content, V2FileParser(content_path / "species.json"));
+        }
+
         if (std::filesystem::exists(content_path / "class") && std::filesystem::is_directory(content_path / "class")) {
             for (const auto& dir_entry : std::filesystem::directory_iterator(content_path / "class")) {
                 if (std::filesystem::is_directory(dir_entry) || skip_file(dir_entry.path())) {
@@ -85,11 +94,6 @@ ParsingResult parse_content(const std::set<std::filesystem::path>& content_paths
                 }
                 result.errors += parse_file(result.content, V2FileParser(dir_entry.path()));
             }
-        }
-
-        if (std::filesystem::exists(content_path / "races.json")
-            && std::filesystem::is_regular_file(content_path / "races.json")) {
-            result.errors += parse_file(result.content, V2FileParser(content_path / "races.json"));
         }
 
         if (std::filesystem::exists(content_path / "spells")
@@ -105,6 +109,16 @@ ParsingResult parse_content(const std::set<std::filesystem::path>& content_paths
                 result.errors += parse_file(
                     result.content, SpellFileParser(dir_entry.path(), source_parser.spell_classes_by_source)
                 );
+            }
+        }
+
+        if (std::filesystem::exists(content_path / "characters")
+            && std::filesystem::is_directory(content_path / "characters")) {
+            for (const auto& dir_entry : std::filesystem::directory_iterator(content_path / "characters")) {
+                if (std::filesystem::is_directory(dir_entry) || skip_file(dir_entry.path())) {
+                    continue;
+                }
+                result.errors += parse_file(result.content, V2FileParser(dir_entry.path()));
             }
         }
     }

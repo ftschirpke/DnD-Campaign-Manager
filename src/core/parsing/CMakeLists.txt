@@ -1,5 +1,6 @@
 target_sources(${DND_CORE}
     PRIVATE
+    character_parsing.cpp
     class_parsing.cpp
     content_parsing.cpp
     file_parser.cpp

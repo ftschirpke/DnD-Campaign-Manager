@@ -7,6 +7,7 @@
 #include <map>
 
 #include <core/errors/errors.hpp>
+#include <core/models/character/character.hpp>
 #include <core/models/class/class.hpp>
 #include <core/models/species/species.hpp>
 #include <core/models/subclass/subclass.hpp>
@@ -17,10 +18,10 @@ namespace dnd {
 
 #define X_PARSE_TYPES                                                                                                  \
     X(action), X(adventure), X(artObjects), X(background), X(backgroundFluff), X(baseitem), X(book), X(boon), X(card), \
-        X(charoption), X(charoptionFluff), X(class), X(classFeature), X(classFluff), X(condition), X(conditionFluff),  \
-        X(cr), X(cult), X(data), X(deck), X(deity), X(disease), X(dragon), X(dragonMundaneItems), X(encounter),        \
-        X(facility), X(facilityFluff), X(feat), X(featFluff), X(gems), X(hazard), X(hazardFluff), X(hoard),            \
-        X(individual), X(item), X(itemEntry), X(itemFluff), X(itemGroup), X(itemMastery), X(itemProperty),             \
+        X(character), X(charoption), X(charoptionFluff), X(class), X(classFeature), X(classFluff), X(condition),       \
+        X(conditionFluff), X(cr), X(cult), X(data), X(deck), X(deity), X(disease), X(dragon), X(dragonMundaneItems),   \
+        X(encounter), X(facility), X(facilityFluff), X(feat), X(featFluff), X(gems), X(hazard), X(hazardFluff),        \
+        X(hoard), X(individual), X(item), X(itemEntry), X(itemFluff), X(itemGroup), X(itemMastery), X(itemProperty),   \
         X(itemType), X(itemTypeAdditionalEntries), X(language), X(languageFluff), X(languageScript),                   \
         X(legendaryGroup), X(lifeBackground), X(lifeClass), X(lifeTrinket), X(magicItems), X(magicvariant),            \
         X(makebrewCreatureAction), X(makebrewCreatureTrait), X(monster), X(monsterFluff), X(monsterTemplate),          \
@@ -37,7 +38,7 @@ enum class ParseType {
 };
 
 #define X(str) #str
-constexpr std::array<const char*, 89> parse_types = {X_PARSE_TYPES};
+constexpr std::array<const char*, 90> parse_types = {X_PARSE_TYPES};
 #undef X
 
 class Content;
@@ -49,6 +50,7 @@ public:
         std::map<std::string, Subclass::Data> subclass_data;
         std::map<std::string, Species::Data> species_data;
         std::map<std::string, Subspecies::Data> subspecies_data;
+        std::map<std::string, Character::Data> character_data;
     };
     explicit V2FileParser(const std::filesystem::path& filepath);
     virtual Errors parse();

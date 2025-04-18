@@ -21,17 +21,6 @@ ContentConfigurationWindow::ContentConfigurationWindow(Session& session)
 void ContentConfigurationWindow::initialize() {
     content_dir_dialog.SetTitle("Select content directory");
     content_dir_dialog.SetWindowSize(1200, 900);
-
-    switch (session.get_status()) {
-        case SessionStatus::CONTENT_DIR_SELECTION:
-            open_content_directory_selection();
-            return;
-        case SessionStatus::PARSING:
-        case SessionStatus::READY:
-        case SessionStatus::UNKNOWN_ERROR:
-            return;
-    }
-    assert(false);
 }
 
 void ContentConfigurationWindow::open_content_directory_selection() {

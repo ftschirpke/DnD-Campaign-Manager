@@ -56,6 +56,8 @@ const std::string& Subclass::get_description() const { return description; }
 
 const SourceInfo& Subclass::get_source_info() const { return source_info; }
 
+const std::string& Subclass::get_short_name() const { return short_name; }
+
 const std::vector<ClassFeature>& Subclass::get_features() const { return features; }
 
 bool Subclass::has_spellcasting() const { return spellcasting != nullptr; }
