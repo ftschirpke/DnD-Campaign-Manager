@@ -176,6 +176,11 @@ WithErrors<Character::Data> parse_character(const nlohmann::json& obj, const std
     errors += parse_required_attribute_into(obj, "source", character_data.source_name, filepath);
     errors += write_formatted_description_into(obj, character_data.description, filepath);
 
+    if (obj.contains("_meta")) {
+        // HACK: add meta JSON as description as that (for now) mostly includes unsupported features and decisions
+        character_data.description += "\n" + obj["_meta"].dump(8);
+    }
+
     // character_data.features_data; // TODO: do I want character features?
     // character_data.decisions_data; // TODO: implement character decisions
 
