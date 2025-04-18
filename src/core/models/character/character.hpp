@@ -58,8 +58,8 @@ public:
 private:
     Character(
         std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
-        std::vector<Feature>&& features, AbilityScores&& base_ability_scores, FeatureProviders&& feature_providers,
-        Progression&& progression, std::vector<Decision>&& decisions
+        std::vector<Feature>&& features, std::vector<CRef<Choosable>>&& choosables, AbilityScores&& base_ability_scores,
+        FeatureProviders&& feature_providers, Progression&& progression, std::vector<Decision>&& decisions
     );
 
     std::string name;

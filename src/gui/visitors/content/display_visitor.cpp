@@ -287,6 +287,21 @@ void dnd::DisplayVisitor::operator()(const Character& character) {
     label("Features:");
     list_features<Feature>(*this, character.get_features());
 
+    label("Choosables:");
+    if (character.get_choosables().empty()) {
+        ImGui::Text("None");
+    } else {
+        for (CRef<Choosable> choosable : character.get_choosables()) {
+            ImGui::Separator();
+            if (ImGui::TreeNode(choosable.get().get_name().c_str())) {
+                ImGui::Separator();
+                operator()(choosable.get());
+                ImGui::TreePop();
+            }
+        }
+        ImGui::Separator();
+    }
+
     end_content_table();
 }
 
