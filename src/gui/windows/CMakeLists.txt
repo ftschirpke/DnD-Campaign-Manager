@@ -5,4 +5,5 @@ target_sources(${DND_GUI_APP}
     content_window.cpp
     error_messages_window.cpp
     fuzzy_search_window.cpp
+    pdf_create_window.cpp
 )

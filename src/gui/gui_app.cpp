@@ -23,8 +23,9 @@ static const char* const imgui_ini_filename = "imgui.ini";
 static const ImGuiWindowFlags error_popup_options = ImGuiWindowFlags_AlwaysAutoResize;
 
 GuiApp::GuiApp()
-    : show_demo_window(false), session(), content_configuration_window(session), content_window(session),
-      error_messages_window(session), fuzzy_search_window(session), advanced_search_window(session) {
+    : show_demo_window(false), show_advanced_search_window(false), show_pdf_create_window(false), session(),
+      content_configuration_window(session), content_window(session), error_messages_window(session),
+      fuzzy_search_window(session), advanced_search_window(session), pdf_create_window(session) {
     ImGui::GetIO().IniFilename = imgui_ini_filename;
 }
 
@@ -51,8 +52,14 @@ void GuiApp::render() {
 
     if (session.parsing_result_available()) {
         fuzzy_search_window.render();
-        advanced_search_window.render();
+        if (show_advanced_search_window) {
+            advanced_search_window.render();
+        }
         content_window.render();
+
+        if (show_pdf_create_window) {
+            pdf_create_window.render();
+        }
     }
 }
 
@@ -101,6 +108,7 @@ void GuiApp::render_overview_window() {
         content_configuration_window.open_content_directory_selection();
     }
 
+
     if (session.get_status() != SessionStatus::PARSING) {
         if (ImGui::Button("Parse content")) {
             session.start_parsing();
@@ -130,6 +138,14 @@ void GuiApp::render_overview_window() {
             ImGui::Text("An unknown error occurred");
             break;
     }
+
+    ImGui::SeparatorText("Windows");
+
+    if (session.parsing_result_available()) {
+        ImGui::Checkbox("Advanced Search", &show_advanced_search_window);
+        ImGui::Checkbox("PDF Creation", &show_pdf_create_window);
+    }
+
     ImGui::End();
 }
 

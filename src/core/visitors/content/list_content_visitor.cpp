@@ -22,7 +22,11 @@ namespace dnd {
 
 void ListContentVisitor::reserve(size_t size) { string_list.reserve(size); }
 
+const std::vector<std::string>& ListContentVisitor::get_list() const { return string_list; }
+
 std::vector<std::string> ListContentVisitor::get_list() { return std::move(string_list); }
+
+void ListContentVisitor::clear_list() { string_list.clear(); }
 
 void ListContentVisitor::operator()(const Character& character) {
     string_list.push_back(fmt::format(
