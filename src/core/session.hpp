@@ -91,7 +91,6 @@ private:
     const ContentPiece* selected_content_piece;
 
     std::vector<SearchResult> fuzzy_search_results;
-    std::vector<std::string> fuzzy_search_result_strings;
 
     AdvancedContentSearch advanced_search;
 

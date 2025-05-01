@@ -26,7 +26,7 @@ void ContentWindow::render() {
             const ContentPiece* content_piece = *it;
             bool open = true;
             if (ImGui::BeginTabItem(content_piece->get_key().c_str(), &open)) {
-                ImGui::SeparatorText(content_piece->get_key().c_str());
+                ImGui::SeparatorText(content_piece->get_name().c_str());
                 content_piece->accept_visitor(display_visitor);
                 ImGui::EndTabItem();
             }
