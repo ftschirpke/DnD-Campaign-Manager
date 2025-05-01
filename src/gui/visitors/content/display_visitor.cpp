@@ -101,7 +101,7 @@ static void list_features(DisplayVisitor& visitor, const std::vector<T>& feature
     }
     for (const T& feature : features) {
         ImGui::Separator();
-        if (ImGui::TreeNode(feature.get_name().c_str())) {
+        if (ImGui::TreeNode(feature.get_key().c_str())) {
             ImGui::Separator();
             visitor(feature);
             ImGui::TreePop();
@@ -256,7 +256,7 @@ void dnd::DisplayVisitor::operator()(const Character& character) {
 
     label("Species:");
     const Species& species = character.get_feature_providers().get_species();
-    if (ImGui::CollapsingHeader(species.get_name().c_str())) {
+    if (ImGui::CollapsingHeader(species.get_key().c_str())) {
         operator()(species);
     }
 
@@ -264,14 +264,14 @@ void dnd::DisplayVisitor::operator()(const Character& character) {
     if (subspecies_optional.has_value()) {
         label("Subspecies:");
         const Subspecies& subspecies = subspecies_optional.value();
-        if (ImGui::CollapsingHeader(subspecies.get_name().c_str())) {
+        if (ImGui::CollapsingHeader(subspecies.get_key().c_str())) {
             operator()(subspecies);
         }
     }
 
     label("Class:");
     const Class& cls = character.get_feature_providers().get_class();
-    if (ImGui::CollapsingHeader(cls.get_name().c_str())) {
+    if (ImGui::CollapsingHeader(cls.get_key().c_str())) {
         operator()(cls);
     }
 
@@ -279,7 +279,7 @@ void dnd::DisplayVisitor::operator()(const Character& character) {
     if (subclass_optional.has_value()) {
         label("Subclass:");
         const Subclass& subclass = subclass_optional.value();
-        if (ImGui::CollapsingHeader(subclass.get_name().c_str())) {
+        if (ImGui::CollapsingHeader(subclass.get_key().c_str())) {
             operator()(subclass);
         }
     }
@@ -293,7 +293,7 @@ void dnd::DisplayVisitor::operator()(const Character& character) {
     } else {
         for (CRef<Choosable> choosable : character.get_choosables()) {
             ImGui::Separator();
-            if (ImGui::TreeNode(choosable.get().get_name().c_str())) {
+            if (ImGui::TreeNode(choosable.get().get_key().c_str())) {
                 ImGui::Separator();
                 operator()(choosable.get());
                 ImGui::TreePop();
@@ -431,6 +431,20 @@ void DisplayVisitor::operator()(const Feature& feature) {
     source(feature);
     label("Description:");
     display_formatted_text(feature.get_description());
+
+    end_content_table();
+}
+
+void DisplayVisitor::operator()(const ClassFeature& class_feature) {
+    begin_content_table(class_feature);
+
+    label("Type:");
+    ImGui::Text("Feature");
+    source(class_feature);
+    label("Level:");
+    ImGui::Text("%d", class_feature.get_level());
+    label("Description:");
+    display_formatted_text(class_feature.get_description());
 
     end_content_table();
 }

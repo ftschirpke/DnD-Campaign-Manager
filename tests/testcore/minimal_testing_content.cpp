@@ -123,7 +123,7 @@ static void add_classes(Content& content) {
     ClassFeature::Data& feature_data3 = subclass_data.features_data.emplace_back();
     feature_data3.level = 2;
     set_valid_mock_values(feature_data3, "Example Subclass Feature");
-    subclass_data.class_key = "Wizard|dummy";
+    subclass_data.class_key = "Wizard##dummy";
     assert(validate_subclass_recursively_for_content(subclass_data, content).ok());
     content.add_subclass(Subclass::create_for(std::move(subclass_data), content).value());
 
@@ -134,7 +134,7 @@ static void add_classes(Content& content) {
     ClassFeature::Data& feature_data4 = subclass_data2.features_data.emplace_back();
     feature_data4.level = 3;
     set_valid_mock_values(feature_data4, "Example Subclass Feature 2");
-    subclass_data2.class_key = "Rogue|dummy";
+    subclass_data2.class_key = "Rogue##dummy";
     assert(validate_subclass_recursively_for_content(subclass_data2, content).ok());
     content.add_subclass(Subclass::create_for(std::move(subclass_data2), content).value());
 }
@@ -165,7 +165,7 @@ static void add_species(Content& content) {
     set_valid_mock_values(subspecies_data1, "Hill Dwarf");
     Feature::Data& feature_data4 = subspecies_data1.features_data.emplace_back();
     set_valid_mock_values(feature_data4, "Example Subspecies Feature");
-    subspecies_data1.species_key = "Dwarf|dummy";
+    subspecies_data1.species_key = "Dwarf##dummy";
     assert(validate_subspecies_recursively_for_content(subspecies_data1, content).ok());
     content.add_subspecies(Subspecies::create_for(std::move(subspecies_data1), content).value());
 
@@ -173,7 +173,7 @@ static void add_species(Content& content) {
     set_valid_mock_values(subspecies_data2, "High Elf");
     Feature::Data& feature_data5 = subspecies_data2.features_data.emplace_back();
     set_valid_mock_values(feature_data5, "Example Subspecies Feature 2");
-    subspecies_data2.species_key = "Elf|dummy";
+    subspecies_data2.species_key = "Elf##dummy";
     assert(validate_subspecies_recursively_for_content(subspecies_data2, content).ok());
     content.add_subspecies(Subspecies::create_for(std::move(subspecies_data2), content).value());
 }
@@ -190,10 +190,10 @@ static void add_characters(Content& content) {
     character_data.base_ability_scores_data.intelligence = 15;
     character_data.base_ability_scores_data.wisdom = 12;
     character_data.base_ability_scores_data.charisma = 14;
-    character_data.feature_providers_data.species_key = "Dwarf|dummy";
-    character_data.feature_providers_data.subspecies_key = "Hill Dwarf|dummy";
-    character_data.feature_providers_data.class_key = "Wizard|dummy";
-    character_data.feature_providers_data.subclass_key = "Abjuration|dummy";
+    character_data.feature_providers_data.species_key = "Dwarf##dummy";
+    character_data.feature_providers_data.subspecies_key = "Hill Dwarf##dummy";
+    character_data.feature_providers_data.class_key = "Wizard##dummy";
+    character_data.feature_providers_data.subclass_key = "Abjuration##dummy";
     character_data.progression_data.level = 4;
     character_data.progression_data.xp = 4200;
     character_data.progression_data.hit_dice_rolls = {6, 4, 2, 5};

@@ -35,8 +35,7 @@ namespace dnd {
 Session::Session(const char* last_session_filename)
     : last_session_filename(last_session_filename), status(SessionStatus::CONTENT_DIR_SELECTION), content_directories(),
       parsing_future(), errors(), content(), last_session_open_tabs(), open_content_pieces(), selected_content_piece(),
-      fuzzy_search_results(max_search_results), fuzzy_search_result_strings(max_search_results),
-      advanced_search(content), unknown_error_messages() {}
+      fuzzy_search_results(max_search_results), advanced_search(content), unknown_error_messages() {}
 
 Session::~Session() { save_session_values(); }
 
@@ -249,6 +248,10 @@ void Session::parse_content_and_initialize() {
     content = std::move(parsing_result.content);
     errors = std::move(parsing_result.errors);
     parsed_content_directories = std::move(parsing_result.content_paths);
+
+    parsing_error_messages.clear();
+    validation_error_messages.clear();
+
     for (const Error& error : errors.get_errors()) {
         switch (error.index()) {
             case 0: {

@@ -76,6 +76,13 @@ void CollectOpenTabsVisitor::operator()(const Feature& feature) {
     open_tabs_json["feature"].push_back(feature.get_key());
 }
 
+void CollectOpenTabsVisitor::operator()(const ClassFeature& class_feature) {
+    if (!open_tabs_json.contains("class_feature")) {
+        open_tabs_json["class_feature"] = nlohmann::json::array();
+    }
+    open_tabs_json["class_feature"].push_back(class_feature.get_name());
+}
+
 void CollectOpenTabsVisitor::operator()(const Choosable& choosable) {
     if (!open_tabs_json.contains("choosable")) {
         open_tabs_json["choosable"] = nlohmann::json::array();
