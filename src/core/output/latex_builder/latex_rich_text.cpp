@@ -2,6 +2,7 @@
 
 #include "latex_rich_text.hpp"
 
+#include <algorithm>
 #include <string>
 
 #include <core/utils/rich_text.hpp>
@@ -24,11 +25,11 @@ std::string derich_text(const std::string& rich_text) {
         if (current == end) {
             break;
         }
-        std::optional<RichText> rich_text = parse_rich_text(current, end);
-        if (rich_text.has_value()) {
-            LOGINFO("Found rich text of type '{}'", rich_text->rich_type);
-            deriched_text += rich_text->text;
-            current += rich_text->length;
+        std::optional<RichText> parsed_rich_text = parse_rich_text(current, end);
+        if (parsed_rich_text.has_value()) {
+            LOGINFO("Found rich text of type '{}'", parsed_rich_text->rich_type);
+            deriched_text += parsed_rich_text->text;
+            current += parsed_rich_text->length;
         } else {
             deriched_text += '{';
             current++;
