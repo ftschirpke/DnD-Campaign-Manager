@@ -21,7 +21,7 @@ TEST_CASE("Validate Subclass // valid subclass", tags) {
     Errors errors;
 
     SECTION("class with one valid feature") {
-        data.class_key = "Wizard|dummy";
+        data.class_key = "Wizard##dummy";
         ClassFeature::Data& feature_data = data.features_data.emplace_back();
         set_valid_mock_values(feature_data, "Feature");
         REQUIRE_NOTHROW(errors = validate_subclass_nonrecursively_for_content(data, content));
@@ -29,7 +29,7 @@ TEST_CASE("Validate Subclass // valid subclass", tags) {
     }
 
     SECTION("class with multiple differently named features") {
-        data.class_key = "Wizard|dummy";
+        data.class_key = "Wizard##dummy";
         Feature::Data& feature_data1 = data.features_data.emplace_back();
         set_valid_mock_values(feature_data1, "Feature 1");
         Feature::Data& feature_data2 = data.features_data.emplace_back();
@@ -58,7 +58,7 @@ TEST_CASE("Validate Subclass // invalid subclass", tags) {
     }
 
     SECTION("subclass without features is invalid") {
-        data.class_key = "Wizard|dummy";
+        data.class_key = "Wizard##dummy";
         REQUIRE_NOTHROW(errors = validate_subclass_nonrecursively_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
@@ -83,19 +83,19 @@ TEST_CASE("Validate Subclass // invalid subclass data relations", tags) {
     SECTION("subclass with a name that already exists in the content") {
         data.name = "Abjuration Wizard";
         data.short_name = "Abjuration"; // already exists in the example content
-        data.class_key = "Wizard|dummy";
+        data.class_key = "Wizard##dummy";
         REQUIRE_NOTHROW(errors = validate_subclass_nonrecursively_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("a class with the given class name must exist") {
-        data.class_key = "Nonexistent Class|dummy";
+        data.class_key = "Nonexistent Class##dummy";
         REQUIRE_NOTHROW(errors = validate_subclass_nonrecursively_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
     }
 
     SECTION("subclass cannot have spellcasting if class already has") {
-        data.class_key = "Wizard|dummy";
+        data.class_key = "Wizard##dummy";
         data.spellcasting_data.is_spellcaster = true;
         data.spellcasting_data.ability = "INT";
         data.spellcasting_data.is_spells_known_type = true;

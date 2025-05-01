@@ -44,13 +44,13 @@ TEST_CASE("Validate Choice // valid choice data", tags) {
         REQUIRE(errors.ok());
 
         data.attribute_name = "cantrips_free";
-        data.group_names = {"Wizard|dummy cantrips"};
+        data.group_names = {"Wizard##dummy cantrips"};
         data.amount = 1;
         REQUIRE_NOTHROW(errors = validate_choice_for_content(data, content));
         REQUIRE(errors.ok());
 
         data.attribute_name = "spells_added_to_spell_list";
-        data.group_names = {"Wizard|dummy spells"};
+        data.group_names = {"Wizard##dummy spells"};
         data.amount = 3;
         REQUIRE_NOTHROW(errors = validate_choice_for_content(data, content));
         REQUIRE(errors.ok());
@@ -72,8 +72,8 @@ TEST_CASE("Validate Choice // valid choice data", tags) {
 
     SECTION("group names and explicit choices") {
         data.attribute_name = "spells_known";
-        data.group_names = {"Wizard|dummy spells"};
-        data.explicit_choices = {"Cure Wounds|dummy"};
+        data.group_names = {"Wizard##dummy spells"};
+        data.explicit_choices = {"Cure Wounds##dummy"};
         data.amount = 2;
         REQUIRE_NOTHROW(errors = validate_choice_for_content(data, content));
         REQUIRE(errors.ok());

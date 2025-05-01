@@ -10,12 +10,12 @@
 
 namespace dnd::test {
 
-static constexpr const char* valid_cantrip1 = "Dancing Lights|dummy";
-static constexpr const char* valid_spell1 = "Fireball|dummy";
-static constexpr const char* valid_spell2 = "Cure Wounds|dummy";
+static constexpr const char* valid_cantrip1 = "Dancing Lights##dummy";
+static constexpr const char* valid_spell1 = "Fireball##dummy";
+static constexpr const char* valid_spell2 = "Cure Wounds##dummy";
 
-static constexpr const char* invalid_cantrip1 = "Some other cantrip|dummy";
-static constexpr const char* invalid_spell1 = "Some other spell|dummy";
+static constexpr const char* invalid_cantrip1 = "Some other cantrip##dummy";
+static constexpr const char* invalid_spell1 = "Some other spell##dummy";
 
 static constexpr const char* tags = "[core][validation][effects]";
 
