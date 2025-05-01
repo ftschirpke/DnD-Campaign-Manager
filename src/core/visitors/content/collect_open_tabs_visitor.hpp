@@ -29,6 +29,7 @@ public:
     virtual void operator()(const Item& item) override;
     virtual void operator()(const Spell& spell) override;
     virtual void operator()(const Feature& feature) override;
+    virtual void operator()(const ClassFeature& class_feature) override;
     virtual void operator()(const Choosable& choosable) override;
 private:
     nlohmann::json open_tabs_json;

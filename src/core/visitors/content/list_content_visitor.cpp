@@ -88,6 +88,13 @@ void ListContentVisitor::operator()(const Feature& feature) {
     ));
 }
 
+void ListContentVisitor::operator()(const ClassFeature& class_feature) {
+    string_list.push_back(fmt::format(
+        "{} ({}) [CLASS FEATURE] : {}##{}", class_feature.get_name(), class_feature.get_source_info().name,
+        class_feature.get_source_info().name, class_feature.get_key()
+    ));
+}
+
 void ListContentVisitor::operator()(const Choosable& choosable) {
     string_list.push_back(fmt::format(
         "{} ({}) [CHOOSABLE] : {}##{}", choosable.get_name(), choosable.get_source_info().name,

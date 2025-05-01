@@ -435,6 +435,20 @@ void DisplayVisitor::operator()(const Feature& feature) {
     end_content_table();
 }
 
+void DisplayVisitor::operator()(const ClassFeature& class_feature) {
+    begin_content_table(class_feature);
+
+    label("Type:");
+    ImGui::Text("Feature");
+    source(class_feature);
+    label("Level:");
+    ImGui::Text("%d", class_feature.get_level());
+    label("Description:");
+    display_formatted_text(class_feature.get_description());
+
+    end_content_table();
+}
+
 void DisplayVisitor::operator()(const Choosable& choosable) {
     begin_content_table(choosable);
 

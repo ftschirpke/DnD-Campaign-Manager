@@ -9,6 +9,7 @@
 #include <core/models/character/character.hpp>
 #include <core/models/class/class.hpp>
 #include <core/models/effects_provider/choosable.hpp>
+#include <core/models/effects_provider/class_feature.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/item/item.hpp>
 #include <core/models/species/species.hpp>
@@ -33,6 +34,7 @@ public:
     virtual void operator()(const Item& item) override;
     virtual void operator()(const Spell& spell) override;
     virtual void operator()(const Feature& feature) override;
+    virtual void operator()(const ClassFeature& class_feature) override;
     virtual void operator()(const Choosable& choosable) override;
 private:
     std::vector<std::string> string_list;
