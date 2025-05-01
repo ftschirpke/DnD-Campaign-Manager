@@ -30,6 +30,7 @@ public:
     void operator()(const Item& item) override { item_card_builder.add_item(item); }
     void operator()(const Spell& spell) override { spell_card_builder.add_spell(spell); }
     void operator()(const Feature& feature) override { DND_UNUSED(feature); }
+    void operator()(const ClassFeature& class_feature) override { DND_UNUSED(class_feature); }
     void operator()(const Choosable& choosable) override { DND_UNUSED(choosable); }
 
     void parse(const std::deque<const ContentPiece*>& content_pieces) {
