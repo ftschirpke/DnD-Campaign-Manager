@@ -6,6 +6,7 @@
 #include <vector>
 
 #include <core/models/spell/spell.hpp>
+#include <core/utils/types.hpp>
 
 namespace dnd {
 
@@ -15,7 +16,14 @@ public:
      * @brief Add to the list of spells we want to create cards for
      * @param spell a spell to create a card for
      */
-    void add_spell(const Spell* spell);
+    void add_spell(const Spell& spell);
+    /**
+     * @brief Add to the list of spells we want to create cards for
+     * @param spell a spell to create a card for
+     */
+    void add_spell(CRef<Spell> spell);
+    std::vector<CRef<Spell>> get_spells() const;
+    void clear_spells();
     /**
      * @brief Creates a LaTeX file that allows printing the cards with the timestamp as the file name
      */
@@ -26,7 +34,7 @@ public:
      */
     void write_latex_file(const std::string& filename);
 private:
-    std::vector<const Spell*> spells;
+    std::vector<CRef<Spell>> spells;
 };
 
 } // namespace dnd

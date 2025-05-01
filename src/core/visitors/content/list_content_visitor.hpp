@@ -22,7 +22,9 @@ namespace dnd {
 class ListContentVisitor : public ContentVisitor {
 public:
     void reserve(size_t size);
+    const std::vector<std::string>& get_list() const;
     std::vector<std::string> get_list();
+    void clear_list();
     virtual void operator()(const Character& character) override;
     virtual void operator()(const Class& cls) override;
     virtual void operator()(const Subclass& subclass) override;

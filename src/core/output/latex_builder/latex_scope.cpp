@@ -9,6 +9,7 @@
 
 #include <core/output/latex_builder/latex_command.hpp>
 #include <core/output/latex_builder/latex_object.hpp>
+#include <core/output/latex_builder/latex_rich_text.hpp>
 #include <core/output/latex_builder/latex_text.hpp>
 
 namespace dnd {
@@ -35,6 +36,11 @@ LatexScope* LatexScope::add_scope() {
     LatexScope* ptr = new_scope.get();
     objects.push_back(std::move(new_scope));
     return ptr;
+}
+
+LatexText* LatexScope::add_rich_text(const std::string& rich_text) {
+    std::string deriched_text = derich_text(rich_text);
+    return add_text(deriched_text);
 }
 
 LatexText* LatexScope::add_text(const std::string& text) {

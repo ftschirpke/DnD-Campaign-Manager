@@ -25,8 +25,8 @@ void ContentWindow::render() {
         for (auto it = open_content_pieces.begin(); it != open_content_pieces.end();) {
             const ContentPiece* content_piece = *it;
             bool open = true;
-            if (ImGui::BeginTabItem(content_piece->get_name().c_str(), &open)) {
-                ImGui::SeparatorText(content_piece->get_name().c_str());
+            if (ImGui::BeginTabItem(content_piece->get_key().c_str(), &open)) {
+                ImGui::SeparatorText(content_piece->get_key().c_str());
                 content_piece->accept_visitor(display_visitor);
                 ImGui::EndTabItem();
             }
@@ -48,7 +48,7 @@ void ContentWindow::render() {
         if (selected_content_piece != nullptr) {
             ImGuiTabBar* tab_bar = ImGui::GetCurrentTabBar();
             ImGuiTabItem* tab_item = ImGui::TabBarFindTabByID(
-                tab_bar, ImGui::GetID(selected_content_piece->get_name().c_str())
+                tab_bar, ImGui::GetID(selected_content_piece->get_key().c_str())
             );
             ImGui::TabBarQueueFocus(tab_bar, tab_item);
             selected_content_piece = nullptr;

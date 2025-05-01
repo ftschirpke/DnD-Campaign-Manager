@@ -9,6 +9,7 @@
 #include <gui/windows/content_window.hpp>
 #include <gui/windows/error_messages_window.hpp>
 #include <gui/windows/fuzzy_search_window.hpp>
+#include <gui/windows/pdf_create_window.hpp>
 
 namespace dnd {
 
@@ -22,6 +23,8 @@ private:
     void render_parsing_error_popup();
 
     bool show_demo_window;
+    bool show_advanced_search_window;
+    bool show_pdf_create_window;
 
     Session session;
 
@@ -30,6 +33,8 @@ private:
     ErrorMessagesWindow error_messages_window;
     FuzzySearchWindow fuzzy_search_window;
     AdvancedSearchWindow advanced_search_window;
+
+    PdfCreateWindow pdf_create_window;
 };
 
 } // namespace dnd
