@@ -8,7 +8,7 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
-#include <core/utils/data_result.hpp>
+#include <core/data_result.hpp>
 #include <core/validation/class/important_levels_validation.hpp>
 
 namespace dnd {

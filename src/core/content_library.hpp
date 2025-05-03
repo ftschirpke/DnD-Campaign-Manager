@@ -6,7 +6,7 @@
 #include <string>
 
 #include <core/models/content_piece.hpp>
-#include <core/utils/types.hpp>
+#include <core/types.hpp>
 
 namespace dnd {
 

@@ -4,8 +4,8 @@
 #include <dnd_config.hpp>
 
 #include <core/models/effects/effects.hpp>
-#include <core/utils/data_result.hpp>
-#include <core/utils/types.hpp>
+#include <core/data_result.hpp>
+#include <core/types.hpp>
 
 namespace dnd {
 

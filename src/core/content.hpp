@@ -17,8 +17,8 @@
 #include <core/models/subspecies/subspecies.hpp>
 #include <core/referencing_content_library.hpp>
 #include <core/storage_content_library.hpp>
-#include <core/utils/data_result.hpp>
-#include <core/utils/types.hpp>
+#include <core/data_result.hpp>
+#include <core/types.hpp>
 
 namespace dnd {
 

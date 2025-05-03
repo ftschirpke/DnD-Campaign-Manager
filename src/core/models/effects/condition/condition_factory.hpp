@@ -4,7 +4,7 @@
 #include <dnd_config.hpp>
 
 #include <core/models/effects/condition/condition.hpp>
-#include <core/utils/data_result.hpp>
+#include <core/data_result.hpp>
 
 namespace dnd {
 

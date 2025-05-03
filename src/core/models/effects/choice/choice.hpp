@@ -11,7 +11,7 @@
 #include <core/errors/errors.hpp>
 #include <core/models/effects/choice/choice_rules.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
-#include <core/utils/data_result.hpp>
+#include <core/data_result.hpp>
 
 namespace dnd {
 

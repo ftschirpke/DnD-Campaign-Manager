@@ -11,7 +11,7 @@
 #include <fmt/format.h>
 #include <fmt/ranges.h>
 
-#include <core/utils/types.hpp>
+#include <core/types.hpp>
 
 namespace dnd {
 
