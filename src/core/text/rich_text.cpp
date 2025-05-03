@@ -36,7 +36,9 @@ std::optional<RichText> parse_rich_text(std::string::const_iterator begin, std::
                 status = Status::SEARCHING_TYPE_START;
                 break;
             case Status::SEARCHING_TYPE_START:
-                assert(*str == '@');
+                if (*str != '@') {
+                    return std::nullopt;
+                }
                 status = Status::SEARCHING_TYPE;
                 break;
             case Status::SEARCHING_TYPE:

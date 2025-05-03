@@ -9,6 +9,8 @@
 
 #include <fmt/format.h>
 
+#include <core/text/text.hpp>
+
 namespace dnd {
 
 class Errors;
@@ -22,7 +24,7 @@ public:
     virtual std::string get_key() const;
 
     std::string name;
-    std::string description;
+    Text description;
     std::filesystem::path source_path;
     std::string source_name;
 protected:
