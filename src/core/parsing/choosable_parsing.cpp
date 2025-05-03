@@ -20,7 +20,7 @@ static WithErrors<Choosable::Data> parse_choosable(const nlohmann::json& obj, co
     choosable_data.source_path = filepath;
     errors += parse_required_attribute_into(obj, "name", choosable_data.name, filepath);
     errors += parse_required_attribute_into(obj, "source", choosable_data.source_name, filepath);
-    errors += write_formatted_description_into(obj, choosable_data.description, filepath);
+    errors += write_formatted_text_into(obj, choosable_data.description, filepath);
 
     // TODO: implement functional choosables
     // choosable_data.main_effects_data;

@@ -20,6 +20,7 @@
 #include <core/models/species/species.hpp>
 #include <core/models/subclass/subclass.hpp>
 #include <core/models/subspecies/subspecies.hpp>
+#include <core/text/text.hpp>
 #include <core/validation/validation_data.hpp>
 
 namespace dnd {
@@ -40,7 +41,7 @@ public:
     Character& operator=(Character&&) noexcept = default;
 
     const std::string& get_name() const override;
-    const std::string& get_description() const override;
+    const Text& get_description() const override;
     const SourceInfo& get_source_info() const override;
     const std::vector<Feature>& get_features() const;
     const std::vector<CRef<Choosable>>& get_choosables() const;
@@ -57,13 +58,13 @@ public:
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Character(
-        std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
+        std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
         std::vector<Feature>&& features, std::vector<CRef<Choosable>>&& choosables, AbilityScores&& base_ability_scores,
         FeatureProviders&& feature_providers, Progression&& progression, std::vector<Decision>&& decisions
     );
 
     std::string name;
-    std::string description;
+    Text description;
     SourceInfo source_info;
     std::vector<Feature> features;
     std::vector<CRef<Choosable>> choosables;

@@ -251,7 +251,7 @@ WithErrors<Spell::Data> parse_spell(const nlohmann::ordered_json& obj, const std
     spell_data.source_path = filepath;
     errors += parse_required_attribute_into(obj, "name", spell_data.name, filepath);
     errors += parse_required_attribute_into(obj, "source", spell_data.source_name, filepath);
-    errors += write_formatted_description_into(obj, spell_data.description, filepath);
+    errors += write_formatted_text_into(obj, spell_data.description, filepath);
 
     parse_spell_components(obj, filepath).move_into(spell_data.components_data, errors);
     parse_spell_type(obj, filepath).move_into(spell_data.type_data, errors);

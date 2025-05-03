@@ -12,6 +12,7 @@
 #include <core/models/effects/condition/condition.hpp>
 #include <core/models/effects_provider/effects_provider.hpp>
 #include <core/models/effects_provider/feature.hpp>
+#include <core/text/text.hpp>
 
 namespace dnd {
 
@@ -34,7 +35,7 @@ public:
     Choosable& operator=(Choosable&&) noexcept = default;
 
     const std::string& get_name() const override;
-    const std::string& get_description() const override;
+    const Text& get_description() const override;
     const SourceInfo& get_source_info() const override;
     const Effects& get_main_effects() const override;
     const std::string& get_type() const;
@@ -43,12 +44,12 @@ public:
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Choosable(
-        std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
+        std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
         std::string&& type, std::vector<std::unique_ptr<Condition>>&& prerequisites, Effects&& main_effects
     );
 
     std::string name;
-    std::string description;
+    Text description;
     SourceInfo source_info;
     Effects main_effects;
     std::string type;

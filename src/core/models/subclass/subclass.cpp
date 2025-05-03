@@ -52,7 +52,7 @@ CreateResult<Subclass> Subclass::create_for(Data&& data, const Content& content)
 
 const std::string& Subclass::get_name() const { return name; }
 
-const std::string& Subclass::get_description() const { return description; }
+const Text& Subclass::get_description() const { return description; }
 
 const SourceInfo& Subclass::get_source_info() const { return source_info; }
 
@@ -71,7 +71,7 @@ void Subclass::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 std::string Subclass::get_key() const { return key(short_name, get_source_info().name); }
 
 Subclass::Subclass(
-    std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
+    std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
     std::string&& short_name, std::vector<ClassFeature>&& features, CRef<Class> cls,
     std::unique_ptr<Spellcasting>&& spellcasting
 )

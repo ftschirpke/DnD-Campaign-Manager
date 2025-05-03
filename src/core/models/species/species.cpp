@@ -11,6 +11,7 @@
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/source_info.hpp>
+#include <core/text/text.hpp>
 #include <core/validation/species/species_validation.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
@@ -39,7 +40,7 @@ CreateResult<Species> Species::create_for(Data&& data, const Content& content) {
 
 const std::string& Species::get_name() const { return name; }
 
-const std::string& Species::get_description() const { return description; }
+const Text& Species::get_description() const { return description; }
 
 const SourceInfo& Species::get_source_info() const { return source_info; }
 
@@ -48,7 +49,7 @@ const std::vector<Feature>& Species::get_features() const { return features; }
 void Species::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 Species::Species(
-    std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
+    std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
     std::vector<Feature>&& features
 )
     : name(std::move(name)), description(std::move(description)),
