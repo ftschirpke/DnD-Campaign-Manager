@@ -12,6 +12,7 @@
 #include <core/models/source_info.hpp>
 #include <core/models/spell/spell_components.hpp>
 #include <core/models/spell/spell_type.hpp>
+#include <core/text/text.hpp>
 
 namespace dnd {
 
@@ -24,7 +25,7 @@ public:
     static CreateResult<Spell> create(Data&& spell_data);
 
     const std::string& get_name() const override;
-    const std::string& get_description() const override;
+    const Text& get_description() const override;
     const SourceInfo& get_source_info() const override;
     const SpellComponents& get_components() const;
     const SpellType& get_type() const;
@@ -37,13 +38,13 @@ public:
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Spell(
-        std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
+        std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
         SpellComponents&& components, SpellType&& type, bool concentration, std::string&& casting_time,
         std::string&& range, std::string&& duration, std::set<std::string>&& classes
     );
 
     std::string name;
-    std::string description;
+    Text description;
     SourceInfo source_info;
     SpellComponents components;
     SpellType type;

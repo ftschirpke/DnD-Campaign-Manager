@@ -15,6 +15,7 @@
 #include <core/basic_mechanics/character_progression.hpp>
 #include <core/basic_mechanics/skills.hpp>
 #include <core/content.hpp>
+#include <core/data_result.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
@@ -31,7 +32,7 @@
 #include <core/models/species/species.hpp>
 #include <core/models/subclass/subclass.hpp>
 #include <core/models/subspecies/subspecies.hpp>
-#include <core/data_result.hpp>
+#include <core/text/text.hpp>
 #include <core/types.hpp>
 #include <core/validation/character/character_validation.hpp>
 #include <core/visitors/content/content_visitor.hpp>
@@ -117,7 +118,7 @@ CreateResult<Character> Character::create_for(Data&& data, const Content& conten
 
 const std::string& Character::get_name() const { return name; }
 
-const std::string& Character::get_description() const { return description; }
+const Text& Character::get_description() const { return description; }
 
 const SourceInfo& Character::get_source_info() const { return source_info; }
 
@@ -235,7 +236,7 @@ int Character::get_proficiency_bonus() const {
 void Character::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 Character::Character(
-    std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
+    std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
     std::vector<Feature>&& features, std::vector<CRef<Choosable>>&& choosables, AbilityScores&& base_ability_scores,
     FeatureProviders&& feature_providers, Progression&& progression, std::vector<Decision>&& decisions
 )

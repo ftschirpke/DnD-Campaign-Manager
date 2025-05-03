@@ -46,7 +46,7 @@ CreateResult<Spell> Spell::create(Data&& data) {
 
 const std::string& Spell::get_name() const { return name; }
 
-const std::string& Spell::get_description() const { return description; }
+const Text& Spell::get_description() const { return description; }
 
 const SourceInfo& Spell::get_source_info() const { return source_info; }
 
@@ -67,7 +67,7 @@ const std::set<std::string>& Spell::get_classes() const { return classes; }
 void Spell::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 Spell::Spell(
-    std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
+    std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
     SpellComponents&& components, SpellType&& type, bool concentration, std::string&& casting_time, std::string&& range,
     std::string&& duration, std::set<std::string>&& classes
 )

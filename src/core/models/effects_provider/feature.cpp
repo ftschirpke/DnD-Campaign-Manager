@@ -11,6 +11,7 @@
 #include <core/models/content_piece.hpp>
 #include <core/models/effects/effects.hpp>
 #include <core/models/source_info.hpp>
+#include <core/text/text.hpp>
 #include <core/validation/effects_provider/feature_validation.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
@@ -37,7 +38,7 @@ CreateResult<Feature> Feature::create_for(Data&& data, const Content& content) {
 
 const std::string& Feature::get_name() const { return name; }
 
-const std::string& Feature::get_description() const { return description; }
+const Text& Feature::get_description() const { return description; }
 
 const SourceInfo& Feature::get_source_info() const { return source_info; }
 
@@ -46,7 +47,7 @@ const Effects& Feature::get_main_effects() const { return main_effects; }
 void Feature::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 Feature::Feature(
-    std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
+    std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
     Effects&& main_effects
 )
     : name(std::move(name)), description(std::move(description)),

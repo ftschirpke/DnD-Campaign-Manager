@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include <core/utils/rich_text.hpp>
+#include <core/text/rich_text.hpp>
 
 #include <catch2/catch_test_macros.hpp>
 

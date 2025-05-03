@@ -12,6 +12,7 @@
 
 #include <core/basic_mechanics/dice.hpp>
 #include <core/content.hpp>
+#include <core/data_result.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
@@ -19,7 +20,7 @@
 #include <core/models/effects_provider/class_feature.hpp>
 #include <core/models/source_info.hpp>
 #include <core/models/spellcasting/spellcasting_factory.hpp>
-#include <core/data_result.hpp>
+#include <core/text/text.hpp>
 #include <core/validation/class/class_validation.hpp>
 #include <core/validation/effects/condition/condition_validation.hpp>
 #include <core/validation/effects/effects_validation.hpp>
@@ -106,7 +107,7 @@ CreateResult<Class> Class::create_for(Data&& data, const Content& content) {
 
 const std::string& Class::get_name() const { return name; }
 
-const std::string& Class::get_description() const { return description; }
+const Text& Class::get_description() const { return description; }
 
 const SourceInfo& Class::get_source_info() const { return source_info; }
 
@@ -125,7 +126,7 @@ const ImportantLevels& Class::get_important_levels() const { return important_le
 void Class::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 Class::Class(
-    std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
+    std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
     std::vector<ClassFeature>&& features, OptCRef<ClassFeature> subclass_feature, Dice hit_dice,
     ImportantLevels&& important_levels, std::unique_ptr<Spellcasting>&& spellcasting
 )
