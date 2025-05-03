@@ -12,7 +12,7 @@
 
 #include <core/content.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
-#include <core/utils/data_result.hpp>
+#include <core/data_result.hpp>
 #include <core/validation/effects/subholders/riv_holder_validation.hpp>
 
 namespace dnd {

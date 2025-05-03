@@ -14,7 +14,7 @@
 #include <core/basic_mechanics/abilities.hpp>
 #include <core/basic_mechanics/dice.hpp>
 #include <core/basic_mechanics/skills.hpp>
-#include <core/utils/data_result.hpp>
+#include <core/data_result.hpp>
 
 namespace dnd {
 

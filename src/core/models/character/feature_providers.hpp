@@ -6,8 +6,8 @@
 #include <compare>
 #include <string>
 
-#include <core/utils/data_result.hpp>
-#include <core/utils/types.hpp>
+#include <core/data_result.hpp>
+#include <core/types.hpp>
 
 namespace dnd {
 

@@ -15,7 +15,7 @@
 #include <core/basic_mechanics/skills.hpp>
 #include <core/models/character/ability_scores.hpp>
 #include <core/models/effects/stat_change/stat_change.hpp>
-#include <core/utils/types.hpp>
+#include <core/types.hpp>
 
 namespace dnd {
 

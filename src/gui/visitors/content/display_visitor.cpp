@@ -85,8 +85,8 @@ static void end_content_table() {
 }
 
 static void display_formatted_text(const std::string& formatted_text) {
-    static DisplayFormatVisitor display_format_visitor(table_flags);
-    static StringFormatter string_formatter(false);
+    DisplayFormatVisitor display_format_visitor(table_flags);
+    StringFormatter string_formatter(false);
     std::vector<std::unique_ptr<Format>> text_formats = string_formatter.parse_formats(formatted_text);
     for (auto it = text_formats.begin(); it != text_formats.end(); ++it) {
         (*it)->accept(display_format_visitor);

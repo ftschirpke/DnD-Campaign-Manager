@@ -8,7 +8,7 @@
 #include <string_view>
 
 #include <core/basic_mechanics/magic_schools.hpp>
-#include <core/utils/data_result.hpp>
+#include <core/data_result.hpp>
 
 namespace dnd {
 

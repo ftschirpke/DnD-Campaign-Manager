@@ -13,7 +13,7 @@
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/source_info.hpp>
 #include <core/models/species/species.hpp>
-#include <core/utils/data_result.hpp>
+#include <core/data_result.hpp>
 #include <core/validation/subspecies/subspecies_validation.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 

@@ -8,7 +8,7 @@
 
 #include <core/referencing_content_library.hpp>
 #include <core/storage_content_library.hpp>
-#include <core/utils/types.hpp>
+#include <core/types.hpp>
 
 namespace dnd {
 

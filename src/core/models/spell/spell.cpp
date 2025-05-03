@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include "core/utils/data_result.hpp"
+#include "core/data_result.hpp"
 #include "spell.hpp"
 
 #include <filesystem>

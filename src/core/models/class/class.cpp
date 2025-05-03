@@ -19,7 +19,7 @@
 #include <core/models/effects_provider/class_feature.hpp>
 #include <core/models/source_info.hpp>
 #include <core/models/spellcasting/spellcasting_factory.hpp>
-#include <core/utils/data_result.hpp>
+#include <core/data_result.hpp>
 #include <core/validation/class/class_validation.hpp>
 #include <core/validation/effects/condition/condition_validation.hpp>
 #include <core/validation/effects/effects_validation.hpp>

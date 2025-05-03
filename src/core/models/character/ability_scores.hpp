@@ -6,7 +6,7 @@
 #include <compare>
 
 #include <core/basic_mechanics/abilities.hpp>
-#include <core/utils/data_result.hpp>
+#include <core/data_result.hpp>
 
 namespace dnd {
 

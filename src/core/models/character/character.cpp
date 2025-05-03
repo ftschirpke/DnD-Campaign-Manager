@@ -31,8 +31,8 @@
 #include <core/models/species/species.hpp>
 #include <core/models/subclass/subclass.hpp>
 #include <core/models/subspecies/subspecies.hpp>
-#include <core/utils/data_result.hpp>
-#include <core/utils/types.hpp>
+#include <core/data_result.hpp>
+#include <core/types.hpp>
 #include <core/validation/character/character_validation.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 

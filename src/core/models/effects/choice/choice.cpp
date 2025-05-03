@@ -26,7 +26,7 @@
 #include <core/searching/content_filters/content_filter.hpp>
 #include <core/searching/content_filters/selection_filter.hpp>
 #include <core/searching/content_filters/spell/spell_filter.hpp>
-#include <core/utils/data_result.hpp>
+#include <core/data_result.hpp>
 #include <core/validation/effects/choice/choice_validation.hpp>
 
 namespace dnd {
