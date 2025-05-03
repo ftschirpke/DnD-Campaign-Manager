@@ -14,7 +14,8 @@
 #include <core/models/class/class.hpp>
 #include <core/models/effects_provider/class_feature.hpp>
 #include <core/parsing/parser.hpp>
-#include <core/utils/rich_text.hpp>
+#include <core/text/rich_text.hpp>
+#include <core/text/text.hpp>
 
 namespace dnd {
 
@@ -334,7 +335,7 @@ Errors parse_class_feature(
     errors += parse_required_attribute_into(obj, "name", feature_data.name, filepath);
     errors += parse_required_attribute_into(obj, "source", feature_data.source_name, filepath);
     errors += parse_required_attribute_into(obj, "level", feature_data.level, filepath);
-    errors += write_formatted_description_into(obj, feature_data.description, filepath);
+    errors += write_formatted_text_into(obj, feature_data.description, filepath);
 
     return errors;
 }
@@ -394,12 +395,12 @@ Errors parse_subclass_feature(
         errors += parse_required_attribute_into(obj, "classSource", copy_class_source, filepath);
         errors += parse_required_attribute_into(obj, "subclassShortName", copy_subclass_short_name, filepath);
         errors += parse_required_attribute_into(obj, "subclassSource", copy_subclass_source, filepath);
-        feature_data.description = fmt::format(
+        feature_data.description = Text::simple(fmt::format(
             "Copy of {}-{} of {}-{} ({}-{})", copy_name, copy_source, copy_subclass_short_name, copy_subclass_source,
             copy_class_name, copy_class_source
-        );
+        ));
     } else {
-        errors += write_formatted_description_into(obj, feature_data.description, filepath);
+        errors += write_formatted_text_into(obj, feature_data.description, filepath);
     }
 
     return errors;

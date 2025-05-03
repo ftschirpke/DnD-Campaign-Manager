@@ -15,6 +15,7 @@
 
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
+#include <core/text/text.hpp>
 
 namespace dnd {
 
@@ -29,8 +30,8 @@ private:
     const std::filesystem::path& filepath;
 };
 
-std::optional<Error> write_formatted_description_into(
-    const nlohmann::json& json, std::string& out, const std::filesystem::path& filepath
+std::optional<Error> write_formatted_text_into(
+    const nlohmann::json& json, Text& out, const std::filesystem::path& filepath
 );
 
 enum class JsonType {
