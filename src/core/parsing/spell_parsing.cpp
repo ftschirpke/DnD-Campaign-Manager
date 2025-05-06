@@ -133,11 +133,12 @@ static WithErrors<std::pair<std::string, bool>> parse_spell_duration(
     return result;
 }
 
-static WithErrors<std::string> parse_spell_casting_time(
+static WithErrors<std::pair<std::string, std::optional<std::string>>> parse_spell_casting_time(
     const nlohmann::ordered_json& obj, const std::filesystem::path& filepath
 ) {
-    WithErrors<std::string> result;
-    std::string& out = result.value;
+    WithErrors<std::pair<std::string, std::optional<std::string>>> result;
+    std::string& time_result = result.value.first;
+    std::optional<std::string>& condition = result.value.second;
     Errors& errors = result.errors;
 
     errors += check_required_attribute(obj, "time", filepath, JsonType::ARRAY);
@@ -158,6 +159,7 @@ static WithErrors<std::string> parse_spell_casting_time(
     }
 
     std::vector<std::string> times;
+    std::vector<std::optional<std::string>> conditions;
     for (const nlohmann::json& time : time_arr) {
         int number;
         errors += parse_required_attribute_into(time, "number", number, filepath);
@@ -170,13 +172,10 @@ static WithErrors<std::string> parse_spell_casting_time(
             unit += "s";
         }
 
-        std::string time_str;
+        std::string time_str = fmt::format("{} {}", number, unit);
         if (time.contains("condition")) {
             std::string condition;
             errors += parse_required_attribute_into(time, "condition", condition, filepath);
-            time_str = fmt::format("{} {}, {}", number, unit, condition);
-        } else {
-            time_str = fmt::format("{} {}", number, unit);
         }
 
         std::string time_note;
@@ -187,7 +186,7 @@ static WithErrors<std::string> parse_spell_casting_time(
         times.push_back(time_str);
     }
 
-    out = fmt::format("{}", fmt::join(times.begin(), times.end(), " / "));
+    time_result = fmt::format("{}", fmt::join(times.begin(), times.end(), " / "));
 
     return result;
 }
@@ -255,10 +254,12 @@ WithErrors<Spell::Data> parse_spell(const nlohmann::ordered_json& obj, const std
 
     parse_spell_components(obj, filepath).move_into(spell_data.components_data, errors);
     parse_spell_type(obj, filepath).move_into(spell_data.type_data, errors);
-    parse_spell_casting_time(obj, filepath).move_into(spell_data.casting_time, errors);
     parse_spell_range(obj, filepath).move_into(spell_data.range, errors);
 
-    WithErrors<std::pair<std::string, bool>> duration_result = parse_spell_duration(obj, filepath);
+    parse_spell_casting_time(obj, filepath)
+
+        WithErrors<std::pair<std::string, bool>>
+            duration_result = parse_spell_duration(obj, filepath);
     errors += std::move(duration_result.errors);
     spell_data.duration = std::move(duration_result.value.first);
     spell_data.concentration = duration_result.value.second;

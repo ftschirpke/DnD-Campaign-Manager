@@ -31,6 +31,7 @@ public:
     const SpellType& get_type() const;
     bool requires_concentration() const;
     const std::string& get_casting_time() const;
+    const std::string& get_casting_condition() const;
     const std::string& get_range() const;
     const std::string& get_duration() const;
     const std::set<std::string>& get_classes() const;
@@ -50,6 +51,7 @@ private:
     SpellType type;
     bool concentration;
     std::string casting_time;
+    std::string casting_condition;
     std::string range;
     std::string duration;
     std::set<std::string> classes;
@@ -63,6 +65,7 @@ struct Spell::Data : public ValidationData {
 
     bool concentration;
     std::string casting_time;
+    std::string casting_condition;
     std::string range;
     std::string duration;
     std::set<std::string> classes;
