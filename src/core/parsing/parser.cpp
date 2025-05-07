@@ -2,6 +2,7 @@
 
 #include "parser.hpp"
 
+#include <algorithm>
 #include <deque>
 #include <filesystem>
 #include <optional>
@@ -18,6 +19,9 @@
 #include <log.hpp>
 
 namespace dnd {
+
+constexpr std::array<std::string_view, 7> known_link_types = {"damage", "condition", "dice",  "skill",
+                                                              "spell",  "creature",  "action"};
 
 const std::filesystem::path& Parser::get_filepath() const { return filepath; }
 
@@ -63,13 +67,18 @@ static std::optional<Error> parse_text_recursive(
                 return error;
             }
         } else {
-            LOGDEBUG("Found rich text of type '{}' - assuming link", rich_text->rich_type);
-            paragraph.parts.emplace_back(Link{
-                .str = std::move(rich_text->text),
-                .attributes = std::move(rich_text->attributes),
-                .italic = italic,
-                .bold = bold,
-            });
+            if (std::find(known_link_types.begin(), known_link_types.end(), rich_text->rich_type)
+                == known_link_types.end()) {
+                LOGWARN("Found rich text of unknown type '{}' - assuming link", rich_text->rich_type);
+            }
+            paragraph.parts.emplace_back(
+                Link{
+                    .str = std::move(rich_text->text),
+                    .attributes = std::move(rich_text->attributes),
+                    .italic = italic,
+                    .bold = bold,
+                }
+            );
         }
 
         cur += rich_text->length;
@@ -94,12 +103,14 @@ static std::optional<Error> parse_list(
         TextObject& last = out.parts.back();
         if (last.index() == 0) /* Paragraph */ {
             Paragraph& paragraph = std::get<0>(last);
-            const InlineText& last_inline = paragraph.parts.back();
-            if (last_inline.index() == 0) /* SimpleText */ {
-                const SimpleText& simple_text = std::get<0>(last_inline);
-                if (simple_text.str.ends_with(':')) {
-                    new_list.text_above = paragraph;
-                    out.parts.pop_back();
+            if (!paragraph.parts.empty()) {
+                const InlineText& last_inline = paragraph.parts.back();
+                if (last_inline.index() == 0) /* SimpleText */ {
+                    const SimpleText& simple_text = std::get<0>(last_inline);
+                    if (simple_text.str.ends_with(':')) {
+                        new_list.text_above = paragraph;
+                        out.parts.pop_back();
+                    }
                 }
             }
         }
@@ -267,7 +278,11 @@ std::optional<Error> write_formatted_text_into(
             if (error.has_value()) {
                 return error;
             }
-            out.parts.push_back(new_paragraph);
+            if (!new_paragraph.parts.empty()) {
+                out.parts.push_back(new_paragraph);
+            } else {
+                LOGDEBUG("we created an empty paragraph?!");
+            }
             continue;
         }
 
@@ -277,6 +292,7 @@ std::optional<Error> write_formatted_text_into(
                 "Json entries in the \"entries\" array must either be strings or objects."
             );
         }
+        LOGDEBUG("Object");
 
         std::string type;
         error = parse_required_attribute_into(entry, "type", type, filepath);
@@ -285,12 +301,14 @@ std::optional<Error> write_formatted_text_into(
         }
 
         if (type == "entries") {
+            LOGDEBUG("entries");
             error = check_required_attribute(entry, "entries", filepath, JsonType::ARRAY);
             if (error.has_value()) {
                 return error;
             }
 
             if (entry.contains("name")) {
+                LOGDEBUG("name");
                 std::string name;
                 error = parse_required_attribute_into(entry, "name", name, filepath);
                 if (error.has_value()) {
@@ -311,11 +329,13 @@ std::optional<Error> write_formatted_text_into(
                     return error;
                 }
             } else {
+                LOGDEBUG("not a name");
                 for (auto it = entry.rbegin(); it != entry.rend(); ++it) {
                     todo.push_front(*it);
                 }
             }
         } else if (type == "list") {
+            LOGDEBUG("list");
             error = check_required_attribute(entry, "items", filepath, JsonType::ARRAY);
             if (error.has_value()) {
                 return error;
@@ -325,8 +345,10 @@ std::optional<Error> write_formatted_text_into(
                 return error;
             }
         } else if (type == "table") {
+            LOGDEBUG("table");
             parse_table(entry, out, filepath);
         } else {
+            LOGDEBUG("unknown");
             return ParsingError(
                 ParsingError::Code::UNEXPECTED_ATTRIBUTE, filepath, fmt::format("Entry type \"{}\" unexpected", type)
             );
