@@ -111,6 +111,7 @@ void GuiApp::render_overview_window() {
 
     if (session.get_status() != SessionStatus::PARSING) {
         if (ImGui::Button("Parse content")) {
+            // FIX: re-parsing does not work currently
             session.start_parsing();
         }
     }

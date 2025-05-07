@@ -65,16 +65,19 @@ ParsingResult parse_content(const std::set<std::filesystem::path>& content_paths
     result.content_paths = content_paths;
 
     for (const std::filesystem::path& content_path : content_paths) {
+        bool valid_directory = true;
         if (!std::filesystem::exists(content_path)) {
             result.errors.add_parsing_error(
                 ParsingError::Code::FILE_NOT_FOUND, content_path, "The content directory does not exist."
             );
+            valid_directory = false;
         } else if (!std::filesystem::directory_entry(content_path).is_directory()) {
             result.errors.add_parsing_error(
                 ParsingError::Code::FILE_NOT_FOUND, content_path, "The content directory is not a directory."
             );
+            valid_directory = false;
         }
-        if (!result.errors.ok()) {
+        if (!valid_directory) {
             return result;
         }
 

@@ -26,6 +26,7 @@ constexpr std::array<std::string_view, 34> known_link_types = {
     "quickref",     "item",        "sense",  "dc",          "note",  "filter",   "chance", "status",
     "classFeature", "variantrule", "hazard", "5etools",     "book",  "feat",     "deity",  "subclassFeature",
     "language",     "class",       "table",  "itemMastery", "deck",  "hit",      "object", "race",
+    "optfeature",
 };
 
 
@@ -38,6 +39,7 @@ Parser::Parser(const std::filesystem::path& filepath) : filepath(filepath) {}
 static std::optional<Error> parse_text_recursive(
     std::string&& str, Paragraph& paragraph, bool italic, bool bold, const std::filesystem::path& filepath
 ) {
+    // TODO: add warning if '\n' is left in the string, as this is not well supported (currently)
     std::optional<Error> error;
     std::string::iterator start = str.begin();
     std::string::iterator cur = str.begin();
@@ -217,6 +219,13 @@ static tl::expected<Table, Error> parse_table(const nlohmann::json& json, const 
         if (error.has_value()) {
             return tl::unexpected(error.value());
         }
+        if (header_entry.starts_with("{@")) {
+            // INFO: I think there is no need and no real use case for rich text in the header; reconsider later
+            std::optional<RichText> rich_text = parse_rich_text(header_entry);
+            if (rich_text.has_value()) {
+                header_entry = rich_text->text;
+            }
+        }
         new_table.header.push_back(header_entry);
     }
 
@@ -255,7 +264,7 @@ static tl::expected<Table, Error> parse_table(const nlohmann::json& json, const 
         return tl::unexpected(error.value());
     }
     const nlohmann::json& rows = json["rows"];
-    for (size_t i = 0; i < new_table.columns; ++i) {
+    for (size_t i = 0; i < rows.size(); ++i) {
         error = check_required_index(rows, i, filepath, JsonType::ARRAY);
         if (error.has_value()) {
             return tl::unexpected(error.value());
@@ -263,9 +272,60 @@ static tl::expected<Table, Error> parse_table(const nlohmann::json& json, const 
         std::vector<Paragraph>& row = new_table.rows.emplace_back();
         for (size_t j = 0; j < rows[i].size(); ++j) {
             std::string entry;
-            error = parse_required_index_into(rows[i], j, entry, filepath);
-            if (error.has_value()) {
-                return tl::unexpected(error.value());
+            const nlohmann::json& entry_json = rows[i][j];
+            if (entry_json.is_string()) {
+                error = parse_required_index_into(rows[i], j, entry, filepath);
+                if (error.has_value()) {
+                    return tl::unexpected(error.value());
+                }
+            } else if (entry_json.is_number_integer()) {
+                int val;
+                error = parse_required_index_into(rows[i], j, val, filepath);
+                if (error.has_value()) {
+                    return tl::unexpected(error.value());
+                }
+                entry = fmt::format("{}", val);
+            } else {
+                error = check_required_index(rows[i], j, filepath, JsonType::OBJECT);
+                if (error.has_value()) {
+                    return tl::unexpected(error.value());
+                }
+                std::string typ;
+                error = parse_required_attribute_into(entry_json, "type", typ, filepath);
+                if (error.has_value()) {
+                    return tl::unexpected(error.value());
+                }
+                if (typ != "cell") {
+                    return tl::unexpected(ParsingError(
+                        ParsingError::Code::INVALID_ATTRIBUTE_TYPE, filepath,
+                        "When having an object in a table entry, it must be of type \"cell\""
+                    ));
+                }
+                error = check_required_attribute(entry_json, "roll", filepath, JsonType::OBJECT);
+                if (error.has_value()) {
+                    return tl::unexpected(error.value());
+                }
+                const nlohmann::json& roll = entry_json["roll"];
+                if (roll.contains("exact")) {
+                    int exact_roll;
+                    error = parse_required_attribute_into(roll, "exact", exact_roll, filepath);
+                    if (error.has_value()) {
+                        return tl::unexpected(error.value());
+                    }
+                    entry = fmt::format("{}", exact_roll);
+                } else {
+                    int min_roll;
+                    error = parse_required_attribute_into(roll, "min", min_roll, filepath);
+                    if (error.has_value()) {
+                        return tl::unexpected(error.value());
+                    }
+                    int max_roll;
+                    error = parse_required_attribute_into(roll, "max", max_roll, filepath);
+                    if (error.has_value()) {
+                        return tl::unexpected(error.value());
+                    }
+                    entry = fmt::format("{}-{}", min_roll, max_roll);
+                }
             }
             Paragraph entry_paragraph{};
             error = parse_paragraph(std::move(entry), entry_paragraph, filepath);
@@ -460,7 +520,6 @@ std::optional<Error> check_required_index(
         json[index], typ, filepath,
         fmt::format("The index {} exists but is of wrong type - should be {}", index, json_attribute_type_name(typ))
     );
-    return std::nullopt;
 }
 
 } // namespace dnd

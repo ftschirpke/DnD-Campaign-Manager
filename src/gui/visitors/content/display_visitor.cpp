@@ -181,6 +181,9 @@ static void display_paragraph(const Paragraph& paragraph, const GuiFonts& fonts)
             if (last_fitting_end == text_end) {
                 // not reached end of line
                 x += subtext_size.x;
+                if (subtext_size.y > ImGui::GetTextLineHeight()) {
+                    y += subtext_size.y - ImGui::GetTextLineHeight();
+                }
             } else {
                 // reached end of line with space
                 x = x_begin;
