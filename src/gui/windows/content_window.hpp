@@ -4,6 +4,7 @@
 #include <dnd_config.hpp>
 
 #include <core/session.hpp>
+#include <gui/gui_fonts.hpp>
 #include <gui/visitors/content/display_visitor.hpp>
 
 namespace dnd {
@@ -13,7 +14,7 @@ namespace dnd {
  */
 class ContentWindow {
 public:
-    ContentWindow(Session& session);
+    ContentWindow(Session& session, const GuiFonts& fonts);
     void render();
 private:
     Session& session;

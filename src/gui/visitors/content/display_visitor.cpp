@@ -37,6 +37,8 @@
 
 namespace dnd {
 
+DisplayVisitor::DisplayVisitor(const GuiFonts& fonts) : fonts(fonts) {}
+
 static const ImVec2 cell_padding = ImVec2(5, 5);
 static constexpr ImGuiTableFlags content_table_flags = ImGuiTableFlags_NoBordersInBodyUntilResize;
 static const float first_column_width = 150;
@@ -231,6 +233,7 @@ static void character_progression_list(const dnd::Character& character) {
 }
 
 void dnd::DisplayVisitor::operator()(const Character& character) {
+    DND_UNUSED(fonts); // TODO: remove when fonts are in use
     {
         ImGui::BeginChild("abilities_and_skills", ImVec2(ImGui::GetContentRegionAvail().x * 0.8f, 260), false);
         character_abilities_and_skills_table(character);
