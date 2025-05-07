@@ -9,6 +9,11 @@ namespace dnd {
 
 LatexText::LatexText(const std::string& text) : end_with_newline(true), linebreak(false), text(text) {}
 
+LatexText* LatexText::with_ending_new_line() {
+    end_with_newline = true;
+    return this;
+}
+
 LatexText* LatexText::no_ending_new_line() {
     end_with_newline = false;
     return this;

@@ -21,6 +21,7 @@ enum class LatexTextModifier {
 class LatexText : public LatexObject {
 public:
     LatexText(const std::string& text);
+    LatexText* with_ending_new_line();
     LatexText* no_ending_new_line();
     LatexText* add_line_break();
     LatexText* add_line_break(const std::string& spacing_argument);
