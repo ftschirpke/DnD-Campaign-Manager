@@ -66,14 +66,20 @@ static GuiFonts setup_fonts() {
     io.Fonts->AddFontDefault();
     std::filesystem::path asset_directory = std::filesystem::path(DND_ASSET_DIRECTORY);
 
-    ImFont* main_font = io.Fonts->AddFontFromFileTTF((asset_directory / "Aileron-Regular.otf").c_str(), font_size);
+    ImFont* main_font = io.Fonts->AddFontFromFileTTF(
+        (asset_directory / "Aileron-Regular.otf").string().c_str(), font_size
+    );
     IM_ASSERT(main_font != nullptr);
     io.FontDefault = main_font;
 
-    ImFont* bold_font = io.Fonts->AddFontFromFileTTF((asset_directory / "Aileron-Bold.otf").c_str(), font_size);
-    ImFont* italic_font = io.Fonts->AddFontFromFileTTF((asset_directory / "Aileron-Italic.otf").c_str(), font_size);
+    ImFont* bold_font = io.Fonts->AddFontFromFileTTF(
+        (asset_directory / "Aileron-Bold.otf").string().c_str(), font_size
+    );
+    ImFont* italic_font = io.Fonts->AddFontFromFileTTF(
+        (asset_directory / "Aileron-Italic.otf").string().c_str(), font_size
+    );
     ImFont* bold_italic_font = io.Fonts->AddFontFromFileTTF(
-        (asset_directory / "Aileron-BoldItalic.otf").c_str(), font_size
+        (asset_directory / "Aileron-BoldItalic.otf").string().c_str(), font_size
     );
 
     return GuiFonts{
