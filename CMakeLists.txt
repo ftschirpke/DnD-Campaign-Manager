@@ -26,6 +26,15 @@ set(DND_ASSET_DIRECTORY ${CMAKE_SOURCE_DIR}/assets)
 set(DND_MOCK_DIRECTORY ${CMAKE_SOURCE_DIR}/mock)
 set(DND_BENCH_DIRECTORY ${CMAKE_SOURCE_DIR}/bench)
 
+# font
+set(FONT_URL https://dotcolon.net/files/fonts/aileron_0102.zip)
+file(DOWNLOAD ${FONT_URL} ${DND_ASSET_DIRECTORY}/aileron.zip SHOW_PROGRESS)
+execute_process(
+    COMMAND ${CMAKE_COMMAND} -E tar xfz aileron.zip
+    WORKING_DIRECTORY ${DND_ASSET_DIRECTORY}
+    RESULT_VARIABLE unzip_result
+)
+
 # Dependency management
 include(Dependencies.cmake)
 
