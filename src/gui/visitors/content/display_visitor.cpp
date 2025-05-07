@@ -42,7 +42,7 @@ static constexpr ImGuiTableFlags content_table_flags = ImGuiTableFlags_NoBorders
 static const float first_column_width = 150;
 
 static constexpr ImGuiTableFlags table_flags = ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg
-                                               | ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_NoHostExtendX;
+                                               | ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_NoHostExtendX;
 
 static void label(const char* label) {
     ImGui::TableNextRow();
@@ -205,6 +205,38 @@ static void display_paragraph(const Paragraph& paragraph, const GuiFonts& fonts)
     ImGui::Dummy(space_used);
 }
 
+static void display_table(const Table& table, const GuiFonts& fonts) {
+    const char* id = "unnamed";
+    if (table.caption.has_value()) {
+        ImGui::PushFont(fonts.bold);
+        ImGui::TextWrapped("%s", table.caption.value().c_str());
+        ImGui::PopFont();
+        id = table.caption.value().c_str();
+    }
+    if (ImGui::BeginTable(id, table.columns, table_flags)) {
+        for (size_t col = 0; col < table.columns; ++col) {
+            float col_weight = 0;
+            if (table.column_widths.has_value()) {
+                col_weight = table.column_widths->at(col).value_or(0);
+            }
+            ImGui::TableSetupColumn(table.header.at(col).c_str(), ImGuiTableColumnFlags_WidthStretch, col_weight);
+        }
+        ImGui::TableHeadersRow();
+        for (size_t row = 0; row < table.rows.size(); ++row) {
+            ImGui::TableNextRow();
+            for (size_t col = 0; col < table.columns; ++col) {
+                ImGui::TableSetColumnIndex(col);
+                if (col >= table.rows[row].size()) {
+                    break;
+                }
+                display_paragraph(table.rows[row][col], fonts);
+            }
+        }
+
+        ImGui::EndTable();
+    }
+}
+
 void display_formatted_text(const Text& formatted_text, const GuiFonts& fonts) {
     DND_UNUSED(table_flags);
     ImGui::PushTextWrapPos(0.0f);
@@ -231,32 +263,7 @@ void display_formatted_text(const Text& formatted_text, const GuiFonts& fonts) {
             }
             case 2: /* Table */ {
                 const Table& table = std::get<2>(text_obj);
-                const char* id = "unnamed";
-                if (table.caption.has_value()) {
-                    ImGui::TextWrapped("%s", table.caption.value().c_str());
-                    id = table.caption.value().c_str();
-                }
-                if (ImGui::BeginTable(id, table.columns, table_flags)) {
-                    for (size_t col = 0; col < table.columns; ++col) {
-                        ImGui::TableSetColumnIndex(col);
-                        if (col >= table.header.size()) {
-                            break;
-                        }
-                        ImGui::Text("%s", table.header[col].c_str());
-                    }
-                    for (size_t row = 0; row < table.rows.size(); ++row) {
-                        ImGui::TableNextRow();
-                        for (size_t col = 0; col < table.columns; ++col) {
-                            ImGui::TableSetColumnIndex(col);
-                            if (col >= table.rows[row].size()) {
-                                break;
-                            }
-                            display_paragraph(table.rows[row][col], fonts);
-                        }
-                    }
-
-                    ImGui::EndTable();
-                }
+                display_table(table, fonts);
                 break;
             }
             default: {

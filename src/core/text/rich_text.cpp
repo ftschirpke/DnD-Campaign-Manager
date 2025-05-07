@@ -10,6 +10,7 @@
 namespace dnd {
 
 enum class Status {
+    SEARCHING_INNER_END,
     SEARCHING_START,
     SEARCHING_TYPE_START,
     SEARCHING_TYPE,
@@ -28,6 +29,8 @@ std::optional<RichText> parse_rich_text(std::string::const_iterator begin, std::
     std::string::const_iterator start = begin;
 
     std::optional<std::string> parsed_key = std::nullopt;
+
+    int inner = 0;
 
     for (std::string::const_iterator str = begin; str != end; str++) {
         switch (status) {
@@ -58,6 +61,9 @@ std::optional<RichText> parse_rich_text(std::string::const_iterator begin, std::
                 if (!found_start && *str != ' ') {
                     start = str;
                     found_start = true;
+                } else if (*str == '{') {
+                    inner++;
+                    status = Status::SEARCHING_INNER_END;
                 } else if (*str == '|' || *str == '}') {
                     rich_text.text = std::string(start, str);
                     found_start = false;
@@ -65,6 +71,16 @@ std::optional<RichText> parse_rich_text(std::string::const_iterator begin, std::
                     if (*str == '}') {
                         rich_text.length = str - begin + 1;
                         status = Status::FINISHED;
+                    }
+                }
+                break;
+            case Status::SEARCHING_INNER_END:
+                if (*str == '{') {
+                    inner++;
+                } else if (*str == '}') {
+                    inner--;
+                    if (inner == 0) {
+                        status = Status::SEARCHING_TEXT;
                     }
                 }
                 break;

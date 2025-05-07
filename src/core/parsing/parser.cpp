@@ -10,6 +10,7 @@
 
 #include <fmt/format.h>
 #include <fmt/ranges.h>
+#include <tl/expected.hpp>
 
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
@@ -20,12 +21,13 @@
 
 namespace dnd {
 
-constexpr std::array<std::string_view, 29> known_link_types = {
+constexpr std::array<std::string_view, 34> known_link_types = {
     "damage",       "condition",   "dice",   "skill",       "spell", "creature", "action", "adventure",
     "quickref",     "item",        "sense",  "dc",          "note",  "filter",   "chance", "status",
     "classFeature", "variantrule", "hazard", "5etools",     "book",  "feat",     "deity",  "subclassFeature",
-    "language",     "class",       "table",  "itemMastery", "deck"
+    "language",     "class",       "table",  "itemMastery", "deck",  "hit",      "object", "race",
 };
+
 
 constexpr std::array<std::string_view, 1> known_ignore_types = {"d20"};
 
@@ -146,28 +148,39 @@ static std::optional<Error> parse_list(
         if (error.has_value()) {
             return error;
         }
-        if (type != "item") {
+        if (type == "refSubclassFeature") {
+            continue;
+        }
+        if (type != "item" && type != "itemSpell") {
             return ParsingError(
                 ParsingError::Code::UNEXPECTED_ATTRIBUTE, filepath,
-                fmt::format("Item in has unexpected type \"{}\" != \"item\"", type)
+                fmt::format("Item in list has unexpected type \"{}\" != \"item\"", type)
             );
         }
-        std::vector<std::string> items_strings;
-        error = parse_required_attribute_into(item, "entries", items_strings, filepath);
-        if (error.has_value()) {
-            return error;
-        }
 
-        std::string name;
-        error = parse_optional_attribute_into(item, "name", name, filepath);
-        if (error.has_value()) {
-            return error;
-        }
-        new_paragraph.parts.push_back(SimpleText{.str = name + ". ", .italic = true, .bold = true});
+        std::string item_str;
+        if (item.contains("entry")) {
+            error = parse_required_attribute_into(item, "entry", item_str, filepath);
+            if (error.has_value()) {
+                return error;
+            }
+        } else {
+            std::vector<std::string> items_strings;
+            error = parse_required_attribute_into(item, "entries", items_strings, filepath);
+            if (error.has_value()) {
+                LOGDEBUG("weird item: {}", item.dump(4));
+                return error;
+            }
 
-        error = parse_paragraph(
-            fmt::format("{}", fmt::join(items_strings.begin(), items_strings.end(), " ")), new_paragraph, filepath
-        );
+            std::string name;
+            error = parse_optional_attribute_into(item, "name", name, filepath);
+            if (error.has_value()) {
+                return error;
+            }
+            new_paragraph.parts.push_back(SimpleText{.str = name + ". ", .italic = true, .bold = true});
+            item_str = fmt::format("{}", fmt::join(items_strings.begin(), items_strings.end(), " "));
+        }
+        error = parse_paragraph(std::move(item_str), new_paragraph, filepath);
         if (error.has_value()) {
             return error;
         }
@@ -178,14 +191,14 @@ static std::optional<Error> parse_list(
     return std::nullopt;
 }
 
-static std::optional<Error> parse_table(const nlohmann::json& json, Text& out, const std::filesystem::path& filepath) {
+static tl::expected<Table, Error> parse_table(const nlohmann::json& json, const std::filesystem::path& filepath) {
     std::optional<Error> error;
     Table new_table{};
 
     std::string caption;
     error = parse_optional_attribute_into(json, "caption", caption, filepath);
     if (error.has_value()) {
-        return error;
+        return tl::unexpected(error.value());
     }
     if (!caption.empty()) {
         new_table.caption = caption;
@@ -193,7 +206,7 @@ static std::optional<Error> parse_table(const nlohmann::json& json, Text& out, c
 
     error = check_required_attribute(json, "colLabels", filepath, JsonType::ARRAY);
     if (error.has_value()) {
-        return error;
+        return tl::unexpected(error.value());
     }
     const nlohmann::json& labels = json["colLabels"];
     new_table.columns = labels.size();
@@ -202,7 +215,7 @@ static std::optional<Error> parse_table(const nlohmann::json& json, Text& out, c
         std::string header_entry;
         error = parse_required_index_into(labels, i, header_entry, filepath);
         if (error.has_value()) {
-            return error;
+            return tl::unexpected(error.value());
         }
         new_table.header.push_back(header_entry);
     }
@@ -217,7 +230,7 @@ static std::optional<Error> parse_table(const nlohmann::json& json, Text& out, c
             std::string style_entry;
             error = parse_required_index_into(styles, i, style_entry, filepath);
             if (error.has_value()) {
-                return error;
+                return tl::unexpected(error.value());
             }
             if (style_entry.starts_with("col-")) {
                 size_t i = 4;
@@ -229,41 +242,40 @@ static std::optional<Error> parse_table(const nlohmann::json& json, Text& out, c
                 }
                 new_table.column_widths->push_back(std::stoi(style_entry.substr(4, i)));
             } else {
-                return ParsingError(
+                return tl::unexpected(ParsingError(
                     ParsingError::Code::INVALID_ATTRIBUTE_TYPE, filepath,
                     "Table column style must start with \"col-<column width>...\""
-                );
+                ));
             }
         }
     }
 
     error = check_required_attribute(json, "rows", filepath, JsonType::ARRAY);
     if (error.has_value()) {
-        return error;
+        return tl::unexpected(error.value());
     }
     const nlohmann::json& rows = json["rows"];
     for (size_t i = 0; i < new_table.columns; ++i) {
         error = check_required_index(rows, i, filepath, JsonType::ARRAY);
         if (error.has_value()) {
-            return error;
+            return tl::unexpected(error.value());
         }
         std::vector<Paragraph>& row = new_table.rows.emplace_back();
         for (size_t j = 0; j < rows[i].size(); ++j) {
             std::string entry;
             error = parse_required_index_into(rows[i], j, entry, filepath);
             if (error.has_value()) {
-                return error;
+                return tl::unexpected(error.value());
             }
             Paragraph entry_paragraph{};
             error = parse_paragraph(std::move(entry), entry_paragraph, filepath);
             if (error.has_value()) {
-                return error;
+                return tl::unexpected(error.value());
             }
             row.push_back(entry_paragraph);
         }
     }
-    out.parts.push_back(new_table);
-    return std::nullopt;
+    return new_table;
 }
 
 std::optional<Error> write_formatted_text_into(
@@ -320,19 +332,25 @@ std::optional<Error> write_formatted_text_into(
                 if (error.has_value()) {
                     return error;
                 }
+                Paragraph new_paragraph{};
+                new_paragraph.parts.push_back(SimpleText{.str = name + ". ", .italic = true, .bold = true});
+
                 std::vector<std::string> entries_strings;
                 error = parse_required_attribute_into(entry, "entries", entries_strings, filepath);
                 if (error.has_value()) {
-                    return error;
-                }
-                Paragraph new_paragraph{};
-                new_paragraph.parts.push_back(SimpleText{.str = name + ". ", .italic = true, .bold = true});
-                error = parse_paragraph(
-                    fmt::format("{}", fmt::join(entries_strings.begin(), entries_strings.end(), " ")), new_paragraph,
-                    filepath
-                );
-                if (error.has_value()) {
-                    return error;
+                    // fallback, treat all entries on their own
+                    for (auto it = entry["entries"].rbegin(); it != entry["entries"].rend(); ++it) {
+                        todo.push_front(*it);
+                    }
+                    error = std::nullopt;
+                } else {
+                    error = parse_paragraph(
+                        fmt::format("{}", fmt::join(entries_strings.begin(), entries_strings.end(), " ")),
+                        new_paragraph, filepath
+                    );
+                    if (error.has_value()) {
+                        return error;
+                    }
                 }
                 out.parts.push_back(new_paragraph);
             } else {
@@ -350,8 +368,15 @@ std::optional<Error> write_formatted_text_into(
                 return error;
             }
         } else if (type == "table") {
-            parse_table(entry, out, filepath);
-        } else if (type == "options" || (type.starts_with("ref") && type.ends_with("Feature"))) {
+            tl::expected<Table, Error> new_table = parse_table(entry, filepath);
+            if (new_table.has_value()) {
+                out.parts.push_back(new_table.value());
+            } else {
+                return new_table.error();
+            }
+        } else if (type == "options" || type.starts_with("ref") || type == "abilityDc" || type == "abilityAttackMod"
+                   || type == "statblock" || type == "quote" // TODO: implement, might be nice
+        ) {
             continue;
         } else {
             return ParsingError(
