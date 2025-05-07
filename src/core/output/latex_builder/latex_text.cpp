@@ -55,10 +55,26 @@ LatexText* LatexText::add_custom_modifier(const std::string& modifier) {
     return this;
 }
 
+LatexText* LatexText::add_custom_inline_modifier(const std::string& modifier) {
+    inline_modifiers.insert(modifier);
+    return this;
+}
+
+LatexText* LatexText::set_size(const std::string& size) {
+    this->size = size;
+    return this;
+}
+
 std::string LatexText::str() const {
     std::string text_string;
     for (const std::string& modifier : modifiers) {
         text_string += '\\' + modifier + '{';
+    }
+    if (size.has_value()) {
+        text_string += '\\' + size.value() + ' ';
+    }
+    for (const std::string& modifier : inline_modifiers) {
+        text_string += '\\' + modifier + ' ';
     }
     text_string += text;
     for (const std::string& _ : modifiers) {

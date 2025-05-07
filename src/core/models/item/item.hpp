@@ -25,14 +25,14 @@ public:
     const std::string& get_name() const override;
     const Text& get_description() const override;
     const SourceInfo& get_source_info() const override;
-    const std::string& get_cosmetic_description() const;
+    const Text& get_cosmetic_description() const;
     bool requires_attunement() const;
 
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Item(
         std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
-        std::string&& cosmetic_description, bool requires_attunement
+        Text&& cosmetic_description, bool requires_attunement
     );
 
     std::string name;

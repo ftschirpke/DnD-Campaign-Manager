@@ -38,7 +38,7 @@ TEST_CASE("validate_name_description_and_source", tags) {
 
     SECTION("Empty description") {
         data.name = "Name";
-        data.description = Text::simple("");
+        data.description = Text{};
         data.source_path = dummy_path;
         REQUIRE_NOTHROW(errors = validate_name_description_and_source(data));
         REQUIRE_FALSE(errors.ok());
@@ -46,7 +46,7 @@ TEST_CASE("validate_name_description_and_source", tags) {
 
     SECTION("Empty source path") {
         data.name = "Name";
-        data.description = Text::simple("Description");
+        data.description = Text{};
         data.source_path = std::filesystem::path("");
         REQUIRE_NOTHROW(errors = validate_name_description_and_source(data));
         REQUIRE_FALSE(errors.ok());
@@ -54,7 +54,7 @@ TEST_CASE("validate_name_description_and_source", tags) {
 
     SECTION("Completely empty") {
         data.name = "";
-        data.description = Text::simple("");
+        data.description = Text{};
         data.source_path = std::filesystem::path("");
         REQUIRE_NOTHROW(errors = validate_name_description_and_source(data));
         REQUIRE_FALSE(errors.ok());

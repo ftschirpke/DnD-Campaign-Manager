@@ -12,18 +12,16 @@
 
 namespace dnd {
 
-ContentPieceFilter::ContentPieceFilter() : name_filter(StringFilter()), description_filter(), is_sourcebook_filter() {}
+ContentPieceFilter::ContentPieceFilter() : name_filter(StringFilter()), is_sourcebook_filter() {}
 
 bool ContentPieceFilter::has_all_filters() const {
-    return std::visit([](const auto& filter) { return filter.is_set(); }, name_filter) && description_filter.is_set()
-           && is_sourcebook_filter.is_set();
+    return std::visit([](const auto& filter) { return filter.is_set(); }, name_filter) && is_sourcebook_filter.is_set();
 }
 
 bool ContentPieceFilter::matches(const ContentPiece& content_piece) const {
     return std::visit(
-               [&content_piece](const auto& filter) { return filter.matches(content_piece.get_name()); }, name_filter
-           )
-           && description_filter.matches(content_piece.get_description());
+        [&content_piece](const auto& filter) { return filter.matches(content_piece.get_name()); }, name_filter
+    );
 }
 
 std::vector<const ContentPiece*> ContentPieceFilter::all_matches(const Content& content) const {
@@ -83,7 +81,6 @@ std::vector<const ContentPiece*> ContentPieceFilter::all_matches(const Content& 
 
 void ContentPieceFilter::clear() {
     name_filter = StringFilter();
-    description_filter.clear();
     is_sourcebook_filter.clear();
 }
 

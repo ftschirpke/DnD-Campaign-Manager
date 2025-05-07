@@ -27,7 +27,7 @@ TEST_CASE("Validate Item", tags) {
     }
 
     SECTION("Valid data with optional fields") {
-        data.cosmetic_description = "Cosmetic Description";
+        data.cosmetic_description = Text::simple("Cosmetic Description");
         REQUIRE_NOTHROW(errors = validate_item(data));
         REQUIRE(errors.ok());
     }

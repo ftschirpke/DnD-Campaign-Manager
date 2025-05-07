@@ -2,7 +2,6 @@
 
 #include "display_visitor.hpp"
 
-#include <memory>
 #include <set>
 #include <string>
 #include <vector>
@@ -29,10 +28,7 @@
 #include <core/models/spell/spell.hpp>
 #include <core/models/subclass/subclass.hpp>
 #include <core/models/subspecies/subspecies.hpp>
-#include <core/output/string_formatting/formats/format.hpp>
-#include <core/output/string_formatting/string_formatter.hpp>
 #include <core/visitors/content/content_visitor.hpp>
-#include <gui/string_formatting/display_format_visitor.hpp>
 #include <gui/visitors/content/display_visitor.hpp>
 
 namespace dnd {
@@ -86,13 +82,16 @@ static void end_content_table() {
     ImGui::PopStyleVar();
 }
 
-static void display_formatted_text(const std::string& formatted_text) {
-    DisplayFormatVisitor display_format_visitor(table_flags);
-    StringFormatter string_formatter(false);
-    std::vector<std::unique_ptr<Format>> text_formats = string_formatter.parse_formats(formatted_text);
-    for (auto it = text_formats.begin(); it != text_formats.end(); ++it) {
-        (*it)->accept(display_format_visitor);
-    }
+static void display_formatted_text(const Text& formatted_text) {
+    DND_UNUSED(table_flags);
+    /* DisplayFormatVisitor display_format_visitor(table_flags); */
+    /* StringFormatter string_formatter(false); */
+    /* std::vector<std::unique_ptr<Format>> text_formats = string_formatter.parse_formats(formatted_text); */
+    /* for (auto it = text_formats.begin(); it != text_formats.end(); ++it) { */
+    /*     (*it)->accept(display_format_visitor); */
+    /* } */
+    DND_UNUSED(formatted_text);
+    // TODO: implement
 }
 
 template <typename T>
@@ -389,7 +388,7 @@ void DisplayVisitor::operator()(const Item& item) {
     ImGui::Text("%s", attunement);
     label("Description:");
     display_formatted_text(item.get_description());
-    if (!item.get_cosmetic_description().empty()) {
+    if (!item.get_cosmetic_description().parts.empty()) {
         wrapped_label("Cosmetic Description:");
         display_formatted_text(item.get_cosmetic_description());
     }

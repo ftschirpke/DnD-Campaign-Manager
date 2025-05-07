@@ -3,17 +3,17 @@
 
 #include <dnd_config.hpp>
 
+#include <optional>
 #include <set>
 #include <string>
-#include <vector>
 
 #include <core/output/latex_builder/latex_object.hpp>
 
 namespace dnd {
 
 enum class LatexTextModifier {
-    ITALIC,
     BOLD,
+    ITALIC,
     UNDERLINED,
     EMPHASIZED,
 };
@@ -27,6 +27,8 @@ public:
     LatexText* add_line_break(const std::string& spacing_argument);
     LatexText* add_modifier(LatexTextModifier modifier);
     LatexText* add_custom_modifier(const std::string& modifier);
+    LatexText* add_custom_inline_modifier(const std::string& modifier);
+    LatexText* set_size(const std::string& size);
     std::string str() const override;
     size_t text_size() const override;
     std::string get_text() const;
@@ -37,6 +39,8 @@ private:
     std::string linebreak_spacing_argument;
     std::string text;
     std::set<std::string> modifiers;
+    std::set<std::string> inline_modifiers;
+    std::optional<std::string> size;
 };
 
 } // namespace dnd
