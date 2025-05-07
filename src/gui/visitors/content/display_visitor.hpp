@@ -14,11 +14,13 @@
 #include <core/models/subclass/subclass.hpp>
 #include <core/models/subspecies/subspecies.hpp>
 #include <core/visitors/content/content_visitor.hpp>
+#include <gui/gui_fonts.hpp>
 
 namespace dnd {
 
 class DisplayVisitor : public ContentVisitor {
 public:
+    explicit DisplayVisitor(const GuiFonts& fonts);
     virtual void operator()(const Character& character) override;
     virtual void operator()(const Class& cls) override;
     virtual void operator()(const Subclass& subclass) override;
@@ -29,6 +31,8 @@ public:
     virtual void operator()(const Feature& feature) override;
     virtual void operator()(const ClassFeature& class_feature) override;
     virtual void operator()(const Choosable& choosable) override;
+private:
+    const GuiFonts& fonts;
 };
 
 } // namespace dnd

@@ -5,11 +5,12 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
 
+#include <gui/gui_fonts.hpp>
 #include <gui/visitors/content/display_visitor.hpp>
 
 namespace dnd {
 
-ContentWindow::ContentWindow(Session& session) : session(session), display_visitor() {}
+ContentWindow::ContentWindow(Session& session, const GuiFonts& fonts) : session(session), display_visitor(fonts) {}
 
 void ContentWindow::render() {
     DND_MEASURE_FUNCTION();

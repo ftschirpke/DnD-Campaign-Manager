@@ -15,6 +15,7 @@
 #include <imgui/imgui.h>
 
 #include <gui/gui_app.hpp>
+#include <gui/gui_fonts.hpp>
 
 #include <stdio.h>
 #define GL_SILENCE_DEPRECATION
@@ -58,13 +59,29 @@ static void setup_style() {
     }
 }
 
-static void setup_font() {
+constexpr float font_size = 24.0;
+
+static GuiFonts setup_fonts() {
     ImGuiIO& io = ImGui::GetIO();
     io.Fonts->AddFontDefault();
-    std::filesystem::path aileron_regular_path = std::filesystem::path(DND_ASSET_DIRECTORY) / "Aileron-Regular.ttf";
-    ImFont* main_font = io.Fonts->AddFontFromFileTTF(aileron_regular_path.string().c_str(), 24.0f);
+    std::filesystem::path asset_directory = std::filesystem::path(DND_ASSET_DIRECTORY);
+
+    ImFont* main_font = io.Fonts->AddFontFromFileTTF((asset_directory / "Aileron-Regular.otf").c_str(), font_size);
     IM_ASSERT(main_font != nullptr);
     io.FontDefault = main_font;
+
+    ImFont* bold_font = io.Fonts->AddFontFromFileTTF((asset_directory / "Aileron-Bold.otf").c_str(), font_size);
+    ImFont* italic_font = io.Fonts->AddFontFromFileTTF((asset_directory / "Aileron-Italic.otf").c_str(), font_size);
+    ImFont* bold_italic_font = io.Fonts->AddFontFromFileTTF(
+        (asset_directory / "Aileron-BoldItalic.otf").c_str(), font_size
+    );
+
+    return GuiFonts{
+        .regular = main_font,
+        .bold = bold_font,
+        .italic = italic_font,
+        .bold_italic = bold_italic_font,
+    };
 }
 
 static void setup_imgui_context() {
@@ -133,10 +150,10 @@ int launch() {
     setup_imgui_context();
     setup_backends(window, glsl_version);
     setup_style();
-    setup_font();
+    GuiFonts fonts = setup_fonts();
 
     try {
-        GuiApp app;
+        GuiApp app(fonts);
         app.initialize();
 
         while (!glfwWindowShouldClose(window)) {

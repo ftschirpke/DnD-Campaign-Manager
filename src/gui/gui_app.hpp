@@ -4,6 +4,7 @@
 #include <dnd_config.hpp>
 
 #include <core/session.hpp>
+#include <gui/gui_fonts.hpp>
 #include <gui/windows/advanced_search_window.hpp>
 #include <gui/windows/content_configuration_window.hpp>
 #include <gui/windows/content_window.hpp>
@@ -15,7 +16,7 @@ namespace dnd {
 
 class GuiApp {
 public:
-    GuiApp();
+    GuiApp(const GuiFonts& fonts);
     void initialize();
     void render();
 private:

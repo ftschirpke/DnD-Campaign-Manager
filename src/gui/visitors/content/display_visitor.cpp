@@ -37,6 +37,8 @@
 
 namespace dnd {
 
+DisplayVisitor::DisplayVisitor(const GuiFonts& fonts) : fonts(fonts) {}
+
 static const ImVec2 cell_padding = ImVec2(5, 5);
 static constexpr ImGuiTableFlags content_table_flags = ImGuiTableFlags_NoBordersInBodyUntilResize;
 static const float first_column_width = 150;

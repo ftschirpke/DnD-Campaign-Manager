@@ -22,9 +22,9 @@ static const char* const imgui_ini_filename = "imgui.ini";
 
 static const ImGuiWindowFlags error_popup_options = ImGuiWindowFlags_AlwaysAutoResize;
 
-GuiApp::GuiApp()
+GuiApp::GuiApp(const GuiFonts& fonts)
     : show_demo_window(false), show_advanced_search_window(false), show_pdf_create_window(false), session(),
-      content_configuration_window(session), content_window(session), error_messages_window(session),
+      content_configuration_window(session), content_window(session, fonts), error_messages_window(session),
       fuzzy_search_window(session), advanced_search_window(session), pdf_create_window(session) {
     ImGui::GetIO().IniFilename = imgui_ini_filename;
 }
