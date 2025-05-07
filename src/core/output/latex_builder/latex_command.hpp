@@ -10,6 +10,9 @@
 
 namespace dnd {
 
+/*
+ * A class designed to only be used for commands modifying text, not containing rendered text itself
+ */
 class LatexCommand : virtual public LatexObject {
 public:
     LatexCommand(const std::string& name);
@@ -17,6 +20,7 @@ public:
     LatexCommand* add_braces_argument(const std::string& argument);
     LatexCommand* add_bracket_argument(const std::string& argument);
     std::string str() const override;
+    size_t text_size() const override;
 private:
     const std::string name;
     std::vector<std::string> braces_arguments;

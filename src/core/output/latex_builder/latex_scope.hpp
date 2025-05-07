@@ -30,14 +30,16 @@ public:
     LatexScope* add_line_break();
     LatexScope* add_line_break(const std::string& spacing_argument);
     LatexScope* add_scope();
+    LatexScope* add_scope(LatexScope&& scope);
     LatexText* add_rich_text(const std::string& rich_text);
     LatexText* add_text(const std::string& text);
     LatexCommand* add_command(const std::string& command);
-    LatexCommand* add_command(const std::string& command, const std::string& bspecies_argument);
+    LatexCommand* add_command(const std::string& command, const std::string& brace_argument);
     LatexBeginEnd add_begin_end(const std::string& name);
     std::string str() const override;
+    size_t text_size() const override;
 private:
-    bool enclosing_bspecies;
+    bool enclosing_brace;
     std::vector<std::unique_ptr<LatexObject>> objects;
 };
 

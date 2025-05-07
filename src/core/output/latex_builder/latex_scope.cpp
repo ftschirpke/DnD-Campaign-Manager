@@ -14,10 +14,10 @@
 
 namespace dnd {
 
-LatexScope::LatexScope() : enclosing_bspecies(true) {}
+LatexScope::LatexScope() : enclosing_brace(true) {}
 
 LatexScope* LatexScope::no_enclosing_braces() {
-    enclosing_bspecies = false;
+    enclosing_brace = false;
     return this;
 }
 
@@ -33,6 +33,13 @@ LatexScope* LatexScope::add_line_break(const std::string& spacing_argument) {
 
 LatexScope* LatexScope::add_scope() {
     auto new_scope = std::make_unique<LatexScope>();
+    LatexScope* ptr = new_scope.get();
+    objects.push_back(std::move(new_scope));
+    return ptr;
+}
+
+LatexScope* LatexScope::add_scope(LatexScope&& scope) {
+    auto new_scope = std::make_unique<LatexScope>(std::move(scope));
     LatexScope* ptr = new_scope.get();
     objects.push_back(std::move(new_scope));
     return ptr;
@@ -81,17 +88,25 @@ std::string LatexScope::str() const {
     std::string scope_string;
     scope_string.reserve(100);
 
-    if (enclosing_bspecies) {
+    if (enclosing_brace) {
         scope_string += "{\n";
     }
     for (auto it = objects.cbegin(); it != objects.cend(); ++it) {
         scope_string += (*it)->str();
     }
-    if (enclosing_bspecies) {
+    if (enclosing_brace) {
         scope_string += "}\n";
     }
 
     return scope_string;
+}
+
+size_t LatexScope::text_size() const {
+    size_t sum = 0;
+    for (auto it = objects.cbegin(); it != objects.cend(); ++it) {
+        sum += (*it)->text_size();
+    }
+    return sum;
 }
 
 } // namespace dnd

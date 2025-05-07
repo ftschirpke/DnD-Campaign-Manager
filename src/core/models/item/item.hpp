@@ -38,14 +38,14 @@ private:
     std::string name;
     Text description;
     SourceInfo source_info;
-    std::string cosmetic_description;
+    Text cosmetic_description;
     bool attunement;
 };
 
 struct Item::Data : public ValidationData {
     std::strong_ordering operator<=>(const Data&) const = default;
 
-    std::string cosmetic_description;
+    Text cosmetic_description;
     bool requires_attunement;
 };
 

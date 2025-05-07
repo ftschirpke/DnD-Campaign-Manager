@@ -2,8 +2,8 @@
 
 #include "latex_text.hpp"
 
+#include <cassert>
 #include <string>
-#include <vector>
 
 namespace dnd {
 
@@ -25,17 +25,40 @@ LatexText* LatexText::add_line_break(const std::string& spacing_argument) {
     return this;
 }
 
-LatexText* LatexText::add_modifier(const std::string& modifier) {
-    modifiers.push_back(modifier);
+LatexText* LatexText::add_modifier(LatexTextModifier modifier) {
+    switch (modifier) {
+        case LatexTextModifier::ITALIC:
+            modifiers.insert("textit");
+            break;
+        case LatexTextModifier::BOLD:
+            modifiers.insert("textbf");
+            break;
+        case LatexTextModifier::UNDERLINED:
+            modifiers.insert("underline");
+            break;
+        case LatexTextModifier::EMPHASIZED:
+            modifiers.insert("emph");
+            break;
+        default:
+            assert(false);
+    }
+    return this;
+}
+
+LatexText* LatexText::add_custom_modifier(const std::string& modifier) {
+    modifiers.insert(modifier);
     return this;
 }
 
 std::string LatexText::str() const {
     std::string text_string;
     for (const std::string& modifier : modifiers) {
-        text_string += '\\' + modifier + ' ';
+        text_string += '\\' + modifier + '{';
     }
     text_string += text;
+    for (const std::string& _ : modifiers) {
+        text_string += '}';
+    }
     if (linebreak) {
         text_string += "\\\\";
         if (!linebreak_spacing_argument.empty()) {
@@ -51,5 +74,7 @@ std::string LatexText::str() const {
 std::string LatexText::get_text() const { return text; }
 
 void LatexText::set_text(const std::string& new_text) { text = new_text; }
+
+size_t LatexText::text_size() const { return text.size(); }
 
 } // namespace dnd

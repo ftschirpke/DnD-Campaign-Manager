@@ -11,6 +11,7 @@ class LatexObject {
 public:
     virtual ~LatexObject() = default;
     virtual std::string str() const = 0;
+    virtual size_t text_size() const = 0;
 };
 
 } // namespace dnd
