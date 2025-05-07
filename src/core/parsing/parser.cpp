@@ -215,7 +215,7 @@ static std::optional<Error> parse_table(const nlohmann::json& json, Text& out, c
                 continue;
             }
             std::string style_entry;
-            error = parse_required_index_into(labels, i, style_entry, filepath);
+            error = parse_required_index_into(styles, i, style_entry, filepath);
             if (error.has_value()) {
                 return error;
             }
@@ -224,11 +224,14 @@ static std::optional<Error> parse_table(const nlohmann::json& json, Text& out, c
                 while (i < style_entry.size() && style_entry[i] != ' ') {
                     ++i;
                 }
+                if (!new_table.column_widths.has_value()) {
+                    new_table.column_widths = std::vector<std::optional<int>>();
+                }
                 new_table.column_widths->push_back(std::stoi(style_entry.substr(4, i)));
             } else {
                 return ParsingError(
                     ParsingError::Code::INVALID_ATTRIBUTE_TYPE, filepath,
-                    "Table column style must start with \"col-<column widht>...\""
+                    "Table column style must start with \"col-<column width>...\""
                 );
             }
         }
@@ -288,8 +291,6 @@ std::optional<Error> write_formatted_text_into(
             }
             if (!new_paragraph.parts.empty()) {
                 out.parts.push_back(new_paragraph);
-            } else {
-                LOGDEBUG("we created an empty paragraph?!");
             }
             continue;
         }
@@ -307,7 +308,7 @@ std::optional<Error> write_formatted_text_into(
             return error;
         }
 
-        if (type == "entries") {
+        if (type == "entries" || type == "inset" || type == "section") {
             error = check_required_attribute(entry, "entries", filepath, JsonType::ARRAY);
             if (error.has_value()) {
                 return error;
@@ -333,8 +334,9 @@ std::optional<Error> write_formatted_text_into(
                 if (error.has_value()) {
                     return error;
                 }
+                out.parts.push_back(new_paragraph);
             } else {
-                for (auto it = entry.rbegin(); it != entry.rend(); ++it) {
+                for (auto it = entry["entries"].rbegin(); it != entry["entries"].rend(); ++it) {
                     todo.push_front(*it);
                 }
             }
@@ -349,6 +351,8 @@ std::optional<Error> write_formatted_text_into(
             }
         } else if (type == "table") {
             parse_table(entry, out, filepath);
+        } else if (type == "options" || (type.starts_with("ref") && type.ends_with("Feature"))) {
+            continue;
         } else {
             return ParsingError(
                 ParsingError::Code::UNEXPECTED_ATTRIBUTE, filepath, fmt::format("Entry type \"{}\" unexpected", type)
