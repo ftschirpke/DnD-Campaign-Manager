@@ -20,8 +20,14 @@
 
 namespace dnd {
 
-constexpr std::array<std::string_view, 7> known_link_types = {"damage", "condition", "dice",  "skill",
-                                                              "spell",  "creature",  "action"};
+constexpr std::array<std::string_view, 29> known_link_types = {
+    "damage",       "condition",   "dice",   "skill",       "spell", "creature", "action", "adventure",
+    "quickref",     "item",        "sense",  "dc",          "note",  "filter",   "chance", "status",
+    "classFeature", "variantrule", "hazard", "5etools",     "book",  "feat",     "deity",  "subclassFeature",
+    "language",     "class",       "table",  "itemMastery", "deck"
+};
+
+constexpr std::array<std::string_view, 1> known_ignore_types = {"d20"};
 
 const std::filesystem::path& Parser::get_filepath() const { return filepath; }
 
@@ -66,23 +72,25 @@ static std::optional<Error> parse_text_recursive(
             if (error.has_value()) {
                 return error;
             }
+        } else if (std::find(known_ignore_types.begin(), known_ignore_types.end(), rich_text->rich_type)
+                   != known_ignore_types.end()) {
         } else {
             if (std::find(known_link_types.begin(), known_link_types.end(), rich_text->rich_type)
                 == known_link_types.end()) {
                 LOGWARN("Found rich text of unknown type '{}' - assuming link", rich_text->rich_type);
             }
-            paragraph.parts.emplace_back(
-                Link{
-                    .str = std::move(rich_text->text),
-                    .attributes = std::move(rich_text->attributes),
-                    .italic = italic,
-                    .bold = bold,
-                }
-            );
+            paragraph.parts.emplace_back(Link{
+                .str = std::move(rich_text->text),
+                .attributes = std::move(rich_text->attributes),
+                .italic = italic,
+                .bold = bold,
+            });
         }
-
         cur += rich_text->length;
         start = cur;
+    }
+    if (start != cur) {
+        paragraph.parts.emplace_back(SimpleText{.str = std::string(start, cur), .italic = italic, .bold = bold});
     }
     return std::nullopt;
 }
@@ -292,7 +300,6 @@ std::optional<Error> write_formatted_text_into(
                 "Json entries in the \"entries\" array must either be strings or objects."
             );
         }
-        LOGDEBUG("Object");
 
         std::string type;
         error = parse_required_attribute_into(entry, "type", type, filepath);
@@ -301,14 +308,12 @@ std::optional<Error> write_formatted_text_into(
         }
 
         if (type == "entries") {
-            LOGDEBUG("entries");
             error = check_required_attribute(entry, "entries", filepath, JsonType::ARRAY);
             if (error.has_value()) {
                 return error;
             }
 
             if (entry.contains("name")) {
-                LOGDEBUG("name");
                 std::string name;
                 error = parse_required_attribute_into(entry, "name", name, filepath);
                 if (error.has_value()) {
@@ -329,13 +334,11 @@ std::optional<Error> write_formatted_text_into(
                     return error;
                 }
             } else {
-                LOGDEBUG("not a name");
                 for (auto it = entry.rbegin(); it != entry.rend(); ++it) {
                     todo.push_front(*it);
                 }
             }
         } else if (type == "list") {
-            LOGDEBUG("list");
             error = check_required_attribute(entry, "items", filepath, JsonType::ARRAY);
             if (error.has_value()) {
                 return error;
@@ -345,10 +348,8 @@ std::optional<Error> write_formatted_text_into(
                 return error;
             }
         } else if (type == "table") {
-            LOGDEBUG("table");
             parse_table(entry, out, filepath);
         } else {
-            LOGDEBUG("unknown");
             return ParsingError(
                 ParsingError::Code::UNEXPECTED_ATTRIBUTE, filepath, fmt::format("Entry type \"{}\" unexpected", type)
             );
