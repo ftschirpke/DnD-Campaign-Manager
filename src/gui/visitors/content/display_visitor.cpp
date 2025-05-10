@@ -216,7 +216,7 @@ static void display_table(const Table& table, const GuiFonts& fonts) {
         ImGui::PopFont();
         id = table.caption.value().c_str();
     }
-    if (ImGui::BeginTable(id, table.columns, table_flags)) {
+    if (ImGui::BeginTable(id, static_cast<int>(table.columns), table_flags)) {
         for (size_t col = 0; col < table.columns; ++col) {
             float col_weight = 0;
             if (table.column_widths.has_value()) {
