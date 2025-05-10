@@ -22,7 +22,7 @@ TEST_CASE("Validate Subclass // valid subclass", tags) {
 
     SECTION("class with one valid feature") {
         data.class_key = "Wizard##dummy";
-        ClassFeature::Data& feature_data = data.features_data.emplace_back();
+        SubclassFeature::Data& feature_data = data.features_data.emplace_back();
         set_valid_mock_values(feature_data, "Feature");
         REQUIRE_NOTHROW(errors = validate_subclass_nonrecursively_for_content(data, content));
         REQUIRE(errors.ok());
@@ -51,7 +51,7 @@ TEST_CASE("Validate Subclass // invalid subclass", tags) {
 
     SECTION("subclass without class is invalid") {
         data.class_key = "";
-        ClassFeature::Data& feature_data = data.features_data.emplace_back();
+        SubclassFeature::Data& feature_data = data.features_data.emplace_back();
         set_valid_mock_values(feature_data, "Feature");
         REQUIRE_NOTHROW(errors = validate_subclass_nonrecursively_for_content(data, content));
         REQUIRE_FALSE(errors.ok());
@@ -75,7 +75,7 @@ TEST_CASE("Validate Subclass // invalid subclass data relations", tags) {
     set_valid_mock_values(data, "Subclass");
     data.short_name = "Subcls";
     data.spellcasting_data.is_spellcaster = false;
-    ClassFeature::Data& valid_feature_data = data.features_data.emplace_back();
+    SubclassFeature::Data& valid_feature_data = data.features_data.emplace_back();
     set_valid_mock_values(valid_feature_data, "Valid Feature");
     Content content = minimal_testing_content();
     Errors errors;

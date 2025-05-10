@@ -96,6 +96,8 @@ static void add_classes(Content& content) {
     class_data.spellcasting_data.is_spells_known_type = true;
     ClassFeature::Data& feature_data = class_data.features_data.emplace_back();
     set_valid_mock_values(feature_data, "Example Class Feature");
+    feature_data.class_name = "Wizard";
+    feature_data.class_source_name = "dummy";
     feature_data.level = 1;
     class_data.subclass_feature_name = "Example Class Feature";
     class_data.hit_dice_str = "d6";
@@ -108,6 +110,8 @@ static void add_classes(Content& content) {
     class_data2.spellcasting_data.is_spellcaster = false;
     ClassFeature::Data& feature_data2 = class_data2.features_data.emplace_back();
     set_valid_mock_values(feature_data2, "Example Class Feature 2");
+    feature_data2.class_name = "Rogue";
+    feature_data2.class_source_name = "dummy";
     feature_data2.level = 20;
     class_data2.subclass_feature_name = "Example Class Feature 2";
     class_data2.hit_dice_str = "d8";
@@ -120,7 +124,9 @@ static void add_classes(Content& content) {
     set_valid_mock_values(subclass_data, "Abjuration Wizard");
     subclass_data.short_name = "Abjuration";
     subclass_data.spellcasting_data.is_spellcaster = false;
-    ClassFeature::Data& feature_data3 = subclass_data.features_data.emplace_back();
+    SubclassFeature::Data& feature_data3 = subclass_data.features_data.emplace_back();
+    feature_data3.subclass_short_name = "Abjuration";
+    feature_data3.subclass_source_name = "dummy";
     feature_data3.level = 2;
     set_valid_mock_values(feature_data3, "Example Subclass Feature");
     subclass_data.class_key = "Wizard##dummy";
@@ -131,7 +137,9 @@ static void add_classes(Content& content) {
     set_valid_mock_values(subclass_data2, "Assassin");
     subclass_data2.short_name = "Assassin";
     subclass_data2.spellcasting_data.is_spellcaster = false;
-    ClassFeature::Data& feature_data4 = subclass_data2.features_data.emplace_back();
+    SubclassFeature::Data& feature_data4 = subclass_data2.features_data.emplace_back();
+    feature_data4.subclass_short_name = "Assassin";
+    feature_data4.subclass_source_name = "dummy";
     feature_data4.level = 3;
     set_valid_mock_values(feature_data4, "Example Subclass Feature 2");
     subclass_data2.class_key = "Rogue##dummy";

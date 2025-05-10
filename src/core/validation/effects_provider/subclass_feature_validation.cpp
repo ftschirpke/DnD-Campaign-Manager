@@ -23,7 +23,7 @@ static std::optional<ValidationError> validate_level(const SubclassFeature::Data
 
 Errors validate_subclass_feature_nonrecursively(const SubclassFeature::Data& data) {
     Errors errors = validate_feature_nonrecursively(data);
-    if (data.subclass_name.empty()) {
+    if (data.subclass_short_name.empty()) {
         errors.add_validation_error(
             ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Subclass feature's subclass name must not be empty"
         );

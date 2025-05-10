@@ -8,6 +8,7 @@
 #include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/class_feature.hpp>
 #include <core/models/effects_provider/feature.hpp>
+#include <core/models/effects_provider/subclass_feature.hpp>
 #include <core/models/item/item.hpp>
 #include <core/models/species/species.hpp>
 #include <core/models/spell/spell.hpp>
@@ -30,6 +31,7 @@ public:
     virtual void operator()(const Spell& spell) override;
     virtual void operator()(const Feature& feature) override;
     virtual void operator()(const ClassFeature& class_feature) override;
+    virtual void operator()(const SubclassFeature& subclass_feature) override;
     virtual void operator()(const Choosable& choosable) override;
 private:
     const GuiFonts& fonts;

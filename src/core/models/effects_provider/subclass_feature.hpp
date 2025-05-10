@@ -27,7 +27,7 @@ public:
 
     static CreateResult<SubclassFeature> create_for(Data&& data, const Content& content);
     static std::string key(
-        const std::string& name, const std::string& source_name, const std::string& subclass_name,
+        const std::string& name, const std::string& source_name, const std::string& subclass_short_name,
         const std::string& subclass_source_name, int level
     );
 
@@ -54,7 +54,7 @@ private:
 
     int level;
     std::map<int, Effects> higher_level_effects; // careful when changing the type here, some code relies on order
-    std::string subclass_name;
+    std::string subclass_short_name;
     std::string subclass_source_name;
 };
 
@@ -69,7 +69,7 @@ struct SubclassFeature::Data : public Feature::Data {
 
     int level;
     std::map<int, Effects::Data> higher_level_effects_data;
-    std::string subclass_name;
+    std::string subclass_short_name;
     std::string subclass_source_name;
 };
 

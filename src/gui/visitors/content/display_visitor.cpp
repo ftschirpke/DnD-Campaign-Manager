@@ -534,7 +534,7 @@ void DisplayVisitor::operator()(const Subclass& subclass) {
     label("Short name:");
     ImGui::Text("%s", subclass.get_short_name().c_str());
     label("Features:");
-    list_features<ClassFeature>(*this, subclass.get_features());
+    list_features<SubclassFeature>(*this, subclass.get_features());
 
     end_content_table();
 }
@@ -639,6 +639,20 @@ void DisplayVisitor::operator()(const ClassFeature& class_feature) {
     ImGui::Text("%d", class_feature.get_level());
     label("Description:");
     display_formatted_text(class_feature.get_description(), fonts);
+
+    end_content_table();
+}
+
+void DisplayVisitor::operator()(const SubclassFeature& subclass_feature) {
+    begin_content_table(subclass_feature);
+
+    label("Type:");
+    ImGui::Text("Feature");
+    source(subclass_feature);
+    label("Level:");
+    ImGui::Text("%d", subclass_feature.get_level());
+    label("Description:");
+    display_formatted_text(subclass_feature.get_description());
 
     end_content_table();
 }

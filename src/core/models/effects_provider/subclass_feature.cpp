@@ -53,10 +53,10 @@ CreateResult<SubclassFeature> SubclassFeature::create_for(Data&& data, const Con
 }
 
 std::string SubclassFeature::key(
-    const std::string& name, const std::string& source_name, const std::string& subclass_name,
+    const std::string& name, const std::string& source_name, const std::string& subclass_short_name,
     const std::string& subclass_source_name, int level
 ) {
-    return fmt::format("{}##{}|{}|{}|{}", name, source_name, subclass_name, subclass_source_name, level);
+    return fmt::format("{}##{}|{}|{}|{}", name, source_name, subclass_short_name, subclass_source_name, level);
 }
 
 int SubclassFeature::get_level() const { return level; }
@@ -64,16 +64,16 @@ int SubclassFeature::get_level() const { return level; }
 const std::map<int, Effects>& SubclassFeature::get_higher_level_effects() const { return higher_level_effects; }
 
 std::string SubclassFeature::get_key() const {
-    return key(get_name(), get_source_info().name, subclass_name, subclass_source_name, level);
+    return key(get_name(), get_source_info().name, subclass_short_name, subclass_source_name, level);
 }
 
 void SubclassFeature::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 std::string SubclassFeature::Data::key(
-    const std::string& name, const std::string& source_name, const std::string& subclass_name,
+    const std::string& name, const std::string& source_name, const std::string& subclass_short_name,
     const std::string& subclass_source_name, int level
 ) {
-    return SubclassFeature::key(name, source_name, subclass_name, subclass_source_name, level);
+    return SubclassFeature::key(name, source_name, subclass_short_name, subclass_source_name, level);
 }
 
 SubclassFeature::SubclassFeature(
@@ -87,7 +87,7 @@ SubclassFeature::SubclassFeature(
       level(level), higher_level_effects(std::move(higher_level_effects)) {}
 
 std::string SubclassFeature::Data::get_key() const {
-    return key(name, source_name, subclass_name, subclass_source_name, level);
+    return key(name, source_name, subclass_short_name, subclass_source_name, level);
 }
 
 } // namespace dnd

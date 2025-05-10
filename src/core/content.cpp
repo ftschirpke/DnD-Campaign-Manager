@@ -59,6 +59,10 @@ const ReferencingContentLibrary<Feature>& Content::get_features() const { return
 
 const ReferencingContentLibrary<ClassFeature>& Content::get_class_features() const { return class_feature_library; }
 
+const ReferencingContentLibrary<SubclassFeature>& Content::get_subclass_features() const {
+    return subclass_feature_library;
+}
+
 const StorageContentLibrary<Choosable>& Content::get_choosables() const { return choosable_library; }
 
 std::optional<EffectsProviderVariant> Content::get_effects_provider(const std::string& name) const {
