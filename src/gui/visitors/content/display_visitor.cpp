@@ -105,7 +105,7 @@ static void display_paragraph(const Paragraph& paragraph, const GuiFonts& fonts)
     float y = y_begin;
 
     for (const InlineText& text_obj : paragraph.parts) {
-        ImFont* font;
+        ImFont* font = nullptr;
         bool push_pop_font = false;
         std::string::const_iterator text_begin;
         std::string::const_iterator text_end;
