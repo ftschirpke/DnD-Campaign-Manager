@@ -141,13 +141,13 @@ tl::expected<Table, Error> parse_table(const nlohmann::json& json, const std::fi
 
     if (json.contains("colStyles") && json["colStyles"].is_array()) {
         const nlohmann::json& styles = json["colStyles"];
-        for (size_t i = 0; i < new_table.columns; ++i) {
-            if (i >= styles.size()) {
+        for (size_t col = 0; col < new_table.columns; ++col) {
+            if (col >= styles.size()) {
                 new_table.column_widths->push_back(std::nullopt);
                 continue;
             }
             std::string style_entry;
-            error = parse_required_index_into(styles, i, style_entry, filepath);
+            error = parse_required_index_into(styles, col, style_entry, filepath);
             if (error.has_value()) {
                 return tl::unexpected(error.value());
             }
