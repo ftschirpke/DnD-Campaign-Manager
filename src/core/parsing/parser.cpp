@@ -37,7 +37,7 @@ const std::filesystem::path& Parser::get_filepath() const { return filepath; }
 Parser::Parser(const std::filesystem::path& filepath) : filepath(filepath) {}
 
 static std::optional<Error> parse_text_recursive(
-    std::string&& str, Paragraph& paragraph, bool italic, bool bold, const std::filesystem::path& filepath
+    std::string&& str, Paragraph& paragraph, bool bold, bool italic, const std::filesystem::path& filepath
 ) {
     // TODO: add warning if '\n' is left in the string, as this is not well supported (currently)
     std::optional<Error> error;
@@ -58,7 +58,7 @@ static std::optional<Error> parse_text_recursive(
             paragraph.parts.emplace_back(SimpleText{.str = std::string(start, cur), .bold = bold, .italic = italic});
         }
 
-        if (rich_text->rich_type == "i" || rich_text->rich_type == "b") {
+        if (rich_text->rich_type == "b" || rich_text->rich_type == "i") {
             if (!rich_text->attributes.empty()) {
                 return ParsingError(
                     ParsingError::Code::UNEXPECTED_ATTRIBUTE, filepath,
@@ -66,13 +66,17 @@ static std::optional<Error> parse_text_recursive(
                     "well"
                 );
             }
-            if (rich_text->rich_type == "i") {
-                italic = true;
+            bool inner_italic = false;
+            bool inner_bold = false;
+            if (rich_text->rich_type == "b") {
+                inner_bold = true;
             } else {
-                assert(rich_text->rich_type == "b");
-                bold = true;
+                assert(rich_text->rich_type == "i");
+                inner_italic = true;
             }
-            error = parse_text_recursive(std::move(rich_text->text), paragraph, italic, bold, filepath);
+            error = parse_text_recursive(
+                std::move(rich_text->text), paragraph, bold || inner_bold, italic || inner_italic, filepath
+            );
             if (error.has_value()) {
                 return error;
             }
