@@ -179,7 +179,7 @@ WithErrors<Character::Data> parse_character(const nlohmann::json& obj, const std
     if (obj.contains("_meta")) {
         // HACK: add meta JSON as description as that (for now) mostly includes unsupported features and decisions
         character_data.description.parts.emplace_back(
-            Paragraph{.parts = {SimpleText{.str = obj["_meta"].dump(8), .italic = false, .bold = false}}}
+            Paragraph{.parts = {SimpleText{.str = obj["_meta"].dump(8), .bold = false, .italic = false}}}
         );
     }
 

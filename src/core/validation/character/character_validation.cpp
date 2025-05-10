@@ -2,8 +2,6 @@
 
 #include "character_validation.hpp"
 
-#include <unordered_set>
-
 #include <fmt/format.h>
 
 #include <core/basic_mechanics/dice.hpp>
@@ -22,6 +20,8 @@
 #include <core/validation/character/progression_validation.hpp>
 #include <core/validation/effects_provider/feature_validation.hpp>
 #include <core/validation/validation_data.hpp>
+
+#include <log.hpp>
 
 namespace dnd {
 
@@ -166,6 +166,10 @@ static Errors validate_character_relations_nonrecursively(const Character::Data&
                 ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format("Choosable '{}' does not exist.", choosable_key)
             );
+            LOGDEBUG("Could not find: {}", choosable_key);
+            for (const auto& entry : content.get_choosables().get_all()) {
+                LOGDEBUG("EXISTS: {}", entry.first);
+            }
         }
     }
 

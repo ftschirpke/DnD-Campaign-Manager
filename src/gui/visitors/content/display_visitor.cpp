@@ -255,12 +255,22 @@ void display_formatted_text(const Text& formatted_text, const GuiFonts& fonts) {
                 if (list.text_above.has_value()) {
                     display_paragraph(list.text_above.value(), fonts);
                 }
-                for (const Paragraph& list_item : list.parts) {
+                for (const ListItem& list_item : list.parts) {
                     ImGui::Bullet();
-                    display_paragraph(list_item, fonts);
-                }
-                if (list.text_below.has_value()) {
-                    display_paragraph(list.text_below.value(), fonts);
+                    ImGui::BeginGroup();
+                    for (const std::variant<Paragraph, Table>& part : list_item.parts) {
+                        switch (part.index()) {
+                            case 0: /* Paragraph */
+                                display_paragraph(std::get<0>(part), fonts);
+                                break;
+                            case 1: /* Table */
+                                display_table(std::get<1>(part), fonts);
+                                break;
+                            default:
+                                assert(false);
+                        }
+                    }
+                    ImGui::EndGroup();
                 }
                 break;
             }

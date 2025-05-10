@@ -12,6 +12,7 @@
 
 #include <fmt/format.h>
 #include <nlohmann/json.hpp>
+#include <tl/expected.hpp>
 
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
@@ -30,9 +31,20 @@ private:
     const std::filesystem::path& filepath;
 };
 
+std::optional<Error> parse_paragraph(std::string&& str, Paragraph& paragraph, const std::filesystem::path& filepath);
+
+tl::expected<Table, Error> parse_table(const nlohmann::json& json, const std::filesystem::path& filepath);
+
+std::optional<Error> parse_list(const nlohmann::json& list_items, Text& out, const std::filesystem::path& filepath);
+
 std::optional<Error> write_formatted_text_into(
     const nlohmann::json& json, Text& out, const std::filesystem::path& filepath
 );
+
+std::optional<Error> write_formatted_text_into(
+    const nlohmann::json& json, Text& out, const std::filesystem::path& filepath, bool skip_first
+);
+
 
 enum class JsonType {
     STRING,
@@ -48,6 +60,10 @@ std::optional<Error> check_required_attribute(
 std::optional<Error> check_required_index(
     const nlohmann::json& json, size_t index, const std::filesystem::path& filepath, JsonType typ
 );
+
+std::string or_of_strings(const std::vector<std::string>& strs);
+
+std::string and_of_strings(const std::vector<std::string>& strs);
 
 template <typename T>
 const char* type_name();

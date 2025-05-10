@@ -16,8 +16,8 @@ struct SimpleText {
     std::strong_ordering operator<=>(const SimpleText&) const = default;
 
     std::string str;
-    bool italic = false;
     bool bold = false;
+    bool italic = false;
 };
 
 struct Link {
@@ -25,8 +25,8 @@ struct Link {
 
     std::string str;
     std::vector<RichAttribute> attributes;
-    bool italic = false;
     bool bold = false;
+    bool italic = false;
 };
 
 using InlineText = std::variant<SimpleText, Link>;
@@ -35,14 +35,6 @@ struct Paragraph {
     std::strong_ordering operator<=>(const Paragraph&) const = default;
 
     std::vector<InlineText> parts;
-};
-
-struct List {
-    std::strong_ordering operator<=>(const List&) const = default;
-
-    std::vector<Paragraph> parts;
-    std::optional<Paragraph> text_above;
-    std::optional<Paragraph> text_below;
 };
 
 struct Table {
@@ -55,6 +47,20 @@ struct Table {
     std::vector<std::vector<Paragraph>> rows;
 };
 
+struct ListItem {
+    std::strong_ordering operator<=>(const ListItem&) const = default;
+
+    std::vector<std::variant<Paragraph, Table>> parts;
+};
+
+struct List {
+    std::strong_ordering operator<=>(const List&) const = default;
+
+    std::vector<ListItem> parts;
+    std::optional<Paragraph> text_above;
+    std::optional<Paragraph> text_below;
+};
+
 using TextObject = std::variant<Paragraph, List, Table>;
 
 struct Text {
@@ -65,7 +71,7 @@ struct Text {
 };
 
 inline Text Text::simple(std::string&& str) {
-    return Text{.parts = {Paragraph{.parts = {SimpleText{.str = str, .italic = false, .bold = false}}}}};
+    return Text{.parts = {Paragraph{.parts = {SimpleText{.str = str, .bold = false, .italic = false}}}}};
 }
 
 } // namespace dnd

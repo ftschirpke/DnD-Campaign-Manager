@@ -55,7 +55,7 @@ static std::optional<Error> parse_text_recursive(
             continue;
         }
         if (start != cur) {
-            paragraph.parts.emplace_back(SimpleText{.str = std::string(start, cur), .italic = italic, .bold = bold});
+            paragraph.parts.emplace_back(SimpleText{.str = std::string(start, cur), .bold = bold, .italic = italic});
         }
 
         if (rich_text->rich_type == "i" || rich_text->rich_type == "b") {
@@ -86,114 +86,24 @@ static std::optional<Error> parse_text_recursive(
             paragraph.parts.emplace_back(Link{
                 .str = std::move(rich_text->text),
                 .attributes = std::move(rich_text->attributes),
-                .italic = italic,
                 .bold = bold,
+                .italic = italic,
             });
         }
         cur += rich_text->length;
         start = cur;
     }
     if (start != cur) {
-        paragraph.parts.emplace_back(SimpleText{.str = std::string(start, cur), .italic = italic, .bold = bold});
+        paragraph.parts.emplace_back(SimpleText{.str = std::string(start, cur), .bold = bold, .italic = italic});
     }
     return std::nullopt;
 }
 
-static std::optional<Error> parse_paragraph(
-    std::string&& str, Paragraph& paragraph, const std::filesystem::path& filepath
-) {
+std::optional<Error> parse_paragraph(std::string&& str, Paragraph& paragraph, const std::filesystem::path& filepath) {
     return parse_text_recursive(std::move(str), paragraph, false, false, filepath);
 }
 
-static std::optional<Error> parse_list(
-    const nlohmann::json& list_items, Text& out, const std::filesystem::path& filepath
-) {
-    std::optional<Error> error;
-    List new_list{};
-
-    if (!out.parts.empty()) {
-        TextObject& last = out.parts.back();
-        if (last.index() == 0) /* Paragraph */ {
-            Paragraph& paragraph = std::get<0>(last);
-            if (!paragraph.parts.empty()) {
-                const InlineText& last_inline = paragraph.parts.back();
-                if (last_inline.index() == 0) /* SimpleText */ {
-                    const SimpleText& simple_text = std::get<0>(last_inline);
-                    if (simple_text.str.ends_with(':')) {
-                        new_list.text_above = paragraph;
-                        out.parts.pop_back();
-                    }
-                }
-            }
-        }
-    }
-
-    for (const nlohmann::json& item : list_items) {
-        Paragraph new_paragraph{};
-        if (item.is_string()) {
-            error = parse_paragraph(item.get<std::string>(), new_paragraph, filepath);
-            if (error.has_value()) {
-                return error;
-            }
-            new_list.parts.push_back(new_paragraph);
-            continue;
-        }
-
-        if (!item.is_object()) {
-            return ParsingError(
-                ParsingError::Code::INVALID_ATTRIBUTE_TYPE, filepath,
-                "Json entries in the \"items\" array must either be strings or objects."
-            );
-        }
-        std::string type;
-        error = parse_required_attribute_into(item, "type", type, filepath);
-        if (error.has_value()) {
-            return error;
-        }
-        if (type == "refSubclassFeature") {
-            continue;
-        }
-        if (type != "item" && type != "itemSpell") {
-            return ParsingError(
-                ParsingError::Code::UNEXPECTED_ATTRIBUTE, filepath,
-                fmt::format("Item in list has unexpected type \"{}\" != \"item\"", type)
-            );
-        }
-
-        std::string item_str;
-        if (item.contains("entry")) {
-            error = parse_required_attribute_into(item, "entry", item_str, filepath);
-            if (error.has_value()) {
-                return error;
-            }
-        } else {
-            std::vector<std::string> items_strings;
-            error = parse_required_attribute_into(item, "entries", items_strings, filepath);
-            if (error.has_value()) {
-                LOGDEBUG("weird item: {}", item.dump(4));
-                return error;
-            }
-
-            std::string name;
-            error = parse_optional_attribute_into(item, "name", name, filepath);
-            if (error.has_value()) {
-                return error;
-            }
-            new_paragraph.parts.push_back(SimpleText{.str = name + ". ", .italic = true, .bold = true});
-            item_str = fmt::format("{}", fmt::join(items_strings.begin(), items_strings.end(), " "));
-        }
-        error = parse_paragraph(std::move(item_str), new_paragraph, filepath);
-        if (error.has_value()) {
-            return error;
-        }
-
-        new_list.parts.push_back(new_paragraph);
-    }
-    out.parts.push_back(new_list);
-    return std::nullopt;
-}
-
-static tl::expected<Table, Error> parse_table(const nlohmann::json& json, const std::filesystem::path& filepath) {
+tl::expected<Table, Error> parse_table(const nlohmann::json& json, const std::filesystem::path& filepath) {
     std::optional<Error> error;
     Table new_table{};
 
@@ -338,8 +248,236 @@ static tl::expected<Table, Error> parse_table(const nlohmann::json& json, const 
     return new_table;
 }
 
+static tl::expected<ListItem, Error> parse_list_item(
+    const nlohmann::json& json, const std::filesystem::path& filepath
+) {
+    ListItem out{};
+
+    std::optional<Error> error;
+    if (json.is_string()) {
+        Paragraph new_paragraph{};
+        error = parse_paragraph(json.get<std::string>(), new_paragraph, filepath);
+        if (error.has_value()) {
+            return tl::unexpected(error.value());
+        }
+        if (!new_paragraph.parts.empty()) {
+            out.parts.push_back(new_paragraph);
+        }
+        return out;
+    }
+    if (!json.is_object()) {
+        return tl::unexpected(ParsingError(
+            ParsingError::Code::INVALID_ATTRIBUTE_TYPE, filepath,
+            "Json entries in the \"items\" array must either be strings or objects."
+        ));
+    }
+
+    std::string type;
+    error = parse_required_attribute_into(json, "type", type, filepath);
+    if (error.has_value()) {
+        return tl::unexpected(error.value());
+    }
+    if (type != "item" && type != "itemSpell") {
+        return out;
+    }
+
+    std::optional<Paragraph> first_paragraph = std::nullopt;
+    if (json.contains("name")) {
+        std::string name;
+        error = parse_required_attribute_into(json, "name", name, filepath);
+        if (error.has_value()) {
+            return tl::unexpected(error.value());
+        }
+        if (!name.empty()) {
+            if (!first_paragraph.has_value()) {
+                first_paragraph = Paragraph{};
+            }
+            first_paragraph->parts.push_back(SimpleText{
+                .str = name + ". ",
+                .bold = true,
+                .italic = false,
+            });
+        }
+    }
+
+    std::deque<CRef<nlohmann::json>> todo;
+
+    if (json.contains("entry")) {
+        todo.push_back(json["entry"]);
+    } else {
+        error = check_required_attribute(json, "entries", filepath, JsonType::ARRAY);
+        if (error.has_value()) {
+            return tl::unexpected(error.value());
+        }
+        for (const nlohmann::json& entry : json["entries"]) {
+            todo.push_back(entry);
+        }
+    }
+
+    if (first_paragraph.has_value()) {
+        const nlohmann::json& first_entry = todo.front();
+        if (first_entry.is_string()) {
+            todo.pop_front();
+            error = parse_paragraph(first_entry.get<std::string>(), first_paragraph.value(), filepath);
+            if (error.has_value()) {
+                return tl::unexpected(error.value());
+            }
+        }
+        if (!first_paragraph.value().parts.empty()) {
+            out.parts.push_back(first_paragraph.value());
+        }
+    }
+
+    while (!todo.empty()) {
+        const nlohmann::json& entry = todo.front();
+        todo.pop_front();
+        if (entry.is_string()) {
+            Paragraph new_paragraph{};
+            error = parse_paragraph(entry.get<std::string>(), new_paragraph, filepath);
+            if (error.has_value()) {
+                return tl::unexpected(error.value());
+            }
+            if (!new_paragraph.parts.empty()) {
+                out.parts.push_back(new_paragraph);
+            }
+            continue;
+        }
+
+        if (!entry.is_object()) {
+            return tl::unexpected(ParsingError(
+                ParsingError::Code::INVALID_ATTRIBUTE_TYPE, filepath,
+                "Json entries in the \"entries\" array must either be strings or objects."
+            ));
+        }
+
+        std::string type;
+        error = parse_required_attribute_into(entry, "type", type, filepath);
+        if (error.has_value()) {
+            return tl::unexpected(error.value());
+        }
+
+        if (type == "entries") {
+            error = check_required_attribute(entry, "entries", filepath, JsonType::ARRAY);
+            if (error.has_value()) {
+                return tl::unexpected(error.value());
+            }
+
+            if (entry.contains("name")) {
+                std::string name;
+                error = parse_required_attribute_into(entry, "name", name, filepath);
+                if (error.has_value()) {
+                    return tl::unexpected(error.value());
+                }
+                Paragraph new_paragraph{};
+                if (!name.empty()) {
+                    new_paragraph.parts.push_back(SimpleText{.str = name + ". ", .bold = true, .italic = true});
+                }
+
+                std::vector<std::string> entries_strings;
+                error = parse_required_attribute_into(entry, "entries", entries_strings, filepath);
+                if (error.has_value()) {
+                    // fallback, treat all entries on their own
+                    for (auto it = entry["entries"].rbegin(); it != entry["entries"].rend(); ++it) {
+                        todo.push_front(*it);
+                    }
+                    error = std::nullopt;
+                } else {
+                    error = parse_paragraph(
+                        fmt::format("{}", fmt::join(entries_strings.begin(), entries_strings.end(), " ")),
+                        new_paragraph, filepath
+                    );
+                    if (error.has_value()) {
+                        return tl::unexpected(error.value());
+                    }
+                }
+                if (!new_paragraph.parts.empty()) {
+                    out.parts.push_back(new_paragraph);
+                }
+            } else {
+                for (auto it = entry["entries"].rbegin(); it != entry["entries"].rend(); ++it) {
+                    todo.push_front(*it);
+                }
+            }
+        } else if (type == "table") {
+            tl::expected<Table, Error> new_table = parse_table(entry, filepath);
+            if (new_table.has_value()) {
+                out.parts.push_back(new_table.value());
+            } else {
+                return tl::unexpected(new_table.error());
+            }
+        } else {
+            return tl::unexpected(ParsingError(
+                ParsingError::Code::UNEXPECTED_ATTRIBUTE, filepath, fmt::format("Entry type \"{}\" unexpected", type)
+            ));
+        }
+    }
+    return out;
+}
+
+std::optional<Error> parse_list(const nlohmann::json& list_items, Text& out, const std::filesystem::path& filepath) {
+    std::optional<Error> error;
+    List new_list{};
+
+    if (!out.parts.empty()) {
+        TextObject& last = out.parts.back();
+        if (last.index() == 0) /* Paragraph */ {
+            Paragraph& paragraph = std::get<0>(last);
+            if (!paragraph.parts.empty()) {
+                const InlineText& last_inline = paragraph.parts.back();
+                if (last_inline.index() == 0) /* SimpleText */ {
+                    const SimpleText& simple_text = std::get<0>(last_inline);
+                    if (simple_text.str.ends_with(':')) {
+                        new_list.text_above = paragraph;
+                        out.parts.pop_back();
+                    }
+                }
+            }
+        }
+    }
+
+    for (const nlohmann::json& item : list_items) {
+        tl::expected<ListItem, Error> parsed_item = parse_list_item(item, filepath);
+        if (parsed_item.has_value()) {
+            if (!parsed_item.value().parts.empty()) {
+                new_list.parts.push_back(parsed_item.value());
+            }
+        } else {
+            return parsed_item.error();
+        }
+    }
+
+    if (new_list.parts.size() == 1) {
+        for (std::variant<Paragraph, Table>& part : new_list.parts[0].parts) {
+            switch (part.index()) {
+                case 0: /*Paragraph */ {
+                    Paragraph& paragraph = std::get<0>(part);
+                    if (!paragraph.parts.empty()) {
+                        out.parts.push_back(paragraph);
+                    }
+                    break;
+                }
+                case 1: /* Table */ {
+                    out.parts.push_back(std::get<1>(part));
+                    break;
+                }
+                default:
+                    assert(false);
+            }
+        }
+    } else if (!new_list.parts.empty()) {
+        out.parts.push_back(new_list);
+    }
+    return std::nullopt;
+}
+
 std::optional<Error> write_formatted_text_into(
     const nlohmann::json& json, Text& out, const std::filesystem::path& filepath
+) {
+    return write_formatted_text_into(json, out, filepath, false);
+}
+
+std::optional<Error> write_formatted_text_into(
+    const nlohmann::json& json, Text& out, const std::filesystem::path& filepath, bool skip_first
 ) {
     std::optional<Error> error = check_required_attribute(json, "entries", filepath, JsonType::ARRAY);
     if (error.has_value()) {
@@ -348,7 +486,12 @@ std::optional<Error> write_formatted_text_into(
 
     std::deque<CRef<nlohmann::json>> todo;
 
+    bool is_first = true;
     for (const nlohmann::json& entry : json["entries"]) {
+        if (skip_first && is_first) {
+            is_first = false;
+            continue;
+        }
         todo.push_back(entry);
     }
 
@@ -393,7 +536,9 @@ std::optional<Error> write_formatted_text_into(
                     return error;
                 }
                 Paragraph new_paragraph{};
-                new_paragraph.parts.push_back(SimpleText{.str = name + ". ", .italic = true, .bold = true});
+                if (!name.empty()) {
+                    new_paragraph.parts.push_back(SimpleText{.str = name + ". ", .bold = true, .italic = true});
+                }
 
                 std::vector<std::string> entries_strings;
                 error = parse_required_attribute_into(entry, "entries", entries_strings, filepath);
@@ -412,7 +557,9 @@ std::optional<Error> write_formatted_text_into(
                         return error;
                     }
                 }
-                out.parts.push_back(new_paragraph);
+                if (!new_paragraph.parts.empty()) {
+                    out.parts.push_back(new_paragraph);
+                }
             } else {
                 for (auto it = entry["entries"].rbegin(); it != entry["entries"].rend(); ++it) {
                     todo.push_front(*it);
@@ -521,5 +668,22 @@ std::optional<Error> check_required_index(
         fmt::format("The index {} exists but is of wrong type - should be {}", index, json_attribute_type_name(typ))
     );
 }
+
+static std::string merge_strings(
+    const std::vector<std::string>& strs, const char* connector, const char* last_connector
+) {
+    if (strs.empty()) {
+        return "";
+    }
+    if (strs.size() == 1) {
+        return strs[0];
+    }
+
+    return fmt::format("{} {} {}", fmt::join(strs.cbegin(), strs.cend() - 1, connector), last_connector, strs.back());
+}
+
+std::string or_of_strings(const std::vector<std::string>& strs) { return merge_strings(strs, ", ", "or"); }
+
+std::string and_of_strings(const std::vector<std::string>& strs) { return merge_strings(strs, ", ", "and"); }
 
 } // namespace dnd
