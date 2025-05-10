@@ -53,10 +53,10 @@ CreateResult<ClassFeature> ClassFeature::create_for(Data&& data, const Content& 
 }
 
 std::string ClassFeature::key(
-    const std::string& name, const std::string& source_name, const std::filesystem::path& source_path, int level
+    const std::string& name, const std::string& source_name, const std::string& class_name,
+    const std::string& class_source_name, int level
 ) {
-    // TODO: make this key independent of the filesystem path
-    return fmt::format("{}##{}|{}|{}", name, source_name, source_path.stem().string(), level);
+    return fmt::format("{}##{}|{}|{}|{}", name, source_name, class_name, class_source_name, level);
 }
 
 int ClassFeature::get_level() const { return level; }
@@ -64,15 +64,16 @@ int ClassFeature::get_level() const { return level; }
 const std::map<int, Effects>& ClassFeature::get_higher_level_effects() const { return higher_level_effects; }
 
 std::string ClassFeature::get_key() const {
-    return key(get_name(), get_source_info().name, get_source_info().path, level);
+    return key(get_name(), get_source_info().name, class_name, class_source_name, level);
 }
 
 void ClassFeature::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 std::string ClassFeature::Data::key(
-    const std::string& name, const std::string& source_name, const std::filesystem::path& source_path, int level
+    const std::string& name, const std::string& source_name, const std::string& class_name,
+    const std::string& class_source_name, int level
 ) {
-    return ClassFeature::key(name, source_name, source_path, level);
+    return ClassFeature::key(name, source_name, class_name, class_source_name, level);
 }
 
 ClassFeature::ClassFeature(
@@ -85,6 +86,6 @@ ClassFeature::ClassFeature(
       ),
       level(level), higher_level_effects(std::move(higher_level_effects)) {}
 
-std::string ClassFeature::Data::get_key() const { return key(name, source_name, source_path, level); }
+std::string ClassFeature::Data::get_key() const { return key(name, source_name, class_name, class_source_name, level); }
 
 } // namespace dnd

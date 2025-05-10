@@ -11,7 +11,7 @@
 
 #include <core/models/class/class.hpp>
 #include <core/models/content_piece.hpp>
-#include <core/models/effects_provider/class_feature.hpp>
+#include <core/models/effects_provider/subclass_feature.hpp>
 #include <core/models/source_info.hpp>
 #include <core/models/spellcasting/spellcasting.hpp>
 #include <core/text/text.hpp>
@@ -37,7 +37,7 @@ public:
     const std::string& get_short_name() const;
     const Text& get_description() const override;
     const SourceInfo& get_source_info() const override;
-    const std::vector<ClassFeature>& get_features() const;
+    const std::vector<SubclassFeature>& get_features() const;
     bool has_spellcasting() const;
     const Spellcasting* get_spellcasting() const;
     CRef<Class> get_class() const;
@@ -47,7 +47,7 @@ public:
 private:
     Subclass(
         std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
-        std::string&& short_name, std::vector<ClassFeature>&& features, CRef<Class> cls,
+        std::string&& short_name, std::vector<SubclassFeature>&& features, CRef<Class> cls,
         std::unique_ptr<Spellcasting>&& spellcasting = nullptr
     );
 
@@ -55,7 +55,7 @@ private:
     Text description;
     SourceInfo source_info;
     std::string short_name;
-    std::vector<ClassFeature> features;
+    std::vector<SubclassFeature> features;
     CRef<Class> cls;
     std::unique_ptr<Spellcasting> spellcasting;
 };
@@ -66,7 +66,7 @@ struct Subclass::Data : public ValidationData {
 
     std::string short_name;
     Spellcasting::Data spellcasting_data;
-    std::vector<ClassFeature::Data> features_data;
+    std::vector<SubclassFeature::Data> features_data;
     std::string class_key;
 };
 

@@ -1,5 +1,5 @@
-#ifndef CLASS_FEATURE_HPP_
-#define CLASS_FEATURE_HPP_
+#ifndef SUBCLASS_FEATURE_HPP_
+#define SUBCLASS_FEATURE_HPP_
 
 #include <dnd_config.hpp>
 
@@ -11,7 +11,6 @@
 #include <core/models/effects/effects.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/source_info.hpp>
-#include <core/text/text.hpp>
 #include <core/validation/effects_provider/feature_validation.hpp>
 
 namespace dnd {
@@ -22,20 +21,20 @@ class ContentVisitor;
 /**
  * @brief A class representing a feature provided by a class or a subclass
  */
-class ClassFeature : public Feature {
+class SubclassFeature : public Feature {
 public:
     struct Data;
 
-    static CreateResult<ClassFeature> create_for(Data&& data, const Content& content);
+    static CreateResult<SubclassFeature> create_for(Data&& data, const Content& content);
     static std::string key(
-        const std::string& name, const std::string& source_name, const std::string& class_name,
-        const std::string& class_source_name, int level
+        const std::string& name, const std::string& source_name, const std::string& subclass_name,
+        const std::string& subclass_source_name, int level
     );
 
-    ClassFeature(const ClassFeature&) = delete;
-    ClassFeature& operator=(const ClassFeature&) = delete;
-    ClassFeature(ClassFeature&&) noexcept = default;
-    ClassFeature& operator=(ClassFeature&&) noexcept = default;
+    SubclassFeature(const SubclassFeature&) = delete;
+    SubclassFeature& operator=(const SubclassFeature&) = delete;
+    SubclassFeature(SubclassFeature&&) noexcept = default;
+    SubclassFeature& operator=(SubclassFeature&&) noexcept = default;
 
     int get_level() const;
     const std::map<int, Effects>& get_higher_level_effects() const;
@@ -48,21 +47,21 @@ public:
      */
     virtual void accept_visitor(ContentVisitor& visitor) const override;
 private:
-    ClassFeature(
-        std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
+    SubclassFeature(
+        std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
         int level, Effects&& main_effects, std::map<int, Effects>&& higher_level_parts = {}
     );
 
     int level;
     std::map<int, Effects> higher_level_effects; // careful when changing the type here, some code relies on order
-    std::string class_name;
-    std::string class_source_name;
+    std::string subclass_name;
+    std::string subclass_source_name;
 };
 
-struct ClassFeature::Data : public Feature::Data {
+struct SubclassFeature::Data : public Feature::Data {
     static std::string key(
-        const std::string& name, const std::string& source_name, const std::string& class_name,
-        const std::string& class_source_name, int level
+        const std::string& name, const std::string& source_name, const std::string& subclass_name,
+        const std::string& subclass_source_name, int level
     );
 
     std::strong_ordering operator<=>(const Data&) const = default;
@@ -70,10 +69,10 @@ struct ClassFeature::Data : public Feature::Data {
 
     int level;
     std::map<int, Effects::Data> higher_level_effects_data;
-    std::string class_name;
-    std::string class_source_name;
+    std::string subclass_name;
+    std::string subclass_source_name;
 };
 
 } // namespace dnd
 
-#endif // CLASS_FEATURE_HPP_
+#endif // SUBCLASS_FEATURE_HPP_

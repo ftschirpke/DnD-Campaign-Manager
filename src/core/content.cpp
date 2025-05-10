@@ -6,6 +6,18 @@
 
 #include <fmt/format.h>
 
+#include <core/groups.hpp>
+#include <core/models/character/character.hpp>
+#include <core/models/class/class.hpp>
+#include <core/models/effects_provider/choosable.hpp>
+#include <core/models/effects_provider/class_feature.hpp>
+#include <core/models/effects_provider/feature.hpp>
+#include <core/models/effects_provider/subclass_feature.hpp>
+#include <core/models/item/item.hpp>
+#include <core/models/species/species.hpp>
+#include <core/models/spell/spell.hpp>
+#include <core/models/subclass/subclass.hpp>
+#include <core/models/subspecies/subspecies.hpp>
 #include <core/referencing_content_library.hpp>
 #include <core/storage_content_library.hpp>
 #include <core/types.hpp>
@@ -104,8 +116,8 @@ OptCRef<Class> Content::add_class(Class&& cls) {
 OptCRef<Subclass> Content::add_subclass(Subclass&& subclass) {
     OptCRef<Subclass> inserted_subclass = subclass_library.add(std::move(subclass));
     if (subclass_library.add(std::move(subclass))) {
-        for (const ClassFeature& class_feature : inserted_subclass.value().get().get_features()) {
-            class_feature_library.add(class_feature);
+        for (const SubclassFeature& subclass_feature : inserted_subclass.value().get().get_features()) {
+            subclass_feature_library.add(subclass_feature);
         }
     }
     return inserted_subclass;
@@ -169,8 +181,8 @@ OptCRef<Class> Content::add_class_result(CreateResult<Class>&& cls) {
 OptCRef<Subclass> Content::add_subclass_result(CreateResult<Subclass>&& subclass) {
     OptCRef<Subclass> inserted_subclass = subclass_library.add_result(std::move(subclass));
     if (subclass_library.add_result(std::move(subclass))) {
-        for (const ClassFeature& class_feature : inserted_subclass.value().get().get_features()) {
-            class_feature_library.add(class_feature);
+        for (const SubclassFeature& subclass_feature : inserted_subclass.value().get().get_features()) {
+            subclass_feature_library.add(subclass_feature);
         }
     }
     return inserted_subclass;
