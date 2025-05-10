@@ -159,7 +159,7 @@ static void display_paragraph(const Paragraph& paragraph, const GuiFonts& fonts)
                 while (current_end != text_end && *current_end != ' ') {
                     ++current_end;
                 }
-                subtext_size = ImGui::CalcTextSize(subtext_begin.base(), current_end.base());
+                subtext_size = ImGui::CalcTextSize(&*subtext_begin, &*current_end);
             } while (x + subtext_size.x <= x_end);
 
             if (inner_iterations++ >= MAX_ITERATIONS) {
