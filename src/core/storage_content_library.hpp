@@ -28,17 +28,17 @@ template <typename T>
 requires isContentPieceType<T>
 class StorageContentLibrary : public ContentLibrary<T> {
 public:
-    bool contains(const std::string& name) const override;
+    bool contains(const std::string& key) const override;
     bool empty() const override;
     size_t size() const override;
     OptCRef<T> get(size_t index) const override;
-    OptCRef<T> get(const std::string& name) const override;
+    OptCRef<T> get(const std::string& key) const override;
     const std::unordered_map<std::string, T>& get_all() const;
     const std::vector<std::pair<typename T::Data, Errors>>& get_drafts() const;
     /**
      * @brief Add a content piece to a content piece to the library
      * @param content_piece the content piece to add
-     * @return reference to the inserted content piece, or std::nullopt if a content piece with that name already exists
+     * @return reference to the inserted content piece, or std::nullopt if a content piece with that key already exists
      */
     OptCRef<T> add(T&& content_piece);
     void add_draft(std::pair<typename T::Data, Errors>&& draft);
@@ -54,8 +54,8 @@ private:
 
 template <typename T>
 requires isContentPieceType<T>
-bool StorageContentLibrary<T>::contains(const std::string& name) const {
-    return data.contains(name);
+bool StorageContentLibrary<T>::contains(const std::string& key) const {
+    return data.contains(key);
 }
 
 template <typename T>
@@ -82,8 +82,8 @@ OptCRef<T> StorageContentLibrary<T>::get(size_t index) const {
 
 template <typename T>
 requires isContentPieceType<T>
-OptCRef<T> StorageContentLibrary<T>::get(const std::string& name) const {
-    auto iterator = data.find(name);
+OptCRef<T> StorageContentLibrary<T>::get(const std::string& key) const {
+    auto iterator = data.find(key);
     if (iterator == data.end()) {
         return std::nullopt;
     }

@@ -16,6 +16,7 @@
 #include <core/basic_mechanics/character_progression.hpp>
 #include <core/basic_mechanics/dice.hpp>
 #include <core/basic_mechanics/skills.hpp>
+#include <core/content.hpp>
 #include <core/errors/runtime_error.hpp>
 #include <core/models/character/character.hpp>
 #include <core/models/class/class.hpp>
@@ -35,7 +36,7 @@
 
 namespace dnd {
 
-DisplayVisitor::DisplayVisitor(const GuiFonts& fonts) : fonts(fonts) {}
+DisplayVisitor::DisplayVisitor(const Content& content, const GuiFonts& fonts) : content(content), fonts(fonts) {}
 
 static const ImVec2 cell_padding = ImVec2(5, 5);
 static constexpr ImGuiTableFlags content_table_flags = ImGuiTableFlags_NoBordersInBodyUntilResize;
@@ -635,6 +636,7 @@ void DisplayVisitor::operator()(const ClassFeature& class_feature) {
     label("Type:");
     ImGui::Text("Feature");
     source(class_feature);
+    DND_UNUSED(content); // TODO: use to lookup content piece for better display
     label("Level:");
     ImGui::Text("%d", class_feature.get_level());
     label("Description:");
@@ -649,6 +651,7 @@ void DisplayVisitor::operator()(const SubclassFeature& subclass_feature) {
     label("Type:");
     ImGui::Text("Feature");
     source(subclass_feature);
+    DND_UNUSED(content); // TODO: use to lookup content piece for better display
     label("Level:");
     ImGui::Text("%d", subclass_feature.get_level());
     label("Description:");

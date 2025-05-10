@@ -67,6 +67,10 @@ std::string SubclassFeature::get_key() const {
     return key(get_name(), get_source_info().name, subclass_short_name, subclass_source_name, level);
 }
 
+const std::string& SubclassFeature::get_subclass_short_name() const { return subclass_short_name; }
+
+const std::string& SubclassFeature::get_subclass_source_name() const { return subclass_source_name; }
+
 void SubclassFeature::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 std::string SubclassFeature::Data::key(

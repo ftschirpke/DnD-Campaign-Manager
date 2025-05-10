@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <core/content.hpp>
 #include <core/models/character/character.hpp>
 #include <core/models/class/class.hpp>
 #include <core/models/effects_provider/choosable.hpp>
@@ -21,7 +22,7 @@ namespace dnd {
 
 class DisplayVisitor : public ContentVisitor {
 public:
-    explicit DisplayVisitor(const GuiFonts& fonts);
+    DisplayVisitor(const Content& content, const GuiFonts& fonts);
     virtual void operator()(const Character& character) override;
     virtual void operator()(const Class& cls) override;
     virtual void operator()(const Subclass& subclass) override;
@@ -34,6 +35,7 @@ public:
     virtual void operator()(const SubclassFeature& subclass_feature) override;
     virtual void operator()(const Choosable& choosable) override;
 private:
+    const Content& content;
     const GuiFonts& fonts;
 };
 

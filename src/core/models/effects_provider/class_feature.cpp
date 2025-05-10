@@ -67,6 +67,10 @@ std::string ClassFeature::get_key() const {
     return key(get_name(), get_source_info().name, class_name, class_source_name, level);
 }
 
+const std::string& ClassFeature::get_class_name() const { return class_name; }
+
+const std::string& ClassFeature::get_class_source_name() const { return class_source_name; }
+
 void ClassFeature::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 std::string ClassFeature::Data::key(

@@ -40,6 +40,8 @@ public:
     const std::map<int, Effects>& get_higher_level_effects() const;
 
     std::string get_key() const override;
+    const std::string& get_subclass_short_name() const;
+    const std::string& get_subclass_source_name() const;
 
     /**
      * @brief Accepts a visitor
