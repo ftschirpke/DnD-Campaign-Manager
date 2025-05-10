@@ -18,6 +18,7 @@
 #include <core/basic_mechanics/magic_schools.hpp>
 #include <core/basic_mechanics/skills.hpp>
 #include <core/content.hpp>
+#include <core/data_result.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
@@ -26,7 +27,6 @@
 #include <core/searching/content_filters/content_filter.hpp>
 #include <core/searching/content_filters/selection_filter.hpp>
 #include <core/searching/content_filters/spell/spell_filter.hpp>
-#include <core/data_result.hpp>
 #include <core/validation/effects/choice/choice_validation.hpp>
 
 namespace dnd {

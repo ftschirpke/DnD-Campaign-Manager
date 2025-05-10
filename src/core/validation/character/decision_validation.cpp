@@ -5,9 +5,7 @@
 #include <algorithm>
 #include <cassert>
 #include <map>
-#include <optional>
 #include <string>
-#include <vector>
 
 #include <fmt/format.h>
 

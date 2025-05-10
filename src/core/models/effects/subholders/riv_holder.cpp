@@ -11,8 +11,8 @@
 #include <fmt/format.h>
 
 #include <core/content.hpp>
-#include <core/exceptions/validation_exceptions.hpp>
 #include <core/data_result.hpp>
+#include <core/exceptions/validation_exceptions.hpp>
 #include <core/validation/effects/subholders/riv_holder_validation.hpp>
 
 namespace dnd {

@@ -3,8 +3,8 @@
 
 #include <dnd_config.hpp>
 
-#include <core/models/effects/condition/condition.hpp>
 #include <core/data_result.hpp>
+#include <core/models/effects/condition/condition.hpp>
 
 namespace dnd {
 

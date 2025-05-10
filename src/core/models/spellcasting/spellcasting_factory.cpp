@@ -10,12 +10,12 @@
 #include <fmt/format.h>
 
 #include <core/basic_mechanics/abilities.hpp>
+#include <core/data_result.hpp>
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/spellcasting/preparation_spellcasting.hpp>
 #include <core/models/spellcasting/spellcasting.hpp>
 #include <core/models/spellcasting/spells_known_spellcasting.hpp>
-#include <core/data_result.hpp>
 #include <core/validation/spellcasting/spellcasting_validation.hpp>
 
 namespace dnd {

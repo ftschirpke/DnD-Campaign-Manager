@@ -5,6 +5,7 @@
 
 #include <string>
 
+#include <core/data_result.hpp>
 #include <core/groups.hpp>
 #include <core/models/character/character.hpp>
 #include <core/models/class/class.hpp>
@@ -17,7 +18,6 @@
 #include <core/models/subspecies/subspecies.hpp>
 #include <core/referencing_content_library.hpp>
 #include <core/storage_content_library.hpp>
-#include <core/data_result.hpp>
 #include <core/types.hpp>
 
 namespace dnd {

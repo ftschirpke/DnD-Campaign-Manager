@@ -8,6 +8,7 @@
 
 #include <tl/expected.hpp>
 
+#include <core/data_result.hpp>
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/character/stats.hpp>
@@ -20,7 +21,6 @@
 #include <core/models/effects/subholders/extra_spells_holder.hpp>
 #include <core/models/effects/subholders/proficiency_holder.hpp>
 #include <core/models/effects/subholders/riv_holder.hpp>
-#include <core/data_result.hpp>
 #include <core/validation/effects/effects_validation.hpp>
 #include <core/validation/effects/subholders/action_holder_validation.hpp>
 #include <core/validation/effects/subholders/extra_spells_holder_validation.hpp>

@@ -3,8 +3,8 @@
 
 #include <dnd_config.hpp>
 
-#include <core/models/effects/effects.hpp>
 #include <core/data_result.hpp>
+#include <core/models/effects/effects.hpp>
 #include <core/types.hpp>
 
 namespace dnd {

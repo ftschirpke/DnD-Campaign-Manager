@@ -11,12 +11,12 @@
 
 #include <fmt/format.h>
 
+#include <core/data_result.hpp>
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/effects/condition/condition.hpp>
 #include <core/models/effects/condition/identifier_condition.hpp>
 #include <core/models/effects/condition/literal_condition.hpp>
-#include <core/data_result.hpp>
 #include <core/utils/string_manipulation.hpp>
 #include <core/validation/effects/condition/condition_validation.hpp>
 
