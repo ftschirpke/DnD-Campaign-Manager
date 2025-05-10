@@ -60,8 +60,8 @@ LatexText* LatexText::add_custom_inline_modifier(const std::string& modifier) {
     return this;
 }
 
-LatexText* LatexText::set_size(const std::string& size) {
-    this->size = size;
+LatexText* LatexText::set_size(const std::string& new_size) {
+    this->size = new_size;
     return this;
 }
 
@@ -77,7 +77,8 @@ std::string LatexText::str() const {
         text_string += '\\' + modifier + ' ';
     }
     text_string += text;
-    for (const std::string& _ : modifiers) {
+    for (const std::string& modifier : modifiers) {
+        DND_UNUSED(modifier);
         text_string += '}';
     }
     if (linebreak) {
