@@ -220,7 +220,7 @@ static void display_table(const Table& table, const GuiFonts& fonts) {
         for (size_t col = 0; col < table.columns; ++col) {
             float col_weight = 0;
             if (table.column_widths.has_value()) {
-                col_weight = table.column_widths->at(col).value_or(0.0f);
+                col_weight = static_cast<float>(table.column_widths->at(col).value_or(0));
             }
             ImGui::TableSetupColumn(table.header.at(col).c_str(), ImGuiTableColumnFlags_WidthStretch, col_weight);
         }
