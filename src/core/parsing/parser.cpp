@@ -123,9 +123,9 @@ tl::expected<Table, Error> parse_table(const nlohmann::json& json, const std::fi
     const nlohmann::json& labels = json["colLabels"];
     new_table.columns = labels.size();
 
-    for (size_t i = 0; i < new_table.columns; ++i) {
+    for (size_t col = 0; col < new_table.columns; ++col) {
         std::string header_entry;
-        error = parse_required_index_into(labels, i, header_entry, filepath);
+        error = parse_required_index_into(labels, col, header_entry, filepath);
         if (error.has_value()) {
             return tl::unexpected(error.value());
         }
@@ -350,13 +350,13 @@ static tl::expected<ListItem, Error> parse_list_item(
             ));
         }
 
-        std::string type;
-        error = parse_required_attribute_into(entry, "type", type, filepath);
+        std::string entry_type;
+        error = parse_required_attribute_into(entry, "type", entry_type, filepath);
         if (error.has_value()) {
             return tl::unexpected(error.value());
         }
 
-        if (type == "entries") {
+        if (entry_type == "entries") {
             error = check_required_attribute(entry, "entries", filepath, JsonType::ARRAY);
             if (error.has_value()) {
                 return tl::unexpected(error.value());
@@ -398,7 +398,7 @@ static tl::expected<ListItem, Error> parse_list_item(
                     todo.push_front(*it);
                 }
             }
-        } else if (type == "table") {
+        } else if (entry_type == "table") {
             tl::expected<Table, Error> new_table = parse_table(entry, filepath);
             if (new_table.has_value()) {
                 out.parts.push_back(new_table.value());
@@ -407,7 +407,8 @@ static tl::expected<ListItem, Error> parse_list_item(
             }
         } else {
             return tl::unexpected(ParsingError(
-                ParsingError::Code::UNEXPECTED_ATTRIBUTE, filepath, fmt::format("Entry type \"{}\" unexpected", type)
+                ParsingError::Code::UNEXPECTED_ATTRIBUTE, filepath,
+                fmt::format("Entry type \"{}\" unexpected", entry_type)
             ));
         }
     }
