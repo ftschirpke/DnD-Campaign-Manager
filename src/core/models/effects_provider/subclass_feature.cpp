@@ -77,8 +77,8 @@ std::string SubclassFeature::Data::key(
 }
 
 SubclassFeature::SubclassFeature(
-    std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
-    int level, Effects&& main_effects, std::map<int, Effects>&& higher_level_effects
+    std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name, int level,
+    Effects&& main_effects, std::map<int, Effects>&& higher_level_effects
 )
     : Feature(
           std::move(name), std::move(description), std::move(source_path), std::move(source_name),

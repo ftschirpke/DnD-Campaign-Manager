@@ -652,7 +652,7 @@ void DisplayVisitor::operator()(const SubclassFeature& subclass_feature) {
     label("Level:");
     ImGui::Text("%d", subclass_feature.get_level());
     label("Description:");
-    display_formatted_text(subclass_feature.get_description());
+    display_formatted_text(subclass_feature.get_description(), fonts);
 
     end_content_table();
 }
