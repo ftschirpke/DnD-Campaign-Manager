@@ -3,9 +3,9 @@
 
 #include <dnd_config.hpp>
 
+#include <core/data_result.hpp>
 #include <core/errors/errors.hpp>
 #include <core/models/character/character.hpp>
-#include <core/utils/data_result.hpp>
 
 namespace dnd {
 

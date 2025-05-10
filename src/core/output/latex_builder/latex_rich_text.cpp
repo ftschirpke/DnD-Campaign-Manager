@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <string>
 
-#include <core/utils/rich_text.hpp>
+#include <core/text/rich_text.hpp>
 #include <log.hpp>
 
 namespace dnd {

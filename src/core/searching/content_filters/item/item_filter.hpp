@@ -19,7 +19,7 @@ public:
     std::vector<const ContentPiece*> all_matches(const Content& content) const override;
     void clear() override;
 
-    StringFilter cosmetic_description_filter;
+    // StringFilter cosmetic_description_filter; // TODO: replace with a TextFilter
     BoolFilter attunement_filter;
 };
 

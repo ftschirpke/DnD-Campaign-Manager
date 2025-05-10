@@ -13,11 +13,12 @@
 #include <vector>
 
 #include <core/models/spell/spell.hpp>
+#include <core/output/latex_builder/latex.hpp>
 #include <core/output/latex_builder/latex_command.hpp>
 #include <core/output/latex_builder/latex_document.hpp>
 #include <core/output/latex_builder/latex_scope.hpp>
 #include <core/output/latex_builder/latex_text.hpp>
-#include <core/utils/types.hpp>
+#include <core/types.hpp>
 
 namespace dnd {
 
@@ -67,9 +68,9 @@ static void create_minipage(LatexScope* scope, const std::string& name, const st
     minipage.begin_command->add_braces_argument("0.49\\textwidth");
     minipage.scope->add_command("centering");
     minipage.scope->add_command("footnotesize");
-    minipage.scope->add_scope()->add_text(name)->add_modifier("scshape");
+    minipage.scope->add_scope()->add_text(name)->add_custom_inline_modifier("scshape");
     minipage.scope->add_line_break();
-    minipage.scope->add_text(value)->add_modifier("scriptsize");
+    minipage.scope->add_text(value)->set_size("scriptsize");
 }
 
 static LatexText* create_card_header(LatexScope* scope, const Spell& spell, int counter) {
@@ -91,7 +92,7 @@ static LatexText* create_card_header(LatexScope* scope, const Spell& spell, int 
         scope->add_command("vspace", "-8mm");
         scope->add_begin_end("center")
             .scope->add_text('(' + spell.get_components().get_material_components() + ')')
-            ->add_modifier("scriptsize");
+            ->set_size("scriptsize");
         scope->add_command("vspace", "-2mm");
     }
     scope->add_command("scriptsize");
@@ -100,40 +101,24 @@ static LatexText* create_card_header(LatexScope* scope, const Spell& spell, int 
 
 static void create_card_footer(LatexScope* scope, const Spell& spell) {
     scope->add_command("vfill");
-    scope->add_text(spell.get_type().str())->add_modifier("scriptsize")->add_modifier("centering");
+    scope->add_text(spell.get_type().str())->set_size("scriptsize")->add_custom_inline_modifier("centering");
 }
 
-static int create_spell_cards(LatexScope* scope, const Spell& spell) {
+static int create_spell_cards(LatexScope* scope, std::vector<LatexScope>& scopes, const Spell& spell) {
     int counter = 1;
     LatexText* first_title = create_card_header(scope, spell, counter);
-    size_t start = 0;
-    size_t end = 0;
     size_t characters_written = 0;
-    while (end < spell.get_description().size()) {
-        if (spell.get_description()[end] == '\n') {
-            if (characters_written + end - start > card_character_cutoff) {
-                // end last card, and start a new card
-                create_card_footer(scope, spell);
-                create_card_header(scope, spell, ++counter);
-                characters_written = 0;
-            }
-
-            LatexText* text = scope->add_rich_text(spell.get_description().substr(start, end - start));
-            characters_written += text->get_text().size();
-            if (end + 1 < spell.get_description().size() && spell.get_description()[end + 1] == '\n') {
-                text->add_line_break();
-                end++;
-            }
-            start = ++end;
+    for (LatexScope& to_write : scopes) {
+        size_t characters = to_write.text_size();
+        if (card_character_cutoff - characters_written < characters) {
+            // end last card, and start a new card
+            create_card_footer(scope, spell);
+            create_card_header(scope, spell, ++counter);
+            characters_written = 0;
         }
-        end++;
+        characters_written += characters;
+        scope->add_scope(std::move(to_write));
     }
-    if (characters_written + end - start > card_character_cutoff) {
-        // end last card, and start a new card
-        create_card_footer(scope, spell);
-        create_card_header(scope, spell, ++counter);
-    }
-    scope->add_rich_text(spell.get_description().substr(start, end - start));
     create_card_footer(scope, spell);
 
     if (counter == 1) {
@@ -142,29 +127,16 @@ static int create_spell_cards(LatexScope* scope, const Spell& spell) {
     return counter;
 }
 
-static int calculate_cards_to_create(const Spell& spell) {
+static int calculate_cards_to_create(const std::vector<LatexScope>& scopes) {
     int counter = 1;
-    size_t start = 0;
-    size_t end = 0;
     size_t characters_written = 0;
-    while (end < spell.get_description().size()) {
-        if (spell.get_description()[end] == '\n') {
-            if (characters_written + end - start > card_character_cutoff) {
-                counter++;
-                characters_written = 0;
-            }
-
-            // WARN: this is wrong by a few bytes due to rich text; but for simplicity, I leave it unchanged
-            characters_written += end - start;
-            if (end + 1 < spell.get_description().size() && spell.get_description()[end + 1] == '\n') {
-                end++;
-            }
-            start = ++end;
+    for (const LatexScope& to_write : scopes) {
+        size_t characters = to_write.text_size();
+        if (card_character_cutoff - characters_written < characters) {
+            ++counter;
+            characters_written = 0;
         }
-        end++;
-    }
-    if (characters_written + end - start > card_character_cutoff) {
-        counter++;
+        characters_written += characters;
     }
     return counter;
 }
@@ -177,7 +149,8 @@ void SpellCardBuilder::write_latex_file(const std::string& filename) {
     not_full_scopes[9].push_back(create_card_page(document));
 
     for (const Spell& spell : spells) {
-        int cards_to_create = calculate_cards_to_create(spell);
+        std::vector<LatexScope> scopes = text_to_latex(spell.get_description());
+        int cards_to_create = calculate_cards_to_create(scopes);
         LatexScope* scope = nullptr;
 
         int open_slots_before = -1;
@@ -194,7 +167,7 @@ void SpellCardBuilder::write_latex_file(const std::string& filename) {
             open_slots_before = 9;
         }
 
-        int cards_created = create_spell_cards(scope, spell);
+        int cards_created = create_spell_cards(scope, scopes, spell);
         if (cards_created != cards_to_create) {
             throw std::logic_error("Not yet implemented.");
         }

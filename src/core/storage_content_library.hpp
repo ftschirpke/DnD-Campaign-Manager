@@ -12,11 +12,11 @@
 #include <fmt/format.h>
 
 #include <core/content_library.hpp>
+#include <core/data_result.hpp>
 #include <core/errors/errors.hpp>
 #include <core/models/content_piece.hpp>
-#include <core/utils/data_result.hpp>
+#include <core/types.hpp>
 #include <core/utils/string_manipulation.hpp>
-#include <core/utils/types.hpp>
 
 namespace dnd {
 

@@ -10,6 +10,7 @@
 #include <core/models/species/species.hpp>
 #include <core/models/subspecies/subspecies.hpp>
 #include <core/parsing/parser.hpp>
+#include <core/text/text.hpp>
 
 namespace dnd {
 
@@ -22,9 +23,9 @@ WithErrors<Species::Data> parse_species(const nlohmann::ordered_json& obj, const
     errors += parse_required_attribute_into(obj, "name", species_data.name, filepath);
     errors += parse_required_attribute_into(obj, "source", species_data.source_name, filepath);
     if (obj.contains("entries")) {
-        errors += write_formatted_description_into(obj, species_data.description, filepath);
+        errors += write_formatted_text_into(obj, species_data.description, filepath);
     } else {
-        species_data.description = "<empty description>";
+        species_data.description = Text::simple("<empty description>");
     }
 
     return result;

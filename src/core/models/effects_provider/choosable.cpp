@@ -12,6 +12,7 @@
 #include <core/models/effects/condition/condition_factory.hpp>
 #include <core/models/effects_provider/choosable.hpp>
 #include <core/models/effects_provider/feature.hpp>
+#include <core/text/text.hpp>
 #include <core/validation/effects_provider/choosable_validation.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
@@ -48,7 +49,7 @@ CreateResult<Choosable> Choosable::create_for(Data&& data, const Content& conten
 
 const std::string& Choosable::get_name() const { return name; }
 
-const std::string& Choosable::get_description() const { return description; }
+const Text& Choosable::get_description() const { return description; }
 
 const SourceInfo& Choosable::get_source_info() const { return source_info; }
 
@@ -61,7 +62,7 @@ const std::vector<std::unique_ptr<Condition>>& Choosable::get_prerequisites() co
 void Choosable::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 Choosable::Choosable(
-    std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
+    std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
     std::string&& type, std::vector<std::unique_ptr<Condition>>&& prerequisites, Effects&& main_effects
 )
     : name(std::move(name)), description(std::move(description)),

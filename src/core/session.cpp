@@ -22,8 +22,8 @@
 #include <core/searching/advanced_search/advanced_content_search.hpp>
 #include <core/searching/fuzzy_search/fuzzy_content_search.hpp>
 #include <core/searching/search_result.hpp>
+#include <core/types.hpp>
 #include <core/utils/string_manipulation.hpp>
-#include <core/utils/types.hpp>
 #include <core/visitors/content/collect_open_tabs_visitor.hpp>
 #include <core/visitors/content/list_content_visitor.hpp>
 

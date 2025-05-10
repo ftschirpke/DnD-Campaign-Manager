@@ -8,12 +8,12 @@
 #include <vector>
 
 #include <core/content.hpp>
+#include <core/data_result.hpp>
 #include <core/errors/errors.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/source_info.hpp>
 #include <core/models/species/species.hpp>
-#include <core/utils/data_result.hpp>
 #include <core/validation/subspecies/subspecies_validation.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
@@ -44,7 +44,7 @@ CreateResult<Subspecies> Subspecies::create_for(Data&& data, const Content& cont
 
 const std::string& Subspecies::get_name() const { return name; }
 
-const std::string& Subspecies::get_description() const { return description; }
+const Text& Subspecies::get_description() const { return description; }
 
 const SourceInfo& Subspecies::get_source_info() const { return source_info; }
 
@@ -55,7 +55,7 @@ CRef<Species> Subspecies::get_species() const { return species; }
 void Subspecies::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 Subspecies::Subspecies(
-    std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
+    std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
     std::vector<Feature>&& features, CRef<Species> species
 )
     : name(std::move(name)), description(std::move(description)),

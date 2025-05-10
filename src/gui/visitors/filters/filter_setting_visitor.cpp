@@ -240,7 +240,6 @@ static void visit_content_piece_filter(ContentPieceFilter& content_piece_filter)
             visit_selection_filter("Name", std::get<1>(name_filter));
             break;
     }
-    visit_string_filter("Description", content_piece_filter.description_filter);
     visit_bool_filter("Is Sourcebook", content_piece_filter.is_sourcebook_filter);
 }
 
@@ -283,7 +282,6 @@ static void content_piece_filter_menu_items(ContentPieceFilter& content_piece_fi
         content_piece_filter.name_filter.emplace<StringFilter>().set_type(StringFilterType::EQUAL);
         ImGui::CloseCurrentPopup();
     }
-    string_menu_item("Description", content_piece_filter.description_filter, StringFilterType::CONTAINS);
     bool_menu_item("Is Sourcebook", content_piece_filter.is_sourcebook_filter, BoolFilterType::IS_TRUE);
 }
 
@@ -395,7 +393,6 @@ void FilterSettingVisitor::operator()(ItemFilter& item_filter) {
     DND_MEASURE_FUNCTION();
     ImGui::TableSetColumnIndex(1);
     visit_content_piece_filter(item_filter);
-    visit_string_filter("Cosmetic Description", item_filter.cosmetic_description_filter);
     visit_bool_filter("Requires Attunement", item_filter.attunement_filter);
 
     ImGui::TableSetColumnIndex(1);
@@ -405,7 +402,6 @@ void FilterSettingVisitor::operator()(ItemFilter& item_filter) {
     if (ImGui::BeginPopup("value_filter_popup")) {
         DND_MEASURE_SCOPE("ItemFilter - Add Value Filter Popup");
         content_piece_filter_menu_items(item_filter);
-        string_menu_item("Cosmetic Description", item_filter.cosmetic_description_filter, StringFilterType::CONTAINS);
         bool_menu_item("Requires Attunement", item_filter.attunement_filter, BoolFilterType::IS_TRUE);
         ImGui::EndPopup();
     }

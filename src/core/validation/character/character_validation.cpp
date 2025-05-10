@@ -2,8 +2,6 @@
 
 #include "character_validation.hpp"
 
-#include <unordered_set>
-
 #include <fmt/format.h>
 
 #include <core/basic_mechanics/dice.hpp>

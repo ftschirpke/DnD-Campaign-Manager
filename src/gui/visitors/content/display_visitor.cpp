@@ -2,7 +2,6 @@
 
 #include "display_visitor.hpp"
 
-#include <memory>
 #include <set>
 #include <string>
 #include <vector>
@@ -29,11 +28,10 @@
 #include <core/models/spell/spell.hpp>
 #include <core/models/subclass/subclass.hpp>
 #include <core/models/subspecies/subspecies.hpp>
-#include <core/output/string_formatting/formats/format.hpp>
-#include <core/output/string_formatting/string_formatter.hpp>
 #include <core/visitors/content/content_visitor.hpp>
-#include <gui/string_formatting/display_format_visitor.hpp>
+#include <gui/gui_fonts.hpp>
 #include <gui/visitors/content/display_visitor.hpp>
+#include <log.hpp>
 
 namespace dnd {
 
@@ -44,7 +42,7 @@ static constexpr ImGuiTableFlags content_table_flags = ImGuiTableFlags_NoBorders
 static const float first_column_width = 150;
 
 static constexpr ImGuiTableFlags table_flags = ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg
-                                               | ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_NoHostExtendX;
+                                               | ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_NoHostExtendX;
 
 static void label(const char* label) {
     ImGui::TableNextRow();
@@ -86,13 +84,207 @@ static void end_content_table() {
     ImGui::PopStyleVar();
 }
 
-static void display_formatted_text(const std::string& formatted_text) {
-    static DisplayFormatVisitor display_format_visitor(table_flags);
-    static StringFormatter string_formatter(false);
-    std::vector<std::unique_ptr<Format>> text_formats = string_formatter.parse_formats(formatted_text);
-    for (auto it = text_formats.begin(); it != text_formats.end(); ++it) {
-        (*it)->accept(display_format_visitor);
+constexpr ImVec4 default_text_color(1.0f, 1.0f, 1.0f, 1.0f);
+constexpr ImVec4 link_color(0.309f, 0.712f, 0.847f, 0.784f);
+
+constexpr size_t MAX_ITERATIONS = 1000;
+
+// because we use multiple text calls to support multiple styles,
+// the use of the high-level functions ImGui::Text() and ImGui::SameLine() does not allow for the text wrapping we want
+// thus, we need to implement it ourselves using ImGui's DrawList by writing one line at a time
+static void display_paragraph(const Paragraph& paragraph, const GuiFonts& fonts) {
+    float canvas_width = ImGui::GetContentRegionAvail().x;
+    ImVec2 begin_cursor = ImGui::GetCursorScreenPos();
+    ImDrawList* draw_list = ImGui::GetWindowDrawList();
+
+    float x_begin = begin_cursor.x;
+    float x_end = x_begin + canvas_width;
+    float y_begin = begin_cursor.y;
+
+    float x = x_begin;
+    float y = y_begin;
+
+    for (const InlineText& text_obj : paragraph.parts) {
+        ImFont* font = nullptr;
+        bool push_pop_font = false;
+        std::string::const_iterator text_begin;
+        std::string::const_iterator text_end;
+        bool is_link = false;
+
+        switch (text_obj.index()) {
+            case 0: /* SimpleText */ {
+                const SimpleText& simple_text = std::get<0>(text_obj);
+                font = fonts.get(simple_text.bold, simple_text.italic);
+                push_pop_font = ImGui::GetFont() != font;
+                text_begin = simple_text.str.cbegin();
+                text_end = simple_text.str.cend();
+                break;
+            }
+            case 1: /* Link */ {
+                const Link& link = std::get<1>(text_obj);
+                font = fonts.get(link.bold, link.italic);
+                push_pop_font = ImGui::GetFont() != font;
+                text_begin = link.str.cbegin();
+                text_end = link.str.cend();
+                is_link = true;
+                break;
+            }
+            default: {
+                assert(false);
+            }
+        }
+
+        if (push_pop_font) {
+            ImGui::PushFont(font);
+        }
+
+        std::string::const_iterator subtext_begin = text_begin;
+        std::string::const_iterator current_end = text_begin;
+        std::string::const_iterator last_fitting_end;
+
+        size_t outer_iterations = 0;
+        bool empty_last_line = false;
+        while (subtext_begin != text_end && outer_iterations++ <= MAX_ITERATIONS) {
+            ImVec2 subtext_size;
+            size_t inner_iterations = 0;
+            do {
+                if (inner_iterations++ >= MAX_ITERATIONS) {
+                    break;
+                }
+                last_fitting_end = current_end;
+                ++current_end;
+                if (last_fitting_end == text_end) {
+                    break;
+                }
+                while (current_end != text_end && *current_end != ' ') {
+                    ++current_end;
+                }
+                subtext_size = ImGui::CalcTextSize(&*subtext_begin, &*current_end);
+            } while (x + subtext_size.x <= x_end);
+
+            if (inner_iterations++ >= MAX_ITERATIONS) {
+                break;
+            }
+
+            std::string line_text(subtext_begin, last_fitting_end);
+            if (line_text.empty()) {
+                if (empty_last_line) {
+                    // finding two empty lines in a row is a sign of too little space; aborting...
+                    break;
+                }
+                empty_last_line = true;
+            }
+
+            const ImVec4& color = (is_link) ? link_color : default_text_color;
+            draw_list->AddText(ImVec2(x, y), ImColor(color), line_text.c_str());
+
+            if (last_fitting_end == text_end) {
+                // not reached end of line
+                x += subtext_size.x;
+                if (subtext_size.y > ImGui::GetTextLineHeight()) {
+                    y += subtext_size.y - ImGui::GetTextLineHeight();
+                }
+            } else {
+                // reached end of line with space
+                x = x_begin;
+                y += ImGui::GetTextLineHeightWithSpacing();
+                ++last_fitting_end; // declare the found space as "written"
+            }
+
+            subtext_begin = last_fitting_end;
+            current_end = last_fitting_end;
+        }
+
+        if (push_pop_font) {
+            ImGui::PopFont();
+        }
     }
+
+    if (x != x_begin) {
+        y += ImGui::GetTextLineHeightWithSpacing();
+    }
+
+    ImVec2 space_used(0, y - y_begin);
+    ImGui::Dummy(space_used);
+}
+
+static void display_table(const Table& table, const GuiFonts& fonts) {
+    const char* id = "unnamed";
+    if (table.caption.has_value()) {
+        ImGui::PushFont(fonts.bold);
+        ImGui::TextWrapped("%s", table.caption.value().c_str());
+        ImGui::PopFont();
+        id = table.caption.value().c_str();
+    }
+    if (ImGui::BeginTable(id, static_cast<int>(table.columns), table_flags)) {
+        for (size_t col = 0; col < table.columns; ++col) {
+            float col_weight = 0;
+            if (table.column_widths.has_value()) {
+                col_weight = static_cast<float>(table.column_widths->at(col).value_or(0));
+            }
+            ImGui::TableSetupColumn(table.header.at(col).c_str(), ImGuiTableColumnFlags_WidthStretch, col_weight);
+        }
+        ImGui::TableHeadersRow();
+        for (size_t row = 0; row < table.rows.size(); ++row) {
+            ImGui::TableNextRow();
+            for (size_t col = 0; col < table.columns; ++col) {
+                ImGui::TableSetColumnIndex(static_cast<int>(col));
+                if (col >= table.rows[row].size()) {
+                    break;
+                }
+                display_paragraph(table.rows[row][col], fonts);
+            }
+        }
+
+        ImGui::EndTable();
+    }
+}
+
+void display_formatted_text(const Text& formatted_text, const GuiFonts& fonts) {
+    DND_UNUSED(table_flags);
+    ImGui::PushTextWrapPos(0.0f);
+    for (const TextObject& text_obj : formatted_text.parts) {
+        switch (text_obj.index()) {
+            case 0: /* Paragraph */ {
+                const Paragraph& paragraph = std::get<0>(text_obj);
+                display_paragraph(paragraph, fonts);
+                break;
+            }
+            case 1: /* List */ {
+                const List& list = std::get<1>(text_obj);
+                if (list.text_above.has_value()) {
+                    display_paragraph(list.text_above.value(), fonts);
+                }
+                for (const ListItem& list_item : list.parts) {
+                    ImGui::Bullet();
+                    ImGui::BeginGroup();
+                    for (const std::variant<Paragraph, Table>& part : list_item.parts) {
+                        switch (part.index()) {
+                            case 0: /* Paragraph */
+                                display_paragraph(std::get<0>(part), fonts);
+                                break;
+                            case 1: /* Table */
+                                display_table(std::get<1>(part), fonts);
+                                break;
+                            default:
+                                assert(false);
+                        }
+                    }
+                    ImGui::EndGroup();
+                }
+                break;
+            }
+            case 2: /* Table */ {
+                const Table& table = std::get<2>(text_obj);
+                display_table(table, fonts);
+                break;
+            }
+            default: {
+                assert(false);
+            }
+        }
+    }
+    ImGui::PopTextWrapPos();
 }
 
 template <typename T>
@@ -233,7 +425,6 @@ static void character_progression_list(const dnd::Character& character) {
 }
 
 void dnd::DisplayVisitor::operator()(const Character& character) {
-    DND_UNUSED(fonts); // TODO: remove when fonts are in use
     {
         ImGui::BeginChild("abilities_and_skills", ImVec2(ImGui::GetContentRegionAvail().x * 0.8f, 260), false);
         character_abilities_and_skills_table(character);
@@ -255,7 +446,7 @@ void dnd::DisplayVisitor::operator()(const Character& character) {
     source(character);
 
     label("Description:");
-    display_formatted_text(character.get_description());
+    display_formatted_text(character.get_description(), fonts);
 
     label("Species:");
     const Species& species = character.get_feature_providers().get_species();
@@ -323,7 +514,7 @@ void DisplayVisitor::operator()(const Class& cls) {
     label("Subclass Level:");
     ImGui::Text("%d", cls.get_important_levels().get_subclass_level());
     label("Description:");
-    display_formatted_text(cls.get_description());
+    display_formatted_text(cls.get_description(), fonts);
     label("Features:");
     list_features<ClassFeature>(*this, cls.get_features());
 
@@ -339,7 +530,7 @@ void DisplayVisitor::operator()(const Subclass& subclass) {
     label("Class name:");
     ImGui::Text("%s", subclass.get_class().get().get_name().c_str());
     label("Description:");
-    display_formatted_text(subclass.get_description());
+    display_formatted_text(subclass.get_description(), fonts);
     label("Short name:");
     ImGui::Text("%s", subclass.get_short_name().c_str());
     label("Features:");
@@ -355,7 +546,7 @@ void DisplayVisitor::operator()(const Species& species) {
     ImGui::Text("Species");
     source(species);
     label("Description:");
-    display_formatted_text(species.get_description());
+    display_formatted_text(species.get_description(), fonts);
     label("Features:");
     list_features<Feature>(*this, species.get_features());
 
@@ -371,7 +562,7 @@ void DisplayVisitor::operator()(const Subspecies& subspecies) {
     label("Species name:");
     ImGui::Text("%s", subspecies.get_species().get().get_name().c_str());
     label("Description:");
-    display_formatted_text(subspecies.get_description());
+    display_formatted_text(subspecies.get_description(), fonts);
     label("Features:");
     list_features<Feature>(*this, subspecies.get_features());
 
@@ -388,10 +579,10 @@ void DisplayVisitor::operator()(const Item& item) {
     const char* attunement = item.requires_attunement() ? "required" : "not required";
     ImGui::Text("%s", attunement);
     label("Description:");
-    display_formatted_text(item.get_description());
-    if (!item.get_cosmetic_description().empty()) {
+    display_formatted_text(item.get_description(), fonts);
+    if (!item.get_cosmetic_description().parts.empty()) {
         wrapped_label("Cosmetic Description:");
-        display_formatted_text(item.get_cosmetic_description());
+        display_formatted_text(item.get_cosmetic_description(), fonts);
     }
 
     end_content_table();
@@ -421,7 +612,7 @@ void DisplayVisitor::operator()(const Spell& spell) {
     ImGui::Text("%s", spell.get_duration().c_str());
 
     label("Description:");
-    display_formatted_text(spell.get_description());
+    display_formatted_text(spell.get_description(), fonts);
 
     end_content_table();
 }
@@ -433,7 +624,7 @@ void DisplayVisitor::operator()(const Feature& feature) {
     ImGui::Text("Feature");
     source(feature);
     label("Description:");
-    display_formatted_text(feature.get_description());
+    display_formatted_text(feature.get_description(), fonts);
 
     end_content_table();
 }
@@ -447,7 +638,7 @@ void DisplayVisitor::operator()(const ClassFeature& class_feature) {
     label("Level:");
     ImGui::Text("%d", class_feature.get_level());
     label("Description:");
-    display_formatted_text(class_feature.get_description());
+    display_formatted_text(class_feature.get_description(), fonts);
 
     end_content_table();
 }
@@ -459,7 +650,7 @@ void DisplayVisitor::operator()(const Choosable& choosable) {
     ImGui::Text("Choosable Feature - %s", choosable.get_type().c_str());
     source(choosable);
     label("Description:");
-    display_formatted_text(choosable.get_description());
+    display_formatted_text(choosable.get_description(), fonts);
 
     end_content_table();
 }

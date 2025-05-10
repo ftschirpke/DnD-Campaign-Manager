@@ -29,4 +29,6 @@ std::string LatexCommand::str() const {
     return command_string;
 }
 
+size_t LatexCommand::text_size() const { return 0; }
+
 } // namespace dnd

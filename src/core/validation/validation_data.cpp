@@ -24,7 +24,7 @@ Errors validate_name_description_and_source(const ValidationData& data) {
     if (data.name.empty()) {
         errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Name is empty");
     }
-    if (data.description.empty()) {
+    if (data.description.parts.empty()) {
         errors.add_validation_error(
             ValidationError::Code::INVALID_ATTRIBUTE_VALUE, fmt::format("Description for '{}' is empty", data.name)
         );

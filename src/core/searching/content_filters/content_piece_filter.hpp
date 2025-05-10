@@ -27,7 +27,7 @@ public:
     void clear() override;
 
     NameFilterVariant name_filter;
-    StringFilter description_filter;
+    // StringFilter description_filter; // TODO: replace with a TextFilter
     BoolFilter is_sourcebook_filter;
 };
 

@@ -8,12 +8,13 @@
 #include <string>
 #include <vector>
 
+#include <core/data_result.hpp>
 #include <core/models/content_piece.hpp>
 #include <core/models/effects_provider/feature.hpp>
 #include <core/models/source_info.hpp>
 #include <core/models/species/species.hpp>
-#include <core/utils/data_result.hpp>
-#include <core/utils/types.hpp>
+#include <core/text/text.hpp>
+#include <core/types.hpp>
 
 namespace dnd {
 
@@ -32,7 +33,7 @@ public:
     Subspecies& operator=(Subspecies&&) noexcept = default;
 
     const std::string& get_name() const override;
-    const std::string& get_description() const override;
+    const Text& get_description() const override;
     const SourceInfo& get_source_info() const override;
     const std::vector<Feature>& get_features() const;
     CRef<Species> get_species() const;
@@ -40,12 +41,12 @@ public:
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Subspecies(
-        std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
+        std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
         std::vector<Feature>&& features, CRef<Species> species
     );
 
     std::string name;
-    std::string description;
+    Text description;
     SourceInfo source_info;
     std::vector<Feature> features;
     CRef<Species> species;

@@ -8,6 +8,7 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include <core/errors/errors.hpp>
+#include <core/text/text.hpp>
 #include <testcore/validation/validation_data_mock.hpp>
 
 namespace dnd::test {
@@ -21,7 +22,7 @@ TEST_CASE("validate_name_description_and_source", tags) {
     Errors errors;
     SECTION("Valid Data") {
         data.name = "Name";
-        data.description = "Description";
+        data.description = Text::simple("Description");
         data.source_path = dummy_path;
         REQUIRE_NOTHROW(errors = validate_name_description_and_source(data));
         REQUIRE(errors.ok());
@@ -29,7 +30,7 @@ TEST_CASE("validate_name_description_and_source", tags) {
 
     SECTION("Empty name") {
         data.name = "";
-        data.description = "Description";
+        data.description = Text::simple("Description");
         data.source_path = dummy_path;
         REQUIRE_NOTHROW(errors = validate_name_description_and_source(data));
         REQUIRE_FALSE(errors.ok());
@@ -37,7 +38,7 @@ TEST_CASE("validate_name_description_and_source", tags) {
 
     SECTION("Empty description") {
         data.name = "Name";
-        data.description = "";
+        data.description = Text{};
         data.source_path = dummy_path;
         REQUIRE_NOTHROW(errors = validate_name_description_and_source(data));
         REQUIRE_FALSE(errors.ok());
@@ -45,7 +46,7 @@ TEST_CASE("validate_name_description_and_source", tags) {
 
     SECTION("Empty source path") {
         data.name = "Name";
-        data.description = "Description";
+        data.description = Text{};
         data.source_path = std::filesystem::path("");
         REQUIRE_NOTHROW(errors = validate_name_description_and_source(data));
         REQUIRE_FALSE(errors.ok());
@@ -53,7 +54,7 @@ TEST_CASE("validate_name_description_and_source", tags) {
 
     SECTION("Completely empty") {
         data.name = "";
-        data.description = "";
+        data.description = Text{};
         data.source_path = std::filesystem::path("");
         REQUIRE_NOTHROW(errors = validate_name_description_and_source(data));
         REQUIRE_FALSE(errors.ok());

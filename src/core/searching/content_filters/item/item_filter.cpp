@@ -11,13 +11,10 @@
 
 namespace dnd {
 
-bool ItemFilter::has_all_filters() const {
-    return ContentPieceFilter::has_all_filters() && cosmetic_description_filter.is_set() && attunement_filter.is_set();
-}
+bool ItemFilter::has_all_filters() const { return ContentPieceFilter::has_all_filters() && attunement_filter.is_set(); }
 
 bool ItemFilter::matches(const Item& item) const {
-    return ContentPieceFilter::matches(item) && cosmetic_description_filter.matches(item.get_cosmetic_description())
-           && attunement_filter.matches(item.requires_attunement());
+    return ContentPieceFilter::matches(item) && attunement_filter.matches(item.requires_attunement());
 }
 
 std::vector<const ContentPiece*> ItemFilter::all_matches(const Content& content) const {
@@ -32,7 +29,6 @@ std::vector<const ContentPiece*> ItemFilter::all_matches(const Content& content)
 
 void ItemFilter::clear() {
     ContentPieceFilter::clear();
-    cosmetic_description_filter.clear();
     attunement_filter.clear();
 }
 

@@ -90,11 +90,11 @@ void V2FileParser::save_result(Content& content) {
     for (auto& [key, data] : parsed_data.class_data) {
         data.important_levels_data.feat_levels = {1};            // HACK: set random feat level to circumvent validation
         data.subclass_feature_name = data.features_data[0].name; // HACK: set subclass feature to circumvent validation
-        data.description = "Class " + data.name;                 // HACK: set description to circumvent validation
+        data.description = Text::simple("Class " + data.name);   // HACK: set description to circumvent validation
         content.add_class_result(Class::create_for(std::move(data), content));
     }
     for (auto& [key, data] : parsed_data.subclass_data) {
-        data.description = "Subclass " + data.name; // HACK: set description to circumvent validation
+        data.description = Text::simple("Subclass " + data.name); // HACK: set description to circumvent validation
         content.add_subclass_result(Subclass::create_for(std::move(data), content));
     }
     for (auto& [key, data] : parsed_data.species_data) {

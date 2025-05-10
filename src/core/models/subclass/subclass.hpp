@@ -14,7 +14,8 @@
 #include <core/models/effects_provider/class_feature.hpp>
 #include <core/models/source_info.hpp>
 #include <core/models/spellcasting/spellcasting.hpp>
-#include <core/utils/types.hpp>
+#include <core/text/text.hpp>
+#include <core/types.hpp>
 
 namespace dnd {
 
@@ -34,7 +35,7 @@ public:
 
     const std::string& get_name() const override;
     const std::string& get_short_name() const;
-    const std::string& get_description() const override;
+    const Text& get_description() const override;
     const SourceInfo& get_source_info() const override;
     const std::vector<ClassFeature>& get_features() const;
     bool has_spellcasting() const;
@@ -45,13 +46,13 @@ public:
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Subclass(
-        std::string&& name, std::string&& description, std::filesystem::path&& source_path, std::string&& source_name,
+        std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
         std::string&& short_name, std::vector<ClassFeature>&& features, CRef<Class> cls,
         std::unique_ptr<Spellcasting>&& spellcasting = nullptr
     );
 
     std::string name;
-    std::string description;
+    Text description;
     SourceInfo source_info;
     std::string short_name;
     std::vector<ClassFeature> features;

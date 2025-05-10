@@ -35,6 +35,8 @@ private:
     const GuiFonts& fonts;
 };
 
+void display_formatted_text(const Text& formatted_text, const GuiFonts& fonts);
+
 } // namespace dnd
 
 #endif // DISPLAY_VISITOR_HPP_

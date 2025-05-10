@@ -10,8 +10,8 @@
 
 #include <core/content_library.hpp>
 #include <core/models/effects_provider/class_feature.hpp>
+#include <core/types.hpp>
 #include <core/utils/string_manipulation.hpp>
-#include <core/utils/types.hpp>
 
 namespace dnd {
 

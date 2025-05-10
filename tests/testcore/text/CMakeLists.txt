@@ -1,4 +1,4 @@
 target_sources(${DND_TESTS}
     PRIVATE
-    string_formatter_test.cpp
+    rich_text_test.cpp
 )

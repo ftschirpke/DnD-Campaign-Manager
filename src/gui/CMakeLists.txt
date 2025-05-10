@@ -5,5 +5,4 @@ target_sources(${DND_GUI_APP}
 )
 
 add_subdirectory(visitors)
-add_subdirectory(string_formatting)
 add_subdirectory(windows)

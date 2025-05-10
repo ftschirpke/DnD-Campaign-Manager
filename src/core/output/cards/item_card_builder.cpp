@@ -7,20 +7,32 @@
 #include <fstream>
 #include <iomanip>
 #include <sstream>
-#include <stdexcept>
 #include <unordered_map>
 #include <vector>
 
 #include <core/models/item/item.hpp>
+#include <core/output/latex_builder/latex.hpp>
 #include <core/output/latex_builder/latex_command.hpp>
 #include <core/output/latex_builder/latex_document.hpp>
 #include <core/output/latex_builder/latex_scope.hpp>
 #include <core/output/latex_builder/latex_text.hpp>
-#include <core/utils/types.hpp>
+#include <core/types.hpp>
 
 namespace dnd {
 
 constexpr int card_character_cutoff = 900;
+
+struct ItemScopes {
+    std::vector<LatexScope> description_scopes;
+    std::vector<LatexScope> cosmetic_scopes;
+
+    static ItemScopes from_item(const Item& item) {
+        return ItemScopes{
+            .description_scopes = text_to_latex(item.get_description()),
+            .cosmetic_scopes = text_to_latex(item.get_cosmetic_description()),
+        };
+    }
+};
 
 
 void ItemCardBuilder::add_item(CRef<Item> item) { items.push_back(item); }
@@ -75,7 +87,7 @@ static LatexText* create_card_header(LatexScope* scope, const Item& item, int co
     scope->add_command("vspace", "-3mm");
     if (item.requires_attunement()) {
         scope->add_command("vspace", "-5mm");
-        scope->add_begin_end("center").scope->add_text("This item requires attunement.")->add_modifier("scriptsize");
+        scope->add_begin_end("center").scope->add_text("This item requires attunement.")->set_size("scriptsize");
         scope->add_command("vspace", "-3mm");
     }
     scope->add_command("scriptsize");
@@ -91,93 +103,36 @@ static LatexScope* create_textit_scope(LatexScope* scope) {
     return center_scope->add_scope();
 }
 
-static int create_item_cards(LatexScope* scope, const Item& item) {
+static int create_item_cards(LatexScope* scope, const Item& item, ItemScopes& scopes) {
     int counter = 1;
     LatexText* first_title = create_card_header(scope, item, counter);
-    size_t start = 0;
-    size_t end = 0;
     size_t characters_written = 0;
-    while (end < item.get_description().size()) {
-        if (item.get_description()[end] == '\n') {
-            if (characters_written + end - start > card_character_cutoff) {
-                // start a new card
-                create_card_footer(scope);
-                create_card_header(scope, item, ++counter);
-                characters_written = 0;
-            }
-
-            LatexText* text = scope->add_rich_text(item.get_description().substr(start, end - start));
-            characters_written += text->get_text().size();
-            if (end + 1 < item.get_description().size() && item.get_description()[end + 1] == '\n') {
-                text->add_line_break();
-                end++;
-            }
-            start = ++end;
-        }
-        end++;
-    }
-    if (characters_written + end - start > card_character_cutoff) {
-        // start a new card
-        create_card_footer(scope);
-        create_card_header(scope, item, ++counter);
-    }
-    scope->add_rich_text(item.get_description().substr(start, end - start));
-
-    int last_description_card = counter;
-    bool written_cosmetic_description_yet = false;
-    int description_swap_card = -1;
-    bool skip_last_footer = false;
-
-    if (!item.get_cosmetic_description().empty()) {
-        start = 0;
-        end = 0;
-        scope->add_command("vfill");
-        description_swap_card = counter;
-        LatexScope* current_it_scope = create_textit_scope(scope);
-        while (end < item.get_cosmetic_description().size()) {
-            if (item.get_cosmetic_description()[end] == '\n') {
-                if (characters_written + end - start > card_character_cutoff) {
-                    // start a new card
-                    if (counter != description_swap_card or !written_cosmetic_description_yet) {
-                        create_card_footer(scope);
-                    }
-                    create_card_header(scope, item, ++counter);
-                    current_it_scope = create_textit_scope(scope);
-                    characters_written = 0;
-                }
-
-                if (!written_cosmetic_description_yet && last_description_card == counter) {
-                    description_swap_card = counter;
-                    written_cosmetic_description_yet = true;
-                }
-                LatexText* text = current_it_scope->add_rich_text(
-                    item.get_cosmetic_description().substr(start, end - start)
-                );
-
-                characters_written += text->get_text().size();
-                if (end + 1 < item.get_cosmetic_description().size()
-                    && item.get_cosmetic_description()[end + 1] == '\n') {
-                    text->add_line_break();
-                    end++;
-                }
-                start = ++end;
-            }
-            end++;
-        }
-        if (characters_written + end - start > card_character_cutoff) {
-            // start a new card
+    for (LatexScope& to_write : scopes.description_scopes) {
+        size_t characters = to_write.text_size();
+        if (card_character_cutoff - characters_written < characters) {
             create_card_footer(scope);
             create_card_header(scope, item, ++counter);
-            current_it_scope = create_textit_scope(scope);
+            characters_written = 0;
         }
-        if (!written_cosmetic_description_yet) {
-            skip_last_footer = true;
+        characters_written += characters;
+        scope->add_scope(std::move(to_write));
+    }
+
+    if (!scopes.cosmetic_scopes.empty()) {
+        scope->add_command("vfill");
+    }
+    scope = create_textit_scope(scope);
+    for (LatexScope& to_write : scopes.cosmetic_scopes) {
+        size_t characters = to_write.text_size();
+        if (card_character_cutoff - characters_written < characters) {
+            create_card_footer(scope);
+            create_card_header(scope, item, ++counter);
+            characters_written = 0;
         }
-        current_it_scope->add_rich_text(item.get_cosmetic_description().substr(start, end - start));
+        characters_written += characters;
+        scope->add_scope(std::move(to_write));
     }
-    if (!skip_last_footer) {
-        create_card_footer(scope);
-    }
+    create_card_footer(scope);
 
     if (counter == 1) {
         first_title->set_text(item.get_name());
@@ -185,54 +140,25 @@ static int create_item_cards(LatexScope* scope, const Item& item) {
     return counter;
 }
 
-static int calculate_cards_to_create(const Item& item) {
+static int calculate_cards_to_create(const ItemScopes& scopes) {
     int counter = 1;
-    size_t start = 0;
-    size_t end = 0;
     size_t characters_written = 0;
-    while (end < item.get_description().size()) {
-        if (item.get_description()[end] == '\n') {
-            if (characters_written + end - start > card_character_cutoff) {
-                counter++;
-                characters_written = 0;
-            }
-
-            // WARN: this is wrong by a few bytes due to rich text; but for simplicity, I leave it unchanged
-            characters_written += end - start;
-            if (end + 1 < item.get_description().size() && item.get_description()[end + 1] == '\n') {
-                end++;
-            }
-            start = ++end;
+    for (const LatexScope& to_write : scopes.description_scopes) {
+        size_t characters = to_write.text_size();
+        if (card_character_cutoff - characters_written < characters) {
+            ++counter;
+            characters_written = 0;
         }
-        end++;
-    }
-    if (characters_written + end - start > card_character_cutoff) {
-        counter++;
+        characters_written += characters;
     }
 
-    if (!item.get_cosmetic_description().empty()) {
-        start = 0;
-        end = 0;
-        while (end < item.get_cosmetic_description().size()) {
-            if (item.get_cosmetic_description()[end] == '\n') {
-                if (characters_written + end - start > card_character_cutoff) {
-                    counter++;
-                    characters_written = 0;
-                }
-
-                // WARN: this is wrong by a few bytes due to rich text; but for simplicity, I leave it unchanged
-                characters_written += end - start;
-                if (end + 1 < item.get_cosmetic_description().size()
-                    && item.get_cosmetic_description()[end + 1] == '\n') {
-                    end++;
-                }
-                start = ++end;
-            }
-            end++;
+    for (const LatexScope& to_write : scopes.cosmetic_scopes) {
+        size_t characters = to_write.text_size();
+        if (card_character_cutoff - characters_written < characters) {
+            ++counter;
+            characters_written = 0;
         }
-        if (characters_written + end - start > card_character_cutoff) {
-            counter++;
-        }
+        characters_written += characters;
     }
     return counter;
 }
@@ -244,8 +170,9 @@ void ItemCardBuilder::write_latex_file(const std::string& filename) {
     std::unordered_map<int, std::deque<LatexScope*>> not_full_scopes;
     not_full_scopes[9].push_back(create_card_page(document));
 
-    for (CRef<Item> item : items) {
-        int cards_to_create = calculate_cards_to_create(item);
+    for (const Item& item : items) {
+        ItemScopes scopes = ItemScopes::from_item(item);
+        int cards_to_create = calculate_cards_to_create(scopes);
         LatexScope* scope = nullptr;
 
         int open_slots_before = -1;
@@ -262,7 +189,7 @@ void ItemCardBuilder::write_latex_file(const std::string& filename) {
             open_slots_before = 9;
         }
 
-        int cards_created = create_item_cards(scope, item);
+        int cards_created = create_item_cards(scope, item, scopes);
         if (cards_created != cards_to_create) {
             throw std::logic_error("Not yet implemented.");
         }
