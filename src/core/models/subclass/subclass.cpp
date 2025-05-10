@@ -25,10 +25,10 @@ CreateResult<Subclass> Subclass::create_for(Data&& data, const Content& content)
     if (!errors.ok()) {
         return InvalidCreate<Subclass>(std::move(data), std::move(errors));
     }
-    std::vector<ClassFeature> features;
+    std::vector<SubclassFeature> features;
     features.reserve(data.features_data.size());
-    for (ClassFeature::Data& feature_data : data.features_data) {
-        CreateResult<ClassFeature> feature_result = ClassFeature::create_for(std::move(feature_data), content);
+    for (SubclassFeature::Data& feature_data : data.features_data) {
+        CreateResult<SubclassFeature> feature_result = SubclassFeature::create_for(std::move(feature_data), content);
         if (!feature_result.is_valid()) {
             auto [_, sub_errors] = feature_result.data_and_errors();
             return InvalidCreate<Subclass>(std::move(data), std::move(sub_errors));
@@ -58,7 +58,7 @@ const SourceInfo& Subclass::get_source_info() const { return source_info; }
 
 const std::string& Subclass::get_short_name() const { return short_name; }
 
-const std::vector<ClassFeature>& Subclass::get_features() const { return features; }
+const std::vector<SubclassFeature>& Subclass::get_features() const { return features; }
 
 bool Subclass::has_spellcasting() const { return spellcasting != nullptr; }
 
@@ -72,7 +72,7 @@ std::string Subclass::get_key() const { return key(short_name, get_source_info()
 
 Subclass::Subclass(
     std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
-    std::string&& short_name, std::vector<ClassFeature>&& features, CRef<Class> cls,
+    std::string&& short_name, std::vector<SubclassFeature>&& features, CRef<Class> cls,
     std::unique_ptr<Spellcasting>&& spellcasting
 )
     : name(std::move(name)), description(std::move(description)),

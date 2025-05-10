@@ -155,7 +155,7 @@ void Character::for_all_effects_do(std::function<void(const Effects&)> func) con
     }
     OptCRef<Subclass> subclass = feature_providers.get_subclass();
     if (subclass.has_value()) {
-        for (const ClassFeature& feature : subclass.value().get().get_features()) {
+        for (const SubclassFeature& feature : subclass.value().get().get_features()) {
             func(feature.get_main_effects());
             for (const auto& [level, effects] : feature.get_higher_level_effects()) {
                 if (level > progression.get_level()) {

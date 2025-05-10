@@ -10,7 +10,8 @@
 
 namespace dnd {
 
-ContentWindow::ContentWindow(Session& session, const GuiFonts& fonts) : session(session), display_visitor(fonts) {}
+ContentWindow::ContentWindow(Session& session, const GuiFonts& fonts)
+    : session(session), display_visitor(session.get_content(), fonts) {}
 
 void ContentWindow::render() {
     DND_MEASURE_FUNCTION();

@@ -10,7 +10,9 @@
 #include <core/models/character/character.hpp>
 #include <core/models/class/class.hpp>
 #include <core/models/effects_provider/choosable.hpp>
+#include <core/models/effects_provider/class_feature.hpp>
 #include <core/models/effects_provider/feature.hpp>
+#include <core/models/effects_provider/subclass_feature.hpp>
 #include <core/models/item/item.hpp>
 #include <core/models/species/species.hpp>
 #include <core/models/spell/spell.hpp>
@@ -46,6 +48,7 @@ public:
     const StorageContentLibrary<Spell>& get_spells() const;
     const ReferencingContentLibrary<Feature>& get_features() const;
     const ReferencingContentLibrary<ClassFeature>& get_class_features() const;
+    const ReferencingContentLibrary<SubclassFeature>& get_subclass_features() const;
     const StorageContentLibrary<Choosable>& get_choosables() const;
 
     std::optional<EffectsProviderVariant> get_effects_provider(const std::string& name) const;
@@ -84,6 +87,7 @@ private:
 
     ReferencingContentLibrary<Feature> feature_library;
     ReferencingContentLibrary<ClassFeature> class_feature_library;
+    ReferencingContentLibrary<SubclassFeature> subclass_feature_library;
     StorageContentLibrary<Choosable> choosable_library;
 };
 

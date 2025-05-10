@@ -330,6 +330,12 @@ void Session::open_last_session() {
             open_content_pieces.push_back(&class_feature.value().get());
         }
     }
+    for (const std::string& subclass_feature_to_open : last_session_open_tabs["subclass_feature"]) {
+        OptCRef<SubclassFeature> subclass_feature = content.get_subclass_features().get(subclass_feature_to_open);
+        if (subclass_feature.has_value()) {
+            open_content_pieces.push_back(&subclass_feature.value().get());
+        }
+    }
     for (const std::string& choosable_to_open : last_session_open_tabs["choosable"]) {
         OptCRef<Choosable> choosable = content.get_choosables().get(choosable_to_open);
         if (choosable.has_value()) {

@@ -16,6 +16,7 @@
 #include <core/basic_mechanics/character_progression.hpp>
 #include <core/basic_mechanics/dice.hpp>
 #include <core/basic_mechanics/skills.hpp>
+#include <core/content.hpp>
 #include <core/errors/runtime_error.hpp>
 #include <core/models/character/character.hpp>
 #include <core/models/class/class.hpp>
@@ -35,7 +36,7 @@
 
 namespace dnd {
 
-DisplayVisitor::DisplayVisitor(const GuiFonts& fonts) : fonts(fonts) {}
+DisplayVisitor::DisplayVisitor(const Content& content, const GuiFonts& fonts) : content(content), fonts(fonts) {}
 
 static const ImVec2 cell_padding = ImVec2(5, 5);
 static constexpr ImGuiTableFlags content_table_flags = ImGuiTableFlags_NoBordersInBodyUntilResize;
@@ -534,7 +535,7 @@ void DisplayVisitor::operator()(const Subclass& subclass) {
     label("Short name:");
     ImGui::Text("%s", subclass.get_short_name().c_str());
     label("Features:");
-    list_features<ClassFeature>(*this, subclass.get_features());
+    list_features<SubclassFeature>(*this, subclass.get_features());
 
     end_content_table();
 }
@@ -635,10 +636,26 @@ void DisplayVisitor::operator()(const ClassFeature& class_feature) {
     label("Type:");
     ImGui::Text("Feature");
     source(class_feature);
+    DND_UNUSED(content); // TODO: use to lookup content piece for better display
     label("Level:");
     ImGui::Text("%d", class_feature.get_level());
     label("Description:");
     display_formatted_text(class_feature.get_description(), fonts);
+
+    end_content_table();
+}
+
+void DisplayVisitor::operator()(const SubclassFeature& subclass_feature) {
+    begin_content_table(subclass_feature);
+
+    label("Type:");
+    ImGui::Text("Feature");
+    source(subclass_feature);
+    DND_UNUSED(content); // TODO: use to lookup content piece for better display
+    label("Level:");
+    ImGui::Text("%d", subclass_feature.get_level());
+    label("Description:");
+    display_formatted_text(subclass_feature.get_description(), fonts);
 
     end_content_table();
 }

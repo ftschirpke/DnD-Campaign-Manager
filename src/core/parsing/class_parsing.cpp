@@ -330,6 +330,8 @@ Errors parse_class_feature(
     }
     Class::Data& class_data = parsed_classes.at(key);
     ClassFeature::Data& feature_data = class_data.features_data.emplace_back();
+    feature_data.class_name = class_name;
+    feature_data.class_source_name = class_source_name;
 
     feature_data.source_path = filepath;
     errors += parse_required_attribute_into(obj, "name", feature_data.name, filepath);
@@ -379,7 +381,9 @@ Errors parse_subclass_feature(
         return errors;
     }
     Subclass::Data& subclass_data = parsed_subclasses.at(key);
-    ClassFeature::Data& feature_data = subclass_data.features_data.emplace_back();
+    SubclassFeature::Data& feature_data = subclass_data.features_data.emplace_back();
+    feature_data.subclass_short_name = subclass_short_name;
+    feature_data.subclass_source_name = subclass_source_name;
 
     feature_data.source_path = filepath;
     errors += parse_required_attribute_into(obj, "name", feature_data.name, filepath);
