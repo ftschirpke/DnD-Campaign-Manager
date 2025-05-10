@@ -106,7 +106,7 @@ static void display_paragraph(const Paragraph& paragraph, const GuiFonts& fonts)
 
     for (const InlineText& text_obj : paragraph.parts) {
         ImFont* font;
-        bool push_pop_font;
+        bool push_pop_font = false;
         std::string::const_iterator text_begin;
         std::string::const_iterator text_end;
         bool is_link = false;
