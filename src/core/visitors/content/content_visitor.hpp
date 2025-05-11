@@ -28,6 +28,7 @@ public:
     virtual void operator()(const Spell& spell) = 0;
     virtual void operator()(const Feature& feature) = 0;
     virtual void operator()(const ClassFeature& class_feature) = 0;
+    virtual void operator()(const SubclassFeature& class_feature) = 0;
     virtual void operator()(const Choosable& choosable) = 0;
 };
 

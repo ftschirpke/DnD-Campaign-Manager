@@ -11,7 +11,7 @@
 #include <core/errors/validation_error.hpp>
 #include <core/exceptions/validation_exceptions.hpp>
 #include <core/models/subclass/subclass.hpp>
-#include <core/validation/effects_provider/class_feature_validation.hpp>
+#include <core/validation/effects_provider/subclass_feature_validation.hpp>
 #include <core/validation/spellcasting/spellcasting_validation.hpp>
 
 namespace dnd {
@@ -44,7 +44,7 @@ static Errors validate_subclass_relations_nonrecursively(const Subclass::Data& d
             fmt::format("Subclass has duplicate key \"{}\".", data.get_key())
         );
     }
-    for (const ClassFeature::Data& feature_data : data.features_data) {
+    for (const SubclassFeature::Data& feature_data : data.features_data) {
         if (content.get_class_features().contains(feature_data.get_key())) {
             errors.add_validation_error(
                 ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
@@ -79,8 +79,8 @@ Errors validate_subclass_nonrecursively_for_content(const Subclass::Data& data, 
 
 Errors validate_subclass_recursively_for_content(const Subclass::Data& data, const Content& content) {
     Errors errors = validate_subclass_nonrecursively_for_content(data, content);
-    for (const ClassFeature::Data& feature_data : data.features_data) {
-        errors += validate_class_feature_recursively_for_content(feature_data, content);
+    for (const SubclassFeature::Data& feature_data : data.features_data) {
+        errors += validate_subclass_feature_recursively_for_content(feature_data, content);
     }
     errors += validate_spellcasting(data.spellcasting_data);
     return errors;
