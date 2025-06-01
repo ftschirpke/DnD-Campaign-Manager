@@ -186,10 +186,12 @@ static void display_paragraph(const Paragraph& paragraph, const GuiFonts& fonts)
                     y += subtext_size.y - ImGui::GetTextLineHeight();
                 }
             } else {
-                // reached end of line with space
+                // reached end of line
                 x = x_begin;
                 y += ImGui::GetTextLineHeightWithSpacing();
-                ++last_fitting_end; // declare the found space as "written"
+                if (*last_fitting_end == ' ') {
+                    ++last_fitting_end; // declare the found space at line break as "written"
+                }
             }
 
             subtext_begin = last_fitting_end;
