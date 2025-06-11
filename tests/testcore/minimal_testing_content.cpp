@@ -43,20 +43,20 @@ static void add_groups(Content& content) {
 }
 
 static void add_spells(Content& content) {
-    Spell::Data spell;
-    set_valid_mock_values(spell, "Dancing Lights");
-    spell.components_data.verbal = true;
-    spell.components_data.somatic = true;
-    spell.components_data.material_components = "a bit of phosphorus or wychwood, or a glowworm";
-    spell.type_data.magic_school_char = 'V';
-    spell.type_data.level = 0;
-    spell.type_data.ritual = false;
-    spell.casting_time = "1 action";
-    spell.range = "120 feet";
-    spell.duration = "Concentration, up to 1 minute";
-    spell.classes = {"Bard", "Sorcerer", "Wizard"};
-    assert(validate_spell_recursively(spell).ok());
-    content.add_spell(Spell::create(std::move(spell)).value());
+    Spell::Data spell1;
+    set_valid_mock_values(spell1, "Dancing Lights");
+    spell1.components_data.verbal = true;
+    spell1.components_data.somatic = true;
+    spell1.components_data.material_components = "a bit of phosphorus or wychwood, or a glowworm";
+    spell1.type_data.magic_school_char = 'V';
+    spell1.type_data.level = 0;
+    spell1.type_data.ritual = false;
+    spell1.casting_time = "1 action";
+    spell1.range = "120 feet";
+    spell1.duration = "Concentration, up to 1 minute";
+    spell1.classes = {"Bard", "Sorcerer", "Wizard"};
+    assert(validate_spell_recursively(spell1).ok());
+    content.add_spell(Spell::create(std::move(spell1)).value());
 
     Spell::Data spell2;
     set_valid_mock_values(spell2, "Fireball");
@@ -89,21 +89,21 @@ static void add_spells(Content& content) {
 }
 
 static void add_classes(Content& content) {
-    Class::Data class_data{};
-    set_valid_mock_values(class_data, "Wizard");
-    class_data.spellcasting_data.is_spellcaster = true;
-    class_data.spellcasting_data.ability = dnd::attributes::INTELLIGENCE;
-    class_data.spellcasting_data.is_spells_known_type = true;
-    ClassFeature::Data& feature_data = class_data.features_data.emplace_back();
-    set_valid_mock_values(feature_data, "Example Class Feature");
-    feature_data.class_name = "Wizard";
-    feature_data.class_source_name = "dummy";
-    feature_data.level = 1;
-    class_data.subclass_feature_name = "Example Class Feature";
-    class_data.hit_dice_str = "d6";
-    class_data.important_levels_data.feat_levels = {4, 8, 12, 16, 19};
-    assert(validate_class_recursively_for_content(class_data, content).ok());
-    content.add_class(Class::create_for(std::move(class_data), content).value());
+    Class::Data class_data1{};
+    set_valid_mock_values(class_data1, "Wizard");
+    class_data1.spellcasting_data.is_spellcaster = true;
+    class_data1.spellcasting_data.ability = dnd::attributes::INTELLIGENCE;
+    class_data1.spellcasting_data.is_spells_known_type = true;
+    ClassFeature::Data& feature_data1 = class_data1.features_data.emplace_back();
+    set_valid_mock_values(feature_data1, "Example Class Feature");
+    feature_data1.class_name = "Wizard";
+    feature_data1.class_source_name = "dummy";
+    feature_data1.level = 1;
+    class_data1.subclass_feature_name = "Example Class Feature";
+    class_data1.hit_dice_str = "d6";
+    class_data1.important_levels_data.feat_levels = {4, 8, 12, 16, 19};
+    assert(validate_class_recursively_for_content(class_data1, content).ok());
+    content.add_class(Class::create_for(std::move(class_data1), content).value());
 
     Class::Data class_data2{};
     set_valid_mock_values(class_data2, "Rogue");
@@ -120,18 +120,18 @@ static void add_classes(Content& content) {
     content.add_class(Class::create_for(std::move(class_data2), content).value());
 
 
-    Subclass::Data subclass_data{};
-    set_valid_mock_values(subclass_data, "Abjuration Wizard");
-    subclass_data.short_name = "Abjuration";
-    subclass_data.spellcasting_data.is_spellcaster = false;
-    SubclassFeature::Data& feature_data3 = subclass_data.features_data.emplace_back();
+    Subclass::Data subclass_data1{};
+    set_valid_mock_values(subclass_data1, "Abjuration Wizard");
+    subclass_data1.short_name = "Abjuration";
+    subclass_data1.spellcasting_data.is_spellcaster = false;
+    SubclassFeature::Data& feature_data3 = subclass_data1.features_data.emplace_back();
     feature_data3.subclass_short_name = "Abjuration";
     feature_data3.subclass_source_name = "dummy";
     feature_data3.level = 2;
     set_valid_mock_values(feature_data3, "Example Subclass Feature");
-    subclass_data.class_key = "Wizard##dummy";
-    assert(validate_subclass_recursively_for_content(subclass_data, content).ok());
-    content.add_subclass(Subclass::create_for(std::move(subclass_data), content).value());
+    subclass_data1.class_key = "Wizard##dummy";
+    assert(validate_subclass_recursively_for_content(subclass_data1, content).ok());
+    content.add_subclass(Subclass::create_for(std::move(subclass_data1), content).value());
 
     Subclass::Data subclass_data2{};
     set_valid_mock_values(subclass_data2, "Assassin");
