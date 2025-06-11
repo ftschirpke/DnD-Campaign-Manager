@@ -313,7 +313,8 @@ WithErrors<Spell::Data> parse_spell(const nlohmann::ordered_json& obj, const std
     WithErrors<Paragraph> higher_levels_result = parse_higher_level_paragraph(obj, filepath);
     errors += std::move(higher_levels_result.errors);
     if (!higher_levels_result.value.parts.empty()) {
-        spell_data.description.parts.push_back(std::move(higher_levels_result.value));
+        TextObject paragraph = std::move(higher_levels_result.value);
+        spell_data.description.parts.push_back(paragraph);
     }
 
     parse_spell_components(obj, filepath).move_into(spell_data.components_data, errors);
