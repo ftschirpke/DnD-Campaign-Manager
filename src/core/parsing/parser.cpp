@@ -21,12 +21,12 @@
 
 namespace dnd {
 
-constexpr std::array<std::string_view, 34> known_link_types = {
-    "damage",       "condition",   "dice",   "skill",       "spell", "creature", "action", "adventure",
-    "quickref",     "item",        "sense",  "dc",          "note",  "filter",   "chance", "status",
-    "classFeature", "variantrule", "hazard", "5etools",     "book",  "feat",     "deity",  "subclassFeature",
-    "language",     "class",       "table",  "itemMastery", "deck",  "hit",      "object", "race",
-    "optfeature",
+constexpr std::array<std::string_view, 36> known_link_types = {
+    "damage",       "condition",   "dice",      "skill",       "spell", "creature", "action", "adventure",
+    "quickref",     "item",        "sense",     "dc",          "note",  "filter",   "chance", "status",
+    "classFeature", "variantrule", "hazard",    "5etools",     "book",  "feat",     "deity",  "subclassFeature",
+    "language",     "class",       "table",     "itemMastery", "deck",  "hit",      "object", "race",
+    "optfeature",   "scaledamage", "scaledice",
 };
 
 
@@ -87,6 +87,13 @@ static std::optional<Error> parse_text_recursive(
                 == known_link_types.end()) {
                 LOGWARN("Found rich text of unknown type '{}' - assuming link", rich_text->rich_type);
             }
+
+            // scaledamage and scaledice work very unintuitively - "<accum-increase>|<increase-range>|<single-increase>"
+            if (rich_text->rich_type == "scaledamage" || rich_text->rich_type == "scaledice") {
+                // swap accum-increase (stored in text) with single-increase (stored in the last attribute)
+                std::swap(rich_text->text, rich_text->attributes.back().value);
+            }
+
             paragraph.parts.emplace_back(Link{
                 .str = std::move(rich_text->text),
                 .attributes = std::move(rich_text->attributes),
