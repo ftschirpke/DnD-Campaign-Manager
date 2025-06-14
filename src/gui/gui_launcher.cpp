@@ -137,6 +137,12 @@ static void clean_up(GLFWwindow* window) {
 // Main code
 int launch() {
     glfwSetErrorCallback(glfw_error_callback);
+
+// NOTE: force X11 on Linux - see https://github.com/glfw/glfw/issues/2621
+#if defined(__linux__)
+    glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
+#endif
+
     if (!glfwInit()) {
         return 1;
     }
