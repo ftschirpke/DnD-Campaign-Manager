@@ -29,24 +29,29 @@ std::vector<std::string> ListContentVisitor::get_list() { return std::move(strin
 void ListContentVisitor::clear_list() { string_list.clear(); }
 
 void ListContentVisitor::operator()(const Character& character) {
-    string_list.push_back(fmt::format(
-        "{} ({}) [CHARACTER] : Level {} {} {}##{}", character.get_name(), character.get_source_info().name,
-        character.get_progression().get_level(), character.get_feature_providers().get_class().get_name(),
-        character.get_feature_providers().get_species().get_name(), character.get_key()
-    ));
+    string_list.push_back(
+        fmt::format(
+            "{} ({}) [CHARACTER] : Level {} {} {}##{}", character.get_name(), character.get_source_info().name,
+            character.get_progression().get_level(), character.get_feature_providers().get_class().get_name(),
+            character.get_feature_providers().get_species().get_name(), character.get_key()
+        )
+    );
 }
 
 void ListContentVisitor::operator()(const Class& cls) {
-    string_list.push_back(fmt::format("{} ({}) [CLASS]##{}", cls.get_name(), cls.get_source_info().name, cls.get_key())
+    string_list.push_back(
+        fmt::format("{} ({}) [CLASS]##{}", cls.get_name(), cls.get_source_info().name, cls.get_key())
     );
 }
 
 void ListContentVisitor::operator()(const Subclass& subclass) {
     const Class& cls = subclass.get_class();
-    string_list.push_back(fmt::format(
-        "{} ({}) [{} SUBCLASS]##{}", subclass.get_name(), subclass.get_source_info().name, cls.get_name(),
-        subclass.get_key()
-    ));
+    string_list.push_back(
+        fmt::format(
+            "{} ({}) [{} SUBCLASS]##{}", subclass.get_name(), subclass.get_source_info().name, cls.get_name(),
+            subclass.get_key()
+        )
+    );
 }
 void ListContentVisitor::operator()(const Species& species) {
     string_list.push_back(
@@ -56,58 +61,77 @@ void ListContentVisitor::operator()(const Species& species) {
 
 void ListContentVisitor::operator()(const Subspecies& subspecies) {
     const Species& species = subspecies.get_species();
-    string_list.push_back(fmt::format(
-        "{} ({}) [{} SUBSPECIES]##{}", subspecies.get_name(), subspecies.get_source_info().name, species.get_name(),
-        subspecies.get_key()
-    ));
+    string_list.push_back(
+        fmt::format(
+            "{} ({}) [{} SUBSPECIES]##{}", subspecies.get_name(), subspecies.get_source_info().name, species.get_name(),
+            subspecies.get_key()
+        )
+    );
 }
 
 void ListContentVisitor::operator()(const Item& item) {
     if (item.requires_attunement()) {
-        string_list.push_back(fmt::format(
-            "{} ({}) [ITEM] requires attunement##{}", item.get_name(), item.get_source_info().name, item.get_key()
-        ));
+        string_list.push_back(
+            fmt::format(
+                "{} ({}) [ITEM] requires attunement##{}", item.get_name(), item.get_source_info().name, item.get_key()
+            )
+        );
     } else {
-        string_list.push_back(fmt::format(
-            "{} ({}) [ITEM] no attunement##{}", item.get_name(), item.get_source_info().name, item.get_key()
-        ));
+        string_list.push_back(
+            fmt::format(
+                "{} ({}) [ITEM] no attunement##{}", item.get_name(), item.get_source_info().name, item.get_key()
+            )
+        );
     }
 }
 
 void ListContentVisitor::operator()(const Spell& spell) {
-    string_list.push_back(fmt::format(
-        "{} ({}) [SPELL] : {}##{}", spell.get_name(), spell.get_source_info().name, spell.get_type().short_str(),
-        spell.get_key()
-    ));
+    string_list.push_back(
+        fmt::format(
+            "{} ({}) [SPELL] : {}##{}", spell.get_name(), spell.get_source_info().name, spell.get_type().short_str(),
+            spell.get_key()
+        )
+    );
 }
 
 void ListContentVisitor::operator()(const Feature& feature) {
-    string_list.push_back(fmt::format(
-        "{} ({}) [FEATURE] : {}##{}", feature.get_name(), feature.get_source_info().name,
-        feature.get_source_info().name, feature.get_key()
-    ));
+    string_list.push_back(
+        fmt::format(
+            "{} ({}) [FEATURE] : {}##{}", feature.get_name(), feature.get_source_info().name,
+            feature.get_source_info().name, feature.get_key()
+        )
+    );
 }
 
 void ListContentVisitor::operator()(const ClassFeature& class_feature) {
-    string_list.push_back(fmt::format(
-        "{} ({}) [CLASS FEATURE] : {}##{}", class_feature.get_name(), class_feature.get_source_info().name,
-        class_feature.get_source_info().name, class_feature.get_key()
-    ));
+    string_list.push_back(
+        fmt::format(
+            "{} ({}) [CLASS FEATURE] : {}##{} from {}##{}", class_feature.get_name(),
+            class_feature.get_source_info().name, class_feature.get_source_info().name, class_feature.get_key(),
+            class_feature.get_class_name(), class_feature.get_class_source_name()
+        )
+    );
 }
 
 void ListContentVisitor::operator()(const SubclassFeature& subclass_feature) {
-    string_list.push_back(fmt::format(
-        "{} ({}) [SUBCLASS FEATURE] : {}##{}", subclass_feature.get_name(), subclass_feature.get_source_info().name,
-        subclass_feature.get_source_info().name, subclass_feature.get_key()
-    ));
+    string_list.push_back(
+        fmt::format(
+            "{} ({}) [SUBCLASS FEATURE] : {}##{} from {}##{}", subclass_feature.get_name(),
+            subclass_feature.get_source_info().name, subclass_feature.get_source_info().name,
+            subclass_feature.get_key(), subclass_feature.get_subclass_short_name(),
+            subclass_feature.get_subclass_source_name()
+        )
+    );
 }
 
 
 void ListContentVisitor::operator()(const Choosable& choosable) {
-    string_list.push_back(fmt::format(
-        "{} ({}) [CHOOSABLE] : {}##{}", choosable.get_name(), choosable.get_source_info().name,
-        choosable.get_source_info().name, choosable.get_key()
-    ));
+    string_list.push_back(
+        fmt::format(
+            "{} ({}) [CHOOSABLE] : {}##{}", choosable.get_name(), choosable.get_source_info().name,
+            choosable.get_source_info().name, choosable.get_key()
+        )
+    );
 }
 
 } // namespace dnd

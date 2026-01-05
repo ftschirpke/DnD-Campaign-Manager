@@ -52,7 +52,8 @@ public:
 private:
     ClassFeature(
         std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
-        int level, Effects&& main_effects, std::map<int, Effects>&& higher_level_parts = {}
+        int level, Effects&& main_effects, std::map<int, Effects>&& higher_level_parts, std::string&& class_name,
+        std::string&& class_source_name
     );
 
     int level;
