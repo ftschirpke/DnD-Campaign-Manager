@@ -21,6 +21,7 @@ TEST_CASE("Validate Subclass // valid subclass", tags) {
     Errors errors;
 
     SECTION("class with one valid feature") {
+        data.class_name = "Wizard";
         data.class_key = "Wizard##dummy";
         SubclassFeature::Data& feature_data = data.features_data.emplace_back();
         set_valid_mock_values(feature_data, "Feature");
@@ -29,6 +30,7 @@ TEST_CASE("Validate Subclass // valid subclass", tags) {
     }
 
     SECTION("class with multiple differently named features") {
+        data.class_name = "Wizard";
         data.class_key = "Wizard##dummy";
         Feature::Data& feature_data1 = data.features_data.emplace_back();
         set_valid_mock_values(feature_data1, "Feature 1");
