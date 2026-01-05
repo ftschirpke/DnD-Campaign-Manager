@@ -25,8 +25,9 @@
 namespace dnd {
 
 bool Content::empty() const {
-    return character_libary.empty() && class_library.empty() && subclass_library.empty() && species_library.empty()
-           && subspecies_library.empty() && item_library.empty() && spell_library.empty();
+#define X(C, U, j, a, p, P) j##_library.empty() &&
+    return X_CONTENT_PIECES true;
+#undef X
 }
 
 std::string Content::status() const {
@@ -35,25 +36,17 @@ std::string Content::status() const {
         "species parsed: {}\ncharacter subspecies parsed: {}\n=== Character Classes ===\ncharacter classes parsed: "
         "{}\ncharacter subclasses parsed: {}\n=== Characters ===\ncharacters parsed: {}",
         groups.status(), item_library.size(), spell_library.size(), species_library.size(), subspecies_library.size(),
-        class_library.size(), subclass_library.size(), character_libary.size()
+        class_library.size(), subclass_library.size(), character_library.size()
     );
 }
 
 const Groups& Content::get_groups() const { return groups; }
 
-const StorageContentLibrary<Character>& Content::get_characters() const { return character_libary; }
+#define X(C, U, j, a, p, P)                                                                                            \
+    const StorageContentLibrary<C>& Content::get_##p() const { return j##_library; }
+X_OWNED_CONTENT_PIECES
+#undef X
 
-const StorageContentLibrary<Class>& Content::get_classes() const { return class_library; }
-
-const StorageContentLibrary<Subclass>& Content::get_subclasses() const { return subclass_library; }
-
-const StorageContentLibrary<Species>& Content::get_species() const { return species_library; }
-
-const StorageContentLibrary<Subspecies>& Content::get_subspecies() const { return subspecies_library; }
-
-const StorageContentLibrary<Item>& Content::get_items() const { return item_library; }
-
-const StorageContentLibrary<Spell>& Content::get_spells() const { return spell_library; }
 
 const ReferencingContentLibrary<Feature>& Content::get_features() const { return feature_library; }
 
@@ -62,8 +55,6 @@ const ReferencingContentLibrary<ClassFeature>& Content::get_class_features() con
 const ReferencingContentLibrary<SubclassFeature>& Content::get_subclass_features() const {
     return subclass_feature_library;
 }
-
-const StorageContentLibrary<Choosable>& Content::get_choosables() const { return choosable_library; }
 
 std::optional<EffectsProviderVariant> Content::get_effects_provider(const std::string& name) const {
     OptCRef<Feature> feature = feature_library.get(name);
@@ -98,7 +89,7 @@ void Content::add_group_members(const std::string& group_name, std::set<std::str
 }
 
 OptCRef<Character> Content::add_character(Character&& character) {
-    OptCRef<Character> inserted_character = character_libary.add(std::move(character));
+    OptCRef<Character> inserted_character = character_library.add(std::move(character));
     if (inserted_character.has_value()) {
         for (const Feature& feature : inserted_character.value().get().get_features()) {
             feature_library.add(feature);
@@ -163,7 +154,7 @@ OptCRef<Choosable> Content::add_choosable(Choosable&& choosable) {
 }
 
 OptCRef<Character> Content::add_character_result(CreateResult<Character>&& character) {
-    OptCRef<Character> inserted_character = character_libary.add_result(std::move(character));
+    OptCRef<Character> inserted_character = character_library.add_result(std::move(character));
     if (inserted_character.has_value()) {
         for (const Feature& feature : inserted_character.value().get().get_features()) {
             feature_library.add(feature);

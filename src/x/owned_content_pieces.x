@@ -1,8 +1,0 @@
-X(Character,  CHARACTER,  character,  character,  characters)
-X(Class,      CLASS,      class,      cls,        classes   )
-X(Subclass,   SUBCLASS,   subclass,   subclass,   subclasses)
-X(Species,    SPECIES,    species,    species,    species   )
-X(Subspecies, SUBSPECIES, subspecies, subspecies, subspecies)
-X(Item,       ITEM,       item,       item,       items     )
-X(Spell,      SPELL,      spell,      spell,      spells    )
-X(Choosable,  CHOOSABLE,  choosable,  choosable,  choosables)

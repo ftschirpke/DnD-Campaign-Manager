@@ -21,6 +21,7 @@
 #include <core/referencing_content_library.hpp>
 #include <core/storage_content_library.hpp>
 #include <core/types.hpp>
+#include <x/content_pieces.hpp>
 
 namespace dnd {
 
@@ -40,31 +41,34 @@ public:
 
     const Groups& get_groups() const;
 
+#define X(C, U, j, a, p, P) const StorageContentLibrary<C>& get_##p() const;
+    X_OWNED_CONTENT_PIECES
+#undef X
+#define X(C, U, j, a, p, P) const ReferencingContentLibrary<C>& get_##p() const;
+    X_REFERENCE_CONTENT_PIECES
+#undef X
+
     std::optional<EffectsProviderVariant> get_effects_provider(const std::string& name) const;
 
     void set_subgroup(const std::string& group_name, const std::string& subgroup_name);
     void set_subgroups(const std::string& group_name, std::set<std::string>&& subgroups);
     void add_group_member(const std::string& group_name, const std::string& value);
     void add_group_members(const std::string& group_name, std::set<std::string>&& values);
+
+#define X(C, U, j, a, p, P) OptCRef<C> add_##j(C&& a);
+    X_OWNED_CONTENT_PIECES
+#undef X
+#define X(C, U, j, a, p, P) OptCRef<C> add_##j##_result(CreateResult<C>&& a);
+    X_OWNED_CONTENT_PIECES
+#undef X
 private:
     Groups groups;
 
-#define X(Cap, UP, join, alone, plural)                                                                                \
-public:                                                                                                                \
-    const StorageContentLibrary<Cap>& get_##plural() const;                                                            \
-    OptCRef<Cap> add_##alone(Cap&& alone);                                                                             \
-    OptCRef<Cap> add_##alone##_result(CreateResult<Cap>&& alone);                                                      \
-private:                                                                                                               \
-    StorageContentLibrary<Cap> join##_library;
-#include <x/owned_content_pieces.x>
+#define X(C, U, j, a, p, P) StorageContentLibrary<C> j##_library;
+    X_OWNED_CONTENT_PIECES
 #undef X
-
-#define X(Cap, UP, join, alone, plural)                                                                                \
-public:                                                                                                                \
-    const ReferencingContentLibrary<Cap>& get_##plural() const;                                                        \
-private:                                                                                                               \
-    ReferencingContentLibrary<Cap> join##_library;
-#include <x/reference_content_pieces.x>
+#define X(C, U, j, a, p, P) ReferencingContentLibrary<C> j##_library;
+    X_REFERENCE_CONTENT_PIECES
 #undef X
 };
 
