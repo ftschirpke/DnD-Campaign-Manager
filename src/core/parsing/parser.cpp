@@ -21,12 +21,12 @@
 
 namespace dnd {
 
-constexpr std::array<std::string_view, 36> known_link_types = {
-    "damage",       "condition",   "dice",      "skill",       "spell", "creature", "action", "adventure",
-    "quickref",     "item",        "sense",     "dc",          "note",  "filter",   "chance", "status",
-    "classFeature", "variantrule", "hazard",    "5etools",     "book",  "feat",     "deity",  "subclassFeature",
-    "language",     "class",       "table",     "itemMastery", "deck",  "hit",      "object", "race",
-    "optfeature",   "scaledamage", "scaledice",
+constexpr std::array<std::string_view, 38> known_link_types = {
+    "damage",       "condition",   "dice",      "skill",       "spell",        "creature", "action", "adventure",
+    "quickref",     "item",        "sense",     "dc",          "note",         "filter",   "chance", "status",
+    "classFeature", "variantrule", "hazard",    "5etools",     "book",         "feat",     "deity",  "subclassFeature",
+    "language",     "class",       "table",     "itemMastery", "deck",         "hit",      "object", "race",
+    "optfeature",   "scaledamage", "scaledice", "subclass",    "itemProperty",
 };
 
 
