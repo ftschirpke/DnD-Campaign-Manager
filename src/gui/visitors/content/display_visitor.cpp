@@ -123,10 +123,10 @@ static void display_paragraph(const Paragraph& paragraph, const GuiFonts& fonts)
             }
             case 1: /* Link */ {
                 const Link& link = std::get<1>(text_obj);
-                font = fonts.get(link.bold, link.italic);
+                font = fonts.get(link.text.bold, link.text.italic);
                 push_pop_font = ImGui::GetFont() != font;
-                text_begin = link.str.cbegin();
-                text_end = link.str.cend();
+                text_begin = link.text.str.cbegin();
+                text_end = link.text.str.cend();
                 is_link = true;
                 break;
             }
@@ -215,9 +215,9 @@ static void display_table(const Table& table, const GuiFonts& fonts) {
     const char* id = "unnamed";
     if (table.caption.has_value()) {
         ImGui::PushFont(fonts.bold);
-        ImGui::TextWrapped("%s", table.caption.value().c_str());
+        ImGui::TextWrapped("%s", table.caption.value().str.c_str());
         ImGui::PopFont();
-        id = table.caption.value().c_str();
+        id = table.caption.value().str.c_str();
     }
     if (ImGui::BeginTable(id, static_cast<int>(table.columns), table_flags)) {
         for (size_t col = 0; col < table.columns; ++col) {
@@ -225,7 +225,7 @@ static void display_table(const Table& table, const GuiFonts& fonts) {
             if (table.column_widths.has_value()) {
                 col_weight = static_cast<float>(table.column_widths->at(col).value_or(0));
             }
-            ImGui::TableSetupColumn(table.header.at(col).c_str(), ImGuiTableColumnFlags_WidthStretch, col_weight);
+            ImGui::TableSetupColumn(table.header.at(col).str.c_str(), ImGuiTableColumnFlags_WidthStretch, col_weight);
         }
         ImGui::TableHeadersRow();
         for (size_t row = 0; row < table.rows.size(); ++row) {

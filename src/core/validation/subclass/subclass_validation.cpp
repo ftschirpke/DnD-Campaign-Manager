@@ -28,6 +28,11 @@ static Errors validate_subclass_raw_nonrecursively(const Subclass::Data& data) {
             ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Character subclass has no features."
         );
     }
+    if (data.class_name.empty()) {
+        errors.add_validation_error(
+            ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Character subclass has no class name."
+        );
+    }
     if (data.class_key.empty()) {
         errors.add_validation_error(
             ValidationError::Code::INVALID_ATTRIBUTE_VALUE, "Character subclass has no class key."
@@ -58,6 +63,11 @@ static Errors validate_subclass_relations_nonrecursively(const Subclass::Data& d
         errors.add_validation_error(
             ValidationError::Code::RELATION_NOT_FOUND,
             fmt::format("Character class '{}' does not exist.", data.class_key)
+        );
+    } else if (data.class_name != class_optional.value().get().get_name()) {
+        errors.add_validation_error(
+            ValidationError::Code::INVALID_RELATION,
+            fmt::format("Character class '{}' (by key) does not have given name '{}'.", data.class_key, data.class_name)
         );
     } else if (data.spellcasting_data.is_spellcaster && class_optional.value().get().has_spellcasting()) {
         errors.add_validation_error(

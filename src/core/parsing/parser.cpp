@@ -94,12 +94,17 @@ static std::optional<Error> parse_text_recursive(
                 std::swap(rich_text->text, rich_text->attributes.back().value);
             }
 
-            paragraph.parts.emplace_back(Link{
-                .str = std::move(rich_text->text),
-                .attributes = std::move(rich_text->attributes),
-                .bold = bold,
-                .italic = italic,
-            });
+            paragraph.parts.emplace_back(
+                Link{
+                    .text =
+                        SimpleText{
+                            .str = std::move(rich_text->text),
+                            .bold = bold,
+                            .italic = italic,
+                        },
+                    .attributes = std::move(rich_text->attributes),
+                }
+            );
         }
         cur += rich_text->length;
         start = cur;
@@ -124,7 +129,7 @@ tl::expected<Table, Error> parse_table(const nlohmann::json& json, const std::fi
         return tl::unexpected(error.value());
     }
     if (!caption.empty()) {
-        new_table.caption = caption;
+        new_table.caption = SimpleText{.str = caption};
     }
 
     error = check_required_attribute(json, "colLabels", filepath, JsonType::ARRAY);
@@ -147,7 +152,7 @@ tl::expected<Table, Error> parse_table(const nlohmann::json& json, const std::fi
                 header_entry = rich_text->text;
             }
         }
-        new_table.header.push_back(header_entry);
+        new_table.header.push_back(SimpleText{.str = header_entry});
     }
 
     if (json.contains("colStyles") && json["colStyles"].is_array()) {
@@ -303,11 +308,13 @@ static tl::expected<ListItem, Error> parse_list_item(
             if (!first_paragraph.has_value()) {
                 first_paragraph = Paragraph{};
             }
-            first_paragraph->parts.push_back(SimpleText{
-                .str = name + ". ",
-                .bold = true,
-                .italic = false,
-            });
+            first_paragraph->parts.push_back(
+                SimpleText{
+                    .str = name + ". ",
+                    .bold = true,
+                    .italic = false,
+                }
+            );
         }
     }
 
@@ -593,8 +600,9 @@ std::optional<Error> write_formatted_text_into(
             } else {
                 return new_table.error();
             }
-        } else if (type == "options" || type.starts_with("ref") || type == "abilityDc" || type == "abilityAttackMod"
-                   || type == "statblock" || type == "quote" // TODO: implement, might be nice
+        } else if (
+            type == "options" || type.starts_with("ref") || type == "abilityDc" || type == "abilityAttackMod"
+            || type == "statblock" || type == "quote" // TODO: implement, might be nice
         ) {
             continue;
         } else {

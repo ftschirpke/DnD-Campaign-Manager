@@ -50,6 +50,10 @@ CreateResult<Subclass> Subclass::create_for(Data&& data, const Content& content)
     ));
 }
 
+std::string Subclass::key(const std::string& name, const std::string& source_name, const std::string& class_name) {
+    return fmt::format("{}##{}|{}", name, source_name, class_name);
+}
+
 const std::string& Subclass::get_name() const { return name; }
 
 const Text& Subclass::get_description() const { return description; }
@@ -68,7 +72,13 @@ CRef<Class> Subclass::get_class() const { return cls; }
 
 void Subclass::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
-std::string Subclass::get_key() const { return key(short_name, get_source_info().name); }
+std::string Subclass::get_key() const { return key(short_name, get_source_info().name, cls.get().get_name()); }
+
+std::string Subclass::Data::key(
+    const std::string& name, const std::string& source_name, const std::string& class_name
+) {
+    return Subclass::key(name, source_name, class_name);
+}
 
 Subclass::Subclass(
     std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
@@ -79,6 +89,6 @@ Subclass::Subclass(
       source_info({.path = std::move(source_path), .name = std::move(source_name)}), short_name(std::move(short_name)),
       features(std::move(features)), cls(cls), spellcasting(std::move(spellcasting)) {}
 
-std::string Subclass::Data::get_key() const { return key(short_name, source_name); }
+std::string Subclass::Data::get_key() const { return key(short_name, source_name, class_name); }
 
 } // namespace dnd

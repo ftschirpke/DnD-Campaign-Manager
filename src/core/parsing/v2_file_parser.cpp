@@ -78,8 +78,6 @@ Errors V2FileParser::parse() {
                 );
                 continue;
             }
-            std::string name;
-            parse_required_attribute_into(element, "name", name, get_filepath());
             errors += parse_object(element, parse_type);
         }
     }
