@@ -29,12 +29,12 @@ static void paragraph_to_latex(const Paragraph& paragraph, LatexScope& scope) {
             }
             case 1: /* Link */ {
                 const Link& link = std::get<1>(text_obj);
-                LatexText* latex_text = scope.add_text(link.str);
+                LatexText* latex_text = scope.add_text(link.text.str);
                 latex_text->no_ending_new_line();
-                if (link.bold) {
+                if (link.text.bold) {
                     latex_text->add_modifier(LatexTextModifier::BOLD);
                 }
-                if (link.italic) {
+                if (link.text.italic) {
                     latex_text->add_modifier(LatexTextModifier::ITALIC);
                 }
                 latex_text->add_modifier(LatexTextModifier::EMPHASIZED);

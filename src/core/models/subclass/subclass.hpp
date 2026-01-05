@@ -27,6 +27,7 @@ public:
     struct Data;
 
     static CreateResult<Subclass> create_for(Data&& data, const Content& content);
+    static std::string key(const std::string& name, const std::string& source_name, const std::string& class_name);
 
     Subclass(const Subclass&) = delete;
     Subclass& operator=(const Subclass&) = delete;
@@ -61,10 +62,13 @@ private:
 };
 
 struct Subclass::Data : public ValidationData {
+    static std::string key(const std::string& name, const std::string& source_name, const std::string& class_name);
+
     std::strong_ordering operator<=>(const Data&) const = default;
     std::string get_key() const override;
 
     std::string short_name;
+    std::string class_name;
     Spellcasting::Data spellcasting_data;
     std::vector<SubclassFeature::Data> features_data;
     std::string class_key;

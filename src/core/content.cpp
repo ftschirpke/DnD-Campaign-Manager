@@ -119,7 +119,7 @@ OptCRef<Class> Content::add_class(Class&& cls) {
 
 OptCRef<Subclass> Content::add_subclass(Subclass&& subclass) {
     OptCRef<Subclass> inserted_subclass = subclass_library.add(std::move(subclass));
-    if (subclass_library.add(std::move(subclass))) {
+    if (inserted_subclass.has_value()) {
         for (const SubclassFeature& subclass_feature : inserted_subclass.value().get().get_features()) {
             subclass_feature_library.add(subclass_feature);
         }
@@ -184,7 +184,7 @@ OptCRef<Class> Content::add_class_result(CreateResult<Class>&& cls) {
 
 OptCRef<Subclass> Content::add_subclass_result(CreateResult<Subclass>&& subclass) {
     OptCRef<Subclass> inserted_subclass = subclass_library.add_result(std::move(subclass));
-    if (subclass_library.add_result(std::move(subclass))) {
+    if (inserted_subclass.has_value()) {
         for (const SubclassFeature& subclass_feature : inserted_subclass.value().get().get_features()) {
             subclass_feature_library.add(subclass_feature);
         }

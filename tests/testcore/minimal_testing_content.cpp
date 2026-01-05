@@ -129,6 +129,7 @@ static void add_classes(Content& content) {
     feature_data3.subclass_source_name = "dummy";
     feature_data3.level = 2;
     set_valid_mock_values(feature_data3, "Example Subclass Feature");
+    subclass_data1.class_name = "Wizard";
     subclass_data1.class_key = "Wizard##dummy";
     assert(validate_subclass_recursively_for_content(subclass_data1, content).ok());
     content.add_subclass(Subclass::create_for(std::move(subclass_data1), content).value());
@@ -142,6 +143,7 @@ static void add_classes(Content& content) {
     feature_data4.subclass_source_name = "dummy";
     feature_data4.level = 3;
     set_valid_mock_values(feature_data4, "Example Subclass Feature 2");
+    subclass_data2.class_name = "Rogue";
     subclass_data2.class_key = "Rogue##dummy";
     assert(validate_subclass_recursively_for_content(subclass_data2, content).ok());
     content.add_subclass(Subclass::create_for(std::move(subclass_data2), content).value());
@@ -201,7 +203,7 @@ static void add_characters(Content& content) {
     character_data.feature_providers_data.species_key = "Dwarf##dummy";
     character_data.feature_providers_data.subspecies_key = "Hill Dwarf##dummy";
     character_data.feature_providers_data.class_key = "Wizard##dummy";
-    character_data.feature_providers_data.subclass_key = "Abjuration##dummy";
+    character_data.feature_providers_data.subclass_key = "Abjuration##dummy|Wizard";
     character_data.progression_data.level = 4;
     character_data.progression_data.xp = 4200;
     character_data.progression_data.hit_dice_rolls = {6, 4, 2, 5};

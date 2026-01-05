@@ -23,27 +23,30 @@ struct SimpleText {
 struct Link {
     std::strong_ordering operator<=>(const Link&) const = default;
 
-    std::string str;
+    SimpleText text;
     std::vector<RichAttribute> attributes;
-    bool bold = false;
-    bool italic = false;
 };
 
 using InlineText = std::variant<SimpleText, Link>;
 
 struct Paragraph {
+    static Paragraph simple(std::string&& str);
     std::strong_ordering operator<=>(const Paragraph&) const = default;
 
     std::vector<InlineText> parts;
 };
 
+inline Paragraph Paragraph::simple(std::string&& str) {
+    return Paragraph{.parts = {SimpleText{.str = str, .bold = false, .italic = false}}};
+}
+
 struct Table {
     std::strong_ordering operator<=>(const Table&) const = default;
 
-    std::optional<std::string> caption;
+    std::optional<SimpleText> caption;
     size_t columns = 0;
     std::optional<std::vector<std::optional<int>>> column_widths;
-    std::vector<std::string> header;
+    std::vector<SimpleText> header;
     std::vector<std::vector<Paragraph>> rows;
 };
 
@@ -70,9 +73,7 @@ struct Text {
     std::vector<TextObject> parts;
 };
 
-inline Text Text::simple(std::string&& str) {
-    return Text{.parts = {Paragraph{.parts = {SimpleText{.str = str, .bold = false, .italic = false}}}}};
-}
+inline Text Text::simple(std::string&& str) { return Text{.parts = {Paragraph::simple(std::move(str))}}; }
 
 } // namespace dnd
 

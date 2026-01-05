@@ -54,11 +54,11 @@ static WithErrors<FeatureProviders::Data> parse_character_feature_providers(
     Errors& errors = result.errors;
 
     std::optional<Error> check_class_error = check_required_attribute(obj, "class", filepath, JsonType::OBJECT);
+    std::string class_name, class_source;
     if (check_class_error.has_value()) {
         errors += check_class_error.value();
     } else {
         const nlohmann::json& cls = obj["class"];
-        std::string class_name, class_source;
         errors += parse_required_attribute_into(cls, "name", class_name, filepath);
         errors += parse_required_attribute_into(cls, "source", class_source, filepath);
         feature_providers_data.class_key = Class::key(class_name, class_source);
@@ -75,7 +75,7 @@ static WithErrors<FeatureProviders::Data> parse_character_feature_providers(
             std::string subclass_short_name, subclass_source;
             errors += parse_required_attribute_into(subclass, "shortName", subclass_short_name, filepath);
             errors += parse_required_attribute_into(subclass, "source", subclass_source, filepath);
-            feature_providers_data.subclass_key = Class::key(subclass_short_name, subclass_source);
+            feature_providers_data.subclass_key = Subclass::key(subclass_short_name, subclass_source, class_name);
         }
     }
 
@@ -178,9 +178,7 @@ WithErrors<Character::Data> parse_character(const nlohmann::json& obj, const std
 
     if (obj.contains("_meta")) {
         // HACK: add meta JSON as description as that (for now) mostly includes unsupported features and decisions
-        character_data.description.parts.emplace_back(
-            Paragraph{.parts = {SimpleText{.str = obj["_meta"].dump(8), .bold = false, .italic = false}}}
-        );
+        character_data.description.parts.emplace_back(Paragraph::simple(obj["_meta"].dump(8)));
     }
 
     // character_data.features_data; // TODO: do I want character features?
