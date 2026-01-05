@@ -21,6 +21,7 @@
 #include <core/referencing_content_library.hpp>
 #include <core/storage_content_library.hpp>
 #include <core/types.hpp>
+#include <x/content_pieces.hpp>
 
 namespace dnd {
 
@@ -39,17 +40,13 @@ public:
     std::string status() const;
 
     const Groups& get_groups() const;
-    const StorageContentLibrary<Character>& get_characters() const;
-    const StorageContentLibrary<Class>& get_classes() const;
-    const StorageContentLibrary<Subclass>& get_subclasses() const;
-    const StorageContentLibrary<Species>& get_species() const;
-    const StorageContentLibrary<Subspecies>& get_subspecies() const;
-    const StorageContentLibrary<Item>& get_items() const;
-    const StorageContentLibrary<Spell>& get_spells() const;
-    const ReferencingContentLibrary<Feature>& get_features() const;
-    const ReferencingContentLibrary<ClassFeature>& get_class_features() const;
-    const ReferencingContentLibrary<SubclassFeature>& get_subclass_features() const;
-    const StorageContentLibrary<Choosable>& get_choosables() const;
+
+#define X(C, U, j, a, p, P) const StorageContentLibrary<C>& get_##p() const;
+    X_OWNED_CONTENT_PIECES
+#undef X
+#define X(C, U, j, a, p, P) const ReferencingContentLibrary<C>& get_##p() const;
+    X_REFERENCE_CONTENT_PIECES
+#undef X
 
     std::optional<EffectsProviderVariant> get_effects_provider(const std::string& name) const;
 
@@ -58,37 +55,21 @@ public:
     void add_group_member(const std::string& group_name, const std::string& value);
     void add_group_members(const std::string& group_name, std::set<std::string>&& values);
 
-    OptCRef<Character> add_character(Character&& character);
-    OptCRef<Class> add_class(Class&& cls);
-    OptCRef<Subclass> add_subclass(Subclass&& subclass);
-    OptCRef<Species> add_species(Species&& species);
-    OptCRef<Subspecies> add_subspecies(Subspecies&& subspecies);
-    OptCRef<Item> add_item(Item&& item);
-    OptCRef<Spell> add_spell(Spell&& spell);
-    OptCRef<Choosable> add_choosable(Choosable&& choosable);
-
-    OptCRef<Character> add_character_result(CreateResult<Character>&& character);
-    OptCRef<Class> add_class_result(CreateResult<Class>&& cls);
-    OptCRef<Subclass> add_subclass_result(CreateResult<Subclass>&& subclass);
-    OptCRef<Species> add_species_result(CreateResult<Species>&& species);
-    OptCRef<Subspecies> add_subspecies_result(CreateResult<Subspecies>&& subspecies);
-    OptCRef<Item> add_item_result(CreateResult<Item>&& item);
-    OptCRef<Spell> add_spell_result(CreateResult<Spell>&& spell);
-    OptCRef<Choosable> add_choosable_result(CreateResult<Choosable>&& choosable);
+#define X(C, U, j, a, p, P) OptCRef<C> add_##j(C&& a);
+    X_OWNED_CONTENT_PIECES
+#undef X
+#define X(C, U, j, a, p, P) OptCRef<C> add_##j##_result(CreateResult<C>&& a);
+    X_OWNED_CONTENT_PIECES
+#undef X
 private:
     Groups groups;
-    StorageContentLibrary<Character> character_libary;
-    StorageContentLibrary<Class> class_library;
-    StorageContentLibrary<Subclass> subclass_library;
-    StorageContentLibrary<Species> species_library;
-    StorageContentLibrary<Subspecies> subspecies_library;
-    StorageContentLibrary<Item> item_library;
-    StorageContentLibrary<Spell> spell_library;
 
-    ReferencingContentLibrary<Feature> feature_library;
-    ReferencingContentLibrary<ClassFeature> class_feature_library;
-    ReferencingContentLibrary<SubclassFeature> subclass_feature_library;
-    StorageContentLibrary<Choosable> choosable_library;
+#define X(C, U, j, a, p, P) StorageContentLibrary<C> j##_library;
+    X_OWNED_CONTENT_PIECES
+#undef X
+#define X(C, U, j, a, p, P) ReferencingContentLibrary<C> j##_library;
+    X_REFERENCE_CONTENT_PIECES
+#undef X
 };
 
 } // namespace dnd

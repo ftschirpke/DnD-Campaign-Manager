@@ -22,17 +22,10 @@ public:
     ParseOpenContentVisitor(ItemCardBuilder& item_card_builder, SpellCardBuilder& spell_card_builder)
         : item_card_builder(item_card_builder), spell_card_builder(spell_card_builder) {}
 
-    void operator()(const Character& character) override { DND_UNUSED(character); }
-    void operator()(const Class& cls) override { DND_UNUSED(cls); }
-    void operator()(const Subclass& subclass) override { DND_UNUSED(subclass); }
-    void operator()(const Species& species) override { DND_UNUSED(species); }
-    void operator()(const Subspecies& subspecies) override { DND_UNUSED(subspecies); }
-    void operator()(const Item& item) override { item_card_builder.add_item(item); }
-    void operator()(const Spell& spell) override { spell_card_builder.add_spell(spell); }
-    void operator()(const Feature& feature) override { DND_UNUSED(feature); }
-    void operator()(const ClassFeature& class_feature) override { DND_UNUSED(class_feature); }
-    void operator()(const SubclassFeature& subclass_feature) override { DND_UNUSED(subclass_feature); }
-    void operator()(const Choosable& choosable) override { DND_UNUSED(choosable); }
+#define X(C, U, j, a, p, P)                                                                                            \
+    void operator()(const C& a) override { DND_UNUSED(a); }
+    X_CONTENT_PIECES
+#undef X
 
     void parse(const std::deque<const ContentPiece*>& content_pieces) {
         item_card_builder.clear_items();

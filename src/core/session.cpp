@@ -24,7 +24,6 @@
 #include <core/searching/search_result.hpp>
 #include <core/types.hpp>
 #include <core/utils/string_manipulation.hpp>
-#include <core/visitors/content/collect_open_tabs_visitor.hpp>
 #include <core/visitors/content/list_content_visitor.hpp>
 
 static const char* OPEN_TABS = "open_tabs";
@@ -120,6 +119,27 @@ void Session::retrieve_last_session_values() {
     }
     last_session_open_tabs = last_session[OPEN_TABS].get<std::unordered_map<std::string, std::vector<std::string>>>();
 }
+
+namespace {
+class CollectOpenTabsVisitor : public ContentVisitor {
+public:
+    nlohmann::json get_open_tabs() { return std::move(open_tabs_json); }
+
+#define X(C, U, j, a, p, P)                                                                                            \
+    virtual void operator()(const C& a) override {                                                                     \
+        if (!open_tabs_json.contains(#j)) {                                                                            \
+            open_tabs_json[#j] = nlohmann::json::array();                                                              \
+        }                                                                                                              \
+        open_tabs_json[#j].push_back(a.get_key());                                                                     \
+    }
+    X_CONTENT_PIECES
+#undef X
+private:
+    nlohmann::json open_tabs_json;
+};
+
+} // namespace
+
 
 void Session::save_session_values() {
     nlohmann::json last_session;
