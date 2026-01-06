@@ -64,6 +64,18 @@ size_t Session::get_fuzzy_search_result_count() const { return fuzzy_search_resu
 
 bool Session::too_many_fuzzy_search_results() const { return fuzzy_search_results.size() > max_search_results; }
 
+static std::vector<std::string> cleaned_results_list(std::vector<std::string>&& results_list) {
+    // TODO: pretty this up - or replace it with another solution
+    for (std::string& result : results_list) {
+        for (char& c : result) {
+            if (c == '#') {
+                c = ':';
+            }
+        }
+    }
+    return results_list;
+}
+
 std::vector<std::string> Session::get_fuzzy_search_result_strings() const {
     DND_MEASURE_FUNCTION();
     ListContentVisitor list_content_visitor;
@@ -74,7 +86,7 @@ std::vector<std::string> Session::get_fuzzy_search_result_strings() const {
     for (size_t i = 0; i < fuzzy_search_results.size(); ++i) {
         fuzzy_search_results[i].content_piece_ptr->accept_visitor(list_content_visitor);
     }
-    return list_content_visitor.get_list();
+    return cleaned_results_list(list_content_visitor.get_list());
 }
 
 std::vector<std::string> Session::get_advanced_search_result_strings() const {
@@ -85,7 +97,7 @@ std::vector<std::string> Session::get_advanced_search_result_strings() const {
     for (const ContentPiece* content_piece : advanced_search_results) {
         content_piece->accept_visitor(list_content_visitor);
     }
-    return list_content_visitor.get_list();
+    return cleaned_results_list(list_content_visitor.get_list());
 }
 
 void Session::retrieve_last_session_values() {

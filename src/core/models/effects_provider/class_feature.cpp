@@ -30,13 +30,6 @@ CreateResult<ClassFeature> ClassFeature::create_for(Data&& data, const Content& 
     }
     Effects main_effects = main_effects_result.value();
 
-    if (data.higher_level_effects_data.empty()) {
-        return ValidCreate(ClassFeature(
-            std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.source_name),
-            data.level, std::move(main_effects)
-        ));
-    }
-
     std::map<int, Effects> higher_level_effects;
     for (auto& [level, effects_data] : data.higher_level_effects_data) {
         CreateResult<Effects> effects_result = Effects::create_for(std::move(effects_data), content);
@@ -46,9 +39,11 @@ CreateResult<ClassFeature> ClassFeature::create_for(Data&& data, const Content& 
         }
         higher_level_effects.emplace(level, effects_result.value());
     }
+
     return ValidCreate(ClassFeature(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.source_name),
-        data.level, std::move(main_effects), std::move(higher_level_effects)
+        data.level, std::move(main_effects), std::move(higher_level_effects), std::move(data.class_name),
+        std::move(data.class_source_name)
     ));
 }
 
@@ -82,13 +77,15 @@ std::string ClassFeature::Data::key(
 
 ClassFeature::ClassFeature(
     std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name, int level,
-    Effects&& main_effects, std::map<int, Effects>&& higher_level_effects
+    Effects&& main_effects, std::map<int, Effects>&& higher_level_effects, std::string&& class_name,
+    std::string&& class_source_name
 )
     : Feature(
           std::move(name), std::move(description), std::move(source_path), std::move(source_name),
           std::move(main_effects)
       ),
-      level(level), higher_level_effects(std::move(higher_level_effects)) {}
+      level(level), higher_level_effects(std::move(higher_level_effects)), class_name(std::move(class_name)),
+      class_source_name(std::move(class_source_name)) {}
 
 std::string ClassFeature::Data::get_key() const { return key(name, source_name, class_name, class_source_name, level); }
 
