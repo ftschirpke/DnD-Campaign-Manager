@@ -1,13 +1,16 @@
 #include "check_text.hpp"
 
+#include <cassert>
 #include <string>
 
 #include <log.hpp>
 
 namespace dnd {
 
-static constexpr uint32_t utf8_code_to_bytes(uint32_t code_point) {
-    assert(code_point <= 0x110000);
+static consteval uint32_t utf8_code_to_bytes(uint32_t code_point) {
+    if (code_point >= 0x110000) {
+        return 0xff'ff'ff'ff;
+    }
     if (code_point <= 0x80) {
         return code_point;
     } else if (code_point <= 0x800) {
@@ -60,7 +63,7 @@ static constexpr uint32_t bytes_to_utf8_code(uint32_t concat_bytes) {
     } else if ((concat_bytes & 0xff'ff'ff'80) == 0x00'00'00'00) {
         return concat_bytes;
     } else {
-        assert(false);
+        return 0xff'ff'ff'ff;
     }
 }
 
