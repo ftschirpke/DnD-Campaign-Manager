@@ -7,6 +7,8 @@
 #include <string>
 #include <vector>
 
+#include <core/text/check_text.hpp>
+
 namespace dnd {
 
 enum class Status {
@@ -49,7 +51,7 @@ std::optional<RichText> parse_rich_text(std::string::const_iterator begin, std::
                     start = str;
                     found_start = true;
                 } else if (*str == ' ' || *str == '}') {
-                    rich_text.rich_type = std::string(start, str);
+                    rich_text.rich_type = checked_string(start, str);
                     found_start = false;
                     status = Status::SEARCHING_TEXT;
                     if (*str == '}') {
@@ -65,7 +67,7 @@ std::optional<RichText> parse_rich_text(std::string::const_iterator begin, std::
                     inner++;
                     status = Status::SEARCHING_INNER_END;
                 } else if (*str == '|' || *str == '}') {
-                    rich_text.text = std::string(start, str);
+                    rich_text.text = checked_string(start, str);
                     found_start = false;
                     status = Status::SEARCHING_ATTRIBUTES;
                     if (*str == '}') {
@@ -89,10 +91,10 @@ std::optional<RichText> parse_rich_text(std::string::const_iterator begin, std::
                     start = str;
                     found_start = true;
                 } else if (*str == '=') {
-                    parsed_key = std::string(start, str);
+                    parsed_key = checked_string(start, str);
                     found_start = false;
                 } else if (*str == '|' || *str == '}') {
-                    rich_text.attributes.push_back({.key = parsed_key, .value = std::string(start, str)});
+                    rich_text.attributes.push_back({.key = parsed_key, .value = checked_string(start, str)});
                     found_start = false;
                     parsed_key = std::nullopt;
                     if (*str == '}') {
