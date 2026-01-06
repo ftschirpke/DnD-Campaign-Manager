@@ -1,6 +1,8 @@
 #include "check_text.hpp"
 
 #include <cassert>
+#include <cstdint>
+#include <optional>
 #include <string>
 
 #include <log.hpp>
@@ -44,6 +46,7 @@ static consteval uint32_t utf8_code_to_bytes(uint32_t code_point) {
     }
 }
 
+#if DND_Debug
 static constexpr uint32_t bytes_to_utf8_code(uint32_t concat_bytes) {
     if ((concat_bytes & 0xf8'c0'c0'c0) == 0xf0'80'80'80) {
         uint32_t byte1_data = (concat_bytes >> 24) & 0x7;
@@ -66,6 +69,7 @@ static constexpr uint32_t bytes_to_utf8_code(uint32_t concat_bytes) {
         return 0xff'ff'ff'ff;
     }
 }
+#endif
 
 static void push_back_bytes(std::string& str, const char* bytes, size_t byte_count) {
     for (size_t i = 0; i < byte_count; ++i) {
