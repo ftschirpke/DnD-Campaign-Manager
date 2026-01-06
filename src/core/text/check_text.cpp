@@ -46,7 +46,7 @@ static consteval uint32_t utf8_code_to_bytes(uint32_t code_point) {
     }
 }
 
-#if DND_Debug
+#if DND_DEBUG_MODE
 static constexpr uint32_t bytes_to_utf8_code(uint32_t concat_bytes) {
     if ((concat_bytes & 0xf8'c0'c0'c0) == 0xf0'80'80'80) {
         uint32_t byte1_data = (concat_bytes >> 24) & 0x7;
