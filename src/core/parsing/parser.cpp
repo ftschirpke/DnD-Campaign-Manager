@@ -14,6 +14,7 @@
 
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
+#include <core/text/check_text.hpp>
 #include <core/text/rich_text.hpp>
 #include <core/text/text.hpp>
 #include <core/types.hpp>
@@ -55,7 +56,7 @@ static std::optional<Error> parse_text_recursive(
             continue;
         }
         if (start != cur) {
-            paragraph.parts.emplace_back(SimpleText{.str = std::string(start, cur), .bold = bold, .italic = italic});
+            paragraph.parts.emplace_back(SimpleText{.str = checked_string(start, cur), .bold = bold, .italic = italic});
         }
 
         if (rich_text->rich_type == "b" || rich_text->rich_type == "i") {
@@ -110,7 +111,7 @@ static std::optional<Error> parse_text_recursive(
         start = cur;
     }
     if (start != cur) {
-        paragraph.parts.emplace_back(SimpleText{.str = std::string(start, cur), .bold = bold, .italic = italic});
+        paragraph.parts.emplace_back(SimpleText{.str = checked_string(start, cur), .bold = bold, .italic = italic});
     }
     return std::nullopt;
 }
@@ -129,7 +130,7 @@ tl::expected<Table, Error> parse_table(const nlohmann::json& json, const std::fi
         return tl::unexpected(error.value());
     }
     if (!caption.empty()) {
-        new_table.caption = SimpleText{.str = caption};
+        new_table.caption = SimpleText{.str = checked_string(std::move(caption))};
     }
 
     error = check_required_attribute(json, "colLabels", filepath, JsonType::ARRAY);
@@ -310,7 +311,7 @@ static tl::expected<ListItem, Error> parse_list_item(
             }
             first_paragraph->parts.push_back(
                 SimpleText{
-                    .str = name + ". ",
+                    .str = checked_string(std::move(name)) + ". ",
                     .bold = true,
                     .italic = false,
                 }
@@ -388,7 +389,9 @@ static tl::expected<ListItem, Error> parse_list_item(
                 }
                 Paragraph new_paragraph{};
                 if (!name.empty()) {
-                    new_paragraph.parts.push_back(SimpleText{.str = name + ". ", .bold = true, .italic = true});
+                    new_paragraph.parts.push_back(
+                        SimpleText{.str = checked_string(std::move(name)) + ". ", .bold = true, .italic = true}
+                    );
                 }
 
                 std::vector<std::string> entries_strings;
@@ -556,7 +559,9 @@ std::optional<Error> write_formatted_text_into(
                 }
                 Paragraph new_paragraph{};
                 if (!name.empty()) {
-                    new_paragraph.parts.push_back(SimpleText{.str = name + ". ", .bold = true, .italic = true});
+                    new_paragraph.parts.push_back(
+                        SimpleText{.str = checked_string(std::move(name)) + ". ", .bold = true, .italic = true}
+                    );
                 }
 
                 std::vector<std::string> entries_strings;
