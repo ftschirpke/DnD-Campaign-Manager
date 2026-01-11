@@ -31,11 +31,12 @@ std::vector<std::string> ListContentVisitor::get_list() { return std::move(strin
 void ListContentVisitor::clear_list() { string_list.clear(); }
 
 void ListContentVisitor::operator()(const Character& character) {
+    const Class& cls = content.get_class(character.get_feature_providers().get_class_id());
+    const Species& species = content.get_species(character.get_feature_providers().get_species_id());
     string_list.push_back(
         fmt::format(
             "{} ({}) [CHARACTER] : Level {} {} {}##{}", character.get_name(), character.get_source_info().name,
-            character.get_progression().get_level(), character.get_feature_providers().get_class().get_name(),
-            character.get_feature_providers().get_species().get_name(), character.get_key()
+            character.get_progression().get_level(), cls.get_name(), species.get_name(), character.get_key()
         )
     );
 }

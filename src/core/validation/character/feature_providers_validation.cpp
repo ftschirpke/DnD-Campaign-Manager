@@ -27,14 +27,14 @@ static Errors validate_feature_providers_raw(const FeatureProviders::Data& data)
 static Errors validate_feature_providers_relations(const FeatureProviders::Data& data, const Content& content) {
     Errors errors;
 
-    OptCRef<Species> species_optional = content.get_species_library().get(data.species_key);
+    Opt<CRef<Species>> species_optional = content.get_species_library().get(data.species_key);
     if (!species_optional.has_value()) {
         errors.add_validation_error(
             ValidationError::Code::RELATION_NOT_FOUND, fmt::format("Species '{}' does not exist.", data.species_key)
         );
     } else if (!data.subspecies_key.empty()) {
         const Species& species = species_optional.value();
-        OptCRef<Subspecies> subspecies_optional = content.get_subspecies_library().get(data.subspecies_key);
+        Opt<CRef<Subspecies>> subspecies_optional = content.get_subspecies_library().get(data.subspecies_key);
         if (!subspecies_optional.has_value()) {
             errors.add_validation_error(
                 ValidationError::Code::RELATION_NOT_FOUND,
@@ -51,14 +51,14 @@ static Errors validate_feature_providers_relations(const FeatureProviders::Data&
     }
     // TODO: potentially check for missing subspecies
 
-    std::optional<Id> class_id = content.find_class(data.class_key);
+    Opt<Id> class_id = content.find_class(data.class_key);
     if (!class_id.has_value()) {
         errors.add_validation_error(
             ValidationError::Code::RELATION_NOT_FOUND, fmt::format("Class '{}' does not exist.", data.class_key)
         );
     } else if (!data.subclass_key.empty()) {
         const Class& cls = content.get_class(class_id.value());
-        std::optional<Id> subclass_id = content.find_subclass(data.subclass_key);
+        Opt<Id> subclass_id = content.find_subclass(data.subclass_key);
         if (!subclass_id.has_value()) {
             errors.add_validation_error(
                 ValidationError::Code::RELATION_NOT_FOUND,

@@ -59,7 +59,7 @@ CreateResult<Character> Character::create_for(Data&& data, const Content& conten
     std::vector<CRef<Choosable>> choosables;
     features.reserve(data.choosable_keys.size());
     for (std::string& choosable_key : data.choosable_keys) {
-        OptCRef<Choosable> choosable = content.get_choosable_library().get(choosable_key);
+        Opt<CRef<Choosable>> choosable = content.get_choosable_library().get(choosable_key);
         if (!choosable.has_value()) {
             errors.add_runtime_error(
                 RuntimeError::Code::UNREACHABLE, "Invalid choosable key was not caught by validation"
@@ -109,7 +109,7 @@ CreateResult<Character> Character::create_for(Data&& data, const Content& conten
         data.get_key(), std::move(features), std::move(choosables), std::move(base_ability_scores),
         std::move(feature_providers), std::move(progression), std::move(decisions)
     );
-    errors = character.recalculate_stats();
+    errors = character.recalculate_stats(content);
     if (!errors.ok()) {
         return InvalidCreate<Character>(std::move(data), std::move(errors));
     }
@@ -136,17 +136,19 @@ const Progression& Character::get_progression() const { return progression; }
 
 const Stats& Character::get_stats() const { return stats; }
 
-void Character::for_all_effects_do(std::function<void(const Effects&)> func) const {
-    for (const Feature& feature : feature_providers.get_species().get_features()) {
+void Character::for_all_effects_do(const Content& content, std::function<void(const Effects&)> func) const {
+    const Species& species = content.get_species(feature_providers.get_species_id());
+    for (const Feature& feature : species.get_features()) {
         func(feature.get_main_effects());
     }
-    OptCRef<Subspecies> subspecies = feature_providers.get_subspecies();
-    if (subspecies.has_value()) {
-        for (const Feature& feature : subspecies.value().get().get_features()) {
+    if (feature_providers.has_subspecies()) {
+        const Subspecies& subspecies = content.get_subspecies(feature_providers.get_subspecies_id().value());
+        for (const Feature& feature : subspecies.get_features()) {
             func(feature.get_main_effects());
         }
     }
-    for (const ClassFeature& feature : feature_providers.get_class().get_features()) {
+    const Class& cls = content.get_class(feature_providers.get_class_id());
+    for (const ClassFeature& feature : cls.get_features()) {
         func(feature.get_main_effects());
         for (const auto& [level, effects] : feature.get_higher_level_effects()) {
             if (level > progression.get_level()) {
@@ -155,9 +157,9 @@ void Character::for_all_effects_do(std::function<void(const Effects&)> func) con
             func(effects);
         }
     }
-    OptCRef<Subclass> subclass = feature_providers.get_subclass();
-    if (subclass.has_value()) {
-        for (const SubclassFeature& feature : subclass.value().get().get_features()) {
+    if (feature_providers.has_subclass()) {
+        const Subclass& subclass = content.get_subclass(feature_providers.get_subclass_id().value());
+        for (const SubclassFeature& feature : subclass.get_features()) {
             func(feature.get_main_effects());
             for (const auto& [level, effects] : feature.get_higher_level_effects()) {
                 if (level > progression.get_level()) {
@@ -175,13 +177,13 @@ void Character::for_all_effects_do(std::function<void(const Effects&)> func) con
     }
 }
 
-Errors Character::recalculate_stats() {
+Errors Character::recalculate_stats(const Content& content) {
     std::vector<CRef<StatChange>> stat_changes;
 
     std::unordered_set<std::string> proficient_skills;
     std::unordered_set<std::string> proficient_saves;
 
-    for_all_effects_do([&stat_changes, &proficient_saves, &proficient_skills](const Effects& effects) {
+    for_all_effects_do(content, [&stat_changes, &proficient_saves, &proficient_skills](const Effects& effects) {
         for (const std::unique_ptr<StatChange>& change : effects.get_stat_changes()) {
             stat_changes.push_back(*change);
         }
@@ -217,9 +219,10 @@ Errors Character::recalculate_stats() {
     }
     stat_changes.insert(stat_changes.end(), implicit_stat_changes.begin(), implicit_stat_changes.end());
 
+    const Class& cls = content.get_class(feature_providers.get_class_id());
+
     tl::expected<Stats, Errors> result = Stats::create(
-        base_ability_scores, get_proficiency_bonus(), stat_changes, feature_providers.get_class().get_hit_dice(),
-        progression.get_hit_dice_rolls()
+        base_ability_scores, get_proficiency_bonus(), stat_changes, cls.get_hit_dice(), progression.get_hit_dice_rolls()
     );
     if (!result.has_value()) {
         return result.error();

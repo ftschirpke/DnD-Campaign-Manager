@@ -28,13 +28,9 @@ using Ref = std::reference_wrapper<T>;
 template <typename T>
 using CRef = std::reference_wrapper<const T>;
 
-// an optional reference to a T
+// a shorthand for std::optional
 template <typename T>
-using OptRef = std::optional<std::reference_wrapper<T>>;
-
-// an optional reference to a const T
-template <typename T>
-using OptCRef = std::optional<std::reference_wrapper<const T>>;
+using Opt = std::optional<T>;
 
 // a variant of references to T
 template <typename... T>

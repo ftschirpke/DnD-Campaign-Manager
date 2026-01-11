@@ -23,22 +23,20 @@ public:
 
     static CreateResult<FeatureProviders> create_for(Data&& data, const Content& content);
 
-    const Species& get_species() const;
-    OptCRef<Subspecies> get_subspecies() const;
-    const Class& get_class() const;
-    OptCRef<Subclass> get_subclass() const;
+    Id get_species_id() const;
+    Opt<Id> get_subspecies_id() const;
+    Id get_class_id() const;
+    Opt<Id> get_subclass_id() const;
 
     bool has_subspecies() const;
     bool has_subclass() const;
 private:
-    FeatureProviders(
-        const Species& species, OptCRef<Subspecies> subspecies, const Class& cls, OptCRef<Subclass> subclass
-    );
+    FeatureProviders(Id species_id, Opt<Id> subspecies_id, Id class_id, Opt<Id> subclass_id);
 
-    CRef<Species> species;
-    OptCRef<Subspecies> subspecies;
-    CRef<Class> cls;
-    OptCRef<Subclass> subclass;
+    Id species_id;
+    Opt<Id> subspecies_id;
+    Id class_id;
+    Opt<Id> subclass_id;
 };
 
 struct FeatureProviders::Data {

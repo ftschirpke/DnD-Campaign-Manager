@@ -32,7 +32,7 @@ bool Content::empty() const {
 
 const Groups& Content::get_groups() const { return groups; }
 
-std::optional<Id> Content::find(Type type, const std::string& key) const {
+Opt<Id> Content::find(Type type, const std::string& key) const {
     std::optional<size_t> index;
     switch (type) {
 #define X(C, U, j, a, p, P)                                                                                            \
@@ -52,7 +52,7 @@ std::optional<Id> Content::find(Type type, const std::string& key) const {
 }
 
 #define X(C, U, j, a, p, P)                                                                                            \
-    std::optional<Id> Content::find_##j(const std::string& key) const { return find(Type::C, key); }
+    Opt<Id> Content::find_##j(const std::string& key) const { return find(Type::C, key); }
 X_CONTENT_PIECES
 #undef X
 
@@ -122,15 +122,15 @@ X_REFERENCE_CONTENT_PIECES
 #undef X
 
 std::optional<EffectsProviderVariant> Content::get_effects_provider(const std::string& key) const {
-    OptCRef<Feature> feature = feature_library.get(key);
+    Opt<CRef<Feature>> feature = feature_library.get(key);
     if (feature.has_value()) {
         return feature.value();
     }
-    OptCRef<ClassFeature> class_feature = class_feature_library.get(key);
+    Opt<CRef<ClassFeature>> class_feature = class_feature_library.get(key);
     if (class_feature.has_value()) {
         return class_feature.value();
     }
-    OptCRef<Choosable> choosable = choosable_library.get(key);
+    Opt<CRef<Choosable>> choosable = choosable_library.get(key);
     if (choosable.has_value()) {
         return choosable.value();
     }
@@ -153,12 +153,12 @@ void Content::add_group_members(const std::string& group_name, std::set<std::str
     groups.add(group_name, std::move(values));
 }
 
-OptCRef<Character> Content::add_character(Character&& character) {
+Opt<CRef<Character>> Content::add_character(Character&& character) {
     std::optional<size_t> character_index = character_library.add(std::move(character));
     if (!character_index.has_value()) {
         return std::nullopt;
     }
-    OptCRef<Character> inserted_character = character_library.get(character_index.value());
+    Opt<CRef<Character>> inserted_character = character_library.get(character_index.value());
     if (inserted_character.has_value()) {
         for (const Feature& feature : inserted_character.value().get().get_features()) {
             feature_library.add(feature);
@@ -167,12 +167,12 @@ OptCRef<Character> Content::add_character(Character&& character) {
     return inserted_character;
 }
 
-OptCRef<Class> Content::add_class(Class&& cls) {
+Opt<CRef<Class>> Content::add_class(Class&& cls) {
     std::optional<size_t> class_index = class_library.add(std::move(cls));
     if (!class_index.has_value()) {
         return std::nullopt;
     }
-    OptCRef<Class> inserted_class = class_library.get(class_index.value());
+    Opt<CRef<Class>> inserted_class = class_library.get(class_index.value());
     if (inserted_class.has_value()) {
         for (const ClassFeature& feature : inserted_class.value().get().get_features()) {
             class_feature_library.add(feature);
@@ -181,12 +181,12 @@ OptCRef<Class> Content::add_class(Class&& cls) {
     return inserted_class;
 }
 
-OptCRef<Subclass> Content::add_subclass(Subclass&& subclass) {
+Opt<CRef<Subclass>> Content::add_subclass(Subclass&& subclass) {
     std::optional<size_t> subclass_index = subclass_library.add(std::move(subclass));
     if (!subclass_index.has_value()) {
         return std::nullopt;
     }
-    OptCRef<Subclass> inserted_subclass = subclass_library.get(subclass_index.value());
+    Opt<CRef<Subclass>> inserted_subclass = subclass_library.get(subclass_index.value());
     if (inserted_subclass.has_value()) {
         for (const SubclassFeature& subclass_feature : inserted_subclass.value().get().get_features()) {
             subclass_feature_library.add(subclass_feature);
@@ -195,12 +195,12 @@ OptCRef<Subclass> Content::add_subclass(Subclass&& subclass) {
     return inserted_subclass;
 }
 
-OptCRef<Species> Content::add_species(Species&& species) {
+Opt<CRef<Species>> Content::add_species(Species&& species) {
     std::optional<size_t> species_index = species_library.add(std::move(species));
     if (!species_index.has_value()) {
         return std::nullopt;
     }
-    OptCRef<Species> inserted_species = species_library.get(species_index.value());
+    Opt<CRef<Species>> inserted_species = species_library.get(species_index.value());
     if (inserted_species.has_value()) {
         for (const Feature& feature : inserted_species.value().get().get_features()) {
             feature_library.add(feature);
@@ -209,12 +209,12 @@ OptCRef<Species> Content::add_species(Species&& species) {
     return inserted_species;
 }
 
-OptCRef<Subspecies> Content::add_subspecies(Subspecies&& subspecies) {
+Opt<CRef<Subspecies>> Content::add_subspecies(Subspecies&& subspecies) {
     std::optional<size_t> subspecies_index = subspecies_library.add(std::move(subspecies));
     if (!subspecies_index.has_value()) {
         return std::nullopt;
     }
-    OptCRef<Subspecies> inserted_subspecies = subspecies_library.get(subspecies_index.value());
+    Opt<CRef<Subspecies>> inserted_subspecies = subspecies_library.get(subspecies_index.value());
     if (inserted_subspecies.has_value()) {
         for (const Feature& feature : inserted_subspecies.value().get().get_features()) {
             feature_library.add(feature);
@@ -223,7 +223,7 @@ OptCRef<Subspecies> Content::add_subspecies(Subspecies&& subspecies) {
     return inserted_subspecies;
 }
 
-OptCRef<Item> Content::add_item(Item&& item) {
+Opt<CRef<Item>> Content::add_item(Item&& item) {
     std::optional<size_t> item_index = item_library.add(std::move(item));
     if (!item_index.has_value()) {
         return std::nullopt;
@@ -231,7 +231,7 @@ OptCRef<Item> Content::add_item(Item&& item) {
     return item_library.get(item_index.value());
 }
 
-OptCRef<Spell> Content::add_spell(Spell&& spell) {
+Opt<CRef<Spell>> Content::add_spell(Spell&& spell) {
     std::optional<size_t> spell_index = spell_library.add(std::move(spell));
     if (!spell_index.has_value()) {
         return std::nullopt;
@@ -239,12 +239,12 @@ OptCRef<Spell> Content::add_spell(Spell&& spell) {
     return spell_library.get(spell_index.value());
 }
 
-OptCRef<Choosable> Content::add_choosable(Choosable&& choosable) {
+Opt<CRef<Choosable>> Content::add_choosable(Choosable&& choosable) {
     std::optional<size_t> choosable_index = choosable_library.add(std::move(choosable));
     if (!choosable_index.has_value()) {
         return std::nullopt;
     }
-    OptCRef<Choosable> inserted_choosable = choosable_library.get(choosable_index.value());
+    Opt<CRef<Choosable>> inserted_choosable = choosable_library.get(choosable_index.value());
     if (inserted_choosable.has_value()) {
         const Choosable& choosable_val = inserted_choosable.value().get();
         const std::string key = choosable_val.get_name();
@@ -255,7 +255,7 @@ OptCRef<Choosable> Content::add_choosable(Choosable&& choosable) {
 }
 
 #define X(C, U, j, a, p, P)                                                                                            \
-    OptCRef<C> Content::add_##j##_result(CreateResult<C>&& a) {                                                        \
+    Opt<CRef<C>> Content::add_##j##_result(CreateResult<C>&& a) {                                                      \
         if (a.is_valid()) {                                                                                            \
             return add_##j(std::move(a.value()));                                                                      \
         } else {                                                                                                       \

@@ -44,7 +44,7 @@ Errors validate_subspecies_relations_nonrecursively(const Subspecies::Data& data
         }
     }
 
-    std::optional<Id> species_id = content.find_species(data.species_key);
+    Opt<Id> species_id = content.find_species(data.species_key);
     if (!species_id.has_value()) {
         errors.add_validation_error(
             ValidationError::Code::RELATION_NOT_FOUND,

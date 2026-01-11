@@ -58,7 +58,7 @@ static Errors validate_subclass_relations_nonrecursively(const Subclass::Data& d
         }
     }
 
-    std::optional<Id> class_id = content.find_class(data.class_key);
+    Opt<Id> class_id = content.find_class(data.class_key);
     if (!class_id.has_value()) {
         errors.add_validation_error(
             ValidationError::Code::RELATION_NOT_FOUND,

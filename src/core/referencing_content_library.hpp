@@ -28,8 +28,8 @@ public:
     bool contains(const std::string& key) const override;
     bool empty() const override;
     size_t size() const override;
-    OptCRef<T> get(size_t index) const override;
-    OptCRef<T> get(const std::string& key) const override;
+    Opt<CRef<T>> get(size_t index) const override;
+    Opt<CRef<T>> get(const std::string& key) const override;
     const std::vector<std::reference_wrapper<const T>>& get_all() const;
     /**
      * @brief Add a content piece to a content piece to the library
@@ -75,7 +75,7 @@ inline size_t ReferencingContentLibrary<T>::size() const {
 
 template <typename T>
 requires isContentPieceType<T>
-inline OptCRef<T> ReferencingContentLibrary<T>::get(size_t index) const {
+inline Opt<CRef<T>> ReferencingContentLibrary<T>::get(size_t index) const {
     if (index >= data.size()) {
         return std::nullopt;
     }
@@ -84,7 +84,7 @@ inline OptCRef<T> ReferencingContentLibrary<T>::get(size_t index) const {
 
 template <typename T>
 requires isContentPieceType<T>
-inline OptCRef<T> ReferencingContentLibrary<T>::get(const std::string& key) const {
+inline Opt<CRef<T>> ReferencingContentLibrary<T>::get(const std::string& key) const {
     std::optional<size_t> idx = find(key);
     if (!idx.has_value()) {
         return std::nullopt;

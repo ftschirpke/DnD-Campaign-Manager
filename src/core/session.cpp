@@ -309,7 +309,7 @@ void Session::parse_content_and_initialize() {
 void Session::open_last_session() {
 #define X(C, U, j, a, p, P)                                                                                            \
     for (const std::string& piece_to_open : last_session_open_tabs[#j]) {                                              \
-        std::optional<Id> id = content.find_##j(piece_to_open);                                                        \
+        Opt<Id> id = content.find_##j(piece_to_open);                                                        \
         if (id.has_value()) {                                                                                          \
             const ContentPiece* piece = content.get_ptr(id.value());                                                   \
             open_content_pieces.push_back(piece);                                                                      \

@@ -50,7 +50,7 @@ CreateResult<Class> Class::create_for(Data&& data, const Content& content) {
     }
 
     int subclass_level = -1;
-    OptCRef<ClassFeature> subclass_feature = std::nullopt;
+    Opt<CRef<ClassFeature>> subclass_feature = std::nullopt;
 
     std::vector<ClassFeature> features;
     features.reserve(data.features_data.size());
@@ -120,7 +120,7 @@ bool Class::has_spellcasting() const { return spellcasting != nullptr; }
 
 const Spellcasting* Class::get_spellcasting() const { return spellcasting.get(); }
 
-OptCRef<ClassFeature> Class::get_subclass_feature() const { return subclass_feature; }
+Opt<CRef<ClassFeature>> Class::get_subclass_feature() const { return subclass_feature; }
 
 const Dice& Class::get_hit_dice() const { return hit_dice; }
 
@@ -130,7 +130,7 @@ void Class::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 Class::Class(
     std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
-    std::string&& key, std::vector<ClassFeature>&& features, OptCRef<ClassFeature> subclass_feature, Dice hit_dice,
+    std::string&& key, std::vector<ClassFeature>&& features, Opt<CRef<ClassFeature>> subclass_feature, Dice hit_dice,
     ImportantLevels&& important_levels, std::unique_ptr<Spellcasting>&& spellcasting
 )
     : name(std::move(name)), description(std::move(description)),

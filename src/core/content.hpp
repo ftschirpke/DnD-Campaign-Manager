@@ -39,8 +39,8 @@ public:
 
     const Groups& get_groups() const;
 
-    std::optional<Id> find(Type type, const std::string& key) const;
-#define X(C, U, j, a, p, P) std::optional<Id> find_##j(const std::string& key) const;
+    Opt<Id> find(Type type, const std::string& key) const;
+#define X(C, U, j, a, p, P) Opt<Id> find_##j(const std::string& key) const;
     X_CONTENT_PIECES
 #undef X
 
@@ -74,10 +74,10 @@ public:
     void add_group_member(const std::string& group_name, const std::string& value);
     void add_group_members(const std::string& group_name, std::set<std::string>&& values);
 
-#define X(C, U, j, a, p, P) OptCRef<C> add_##j(C&& a);
+#define X(C, U, j, a, p, P) Opt<CRef<C>> add_##j(C&& a);
     X_OWNED_CONTENT_PIECES
 #undef X
-#define X(C, U, j, a, p, P) OptCRef<C> add_##j##_result(CreateResult<C>&& a);
+#define X(C, U, j, a, p, P) Opt<CRef<C>> add_##j##_result(CreateResult<C>&& a);
     X_OWNED_CONTENT_PIECES
 #undef X
 private:

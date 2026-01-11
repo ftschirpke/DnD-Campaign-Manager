@@ -32,8 +32,8 @@ public:
     bool contains(const std::string& key) const override;
     bool empty() const override;
     size_t size() const override;
-    OptCRef<T> get(size_t index) const override;
-    OptCRef<T> get(const std::string& key) const override;
+    Opt<CRef<T>> get(size_t index) const override;
+    Opt<CRef<T>> get(const std::string& key) const override;
     const std::vector<T>& get_all() const;
     const std::vector<std::pair<typename T::Data, Errors>>& get_drafts() const;
     /**
@@ -84,7 +84,7 @@ size_t StorageContentLibrary<T>::size() const {
 
 template <typename T>
 requires isContentPieceType<T>
-OptCRef<T> StorageContentLibrary<T>::get(size_t index) const {
+Opt<CRef<T>> StorageContentLibrary<T>::get(size_t index) const {
     if (index >= data.size()) {
         return std::nullopt;
     }
@@ -93,7 +93,7 @@ OptCRef<T> StorageContentLibrary<T>::get(size_t index) const {
 
 template <typename T>
 requires isContentPieceType<T>
-OptCRef<T> StorageContentLibrary<T>::get(const std::string& key) const {
+Opt<CRef<T>> StorageContentLibrary<T>::get(const std::string& key) const {
     std::optional<size_t> idx = find(key);
     if (!idx.has_value()) {
         return std::nullopt;

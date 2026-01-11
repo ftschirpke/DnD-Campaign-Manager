@@ -53,8 +53,8 @@ public:
 
     int get_proficiency_bonus() const;
 
-    void for_all_effects_do(std::function<void(const Effects&)> func) const;
-    Errors recalculate_stats();
+    void for_all_effects_do(const Content& content, std::function<void(const Effects&)> func) const;
+    Errors recalculate_stats(const Content& content);
 
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:

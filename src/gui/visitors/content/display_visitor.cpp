@@ -451,31 +451,31 @@ void dnd::DisplayVisitor::operator()(const Character& character) {
     label("Description:");
     display_formatted_text(character.get_description(), fonts);
 
+    const FeatureProviders& fp = character.get_feature_providers();
+
     label("Species:");
-    const Species& species = character.get_feature_providers().get_species();
+    const Species& species = content.get_species(fp.get_species_id());
     if (ImGui::CollapsingHeader(species.get_key().c_str())) {
         operator()(species);
     }
 
-    OptCRef<Subspecies> subspecies_optional = character.get_feature_providers().get_subspecies();
-    if (subspecies_optional.has_value()) {
+    if (fp.has_subspecies()) {
         label("Subspecies:");
-        const Subspecies& subspecies = subspecies_optional.value();
+        const Subspecies& subspecies = content.get_subspecies(fp.get_subspecies_id().value());
         if (ImGui::CollapsingHeader(subspecies.get_key().c_str())) {
             operator()(subspecies);
         }
     }
 
     label("Class:");
-    const Class& cls = character.get_feature_providers().get_class();
+    const Class& cls = content.get_class(fp.get_class_id());
     if (ImGui::CollapsingHeader(cls.get_key().c_str())) {
         operator()(cls);
     }
 
-    OptCRef<Subclass> subclass_optional = character.get_feature_providers().get_subclass();
-    if (subclass_optional.has_value()) {
+    if (fp.has_subclass()) {
         label("Subclass:");
-        const Subclass& subclass = subclass_optional.value();
+        const Subclass& subclass = content.get_subclass(fp.get_subclass_id().value());
         if (ImGui::CollapsingHeader(subclass.get_key().c_str())) {
             operator()(subclass);
         }

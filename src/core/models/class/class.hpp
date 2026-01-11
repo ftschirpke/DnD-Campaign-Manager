@@ -41,7 +41,7 @@ public:
     const std::vector<ClassFeature>& get_features() const;
     bool has_spellcasting() const;
     const Spellcasting* get_spellcasting() const;
-    OptCRef<ClassFeature> get_subclass_feature() const;
+    Opt<CRef<ClassFeature>> get_subclass_feature() const;
     const Dice& get_hit_dice() const;
     const ImportantLevels& get_important_levels() const;
 
@@ -49,7 +49,7 @@ public:
 private:
     Class(
         std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
-        std::string&& key, std::vector<ClassFeature>&& features, OptCRef<ClassFeature> subclass_feature, Dice hit_dice,
+        std::string&& key, std::vector<ClassFeature>&& features, Opt<CRef<ClassFeature>> subclass_feature, Dice hit_dice,
         ImportantLevels&& important_levels, std::unique_ptr<Spellcasting>&& spellcasting = nullptr
     );
 
@@ -59,7 +59,7 @@ private:
     std::string key;
     std::vector<ClassFeature> features;
     std::unique_ptr<Spellcasting> spellcasting;
-    OptCRef<ClassFeature> subclass_feature;
+    Opt<CRef<ClassFeature>> subclass_feature;
     Dice hit_dice;
     ImportantLevels important_levels;
 };
