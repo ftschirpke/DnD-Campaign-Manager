@@ -5,7 +5,20 @@
 #include <optional>
 #include <variant>
 
+#include <x/content_pieces.hpp>
+
 namespace dnd {
+
+enum class Type {
+#define X(C, u, j, a, p, P) C,
+    X_CONTENT_PIECES
+#undef X
+};
+
+struct Id {
+    size_t index;
+    Type type;
+};
 
 // a shorthand for std::reference_wrapper<T>
 template <typename T>

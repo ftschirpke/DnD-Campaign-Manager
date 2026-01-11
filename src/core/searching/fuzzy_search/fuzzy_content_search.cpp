@@ -3,7 +3,6 @@
 
 #include "fuzzy_content_search.hpp"
 
-#include <array>
 #include <string>
 #include <vector>
 
@@ -23,7 +22,7 @@ std::vector<SearchResult> fuzzy_search_content(
 
 #define X(C, U, j, a, p, P)                                                                                            \
     if (options.search_##p) {                                                                                          \
-        for (const auto& [_, a] : content.get_##p().get_all()) {                                                       \
+        for (const auto& a : content.get_all_##p()) {                                                                  \
             int64_t match_score = fuzzy_match_string(search_query, a.get_name());                                      \
             if (match_score > min_match_score) {                                                                       \
                 results.emplace_back(&a, match_score);                                                                 \
@@ -34,19 +33,19 @@ std::vector<SearchResult> fuzzy_search_content(
 #undef X
 
     if (options.search_features) {
-        for (const auto& [_, feature] : content.get_features().get_all()) {
+        for (const auto& feature : content.get_all_features()) {
             int64_t match_score = fuzzy_match_string(search_query, feature.get().get_name());
             if (match_score > min_match_score) {
                 results.emplace_back(&feature.get(), match_score);
             }
         }
-        for (const auto& [_, feature] : content.get_class_features().get_all()) {
+        for (const auto& feature : content.get_all_class_features()) {
             int64_t match_score = fuzzy_match_string(search_query, feature.get().get_name());
             if (match_score > min_match_score) {
                 results.emplace_back(&feature.get(), match_score);
             }
         }
-        for (const auto& [_, feature] : content.get_subclass_features().get_all()) {
+        for (const auto& feature : content.get_all_subclass_features()) {
             int64_t match_score = fuzzy_match_string(search_query, feature.get().get_name());
             if (match_score > min_match_score) {
                 results.emplace_back(&feature.get(), match_score);

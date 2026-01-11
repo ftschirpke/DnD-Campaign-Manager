@@ -19,7 +19,7 @@ bool ItemFilter::matches(const Item& item) const {
 
 std::vector<const ContentPiece*> ItemFilter::all_matches(const Content& content) const {
     std::vector<const ContentPiece*> matching_content_pieces;
-    for (const auto& [_, item] : content.get_items().get_all()) {
+    for (const auto& item : content.get_item_library().get_all()) {
         if (matches(item)) {
             matching_content_pieces.push_back(&item);
         }

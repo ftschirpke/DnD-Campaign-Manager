@@ -307,72 +307,16 @@ void Session::parse_content_and_initialize() {
 }
 
 void Session::open_last_session() {
-    for (const std::string& character_to_open : last_session_open_tabs["character"]) {
-        OptCRef<Character> character = content.get_characters().get(character_to_open);
-        if (character.has_value()) {
-            open_content_pieces.push_back(&character.value().get());
-        }
+#define X(C, U, j, a, p, P)                                                                                            \
+    for (const std::string& piece_to_open : last_session_open_tabs[#j]) {                                              \
+        std::optional<Id> id = content.find_##j(piece_to_open);                                                        \
+        if (id.has_value()) {                                                                                          \
+            const ContentPiece* piece = content.get_ptr(id.value());                                                   \
+            open_content_pieces.push_back(piece);                                                                      \
+        }                                                                                                              \
     }
-    for (const std::string& class_to_open : last_session_open_tabs["class"]) {
-        OptCRef<Class> cls = content.get_classes().get(class_to_open);
-        if (cls.has_value()) {
-            open_content_pieces.push_back(&cls.value().get());
-        }
-    }
-    for (const std::string& subclass_to_open : last_session_open_tabs["subclass"]) {
-        OptCRef<Subclass> subclass = content.get_subclasses().get(subclass_to_open);
-        if (subclass.has_value()) {
-            open_content_pieces.push_back(&subclass.value().get());
-        }
-    }
-    for (const std::string& species_to_open : last_session_open_tabs["species"]) {
-        OptCRef<Species> species = content.get_species().get(species_to_open);
-        if (species.has_value()) {
-            open_content_pieces.push_back(&species.value().get());
-        }
-    }
-    for (const std::string& subspecies_to_open : last_session_open_tabs["subspecies"]) {
-        OptCRef<Subspecies> subspecies = content.get_subspecies().get(subspecies_to_open);
-        if (subspecies.has_value()) {
-            open_content_pieces.push_back(&subspecies.value().get());
-        }
-    }
-    for (const std::string& item_to_open : last_session_open_tabs["item"]) {
-        OptCRef<Item> item = content.get_items().get(item_to_open);
-        if (item.has_value()) {
-            open_content_pieces.push_back(&item.value().get());
-        }
-    }
-    for (const std::string& spell_to_open : last_session_open_tabs["spell"]) {
-        OptCRef<Spell> spell = content.get_spells().get(spell_to_open);
-        if (spell.has_value()) {
-            open_content_pieces.push_back(&spell.value().get());
-        }
-    }
-    for (const std::string& feature_to_open : last_session_open_tabs["feature"]) {
-        OptCRef<Feature> feature = content.get_features().get(feature_to_open);
-        if (feature.has_value()) {
-            open_content_pieces.push_back(&feature.value().get());
-        }
-    }
-    for (const std::string& class_feature_to_open : last_session_open_tabs["class_feature"]) {
-        OptCRef<ClassFeature> class_feature = content.get_class_features().get(class_feature_to_open);
-        if (class_feature.has_value()) {
-            open_content_pieces.push_back(&class_feature.value().get());
-        }
-    }
-    for (const std::string& subclass_feature_to_open : last_session_open_tabs["subclass_feature"]) {
-        OptCRef<SubclassFeature> subclass_feature = content.get_subclass_features().get(subclass_feature_to_open);
-        if (subclass_feature.has_value()) {
-            open_content_pieces.push_back(&subclass_feature.value().get());
-        }
-    }
-    for (const std::string& choosable_to_open : last_session_open_tabs["choosable"]) {
-        OptCRef<Choosable> choosable = content.get_choosables().get(choosable_to_open);
-        if (choosable.has_value()) {
-            open_content_pieces.push_back(&choosable.value().get());
-        }
-    }
+    X_CONTENT_PIECES
+#undef X
 }
 
 void Session::open_content_piece(const ContentPiece* content_piece) {

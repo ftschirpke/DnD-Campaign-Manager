@@ -27,28 +27,47 @@ namespace dnd {
 
 using EffectsProviderVariant = VarOfCRef<Feature, ClassFeature, Choosable>;
 
+using ContentPieceVariant = VarOfCRef<
+    Character, Class, Subclass, Species, Subspecies, Item, Spell, Choosable, Feature, ClassFeature, SubclassFeature>;
+
 /**
  * @brief A class that holds all the content for a certain session or campaign
  */
 class Content {
 public:
     bool empty() const;
-    /**
-     * @brief Returns a string describing how many items this controller holds
-     * @return a string describing the current status of the controller
-     */
-    std::string status() const;
 
     const Groups& get_groups() const;
 
-#define X(C, U, j, a, p, P) const StorageContentLibrary<C>& get_##p() const;
+    std::optional<Id> find(Type type, const std::string& key) const;
+#define X(C, U, j, a, p, P) std::optional<Id> find_##j(const std::string& key) const;
+    X_CONTENT_PIECES
+#undef X
+
+    ContentPieceVariant get(Id id) const;
+    const ContentPiece* get_ptr(Id id) const;
+
+#define X(C, U, j, a, p, P) const C& get_##j(Id id) const;
+    X_CONTENT_PIECES
+#undef X
+#define X(C, U, j, a, p, P) const C& get_##j(size_t index) const;
+    X_CONTENT_PIECES
+#undef X
+
+#define X(C, U, j, a, p, P) const std::vector<C>& get_all_##p() const;
     X_OWNED_CONTENT_PIECES
 #undef X
-#define X(C, U, j, a, p, P) const ReferencingContentLibrary<C>& get_##p() const;
+#define X(C, U, j, a, p, P) const std::vector<CRef<C>>& get_all_##p() const;
+    X_REFERENCE_CONTENT_PIECES
+#undef X
+#define X(C, U, j, a, p, P) const StorageContentLibrary<C>& get_##j##_library() const;
+    X_OWNED_CONTENT_PIECES
+#undef X
+#define X(C, U, j, a, p, P) const ReferencingContentLibrary<C>& get_##j##_library() const;
     X_REFERENCE_CONTENT_PIECES
 #undef X
 
-    std::optional<EffectsProviderVariant> get_effects_provider(const std::string& name) const;
+    std::optional<EffectsProviderVariant> get_effects_provider(const std::string& key) const;
 
     void set_subgroup(const std::string& group_name, const std::string& subgroup_name);
     void set_subgroups(const std::string& group_name, std::set<std::string>&& subgroups);

@@ -30,42 +30,107 @@ bool Content::empty() const {
 #undef X
 }
 
-std::string Content::status() const {
-    return fmt::format(
-        "{}\n=== Items ===\nitems parsed: {}\n=== Spells ===\nspells parsed: {}\n=== Character Species ===\ncharacter "
-        "species parsed: {}\ncharacter subspecies parsed: {}\n=== Character Classes ===\ncharacter classes parsed: "
-        "{}\ncharacter subclasses parsed: {}\n=== Characters ===\ncharacters parsed: {}",
-        groups.status(), item_library.size(), spell_library.size(), species_library.size(), subspecies_library.size(),
-        class_library.size(), subclass_library.size(), character_library.size()
-    );
-}
-
 const Groups& Content::get_groups() const { return groups; }
 
+std::optional<Id> Content::find(Type type, const std::string& key) const {
+    std::optional<size_t> index;
+    switch (type) {
 #define X(C, U, j, a, p, P)                                                                                            \
-    const StorageContentLibrary<C>& Content::get_##p() const { return j##_library; }
+    case Type::C: {                                                                                                    \
+        index = j##_library.find(key);                                                                                 \
+        break;                                                                                                         \
+    }
+        X_CONTENT_PIECES
+#undef X
+        default:
+            assert(false);
+    }
+    if (!index.has_value()) {
+        return std::nullopt;
+    }
+    return Id{.index = index.value(), .type = type};
+}
+
+#define X(C, U, j, a, p, P)                                                                                            \
+    std::optional<Id> Content::find_##j(const std::string& key) const { return find(Type::C, key); }
+X_CONTENT_PIECES
+#undef X
+
+ContentPieceVariant Content::get(Id id) const {
+    switch (id.type) {
+#define X(C, U, j, a, p, P)                                                                                            \
+    case Type::C: {                                                                                                    \
+        auto val = j##_library.get(id.index);                                                                          \
+        assert(val.has_value()); /* we assume the IDs we handed out to be valid */                                     \
+        return val.value();                                                                                            \
+    }
+        X_CONTENT_PIECES
+#undef X
+        default:
+            assert(false);
+    }
+}
+
+const ContentPiece* Content::get_ptr(Id id) const {
+    switch (id.type) {
+#define X(C, U, j, a, p, P)                                                                                            \
+    case Type::C: {                                                                                                    \
+        return &get_##j(id);                                                                                           \
+    }
+        X_CONTENT_PIECES
+#undef X
+        default:
+            assert(false);
+    }
+}
+
+#define X(C, U, j, a, p, P)                                                                                            \
+    const C& Content::get_##j(size_t index) const {                                                                    \
+        auto val = j##_library.get(index);                                                                             \
+        assert(val.has_value()); /* we assume the IDs we handed out to be valid */                                     \
+        return val.value();                                                                                            \
+    }
+X_CONTENT_PIECES
+#undef X
+
+#define X(C, U, j, a, p, P)                                                                                            \
+    const C& Content::get_##j(Id id) const {                                                                           \
+        assert(id.type == Type::C);                                                                                    \
+        return get_##j(id.index);                                                                                      \
+    }
+X_CONTENT_PIECES
+#undef X
+
+#define X(C, U, j, a, p, P)                                                                                            \
+    const std::vector<C>& Content::get_all_##p() const { return get_##j##_library().get_all(); }
 X_OWNED_CONTENT_PIECES
 #undef X
 
+#define X(C, U, j, a, p, P)                                                                                            \
+    const std::vector<CRef<C>>& Content::get_all_##p() const { return get_##j##_library().get_all(); }
+X_REFERENCE_CONTENT_PIECES
+#undef X
 
-const ReferencingContentLibrary<Feature>& Content::get_features() const { return feature_library; }
+#define X(C, U, j, a, p, P)                                                                                            \
+    const StorageContentLibrary<C>& Content::get_##j##_library() const { return j##_library; }
+X_OWNED_CONTENT_PIECES
+#undef X
 
-const ReferencingContentLibrary<ClassFeature>& Content::get_class_features() const { return class_feature_library; }
+#define X(C, U, j, a, p, P)                                                                                            \
+    const ReferencingContentLibrary<C>& Content::get_##j##_library() const { return j##_library; }
+X_REFERENCE_CONTENT_PIECES
+#undef X
 
-const ReferencingContentLibrary<SubclassFeature>& Content::get_subclass_features() const {
-    return subclass_feature_library;
-}
-
-std::optional<EffectsProviderVariant> Content::get_effects_provider(const std::string& name) const {
-    OptCRef<Feature> feature = feature_library.get(name);
+std::optional<EffectsProviderVariant> Content::get_effects_provider(const std::string& key) const {
+    OptCRef<Feature> feature = feature_library.get(key);
     if (feature.has_value()) {
         return feature.value();
     }
-    OptCRef<ClassFeature> class_feature = class_feature_library.get(name);
+    OptCRef<ClassFeature> class_feature = class_feature_library.get(key);
     if (class_feature.has_value()) {
         return class_feature.value();
     }
-    OptCRef<Choosable> choosable = choosable_library.get(name);
+    OptCRef<Choosable> choosable = choosable_library.get(key);
     if (choosable.has_value()) {
         return choosable.value();
     }
@@ -89,7 +154,11 @@ void Content::add_group_members(const std::string& group_name, std::set<std::str
 }
 
 OptCRef<Character> Content::add_character(Character&& character) {
-    OptCRef<Character> inserted_character = character_library.add(std::move(character));
+    std::optional<size_t> character_index = character_library.add(std::move(character));
+    if (!character_index.has_value()) {
+        return std::nullopt;
+    }
+    OptCRef<Character> inserted_character = character_library.get(character_index.value());
     if (inserted_character.has_value()) {
         for (const Feature& feature : inserted_character.value().get().get_features()) {
             feature_library.add(feature);
@@ -99,7 +168,11 @@ OptCRef<Character> Content::add_character(Character&& character) {
 }
 
 OptCRef<Class> Content::add_class(Class&& cls) {
-    OptCRef<Class> inserted_class = class_library.add(std::move(cls));
+    std::optional<size_t> class_index = class_library.add(std::move(cls));
+    if (!class_index.has_value()) {
+        return std::nullopt;
+    }
+    OptCRef<Class> inserted_class = class_library.get(class_index.value());
     if (inserted_class.has_value()) {
         for (const ClassFeature& feature : inserted_class.value().get().get_features()) {
             class_feature_library.add(feature);
@@ -109,7 +182,11 @@ OptCRef<Class> Content::add_class(Class&& cls) {
 }
 
 OptCRef<Subclass> Content::add_subclass(Subclass&& subclass) {
-    OptCRef<Subclass> inserted_subclass = subclass_library.add(std::move(subclass));
+    std::optional<size_t> subclass_index = subclass_library.add(std::move(subclass));
+    if (!subclass_index.has_value()) {
+        return std::nullopt;
+    }
+    OptCRef<Subclass> inserted_subclass = subclass_library.get(subclass_index.value());
     if (inserted_subclass.has_value()) {
         for (const SubclassFeature& subclass_feature : inserted_subclass.value().get().get_features()) {
             subclass_feature_library.add(subclass_feature);
@@ -119,7 +196,11 @@ OptCRef<Subclass> Content::add_subclass(Subclass&& subclass) {
 }
 
 OptCRef<Species> Content::add_species(Species&& species) {
-    OptCRef<Species> inserted_species = species_library.add(std::move(species));
+    std::optional<size_t> species_index = species_library.add(std::move(species));
+    if (!species_index.has_value()) {
+        return std::nullopt;
+    }
+    OptCRef<Species> inserted_species = species_library.get(species_index.value());
     if (inserted_species.has_value()) {
         for (const Feature& feature : inserted_species.value().get().get_features()) {
             feature_library.add(feature);
@@ -129,7 +210,11 @@ OptCRef<Species> Content::add_species(Species&& species) {
 }
 
 OptCRef<Subspecies> Content::add_subspecies(Subspecies&& subspecies) {
-    OptCRef<Subspecies> inserted_subspecies = subspecies_library.add(std::move(subspecies));
+    std::optional<size_t> subspecies_index = subspecies_library.add(std::move(subspecies));
+    if (!subspecies_index.has_value()) {
+        return std::nullopt;
+    }
+    OptCRef<Subspecies> inserted_subspecies = subspecies_library.get(subspecies_index.value());
     if (inserted_subspecies.has_value()) {
         for (const Feature& feature : inserted_subspecies.value().get().get_features()) {
             feature_library.add(feature);
@@ -138,86 +223,47 @@ OptCRef<Subspecies> Content::add_subspecies(Subspecies&& subspecies) {
     return inserted_subspecies;
 }
 
-OptCRef<Item> Content::add_item(Item&& item) { return item_library.add(std::move(item)); }
+OptCRef<Item> Content::add_item(Item&& item) {
+    std::optional<size_t> item_index = item_library.add(std::move(item));
+    if (!item_index.has_value()) {
+        return std::nullopt;
+    }
+    return item_library.get(item_index.value());
+}
 
-OptCRef<Spell> Content::add_spell(Spell&& spell) { return spell_library.add(std::move(spell)); }
+OptCRef<Spell> Content::add_spell(Spell&& spell) {
+    std::optional<size_t> spell_index = spell_library.add(std::move(spell));
+    if (!spell_index.has_value()) {
+        return std::nullopt;
+    }
+    return spell_library.get(spell_index.value());
+}
 
 OptCRef<Choosable> Content::add_choosable(Choosable&& choosable) {
-    OptCRef<Choosable> inserted_choosable = choosable_library.add(std::move(choosable));
+    std::optional<size_t> choosable_index = choosable_library.add(std::move(choosable));
+    if (!choosable_index.has_value()) {
+        return std::nullopt;
+    }
+    OptCRef<Choosable> inserted_choosable = choosable_library.get(choosable_index.value());
     if (inserted_choosable.has_value()) {
         const Choosable& choosable_val = inserted_choosable.value().get();
-        const std::string name = choosable_val.get_name();
+        const std::string key = choosable_val.get_name();
         const std::string type_name = choosable_val.get_type();
-        groups.add(type_name, name);
+        groups.add(type_name, key);
     }
     return inserted_choosable;
 }
 
-OptCRef<Character> Content::add_character_result(CreateResult<Character>&& character) {
-    OptCRef<Character> inserted_character = character_library.add_result(std::move(character));
-    if (inserted_character.has_value()) {
-        for (const Feature& feature : inserted_character.value().get().get_features()) {
-            feature_library.add(feature);
-        }
+#define X(C, U, j, a, p, P)                                                                                            \
+    OptCRef<C> Content::add_##j##_result(CreateResult<C>&& a) {                                                        \
+        if (a.is_valid()) {                                                                                            \
+            return add_##j(std::move(a.value()));                                                                      \
+        } else {                                                                                                       \
+            j##_library.add_draft(std::move(a.data_and_errors()));                                                     \
+            return std::nullopt;                                                                                       \
+        }                                                                                                              \
     }
-    return inserted_character;
-}
-
-OptCRef<Class> Content::add_class_result(CreateResult<Class>&& cls) {
-    OptCRef<Class> inserted_class = class_library.add_result(std::move(cls));
-    if (inserted_class.has_value()) {
-        for (const ClassFeature& feature : inserted_class.value().get().get_features()) {
-            class_feature_library.add(feature);
-        }
-    }
-    return inserted_class;
-}
-
-OptCRef<Subclass> Content::add_subclass_result(CreateResult<Subclass>&& subclass) {
-    OptCRef<Subclass> inserted_subclass = subclass_library.add_result(std::move(subclass));
-    if (inserted_subclass.has_value()) {
-        for (const SubclassFeature& subclass_feature : inserted_subclass.value().get().get_features()) {
-            subclass_feature_library.add(subclass_feature);
-        }
-    }
-    return inserted_subclass;
-}
-
-OptCRef<Species> Content::add_species_result(CreateResult<Species>&& species) {
-    OptCRef<Species> inserted_species = species_library.add_result(std::move(species));
-    if (inserted_species.has_value()) {
-        for (const Feature& feature : inserted_species.value().get().get_features()) {
-            feature_library.add(feature);
-        }
-    }
-    return inserted_species;
-}
-
-OptCRef<Subspecies> Content::add_subspecies_result(CreateResult<Subspecies>&& subspecies) {
-    OptCRef<Subspecies> inserted_subspecies = subspecies_library.add_result(std::move(subspecies));
-    if (inserted_subspecies.has_value()) {
-        for (const Feature& feature : inserted_subspecies.value().get().get_features()) {
-            feature_library.add(feature);
-        }
-    }
-    return inserted_subspecies;
-}
-
-OptCRef<Item> Content::add_item_result(CreateResult<Item>&& item) { return item_library.add_result(std::move(item)); }
-
-OptCRef<Spell> Content::add_spell_result(CreateResult<Spell>&& spell) {
-    return spell_library.add_result(std::move(spell));
-}
-
-OptCRef<Choosable> Content::add_choosable_result(CreateResult<Choosable>&& choosable) {
-    OptCRef<Choosable> inserted_choosable = choosable_library.add_result(std::move(choosable));
-    if (inserted_choosable.has_value()) {
-        const Choosable& choosable_val = inserted_choosable.value().get();
-        const std::string name = choosable_val.get_name();
-        const std::string type_name = choosable_val.get_type();
-        groups.add(type_name, name);
-    }
-    return inserted_choosable;
-}
+X_OWNED_CONTENT_PIECES
+#undef X
 
 } // namespace dnd

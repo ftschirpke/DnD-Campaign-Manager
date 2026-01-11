@@ -4,8 +4,8 @@
 #include <dnd_config.hpp>
 
 #include <algorithm>
+#include <optional>
 #include <string>
-#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -28,24 +28,24 @@ template <typename T>
 requires isContentPieceType<T>
 class StorageContentLibrary : public ContentLibrary<T> {
 public:
+    std::optional<size_t> find(const std::string& key) const;
     bool contains(const std::string& key) const override;
     bool empty() const override;
     size_t size() const override;
     OptCRef<T> get(size_t index) const override;
     OptCRef<T> get(const std::string& key) const override;
-    const std::unordered_map<std::string, T>& get_all() const;
+    const std::vector<T>& get_all() const;
     const std::vector<std::pair<typename T::Data, Errors>>& get_drafts() const;
     /**
      * @brief Add a content piece to a content piece to the library
      * @param content_piece the content piece to add
      * @return reference to the inserted content piece, or std::nullopt if a content piece with that key already exists
      */
-    OptCRef<T> add(T&& content_piece);
+    std::optional<size_t> add(T&& content_piece);
     void add_draft(std::pair<typename T::Data, Errors>&& draft);
     void add_draft(typename T::Data&& draft_data, Errors&& draft_errors);
-    OptCRef<T> add_result(CreateResult<T>&& content_piece_result);
 private:
-    std::unordered_map<std::string, T> data;
+    std::vector<T> data;
     std::vector<std::pair<typename T::Data, Errors>> drafts;
 };
 
@@ -54,8 +54,20 @@ private:
 
 template <typename T>
 requires isContentPieceType<T>
+inline std::optional<size_t> StorageContentLibrary<T>::find(const std::string& key) const {
+    for (size_t i = 0; i < data.size(); ++i) {
+        if (data[i].get_key() == key) {
+            return i;
+        }
+    }
+    return std::nullopt;
+}
+
+
+template <typename T>
+requires isContentPieceType<T>
 bool StorageContentLibrary<T>::contains(const std::string& key) const {
-    return data.contains(key);
+    return find(key).has_value();
 }
 
 template <typename T>
@@ -76,23 +88,22 @@ OptCRef<T> StorageContentLibrary<T>::get(size_t index) const {
     if (index >= data.size()) {
         return std::nullopt;
     }
-    const T& element = std::next(data.begin(), static_cast<long>(index))->second;
-    return std::cref(element);
+    return std::cref(data[index]);
 }
 
 template <typename T>
 requires isContentPieceType<T>
 OptCRef<T> StorageContentLibrary<T>::get(const std::string& key) const {
-    auto iterator = data.find(key);
-    if (iterator == data.end()) {
+    std::optional<size_t> idx = find(key);
+    if (!idx.has_value()) {
         return std::nullopt;
     }
-    return std::cref(iterator->second);
+    return data[idx.value()];
 }
 
 template <typename T>
 requires isContentPieceType<T>
-const std::unordered_map<std::string, T>& StorageContentLibrary<T>::get_all() const {
+const std::vector<T>& StorageContentLibrary<T>::get_all() const {
     return data;
 }
 
@@ -104,25 +115,13 @@ const std::vector<std::pair<typename T::Data, Errors>>& StorageContentLibrary<T>
 
 template <typename T>
 requires isContentPieceType<T>
-OptCRef<T> StorageContentLibrary<T>::add(T&& content_piece) {
-    const std::string key = content_piece.get_key();
-    auto [it, was_inserted] = data.emplace(key, std::move(content_piece));
-    if (was_inserted) {
-        return std::cref(it->second);
-    } else {
+std::optional<size_t> StorageContentLibrary<T>::add(T&& content_piece) {
+    try {
+        data.emplace_back(std::move(content_piece));
+    } catch (const std::exception& _) {
         return std::nullopt;
     }
-}
-
-template <typename T>
-requires isContentPieceType<T>
-OptCRef<T> StorageContentLibrary<T>::add_result(CreateResult<T>&& content_piece_result) {
-    if (content_piece_result.is_valid()) {
-        return add(std::move(content_piece_result.value()));
-    } else {
-        add_draft(std::move(content_piece_result.data_and_errors()));
-        return std::nullopt;
-    }
+    return data.size() - 1;
 }
 
 template <typename T>

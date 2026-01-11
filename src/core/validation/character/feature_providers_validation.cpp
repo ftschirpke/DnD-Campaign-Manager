@@ -27,14 +27,14 @@ static Errors validate_feature_providers_raw(const FeatureProviders::Data& data)
 static Errors validate_feature_providers_relations(const FeatureProviders::Data& data, const Content& content) {
     Errors errors;
 
-    OptCRef<Species> species_optional = content.get_species().get(data.species_key);
+    OptCRef<Species> species_optional = content.get_species_library().get(data.species_key);
     if (!species_optional.has_value()) {
         errors.add_validation_error(
             ValidationError::Code::RELATION_NOT_FOUND, fmt::format("Species '{}' does not exist.", data.species_key)
         );
     } else if (!data.subspecies_key.empty()) {
         const Species& species = species_optional.value();
-        OptCRef<Subspecies> subspecies_optional = content.get_subspecies().get(data.subspecies_key);
+        OptCRef<Subspecies> subspecies_optional = content.get_subspecies_library().get(data.subspecies_key);
         if (!subspecies_optional.has_value()) {
             errors.add_validation_error(
                 ValidationError::Code::RELATION_NOT_FOUND,
@@ -51,14 +51,14 @@ static Errors validate_feature_providers_relations(const FeatureProviders::Data&
     }
     // TODO: potentially check for missing subspecies
 
-    OptCRef<Class> class_optional = content.get_classes().get(data.class_key);
+    OptCRef<Class> class_optional = content.get_class_library().get(data.class_key);
     if (!class_optional.has_value()) {
         errors.add_validation_error(
             ValidationError::Code::RELATION_NOT_FOUND, fmt::format("Class '{}' does not exist.", data.class_key)
         );
     } else if (!data.subclass_key.empty()) {
         const Class& cls = class_optional.value();
-        OptCRef<Subclass> subclass_optional = content.get_subclasses().get(data.subclass_key);
+        OptCRef<Subclass> subclass_optional = content.get_subclass_library().get(data.subclass_key);
         if (!subclass_optional.has_value()) {
             errors.add_validation_error(
                 ValidationError::Code::RELATION_NOT_FOUND,

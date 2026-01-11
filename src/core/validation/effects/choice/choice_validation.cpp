@@ -207,7 +207,7 @@ static Errors validate_relations_item_choice(const Choice::Data& data, const Con
         if (explicit_choice.empty()) {
             continue;
         }
-        if (!content.get_items().contains(explicit_choice)) {
+        if (!content.get_item_library().contains(explicit_choice)) {
             errors.add_validation_error(
                 ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format(
@@ -247,7 +247,7 @@ static Errors validate_relations_spell_choice(const Choice::Data& data, const Co
         if (explicit_choice.empty()) {
             continue;
         }
-        if (!content.get_spells().contains(explicit_choice)) {
+        if (!content.get_spell_library().contains(explicit_choice)) {
             errors.add_validation_error(
                 ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format(
@@ -266,7 +266,7 @@ static Errors validate_relations_spell_choice(const Choice::Data& data, const Co
             std::smatch match_pieces;
             if (std::regex_match(group_name, match_pieces, cantrip_filter_regex)) {
                 std::string class_name = match_pieces[4];
-                if (!class_name.empty() && !content.get_classes().contains(class_name)) {
+                if (!class_name.empty() && !content.get_class_library().contains(class_name)) {
                     errors.add_validation_error(
                         ValidationError::Code::RELATION_NOT_FOUND,
                         fmt::format(
@@ -290,7 +290,7 @@ static Errors validate_relations_spell_choice(const Choice::Data& data, const Co
             std::smatch match_pieces;
             if (std::regex_match(group_name, match_pieces, spell_filter_regex)) {
                 std::string class_name = match_pieces[6];
-                if (!class_name.empty() && !content.get_classes().contains(class_name)) {
+                if (!class_name.empty() && !content.get_class_library().contains(class_name)) {
                     errors.add_validation_error(
                         ValidationError::Code::RELATION_NOT_FOUND,
                         fmt::format(
@@ -320,7 +320,7 @@ static Errors validate_relations_choosable_choice(const Choice::Data& data, cons
         if (explicit_choice.empty()) {
             continue;
         }
-        if (!content.get_choosables().contains(explicit_choice)) {
+        if (!content.get_choosable_library().contains(explicit_choice)) {
             errors.add_validation_error(
                 ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format(

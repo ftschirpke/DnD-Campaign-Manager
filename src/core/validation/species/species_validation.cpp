@@ -21,14 +21,14 @@ static Errors validate_species_raw_nonrecursively(const Species::Data& data) {
 
 static Errors validate_species_relations_nonrecursively(const Species::Data& data, const Content& content) {
     Errors errors;
-    if (content.get_species().contains(data.get_key())) {
+    if (content.get_species_library().contains(data.get_key())) {
         errors.add_validation_error(
             ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
             fmt::format("Species has duplicate key \"{}\".", data.get_key())
         );
     }
     for (const Feature::Data& feature_data : data.features_data) {
-        if (content.get_features().contains(feature_data.get_key())) {
+        if (content.find_feature(feature_data.get_key())) {
             errors.add_validation_error(
                 ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format("Feature has duplicate key \"{}\".", feature_data.get_key())

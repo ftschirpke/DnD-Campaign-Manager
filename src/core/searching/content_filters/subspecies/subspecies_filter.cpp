@@ -17,7 +17,7 @@ bool SubspeciesFilter::matches(const Subspecies& subspecies) const { return Cont
 
 std::vector<const ContentPiece*> SubspeciesFilter::all_matches(const Content& content) const {
     std::vector<const ContentPiece*> matching_content_pieces;
-    for (const auto& [_, subspecies] : content.get_subspecies().get_all()) {
+    for (const auto& subspecies : content.get_subspecies_library().get_all()) {
         if (matches(subspecies)) {
             matching_content_pieces.push_back(&subspecies);
         }

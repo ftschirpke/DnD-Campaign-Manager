@@ -17,13 +17,13 @@ bool FeatureFilter::matches(const Feature& feature) const { return ContentPieceF
 
 std::vector<const ContentPiece*> FeatureFilter::all_matches(const Content& content) const {
     std::vector<const ContentPiece*> matching_content_pieces;
-    for (const auto& [_, feature] : content.get_features().get_all()) {
+    for (const auto& feature : content.get_feature_library().get_all()) {
         if (matches(feature)) {
             matching_content_pieces.push_back(&feature.get());
         }
     }
     // TODO: consider separating features and class features
-    for (const auto& [_, feature] : content.get_class_features().get_all()) {
+    for (const auto& feature : content.get_class_feature_library().get_all()) {
         if (matches(feature)) {
             matching_content_pieces.push_back(&feature.get());
         }

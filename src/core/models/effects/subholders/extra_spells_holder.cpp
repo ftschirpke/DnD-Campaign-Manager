@@ -19,7 +19,7 @@ static std::vector<const Spell*> find_spells_in_content(
     std::vector<const Spell*> spells;
     spells.reserve(spell_names.size());
     for (const std::string& spell_name : spell_names) {
-        spells.push_back(&content.get_spells().get(spell_name).value().get());
+        spells.push_back(&content.get_spell_library().get(spell_name).value().get());
     }
     return spells;
 }

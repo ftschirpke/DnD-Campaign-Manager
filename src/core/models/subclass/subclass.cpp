@@ -35,7 +35,7 @@ CreateResult<Subclass> Subclass::create_for(Data&& data, const Content& content)
         }
         features.push_back(feature_result.value());
     }
-    CRef<Class> cls = content.get_classes().get(data.class_key).value();
+    CRef<Class> cls = content.get_class_library().get(data.class_key).value();
 
     FactoryResult<Spellcasting> spellcasting_result = create_spellcasting(std::move(data.spellcasting_data));
     if (!spellcasting_result.is_valid()) {

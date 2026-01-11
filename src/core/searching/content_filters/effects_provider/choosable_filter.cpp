@@ -22,7 +22,7 @@ bool ChoosableFilter::matches(const Choosable& choosable) const {
 
 std::vector<const ContentPiece*> ChoosableFilter::all_matches(const Content& content) const {
     std::vector<const ContentPiece*> matching_content_pieces;
-    for (const auto& [_, choosable] : content.get_choosables().get_all()) {
+    for (const auto& choosable : content.get_choosable_library().get_all()) {
         if (matches(choosable)) {
             matching_content_pieces.push_back(&choosable);
         }

@@ -21,7 +21,7 @@ bool ClassFilter::matches(const Class& cls) const {
 
 std::vector<const ContentPiece*> ClassFilter::all_matches(const Content& content) const {
     std::vector<const ContentPiece*> matching_content_pieces;
-    for (const auto& [_, cls] : content.get_classes().get_all()) {
+    for (const auto& cls : content.get_class_library().get_all()) {
         if (matches(cls)) {
             matching_content_pieces.push_back(&cls);
         }

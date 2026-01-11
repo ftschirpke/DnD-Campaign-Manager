@@ -21,7 +21,7 @@ bool SubclassFilter::matches(const Subclass& subclass) const {
 
 std::vector<const ContentPiece*> SubclassFilter::all_matches(const Content& content) const {
     std::vector<const ContentPiece*> matching_content_pieces;
-    for (const auto& [_, subclass] : content.get_subclasses().get_all()) {
+    for (const auto& subclass : content.get_subclass_library().get_all()) {
         if (matches(subclass)) {
             matching_content_pieces.push_back(&subclass);
         }

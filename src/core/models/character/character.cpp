@@ -59,7 +59,7 @@ CreateResult<Character> Character::create_for(Data&& data, const Content& conten
     std::vector<CRef<Choosable>> choosables;
     features.reserve(data.choosable_keys.size());
     for (std::string& choosable_key : data.choosable_keys) {
-        OptCRef<Choosable> choosable = content.get_choosables().get(choosable_key);
+        OptCRef<Choosable> choosable = content.get_choosable_library().get(choosable_key);
         if (!choosable.has_value()) {
             errors.add_runtime_error(
                 RuntimeError::Code::UNREACHABLE, "Invalid choosable key was not caught by validation"

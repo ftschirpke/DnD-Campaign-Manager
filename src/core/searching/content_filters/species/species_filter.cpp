@@ -17,7 +17,7 @@ bool SpeciesFilter::matches(const Species& species) const { return ContentPieceF
 
 std::vector<const ContentPiece*> SpeciesFilter::all_matches(const Content& content) const {
     std::vector<const ContentPiece*> matching_content_pieces;
-    for (const auto& [_, species] : content.get_species().get_all()) {
+    for (const auto& species : content.get_species_library().get_all()) {
         if (matches(species)) {
             matching_content_pieces.push_back(&species);
         }

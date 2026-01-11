@@ -38,7 +38,7 @@ bool SpellFilter::matches(const Spell& spell) const {
 
 std::vector<const ContentPiece*> SpellFilter::all_matches(const Content& content) const {
     std::vector<const ContentPiece*> matching_content_pieces;
-    for (const auto& [_, spell] : content.get_spells().get_all()) {
+    for (const auto& spell : content.get_spell_library().get_all()) {
         if (matches(spell)) {
             matching_content_pieces.push_back(&spell);
         }

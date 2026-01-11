@@ -3,8 +3,9 @@
 
 #include <dnd_config.hpp>
 
+#include <optional>
 #include <string>
-#include <unordered_map>
+#include <vector>
 
 #include <fmt/format.h>
 
@@ -23,20 +24,21 @@ template <typename T>
 requires isContentPieceType<T>
 class ReferencingContentLibrary : public ContentLibrary<T> {
 public:
-    bool contains(const std::string& name) const override;
+    std::optional<size_t> find(const std::string& key) const;
+    bool contains(const std::string& key) const override;
     bool empty() const override;
     size_t size() const override;
     OptCRef<T> get(size_t index) const override;
-    OptCRef<T> get(const std::string& name) const override;
-    const std::unordered_map<std::string, std::reference_wrapper<const T>>& get_all() const;
+    OptCRef<T> get(const std::string& key) const override;
+    const std::vector<std::reference_wrapper<const T>>& get_all() const;
     /**
      * @brief Add a content piece to a content piece to the library
      * @param content_piece the content piece to add
-     * @return reference to the inserted content piece, or std::nullopt if a content piece with that name already exists
+     * @return reference to the inserted content piece, or std::nullopt if a content piece with that key already exists
      */
-    OptCRef<T> add(const T& content_piece);
+    std::optional<size_t> add(const T& content_piece);
 private:
-    std::unordered_map<std::string, std::reference_wrapper<const T>> data;
+    std::vector<std::reference_wrapper<const T>> data;
 };
 
 
@@ -44,8 +46,19 @@ private:
 
 template <typename T>
 requires isContentPieceType<T>
-inline bool ReferencingContentLibrary<T>::contains(const std::string& name) const {
-    return data.contains(name);
+inline std::optional<size_t> ReferencingContentLibrary<T>::find(const std::string& key) const {
+    for (size_t i = 0; i < data.size(); ++i) {
+        if (data[i].get().get_key() == key) {
+            return i;
+        }
+    }
+    return std::nullopt;
+}
+
+template <typename T>
+requires isContentPieceType<T>
+inline bool ReferencingContentLibrary<T>::contains(const std::string& key) const {
+    return find(key).has_value();
 }
 
 template <typename T>
@@ -66,37 +79,34 @@ inline OptCRef<T> ReferencingContentLibrary<T>::get(size_t index) const {
     if (index >= data.size()) {
         return std::nullopt;
     }
-    std::reference_wrapper<const T> element = std::next(data.begin(), static_cast<long>(index))->second;
-    return element;
+    return data[index];
 }
 
 template <typename T>
 requires isContentPieceType<T>
-inline OptCRef<T> ReferencingContentLibrary<T>::get(const std::string& name) const {
-    auto iterator = data.find(name);
-    if (iterator == data.end()) {
+inline OptCRef<T> ReferencingContentLibrary<T>::get(const std::string& key) const {
+    std::optional<size_t> idx = find(key);
+    if (!idx.has_value()) {
         return std::nullopt;
     }
-    return std::cref(iterator->second);
+    return data[idx.value()];
 }
 
 template <typename T>
 requires isContentPieceType<T>
-inline const std::unordered_map<std::string, std::reference_wrapper<const T>>& ReferencingContentLibrary<T>::get_all(
-) const {
+inline const std::vector<std::reference_wrapper<const T>>& ReferencingContentLibrary<T>::get_all() const {
     return data;
 }
 
 template <typename T>
 requires isContentPieceType<T>
-inline OptCRef<T> ReferencingContentLibrary<T>::add(const T& content_piece) {
-    const std::string key = content_piece.get_key();
-    auto [it, was_inserted] = data.emplace(key, std::cref(content_piece));
-    if (was_inserted) {
-        return std::cref(content_piece);
-    } else {
+inline std::optional<size_t> ReferencingContentLibrary<T>::add(const T& content_piece) {
+    try {
+        data.emplace_back(std::cref(content_piece));
+    } catch (const std::exception& _) {
         return std::nullopt;
     }
+    return data.size() - 1;
 }
 
 } // namespace dnd

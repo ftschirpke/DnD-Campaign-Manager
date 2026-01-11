@@ -34,7 +34,7 @@ CreateResult<Subspecies> Subspecies::create_for(Data&& data, const Content& cont
         }
         features.push_back(feature_result.value());
     }
-    CRef<Species> species = content.get_species().get(data.species_key).value();
+    CRef<Species> species = content.get_species_library().get(data.species_key).value();
 
     return ValidCreate(Subspecies(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.source_name),

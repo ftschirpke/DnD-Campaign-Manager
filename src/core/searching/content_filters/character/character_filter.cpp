@@ -22,7 +22,7 @@ bool CharacterFilter::matches(const Character& character) const {
 
 std::vector<const ContentPiece*> CharacterFilter::all_matches(const Content& content) const {
     std::vector<const ContentPiece*> matching_content_pieces;
-    for (const auto& [_, character] : content.get_characters().get_all()) {
+    for (const auto& character : content.get_all_characters()) {
         if (matches(character)) {
             matching_content_pieces.push_back(&character);
         }
