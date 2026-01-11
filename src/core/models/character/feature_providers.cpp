@@ -39,9 +39,7 @@ bool FeatureProviders::has_subspecies() const { return subspecies_id.has_value()
 
 bool FeatureProviders::has_subclass() const { return subclass_id.has_value(); }
 
-FeatureProviders::FeatureProviders(
-    Id species_id, Opt<Id> subspecies_id, Id class_id, Opt<Id> subclass_id
-)
+FeatureProviders::FeatureProviders(Id species_id, Opt<Id> subspecies_id, Id class_id, Opt<Id> subclass_id)
     : species_id(species_id), subspecies_id(subspecies_id), class_id(class_id), subclass_id(subclass_id) {}
 
 } // namespace dnd
