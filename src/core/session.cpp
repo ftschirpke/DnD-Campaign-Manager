@@ -78,7 +78,7 @@ static std::vector<std::string> cleaned_results_list(std::vector<std::string>&& 
 
 std::vector<std::string> Session::get_fuzzy_search_result_strings() const {
     DND_MEASURE_FUNCTION();
-    ListContentVisitor list_content_visitor;
+    ListContentVisitor list_content_visitor(content);
     list_content_visitor.reserve(fuzzy_search_results.size());
     if (fuzzy_search_results.size() > max_search_results) {
         return {};
@@ -91,7 +91,7 @@ std::vector<std::string> Session::get_fuzzy_search_result_strings() const {
 
 std::vector<std::string> Session::get_advanced_search_result_strings() const {
     DND_MEASURE_FUNCTION();
-    ListContentVisitor list_content_visitor;
+    ListContentVisitor list_content_visitor(content);
     const std::vector<const ContentPiece*>& advanced_search_results = advanced_search.get_search_results();
     list_content_visitor.reserve(advanced_search_results.size());
     for (const ContentPiece* content_piece : advanced_search_results) {

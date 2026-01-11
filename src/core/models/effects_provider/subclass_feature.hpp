@@ -26,10 +26,6 @@ public:
     struct Data;
 
     static CreateResult<SubclassFeature> create_for(Data&& data, const Content& content);
-    static std::string key(
-        const std::string& name, const std::string& source_name, const std::string& subclass_short_name,
-        const std::string& subclass_source_name, int level
-    );
 
     SubclassFeature(const SubclassFeature&) = delete;
     SubclassFeature& operator=(const SubclassFeature&) = delete;
@@ -39,7 +35,6 @@ public:
     int get_level() const;
     const std::map<int, Effects>& get_higher_level_effects() const;
 
-    std::string get_key() const override;
     const std::string& get_subclass_short_name() const;
     const std::string& get_subclass_source_name() const;
 
@@ -51,10 +46,11 @@ public:
 private:
     SubclassFeature(
         std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
-        int level, Effects&& main_effects, std::map<int, Effects>&& higher_level_parts,
+        std::string&& key, int level, Effects&& main_effects, std::map<int, Effects>&& higher_level_parts,
         std::string&& subclass_short_name, std::string&& subclass_source_name
     );
 
+    std::string key;
     int level;
     std::map<int, Effects> higher_level_effects; // careful when changing the type here, some code relies on order
     std::string subclass_short_name;

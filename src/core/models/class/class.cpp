@@ -101,7 +101,8 @@ CreateResult<Class> Class::create_for(Data&& data, const Content& content) {
 
     return ValidCreate(Class(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.source_name),
-        std::move(features), subclass_feature, std::move(hit_dice), std::move(important_levels), std::move(spellcasting)
+        data.get_key(), std::move(features), subclass_feature, std::move(hit_dice), std::move(important_levels),
+        std::move(spellcasting)
     ));
 }
 
@@ -110,6 +111,8 @@ const std::string& Class::get_name() const { return name; }
 const Text& Class::get_description() const { return description; }
 
 const SourceInfo& Class::get_source_info() const { return source_info; }
+
+const std::string& Class::get_key() const { return key; }
 
 const std::vector<ClassFeature>& Class::get_features() const { return features; }
 
@@ -127,12 +130,12 @@ void Class::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 Class::Class(
     std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
-    std::vector<ClassFeature>&& features, OptCRef<ClassFeature> subclass_feature, Dice hit_dice,
+    std::string&& key, std::vector<ClassFeature>&& features, OptCRef<ClassFeature> subclass_feature, Dice hit_dice,
     ImportantLevels&& important_levels, std::unique_ptr<Spellcasting>&& spellcasting
 )
     : name(std::move(name)), description(std::move(description)),
-      source_info({.path = std::move(source_path), .name = std::move(source_name)}), features(std::move(features)),
-      spellcasting(std::move(spellcasting)), subclass_feature(subclass_feature), hit_dice(std::move(hit_dice)),
-      important_levels(std::move(important_levels)) {}
+      source_info({.path = std::move(source_path), .name = std::move(source_name)}), key(std::move(key)),
+      features(std::move(features)), spellcasting(std::move(spellcasting)), subclass_feature(subclass_feature),
+      hit_dice(std::move(hit_dice)), important_levels(std::move(important_levels)) {}
 
 } // namespace dnd

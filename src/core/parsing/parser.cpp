@@ -545,7 +545,7 @@ std::optional<Error> write_formatted_text_into(
             return error;
         }
 
-        if (type == "entries" || type == "inset" || type == "section") {
+        if (type == "entries" || type == "inset" || type == "item" || type == "section") {
             error = check_required_attribute(entry, "entries", filepath, JsonType::ARRAY);
             if (error.has_value()) {
                 return error;

@@ -106,8 +106,8 @@ CreateResult<Character> Character::create_for(Data&& data, const Content& conten
 
     Character character(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.source_name),
-        std::move(features), std::move(choosables), std::move(base_ability_scores), std::move(feature_providers),
-        std::move(progression), std::move(decisions)
+        data.get_key(), std::move(features), std::move(choosables), std::move(base_ability_scores),
+        std::move(feature_providers), std::move(progression), std::move(decisions)
     );
     errors = character.recalculate_stats();
     if (!errors.ok()) {
@@ -121,6 +121,8 @@ const std::string& Character::get_name() const { return name; }
 const Text& Character::get_description() const { return description; }
 
 const SourceInfo& Character::get_source_info() const { return source_info; }
+
+const std::string& Character::get_key() const { return key; }
 
 const std::vector<Feature>& Character::get_features() const { return features; }
 
@@ -237,13 +239,14 @@ void Character::accept_visitor(ContentVisitor& visitor) const { visitor(*this); 
 
 Character::Character(
     std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
-    std::vector<Feature>&& features, std::vector<CRef<Choosable>>&& choosables, AbilityScores&& base_ability_scores,
-    FeatureProviders&& feature_providers, Progression&& progression, std::vector<Decision>&& decisions
+    std::string&& key, std::vector<Feature>&& features, std::vector<CRef<Choosable>>&& choosables,
+    AbilityScores&& base_ability_scores, FeatureProviders&& feature_providers, Progression&& progression,
+    std::vector<Decision>&& decisions
 )
     : name(std::move(name)), description(std::move(description)),
-      source_info({.path = std::move(source_path), .name = std::move(source_name)}), features(std::move(features)),
-      choosables(std::move(choosables)), base_ability_scores(std::move(base_ability_scores)),
-      feature_providers(std::move(feature_providers)), progression(std::move(progression)),
-      stats(Stats::create_default()), decisions(std::move(decisions)) {}
+      source_info({.path = std::move(source_path), .name = std::move(source_name)}), key(std::move(key)),
+      features(std::move(features)), choosables(std::move(choosables)),
+      base_ability_scores(std::move(base_ability_scores)), feature_providers(std::move(feature_providers)),
+      progression(std::move(progression)), stats(Stats::create_default()), decisions(std::move(decisions)) {}
 
 } // namespace dnd

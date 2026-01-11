@@ -19,7 +19,6 @@
 
 namespace dnd {
 
-class Content;
 class ContentVisitor;
 
 class Subclass : public ContentPiece {
@@ -27,7 +26,6 @@ public:
     struct Data;
 
     static CreateResult<Subclass> create_for(Data&& data, const Content& content);
-    static std::string key(const std::string& name, const std::string& source_name, const std::string& class_name);
 
     Subclass(const Subclass&) = delete;
     Subclass& operator=(const Subclass&) = delete;
@@ -38,26 +36,27 @@ public:
     const std::string& get_short_name() const;
     const Text& get_description() const override;
     const SourceInfo& get_source_info() const override;
+    const std::string& get_key() const override;
     const std::vector<SubclassFeature>& get_features() const;
     bool has_spellcasting() const;
     const Spellcasting* get_spellcasting() const;
-    CRef<Class> get_class() const;
-    std::string get_key() const override;
+    Id get_class_id() const;
 
     virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Subclass(
         std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
-        std::string&& short_name, std::vector<SubclassFeature>&& features, CRef<Class> cls,
+        std::string&& key, std::string&& short_name, std::vector<SubclassFeature>&& features, Id class_id,
         std::unique_ptr<Spellcasting>&& spellcasting = nullptr
     );
 
     std::string name;
     Text description;
     SourceInfo source_info;
+    std::string key;
     std::string short_name;
     std::vector<SubclassFeature> features;
-    CRef<Class> cls;
+    Id class_id;
     std::unique_ptr<Spellcasting> spellcasting;
 };
 

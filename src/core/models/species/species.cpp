@@ -34,7 +34,7 @@ CreateResult<Species> Species::create_for(Data&& data, const Content& content) {
     }
     return ValidCreate(Species(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.source_name),
-        std::move(features)
+        data.get_key(), std::move(features)
     ));
 }
 
@@ -44,15 +44,18 @@ const Text& Species::get_description() const { return description; }
 
 const SourceInfo& Species::get_source_info() const { return source_info; }
 
+const std::string& Species::get_key() const { return key; }
+
 const std::vector<Feature>& Species::get_features() const { return features; }
 
 void Species::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 Species::Species(
     std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
-    std::vector<Feature>&& features
+    std::string&& key, std::vector<Feature>&& features
 )
     : name(std::move(name)), description(std::move(description)),
-      source_info({.path = std::move(source_path), .name = std::move(source_name)}), features(std::move(features)) {}
+      source_info({.path = std::move(source_path), .name = std::move(source_name)}), key(std::move(key)),
+      features(std::move(features)) {}
 
 } // namespace dnd

@@ -14,7 +14,7 @@
 namespace dnd {
 
 std::string ValidationData::key(const std::string& name, const std::string& source_name) {
-    return ContentPiece::key(name, source_name);
+    return fmt::format("{}##{}", name, source_name);
 }
 
 std::string ValidationData::get_key() const { return key(name, source_name); }

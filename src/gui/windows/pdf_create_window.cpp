@@ -38,7 +38,8 @@ public:
 
 PdfCreateWindow::PdfCreateWindow(Session& session)
     : session(session), last_content_pieces(std::nullopt), creation_type(PdfCreationType::SPELL_CARDS),
-      item_card_builder(), spell_card_builder(), list_items_visitor(), list_spells_visitor() {}
+      item_card_builder(), spell_card_builder(), list_items_visitor(session.get_content()),
+      list_spells_visitor(session.get_content()) {}
 
 void PdfCreateWindow::render() {
     DND_MEASURE_FUNCTION();

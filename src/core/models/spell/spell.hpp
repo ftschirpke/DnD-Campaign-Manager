@@ -27,6 +27,7 @@ public:
     const std::string& get_name() const override;
     const Text& get_description() const override;
     const SourceInfo& get_source_info() const override;
+    const std::string& get_key() const override;
     const SpellComponents& get_components() const;
     const SpellType& get_type() const;
     bool requires_concentration() const;
@@ -39,13 +40,14 @@ public:
 private:
     Spell(
         std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
-        SpellComponents&& components, SpellType&& type, bool concentration, std::string&& casting_time,
-        std::string&& range, std::string&& duration, std::set<std::string>&& classes
+        std::string&& key, SpellComponents&& components, SpellType&& type, bool concentration,
+        std::string&& casting_time, std::string&& range, std::string&& duration, std::set<std::string>&& classes
     );
 
     std::string name;
     Text description;
     SourceInfo source_info;
+    std::string key;
     SpellComponents components;
     SpellType type;
     bool concentration;

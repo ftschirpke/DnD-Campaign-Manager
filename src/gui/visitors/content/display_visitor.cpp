@@ -531,7 +531,8 @@ void DisplayVisitor::operator()(const Subclass& subclass) {
     ImGui::Text("Subclass");
     source(subclass);
     label("Class name:");
-    ImGui::Text("%s", subclass.get_class().get().get_name().c_str());
+    const Class& cls = content.get_class(subclass.get_class_id());
+    ImGui::Text("%s", cls.get_name().c_str());
     label("Description:");
     display_formatted_text(subclass.get_description(), fonts);
     label("Short name:");

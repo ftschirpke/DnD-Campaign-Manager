@@ -43,7 +43,7 @@ CreateResult<Choosable> Choosable::create_for(Data&& data, const Content& conten
 
     return ValidCreate(Choosable(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.source_name),
-        std::move(data.type), std::move(prerequisites), std::move(main_part)
+        data.get_key(), std::move(data.type), std::move(prerequisites), std::move(main_part)
     ));
 }
 
@@ -52,6 +52,8 @@ const std::string& Choosable::get_name() const { return name; }
 const Text& Choosable::get_description() const { return description; }
 
 const SourceInfo& Choosable::get_source_info() const { return source_info; }
+
+const std::string& Choosable::get_key() const { return key; }
 
 const Effects& Choosable::get_main_effects() const { return main_effects; }
 
@@ -63,10 +65,11 @@ void Choosable::accept_visitor(ContentVisitor& visitor) const { visitor(*this); 
 
 Choosable::Choosable(
     std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
-    std::string&& type, std::vector<std::unique_ptr<Condition>>&& prerequisites, Effects&& main_effects
+    std::string&& key, std::string&& type, std::vector<std::unique_ptr<Condition>>&& prerequisites,
+    Effects&& main_effects
 )
     : name(std::move(name)), description(std::move(description)),
-      source_info({.path = std::move(source_path), .name = std::move(source_name)}),
+      source_info({.path = std::move(source_path), .name = std::move(source_name)}), key(std::move(key)),
       main_effects(std::move(main_effects)), type(type), prerequisites(std::move(prerequisites)) {}
 
 } // namespace dnd

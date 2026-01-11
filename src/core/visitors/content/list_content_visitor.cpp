@@ -20,6 +20,8 @@
 
 namespace dnd {
 
+ListContentVisitor::ListContentVisitor(const Content& content) noexcept : content(content) {}
+
 void ListContentVisitor::reserve(size_t size) { string_list.reserve(size); }
 
 const std::vector<std::string>& ListContentVisitor::get_list() const { return string_list; }
@@ -45,7 +47,8 @@ void ListContentVisitor::operator()(const Class& cls) {
 }
 
 void ListContentVisitor::operator()(const Subclass& subclass) {
-    const Class& cls = subclass.get_class();
+    Id class_id = subclass.get_class_id();
+    const Class& cls = content.get_class(class_id);
     string_list.push_back(
         fmt::format(
             "{} ({}) [{} SUBCLASS]##{}", subclass.get_name(), subclass.get_source_info().name, cls.get_name(),

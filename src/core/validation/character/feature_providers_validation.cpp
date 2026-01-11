@@ -51,24 +51,28 @@ static Errors validate_feature_providers_relations(const FeatureProviders::Data&
     }
     // TODO: potentially check for missing subspecies
 
-    OptCRef<Class> class_optional = content.get_class_library().get(data.class_key);
-    if (!class_optional.has_value()) {
+    std::optional<Id> class_id = content.find_class(data.class_key);
+    if (!class_id.has_value()) {
         errors.add_validation_error(
             ValidationError::Code::RELATION_NOT_FOUND, fmt::format("Class '{}' does not exist.", data.class_key)
         );
     } else if (!data.subclass_key.empty()) {
-        const Class& cls = class_optional.value();
-        OptCRef<Subclass> subclass_optional = content.get_subclass_library().get(data.subclass_key);
-        if (!subclass_optional.has_value()) {
+        const Class& cls = content.get_class(class_id.value());
+        std::optional<Id> subclass_id = content.find_subclass(data.subclass_key);
+        if (!subclass_id.has_value()) {
             errors.add_validation_error(
                 ValidationError::Code::RELATION_NOT_FOUND,
                 fmt::format("Subclass '{}' does not exist.", data.subclass_key)
             );
-        } else if (subclass_optional.value().get().get_class().get().get_name() != cls.get_name()) {
-            errors.add_validation_error(
-                ValidationError::Code::INVALID_RELATION,
-                fmt::format("Subclass '{}' is not a subclass of class '{}'.", data.subclass_key, cls.get_name())
-            );
+        } else {
+            const Subclass& subclass = content.get_subclass(subclass_id.value());
+            const Class& subclass_class = content.get_class(subclass.get_class_id());
+            if (subclass_class.get_name() != cls.get_name()) {
+                errors.add_validation_error(
+                    ValidationError::Code::INVALID_RELATION,
+                    fmt::format("Subclass '{}' is not a subclass of class '{}'.", data.subclass_key, cls.get_name())
+                );
+            }
         }
     }
     return errors;

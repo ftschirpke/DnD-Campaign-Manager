@@ -27,10 +27,6 @@ public:
     struct Data;
 
     static CreateResult<ClassFeature> create_for(Data&& data, const Content& content);
-    static std::string key(
-        const std::string& name, const std::string& source_name, const std::string& class_name,
-        const std::string& class_source_name, int level
-    );
 
     ClassFeature(const ClassFeature&) = delete;
     ClassFeature& operator=(const ClassFeature&) = delete;
@@ -40,7 +36,6 @@ public:
     int get_level() const;
     const std::map<int, Effects>& get_higher_level_effects() const;
 
-    std::string get_key() const override;
     const std::string& get_class_name() const;
     const std::string& get_class_source_name() const;
 
@@ -52,8 +47,8 @@ public:
 private:
     ClassFeature(
         std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
-        int level, Effects&& main_effects, std::map<int, Effects>&& higher_level_parts, std::string&& class_name,
-        std::string&& class_source_name
+        std::string&& key, int level, Effects&& main_effects, std::map<int, Effects>&& higher_level_parts,
+        std::string&& class_name, std::string&& class_source_name
     );
 
     int level;

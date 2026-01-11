@@ -40,7 +40,7 @@ Errors SpellSourcesFileParser::parse() {
                 std::string class_name, class_source;
                 errors += parse_required_attribute_into(class_entry, "name", class_name, get_filepath());
                 errors += parse_required_attribute_into(class_entry, "source", class_source, get_filepath());
-                spell_set.insert(Class::key(class_name, class_source));
+                spell_set.insert(Class::Data::key(class_name, class_source));
             }
         }
     }

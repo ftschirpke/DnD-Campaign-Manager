@@ -41,25 +41,14 @@ CreateResult<SubclassFeature> SubclassFeature::create_for(Data&& data, const Con
     }
     return ValidCreate(SubclassFeature(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.source_name),
-        data.level, std::move(main_effects), std::move(higher_level_effects), std::move(data.subclass_short_name),
-        std::move(data.subclass_source_name)
+        data.get_key(), data.level, std::move(main_effects), std::move(higher_level_effects),
+        std::move(data.subclass_short_name), std::move(data.subclass_source_name)
     ));
-}
-
-std::string SubclassFeature::key(
-    const std::string& name, const std::string& source_name, const std::string& subclass_short_name,
-    const std::string& subclass_source_name, int level
-) {
-    return fmt::format("{}##{}|{}|{}|{}", name, source_name, subclass_short_name, subclass_source_name, level);
 }
 
 int SubclassFeature::get_level() const { return level; }
 
 const std::map<int, Effects>& SubclassFeature::get_higher_level_effects() const { return higher_level_effects; }
-
-std::string SubclassFeature::get_key() const {
-    return key(get_name(), get_source_info().name, subclass_short_name, subclass_source_name, level);
-}
 
 const std::string& SubclassFeature::get_subclass_short_name() const { return subclass_short_name; }
 
@@ -67,24 +56,24 @@ const std::string& SubclassFeature::get_subclass_source_name() const { return su
 
 void SubclassFeature::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
-std::string SubclassFeature::Data::key(
-    const std::string& name, const std::string& source_name, const std::string& subclass_short_name,
-    const std::string& subclass_source_name, int level
-) {
-    return SubclassFeature::key(name, source_name, subclass_short_name, subclass_source_name, level);
-}
-
 SubclassFeature::SubclassFeature(
-    std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name, int level,
-    Effects&& main_effects, std::map<int, Effects>&& higher_level_effects, std::string&& subclass_short_name,
-    std::string&& subclass_source_name
+    std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
+    std::string&& key, int level, Effects&& main_effects, std::map<int, Effects>&& higher_level_effects,
+    std::string&& subclass_short_name, std::string&& subclass_source_name
 )
     : Feature(
-          std::move(name), std::move(description), std::move(source_path), std::move(source_name),
+          std::move(name), std::move(description), std::move(source_path), std::move(source_name), std::move(key),
           std::move(main_effects)
       ),
       level(level), higher_level_effects(std::move(higher_level_effects)),
       subclass_short_name(std::move(subclass_short_name)), subclass_source_name(std::move(subclass_source_name)) {}
+
+std::string SubclassFeature::Data::key(
+    const std::string& name, const std::string& source_name, const std::string& subclass_short_name,
+    const std::string& subclass_source_name, int level
+) {
+    return fmt::format("{}##{}|{}|{}|{}", name, source_name, subclass_short_name, subclass_source_name, level);
+}
 
 std::string SubclassFeature::Data::get_key() const {
     return key(name, source_name, subclass_short_name, subclass_source_name, level);

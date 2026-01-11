@@ -25,6 +25,7 @@ public:
     const std::string& get_name() const override;
     const Text& get_description() const override;
     const SourceInfo& get_source_info() const override;
+    const std::string& get_key() const override;
     const Text& get_cosmetic_description() const;
     bool requires_attunement() const;
 
@@ -32,12 +33,13 @@ public:
 private:
     Item(
         std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
-        Text&& cosmetic_description, bool requires_attunement
+        std::string&& key, Text&& cosmetic_description, bool requires_attunement
     );
 
     std::string name;
     Text description;
     SourceInfo source_info;
+    std::string key;
     Text cosmetic_description;
     bool attunement;
 };

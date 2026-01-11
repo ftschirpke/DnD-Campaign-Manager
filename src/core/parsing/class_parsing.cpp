@@ -319,7 +319,7 @@ Errors parse_class_feature(
     std::string class_name, class_source_name;
     errors += parse_required_attribute_into(obj, "className", class_name, filepath);
     errors += parse_required_attribute_into(obj, "classSource", class_source_name, filepath);
-    std::string key = Class::key(class_name, class_source_name);
+    std::string key = Class::Data::key(class_name, class_source_name);
 
     if (!parsed_classes.contains(key)) {
         errors.add_parsing_error(
@@ -355,7 +355,7 @@ WithErrors<Subclass::Data> parse_subclass(const nlohmann::ordered_json& obj, con
     std::string class_source_name;
     errors += parse_required_attribute_into(obj, "className", subclass_data.class_name, filepath);
     errors += parse_required_attribute_into(obj, "classSource", class_source_name, filepath);
-    subclass_data.class_key = Class::key(subclass_data.class_name, class_source_name);
+    subclass_data.class_key = Class::Data::key(subclass_data.class_name, class_source_name);
 
     parse_spellcasting(obj, filepath, true).move_into(subclass_data.spellcasting_data, errors);
 
@@ -372,7 +372,7 @@ Errors parse_subclass_feature(
     errors += parse_required_attribute_into(obj, "subclassShortName", subclass_short_name, filepath);
     errors += parse_required_attribute_into(obj, "subclassSource", subclass_source_name, filepath);
     errors += parse_required_attribute_into(obj, "className", class_name, filepath);
-    std::string key = Subclass::key(subclass_short_name, subclass_source_name, class_name);
+    std::string key = Subclass::Data::key(subclass_short_name, subclass_source_name, class_name);
 
     if (!parsed_subclasses.contains(key)) {
         errors.add_parsing_error(

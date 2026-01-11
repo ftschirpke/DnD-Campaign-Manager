@@ -43,6 +43,7 @@ public:
     const std::string& get_name() const override;
     const Text& get_description() const override;
     const SourceInfo& get_source_info() const override;
+    const std::string& get_key() const override;
     const std::vector<Feature>& get_features() const;
     const std::vector<CRef<Choosable>>& get_choosables() const;
     const AbilityScores& get_base_ability_scores() const;
@@ -59,13 +60,15 @@ public:
 private:
     Character(
         std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
-        std::vector<Feature>&& features, std::vector<CRef<Choosable>>&& choosables, AbilityScores&& base_ability_scores,
-        FeatureProviders&& feature_providers, Progression&& progression, std::vector<Decision>&& decisions
+        std::string&& key, std::vector<Feature>&& features, std::vector<CRef<Choosable>>&& choosables,
+        AbilityScores&& base_ability_scores, FeatureProviders&& feature_providers, Progression&& progression,
+        std::vector<Decision>&& decisions
     );
 
     std::string name;
     Text description;
     SourceInfo source_info;
+    std::string key;
     std::vector<Feature> features;
     std::vector<CRef<Choosable>> choosables;
     AbilityScores base_ability_scores;

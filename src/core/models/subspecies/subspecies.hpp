@@ -35,6 +35,7 @@ public:
     const std::string& get_name() const override;
     const Text& get_description() const override;
     const SourceInfo& get_source_info() const override;
+    const std::string& get_key() const override;
     const std::vector<Feature>& get_features() const;
     CRef<Species> get_species() const;
 
@@ -42,12 +43,13 @@ public:
 private:
     Subspecies(
         std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
-        std::vector<Feature>&& features, CRef<Species> species
+        std::string&& key, std::vector<Feature>&& features, CRef<Species> species
     );
 
     std::string name;
     Text description;
     SourceInfo source_info;
+    std::string key;
     std::vector<Feature> features;
     CRef<Species> species;
 };

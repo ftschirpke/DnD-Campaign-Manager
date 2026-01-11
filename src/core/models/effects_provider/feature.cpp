@@ -32,7 +32,7 @@ CreateResult<Feature> Feature::create_for(Data&& data, const Content& content) {
 
     return ValidCreate(Feature(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.source_name),
-        std::move(main_part)
+        data.get_key(), std::move(main_part)
     ));
 }
 
@@ -42,16 +42,18 @@ const Text& Feature::get_description() const { return description; }
 
 const SourceInfo& Feature::get_source_info() const { return source_info; }
 
+const std::string& Feature::get_key() const { return key; }
+
 const Effects& Feature::get_main_effects() const { return main_effects; }
 
 void Feature::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 Feature::Feature(
     std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
-    Effects&& main_effects
+    std::string&& key, Effects&& main_effects
 )
     : name(std::move(name)), description(std::move(description)),
-      source_info({.path = std::move(source_path), .name = std::move(source_name)}),
+      source_info({.path = std::move(source_path), .name = std::move(source_name)}), key(std::move(key)),
       main_effects(std::move(main_effects)) {}
 
 } // namespace dnd
