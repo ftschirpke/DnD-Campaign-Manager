@@ -21,9 +21,9 @@ bool SubclassFilter::matches(const Subclass& subclass) const {
     return ContentPieceFilter::matches(subclass) && has_spellcasting_filter.matches(subclass.has_spellcasting());
 }
 
-std::vector<Id> SubclassFilter::all_matches(const Content& content) const {
+std::vector<Id> SubclassFilter::all_matches() const {
     std::vector<Id> matching_content_pieces;
-    const std::vector<Subclass>& subclasses = content.get_all_subclasses();
+    const std::vector<Subclass>& subclasses = content.get().get_all_subclasses();
     for (size_t i = 0; i < subclasses.size(); ++i) {
         if (matches(subclasses[i])) {
             matching_content_pieces.push_back(Id{.index = i, .type = Type::Subclass});

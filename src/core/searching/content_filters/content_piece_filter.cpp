@@ -23,10 +23,10 @@ bool ContentPieceFilter::matches(const ContentPiece& content_piece) const {
     return dispatch(name_filter, const auto& filter, filter.matches(content_piece.get_name()));
 }
 
-std::vector<Id> ContentPieceFilter::all_matches(const Content& content) const {
+std::vector<Id> ContentPieceFilter::all_matches() const {
     std::vector<Id> matching_content_pieces;
 #define X(C, U, j, a, p, P)                                                                                            \
-    const auto& vec_##p = content.get_all_##p();                                                                       \
+    const auto& vec_##p = content.get().get_all_##p();                                                                 \
     for (size_t i = 0; i < vec_##p.size(); ++i) {                                                                      \
         const C& a = vec_##p[i];                                                                                       \
         if (matches(a)) {                                                                                              \

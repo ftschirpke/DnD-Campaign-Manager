@@ -23,7 +23,7 @@ public:
 
     bool has_all_filters() const override;
     bool matches(const Spell& spell) const;
-    std::vector<Id> all_matches(const Content& content) const override;
+    std::vector<Id> all_matches() const override;
     void clear() override;
 
     BoolFilter verbal_component_filter;

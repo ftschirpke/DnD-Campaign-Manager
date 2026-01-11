@@ -18,7 +18,7 @@ public:
 
     bool has_all_filters() const override;
     bool matches(const Item& item) const;
-    std::vector<Id> all_matches(const Content& content) const override;
+    std::vector<Id> all_matches() const override;
     void clear() override;
 
     // StringFilter cosmetic_description_filter; // TODO: replace with a TextFilter

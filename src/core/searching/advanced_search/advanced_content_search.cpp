@@ -20,7 +20,7 @@ ContentFilterVariant& AdvancedContentSearch::get_filter() { return filter; }
 const std::vector<Id>& AdvancedContentSearch::get_search_results() const { return search_results; }
 
 static std::vector<Id> search(const Content& content, ContentFilterVariant searching_filter) {
-    std::vector<Id> search_results = dispatch(searching_filter, const auto& filter, filter.all_matches(content));
+    std::vector<Id> search_results = dispatch(searching_filter, const auto& filter, filter.all_matches());
     std::sort(search_results.begin(), search_results.end(), [&content](Id lhs, Id rhs) {
         auto lhs_res = content.get(lhs);
         auto rhs_res = content.get(rhs);

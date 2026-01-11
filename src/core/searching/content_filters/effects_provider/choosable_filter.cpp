@@ -22,9 +22,9 @@ bool ChoosableFilter::matches(const Choosable& choosable) const {
            && has_prerequisites_filter.matches(!choosable.get_prerequisites().empty());
 }
 
-std::vector<Id> ChoosableFilter::all_matches(const Content& content) const {
+std::vector<Id> ChoosableFilter::all_matches() const {
     std::vector<Id> matching_content_pieces;
-    const std::vector<Choosable>& choosables = content.get_all_choosables();
+    const std::vector<Choosable>& choosables = content.get().get_all_choosables();
     for (size_t i = 0; i < choosables.size(); ++i) {
         if (matches(choosables[i])) {
             matching_content_pieces.push_back(Id{.index = i, .type = Type::Choosable});

@@ -38,9 +38,9 @@ bool SpellFilter::matches(const Spell& spell) const {
            );
 }
 
-std::vector<Id> SpellFilter::all_matches(const Content& content) const {
+std::vector<Id> SpellFilter::all_matches() const {
     std::vector<Id> matching_content_pieces;
-    const std::vector<Spell>& spells = content.get_all_spells();
+    const std::vector<Spell>& spells = content.get().get_all_spells();
     for (size_t i = 0; i < spells.size(); ++i) {
         const Spell& spell = spells[i];
         if (matches(spell)) {

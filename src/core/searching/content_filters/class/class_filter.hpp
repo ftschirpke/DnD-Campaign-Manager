@@ -15,7 +15,7 @@ public:
 
     bool has_all_filters() const override;
     bool matches(const Class& cls) const;
-    std::vector<Id> all_matches(const Content& content) const override;
+    std::vector<Id> all_matches() const override;
     void clear() override;
 
     BoolFilter has_spellcasting_filter;

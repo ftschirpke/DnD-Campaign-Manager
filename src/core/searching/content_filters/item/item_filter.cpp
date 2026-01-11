@@ -19,9 +19,9 @@ bool ItemFilter::matches(const Item& item) const {
     return ContentPieceFilter::matches(item) && attunement_filter.matches(item.requires_attunement());
 }
 
-std::vector<Id> ItemFilter::all_matches(const Content& content) const {
+std::vector<Id> ItemFilter::all_matches() const {
     std::vector<Id> matching_content_pieces;
-    const std::vector<Item>& items = content.get_all_items();
+    const std::vector<Item>& items = content.get().get_all_items();
     for (size_t i = 0; i < items.size(); ++i) {
         if (matches(items[i])) {
             matching_content_pieces.push_back(Id{.index = i, .type = Type::Item});

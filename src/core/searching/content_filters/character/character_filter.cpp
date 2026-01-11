@@ -22,9 +22,9 @@ bool CharacterFilter::matches(const Character& character) const {
            && xp_filter.matches(character.get_progression().get_xp());
 }
 
-std::vector<Id> CharacterFilter::all_matches(const Content& content) const {
+std::vector<Id> CharacterFilter::all_matches() const {
     std::vector<Id> matching_content_pieces;
-    const std::vector<Character>& characters = content.get_all_characters();
+    const std::vector<Character>& characters = content.get().get_all_characters();
     for (size_t i = 0; i < characters.size(); ++i) {
         if (matches(characters[i])) {
             matching_content_pieces.push_back(Id{.index = i, .type = Type::Character});

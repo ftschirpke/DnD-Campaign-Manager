@@ -21,9 +21,9 @@ bool ClassFilter::matches(const Class& cls) const {
     return ContentPieceFilter::matches(cls) && has_spellcasting_filter.matches(cls.has_spellcasting());
 }
 
-std::vector<Id> ClassFilter::all_matches(const Content& content) const {
+std::vector<Id> ClassFilter::all_matches() const {
     std::vector<Id> matching_content_pieces;
-    const std::vector<Class>& classes = content.get_all_classes();
+    const std::vector<Class>& classes = content.get().get_all_classes();
     for (size_t i = 0; i < classes.size(); ++i) {
         if (matches(classes[i])) {
             matching_content_pieces.push_back(Id{.index = i, .type = Type::Class});

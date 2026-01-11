@@ -17,9 +17,9 @@ bool SubspeciesFilter::has_all_filters() const { return ContentPieceFilter::has_
 
 bool SubspeciesFilter::matches(const Subspecies& subspecies) const { return ContentPieceFilter::matches(subspecies); }
 
-std::vector<Id> SubspeciesFilter::all_matches(const Content& content) const {
+std::vector<Id> SubspeciesFilter::all_matches() const {
     std::vector<Id> matching_content_pieces;
-    const std::vector<Subspecies>& subspecies = content.get_all_subspecies();
+    const std::vector<Subspecies>& subspecies = content.get().get_all_subspecies();
     for (size_t i = 0; i < subspecies.size(); ++i) {
         if (matches(subspecies[i])) {
             matching_content_pieces.push_back(Id{.index = i, .type = Type::Subspecies});
