@@ -3,6 +3,7 @@
 #include "bool_filter.hpp"
 
 #include <cassert>
+#include <utility>
 
 namespace dnd {
 

@@ -118,7 +118,8 @@ requires isContentPieceType<T>
 std::optional<size_t> StorageContentLibrary<T>::add(T&& content_piece) {
     try {
         data.emplace_back(std::move(content_piece));
-    } catch (const std::exception& _) {
+    } catch (const std::exception& e) {
+        DND_UNUSED(e);
         return std::nullopt;
     }
     return data.size() - 1;
