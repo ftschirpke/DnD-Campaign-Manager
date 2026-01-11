@@ -2,6 +2,7 @@
 
 #include "content.hpp"
 
+#include <cassert>
 #include <string>
 
 #include <fmt/format.h>
