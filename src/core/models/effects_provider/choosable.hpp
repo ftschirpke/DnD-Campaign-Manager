@@ -41,8 +41,6 @@ public:
     const Effects& get_main_effects() const override;
     const std::string& get_type() const;
     const std::vector<std::unique_ptr<Condition>>& get_prerequisites() const;
-
-    virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Choosable(
         std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,

@@ -10,19 +10,14 @@
 
 namespace dnd {
 
+class Content;
+
 class ItemCardBuilder {
 public:
-    /**
-     * @brief Add to the list of items we want to create cards for
-     * @param item an item to create a card for
-     */
-    void add_item(CRef<Item> item);
-    /**
-     * @brief Add to the list of items we want to create cards for
-     * @param item an item to create a card for
-     */
-    void add_item(const Item& item);
-    std::vector<CRef<Item>> get_items() const;
+    explicit ItemCardBuilder(const Content& content) noexcept;
+
+    void add_item(Id item_id);
+    std::vector<Id> get_items() const;
     void clear_items();
     /**
      * @brief Creates a LaTeX file that allows printing the cards with the timestamp as the file name
@@ -34,7 +29,8 @@ public:
      */
     void write_latex_file(const std::string& filename);
 private:
-    std::vector<CRef<Item>> items;
+    const Content& content;
+    std::vector<Id> items;
 };
 
 } // namespace dnd

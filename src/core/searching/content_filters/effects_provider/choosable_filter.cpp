@@ -11,6 +11,8 @@
 
 namespace dnd {
 
+ChoosableFilter::ChoosableFilter(const Content& content) noexcept : ContentPieceFilter(content) {}
+
 bool ChoosableFilter::has_all_filters() const {
     return ContentPieceFilter::has_all_filters() && type_filter.is_set() && has_prerequisites_filter.is_set();
 }
@@ -20,11 +22,12 @@ bool ChoosableFilter::matches(const Choosable& choosable) const {
            && has_prerequisites_filter.matches(!choosable.get_prerequisites().empty());
 }
 
-std::vector<const ContentPiece*> ChoosableFilter::all_matches(const Content& content) const {
-    std::vector<const ContentPiece*> matching_content_pieces;
-    for (const auto& choosable : content.get_choosable_library().get_all()) {
-        if (matches(choosable)) {
-            matching_content_pieces.push_back(&choosable);
+std::vector<Id> ChoosableFilter::all_matches(const Content& content) const {
+    std::vector<Id> matching_content_pieces;
+    const std::vector<Choosable>& choosables = content.get_all_choosables();
+    for (size_t i = 0; i < choosables.size(); ++i) {
+        if (matches(choosables[i])) {
+            matching_content_pieces.push_back(Id{.index = i, .type = Type::Choosable});
         }
     }
     return matching_content_pieces;

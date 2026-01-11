@@ -16,7 +16,7 @@ ContentWindow::ContentWindow(Session& session, const GuiFonts& fonts)
 void ContentWindow::render() {
     DND_MEASURE_FUNCTION();
     ImGui::Begin("Content");
-    std::deque<const ContentPiece*>& open_content_pieces = session.get_open_content_pieces();
+    std::deque<Id>& open_content_pieces = session.get_open_content_pieces();
     if (open_content_pieces.empty()) {
         ImGui::Text("No content selected");
         ImGui::End();
@@ -25,11 +25,14 @@ void ContentWindow::render() {
     ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_AutoSelectNewTabs | ImGuiTabBarFlags_Reorderable;
     if (ImGui::BeginTabBar("Content Tabs", tab_bar_flags)) {
         for (auto it = open_content_pieces.begin(); it != open_content_pieces.end();) {
-            const ContentPiece* content_piece = *it;
+            Id content_piece_id = *it;
+            auto content_piece = session.get_content().get(content_piece_id);
+            const std::string& key = dispatch(content_piece, const auto& p, p.get().get_key());
+            const std::string& name = dispatch(content_piece, const auto& p, p.get().get_name());
             bool open = true;
-            if (ImGui::BeginTabItem(content_piece->get_key().c_str(), &open)) {
-                ImGui::SeparatorText(content_piece->get_name().c_str());
-                content_piece->accept_visitor(display_visitor);
+            if (ImGui::BeginTabItem(key.c_str(), &open)) {
+                ImGui::SeparatorText(name.c_str());
+                display_visitor.visit_variant(content_piece);
                 ImGui::EndTabItem();
             }
             if (!open) {
@@ -46,14 +49,14 @@ void ContentWindow::render() {
                 ImGui::SetTooltip("Close all tabs");
             }
         }
-        const ContentPiece* selected_content_piece = session.get_selected_content_piece();
-        if (selected_content_piece != nullptr) {
+        Opt<Id> selected_content_piece_id = session.get_selected_content_piece();
+        if (selected_content_piece_id.has_value()) {
+            auto content_piece = session.get_content().get(selected_content_piece_id.value());
+            const std::string& key = dispatch(content_piece, const auto& p, p.get().get_key());
             ImGuiTabBar* tab_bar = ImGui::GetCurrentTabBar();
-            ImGuiTabItem* tab_item = ImGui::TabBarFindTabByID(
-                tab_bar, ImGui::GetID(selected_content_piece->get_key().c_str())
-            );
+            ImGuiTabItem* tab_item = ImGui::TabBarFindTabByID(tab_bar, ImGui::GetID(key.c_str()));
             ImGui::TabBarQueueFocus(tab_bar, tab_item);
-            selected_content_piece = nullptr;
+            selected_content_piece_id = std::nullopt;
         }
         ImGui::EndTabBar();
     }

@@ -41,8 +41,6 @@ public:
     bool has_spellcasting() const;
     const Spellcasting* get_spellcasting() const;
     Id get_class_id() const;
-
-    virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Subclass(
         std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,

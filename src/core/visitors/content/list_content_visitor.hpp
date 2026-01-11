@@ -20,7 +20,7 @@ public:
     std::vector<std::string> get_list();
     void clear_list();
 
-#define X(C, U, j, a, p, P) virtual void operator()(const C& a) override;
+#define X(C, U, j, a, p, P) virtual void visit(const C& a) override;
     X_CONTENT_PIECES
 #undef X
 private:

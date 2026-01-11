@@ -35,8 +35,6 @@ public:
     const SourceInfo& get_source_info() const override;
     const std::string& get_key() const override;
     const std::vector<Feature>& get_features() const;
-
-    virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Species(
         std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,

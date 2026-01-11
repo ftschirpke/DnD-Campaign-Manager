@@ -68,8 +68,6 @@ const Spellcasting* Subclass::get_spellcasting() const { return spellcasting.get
 
 Id Subclass::get_class_id() const { return class_id; }
 
-void Subclass::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
-
 std::string Subclass::Data::key(
     const std::string& name, const std::string& source_name, const std::string& class_name
 ) {

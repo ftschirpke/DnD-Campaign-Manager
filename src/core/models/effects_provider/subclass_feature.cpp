@@ -54,8 +54,6 @@ const std::string& SubclassFeature::get_subclass_short_name() const { return sub
 
 const std::string& SubclassFeature::get_subclass_source_name() const { return subclass_source_name; }
 
-void SubclassFeature::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
-
 SubclassFeature::SubclassFeature(
     std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
     std::string&& key, int level, Effects&& main_effects, std::map<int, Effects>&& higher_level_effects,

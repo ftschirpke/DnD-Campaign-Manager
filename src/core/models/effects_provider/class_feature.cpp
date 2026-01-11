@@ -55,8 +55,6 @@ const std::string& ClassFeature::get_class_name() const { return class_name; }
 
 const std::string& ClassFeature::get_class_source_name() const { return class_source_name; }
 
-void ClassFeature::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
-
 ClassFeature::ClassFeature(
     std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
     std::string&& key, int level, Effects&& main_effects, std::map<int, Effects>&& higher_level_effects,

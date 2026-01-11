@@ -48,8 +48,6 @@ const std::string& Species::get_key() const { return key; }
 
 const std::vector<Feature>& Species::get_features() const { return features; }
 
-void Species::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
-
 Species::Species(
     std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
     std::string&& key, std::vector<Feature>&& features

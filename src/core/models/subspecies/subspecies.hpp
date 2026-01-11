@@ -38,8 +38,6 @@ public:
     const std::string& get_key() const override;
     const std::vector<Feature>& get_features() const;
     CRef<Species> get_species() const;
-
-    virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Subspecies(
         std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,

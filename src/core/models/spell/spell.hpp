@@ -35,8 +35,6 @@ public:
     const std::string& get_range() const;
     const std::string& get_duration() const;
     const std::set<std::string>& get_classes() const;
-
-    virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Spell(
         std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,

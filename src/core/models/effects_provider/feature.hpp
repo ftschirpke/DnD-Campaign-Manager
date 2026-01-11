@@ -36,8 +36,6 @@ public:
     const SourceInfo& get_source_info() const override;
     const std::string& get_key() const override;
     const Effects& get_main_effects() const override;
-
-    virtual void accept_visitor(ContentVisitor& visitor) const override;
 protected:
     Feature(
         std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,

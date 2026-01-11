@@ -30,7 +30,7 @@ std::vector<std::string> ListContentVisitor::get_list() { return std::move(strin
 
 void ListContentVisitor::clear_list() { string_list.clear(); }
 
-void ListContentVisitor::operator()(const Character& character) {
+void ListContentVisitor::visit(const Character& character) {
     const Class& cls = content.get_class(character.get_feature_providers().get_class_id());
     const Species& species = content.get_species(character.get_feature_providers().get_species_id());
     string_list.push_back(
@@ -41,13 +41,13 @@ void ListContentVisitor::operator()(const Character& character) {
     );
 }
 
-void ListContentVisitor::operator()(const Class& cls) {
+void ListContentVisitor::visit(const Class& cls) {
     string_list.push_back(
         fmt::format("{} ({}) [CLASS]##{}", cls.get_name(), cls.get_source_info().name, cls.get_key())
     );
 }
 
-void ListContentVisitor::operator()(const Subclass& subclass) {
+void ListContentVisitor::visit(const Subclass& subclass) {
     Id class_id = subclass.get_class_id();
     const Class& cls = content.get_class(class_id);
     string_list.push_back(
@@ -57,13 +57,13 @@ void ListContentVisitor::operator()(const Subclass& subclass) {
         )
     );
 }
-void ListContentVisitor::operator()(const Species& species) {
+void ListContentVisitor::visit(const Species& species) {
     string_list.push_back(
         fmt::format("{} ({}) [SPECIES]##{}", species.get_name(), species.get_source_info().name, species.get_key())
     );
 }
 
-void ListContentVisitor::operator()(const Subspecies& subspecies) {
+void ListContentVisitor::visit(const Subspecies& subspecies) {
     const Species& species = subspecies.get_species();
     string_list.push_back(
         fmt::format(
@@ -73,7 +73,7 @@ void ListContentVisitor::operator()(const Subspecies& subspecies) {
     );
 }
 
-void ListContentVisitor::operator()(const Item& item) {
+void ListContentVisitor::visit(const Item& item) {
     if (item.requires_attunement()) {
         string_list.push_back(
             fmt::format(
@@ -89,7 +89,7 @@ void ListContentVisitor::operator()(const Item& item) {
     }
 }
 
-void ListContentVisitor::operator()(const Spell& spell) {
+void ListContentVisitor::visit(const Spell& spell) {
     string_list.push_back(
         fmt::format(
             "{} ({}) [SPELL] : {}##{}", spell.get_name(), spell.get_source_info().name, spell.get_type().short_str(),
@@ -98,7 +98,7 @@ void ListContentVisitor::operator()(const Spell& spell) {
     );
 }
 
-void ListContentVisitor::operator()(const Feature& feature) {
+void ListContentVisitor::visit(const Feature& feature) {
     string_list.push_back(
         fmt::format(
             "{} ({}) [FEATURE] : {}##{}", feature.get_name(), feature.get_source_info().name,
@@ -107,7 +107,7 @@ void ListContentVisitor::operator()(const Feature& feature) {
     );
 }
 
-void ListContentVisitor::operator()(const ClassFeature& class_feature) {
+void ListContentVisitor::visit(const ClassFeature& class_feature) {
     string_list.push_back(
         fmt::format(
             "{} ({}) [CLASS FEATURE] : {}##{} from {}##{}", class_feature.get_name(),
@@ -117,7 +117,7 @@ void ListContentVisitor::operator()(const ClassFeature& class_feature) {
     );
 }
 
-void ListContentVisitor::operator()(const SubclassFeature& subclass_feature) {
+void ListContentVisitor::visit(const SubclassFeature& subclass_feature) {
     string_list.push_back(
         fmt::format(
             "{} ({}) [SUBCLASS FEATURE] : {}##{} from {}##{}", subclass_feature.get_name(),
@@ -129,7 +129,7 @@ void ListContentVisitor::operator()(const SubclassFeature& subclass_feature) {
 }
 
 
-void ListContentVisitor::operator()(const Choosable& choosable) {
+void ListContentVisitor::visit(const Choosable& choosable) {
     string_list.push_back(
         fmt::format(
             "{} ({}) [CHOOSABLE] : {}##{}", choosable.get_name(), choosable.get_source_info().name,

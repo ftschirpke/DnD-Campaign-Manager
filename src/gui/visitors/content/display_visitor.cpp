@@ -300,7 +300,7 @@ static void list_features(DisplayVisitor& visitor, const std::vector<T>& feature
         ImGui::Separator();
         if (ImGui::TreeNode(feature.get_key().c_str())) {
             ImGui::Separator();
-            visitor(feature);
+            visitor.visit(feature);
             ImGui::TreePop();
         }
     }
@@ -427,7 +427,7 @@ static void character_progression_list(const dnd::Character& character) {
     }
 }
 
-void dnd::DisplayVisitor::operator()(const Character& character) {
+void dnd::DisplayVisitor::visit(const Character& character) {
     {
         ImGui::BeginChild("abilities_and_skills", ImVec2(ImGui::GetContentRegionAvail().x * 0.8f, 260), false);
         character_abilities_and_skills_table(character);
@@ -456,28 +456,28 @@ void dnd::DisplayVisitor::operator()(const Character& character) {
     label("Species:");
     const Species& species = content.get_species(fp.get_species_id());
     if (ImGui::CollapsingHeader(species.get_key().c_str())) {
-        operator()(species);
+        visit(species);
     }
 
     if (fp.has_subspecies()) {
         label("Subspecies:");
         const Subspecies& subspecies = content.get_subspecies(fp.get_subspecies_id().value());
         if (ImGui::CollapsingHeader(subspecies.get_key().c_str())) {
-            operator()(subspecies);
+            visit(subspecies);
         }
     }
 
     label("Class:");
     const Class& cls = content.get_class(fp.get_class_id());
     if (ImGui::CollapsingHeader(cls.get_key().c_str())) {
-        operator()(cls);
+        visit(cls);
     }
 
     if (fp.has_subclass()) {
         label("Subclass:");
         const Subclass& subclass = content.get_subclass(fp.get_subclass_id().value());
         if (ImGui::CollapsingHeader(subclass.get_key().c_str())) {
-            operator()(subclass);
+            visit(subclass);
         }
     }
 
@@ -492,7 +492,7 @@ void dnd::DisplayVisitor::operator()(const Character& character) {
             ImGui::Separator();
             if (ImGui::TreeNode(choosable.get().get_key().c_str())) {
                 ImGui::Separator();
-                operator()(choosable.get());
+                visit(choosable.get());
                 ImGui::TreePop();
             }
         }
@@ -502,7 +502,7 @@ void dnd::DisplayVisitor::operator()(const Character& character) {
     end_content_table();
 }
 
-void DisplayVisitor::operator()(const Class& cls) {
+void DisplayVisitor::visit(const Class& cls) {
     begin_content_table(cls);
 
     label("Type:");
@@ -524,7 +524,7 @@ void DisplayVisitor::operator()(const Class& cls) {
     end_content_table();
 }
 
-void DisplayVisitor::operator()(const Subclass& subclass) {
+void DisplayVisitor::visit(const Subclass& subclass) {
     begin_content_table(subclass);
 
     label("Type:");
@@ -543,7 +543,7 @@ void DisplayVisitor::operator()(const Subclass& subclass) {
     end_content_table();
 }
 
-void DisplayVisitor::operator()(const Species& species) {
+void DisplayVisitor::visit(const Species& species) {
     begin_content_table(species);
 
     label("Type:");
@@ -557,7 +557,7 @@ void DisplayVisitor::operator()(const Species& species) {
     end_content_table();
 }
 
-void DisplayVisitor::operator()(const Subspecies& subspecies) {
+void DisplayVisitor::visit(const Subspecies& subspecies) {
     begin_content_table(subspecies);
 
     label("Type:");
@@ -573,7 +573,7 @@ void DisplayVisitor::operator()(const Subspecies& subspecies) {
     end_content_table();
 }
 
-void DisplayVisitor::operator()(const Item& item) {
+void DisplayVisitor::visit(const Item& item) {
     begin_content_table(item);
 
     label("Type:");
@@ -592,7 +592,7 @@ void DisplayVisitor::operator()(const Item& item) {
     end_content_table();
 }
 
-void DisplayVisitor::operator()(const Spell& spell) {
+void DisplayVisitor::visit(const Spell& spell) {
     begin_content_table(spell);
 
     label("Type:");
@@ -621,7 +621,7 @@ void DisplayVisitor::operator()(const Spell& spell) {
     end_content_table();
 }
 
-void DisplayVisitor::operator()(const Feature& feature) {
+void DisplayVisitor::visit(const Feature& feature) {
     begin_content_table(feature);
 
     label("Type:");
@@ -633,7 +633,7 @@ void DisplayVisitor::operator()(const Feature& feature) {
     end_content_table();
 }
 
-void DisplayVisitor::operator()(const ClassFeature& class_feature) {
+void DisplayVisitor::visit(const ClassFeature& class_feature) {
     begin_content_table(class_feature);
 
     label("Type:");
@@ -648,7 +648,7 @@ void DisplayVisitor::operator()(const ClassFeature& class_feature) {
     end_content_table();
 }
 
-void DisplayVisitor::operator()(const SubclassFeature& subclass_feature) {
+void DisplayVisitor::visit(const SubclassFeature& subclass_feature) {
     begin_content_table(subclass_feature);
 
     label("Type:");
@@ -663,7 +663,7 @@ void DisplayVisitor::operator()(const SubclassFeature& subclass_feature) {
     end_content_table();
 }
 
-void DisplayVisitor::operator()(const Choosable& choosable) {
+void DisplayVisitor::visit(const Choosable& choosable) {
     begin_content_table(choosable);
 
     label("Type:");

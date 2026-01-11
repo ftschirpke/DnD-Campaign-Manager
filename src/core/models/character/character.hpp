@@ -55,8 +55,6 @@ public:
 
     void for_all_effects_do(const Content& content, std::function<void(const Effects&)> func) const;
     Errors recalculate_stats(const Content& content);
-
-    virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Character(
         std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,

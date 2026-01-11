@@ -12,9 +12,11 @@ namespace dnd {
 
 class ChoosableFilter : public ContentPieceFilter {
 public:
+    explicit ChoosableFilter(const Content& content) noexcept;
+
     bool has_all_filters() const override;
     bool matches(const Choosable& choosable) const;
-    std::vector<const ContentPiece*> all_matches(const Content& content) const override;
+    std::vector<Id> all_matches(const Content& content) const override;
     void clear() override;
 
     StringFilter type_filter;

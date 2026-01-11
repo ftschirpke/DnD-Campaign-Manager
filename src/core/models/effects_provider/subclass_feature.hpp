@@ -37,12 +37,6 @@ public:
 
     const std::string& get_subclass_short_name() const;
     const std::string& get_subclass_source_name() const;
-
-    /**
-     * @brief Accepts a visitor
-     * @param visitor reference to the visitor
-     */
-    virtual void accept_visitor(ContentVisitor& visitor) const override;
 private:
     SubclassFeature(
         std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,

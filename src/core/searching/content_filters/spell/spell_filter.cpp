@@ -12,6 +12,8 @@
 
 namespace dnd {
 
+SpellFilter::SpellFilter(const Content& content) noexcept : ContentPieceFilter(content) {}
+
 bool SpellFilter::has_all_filters() const {
     return ContentPieceFilter::has_all_filters() && verbal_component_filter.is_set()
            && somatic_component_filter.is_set() && material_component_filter.is_set() && level_filter.is_set()
@@ -36,11 +38,13 @@ bool SpellFilter::matches(const Spell& spell) const {
            );
 }
 
-std::vector<const ContentPiece*> SpellFilter::all_matches(const Content& content) const {
-    std::vector<const ContentPiece*> matching_content_pieces;
-    for (const auto& spell : content.get_spell_library().get_all()) {
+std::vector<Id> SpellFilter::all_matches(const Content& content) const {
+    std::vector<Id> matching_content_pieces;
+    const std::vector<Spell>& spells = content.get_all_spells();
+    for (size_t i = 0; i < spells.size(); ++i) {
+        const Spell& spell = spells[i];
         if (matches(spell)) {
-            matching_content_pieces.push_back(&spell);
+            matching_content_pieces.push_back(Id{.index = i, .type = Type::Spell});
         }
     }
     return matching_content_pieces;

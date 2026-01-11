@@ -31,7 +31,7 @@ static void render_draft_error_messages(const char* label, const StorageContentL
     ImGui::SeparatorText(label);
     for (const auto& [_, errors] : library.get_drafts()) {
         for (const Error& error : errors.get_errors()) {
-            const std::string& message = std::visit([](const auto& e) { return e.get_error_message(); }, error);
+            const std::string& message = dispatch(error, const auto& e, e.get_error_message());
             ImGui::TextWrapped("%s", message.c_str());
         }
     }

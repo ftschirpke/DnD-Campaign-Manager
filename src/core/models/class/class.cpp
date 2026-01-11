@@ -76,7 +76,7 @@ CreateResult<Class> Class::create_for(Data&& data, const Content& content) {
     if (!hit_dice_result.has_value()) {
         Errors sub_errors;
         for (const Error& error : hit_dice_result.error().get_errors()) {
-            std::string error_message = std::visit([](const auto& error) { return error.get_error_message(); }, error);
+            std::string error_message = dispatch(error, const auto& e, e.get_error_message());
             sub_errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, std::move(error_message));
         }
         return InvalidCreate<Class>(std::move(data), std::move(sub_errors));
@@ -125,8 +125,6 @@ Opt<CRef<ClassFeature>> Class::get_subclass_feature() const { return subclass_fe
 const Dice& Class::get_hit_dice() const { return hit_dice; }
 
 const ImportantLevels& Class::get_important_levels() const { return important_levels; }
-
-void Class::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
 
 Class::Class(
     std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,

@@ -54,8 +54,6 @@ const std::vector<Feature>& Subspecies::get_features() const { return features; 
 
 CRef<Species> Subspecies::get_species() const { return species; }
 
-void Subspecies::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
-
 Subspecies::Subspecies(
     std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
     std::string&& key, std::vector<Feature>&& features, CRef<Species> species

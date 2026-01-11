@@ -24,7 +24,6 @@ public:
     virtual const Text& get_description() const = 0;
     virtual const SourceInfo& get_source_info() const = 0;
     virtual const std::string& get_key() const = 0;
-    virtual void accept_visitor(ContentVisitor& visitor) const = 0;
 };
 
 template <typename T>

@@ -16,9 +16,13 @@ enum class Type {
 };
 
 struct Id {
+    std::strong_ordering operator<=>(const Id&) const = default;
+
     size_t index;
     Type type;
 };
+
+#define dispatch(var, el, func_body, ...) std::visit([&](el) { return func_body; }, var);
 
 // a shorthand for std::reference_wrapper<T>
 template <typename T>

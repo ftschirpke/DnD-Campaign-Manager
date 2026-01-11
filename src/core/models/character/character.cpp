@@ -238,8 +238,6 @@ int Character::get_proficiency_bonus() const {
     return proficiency_bonus_result.value();
 }
 
-void Character::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
-
 Character::Character(
     std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
     std::string&& key, std::vector<Feature>&& features, std::vector<CRef<Choosable>>&& choosables,

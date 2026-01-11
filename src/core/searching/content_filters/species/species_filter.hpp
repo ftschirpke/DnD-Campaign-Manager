@@ -12,9 +12,11 @@ namespace dnd {
 
 class SpeciesFilter : public ContentPieceFilter {
 public:
+    explicit SpeciesFilter(const Content& content) noexcept;
+
     bool has_all_filters() const override;
     bool matches(const Species& species) const;
-    std::vector<const ContentPiece*> all_matches(const Content& content) const override;
+    std::vector<Id> all_matches(const Content& content) const override;
     void clear() override;
 };
 

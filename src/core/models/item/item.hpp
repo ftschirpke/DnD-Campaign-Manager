@@ -28,8 +28,6 @@ public:
     const std::string& get_key() const override;
     const Text& get_cosmetic_description() const;
     bool requires_attunement() const;
-
-    virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Item(
         std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,

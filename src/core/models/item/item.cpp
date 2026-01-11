@@ -39,8 +39,6 @@ const Text& Item::get_cosmetic_description() const { return cosmetic_description
 
 bool Item::requires_attunement() const { return attunement; }
 
-void Item::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
-
 Item::Item(
     std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
     std::string&& key, Text&& cosmetic_description, bool requires_attunement

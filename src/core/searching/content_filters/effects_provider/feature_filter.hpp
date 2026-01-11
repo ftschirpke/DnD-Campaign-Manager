@@ -10,13 +10,13 @@
 
 namespace dnd {
 
-// TODO: Extend this class
-
 class FeatureFilter : public ContentPieceFilter {
 public:
+    explicit FeatureFilter(const Content& content) noexcept;
+
     bool has_all_filters() const override;
     bool matches(const Feature& feature) const;
-    std::vector<const ContentPiece*> all_matches(const Content& content) const override;
+    std::vector<Id> all_matches(const Content& content) const override;
     void clear() override;
 };
 

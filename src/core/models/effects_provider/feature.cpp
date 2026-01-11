@@ -46,8 +46,6 @@ const std::string& Feature::get_key() const { return key; }
 
 const Effects& Feature::get_main_effects() const { return main_effects; }
 
-void Feature::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
-
 Feature::Feature(
     std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
     std::string&& key, Effects&& main_effects

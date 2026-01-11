@@ -61,8 +61,6 @@ const std::string& Choosable::get_type() const { return type; }
 
 const std::vector<std::unique_ptr<Condition>>& Choosable::get_prerequisites() const { return prerequisites; }
 
-void Choosable::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
-
 Choosable::Choosable(
     std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
     std::string&& key, std::string&& type, std::vector<std::unique_ptr<Condition>>&& prerequisites,
