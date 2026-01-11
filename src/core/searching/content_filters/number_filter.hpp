@@ -106,8 +106,7 @@ bool NumberFilter<T>::matches(T number) const {
         case NumberFilterType::NONE:
             return true;
     }
-    assert(false);
-    return false;
+    std::unreachable();
 }
 
 } // namespace dnd

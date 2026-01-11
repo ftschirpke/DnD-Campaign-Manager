@@ -60,11 +60,8 @@ static ContentFilterVariant get_filter_from_filter_index(const Content& content,
             return FeatureFilter(content);
         case 9:
             return ChoosableFilter(content);
-        default: {
-            assert(false);
-            return ContentPieceFilter(content);
-        }
     }
+    std::unreachable();
 }
 
 AdvancedSearchWindow::AdvancedSearchWindow(Session& session) : session(session), result_list() {}

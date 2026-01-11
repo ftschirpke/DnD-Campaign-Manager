@@ -483,7 +483,7 @@ std::optional<Error> parse_list(const nlohmann::json& list_items, Text& out, con
                     break;
                 }
                 default:
-                    assert(false);
+                    std::unreachable();
             }
         }
     } else if (!new_list.parts.empty()) {
@@ -629,10 +629,8 @@ static const char* json_attribute_type_name(JsonType typ) {
             return "object";
         case JsonType::ANY:
             return "any";
-        default:
-            assert(false);
-            return "";
     }
+    std::unreachable();
 }
 
 static std::optional<Error> check_type(
@@ -653,8 +651,7 @@ static std::optional<Error> check_type(
             is_required_type = true;
             break;
         default:
-            assert(false);
-            break;
+            std::unreachable();
     }
     if (!is_required_type) {
         return ParsingError(ParsingError::Code::INVALID_ATTRIBUTE_TYPE, filepath, std::move(error_msg));

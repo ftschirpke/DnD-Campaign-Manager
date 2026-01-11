@@ -54,8 +54,7 @@ Errors StatChange::apply_with_value(Stats& stats, int value) const {
             affected_stat = std::min(affected_stat, value);
             return errors;
     }
-    assert(false);
-    return errors;
+    std::unreachable();
 }
 
 } // namespace dnd

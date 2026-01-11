@@ -80,8 +80,7 @@ static const char* dice_type_to_string(DiceType dice_type) {
         case DiceType::D100:
             return "d100";
     };
-    assert(false);
-    return "";
+    std::unreachable();
 }
 
 

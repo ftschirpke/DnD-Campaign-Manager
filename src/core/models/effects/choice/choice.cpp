@@ -204,8 +204,7 @@ std::set<std::string> Choice::possible_values(const Content& content) const {
             };
             return possible_values;
     }
-    assert(false);
-    return possible_values;
+    std::unreachable();
 }
 
 Choice::Choice(

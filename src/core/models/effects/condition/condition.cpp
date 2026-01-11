@@ -44,10 +44,7 @@ tl::expected<bool, RuntimeError> Condition::evaluate_with_right_side(const Stats
         case ComparisonOperator::GREATER_THAN_OR_EQUAL:
             return left_side_value >= right_side_value;
     }
-    assert(false);
-    return tl::unexpected(
-        RuntimeError(RuntimeError::Code::UNREACHABLE, "Found unknown comparison operator in condition")
-    );
+    std::unreachable();
 }
 
 } // namespace dnd

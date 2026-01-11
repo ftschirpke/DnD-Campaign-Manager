@@ -39,8 +39,7 @@ int AbilityScores::get(Ability ability) const {
         case Ability::CHARISMA:
             return charisma;
     }
-    assert(false);
-    return 0;
+    std::unreachable();
 }
 
 int AbilityScores::get_strength() const { return strength; }
@@ -70,8 +69,7 @@ int AbilityScores::get_modifier(Ability ability) const {
         case Ability::CHARISMA:
             return get_charisma_modifier();
     }
-    assert(false);
-    return 0;
+    std::unreachable();
 }
 
 int AbilityScores::get_strength_modifier() const { return calculate_modifier(strength); }

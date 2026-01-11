@@ -152,8 +152,7 @@ Errors validate_choice_raw(const Choice::Data& data) {
         case ChoiceType::CHOOSABLE:
             return errors;
     }
-    assert(false);
-    return errors;
+    std::unreachable();
 }
 
 static Errors validate_relations_string_choice(const Choice::Data& data, const Content& content) {
@@ -375,8 +374,7 @@ static Errors validate_choice_relations(const Choice::Data& data, const Content&
         case ChoiceType::STAT_CHANGE:
             return errors;
     }
-    assert(false);
-    return errors;
+    std::unreachable();
 }
 
 Errors validate_choice_for_content(const Choice::Data& data, const Content& content) {

@@ -68,8 +68,7 @@ std::string SpellType::str() const {
         case SpellLevel::LEVEL9:
             return fmt::format("{}th-level spell - School of {}", get_spell_level_as_int(), capitalized_school_name);
     }
-    assert(false);
-    return "";
+    std::unreachable();
 }
 
 std::string SpellType::short_str() const {
@@ -90,8 +89,7 @@ std::string SpellType::short_str() const {
         case SpellLevel::LEVEL9:
             return fmt::format("{}th-level {}", get_spell_level_as_int(), get_magic_school_name());
     }
-    assert(false);
-    return "";
+    std::unreachable();
 }
 
 } // namespace dnd

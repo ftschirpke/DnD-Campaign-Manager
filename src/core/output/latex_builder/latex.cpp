@@ -42,7 +42,7 @@ static void paragraph_to_latex(const Paragraph& paragraph, LatexScope& scope) {
                 break;
             }
             default: {
-                assert(false);
+                std::unreachable();
             }
         }
     }
@@ -73,7 +73,7 @@ std::vector<LatexScope> text_to_latex(const Text& text) {
                 break;
             }
             default: {
-                assert(false);
+                std::unreachable();
             }
         }
     }

@@ -89,7 +89,7 @@ void PdfCreateWindow::render() {
             }
             break;
         default:
-            assert(false);
+            std::unreachable();
     }
 
     ImGui::Text("When you are happy with your selection press the button to create the cards: ");
@@ -103,7 +103,7 @@ void PdfCreateWindow::render() {
                 spell_card_builder.write_latex_file(); // TODO: let user choose file name or at least display file name
                 break;
             default:
-                assert(false);
+                std::unreachable();
         }
     }
 

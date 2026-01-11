@@ -131,7 +131,7 @@ static void display_paragraph(const Paragraph& paragraph, const GuiFonts& fonts)
                 break;
             }
             default: {
-                assert(false);
+                std::unreachable();
             }
         }
 
@@ -270,7 +270,7 @@ void display_formatted_text(const Text& formatted_text, const GuiFonts& fonts) {
                                 display_table(std::get<1>(part), fonts);
                                 break;
                             default:
-                                assert(false);
+                                std::unreachable();
                         }
                     }
                     ImGui::EndGroup();
@@ -283,7 +283,7 @@ void display_formatted_text(const Text& formatted_text, const GuiFonts& fonts) {
                 break;
             }
             default: {
-                assert(false);
+                std::unreachable();
             }
         }
     }

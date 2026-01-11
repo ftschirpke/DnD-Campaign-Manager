@@ -33,8 +33,7 @@ static std::optional<StatChangeTime> stat_change_time_from_str(std::string_view 
     } else if (stat_change_time_str == "latest") {
         return StatChangeTime::LATEST;
     }
-    assert(false);
-    return std::nullopt;
+    std::unreachable();
 }
 
 static std::optional<StatChangeOperation> stat_change_operation_from_str(std::string_view stat_change_operation_str) {
@@ -53,8 +52,7 @@ static std::optional<StatChangeOperation> stat_change_operation_from_str(std::st
     } else if (stat_change_operation_str == "min") {
         return StatChangeOperation::MIN;
     }
-    assert(false);
-    return std::nullopt;
+    std::unreachable();
 }
 
 FactoryResult<StatChange> create_stat_change(StatChange::Data&& data) {

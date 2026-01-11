@@ -44,7 +44,7 @@ Opt<Id> Content::find(Type type, const std::string& key) const {
         X_CONTENT_PIECES
 #undef X
         default:
-            assert(false);
+            std::unreachable();
     }
     if (!index.has_value()) {
         return std::nullopt;
@@ -67,9 +67,8 @@ ContentPieceVariant Content::get(Id id) const {
     }
         X_CONTENT_PIECES
 #undef X
-        default:
-            assert(false);
     }
+    std::unreachable();
 }
 
 const ContentPiece* Content::get_ptr(Id id) const {
@@ -80,9 +79,8 @@ const ContentPiece* Content::get_ptr(Id id) const {
     }
         X_CONTENT_PIECES
 #undef X
-        default:
-            assert(false);
     }
+    std::unreachable();
 }
 
 #define X(C, U, j, a, p, P)                                                                                            \

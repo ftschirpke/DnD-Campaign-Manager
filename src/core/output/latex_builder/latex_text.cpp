@@ -45,7 +45,7 @@ LatexText* LatexText::add_modifier(LatexTextModifier modifier) {
             modifiers.insert("emph");
             break;
         default:
-            assert(false);
+            std::unreachable();
     }
     return this;
 }

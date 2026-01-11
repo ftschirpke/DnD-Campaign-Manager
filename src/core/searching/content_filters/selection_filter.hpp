@@ -99,8 +99,7 @@ bool SelectionFilter<T>::matches(const T& selection) const {
         case SelectionFilterType::NONE:
             return true;
     }
-    assert(false);
-    return false;
+    std::unreachable();
 }
 
 } // namespace dnd
