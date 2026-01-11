@@ -3,10 +3,9 @@
 
 #include <dnd_config.hpp>
 
+#include <expected>
 #include <string>
 #include <string_view>
-
-#include <tl/expected.hpp>
 
 #include <core/errors/runtime_error.hpp>
 #include <core/models/character/stats.hpp>
@@ -26,7 +25,7 @@ public:
     LiteralCondition(const std::string& left_side_identifier, ComparisonOperator comparison_operator, float right_side);
     LiteralCondition(std::string_view left_side_identifier, ComparisonOperator comparison_operator, float right_side);
 
-    tl::expected<bool, RuntimeError> evaluate(const Stats& stats) const override final;
+    std::expected<bool, RuntimeError> evaluate(const Stats& stats) const override final;
 private:
     int right_side;
 };

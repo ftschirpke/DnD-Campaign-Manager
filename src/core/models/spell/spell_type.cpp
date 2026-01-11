@@ -3,12 +3,12 @@
 #include "spell_type.hpp"
 
 #include <cassert>
+#include <expected>
 #include <string>
 #include <string_view>
 #include <utility>
 
 #include <fmt/format.h>
-#include <tl/expected.hpp>
 
 #include <core/basic_mechanics/magic_schools.hpp>
 #include <core/errors/errors.hpp>
@@ -43,7 +43,7 @@ bool SpellType::is_ritual() const { return ritual; }
 int SpellType::get_spell_level_as_int() const { return static_cast<int>(spell_level); }
 
 std::string_view SpellType::get_magic_school_name() const {
-    tl::expected<std::string_view, RuntimeError> magic_school_name_result = magic_school_name(magic_school);
+    std::expected<std::string_view, RuntimeError> magic_school_name_result = magic_school_name(magic_school);
     assert(magic_school_name_result.has_value());
     return magic_school_name_result.value();
 }

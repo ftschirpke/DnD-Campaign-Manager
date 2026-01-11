@@ -2,10 +2,9 @@
 
 #include "literal_condition.hpp"
 
+#include <expected>
 #include <string>
 #include <string_view>
-
-#include <tl/expected.hpp>
 
 #include <core/errors/runtime_error.hpp>
 #include <core/models/character/stats.hpp>
@@ -43,7 +42,7 @@ LiteralCondition::LiteralCondition(
 )
     : Condition(left_side_identifier, comparison_operator), right_side(static_cast<int>(right_side * 100)) {}
 
-tl::expected<bool, RuntimeError> LiteralCondition::evaluate(const Stats& stats) const {
+std::expected<bool, RuntimeError> LiteralCondition::evaluate(const Stats& stats) const {
     return evaluate_with_right_side(stats, right_side);
 }
 

@@ -3,13 +3,12 @@
 #include "character.hpp"
 
 #include <cassert>
+#include <expected>
 #include <filesystem>
 #include <string>
 #include <unordered_set>
 #include <utility>
 #include <vector>
-
-#include <tl/expected.hpp>
 
 #include <core/attribute_names.hpp>
 #include <core/basic_mechanics/character_progression.hpp>
@@ -221,7 +220,7 @@ Errors Character::recalculate_stats(const Content& content) {
 
     const Class& cls = content.get_class(feature_providers.get_class_id());
 
-    tl::expected<Stats, Errors> result = Stats::create(
+    std::expected<Stats, Errors> result = Stats::create(
         base_ability_scores, get_proficiency_bonus(), stat_changes, cls.get_hit_dice(), progression.get_hit_dice_rolls()
     );
     if (!result.has_value()) {
@@ -233,7 +232,7 @@ Errors Character::recalculate_stats(const Content& content) {
 }
 
 int Character::get_proficiency_bonus() const {
-    tl::expected<int, RuntimeError> proficiency_bonus_result = proficiency_bonus_for_level(progression.get_level());
+    std::expected<int, RuntimeError> proficiency_bonus_result = proficiency_bonus_for_level(progression.get_level());
     assert(proficiency_bonus_result.has_value());
     return proficiency_bonus_result.value();
 }

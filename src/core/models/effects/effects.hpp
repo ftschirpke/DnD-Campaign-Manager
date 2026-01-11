@@ -4,10 +4,9 @@
 #include <dnd_config.hpp>
 
 #include <compare>
+#include <expected>
 #include <memory>
 #include <vector>
-
-#include <tl/expected.hpp>
 
 #include <core/models/character/stats.hpp>
 #include <core/models/effects/choice/choice.hpp>
@@ -50,7 +49,7 @@ public:
     const ProficiencyHolder& get_proficiencies() const;
     const RIVHolder& get_rivs() const;
 
-    tl::expected<bool, Errors> is_active(const Stats& stats) const;
+    std::expected<bool, Errors> is_active(const Stats& stats) const;
 
     void merge(Effects&& other);
 private:

@@ -2,10 +2,10 @@
 
 #include "choosable_parsing.hpp"
 
+#include <expected>
 #include <filesystem>
 
 #include <nlohmann/json.hpp>
-#include <tl/expected.hpp>
 
 #include <core/errors/errors.hpp>
 #include <core/models/effects_provider/choosable.hpp>
@@ -76,7 +76,7 @@ static WithErrors<Choosable::Data> parse_choosable(const nlohmann::json& obj, co
                         errors += error.value();
                         continue;
                     }
-                    tl::expected<ParsedChoice, Error> parsed_choice = parse_choice(entry["choose"], filepath);
+                    std::expected<ParsedChoice, Error> parsed_choice = parse_choice(entry["choose"], filepath);
 
                     int max_score = 20;
                     error = parse_optional_attribute_into(entry, "max", max_score, filepath);

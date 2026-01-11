@@ -39,7 +39,7 @@ Stats Stats::create_default() {
     return stats;
 }
 
-tl::expected<Stats, Errors> Stats::create(
+std::expected<Stats, Errors> Stats::create(
     const AbilityScores& base_ability_scores, int proficiency_bonus, std::vector<CRef<StatChange>> stat_changes,
     Dice class_hit_dice, const std::vector<int>& hit_dice_rolls
 ) {
@@ -64,7 +64,7 @@ tl::expected<Stats, Errors> Stats::create(
         }
     }
     if (!errors.ok()) {
-        return tl::unexpected(errors);
+        return std::unexpected(errors);
     }
 
     stats.check_maximum_ability_scores();
@@ -90,7 +90,7 @@ tl::expected<Stats, Errors> Stats::create(
         }
     }
     if (!errors.ok()) {
-        return tl::unexpected(errors);
+        return std::unexpected(errors);
     }
 
     return stats;

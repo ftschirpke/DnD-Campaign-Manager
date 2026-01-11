@@ -2,11 +2,10 @@
 
 #include "effects.hpp"
 
+#include <expected>
 #include <memory>
 #include <utility>
 #include <vector>
-
-#include <tl/expected.hpp>
 
 #include <core/data_result.hpp>
 #include <core/errors/errors.hpp>
@@ -134,10 +133,10 @@ bool Effects::empty() const {
            && proficiencies.empty() && rivs.empty();
 }
 
-tl::expected<bool, Errors> Effects::is_active(const Stats& stats) const {
+std::expected<bool, Errors> Effects::is_active(const Stats& stats) const {
     Errors errors;
     for (const std::unique_ptr<Condition>& condition : activation_conditions) {
-        tl::expected<bool, RuntimeError> condition_result = condition->evaluate(stats);
+        std::expected<bool, RuntimeError> condition_result = condition->evaluate(stats);
         if (!condition_result.has_value()) {
             errors.add_runtime_error(std::move(condition_result.error()));
             continue;
@@ -149,7 +148,7 @@ tl::expected<bool, Errors> Effects::is_active(const Stats& stats) const {
     if (errors.ok()) {
         return true;
     } else {
-        return tl::unexpected(std::move(errors));
+        return std::unexpected(std::move(errors));
     }
 }
 

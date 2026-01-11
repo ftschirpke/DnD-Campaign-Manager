@@ -15,7 +15,7 @@
 
 namespace dnd {
 
-static tl::expected<DiceType, Errors> int_to_dice_type(int number) {
+static std::expected<DiceType, Errors> int_to_dice_type(int number) {
     switch (number) {
         case 4:
             return DiceType::D4;
@@ -36,10 +36,10 @@ static tl::expected<DiceType, Errors> int_to_dice_type(int number) {
         RuntimeError::Code::INVALID_ARGUMENT,
         fmt::format("Invalid dice number '{}' - must be 4, 6, 8, 10, 12, 20, or 100", number)
     ));
-    return tl::unexpected(errors);
+    return std::unexpected(errors);
 }
 
-static tl::expected<DiceType, Errors> string_to_dice_type(const std::string& lowercase_str) {
+static std::expected<DiceType, Errors> string_to_dice_type(const std::string& lowercase_str) {
     if (lowercase_str == "d4") {
         return DiceType::D4;
     } else if (lowercase_str == "d6") {
@@ -59,7 +59,7 @@ static tl::expected<DiceType, Errors> string_to_dice_type(const std::string& low
             RuntimeError::Code::INVALID_ARGUMENT,
             fmt::format("Invalid dice type '{}' - must be d4, d6, d8, d10, d12, d20, or d100", lowercase_str)
         ));
-        return tl::unexpected(errors);
+        return std::unexpected(errors);
     }
 }
 
@@ -84,47 +84,47 @@ static const char* dice_type_to_string(DiceType dice_type) {
 }
 
 
-tl::expected<Dice, Errors> Dice::single_from_int(int dice_number) {
-    tl::expected<DiceType, Errors> dice_type = int_to_dice_type(dice_number);
+std::expected<Dice, Errors> Dice::single_from_int(int dice_number) {
+    std::expected<DiceType, Errors> dice_type = int_to_dice_type(dice_number);
     if (dice_type.has_value()) {
         return Dice::from_dice_count_map(std::map<DiceType, int>{{dice_type.value(), 1}});
     } else {
-        return tl::unexpected(dice_type.error());
+        return std::unexpected(dice_type.error());
     }
 }
 
-tl::expected<Dice, Errors> Dice::single_from_int_with_modifier(int dice_number, int modifier) {
-    tl::expected<DiceType, Errors> dice_type = int_to_dice_type(dice_number);
+std::expected<Dice, Errors> Dice::single_from_int_with_modifier(int dice_number, int modifier) {
+    std::expected<DiceType, Errors> dice_type = int_to_dice_type(dice_number);
     if (dice_type.has_value()) {
         return Dice::from_dice_count_map_with_modifier(std::map<DiceType, int>{{dice_type.value(), 1}}, modifier);
     } else {
-        return tl::unexpected(dice_type.error());
+        return std::unexpected(dice_type.error());
     }
 }
 
-tl::expected<Dice, Errors> Dice::multi_from_int(int dice_number, int dice_count) {
-    tl::expected<DiceType, Errors> dice_type = int_to_dice_type(dice_number);
+std::expected<Dice, Errors> Dice::multi_from_int(int dice_number, int dice_count) {
+    std::expected<DiceType, Errors> dice_type = int_to_dice_type(dice_number);
     if (dice_type.has_value()) {
         return Dice::from_dice_count_map(std::map<DiceType, int>{{dice_type.value(), dice_count}});
     } else {
-        return tl::unexpected(dice_type.error());
+        return std::unexpected(dice_type.error());
     }
 }
 
-tl::expected<Dice, Errors> Dice::multi_from_int_with_modifier(int dice_number, int dice_count, int modifier) {
-    tl::expected<DiceType, Errors> dice_type = int_to_dice_type(dice_number);
+std::expected<Dice, Errors> Dice::multi_from_int_with_modifier(int dice_number, int dice_count, int modifier) {
+    std::expected<DiceType, Errors> dice_type = int_to_dice_type(dice_number);
     if (dice_type.has_value()) {
         return Dice::from_dice_count_map_with_modifier(
             std::map<DiceType, int>{{dice_type.value(), dice_count}}, modifier
         );
     } else {
-        return tl::unexpected(dice_type.error());
+        return std::unexpected(dice_type.error());
     }
 }
 
-tl::expected<Dice, Errors> Dice::from_string(const std::string& str) { return Dice::from_string(std::string(str)); }
+std::expected<Dice, Errors> Dice::from_string(const std::string& str) { return Dice::from_string(std::string(str)); }
 
-tl::expected<Dice, Errors> Dice::from_string(std::string&& str) {
+std::expected<Dice, Errors> Dice::from_string(std::string&& str) {
     string_lowercase_inplace(str);
     std::map<DiceType, int> dice_counts;
     int modifier = 0;
@@ -135,7 +135,7 @@ tl::expected<Dice, Errors> Dice::from_string(std::string&& str) {
         Errors errors(RuntimeError(
             RuntimeError::Code::INVALID_ARGUMENT, fmt::format("Invalid dice string '{}': no 'd' (or 'D') found.", str)
         ));
-        return tl::unexpected(errors);
+        return std::unexpected(errors);
     }
     do {
         int count = 1;
@@ -146,26 +146,26 @@ tl::expected<Dice, Errors> Dice::from_string(std::string&& str) {
         if (plus_index == std::string::npos) {
             size_t minus_index = str.find('-', d_index);
             if (minus_index != std::string::npos) {
-                tl::expected<DiceType, Errors> dice_type = string_to_dice_type(
+                std::expected<DiceType, Errors> dice_type = string_to_dice_type(
                     str.substr(d_index, minus_index - d_index)
                 );
                 if (!dice_type.has_value()) {
-                    return tl::unexpected(dice_type.error());
+                    return std::unexpected(dice_type.error());
                 }
                 dice_counts[dice_type.value()] += count;
                 modifier = std::stoi(str.substr(minus_index));
                 return Dice::from_dice_count_map_with_modifier(std::move(dice_counts), modifier);
             }
-            tl::expected<DiceType, Errors> dice_type = string_to_dice_type(str.substr(d_index));
+            std::expected<DiceType, Errors> dice_type = string_to_dice_type(str.substr(d_index));
             if (!dice_type.has_value()) {
-                return tl::unexpected(dice_type.error());
+                return std::unexpected(dice_type.error());
             }
             dice_counts[dice_type.value()] += count;
             return Dice::from_dice_count_map(std::move(dice_counts));
         }
-        tl::expected<DiceType, Errors> dice_type = string_to_dice_type(str.substr(d_index, plus_index - d_index));
+        std::expected<DiceType, Errors> dice_type = string_to_dice_type(str.substr(d_index, plus_index - d_index));
         if (!dice_type.has_value()) {
-            return tl::unexpected(dice_type.error());
+            return std::unexpected(dice_type.error());
         }
         dice_counts[dice_type.value()] += count;
         current_index = plus_index + 1;
@@ -177,25 +177,25 @@ tl::expected<Dice, Errors> Dice::from_string(std::string&& str) {
             RuntimeError::Code::INVALID_ARGUMENT,
             fmt::format("Invalid dice string '{}': please put the modifier at the end", str)
         ));
-        return tl::unexpected(errors);
+        return std::unexpected(errors);
     }
     modifier = std::stoi(str.substr(current_index));
     return Dice::from_dice_count_map_with_modifier(std::move(dice_counts), modifier);
 }
 
-tl::expected<Dice, Errors> Dice::from_dice_count_map(std::map<DiceType, int>&& dice_counts) {
+std::expected<Dice, Errors> Dice::from_dice_count_map(std::map<DiceType, int>&& dice_counts) {
     return Dice::from_dice_count_map_with_modifier(std::move(dice_counts), 0);
 }
 
-tl::expected<Dice, Errors> Dice::from_dice_count_map_with_modifier(
+std::expected<Dice, Errors> Dice::from_dice_count_map_with_modifier(
     std::map<DiceType, int>&& dice_counts, int modifier
 ) {
     Errors errors;
     for (const auto& [dice_type, dice_count] : dice_counts) {
         if (dice_count < 0) {
-            tl::expected<const char*, Errors> dice_type_str = dice_type_to_string(dice_type);
+            std::expected<const char*, Errors> dice_type_str = dice_type_to_string(dice_type);
             if (!dice_type_str.has_value()) {
-                return tl::unexpected(dice_type_str.error());
+                return std::unexpected(dice_type_str.error());
             }
             errors.add_runtime_error(
                 RuntimeError::Code::INVALID_ARGUMENT,
@@ -207,7 +207,7 @@ tl::expected<Dice, Errors> Dice::from_dice_count_map_with_modifier(
         }
     }
     if (!errors.ok()) {
-        return tl::unexpected(errors);
+        return std::unexpected(errors);
     }
     return Dice(std::move(dice_counts), modifier);
 }

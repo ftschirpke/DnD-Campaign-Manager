@@ -3,6 +3,7 @@
 #include "choice.hpp"
 
 #include <cassert>
+#include <expected>
 #include <memory>
 #include <regex>
 #include <set>
@@ -11,7 +12,6 @@
 #include <vector>
 
 #include <fmt/format.h>
-#include <tl/expected.hpp>
 
 #include <core/attribute_names.hpp>
 #include <core/basic_mechanics/abilities.hpp>
@@ -45,7 +45,9 @@ static std::unique_ptr<ContentFilter> create_cantrip_filter(const Content& conte
     }
     const std::string spell_magic_school_name = match[2].str();
     if (!spell_magic_school_name.empty()) {
-        tl::expected<MagicSchool, RuntimeError> magic_school_result = magic_school_from_string(spell_magic_school_name);
+        std::expected<MagicSchool, RuntimeError> magic_school_result = magic_school_from_string(
+            spell_magic_school_name
+        );
         assert(magic_school_result.has_value());
         MagicSchool magic_school = magic_school_result.value();
         cantrip_filter.magic_school_filter.set(SelectionFilterType::IS_IN, {magic_school});
@@ -83,7 +85,9 @@ static std::unique_ptr<ContentFilter> create_spell_filter(const Content& content
     }
     const std::string spell_magic_school_name = match[4].str();
     if (!spell_magic_school_name.empty()) {
-        tl::expected<MagicSchool, RuntimeError> magic_school_result = magic_school_from_string(spell_magic_school_name);
+        std::expected<MagicSchool, RuntimeError> magic_school_result = magic_school_from_string(
+            spell_magic_school_name
+        );
         assert(magic_school_result.has_value());
         MagicSchool magic_school = magic_school_result.value();
         spell_filter.magic_school_filter.set(SelectionFilterType::IS_IN, {magic_school});

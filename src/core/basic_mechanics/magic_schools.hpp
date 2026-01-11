@@ -3,11 +3,10 @@
 
 #include <dnd_config.hpp>
 
+#include <expected>
 #include <optional>
 #include <string>
 #include <string_view>
-
-#include <tl/expected.hpp>
 
 #include <core/errors/runtime_error.hpp>
 
@@ -37,10 +36,10 @@ std::optional<MagicSchool> magic_school_from_char(char c);
 bool is_magic_school(std::string_view magic_school_name);
 bool is_magic_school(const std::string& magic_school_name);
 
-tl::expected<std::string_view, RuntimeError> magic_school_name(MagicSchool magic_school);
+std::expected<std::string_view, RuntimeError> magic_school_name(MagicSchool magic_school);
 
-tl::expected<MagicSchool, RuntimeError> magic_school_from_string_view(std::string_view magic_school_name);
-tl::expected<MagicSchool, RuntimeError> magic_school_from_string(const std::string& magic_school_name);
+std::expected<MagicSchool, RuntimeError> magic_school_from_string_view(std::string_view magic_school_name);
+std::expected<MagicSchool, RuntimeError> magic_school_from_string(const std::string& magic_school_name);
 
 } // namespace dnd
 

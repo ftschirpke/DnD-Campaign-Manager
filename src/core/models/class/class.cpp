@@ -72,7 +72,7 @@ CreateResult<Class> Class::create_for(Data&& data, const Content& content) {
     assert(subclass_level != -1);
     assert(subclass_feature.has_value());
 
-    tl::expected<Dice, Errors> hit_dice_result = Dice::from_string(data.hit_dice_str);
+    std::expected<Dice, Errors> hit_dice_result = Dice::from_string(data.hit_dice_str);
     if (!hit_dice_result.has_value()) {
         Errors sub_errors;
         for (const Error& error : hit_dice_result.error().get_errors()) {

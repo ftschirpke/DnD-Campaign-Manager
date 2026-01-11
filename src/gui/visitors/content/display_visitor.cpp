@@ -416,7 +416,7 @@ static void character_progression_list(const dnd::Character& character) {
     ImGui::Text("Level: %d", level);
     int xp = character.get_progression().get_xp();
     if (level < MAX_CHARACTER_LEVEL) {
-        tl::expected<int, RuntimeError> xp_next_level_result = dnd::xp_for_level(level + 1);
+        std::expected<int, RuntimeError> xp_next_level_result = dnd::xp_for_level(level + 1);
         assert(xp_next_level_result.has_value());
         int xp_next_level = xp_next_level_result.value();
         ImGui::Text("XP: %d/%d", xp, xp_next_level);

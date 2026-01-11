@@ -15,10 +15,6 @@ function(set_compiler_flags TARGET)
         target_compile_options(${TARGET} PRIVATE
             -pedantic -Wall -Wextra -Wpedantic -Werror -Wdisabled-optimization -Wcast-qual -Wold-style-cast
             -Woverloaded-virtual -Wredundant-decls -Wstrict-overflow=2
-            -fsanitize=address
-        )
-        target_link_options(${TARGET} PRIVATE
-            -fsanitize=address
         )
         if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
             target_compile_options(${TARGET} PRIVATE -Wlogical-op -Wnoexcept -Wstrict-null-sentinel -Wuseless-cast)

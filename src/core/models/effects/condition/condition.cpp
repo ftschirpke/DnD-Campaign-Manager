@@ -3,12 +3,12 @@
 #include "condition.hpp"
 
 #include <cassert>
+#include <expected>
 #include <optional>
 #include <string>
 #include <string_view>
 
 #include <fmt/format.h>
-#include <tl/expected.hpp>
 
 #include <core/errors/runtime_error.hpp>
 #include <core/models/character/stats.hpp>
@@ -21,10 +21,10 @@ Condition::Condition(const std::string& left_side_identifier, ComparisonOperator
 Condition::Condition(std::string_view left_side_identifier, ComparisonOperator comparison_operator)
     : left_side_identifier(left_side_identifier), comparison_operator(comparison_operator) {}
 
-tl::expected<bool, RuntimeError> Condition::evaluate_with_right_side(const Stats& stats, int right_side_value) const {
+std::expected<bool, RuntimeError> Condition::evaluate_with_right_side(const Stats& stats, int right_side_value) const {
     std::optional<int> left_side_optional = stats.get_raw(left_side_identifier);
     if (!left_side_optional.has_value()) {
-        return tl::unexpected(RuntimeError(
+        return std::unexpected(RuntimeError(
             RuntimeError::Code::INVALID_ARGUMENT,
             fmt::format("Condition left side identifier '{}' not found in stats", left_side_identifier)
         ));

@@ -2,12 +2,12 @@
 
 #include "identifier_condition.hpp"
 
+#include <expected>
 #include <optional>
 #include <string>
 #include <string_view>
 
 #include <fmt/format.h>
-#include <tl/expected.hpp>
 
 #include <core/errors/runtime_error.hpp>
 #include <core/models/character/stats.hpp>
@@ -27,10 +27,10 @@ IdentifierCondition::IdentifierCondition(
 )
     : Condition(left_side_identifier, comparison_operator), right_side_identifier(right_side_identifier) {}
 
-tl::expected<bool, RuntimeError> IdentifierCondition::evaluate(const Stats& stats) const {
+std::expected<bool, RuntimeError> IdentifierCondition::evaluate(const Stats& stats) const {
     std::optional<int> right_side_optional = stats.get_raw(right_side_identifier);
     if (!right_side_optional.has_value()) {
-        return tl::unexpected(RuntimeError(
+        return std::unexpected(RuntimeError(
             RuntimeError::Code::INVALID_ARGUMENT,
             fmt::format("Condition right side identifier '{}' not found in stats", right_side_identifier)
         ));

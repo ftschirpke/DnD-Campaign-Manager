@@ -13,18 +13,18 @@ static constexpr std::array<int, MAX_CHARACTER_LEVEL> minxp_for_level = {
     85000, 100000, 120000, 140000, 165000, 195000, 225000, 265000, 305000, 355000,
 };
 
-tl::expected<int, RuntimeError> xp_for_level(int level) {
+std::expected<int, RuntimeError> xp_for_level(int level) {
     if (level < MIN_CHARACTER_LEVEL || level > MAX_CHARACTER_LEVEL) {
-        return tl::unexpected(
+        return std::unexpected(
             RuntimeError(RuntimeError::Code::INVALID_ARGUMENT, "Level must be between 1 and 20 (inclusive).")
         );
     }
     return minxp_for_level[static_cast<size_t>(level) - 1];
 }
 
-tl::expected<int, RuntimeError> level_for_xp(int xp) {
+std::expected<int, RuntimeError> level_for_xp(int xp) {
     if (xp < 0) {
-        return tl::unexpected(RuntimeError(RuntimeError::Code::INVALID_ARGUMENT, "XP value cannot be negative."));
+        return std::unexpected(RuntimeError(RuntimeError::Code::INVALID_ARGUMENT, "XP value cannot be negative."));
     }
     static_assert(MIN_CHARACTER_LEVEL == 1);
     static_assert(minxp_for_level.size() == MAX_CHARACTER_LEVEL);
@@ -42,9 +42,9 @@ tl::expected<int, RuntimeError> level_for_xp(int xp) {
 // levels 9-12: +4
 // levels 13-16: +5
 // levels 17-20: +6
-tl::expected<int, RuntimeError> proficiency_bonus_for_level(int level) {
+std::expected<int, RuntimeError> proficiency_bonus_for_level(int level) {
     if (level < MIN_CHARACTER_LEVEL || level > MAX_CHARACTER_LEVEL) {
-        return tl::unexpected(
+        return std::unexpected(
             RuntimeError(RuntimeError::Code::INVALID_ARGUMENT, "Level must be between 1 and 20 (inclusive).")
         );
     }
