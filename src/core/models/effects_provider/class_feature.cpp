@@ -42,50 +42,37 @@ CreateResult<ClassFeature> ClassFeature::create_for(Data&& data, const Content& 
 
     return ValidCreate(ClassFeature(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.source_name),
-        data.level, std::move(main_effects), std::move(higher_level_effects), std::move(data.class_name),
-        std::move(data.class_source_name)
+        data.get_key(), data.level, std::move(main_effects), std::move(higher_level_effects),
+        std::move(data.class_name), std::move(data.class_source_name)
     ));
-}
-
-std::string ClassFeature::key(
-    const std::string& name, const std::string& source_name, const std::string& class_name,
-    const std::string& class_source_name, int level
-) {
-    return fmt::format("{}##{}|{}|{}|{}", name, source_name, class_name, class_source_name, level);
 }
 
 int ClassFeature::get_level() const { return level; }
 
 const std::map<int, Effects>& ClassFeature::get_higher_level_effects() const { return higher_level_effects; }
 
-std::string ClassFeature::get_key() const {
-    return key(get_name(), get_source_info().name, class_name, class_source_name, level);
-}
-
 const std::string& ClassFeature::get_class_name() const { return class_name; }
 
 const std::string& ClassFeature::get_class_source_name() const { return class_source_name; }
 
-void ClassFeature::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
+ClassFeature::ClassFeature(
+    std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
+    std::string&& key, int level, Effects&& main_effects, std::map<int, Effects>&& higher_level_effects,
+    std::string&& class_name, std::string&& class_source_name
+)
+    : Feature(
+          std::move(name), std::move(description), std::move(source_path), std::move(source_name), std::move(key),
+          std::move(main_effects)
+      ),
+      level(level), higher_level_effects(std::move(higher_level_effects)), class_name(std::move(class_name)),
+      class_source_name(std::move(class_source_name)) {}
 
 std::string ClassFeature::Data::key(
     const std::string& name, const std::string& source_name, const std::string& class_name,
     const std::string& class_source_name, int level
 ) {
-    return ClassFeature::key(name, source_name, class_name, class_source_name, level);
+    return fmt::format("{}##{}|{}|{}|{}", name, source_name, class_name, class_source_name, level);
 }
-
-ClassFeature::ClassFeature(
-    std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name, int level,
-    Effects&& main_effects, std::map<int, Effects>&& higher_level_effects, std::string&& class_name,
-    std::string&& class_source_name
-)
-    : Feature(
-          std::move(name), std::move(description), std::move(source_path), std::move(source_name),
-          std::move(main_effects)
-      ),
-      level(level), higher_level_effects(std::move(higher_level_effects)), class_name(std::move(class_name)),
-      class_source_name(std::move(class_source_name)) {}
 
 std::string ClassFeature::Data::get_key() const { return key(name, source_name, class_name, class_source_name, level); }
 

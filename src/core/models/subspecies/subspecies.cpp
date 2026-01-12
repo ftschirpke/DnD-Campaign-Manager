@@ -34,11 +34,11 @@ CreateResult<Subspecies> Subspecies::create_for(Data&& data, const Content& cont
         }
         features.push_back(feature_result.value());
     }
-    CRef<Species> species = content.get_species().get(data.species_key).value();
+    CRef<Species> species = content.get_species_library().get(data.species_key).value();
 
     return ValidCreate(Subspecies(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.source_name),
-        std::move(features), species
+        data.get_key(), std::move(features), species
     ));
 }
 
@@ -48,18 +48,18 @@ const Text& Subspecies::get_description() const { return description; }
 
 const SourceInfo& Subspecies::get_source_info() const { return source_info; }
 
+const std::string& Subspecies::get_key() const { return key; }
+
 const std::vector<Feature>& Subspecies::get_features() const { return features; }
 
 CRef<Species> Subspecies::get_species() const { return species; }
 
-void Subspecies::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
-
 Subspecies::Subspecies(
     std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
-    std::vector<Feature>&& features, CRef<Species> species
+    std::string&& key, std::vector<Feature>&& features, CRef<Species> species
 )
     : name(std::move(name)), description(std::move(description)),
-      source_info({.path = std::move(source_path), .name = std::move(source_name)}), features(std::move(features)),
-      species(species) {}
+      source_info({.path = std::move(source_path), .name = std::move(source_name)}), key(std::move(key)),
+      features(std::move(features)), species(species) {}
 
 } // namespace dnd

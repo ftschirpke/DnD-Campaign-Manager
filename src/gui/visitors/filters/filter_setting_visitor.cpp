@@ -275,9 +275,7 @@ static void selection_menu_item(const char* name, SelectionFilter<T>& filter, Se
 }
 
 static void content_piece_filter_menu_items(ContentPieceFilter& content_piece_filter) {
-    bool name_filter_set = std::visit(
-        [](const auto& filter) { return filter.is_set(); }, content_piece_filter.name_filter
-    );
+    bool name_filter_set = dispatch(content_piece_filter.name_filter, const auto& f, f.is_set());
     if (!name_filter_set && ImGui::MenuItem("Name")) {
         content_piece_filter.name_filter.emplace<StringFilter>().set_type(StringFilterType::EQUAL);
         ImGui::CloseCurrentPopup();

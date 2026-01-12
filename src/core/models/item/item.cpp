@@ -23,7 +23,7 @@ CreateResult<Item> Item::create(Data&& data) {
     }
     return ValidCreate(Item(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.source_name),
-        std::move(data.cosmetic_description), data.requires_attunement
+        data.get_key(), std::move(data.cosmetic_description), data.requires_attunement
     ));
 }
 
@@ -33,18 +33,18 @@ const Text& Item::get_description() const { return description; }
 
 const SourceInfo& Item::get_source_info() const { return source_info; }
 
+const std::string& Item::get_key() const { return key; }
+
 const Text& Item::get_cosmetic_description() const { return cosmetic_description; }
 
 bool Item::requires_attunement() const { return attunement; }
 
-void Item::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
-
 Item::Item(
     std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
-    Text&& cosmetic_description, bool requires_attunement
+    std::string&& key, Text&& cosmetic_description, bool requires_attunement
 )
     : name(std::move(name)), description(std::move(description)),
-      source_info({.path = std::move(source_path), .name = std::move(source_name)}),
+      source_info({.path = std::move(source_path), .name = std::move(source_name)}), key(std::move(key)),
       cosmetic_description(std::move(cosmetic_description)), attunement(requires_attunement) {}
 
 } // namespace dnd

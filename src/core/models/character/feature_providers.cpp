@@ -2,8 +2,6 @@
 
 #include "feature_providers.hpp"
 
-#include <functional>
-
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/errors/validation_error.hpp>
@@ -12,6 +10,7 @@
 #include <core/models/species/species.hpp>
 #include <core/models/subclass/subclass.hpp>
 #include <core/models/subspecies/subspecies.hpp>
+#include <core/types.hpp>
 #include <core/validation/character/feature_providers_validation.hpp>
 
 namespace dnd {
@@ -21,34 +20,26 @@ CreateResult<FeatureProviders> FeatureProviders::create_for(Data&& data, const C
     if (!errors.ok()) {
         return InvalidCreate<FeatureProviders>(std::move(data), std::move(errors));
     }
-    OptCRef<Species> species = content.get_species().get(data.species_key);
-    OptCRef<Subspecies> subspecies;
-    if (!data.subspecies_key.empty()) {
-        subspecies = content.get_subspecies().get(data.subspecies_key);
-    }
-    OptCRef<Class> cls = content.get_classes().get(data.class_key);
-    OptCRef<Subclass> subclass;
-    if (!data.subclass_key.empty()) {
-        subclass = content.get_subclasses().get(data.subclass_key);
-    }
-    return ValidCreate(FeatureProviders(species.value().get(), subspecies, cls.value().get(), subclass));
+    Id species_id = content.find_species(data.species_key).value();
+    Opt<Id> subspecies_id = content.find_subspecies(data.subspecies_key);
+    Id class_id = content.find_class(data.class_key).value();
+    Opt<Id> subclass_id = content.find_subclass(data.subclass_key);
+    return ValidCreate(FeatureProviders(species_id, subspecies_id, class_id, subclass_id));
 }
 
-const Species& FeatureProviders::get_species() const { return species; }
+Id FeatureProviders::get_species_id() const { return species_id; }
 
-OptCRef<Subspecies> FeatureProviders::get_subspecies() const { return subspecies; }
+Opt<Id> FeatureProviders::get_subspecies_id() const { return subspecies_id; }
 
-const Class& FeatureProviders::get_class() const { return cls; }
+Id FeatureProviders::get_class_id() const { return class_id; }
 
-OptCRef<Subclass> FeatureProviders::get_subclass() const { return subclass; }
+Opt<Id> FeatureProviders::get_subclass_id() const { return subclass_id; }
 
-bool FeatureProviders::has_subspecies() const { return subspecies.has_value(); }
+bool FeatureProviders::has_subspecies() const { return subspecies_id.has_value(); }
 
-bool FeatureProviders::has_subclass() const { return subclass.has_value(); }
+bool FeatureProviders::has_subclass() const { return subclass_id.has_value(); }
 
-FeatureProviders::FeatureProviders(
-    const Species& species, OptCRef<Subspecies> subspecies, const Class& cls, OptCRef<Subclass> subclass
-)
-    : species(std::cref(species)), subspecies(subspecies), cls(std::cref(cls)), subclass(subclass) {}
+FeatureProviders::FeatureProviders(Id species_id, Opt<Id> subspecies_id, Id class_id, Opt<Id> subclass_id)
+    : species_id(species_id), subspecies_id(subspecies_id), class_id(class_id), subclass_id(subclass_id) {}
 
 } // namespace dnd

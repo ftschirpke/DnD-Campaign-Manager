@@ -4,6 +4,7 @@
 
 #include <cassert>
 #include <string>
+#include <utility>
 
 namespace dnd {
 
@@ -45,7 +46,7 @@ LatexText* LatexText::add_modifier(LatexTextModifier modifier) {
             modifiers.insert("emph");
             break;
         default:
-            assert(false);
+            std::unreachable();
     }
     return this;
 }

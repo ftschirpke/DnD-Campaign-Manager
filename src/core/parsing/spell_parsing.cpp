@@ -244,15 +244,13 @@ static WithErrors<SpellType::Data> parse_spell_type(
     return result;
 }
 
-static WithErrors<Paragraph> parse_higher_level_paragraph(
-    const nlohmann::ordered_json& obj, const std::filesystem::path& filepath
+static Errors parse_higher_level_text_into(
+    const nlohmann::ordered_json& obj, Text& out, const std::filesystem::path& filepath
 ) {
-    WithErrors<Paragraph> result{};
-    Paragraph& paragraph = result.value;
-    Errors& errors = result.errors;
+    Errors errors;
 
     if (!obj.contains("entriesHigherLevel")) {
-        return result;
+        return errors;
     }
 
     CRef<nlohmann::ordered_json> higher_level_entries = obj["entriesHigherLevel"];
@@ -264,7 +262,7 @@ static WithErrors<Paragraph> parse_higher_level_paragraph(
         errors.add_parsing_error(
             ParsingError::Code::INVALID_ATTRIBUTE_TYPE, filepath, "entriesHigherLevel must be an object"
         );
-        return result;
+        return errors;
     }
 
     std::string type;
@@ -280,23 +278,23 @@ static WithErrors<Paragraph> parse_higher_level_paragraph(
     if (name.empty()) {
         name = "At Higher Levels";
     }
-    paragraph.parts.push_back(SimpleText{.str = name + ". ", .bold = true, .italic = false});
-
+    Paragraph first_paragraph;
+    first_paragraph.parts.push_back(SimpleText{.str = name + ". ", .bold = true, .italic = false});
 
     errors += check_required_attribute(higher_level_entries.get(), "entries", filepath, JsonType::ARRAY);
     const nlohmann::ordered_json& entries = higher_level_entries.get()["entries"];
+    std::string entry;
+    errors += parse_required_index_into(entries, 0, entry, filepath);
+    errors += parse_paragraph(std::move(entry), first_paragraph, filepath);
 
-    if (entries.size() == 1) {
-        std::string entry;
-        errors += parse_required_index_into(entries, 0, entry, filepath);
-        errors += parse_paragraph(std::move(entry), paragraph, filepath);
-    } else {
-        errors.add_parsing_error(
-            ParsingError::Code::INVALID_ATTRIBUTE_TYPE, filepath, "Expected exactly 1 entry in higher level entries."
-        );
+    TextObject paragraph = std::move(first_paragraph);
+    out.parts.push_back(paragraph);
+
+    if (entries.size() > 1) {
+        errors += write_formatted_text_into(higher_level_entries.get(), out, filepath, true);
     }
 
-    return result;
+    return errors;
 }
 
 
@@ -309,13 +307,7 @@ WithErrors<Spell::Data> parse_spell(const nlohmann::ordered_json& obj, const std
     errors += parse_required_attribute_into(obj, "name", spell_data.name, filepath);
     errors += parse_required_attribute_into(obj, "source", spell_data.source_name, filepath);
     errors += write_formatted_text_into(obj, spell_data.description, filepath);
-
-    WithErrors<Paragraph> higher_levels_result = parse_higher_level_paragraph(obj, filepath);
-    errors += std::move(higher_levels_result.errors);
-    if (!higher_levels_result.value.parts.empty()) {
-        TextObject paragraph = std::move(higher_levels_result.value);
-        spell_data.description.parts.push_back(paragraph);
-    }
+    errors += parse_higher_level_text_into(obj, spell_data.description, filepath);
 
     parse_spell_components(obj, filepath).move_into(spell_data.components_data, errors);
     parse_spell_type(obj, filepath).move_into(spell_data.type_data, errors);

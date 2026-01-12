@@ -12,6 +12,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include <core/content.hpp>
 #include <core/models/spell/spell.hpp>
 #include <core/output/latex_builder/latex.hpp>
 #include <core/output/latex_builder/latex_command.hpp>
@@ -24,11 +25,11 @@ namespace dnd {
 
 constexpr int card_character_cutoff = 750;
 
-void SpellCardBuilder::add_spell(const Spell& spell) { spells.push_back(spell); }
+SpellCardBuilder::SpellCardBuilder(const Content& content) noexcept : content(content) {}
 
-void SpellCardBuilder::add_spell(CRef<Spell> spell) { spells.push_back(spell); }
+void SpellCardBuilder::add_spell(Id spell_id) { spells.push_back(spell_id); }
 
-std::vector<CRef<Spell>> SpellCardBuilder::get_spells() const { return spells; }
+std::vector<Id> SpellCardBuilder::get_spells() const { return spells; }
 
 void SpellCardBuilder::clear_spells() { spells.clear(); }
 
@@ -148,7 +149,9 @@ void SpellCardBuilder::write_latex_file(const std::string& filename) {
     std::unordered_map<int, std::deque<LatexScope*>> not_full_scopes;
     not_full_scopes[9].push_back(create_card_page(document));
 
-    for (const Spell& spell : spells) {
+    for (Id id : spells) {
+        const Spell& spell = content.get_spell(id);
+
         std::vector<LatexScope> scopes = text_to_latex(spell.get_description());
         int cards_to_create = calculate_cards_to_create(scopes);
         LatexScope* scope = nullptr;

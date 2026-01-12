@@ -45,7 +45,7 @@ WithErrors<Subspecies::Data> parse_subspecies(
     std::string species_name, species_source_name;
     errors += parse_required_attribute_into(obj, "raceName", species_name, filepath);
     errors += parse_required_attribute_into(obj, "raceSource", species_source_name, filepath);
-    subspecies_data.species_key = Species::key(species_name, species_source_name);
+    subspecies_data.species_key = Species::Data::key(species_name, species_source_name);
 
     return result;
 }

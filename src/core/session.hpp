@@ -42,8 +42,8 @@ public:
 
     const std::set<std::filesystem::path>& get_content_directories() const;
 
-    std::deque<const ContentPiece*>& get_open_content_pieces();
-    const ContentPiece* get_selected_content_piece();
+    std::deque<Id>& get_open_content_pieces();
+    Opt<Id> get_selected_content_piece();
 
     void retrieve_last_session_values();
     void save_session_values();
@@ -70,7 +70,7 @@ public:
 private:
     void parse_content_and_initialize();
     void open_last_session();
-    void open_content_piece(const ContentPiece* content_piece);
+    void open_content_piece(Id content_piece);
 
     static constexpr int max_search_results = 1000;
 
@@ -87,8 +87,8 @@ private:
     std::set<std::filesystem::path> parsed_content_directories;
 
     std::unordered_map<std::string, std::vector<std::string>> last_session_open_tabs;
-    std::deque<const ContentPiece*> open_content_pieces;
-    const ContentPiece* selected_content_piece;
+    std::deque<Id> open_content_pieces;
+    Opt<Id> selected_content_piece;
 
     std::vector<SearchResult> fuzzy_search_results;
 

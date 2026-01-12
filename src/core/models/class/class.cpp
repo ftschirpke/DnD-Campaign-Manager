@@ -50,7 +50,7 @@ CreateResult<Class> Class::create_for(Data&& data, const Content& content) {
     }
 
     int subclass_level = -1;
-    OptCRef<ClassFeature> subclass_feature = std::nullopt;
+    Opt<CRef<ClassFeature>> subclass_feature = std::nullopt;
 
     std::vector<ClassFeature> features;
     features.reserve(data.features_data.size());
@@ -72,11 +72,11 @@ CreateResult<Class> Class::create_for(Data&& data, const Content& content) {
     assert(subclass_level != -1);
     assert(subclass_feature.has_value());
 
-    tl::expected<Dice, Errors> hit_dice_result = Dice::from_string(data.hit_dice_str);
+    std::expected<Dice, Errors> hit_dice_result = Dice::from_string(data.hit_dice_str);
     if (!hit_dice_result.has_value()) {
         Errors sub_errors;
         for (const Error& error : hit_dice_result.error().get_errors()) {
-            std::string error_message = std::visit([](const auto& error) { return error.get_error_message(); }, error);
+            std::string error_message = dispatch(error, const auto& e, e.get_error_message());
             sub_errors.add_validation_error(ValidationError::Code::INVALID_ATTRIBUTE_VALUE, std::move(error_message));
         }
         return InvalidCreate<Class>(std::move(data), std::move(sub_errors));
@@ -101,7 +101,8 @@ CreateResult<Class> Class::create_for(Data&& data, const Content& content) {
 
     return ValidCreate(Class(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.source_name),
-        std::move(features), subclass_feature, std::move(hit_dice), std::move(important_levels), std::move(spellcasting)
+        data.get_key(), std::move(features), subclass_feature, std::move(hit_dice), std::move(important_levels),
+        std::move(spellcasting)
     ));
 }
 
@@ -111,28 +112,28 @@ const Text& Class::get_description() const { return description; }
 
 const SourceInfo& Class::get_source_info() const { return source_info; }
 
+const std::string& Class::get_key() const { return key; }
+
 const std::vector<ClassFeature>& Class::get_features() const { return features; }
 
 bool Class::has_spellcasting() const { return spellcasting != nullptr; }
 
 const Spellcasting* Class::get_spellcasting() const { return spellcasting.get(); }
 
-OptCRef<ClassFeature> Class::get_subclass_feature() const { return subclass_feature; }
+Opt<CRef<ClassFeature>> Class::get_subclass_feature() const { return subclass_feature; }
 
 const Dice& Class::get_hit_dice() const { return hit_dice; }
 
 const ImportantLevels& Class::get_important_levels() const { return important_levels; }
 
-void Class::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
-
 Class::Class(
     std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
-    std::vector<ClassFeature>&& features, OptCRef<ClassFeature> subclass_feature, Dice hit_dice,
+    std::string&& key, std::vector<ClassFeature>&& features, Opt<CRef<ClassFeature>> subclass_feature, Dice hit_dice,
     ImportantLevels&& important_levels, std::unique_ptr<Spellcasting>&& spellcasting
 )
     : name(std::move(name)), description(std::move(description)),
-      source_info({.path = std::move(source_path), .name = std::move(source_name)}), features(std::move(features)),
-      spellcasting(std::move(spellcasting)), subclass_feature(subclass_feature), hit_dice(std::move(hit_dice)),
-      important_levels(std::move(important_levels)) {}
+      source_info({.path = std::move(source_path), .name = std::move(source_name)}), key(std::move(key)),
+      features(std::move(features)), spellcasting(std::move(spellcasting)), subclass_feature(subclass_feature),
+      hit_dice(std::move(hit_dice)), important_levels(std::move(important_levels)) {}
 
 } // namespace dnd

@@ -35,7 +35,7 @@ public:
     template <typename T>
     void set_filter(T&& new_filter);
     ContentFilterVariant& get_filter();
-    const std::vector<const ContentPiece*>& get_search_results() const;
+    const std::vector<Id>& get_search_results() const;
 
     void start_searching();
     /**
@@ -48,8 +48,8 @@ private:
     const Content& content;
     ContentFilterVariant filter;
     bool searching;
-    std::future<std::vector<const ContentPiece*>> search_future;
-    std::vector<const ContentPiece*> search_results;
+    std::future<std::vector<Id>> search_future;
+    std::vector<Id> search_results;
 };
 
 template <typename T>

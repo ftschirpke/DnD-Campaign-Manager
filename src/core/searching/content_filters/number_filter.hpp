@@ -5,6 +5,7 @@
 
 #include <cassert>
 #include <type_traits>
+#include <utility>
 
 namespace dnd {
 
@@ -106,8 +107,7 @@ bool NumberFilter<T>::matches(T number) const {
         case NumberFilterType::NONE:
             return true;
     }
-    assert(false);
-    return false;
+    std::unreachable();
 }
 
 } // namespace dnd

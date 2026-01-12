@@ -4,21 +4,22 @@
 #include <dnd_config.hpp>
 
 #include <core/models/content_piece.hpp>
+#include <core/types.hpp>
 
 namespace dnd {
 
 class SearchResult {
 public:
     SearchResult() noexcept = default;
-    SearchResult(const ContentPiece* content_piece_ptr, int64_t significance) noexcept;
+    SearchResult(Id content_piece_id, int64_t significance) noexcept;
 
-    const ContentPiece* content_piece_ptr;
+    Id content_piece_id;
     int64_t significance;
 };
 
 
-inline SearchResult::SearchResult(const ContentPiece* content_piece_ptr, int64_t significance) noexcept
-    : content_piece_ptr(content_piece_ptr), significance(significance) {}
+inline SearchResult::SearchResult(Id content_piece_id, int64_t significance) noexcept
+    : content_piece_id(content_piece_id), significance(significance) {}
 
 } // namespace dnd
 

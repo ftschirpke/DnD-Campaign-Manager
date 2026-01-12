@@ -35,7 +35,7 @@ CreateResult<Subclass> Subclass::create_for(Data&& data, const Content& content)
         }
         features.push_back(feature_result.value());
     }
-    CRef<Class> cls = content.get_classes().get(data.class_key).value();
+    Id class_id = content.find_class(data.class_key).value();
 
     FactoryResult<Spellcasting> spellcasting_result = create_spellcasting(std::move(data.spellcasting_data));
     if (!spellcasting_result.is_valid()) {
@@ -46,12 +46,8 @@ CreateResult<Subclass> Subclass::create_for(Data&& data, const Content& content)
 
     return ValidCreate(Subclass(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.source_name),
-        std::move(data.short_name), std::move(features), cls, std::move(spellcasting)
+        data.get_key(), std::move(data.short_name), std::move(features), class_id, std::move(spellcasting)
     ));
-}
-
-std::string Subclass::key(const std::string& name, const std::string& source_name, const std::string& class_name) {
-    return fmt::format("{}##{}|{}", name, source_name, class_name);
 }
 
 const std::string& Subclass::get_name() const { return name; }
@@ -59,6 +55,8 @@ const std::string& Subclass::get_name() const { return name; }
 const Text& Subclass::get_description() const { return description; }
 
 const SourceInfo& Subclass::get_source_info() const { return source_info; }
+
+const std::string& Subclass::get_key() const { return key; }
 
 const std::string& Subclass::get_short_name() const { return short_name; }
 
@@ -68,26 +66,23 @@ bool Subclass::has_spellcasting() const { return spellcasting != nullptr; }
 
 const Spellcasting* Subclass::get_spellcasting() const { return spellcasting.get(); }
 
-CRef<Class> Subclass::get_class() const { return cls; }
-
-void Subclass::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
-
-std::string Subclass::get_key() const { return key(short_name, get_source_info().name, cls.get().get_name()); }
+Id Subclass::get_class_id() const { return class_id; }
 
 std::string Subclass::Data::key(
     const std::string& name, const std::string& source_name, const std::string& class_name
 ) {
-    return Subclass::key(name, source_name, class_name);
+    return fmt::format("{}##{}|{}", name, source_name, class_name);
 }
 
 Subclass::Subclass(
     std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
-    std::string&& short_name, std::vector<SubclassFeature>&& features, CRef<Class> cls,
+    std::string&& key, std::string&& short_name, std::vector<SubclassFeature>&& features, Id class_id,
     std::unique_ptr<Spellcasting>&& spellcasting
 )
     : name(std::move(name)), description(std::move(description)),
-      source_info({.path = std::move(source_path), .name = std::move(source_name)}), short_name(std::move(short_name)),
-      features(std::move(features)), cls(cls), spellcasting(std::move(spellcasting)) {}
+      source_info({.path = std::move(source_path), .name = std::move(source_name)}), key(std::move(key)),
+      short_name(std::move(short_name)), features(std::move(features)), class_id(class_id),
+      spellcasting(std::move(spellcasting)) {}
 
 std::string Subclass::Data::get_key() const { return key(short_name, source_name, class_name); }
 

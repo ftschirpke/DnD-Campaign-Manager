@@ -10,6 +10,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include <core/content.hpp>
 #include <core/models/item/item.hpp>
 #include <core/output/latex_builder/latex.hpp>
 #include <core/output/latex_builder/latex_command.hpp>
@@ -34,12 +35,11 @@ struct ItemScopes {
     }
 };
 
+ItemCardBuilder::ItemCardBuilder(const Content& content) noexcept : content(content) {}
 
-void ItemCardBuilder::add_item(CRef<Item> item) { items.push_back(item); }
+void ItemCardBuilder::add_item(Id item_id) { items.push_back(item_id); }
 
-void ItemCardBuilder::add_item(const Item& item) { items.push_back(item); }
-
-std::vector<CRef<Item>> ItemCardBuilder::get_items() const { return items; }
+std::vector<Id> ItemCardBuilder::get_items() const { return items; }
 
 void ItemCardBuilder::clear_items() { items.clear(); }
 
@@ -170,7 +170,8 @@ void ItemCardBuilder::write_latex_file(const std::string& filename) {
     std::unordered_map<int, std::deque<LatexScope*>> not_full_scopes;
     not_full_scopes[9].push_back(create_card_page(document));
 
-    for (const Item& item : items) {
+    for (Id id : items) {
+        const Item& item = content.get_item(id);
         ItemScopes scopes = ItemScopes::from_item(item);
         int cards_to_create = calculate_cards_to_create(scopes);
         LatexScope* scope = nullptr;

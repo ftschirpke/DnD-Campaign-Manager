@@ -3,10 +3,9 @@
 
 #include <dnd_config.hpp>
 
+#include <expected>
 #include <string>
 #include <string_view>
-
-#include <tl/expected.hpp>
 
 #include <core/errors/runtime_error.hpp>
 #include <core/models/character/stats.hpp>
@@ -27,12 +26,12 @@ public:
     struct Data;
 
     virtual ~Condition() = default;
-    virtual tl::expected<bool, RuntimeError> evaluate(const Stats& stats) const = 0;
+    virtual std::expected<bool, RuntimeError> evaluate(const Stats& stats) const = 0;
 protected:
     Condition(const std::string& left_side_identifier, ComparisonOperator comparison_operator);
     Condition(std::string_view left_side_identifier, ComparisonOperator comparison_operator);
 
-    tl::expected<bool, RuntimeError> evaluate_with_right_side(const Stats& stats, int right_side_value) const;
+    std::expected<bool, RuntimeError> evaluate_with_right_side(const Stats& stats, int right_side_value) const;
 
     std::string left_side_identifier;
     ComparisonOperator comparison_operator;

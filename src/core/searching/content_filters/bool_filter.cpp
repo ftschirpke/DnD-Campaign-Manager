@@ -3,6 +3,7 @@
 #include "bool_filter.hpp"
 
 #include <cassert>
+#include <utility>
 
 namespace dnd {
 
@@ -27,8 +28,7 @@ bool BoolFilter::matches(bool boolean) const {
         case BoolFilterType::NONE:
             return true;
     }
-    assert(false);
-    return false;
+    std::unreachable();
 }
 
 } // namespace dnd

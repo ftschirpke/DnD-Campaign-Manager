@@ -3,6 +3,7 @@
 
 #include <dnd_config.hpp>
 
+#include <core/content.hpp>
 #include <x/content_pieces.hpp>
 
 namespace dnd {
@@ -14,7 +15,8 @@ X_CONTENT_PIECES
 class ContentVisitor {
 public:
     virtual ~ContentVisitor() = default;
-#define X(C, U, j, a, p, P) virtual void operator()(const C& a) = 0;
+    void visit_variant(const ContentPieceVariant& variant);
+#define X(C, U, j, a, p, P) virtual void visit(const C& a) = 0;
     X_CONTENT_PIECES
 #undef X
 };

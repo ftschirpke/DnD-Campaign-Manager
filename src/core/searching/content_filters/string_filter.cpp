@@ -4,6 +4,7 @@
 
 #include <cassert>
 #include <string>
+#include <utility>
 
 namespace dnd {
 
@@ -59,8 +60,7 @@ bool StringFilter::matches(const std::string& str) const {
         case StringFilterType::NONE:
             return true;
     }
-    assert(false);
-    return false;
+    std::unreachable();
 }
 
 } // namespace dnd

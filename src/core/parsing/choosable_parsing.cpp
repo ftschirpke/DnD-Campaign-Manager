@@ -2,10 +2,10 @@
 
 #include "choosable_parsing.hpp"
 
+#include <expected>
 #include <filesystem>
 
 #include <nlohmann/json.hpp>
-#include <tl/expected.hpp>
 
 #include <core/errors/errors.hpp>
 #include <core/models/effects_provider/choosable.hpp>
@@ -76,7 +76,7 @@ static WithErrors<Choosable::Data> parse_choosable(const nlohmann::json& obj, co
                         errors += error.value();
                         continue;
                     }
-                    tl::expected<ParsedChoice, Error> parsed_choice = parse_choice(entry["choose"], filepath);
+                    std::expected<ParsedChoice, Error> parsed_choice = parse_choice(entry["choose"], filepath);
 
                     int max_score = 20;
                     error = parse_optional_attribute_into(entry, "max", max_score, filepath);
@@ -94,34 +94,42 @@ static WithErrors<Choosable::Data> parse_choosable(const nlohmann::json& obj, co
 
             if (!direct.empty()) {
                 Paragraph direct_paragraph{};
-                direct_paragraph.parts.push_back(SimpleText{
-                    .str = "Ability Score Increase. ",
-                    .bold = true,
-                    .italic = false,
-                });
-                direct_paragraph.parts.push_back(SimpleText{
-                    .str = fmt::format("Increase your {} by 1, to a maximum of 20.", and_of_strings(direct)),
-                    .bold = false,
-                    .italic = false,
-                });
+                direct_paragraph.parts.push_back(
+                    SimpleText{
+                        .str = "Ability Score Increase. ",
+                        .bold = true,
+                        .italic = false,
+                    }
+                );
+                direct_paragraph.parts.push_back(
+                    SimpleText{
+                        .str = fmt::format("Increase your {} by 1, to a maximum of 20.", and_of_strings(direct)),
+                        .bold = false,
+                        .italic = false,
+                    }
+                );
                 choosable_data.description.parts.push_back(direct_paragraph);
             }
 
             for (auto& [choice, max_score] : choices) {
                 Paragraph choice_paragraph{};
-                choice_paragraph.parts.push_back(SimpleText{
-                    .str = "Ability Score Increase. ",
-                    .bold = true,
-                    .italic = false,
-                });
-                choice_paragraph.parts.push_back(SimpleText{
-                    .str = fmt::format(
-                        "Increase your {} by {}, to a maximum of {}.", or_of_strings(choice.options), choice.amount,
-                        max_score
-                    ),
-                    .bold = false,
-                    .italic = false,
-                });
+                choice_paragraph.parts.push_back(
+                    SimpleText{
+                        .str = "Ability Score Increase. ",
+                        .bold = true,
+                        .italic = false,
+                    }
+                );
+                choice_paragraph.parts.push_back(
+                    SimpleText{
+                        .str = fmt::format(
+                            "Increase your {} by {}, to a maximum of {}.", or_of_strings(choice.options), choice.amount,
+                            max_score
+                        ),
+                        .bold = false,
+                        .italic = false,
+                    }
+                );
                 choosable_data.description.parts.push_back(choice_paragraph);
             }
         }

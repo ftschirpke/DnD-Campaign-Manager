@@ -21,7 +21,7 @@ public:
     void render();
 private:
     Session& session;
-    std::optional<std::deque<const ContentPiece*>> last_content_pieces;
+    std::optional<std::deque<Id>> last_content_pieces;
     PdfCreationType creation_type;
     ItemCardBuilder item_card_builder;
     SpellCardBuilder spell_card_builder;

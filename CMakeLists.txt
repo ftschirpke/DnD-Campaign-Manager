@@ -16,7 +16,7 @@ set(DND_GUI_APP dndmanager)
 set(DND_TESTS dndmanager_tests)
 set(DND_CORE dndmanager_core)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 include(Compiler.cmake)

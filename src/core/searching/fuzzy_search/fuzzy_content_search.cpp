@@ -3,7 +3,6 @@
 
 #include "fuzzy_content_search.hpp"
 
-#include <array>
 #include <string>
 #include <vector>
 
@@ -23,35 +22,32 @@ std::vector<SearchResult> fuzzy_search_content(
 
 #define X(C, U, j, a, p, P)                                                                                            \
     if (options.search_##p) {                                                                                          \
-        for (const auto& [_, a] : content.get_##p().get_all()) {                                                       \
+        const std::vector<C>& vec_##p = content.get_all_##p();                                                         \
+        for (size_t i = 0; i < vec_##p.size(); ++i) {                                                                  \
+            const C& a = vec_##p[i];                                                                                   \
             int64_t match_score = fuzzy_match_string(search_query, a.get_name());                                      \
             if (match_score > min_match_score) {                                                                       \
-                results.emplace_back(&a, match_score);                                                                 \
+                results.emplace_back(Id{.index = i, .type = Type::C}, match_score);                                    \
             }                                                                                                          \
         }                                                                                                              \
     }
+
     X_OWNED_CONTENT_PIECES
 #undef X
 
     if (options.search_features) {
-        for (const auto& [_, feature] : content.get_features().get_all()) {
-            int64_t match_score = fuzzy_match_string(search_query, feature.get().get_name());
-            if (match_score > min_match_score) {
-                results.emplace_back(&feature.get(), match_score);
-            }
-        }
-        for (const auto& [_, feature] : content.get_class_features().get_all()) {
-            int64_t match_score = fuzzy_match_string(search_query, feature.get().get_name());
-            if (match_score > min_match_score) {
-                results.emplace_back(&feature.get(), match_score);
-            }
-        }
-        for (const auto& [_, feature] : content.get_subclass_features().get_all()) {
-            int64_t match_score = fuzzy_match_string(search_query, feature.get().get_name());
-            if (match_score > min_match_score) {
-                results.emplace_back(&feature.get(), match_score);
-            }
-        }
+#define X(C, U, j, a, p, P)                                                                                            \
+    const std::vector<CRef<C>>& vec_##p = content.get_all_##p();                                                       \
+    for (size_t i = 0; i < vec_##p.size(); ++i) {                                                                      \
+        const C& a = vec_##p[i];                                                                                       \
+        int64_t match_score = fuzzy_match_string(search_query, a.get_name());                                          \
+        if (match_score > min_match_score) {                                                                           \
+            results.emplace_back(Id{.index = i, .type = Type::C}, match_score);                                        \
+        }                                                                                                              \
+    }
+
+        X_FEATURES
+#undef X
     }
     return results;
 }

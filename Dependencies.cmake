@@ -18,14 +18,6 @@ FetchContent_Declare(
     GIT_TAG 123913715afeb8a437e6388b4473fcc4753e1c9a # Release 11.1.4
 )
 
-# tl::expected - expected monad
-FetchContent_Populate(
-    tl_expected
-    GIT_REPOSITORY https://github.com/TartanLlama/expected
-    GIT_TAG 292eff8bd8ee230a7df1d6a1c00c4ea0eb2f0362 # Release v1.1.0
-    SOURCE_DIR tl_expected
-)
-
 FetchContent_MakeAvailable(nlohmann_json fmt)
 
 # ------------------------------------------------------------------------------

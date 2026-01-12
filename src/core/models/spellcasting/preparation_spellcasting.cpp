@@ -27,8 +27,7 @@ int PreparationSpellcasting::get_prepared_spells_amount(AbilityScores ability_sc
             prepared_spells_amount += level;
             return prepared_spells_amount;
     }
-    assert(false);
-    return 0;
+    std::unreachable();
 }
 
 PreparationSpellcasting::PreparationSpellcasting(

@@ -3,6 +3,7 @@
 #include "choice.hpp"
 
 #include <cassert>
+#include <expected>
 #include <memory>
 #include <regex>
 #include <set>
@@ -11,7 +12,6 @@
 #include <vector>
 
 #include <fmt/format.h>
-#include <tl/expected.hpp>
 
 #include <core/attribute_names.hpp>
 #include <core/basic_mechanics/abilities.hpp>
@@ -35,8 +35,8 @@ static constexpr const char* cantrip_filter_regex_cstr = "(([aA]bjuration|[cC]on
                                                          "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation) )?"
                                                          "(([a-zA-Z][a-z]*) )?[cC]antrips";
 
-static std::unique_ptr<ContentFilter> create_cantrip_filter(const std::string& group_name) {
-    SpellFilter cantrip_filter;
+static std::unique_ptr<ContentFilter> create_cantrip_filter(const Content& content, const std::string& group_name) {
+    SpellFilter cantrip_filter(content);
     cantrip_filter.level_filter.set(NumberFilterType::EQUAL, 0);
     static const std::regex cantrip_filter_regex(cantrip_filter_regex_cstr);
     std::smatch match;
@@ -45,7 +45,9 @@ static std::unique_ptr<ContentFilter> create_cantrip_filter(const std::string& g
     }
     const std::string spell_magic_school_name = match[2].str();
     if (!spell_magic_school_name.empty()) {
-        tl::expected<MagicSchool, RuntimeError> magic_school_result = magic_school_from_string(spell_magic_school_name);
+        std::expected<MagicSchool, RuntimeError> magic_school_result = magic_school_from_string(
+            spell_magic_school_name
+        );
         assert(magic_school_result.has_value());
         MagicSchool magic_school = magic_school_result.value();
         cantrip_filter.magic_school_filter.set(SelectionFilterType::IS_IN, {magic_school});
@@ -62,8 +64,8 @@ static constexpr const char* spell_filter_regex_cstr = "((1st|2nd|3rd|[4-9]th)-l
                                                        "[eE]vocation|[iI]llusion|[nN]ecromancy|[tT]ransmutation) )?"
                                                        "(([a-zA-Z][a-z]*) )?[sS]pells";
 
-static std::unique_ptr<ContentFilter> create_spell_filter(const std::string& group_name) {
-    SpellFilter spell_filter;
+static std::unique_ptr<ContentFilter> create_spell_filter(const Content& content, const std::string& group_name) {
+    SpellFilter spell_filter(content);
     static const std::regex spell_filter_regex(spell_filter_regex_cstr);
     std::smatch match;
     if (!std::regex_match(group_name, match, spell_filter_regex)) {
@@ -83,7 +85,9 @@ static std::unique_ptr<ContentFilter> create_spell_filter(const std::string& gro
     }
     const std::string spell_magic_school_name = match[4].str();
     if (!spell_magic_school_name.empty()) {
-        tl::expected<MagicSchool, RuntimeError> magic_school_result = magic_school_from_string(spell_magic_school_name);
+        std::expected<MagicSchool, RuntimeError> magic_school_result = magic_school_from_string(
+            spell_magic_school_name
+        );
         assert(magic_school_result.has_value());
         MagicSchool magic_school = magic_school_result.value();
         spell_filter.magic_school_filter.set(SelectionFilterType::IS_IN, {magic_school});
@@ -95,20 +99,20 @@ static std::unique_ptr<ContentFilter> create_spell_filter(const std::string& gro
     return std::make_unique<SpellFilter>(std::move(spell_filter));
 }
 
-static std::vector<std::unique_ptr<ContentFilter>> spell_filters(Choice::Data& data) {
+static std::vector<std::unique_ptr<ContentFilter>> spell_filters(const Content& content, Choice::Data& data) {
     std::vector<std::unique_ptr<ContentFilter>> filters;
     if (!data.explicit_choices.empty()) {
-        SpellFilter spell_filter;
+        SpellFilter spell_filter(content);
         SelectionFilter<std::string>& selection_filter = spell_filter.name_filter.emplace<1>();
         selection_filter.set(SelectionFilterType::IS_IN, data.explicit_choices);
         filters.push_back(std::make_unique<SpellFilter>(std::move(spell_filter)));
     }
     for (const std::string& group_name : data.group_names) {
-        SpellFilter spell_filter;
+        SpellFilter spell_filter(content);
         if (data.attribute_name == "cantrips_free") {
-            filters.push_back(create_cantrip_filter(group_name));
+            filters.push_back(create_cantrip_filter(content, group_name));
         } else {
-            filters.push_back(create_spell_filter(group_name));
+            filters.push_back(create_spell_filter(content, group_name));
         }
     }
     return filters;
@@ -147,7 +151,7 @@ CreateResult<Choice> Choice::create_for(Data&& data, const Content& content) {
         case ChoiceType::ITEM:
             break;
         case ChoiceType::SPELL:
-            filters = spell_filters(data);
+            filters = spell_filters(content, data);
             break;
         case ChoiceType::CHOOSABLE:
             break;
@@ -188,24 +192,23 @@ std::set<std::string> Choice::possible_values(const Content& content) const {
             };
             return possible_values;
         case ChoiceType::ITEM:
-            for (const auto& [_, item] : content.get_items().get_all()) {
+            for (const auto& item : content.get_all_items()) {
                 possible_values.emplace(item.get_name());
             };
             return possible_values;
         case ChoiceType::SPELL:
             // TODO: use the spell filters instead of this
-            for (const auto& [_, spell] : content.get_spells().get_all()) {
+            for (const auto& spell : content.get_all_spells()) {
                 possible_values.emplace(spell.get_name());
             };
             return possible_values;
         case ChoiceType::CHOOSABLE:
-            for (const auto& [_, choosable] : content.get_choosables().get_all()) {
+            for (const auto& choosable : content.get_all_choosables()) {
                 possible_values.emplace(choosable.get_name());
             };
             return possible_values;
     }
-    assert(false);
-    return possible_values;
+    std::unreachable();
 }
 
 Choice::Choice(

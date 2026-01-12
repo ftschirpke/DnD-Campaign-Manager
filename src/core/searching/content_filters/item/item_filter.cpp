@@ -11,17 +11,20 @@
 
 namespace dnd {
 
+ItemFilter::ItemFilter(const Content& content) noexcept : ContentPieceFilter(content) {}
+
 bool ItemFilter::has_all_filters() const { return ContentPieceFilter::has_all_filters() && attunement_filter.is_set(); }
 
 bool ItemFilter::matches(const Item& item) const {
     return ContentPieceFilter::matches(item) && attunement_filter.matches(item.requires_attunement());
 }
 
-std::vector<const ContentPiece*> ItemFilter::all_matches(const Content& content) const {
-    std::vector<const ContentPiece*> matching_content_pieces;
-    for (const auto& [_, item] : content.get_items().get_all()) {
-        if (matches(item)) {
-            matching_content_pieces.push_back(&item);
+std::vector<Id> ItemFilter::all_matches() const {
+    std::vector<Id> matching_content_pieces;
+    const std::vector<Item>& items = content.get().get_all_items();
+    for (size_t i = 0; i < items.size(); ++i) {
+        if (matches(items[i])) {
+            matching_content_pieces.push_back(Id{.index = i, .type = Type::Item});
         }
     }
     return matching_content_pieces;

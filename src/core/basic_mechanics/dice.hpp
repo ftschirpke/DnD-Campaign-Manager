@@ -3,10 +3,9 @@
 
 #include <dnd_config.hpp>
 
+#include <expected>
 #include <map>
 #include <string>
-
-#include <tl/expected.hpp>
 
 #include <core/errors/errors.hpp>
 
@@ -24,14 +23,14 @@ enum class DiceType {
 
 class Dice {
 public:
-    static tl::expected<Dice, Errors> single_from_int(int dice_number);
-    static tl::expected<Dice, Errors> single_from_int_with_modifier(int dice_number, int modifier);
-    static tl::expected<Dice, Errors> multi_from_int(int dice_number, int dice_count);
-    static tl::expected<Dice, Errors> multi_from_int_with_modifier(int dice_number, int dice_count, int modifier);
-    static tl::expected<Dice, Errors> from_string(const std::string& str);
-    static tl::expected<Dice, Errors> from_string(std::string&& str);
-    static tl::expected<Dice, Errors> from_dice_count_map(std::map<DiceType, int>&& dice_counts);
-    static tl::expected<Dice, Errors> from_dice_count_map_with_modifier(
+    static std::expected<Dice, Errors> single_from_int(int dice_number);
+    static std::expected<Dice, Errors> single_from_int_with_modifier(int dice_number, int modifier);
+    static std::expected<Dice, Errors> multi_from_int(int dice_number, int dice_count);
+    static std::expected<Dice, Errors> multi_from_int_with_modifier(int dice_number, int dice_count, int modifier);
+    static std::expected<Dice, Errors> from_string(const std::string& str);
+    static std::expected<Dice, Errors> from_string(std::string&& str);
+    static std::expected<Dice, Errors> from_dice_count_map(std::map<DiceType, int>&& dice_counts);
+    static std::expected<Dice, Errors> from_dice_count_map_with_modifier(
         std::map<DiceType, int>&& dice_counts, int modifier
     );
 

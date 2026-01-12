@@ -73,7 +73,7 @@ static Errors validate_decision_target_for_character(
             // TODO: check character specific features for choices
             case 0: /* Feature */ {
                 const std::string& species_key = character_data.feature_providers_data.species_key;
-                OptCRef<Species> species_optional = content.get_species().get(species_key);
+                Opt<CRef<Species>> species_optional = content.get_species_library().get(species_key);
                 if (species_optional.has_value()) {
                     const Species& species = species_optional.value();
                     feature_found = std::any_of(
@@ -84,7 +84,7 @@ static Errors validate_decision_target_for_character(
                     }
                 }
                 const std::string& subspecies_key = character_data.feature_providers_data.subspecies_key;
-                OptCRef<Subspecies> subspecies_optional = content.get_subspecies().get(subspecies_key);
+                Opt<CRef<Subspecies>> subspecies_optional = content.get_subspecies_library().get(subspecies_key);
                 if (subspecies_optional.has_value()) {
                     const Subspecies& subspecies = subspecies_optional.value();
                     feature_found = std::any_of(
@@ -95,7 +95,7 @@ static Errors validate_decision_target_for_character(
             }
             case 1: /* ClassFeature */ {
                 const std::string& class_key = character_data.feature_providers_data.class_key;
-                OptCRef<Class> class_optional = content.get_classes().get(class_key);
+                Opt<CRef<Class>> class_optional = content.get_class_library().get(class_key);
                 if (class_optional.has_value()) {
                     const Class& cls = class_optional.value();
                     feature_found = std::any_of(cls.get_features().begin(), cls.get_features().end(), has_feature_name);
@@ -104,8 +104,8 @@ static Errors validate_decision_target_for_character(
                     }
                 }
                 const std::string& subclass_key = character_data.feature_providers_data.subclass_key;
-                OptCRef<Subclass> subclass_optional = content.get_subclasses().get(subclass_key);
-                if (content.get_subclasses().contains(subclass_key)) {
+                Opt<CRef<Subclass>> subclass_optional = content.get_subclass_library().get(subclass_key);
+                if (content.get_subclass_library().contains(subclass_key)) {
                     const Subclass& subclass = subclass_optional.value();
                     feature_found = std::any_of(
                         subclass.get_features().begin(), subclass.get_features().end(), has_feature_name
@@ -143,15 +143,14 @@ static Errors validate_character_raw_nonrecursively(const Character::Data& data)
 
 static Errors validate_character_relations_nonrecursively(const Character::Data& data, const Content& content) {
     Errors errors;
-    if (content.get_characters().contains(data.get_key())) {
+    if (content.find_character(data.get_key())) {
         errors.add_validation_error(
             ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
             fmt::format("Character has duplicate key \"{}\".", data.get_key())
         );
     }
     for (const Feature::Data& feature_data : data.features_data) {
-        if (content.get_features().contains(feature_data.get_key())
-            || content.get_class_features().contains(feature_data.get_key())) {
+        if (content.find_feature(feature_data.get_key())) {
             errors.add_validation_error(
                 ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format("Feature has duplicate key \"{}\".", feature_data.get_key())
@@ -159,7 +158,7 @@ static Errors validate_character_relations_nonrecursively(const Character::Data&
         }
     }
     for (const std::string& choosable_key : data.choosable_keys) {
-        if (!content.get_choosables().contains(choosable_key)) {
+        if (!content.get_choosable_library().contains(choosable_key)) {
             errors.add_validation_error(
                 ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format("Choosable '{}' does not exist.", choosable_key)
@@ -167,7 +166,7 @@ static Errors validate_character_relations_nonrecursively(const Character::Data&
         }
     }
 
-    OptCRef<Class> class_optional = content.get_classes().get(data.feature_providers_data.class_key);
+    Opt<CRef<Class>> class_optional = content.get_class_library().get(data.feature_providers_data.class_key);
     if (!data.feature_providers_data.class_key.empty() && class_optional.has_value()) {
         const Class& cls = class_optional.value();
         if (data.progression_data.level >= cls.get_important_levels().get_subclass_level()

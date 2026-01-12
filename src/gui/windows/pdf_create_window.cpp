@@ -5,6 +5,7 @@
 #include <cassert>
 #include <deque>
 #include <optional>
+#include <utility>
 
 #include <imgui/imgui.h>
 
@@ -16,29 +17,34 @@ namespace dnd {
 
 class ParseOpenContentVisitor : public ContentVisitor {
 private:
+    const Content& content;
     ItemCardBuilder& item_card_builder;
     SpellCardBuilder& spell_card_builder;
 public:
-    ParseOpenContentVisitor(ItemCardBuilder& item_card_builder, SpellCardBuilder& spell_card_builder)
-        : item_card_builder(item_card_builder), spell_card_builder(spell_card_builder) {}
+    ParseOpenContentVisitor(
+        const Content& content, ItemCardBuilder& item_card_builder, SpellCardBuilder& spell_card_builder
+    )
+        : content(content), item_card_builder(item_card_builder), spell_card_builder(spell_card_builder) {}
 
 #define X(C, U, j, a, p, P)                                                                                            \
-    void operator()(const C& a) override { DND_UNUSED(a); }
+    void visit(const C& a) override { DND_UNUSED(a); }
     X_CONTENT_PIECES
 #undef X
 
-    void parse(const std::deque<const ContentPiece*>& content_pieces) {
+    void parse(const std::deque<Id>& content_pieces) {
         item_card_builder.clear_items();
         spell_card_builder.clear_spells();
-        for (const ContentPiece* content_piece : content_pieces) {
-            content_piece->accept_visitor(*this);
+        for (Id id : content_pieces) {
+            auto variant = content.get(id);
+            visit_variant(variant);
         }
     }
 };
 
 PdfCreateWindow::PdfCreateWindow(Session& session)
     : session(session), last_content_pieces(std::nullopt), creation_type(PdfCreationType::SPELL_CARDS),
-      item_card_builder(), spell_card_builder(), list_items_visitor(), list_spells_visitor() {}
+      item_card_builder(session.get_content()), spell_card_builder(session.get_content()),
+      list_items_visitor(session.get_content()), list_spells_visitor(session.get_content()) {}
 
 void PdfCreateWindow::render() {
     DND_MEASURE_FUNCTION();
@@ -50,18 +56,22 @@ void PdfCreateWindow::render() {
     ImGui::SameLine();
     ImGui::RadioButton("Item Cards", radio_creation_type, static_cast<int>(PdfCreationType::ITEM_CARDS));
 
-    std::deque<const ContentPiece*>& content_pieces = session.get_open_content_pieces();
+    std::deque<Id>& content_pieces = session.get_open_content_pieces();
     if (!last_content_pieces.has_value() || last_content_pieces.value() != content_pieces) {
-        ParseOpenContentVisitor visitor(item_card_builder, spell_card_builder);
+        const Content& content = session.get_content();
+
+        ParseOpenContentVisitor visitor(content, item_card_builder, spell_card_builder);
         visitor.parse(content_pieces);
 
         list_items_visitor.clear_list();
-        for (const Item& item : item_card_builder.get_items()) {
-            item.accept_visitor(list_items_visitor);
+        for (Id item_id : item_card_builder.get_items()) {
+            const Item& item = content.get_item(item_id);
+            list_items_visitor.visit(item);
         }
         list_spells_visitor.clear_list();
-        for (const Spell& spell : spell_card_builder.get_spells()) {
-            spell.accept_visitor(list_spells_visitor);
+        for (Id spell_id : spell_card_builder.get_spells()) {
+            const Spell& spell = content.get_spell(spell_id);
+            list_spells_visitor.visit(spell);
         }
     }
 
@@ -80,7 +90,7 @@ void PdfCreateWindow::render() {
             }
             break;
         default:
-            assert(false);
+            std::unreachable();
     }
 
     ImGui::Text("When you are happy with your selection press the button to create the cards: ");
@@ -94,7 +104,7 @@ void PdfCreateWindow::render() {
                 spell_card_builder.write_latex_file(); // TODO: let user choose file name or at least display file name
                 break;
             default:
-                assert(false);
+                std::unreachable();
         }
     }
 

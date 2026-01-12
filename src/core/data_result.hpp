@@ -3,9 +3,8 @@
 
 #include <dnd_config.hpp>
 
+#include <expected>
 #include <memory>
-
-#include <tl/expected.hpp>
 
 #include <core/errors/errors.hpp>
 
@@ -13,7 +12,7 @@ namespace dnd {
 
 /**
  * @brief A class to hold a result of an attempt to construct an object from data
- * @details This is a light wrapper around tl::expected to better fit the needs of the project
+ * @details This is a thin wrapper around std::expected to better fit the needs of the project
  * @tparam OutputT the type of the output
  * @tparam DataT the type of the data
  */
@@ -29,9 +28,9 @@ public:
     const std::pair<DataT, Errors>& data_and_errors_ref() const;
     std::pair<DataT, Errors>&& data_and_errors();
 private:
-    DataResult(tl::expected<OutputT, std::pair<DataT, Errors>>&& inner);
+    DataResult(std::expected<OutputT, std::pair<DataT, Errors>>&& inner);
 
-    tl::expected<OutputT, std::pair<DataT, Errors>> inner;
+    std::expected<OutputT, std::pair<DataT, Errors>> inner;
 };
 
 // holds a result of an attempt to construct an object from data
@@ -61,12 +60,12 @@ FactoryResult<T> InvalidFactory(typename T::Data&& data, Errors&& errors);
 
 template <typename OutputT, typename DataT>
 DataResult<OutputT, DataT> DataResult<OutputT, DataT>::valid(OutputT&& output) {
-    return DataResult(tl::expected<OutputT, std::pair<DataT, Errors>>(std::move(output)));
+    return DataResult(std::expected<OutputT, std::pair<DataT, Errors>>(std::move(output)));
 }
 
 template <typename OutputT, typename DataT>
 DataResult<OutputT, DataT> DataResult<OutputT, DataT>::invalid(DataT&& data, Errors&& errors) {
-    return DataResult(tl::unexpected(std::make_pair(std::move(data), std::move(errors))));
+    return DataResult(std::unexpected(std::make_pair(std::move(data), std::move(errors))));
 }
 
 template <typename OutputT, typename DataT>
@@ -95,7 +94,7 @@ std::pair<DataT, Errors>&& DataResult<OutputT, DataT>::data_and_errors() {
 }
 
 template <typename OutputT, typename DataT>
-DataResult<OutputT, DataT>::DataResult(tl::expected<OutputT, std::pair<DataT, Errors>>&& inner)
+DataResult<OutputT, DataT>::DataResult(std::expected<OutputT, std::pair<DataT, Errors>>&& inner)
     : inner(std::move(inner)) {}
 
 

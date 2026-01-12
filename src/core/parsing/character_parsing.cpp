@@ -61,7 +61,7 @@ static WithErrors<FeatureProviders::Data> parse_character_feature_providers(
         const nlohmann::json& cls = obj["class"];
         errors += parse_required_attribute_into(cls, "name", class_name, filepath);
         errors += parse_required_attribute_into(cls, "source", class_source, filepath);
-        feature_providers_data.class_key = Class::key(class_name, class_source);
+        feature_providers_data.class_key = Class::Data::key(class_name, class_source);
     }
 
     if (obj.contains("subclass")) {
@@ -75,7 +75,7 @@ static WithErrors<FeatureProviders::Data> parse_character_feature_providers(
             std::string subclass_short_name, subclass_source;
             errors += parse_required_attribute_into(subclass, "shortName", subclass_short_name, filepath);
             errors += parse_required_attribute_into(subclass, "source", subclass_source, filepath);
-            feature_providers_data.subclass_key = Subclass::key(subclass_short_name, subclass_source, class_name);
+            feature_providers_data.subclass_key = Subclass::Data::key(subclass_short_name, subclass_source, class_name);
         }
     }
 
@@ -87,7 +87,7 @@ static WithErrors<FeatureProviders::Data> parse_character_feature_providers(
         std::string species_name, species_source;
         errors += parse_required_attribute_into(species, "name", species_name, filepath);
         errors += parse_required_attribute_into(species, "source", species_source, filepath);
-        feature_providers_data.species_key = Class::key(species_name, species_source);
+        feature_providers_data.species_key = Class::Data::key(species_name, species_source);
     }
 
     if (obj.contains("subspecies")) {
@@ -101,7 +101,7 @@ static WithErrors<FeatureProviders::Data> parse_character_feature_providers(
             std::string subspecies_name, subspecies_source;
             errors += parse_required_attribute_into(subspecies, "name", subspecies_name, filepath);
             errors += parse_required_attribute_into(subspecies, "source", subspecies_source, filepath);
-            feature_providers_data.subspecies_key = Class::key(subspecies_name, subspecies_source);
+            feature_providers_data.subspecies_key = Class::Data::key(subspecies_name, subspecies_source);
         }
     }
 
@@ -159,7 +159,7 @@ static WithErrors<std::vector<std::string>> parse_character_feats(
         std::string feat_name, feat_source;
         errors += parse_required_attribute_into(feat_entry, "name", feat_name, filepath);
         errors += parse_required_attribute_into(feat_entry, "source", feat_source, filepath);
-        feat_keys.emplace_back(Choosable::key(feat_name, feat_source));
+        feat_keys.emplace_back(Choosable::Data::key(feat_name, feat_source));
     }
 
     return result;

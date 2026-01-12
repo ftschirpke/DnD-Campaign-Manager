@@ -3,13 +3,12 @@
 #include "character.hpp"
 
 #include <cassert>
+#include <expected>
 #include <filesystem>
 #include <string>
 #include <unordered_set>
 #include <utility>
 #include <vector>
-
-#include <tl/expected.hpp>
 
 #include <core/attribute_names.hpp>
 #include <core/basic_mechanics/character_progression.hpp>
@@ -59,7 +58,7 @@ CreateResult<Character> Character::create_for(Data&& data, const Content& conten
     std::vector<CRef<Choosable>> choosables;
     features.reserve(data.choosable_keys.size());
     for (std::string& choosable_key : data.choosable_keys) {
-        OptCRef<Choosable> choosable = content.get_choosables().get(choosable_key);
+        Opt<CRef<Choosable>> choosable = content.get_choosable_library().get(choosable_key);
         if (!choosable.has_value()) {
             errors.add_runtime_error(
                 RuntimeError::Code::UNREACHABLE, "Invalid choosable key was not caught by validation"
@@ -106,10 +105,10 @@ CreateResult<Character> Character::create_for(Data&& data, const Content& conten
 
     Character character(
         std::move(data.name), std::move(data.description), std::move(data.source_path), std::move(data.source_name),
-        std::move(features), std::move(choosables), std::move(base_ability_scores), std::move(feature_providers),
-        std::move(progression), std::move(decisions)
+        data.get_key(), std::move(features), std::move(choosables), std::move(base_ability_scores),
+        std::move(feature_providers), std::move(progression), std::move(decisions)
     );
-    errors = character.recalculate_stats();
+    errors = character.recalculate_stats(content);
     if (!errors.ok()) {
         return InvalidCreate<Character>(std::move(data), std::move(errors));
     }
@@ -121,6 +120,8 @@ const std::string& Character::get_name() const { return name; }
 const Text& Character::get_description() const { return description; }
 
 const SourceInfo& Character::get_source_info() const { return source_info; }
+
+const std::string& Character::get_key() const { return key; }
 
 const std::vector<Feature>& Character::get_features() const { return features; }
 
@@ -134,17 +135,19 @@ const Progression& Character::get_progression() const { return progression; }
 
 const Stats& Character::get_stats() const { return stats; }
 
-void Character::for_all_effects_do(std::function<void(const Effects&)> func) const {
-    for (const Feature& feature : feature_providers.get_species().get_features()) {
+void Character::for_all_effects_do(const Content& content, std::function<void(const Effects&)> func) const {
+    const Species& species = content.get_species(feature_providers.get_species_id());
+    for (const Feature& feature : species.get_features()) {
         func(feature.get_main_effects());
     }
-    OptCRef<Subspecies> subspecies = feature_providers.get_subspecies();
-    if (subspecies.has_value()) {
-        for (const Feature& feature : subspecies.value().get().get_features()) {
+    if (feature_providers.has_subspecies()) {
+        const Subspecies& subspecies = content.get_subspecies(feature_providers.get_subspecies_id().value());
+        for (const Feature& feature : subspecies.get_features()) {
             func(feature.get_main_effects());
         }
     }
-    for (const ClassFeature& feature : feature_providers.get_class().get_features()) {
+    const Class& cls = content.get_class(feature_providers.get_class_id());
+    for (const ClassFeature& feature : cls.get_features()) {
         func(feature.get_main_effects());
         for (const auto& [level, effects] : feature.get_higher_level_effects()) {
             if (level > progression.get_level()) {
@@ -153,9 +156,9 @@ void Character::for_all_effects_do(std::function<void(const Effects&)> func) con
             func(effects);
         }
     }
-    OptCRef<Subclass> subclass = feature_providers.get_subclass();
-    if (subclass.has_value()) {
-        for (const SubclassFeature& feature : subclass.value().get().get_features()) {
+    if (feature_providers.has_subclass()) {
+        const Subclass& subclass = content.get_subclass(feature_providers.get_subclass_id().value());
+        for (const SubclassFeature& feature : subclass.get_features()) {
             func(feature.get_main_effects());
             for (const auto& [level, effects] : feature.get_higher_level_effects()) {
                 if (level > progression.get_level()) {
@@ -173,13 +176,13 @@ void Character::for_all_effects_do(std::function<void(const Effects&)> func) con
     }
 }
 
-Errors Character::recalculate_stats() {
+Errors Character::recalculate_stats(const Content& content) {
     std::vector<CRef<StatChange>> stat_changes;
 
     std::unordered_set<std::string> proficient_skills;
     std::unordered_set<std::string> proficient_saves;
 
-    for_all_effects_do([&stat_changes, &proficient_saves, &proficient_skills](const Effects& effects) {
+    for_all_effects_do(content, [&stat_changes, &proficient_saves, &proficient_skills](const Effects& effects) {
         for (const std::unique_ptr<StatChange>& change : effects.get_stat_changes()) {
             stat_changes.push_back(*change);
         }
@@ -215,9 +218,10 @@ Errors Character::recalculate_stats() {
     }
     stat_changes.insert(stat_changes.end(), implicit_stat_changes.begin(), implicit_stat_changes.end());
 
-    tl::expected<Stats, Errors> result = Stats::create(
-        base_ability_scores, get_proficiency_bonus(), stat_changes, feature_providers.get_class().get_hit_dice(),
-        progression.get_hit_dice_rolls()
+    const Class& cls = content.get_class(feature_providers.get_class_id());
+
+    std::expected<Stats, Errors> result = Stats::create(
+        base_ability_scores, get_proficiency_bonus(), stat_changes, cls.get_hit_dice(), progression.get_hit_dice_rolls()
     );
     if (!result.has_value()) {
         return result.error();
@@ -228,22 +232,21 @@ Errors Character::recalculate_stats() {
 }
 
 int Character::get_proficiency_bonus() const {
-    tl::expected<int, RuntimeError> proficiency_bonus_result = proficiency_bonus_for_level(progression.get_level());
+    std::expected<int, RuntimeError> proficiency_bonus_result = proficiency_bonus_for_level(progression.get_level());
     assert(proficiency_bonus_result.has_value());
     return proficiency_bonus_result.value();
 }
 
-void Character::accept_visitor(ContentVisitor& visitor) const { visitor(*this); }
-
 Character::Character(
     std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
-    std::vector<Feature>&& features, std::vector<CRef<Choosable>>&& choosables, AbilityScores&& base_ability_scores,
-    FeatureProviders&& feature_providers, Progression&& progression, std::vector<Decision>&& decisions
+    std::string&& key, std::vector<Feature>&& features, std::vector<CRef<Choosable>>&& choosables,
+    AbilityScores&& base_ability_scores, FeatureProviders&& feature_providers, Progression&& progression,
+    std::vector<Decision>&& decisions
 )
     : name(std::move(name)), description(std::move(description)),
-      source_info({.path = std::move(source_path), .name = std::move(source_name)}), features(std::move(features)),
-      choosables(std::move(choosables)), base_ability_scores(std::move(base_ability_scores)),
-      feature_providers(std::move(feature_providers)), progression(std::move(progression)),
-      stats(Stats::create_default()), decisions(std::move(decisions)) {}
+      source_info({.path = std::move(source_path), .name = std::move(source_name)}), key(std::move(key)),
+      features(std::move(features)), choosables(std::move(choosables)),
+      base_ability_scores(std::move(base_ability_scores)), feature_providers(std::move(feature_providers)),
+      progression(std::move(progression)), stats(Stats::create_default()), decisions(std::move(decisions)) {}
 
 } // namespace dnd

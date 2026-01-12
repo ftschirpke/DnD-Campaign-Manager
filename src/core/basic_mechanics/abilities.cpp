@@ -8,6 +8,7 @@
 #include <optional>
 #include <string>
 #include <string_view>
+#include <utility>
 
 #include <core/attribute_names.hpp>
 
@@ -39,8 +40,7 @@ const char* ability_cstr_name(Ability ability) {
         case Ability::CHARISMA:
             return attributes::CHARISMA;
     }
-    assert(false);
-    return "";
+    std::unreachable();
 }
 
 bool is_ability(std::string_view attribute_name) {

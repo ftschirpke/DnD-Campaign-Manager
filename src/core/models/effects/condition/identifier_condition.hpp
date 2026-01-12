@@ -3,10 +3,9 @@
 
 #include <dnd_config.hpp>
 
+#include <expected>
 #include <string>
 #include <string_view>
-
-#include <tl/expected.hpp>
 
 #include <core/errors/runtime_error.hpp>
 #include <core/models/character/stats.hpp>
@@ -25,7 +24,7 @@ public:
         std::string_view right_side_identifier
     );
 
-    tl::expected<bool, RuntimeError> evaluate(const Stats& stats) const override final;
+    std::expected<bool, RuntimeError> evaluate(const Stats& stats) const override final;
 private:
     std::string right_side_identifier;
 };

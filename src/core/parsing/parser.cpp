@@ -4,13 +4,14 @@
 
 #include <algorithm>
 #include <deque>
+#include <expected>
 #include <filesystem>
 #include <optional>
 #include <string>
+#include <utility>
 
 #include <fmt/format.h>
 #include <fmt/ranges.h>
-#include <tl/expected.hpp>
 
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
@@ -120,14 +121,14 @@ std::optional<Error> parse_paragraph(std::string&& str, Paragraph& paragraph, co
     return parse_text_recursive(std::move(str), paragraph, false, false, filepath);
 }
 
-tl::expected<Table, Error> parse_table(const nlohmann::json& json, const std::filesystem::path& filepath) {
+std::expected<Table, Error> parse_table(const nlohmann::json& json, const std::filesystem::path& filepath) {
     std::optional<Error> error;
     Table new_table{};
 
     std::string caption;
     error = parse_optional_attribute_into(json, "caption", caption, filepath);
     if (error.has_value()) {
-        return tl::unexpected(error.value());
+        return std::unexpected(error.value());
     }
     if (!caption.empty()) {
         new_table.caption = SimpleText{.str = checked_string(std::move(caption))};
@@ -135,7 +136,7 @@ tl::expected<Table, Error> parse_table(const nlohmann::json& json, const std::fi
 
     error = check_required_attribute(json, "colLabels", filepath, JsonType::ARRAY);
     if (error.has_value()) {
-        return tl::unexpected(error.value());
+        return std::unexpected(error.value());
     }
     const nlohmann::json& labels = json["colLabels"];
     new_table.columns = labels.size();
@@ -144,7 +145,7 @@ tl::expected<Table, Error> parse_table(const nlohmann::json& json, const std::fi
         std::string header_entry;
         error = parse_required_index_into(labels, col, header_entry, filepath);
         if (error.has_value()) {
-            return tl::unexpected(error.value());
+            return std::unexpected(error.value());
         }
         if (header_entry.starts_with("{@")) {
             // INFO: I think there is no need and no real use case for rich text in the header; reconsider later
@@ -166,7 +167,7 @@ tl::expected<Table, Error> parse_table(const nlohmann::json& json, const std::fi
             std::string style_entry;
             error = parse_required_index_into(styles, col, style_entry, filepath);
             if (error.has_value()) {
-                return tl::unexpected(error.value());
+                return std::unexpected(error.value());
             }
             if (style_entry.starts_with("col-")) {
                 size_t i = 4;
@@ -178,7 +179,7 @@ tl::expected<Table, Error> parse_table(const nlohmann::json& json, const std::fi
                 }
                 new_table.column_widths->push_back(std::stoi(style_entry.substr(4, i)));
             } else {
-                return tl::unexpected(ParsingError(
+                return std::unexpected(ParsingError(
                     ParsingError::Code::INVALID_ATTRIBUTE_TYPE, filepath,
                     "Table column style must start with \"col-<column width>...\""
                 ));
@@ -188,13 +189,13 @@ tl::expected<Table, Error> parse_table(const nlohmann::json& json, const std::fi
 
     error = check_required_attribute(json, "rows", filepath, JsonType::ARRAY);
     if (error.has_value()) {
-        return tl::unexpected(error.value());
+        return std::unexpected(error.value());
     }
     const nlohmann::json& rows = json["rows"];
     for (size_t i = 0; i < rows.size(); ++i) {
         error = check_required_index(rows, i, filepath, JsonType::ARRAY);
         if (error.has_value()) {
-            return tl::unexpected(error.value());
+            return std::unexpected(error.value());
         }
         std::vector<Paragraph>& row = new_table.rows.emplace_back();
         for (size_t j = 0; j < rows[i].size(); ++j) {
@@ -203,53 +204,53 @@ tl::expected<Table, Error> parse_table(const nlohmann::json& json, const std::fi
             if (entry_json.is_string()) {
                 error = parse_required_index_into(rows[i], j, entry, filepath);
                 if (error.has_value()) {
-                    return tl::unexpected(error.value());
+                    return std::unexpected(error.value());
                 }
             } else if (entry_json.is_number_integer()) {
                 int val;
                 error = parse_required_index_into(rows[i], j, val, filepath);
                 if (error.has_value()) {
-                    return tl::unexpected(error.value());
+                    return std::unexpected(error.value());
                 }
                 entry = fmt::format("{}", val);
             } else {
                 error = check_required_index(rows[i], j, filepath, JsonType::OBJECT);
                 if (error.has_value()) {
-                    return tl::unexpected(error.value());
+                    return std::unexpected(error.value());
                 }
                 std::string typ;
                 error = parse_required_attribute_into(entry_json, "type", typ, filepath);
                 if (error.has_value()) {
-                    return tl::unexpected(error.value());
+                    return std::unexpected(error.value());
                 }
                 if (typ != "cell") {
-                    return tl::unexpected(ParsingError(
+                    return std::unexpected(ParsingError(
                         ParsingError::Code::INVALID_ATTRIBUTE_TYPE, filepath,
                         "When having an object in a table entry, it must be of type \"cell\""
                     ));
                 }
                 error = check_required_attribute(entry_json, "roll", filepath, JsonType::OBJECT);
                 if (error.has_value()) {
-                    return tl::unexpected(error.value());
+                    return std::unexpected(error.value());
                 }
                 const nlohmann::json& roll = entry_json["roll"];
                 if (roll.contains("exact")) {
                     int exact_roll;
                     error = parse_required_attribute_into(roll, "exact", exact_roll, filepath);
                     if (error.has_value()) {
-                        return tl::unexpected(error.value());
+                        return std::unexpected(error.value());
                     }
                     entry = fmt::format("{}", exact_roll);
                 } else {
                     int min_roll;
                     error = parse_required_attribute_into(roll, "min", min_roll, filepath);
                     if (error.has_value()) {
-                        return tl::unexpected(error.value());
+                        return std::unexpected(error.value());
                     }
                     int max_roll;
                     error = parse_required_attribute_into(roll, "max", max_roll, filepath);
                     if (error.has_value()) {
-                        return tl::unexpected(error.value());
+                        return std::unexpected(error.value());
                     }
                     entry = fmt::format("{}-{}", min_roll, max_roll);
                 }
@@ -257,7 +258,7 @@ tl::expected<Table, Error> parse_table(const nlohmann::json& json, const std::fi
             Paragraph entry_paragraph{};
             error = parse_paragraph(std::move(entry), entry_paragraph, filepath);
             if (error.has_value()) {
-                return tl::unexpected(error.value());
+                return std::unexpected(error.value());
             }
             row.push_back(entry_paragraph);
         }
@@ -265,7 +266,7 @@ tl::expected<Table, Error> parse_table(const nlohmann::json& json, const std::fi
     return new_table;
 }
 
-static tl::expected<ListItem, Error> parse_list_item(
+static std::expected<ListItem, Error> parse_list_item(
     const nlohmann::json& json, const std::filesystem::path& filepath
 ) {
     ListItem out{};
@@ -275,7 +276,7 @@ static tl::expected<ListItem, Error> parse_list_item(
         Paragraph new_paragraph{};
         error = parse_paragraph(json.get<std::string>(), new_paragraph, filepath);
         if (error.has_value()) {
-            return tl::unexpected(error.value());
+            return std::unexpected(error.value());
         }
         if (!new_paragraph.parts.empty()) {
             out.parts.push_back(new_paragraph);
@@ -283,7 +284,7 @@ static tl::expected<ListItem, Error> parse_list_item(
         return out;
     }
     if (!json.is_object()) {
-        return tl::unexpected(ParsingError(
+        return std::unexpected(ParsingError(
             ParsingError::Code::INVALID_ATTRIBUTE_TYPE, filepath,
             "Json entries in the \"items\" array must either be strings or objects."
         ));
@@ -292,7 +293,7 @@ static tl::expected<ListItem, Error> parse_list_item(
     std::string type;
     error = parse_required_attribute_into(json, "type", type, filepath);
     if (error.has_value()) {
-        return tl::unexpected(error.value());
+        return std::unexpected(error.value());
     }
     if (type != "item" && type != "itemSpell") {
         return out;
@@ -303,7 +304,7 @@ static tl::expected<ListItem, Error> parse_list_item(
         std::string name;
         error = parse_required_attribute_into(json, "name", name, filepath);
         if (error.has_value()) {
-            return tl::unexpected(error.value());
+            return std::unexpected(error.value());
         }
         if (!name.empty()) {
             if (!first_paragraph.has_value()) {
@@ -326,7 +327,7 @@ static tl::expected<ListItem, Error> parse_list_item(
     } else {
         error = check_required_attribute(json, "entries", filepath, JsonType::ARRAY);
         if (error.has_value()) {
-            return tl::unexpected(error.value());
+            return std::unexpected(error.value());
         }
         for (const nlohmann::json& entry : json["entries"]) {
             todo.push_back(entry);
@@ -339,7 +340,7 @@ static tl::expected<ListItem, Error> parse_list_item(
             todo.pop_front();
             error = parse_paragraph(first_entry.get<std::string>(), first_paragraph.value(), filepath);
             if (error.has_value()) {
-                return tl::unexpected(error.value());
+                return std::unexpected(error.value());
             }
         }
         if (!first_paragraph.value().parts.empty()) {
@@ -354,7 +355,7 @@ static tl::expected<ListItem, Error> parse_list_item(
             Paragraph new_paragraph{};
             error = parse_paragraph(entry.get<std::string>(), new_paragraph, filepath);
             if (error.has_value()) {
-                return tl::unexpected(error.value());
+                return std::unexpected(error.value());
             }
             if (!new_paragraph.parts.empty()) {
                 out.parts.push_back(new_paragraph);
@@ -363,7 +364,7 @@ static tl::expected<ListItem, Error> parse_list_item(
         }
 
         if (!entry.is_object()) {
-            return tl::unexpected(ParsingError(
+            return std::unexpected(ParsingError(
                 ParsingError::Code::INVALID_ATTRIBUTE_TYPE, filepath,
                 "Json entries in the \"entries\" array must either be strings or objects."
             ));
@@ -372,20 +373,20 @@ static tl::expected<ListItem, Error> parse_list_item(
         std::string entry_type;
         error = parse_required_attribute_into(entry, "type", entry_type, filepath);
         if (error.has_value()) {
-            return tl::unexpected(error.value());
+            return std::unexpected(error.value());
         }
 
         if (entry_type == "entries") {
             error = check_required_attribute(entry, "entries", filepath, JsonType::ARRAY);
             if (error.has_value()) {
-                return tl::unexpected(error.value());
+                return std::unexpected(error.value());
             }
 
             if (entry.contains("name")) {
                 std::string name;
                 error = parse_required_attribute_into(entry, "name", name, filepath);
                 if (error.has_value()) {
-                    return tl::unexpected(error.value());
+                    return std::unexpected(error.value());
                 }
                 Paragraph new_paragraph{};
                 if (!name.empty()) {
@@ -408,7 +409,7 @@ static tl::expected<ListItem, Error> parse_list_item(
                         new_paragraph, filepath
                     );
                     if (error.has_value()) {
-                        return tl::unexpected(error.value());
+                        return std::unexpected(error.value());
                     }
                 }
                 if (!new_paragraph.parts.empty()) {
@@ -420,14 +421,14 @@ static tl::expected<ListItem, Error> parse_list_item(
                 }
             }
         } else if (entry_type == "table") {
-            tl::expected<Table, Error> new_table = parse_table(entry, filepath);
+            std::expected<Table, Error> new_table = parse_table(entry, filepath);
             if (new_table.has_value()) {
                 out.parts.push_back(new_table.value());
             } else {
-                return tl::unexpected(new_table.error());
+                return std::unexpected(new_table.error());
             }
         } else {
-            return tl::unexpected(ParsingError(
+            return std::unexpected(ParsingError(
                 ParsingError::Code::UNEXPECTED_ATTRIBUTE, filepath,
                 fmt::format("Entry type \"{}\" unexpected", entry_type)
             ));
@@ -458,7 +459,7 @@ std::optional<Error> parse_list(const nlohmann::json& list_items, Text& out, con
     }
 
     for (const nlohmann::json& item : list_items) {
-        tl::expected<ListItem, Error> parsed_item = parse_list_item(item, filepath);
+        std::expected<ListItem, Error> parsed_item = parse_list_item(item, filepath);
         if (parsed_item.has_value()) {
             if (!parsed_item.value().parts.empty()) {
                 new_list.parts.push_back(parsed_item.value());
@@ -483,7 +484,7 @@ std::optional<Error> parse_list(const nlohmann::json& list_items, Text& out, con
                     break;
                 }
                 default:
-                    assert(false);
+                    std::unreachable();
             }
         }
     } else if (!new_list.parts.empty()) {
@@ -545,7 +546,7 @@ std::optional<Error> write_formatted_text_into(
             return error;
         }
 
-        if (type == "entries" || type == "inset" || type == "section") {
+        if (type == "entries" || type == "inset" || type == "item" || type == "section") {
             error = check_required_attribute(entry, "entries", filepath, JsonType::ARRAY);
             if (error.has_value()) {
                 return error;
@@ -599,7 +600,7 @@ std::optional<Error> write_formatted_text_into(
                 return error;
             }
         } else if (type == "table") {
-            tl::expected<Table, Error> new_table = parse_table(entry, filepath);
+            std::expected<Table, Error> new_table = parse_table(entry, filepath);
             if (new_table.has_value()) {
                 out.parts.push_back(new_table.value());
             } else {
@@ -629,10 +630,8 @@ static const char* json_attribute_type_name(JsonType typ) {
             return "object";
         case JsonType::ANY:
             return "any";
-        default:
-            assert(false);
-            return "";
     }
+    std::unreachable();
 }
 
 static std::optional<Error> check_type(
@@ -653,8 +652,7 @@ static std::optional<Error> check_type(
             is_required_type = true;
             break;
         default:
-            assert(false);
-            break;
+            std::unreachable();
     }
     if (!is_required_type) {
         return ParsingError(ParsingError::Code::INVALID_ATTRIBUTE_TYPE, filepath, std::move(error_msg));

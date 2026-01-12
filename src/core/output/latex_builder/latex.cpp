@@ -3,6 +3,7 @@
 #include "latex.hpp"
 
 #include <cassert>
+#include <utility>
 
 #include <core/output/latex_builder/latex_scope.hpp>
 #include <core/text/text.hpp>
@@ -42,7 +43,7 @@ static void paragraph_to_latex(const Paragraph& paragraph, LatexScope& scope) {
                 break;
             }
             default: {
-                assert(false);
+                std::unreachable();
             }
         }
     }
@@ -73,7 +74,7 @@ std::vector<LatexScope> text_to_latex(const Text& text) {
                 break;
             }
             default: {
-                assert(false);
+                std::unreachable();
             }
         }
     }

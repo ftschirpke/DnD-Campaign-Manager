@@ -42,7 +42,7 @@ static Errors spells_set_validate_relations(const std::set<std::string>& spells,
     Errors errors;
 
     for (const std::string& spell_key : spells) {
-        OptCRef<Spell> spell_optional = content.get_spells().get(spell_key);
+        Opt<CRef<Spell>> spell_optional = content.get_spell_library().get(spell_key);
         if (!spell_optional.has_value()) {
             errors.add_validation_error(
                 ValidationError::Code::RELATION_NOT_FOUND, fmt::format("Spell '{}' does not exist.", spell_key)
@@ -59,7 +59,7 @@ static Errors spells_set_validate_relations(const std::set<std::string>& spells,
 static Errors validate_extra_spells_holder_relations(const ExtraSpellsHolder::Data& data, const Content& content) {
     Errors errors;
     for (const std::string& cantrip_name : data.free_cantrips) {
-        OptCRef<Spell> cantrip_optional = content.get_spells().get(cantrip_name);
+        Opt<CRef<Spell>> cantrip_optional = content.get_spell_library().get(cantrip_name);
         if (!cantrip_optional.has_value()) {
             errors.add_validation_error(
                 ValidationError::Code::RELATION_NOT_FOUND, fmt::format("Cantrip '{}' does not exist.", cantrip_name)

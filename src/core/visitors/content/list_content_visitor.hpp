@@ -6,21 +6,25 @@
 #include <string>
 #include <vector>
 
+#include <core/content.hpp>
 #include <core/visitors/content/content_visitor.hpp>
 
 namespace dnd {
 
 class ListContentVisitor : public ContentVisitor {
 public:
+    explicit ListContentVisitor(const Content& content) noexcept;
+
     void reserve(size_t size);
     const std::vector<std::string>& get_list() const;
     std::vector<std::string> get_list();
     void clear_list();
 
-#define X(C, U, j, a, p, P) virtual void operator()(const C& a) override;
+#define X(C, U, j, a, p, P) virtual void visit(const C& a) override;
     X_CONTENT_PIECES
 #undef X
 private:
+    const Content& content;
     std::vector<std::string> string_list;
 };
 

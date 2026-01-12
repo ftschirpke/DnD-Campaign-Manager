@@ -29,14 +29,14 @@ static Errors validate_subspecies_raw_nonrecursively(const Subspecies::Data& dat
 
 Errors validate_subspecies_relations_nonrecursively(const Subspecies::Data& data, const Content& content) {
     Errors errors;
-    if (content.get_subspecies().contains(data.get_key())) {
+    if (content.get_subspecies_library().contains(data.get_key())) {
         errors.add_validation_error(
             ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
             fmt::format("Subspecies has duplicate key \"{}\".", data.get_key())
         );
     }
     for (const Feature::Data& feature_data : data.features_data) {
-        if (content.get_features().contains(feature_data.get_key())) {
+        if (content.find_feature(feature_data.get_key())) {
             errors.add_validation_error(
                 ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format("Feature has duplicate key \"{}\".", feature_data.get_key())
@@ -44,8 +44,8 @@ Errors validate_subspecies_relations_nonrecursively(const Subspecies::Data& data
         }
     }
 
-    OptCRef<Species> species_optional = content.get_species().get(data.species_key);
-    if (!species_optional.has_value()) {
+    Opt<Id> species_id = content.find_species(data.species_key);
+    if (!species_id.has_value()) {
         errors.add_validation_error(
             ValidationError::Code::RELATION_NOT_FOUND,
             fmt::format("Character species '{}' does not exist.", data.species_key)

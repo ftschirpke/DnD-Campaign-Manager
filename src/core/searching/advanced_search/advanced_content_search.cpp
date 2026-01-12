@@ -3,28 +3,30 @@
 #include "advanced_content_search.hpp"
 
 #include <future>
-#include <variant>
 #include <vector>
 
 #include <core/content.hpp>
 #include <core/searching/content_filters/content_filter.hpp>
 #include <core/searching/content_filters/content_piece_filter.hpp>
+#include <core/types.hpp>
 
 namespace dnd {
 
 AdvancedContentSearch::AdvancedContentSearch(const Content& content)
-    : content(content), filter(ContentPieceFilter()), searching(false), search_future() {}
+    : content(content), filter(ContentPieceFilter(content)), searching(false), search_future() {}
 
 ContentFilterVariant& AdvancedContentSearch::get_filter() { return filter; }
 
-const std::vector<const ContentPiece*>& AdvancedContentSearch::get_search_results() const { return search_results; }
+const std::vector<Id>& AdvancedContentSearch::get_search_results() const { return search_results; }
 
-static std::vector<const ContentPiece*> search(const Content& content, ContentFilterVariant searching_filter) {
-    std::vector<const ContentPiece*> search_results = std::visit(
-        [&content](const ContentFilter& filter) { return filter.all_matches(content); }, searching_filter
-    );
-    std::sort(search_results.begin(), search_results.end(), [](const ContentPiece* lhs, const ContentPiece* rhs) {
-        return lhs->get_name() < rhs->get_name();
+static std::vector<Id> search(const Content& content, ContentFilterVariant searching_filter) {
+    std::vector<Id> search_results = dispatch(searching_filter, const auto& filter, filter.all_matches());
+    std::sort(search_results.begin(), search_results.end(), [&content](Id lhs, Id rhs) {
+        auto lhs_res = content.get(lhs);
+        auto rhs_res = content.get(rhs);
+        auto lhs_name = dispatch(lhs_res, const auto& piece, piece.get().get_name());
+        auto rhs_name = dispatch(rhs_res, const auto& piece, piece.get().get_name());
+        return lhs_name < rhs_name;
     });
     return search_results;
 }

@@ -76,16 +76,9 @@ static const float min_w = 240.0f;
 static void render_content_count_table(const Content& content) {
     float window_width = ImGui::GetWindowWidth();
     float w = std::max(min_w, window_width);
-    display_size("Characters", content.get_characters().size(), w);
-    display_size("Classes", content.get_classes().size(), w);
-    display_size("Subclasses", content.get_subclasses().size(), w);
-    display_size("Species", content.get_species().size(), w);
-    display_size("Subspecies", content.get_subspecies().size(), w);
-    display_size("Items", content.get_items().size(), w);
-    display_size("Spells", content.get_spells().size(), w);
-    display_size("Features", content.get_features().size(), w);
-    display_size("Class Features", content.get_class_features().size(), w);
-    display_size("Choosables", content.get_choosables().size(), w);
+#define X(C, U, j, a, p, P) display_size(#p, content.get_##j##_library().size(), w);
+    X_CONTENT_PIECES
+#undef X
 }
 
 void GuiApp::render_overview_window() {

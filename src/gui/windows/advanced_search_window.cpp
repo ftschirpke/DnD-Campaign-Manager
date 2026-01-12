@@ -4,6 +4,7 @@
 
 #include <cassert>
 #include <string>
+#include <utility>
 #include <variant>
 #include <vector>
 
@@ -38,31 +39,30 @@ static constexpr std::array<const char*, 10> content_filter_names = {
     "Any", "Characters", "Classes", "Subclasses", "Species", "Subspecies", "Items", "Spells", "Features", "Choosables",
 };
 
-static ContentFilterVariant get_filter_from_filter_index(size_t idx) {
+static ContentFilterVariant get_filter_from_filter_index(const Content& content, size_t idx) {
     switch (idx) {
         case 0:
-            return ContentPieceFilter();
+            return ContentPieceFilter(content);
         case 1:
-            return CharacterFilter();
+            return CharacterFilter(content);
         case 2:
-            return ClassFilter();
+            return ClassFilter(content);
         case 3:
-            return SubclassFilter();
+            return SubclassFilter(content);
         case 4:
-            return SpeciesFilter();
+            return SpeciesFilter(content);
         case 5:
-            return SubspeciesFilter();
+            return SubspeciesFilter(content);
         case 6:
-            return ItemFilter();
+            return ItemFilter(content);
         case 7:
-            return SpellFilter();
+            return SpellFilter(content);
         case 8:
-            return FeatureFilter();
+            return FeatureFilter(content);
         case 9:
-            return ChoosableFilter();
+            return ChoosableFilter(content);
     }
-    assert(false);
-    return ContentPieceFilter();
+    std::unreachable();
 }
 
 AdvancedSearchWindow::AdvancedSearchWindow(Session& session) : session(session), result_list() {}
@@ -101,7 +101,7 @@ void AdvancedSearchWindow::render() {
         ImGui::EndCombo();
     }
     if (swap_to_idx != content_filter_names.size()) {
-        filter = get_filter_from_filter_index(swap_to_idx);
+        filter = get_filter_from_filter_index(session.get_content(), swap_to_idx);
         session.set_advanced_search_filter(std::move(filter));
     }
 
@@ -112,7 +112,7 @@ void AdvancedSearchWindow::render() {
     ImGui::TableNextRow();
     ImGui::TableSetColumnIndex(0);
     if (ImGui::Button("Clear Filter", ImVec2(first_column_button_width, 0))) {
-        std::visit([](ContentFilter& filter) { filter.clear(); }, filter);
+        dispatch(filter, auto& f, f.clear());
     }
 
     ImGui::EndTable();

@@ -4,6 +4,7 @@
 
 #include <set>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include <fmt/format.h>
@@ -131,7 +132,7 @@ static void display_paragraph(const Paragraph& paragraph, const GuiFonts& fonts)
                 break;
             }
             default: {
-                assert(false);
+                std::unreachable();
             }
         }
 
@@ -270,7 +271,7 @@ void display_formatted_text(const Text& formatted_text, const GuiFonts& fonts) {
                                 display_table(std::get<1>(part), fonts);
                                 break;
                             default:
-                                assert(false);
+                                std::unreachable();
                         }
                     }
                     ImGui::EndGroup();
@@ -283,7 +284,7 @@ void display_formatted_text(const Text& formatted_text, const GuiFonts& fonts) {
                 break;
             }
             default: {
-                assert(false);
+                std::unreachable();
             }
         }
     }
@@ -300,7 +301,7 @@ static void list_features(DisplayVisitor& visitor, const std::vector<T>& feature
         ImGui::Separator();
         if (ImGui::TreeNode(feature.get_key().c_str())) {
             ImGui::Separator();
-            visitor(feature);
+            visitor.visit(feature);
             ImGui::TreePop();
         }
     }
@@ -416,7 +417,7 @@ static void character_progression_list(const dnd::Character& character) {
     ImGui::Text("Level: %d", level);
     int xp = character.get_progression().get_xp();
     if (level < MAX_CHARACTER_LEVEL) {
-        tl::expected<int, RuntimeError> xp_next_level_result = dnd::xp_for_level(level + 1);
+        std::expected<int, RuntimeError> xp_next_level_result = dnd::xp_for_level(level + 1);
         assert(xp_next_level_result.has_value());
         int xp_next_level = xp_next_level_result.value();
         ImGui::Text("XP: %d/%d", xp, xp_next_level);
@@ -427,7 +428,7 @@ static void character_progression_list(const dnd::Character& character) {
     }
 }
 
-void dnd::DisplayVisitor::operator()(const Character& character) {
+void dnd::DisplayVisitor::visit(const Character& character) {
     {
         ImGui::BeginChild("abilities_and_skills", ImVec2(ImGui::GetContentRegionAvail().x * 0.8f, 260), false);
         character_abilities_and_skills_table(character);
@@ -451,33 +452,33 @@ void dnd::DisplayVisitor::operator()(const Character& character) {
     label("Description:");
     display_formatted_text(character.get_description(), fonts);
 
+    const FeatureProviders& fp = character.get_feature_providers();
+
     label("Species:");
-    const Species& species = character.get_feature_providers().get_species();
+    const Species& species = content.get_species(fp.get_species_id());
     if (ImGui::CollapsingHeader(species.get_key().c_str())) {
-        operator()(species);
+        visit(species);
     }
 
-    OptCRef<Subspecies> subspecies_optional = character.get_feature_providers().get_subspecies();
-    if (subspecies_optional.has_value()) {
+    if (fp.has_subspecies()) {
         label("Subspecies:");
-        const Subspecies& subspecies = subspecies_optional.value();
+        const Subspecies& subspecies = content.get_subspecies(fp.get_subspecies_id().value());
         if (ImGui::CollapsingHeader(subspecies.get_key().c_str())) {
-            operator()(subspecies);
+            visit(subspecies);
         }
     }
 
     label("Class:");
-    const Class& cls = character.get_feature_providers().get_class();
+    const Class& cls = content.get_class(fp.get_class_id());
     if (ImGui::CollapsingHeader(cls.get_key().c_str())) {
-        operator()(cls);
+        visit(cls);
     }
 
-    OptCRef<Subclass> subclass_optional = character.get_feature_providers().get_subclass();
-    if (subclass_optional.has_value()) {
+    if (fp.has_subclass()) {
         label("Subclass:");
-        const Subclass& subclass = subclass_optional.value();
+        const Subclass& subclass = content.get_subclass(fp.get_subclass_id().value());
         if (ImGui::CollapsingHeader(subclass.get_key().c_str())) {
-            operator()(subclass);
+            visit(subclass);
         }
     }
 
@@ -492,7 +493,7 @@ void dnd::DisplayVisitor::operator()(const Character& character) {
             ImGui::Separator();
             if (ImGui::TreeNode(choosable.get().get_key().c_str())) {
                 ImGui::Separator();
-                operator()(choosable.get());
+                visit(choosable.get());
                 ImGui::TreePop();
             }
         }
@@ -502,7 +503,7 @@ void dnd::DisplayVisitor::operator()(const Character& character) {
     end_content_table();
 }
 
-void DisplayVisitor::operator()(const Class& cls) {
+void DisplayVisitor::visit(const Class& cls) {
     begin_content_table(cls);
 
     label("Type:");
@@ -524,14 +525,15 @@ void DisplayVisitor::operator()(const Class& cls) {
     end_content_table();
 }
 
-void DisplayVisitor::operator()(const Subclass& subclass) {
+void DisplayVisitor::visit(const Subclass& subclass) {
     begin_content_table(subclass);
 
     label("Type:");
     ImGui::Text("Subclass");
     source(subclass);
     label("Class name:");
-    ImGui::Text("%s", subclass.get_class().get().get_name().c_str());
+    const Class& cls = content.get_class(subclass.get_class_id());
+    ImGui::Text("%s", cls.get_name().c_str());
     label("Description:");
     display_formatted_text(subclass.get_description(), fonts);
     label("Short name:");
@@ -542,7 +544,7 @@ void DisplayVisitor::operator()(const Subclass& subclass) {
     end_content_table();
 }
 
-void DisplayVisitor::operator()(const Species& species) {
+void DisplayVisitor::visit(const Species& species) {
     begin_content_table(species);
 
     label("Type:");
@@ -556,7 +558,7 @@ void DisplayVisitor::operator()(const Species& species) {
     end_content_table();
 }
 
-void DisplayVisitor::operator()(const Subspecies& subspecies) {
+void DisplayVisitor::visit(const Subspecies& subspecies) {
     begin_content_table(subspecies);
 
     label("Type:");
@@ -572,7 +574,7 @@ void DisplayVisitor::operator()(const Subspecies& subspecies) {
     end_content_table();
 }
 
-void DisplayVisitor::operator()(const Item& item) {
+void DisplayVisitor::visit(const Item& item) {
     begin_content_table(item);
 
     label("Type:");
@@ -591,7 +593,7 @@ void DisplayVisitor::operator()(const Item& item) {
     end_content_table();
 }
 
-void DisplayVisitor::operator()(const Spell& spell) {
+void DisplayVisitor::visit(const Spell& spell) {
     begin_content_table(spell);
 
     label("Type:");
@@ -620,7 +622,7 @@ void DisplayVisitor::operator()(const Spell& spell) {
     end_content_table();
 }
 
-void DisplayVisitor::operator()(const Feature& feature) {
+void DisplayVisitor::visit(const Feature& feature) {
     begin_content_table(feature);
 
     label("Type:");
@@ -632,7 +634,7 @@ void DisplayVisitor::operator()(const Feature& feature) {
     end_content_table();
 }
 
-void DisplayVisitor::operator()(const ClassFeature& class_feature) {
+void DisplayVisitor::visit(const ClassFeature& class_feature) {
     begin_content_table(class_feature);
 
     label("Type:");
@@ -647,7 +649,7 @@ void DisplayVisitor::operator()(const ClassFeature& class_feature) {
     end_content_table();
 }
 
-void DisplayVisitor::operator()(const SubclassFeature& subclass_feature) {
+void DisplayVisitor::visit(const SubclassFeature& subclass_feature) {
     begin_content_table(subclass_feature);
 
     label("Type:");
@@ -662,7 +664,7 @@ void DisplayVisitor::operator()(const SubclassFeature& subclass_feature) {
     end_content_table();
 }
 
-void DisplayVisitor::operator()(const Choosable& choosable) {
+void DisplayVisitor::visit(const Choosable& choosable) {
     begin_content_table(choosable);
 
     label("Type:");

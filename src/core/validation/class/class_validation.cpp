@@ -44,14 +44,14 @@ static Errors validate_class_raw_nonrecursively(const Class::Data& data) {
 
 static Errors validate_class_relations_nonrecursively(const Class::Data& data, const Content& content) {
     Errors errors;
-    if (content.get_classes().contains(data.get_key())) {
+    if (content.get_class_library().contains(data.get_key())) {
         errors.add_validation_error(
             ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
             fmt::format("Class has duplicate key \"{}\".", data.get_key())
         );
     }
     for (const ClassFeature::Data& feature_data : data.features_data) {
-        if (content.get_class_features().contains(feature_data.get_key())) {
+        if (content.find_class(feature_data.get_key())) {
             errors.add_validation_error(
                 ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format("Feature has duplicate key \"{}\".", feature_data.get_key())

@@ -3,12 +3,12 @@
 
 #include <dnd_config.hpp>
 
+#include <expected>
 #include <filesystem>
 #include <string>
 #include <vector>
 
 #include <nlohmann/json.hpp>
-#include <tl/expected.hpp>
 
 #include <core/errors/errors.hpp>
 
@@ -19,7 +19,7 @@ struct ParsedChoice {
     int amount;
 };
 
-tl::expected<ParsedChoice, Error> parse_choice(const nlohmann::json& obj, const std::filesystem::path& filepath);
+std::expected<ParsedChoice, Error> parse_choice(const nlohmann::json& obj, const std::filesystem::path& filepath);
 
 } // namespace dnd
 

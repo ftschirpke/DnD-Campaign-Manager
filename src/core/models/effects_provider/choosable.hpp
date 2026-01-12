@@ -37,20 +37,21 @@ public:
     const std::string& get_name() const override;
     const Text& get_description() const override;
     const SourceInfo& get_source_info() const override;
+    const std::string& get_key() const override;
     const Effects& get_main_effects() const override;
     const std::string& get_type() const;
     const std::vector<std::unique_ptr<Condition>>& get_prerequisites() const;
-
-    virtual void accept_visitor(ContentVisitor& visitor) const override final;
 private:
     Choosable(
         std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,
-        std::string&& type, std::vector<std::unique_ptr<Condition>>&& prerequisites, Effects&& main_effects
+        std::string&& key, std::string&& type, std::vector<std::unique_ptr<Condition>>&& prerequisites,
+        Effects&& main_effects
     );
 
     std::string name;
     Text description;
     SourceInfo source_info;
+    std::string key;
     Effects main_effects;
     std::string type;
     std::vector<std::unique_ptr<Condition>> prerequisites;

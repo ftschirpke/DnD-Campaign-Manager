@@ -11,15 +11,18 @@
 
 namespace dnd {
 
+SpeciesFilter::SpeciesFilter(const Content& content) noexcept : ContentPieceFilter(content) {}
+
 bool SpeciesFilter::has_all_filters() const { return ContentPieceFilter::has_all_filters(); }
 
 bool SpeciesFilter::matches(const Species& species) const { return ContentPieceFilter::matches(species); }
 
-std::vector<const ContentPiece*> SpeciesFilter::all_matches(const Content& content) const {
-    std::vector<const ContentPiece*> matching_content_pieces;
-    for (const auto& [_, species] : content.get_species().get_all()) {
-        if (matches(species)) {
-            matching_content_pieces.push_back(&species);
+std::vector<Id> SpeciesFilter::all_matches() const {
+    std::vector<Id> matching_content_pieces;
+    const std::vector<Species>& species = content.get().get_all_species();
+    for (size_t i = 0; i < species.size(); ++i) {
+        if (matches(species[i])) {
+            matching_content_pieces.push_back(Id{.index = i, .type = Type::Species});
         }
     }
     return matching_content_pieces;

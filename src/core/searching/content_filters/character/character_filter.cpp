@@ -11,6 +11,8 @@
 
 namespace dnd {
 
+CharacterFilter::CharacterFilter(const Content& content) noexcept : ContentPieceFilter(content) {}
+
 bool CharacterFilter::has_all_filters() const {
     return ContentPieceFilter::has_all_filters() && level_filter.is_set() && xp_filter.is_set();
 }
@@ -20,11 +22,12 @@ bool CharacterFilter::matches(const Character& character) const {
            && xp_filter.matches(character.get_progression().get_xp());
 }
 
-std::vector<const ContentPiece*> CharacterFilter::all_matches(const Content& content) const {
-    std::vector<const ContentPiece*> matching_content_pieces;
-    for (const auto& [_, character] : content.get_characters().get_all()) {
-        if (matches(character)) {
-            matching_content_pieces.push_back(&character);
+std::vector<Id> CharacterFilter::all_matches() const {
+    std::vector<Id> matching_content_pieces;
+    const std::vector<Character>& characters = content.get().get_all_characters();
+    for (size_t i = 0; i < characters.size(); ++i) {
+        if (matches(characters[i])) {
+            matching_content_pieces.push_back(Id{.index = i, .type = Type::Character});
         }
     }
     return matching_content_pieces;

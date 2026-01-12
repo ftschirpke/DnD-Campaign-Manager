@@ -52,11 +52,14 @@ const std::vector<std::string>& Session::get_validation_error_messages() const {
 
 const std::set<std::filesystem::path>& Session::get_content_directories() const { return content_directories; }
 
-std::deque<const ContentPiece*>& Session::get_open_content_pieces() { return open_content_pieces; }
+std::deque<Id>& Session::get_open_content_pieces() { return open_content_pieces; }
 
-const ContentPiece* Session::get_selected_content_piece() {
-    const ContentPiece* rv = selected_content_piece;
-    selected_content_piece = nullptr;
+Opt<Id> Session::get_selected_content_piece() {
+    if (!selected_content_piece.has_value()) {
+        return std::nullopt;
+    }
+    Id rv = selected_content_piece.value();
+    selected_content_piece = std::nullopt;
     return rv;
 }
 
@@ -78,24 +81,26 @@ static std::vector<std::string> cleaned_results_list(std::vector<std::string>&& 
 
 std::vector<std::string> Session::get_fuzzy_search_result_strings() const {
     DND_MEASURE_FUNCTION();
-    ListContentVisitor list_content_visitor;
+    ListContentVisitor list_content_visitor(content);
     list_content_visitor.reserve(fuzzy_search_results.size());
     if (fuzzy_search_results.size() > max_search_results) {
         return {};
     }
-    for (size_t i = 0; i < fuzzy_search_results.size(); ++i) {
-        fuzzy_search_results[i].content_piece_ptr->accept_visitor(list_content_visitor);
+    for (const SearchResult& result : fuzzy_search_results) {
+        ContentPieceVariant variant = content.get(result.content_piece_id);
+        list_content_visitor.visit_variant(variant);
     }
     return cleaned_results_list(list_content_visitor.get_list());
 }
 
 std::vector<std::string> Session::get_advanced_search_result_strings() const {
     DND_MEASURE_FUNCTION();
-    ListContentVisitor list_content_visitor;
-    const std::vector<const ContentPiece*>& advanced_search_results = advanced_search.get_search_results();
+    ListContentVisitor list_content_visitor(content);
+    const std::vector<Id>& advanced_search_results = advanced_search.get_search_results();
     list_content_visitor.reserve(advanced_search_results.size());
-    for (const ContentPiece* content_piece : advanced_search_results) {
-        content_piece->accept_visitor(list_content_visitor);
+    for (Id content_piece_id : advanced_search_results) {
+        ContentPieceVariant variant = content.get(content_piece_id);
+        list_content_visitor.visit_variant(variant);
     }
     return cleaned_results_list(list_content_visitor.get_list());
 }
@@ -138,7 +143,7 @@ public:
     nlohmann::json get_open_tabs() { return std::move(open_tabs_json); }
 
 #define X(C, U, j, a, p, P)                                                                                            \
-    virtual void operator()(const C& a) override {                                                                     \
+    virtual void visit(const C& a) override {                                                                          \
         if (!open_tabs_json.contains(#j)) {                                                                            \
             open_tabs_json[#j] = nlohmann::json::array();                                                              \
         }                                                                                                              \
@@ -160,8 +165,9 @@ void Session::save_session_values() {
     }
 
     CollectOpenTabsVisitor collect_open_tabs_visitor;
-    for (const ContentPiece* open_content_piece : open_content_pieces) {
-        open_content_piece->accept_visitor(collect_open_tabs_visitor);
+    for (Id open_content_piece : open_content_pieces) {
+        auto variant = content.get(open_content_piece);
+        collect_open_tabs_visitor.visit_variant(variant);
     }
     last_session[OPEN_TABS] = collect_open_tabs_visitor.get_open_tabs();
 
@@ -209,7 +215,7 @@ void Session::set_fuzzy_search(const std::string& search_query, const FuzzySearc
     std::sort(
         fuzzy_search_results.begin(), fuzzy_search_results.end(), [](const SearchResult& a, const SearchResult& b) {
             if (a.significance == b.significance) {
-                return a.content_piece_ptr->get_name() < b.content_piece_ptr->get_name();
+                return a.content_piece_id < b.content_piece_id;
             }
             return a.significance > b.significance;
         }
@@ -220,11 +226,11 @@ void Session::open_fuzzy_search_result(size_t index) {
     if (index >= fuzzy_search_results.size()) {
         return;
     }
-    open_content_piece(fuzzy_search_results[index].content_piece_ptr);
+    open_content_piece(fuzzy_search_results[index].content_piece_id);
 }
 
 void Session::open_advanced_search_result(size_t index) {
-    const std::vector<const ContentPiece*>& advanced_search_results = advanced_search.get_search_results();
+    const std::vector<Id>& advanced_search_results = advanced_search.get_search_results();
     if (index >= advanced_search_results.size()) {
         return;
     }
@@ -307,75 +313,18 @@ void Session::parse_content_and_initialize() {
 }
 
 void Session::open_last_session() {
-    for (const std::string& character_to_open : last_session_open_tabs["character"]) {
-        OptCRef<Character> character = content.get_characters().get(character_to_open);
-        if (character.has_value()) {
-            open_content_pieces.push_back(&character.value().get());
-        }
+#define X(C, U, j, a, p, P)                                                                                            \
+    for (const std::string& piece_to_open : last_session_open_tabs[#j]) {                                              \
+        Opt<Id> id = content.find_##j(piece_to_open);                                                                  \
+        if (id.has_value()) {                                                                                          \
+            open_content_pieces.push_back(id.value());                                                                 \
+        }                                                                                                              \
     }
-    for (const std::string& class_to_open : last_session_open_tabs["class"]) {
-        OptCRef<Class> cls = content.get_classes().get(class_to_open);
-        if (cls.has_value()) {
-            open_content_pieces.push_back(&cls.value().get());
-        }
-    }
-    for (const std::string& subclass_to_open : last_session_open_tabs["subclass"]) {
-        OptCRef<Subclass> subclass = content.get_subclasses().get(subclass_to_open);
-        if (subclass.has_value()) {
-            open_content_pieces.push_back(&subclass.value().get());
-        }
-    }
-    for (const std::string& species_to_open : last_session_open_tabs["species"]) {
-        OptCRef<Species> species = content.get_species().get(species_to_open);
-        if (species.has_value()) {
-            open_content_pieces.push_back(&species.value().get());
-        }
-    }
-    for (const std::string& subspecies_to_open : last_session_open_tabs["subspecies"]) {
-        OptCRef<Subspecies> subspecies = content.get_subspecies().get(subspecies_to_open);
-        if (subspecies.has_value()) {
-            open_content_pieces.push_back(&subspecies.value().get());
-        }
-    }
-    for (const std::string& item_to_open : last_session_open_tabs["item"]) {
-        OptCRef<Item> item = content.get_items().get(item_to_open);
-        if (item.has_value()) {
-            open_content_pieces.push_back(&item.value().get());
-        }
-    }
-    for (const std::string& spell_to_open : last_session_open_tabs["spell"]) {
-        OptCRef<Spell> spell = content.get_spells().get(spell_to_open);
-        if (spell.has_value()) {
-            open_content_pieces.push_back(&spell.value().get());
-        }
-    }
-    for (const std::string& feature_to_open : last_session_open_tabs["feature"]) {
-        OptCRef<Feature> feature = content.get_features().get(feature_to_open);
-        if (feature.has_value()) {
-            open_content_pieces.push_back(&feature.value().get());
-        }
-    }
-    for (const std::string& class_feature_to_open : last_session_open_tabs["class_feature"]) {
-        OptCRef<ClassFeature> class_feature = content.get_class_features().get(class_feature_to_open);
-        if (class_feature.has_value()) {
-            open_content_pieces.push_back(&class_feature.value().get());
-        }
-    }
-    for (const std::string& subclass_feature_to_open : last_session_open_tabs["subclass_feature"]) {
-        OptCRef<SubclassFeature> subclass_feature = content.get_subclass_features().get(subclass_feature_to_open);
-        if (subclass_feature.has_value()) {
-            open_content_pieces.push_back(&subclass_feature.value().get());
-        }
-    }
-    for (const std::string& choosable_to_open : last_session_open_tabs["choosable"]) {
-        OptCRef<Choosable> choosable = content.get_choosables().get(choosable_to_open);
-        if (choosable.has_value()) {
-            open_content_pieces.push_back(&choosable.value().get());
-        }
-    }
+    X_CONTENT_PIECES
+#undef X
 }
 
-void Session::open_content_piece(const ContentPiece* content_piece) {
+void Session::open_content_piece(Id content_piece) {
     if (std::find(open_content_pieces.begin(), open_content_pieces.end(), content_piece) == open_content_pieces.end()) {
         open_content_pieces.push_back(content_piece);
     }

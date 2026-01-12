@@ -3,12 +3,11 @@
 
 #include <dnd_config.hpp>
 
+#include <expected>
 #include <optional>
 #include <string>
 #include <unordered_map>
 #include <vector>
-
-#include <tl/expected.hpp>
 
 #include <core/basic_mechanics/abilities.hpp>
 #include <core/basic_mechanics/dice.hpp>
@@ -22,7 +21,7 @@ namespace dnd {
 class Stats {
 public:
     static Stats create_default();
-    static tl::expected<Stats, Errors> create(
+    static std::expected<Stats, Errors> create(
         const AbilityScores& base_ability_scores, int proficiency_bonus, std::vector<CRef<StatChange>> stat_changes,
         Dice class_hit_dice, const std::vector<int>& hit_dice_rolls
     );

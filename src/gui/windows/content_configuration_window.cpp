@@ -51,7 +51,7 @@ void ContentConfigurationWindow::render_content_dir_selection() {
     if (ImGui::BeginPopupModal("Invalid content directory", nullptr, error_popup_options)) {
         ImGui::Text("Selected directory: %s", content_dir_dialog.GetSelected().string().c_str());
         for (const Error& error : errors.get_errors()) {
-            std::visit([](const auto& err) { ImGui::Text("Error: %s", err.get_error_message().c_str()); }, error);
+            dispatch(error, const auto& e, ImGui::Text("Error: %s", e.get_error_message().c_str()));
         }
         if (ImGui::Button("Select other directory")) {
             ImGui::CloseCurrentPopup();
