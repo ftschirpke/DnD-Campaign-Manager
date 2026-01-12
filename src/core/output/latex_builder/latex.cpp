@@ -3,6 +3,7 @@
 #include "latex.hpp"
 
 #include <cassert>
+#include <utility>
 
 #include <core/output/latex_builder/latex_scope.hpp>
 #include <core/text/text.hpp>

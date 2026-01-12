@@ -5,6 +5,7 @@
 #include <cassert>
 #include <string>
 #include <string_view>
+#include <utility>
 
 #include <core/errors/errors.hpp>
 #include <core/errors/runtime_error.hpp>

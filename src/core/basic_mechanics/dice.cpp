@@ -5,6 +5,7 @@
 #include <cassert>
 #include <map>
 #include <string>
+#include <utility>
 
 #include <fmt/format.h>
 

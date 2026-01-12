@@ -3,6 +3,7 @@
 #include "ability_scores.hpp"
 
 #include <cassert>
+#include <utility>
 
 #include <core/basic_mechanics/abilities.hpp>
 #include <core/errors/errors.hpp>
