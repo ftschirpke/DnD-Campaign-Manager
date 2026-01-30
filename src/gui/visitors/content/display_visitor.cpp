@@ -619,6 +619,9 @@ void DisplayVisitor::visit(const Spell& spell) {
     label("Description:");
     display_formatted_text(spell.get_description(), fonts);
 
+    label("Classes:");
+    ImGui::Text("%s", fmt::format("{}", fmt::join(spell.get_classes(), ", ")).c_str());
+
     end_content_table();
 }
 

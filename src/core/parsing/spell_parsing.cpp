@@ -298,7 +298,9 @@ static Errors parse_higher_level_text_into(
 }
 
 
-WithErrors<Spell::Data> parse_spell(const nlohmann::ordered_json& obj, const std::filesystem::path& filepath) {
+WithErrors<Spell::Data> parse_spell(
+    const nlohmann::ordered_json& obj, const std::filesystem::path& filepath, const FoundryFileParser& foundry_parser
+) {
     WithErrors<Spell::Data> result;
     Spell::Data& spell_data = result.value;
     Errors& errors = result.errors;
@@ -319,7 +321,7 @@ WithErrors<Spell::Data> parse_spell(const nlohmann::ordered_json& obj, const std
     spell_data.duration = std::move(duration_result.value.first);
     spell_data.concentration = duration_result.value.second;
 
-    // spell_data.classes; // TODO: use spells/sources.json
+    DND_UNUSED(foundry_parser); // TODO: implement
 
     return result;
 }

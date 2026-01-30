@@ -140,9 +140,15 @@ static WithErrors<Choosable::Data> parse_choosable(const nlohmann::json& obj, co
     return result;
 }
 
-WithErrors<Choosable::Data> parse_feat(const nlohmann::json& obj, const std::filesystem::path& filepath) {
+WithErrors<Choosable::Data> parse_feat(
+    const nlohmann::json& obj, const std::filesystem::path& filepath,
+    const FoundryFileParser& foundry_parser
+) {
     WithErrors<Choosable::Data> feat_data = parse_choosable(obj, filepath);
     feat_data.value.type = "feat";
+
+    DND_UNUSED(foundry_parser); // TODO: implement
+
     return feat_data;
 }
 

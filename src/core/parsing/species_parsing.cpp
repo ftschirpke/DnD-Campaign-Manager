@@ -14,7 +14,9 @@
 
 namespace dnd {
 
-WithErrors<Species::Data> parse_species(const nlohmann::ordered_json& obj, const std::filesystem::path& filepath) {
+WithErrors<Species::Data> parse_species(
+    const nlohmann::ordered_json& obj, const std::filesystem::path& filepath, const FoundryFileParser& foundry_parser
+) {
     WithErrors<Species::Data> result;
     Species::Data& species_data = result.value;
     Errors& errors = result.errors;
@@ -28,11 +30,13 @@ WithErrors<Species::Data> parse_species(const nlohmann::ordered_json& obj, const
         species_data.description = Text::simple("<empty description>");
     }
 
+    DND_UNUSED(foundry_parser); // TODO: implement
+
     return result;
 }
 
 WithErrors<Subspecies::Data> parse_subspecies(
-    const nlohmann::ordered_json& obj, const std::filesystem::path& filepath
+    const nlohmann::ordered_json& obj, const std::filesystem::path& filepath, const FoundryFileParser& foundry_parser
 ) {
     WithErrors<Subspecies::Data> result;
     Subspecies::Data& subspecies_data = result.value;
@@ -46,6 +50,8 @@ WithErrors<Subspecies::Data> parse_subspecies(
     errors += parse_required_attribute_into(obj, "raceName", species_name, filepath);
     errors += parse_required_attribute_into(obj, "raceSource", species_source_name, filepath);
     subspecies_data.species_key = Species::Data::key(species_name, species_source_name);
+
+    DND_UNUSED(foundry_parser); // TODO: implement
 
     return result;
 }

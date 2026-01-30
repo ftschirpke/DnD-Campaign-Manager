@@ -21,6 +21,7 @@ public:
     virtual Errors parse();
     virtual void save_result(Content& content);
 private:
+    FoundryFileParser foundry_parser;
     const SpellSources& spell_sources;
     std::unordered_map<std::string, Spell::Data> parsed_data;
 };

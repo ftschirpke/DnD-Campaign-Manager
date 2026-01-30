@@ -26,7 +26,8 @@
 
 namespace dnd {
 
-ContentFileParser::ContentFileParser(const std::filesystem::path& filepath) : FileParser(filepath, true) {}
+ContentFileParser::ContentFileParser(const std::filesystem::path& filepath)
+    : FileParser(filepath, true), foundry_parser(filepath) {}
 
 Errors ContentFileParser::parse() {
     Errors errors;
@@ -112,48 +113,48 @@ Errors ContentFileParser::parse_object(const nlohmann::ordered_json& obj, ParseT
     switch (parse_type) {
         case ParseType::class_type: {
             Class::Data result{};
-            parse_class(obj, get_filepath()).move_into(result, errors);
+            parse_class(obj, get_filepath(), foundry_parser).move_into(result, errors);
             parsed_data.class_data.insert({result.get_key(), result});
             break;
         }
         case ParseType::classFeature_type: {
-            errors += parse_class_feature(obj, get_filepath(), parsed_data.class_data);
+            errors += parse_class_feature(obj, get_filepath(), parsed_data.class_data, foundry_parser);
             break;
         }
         case ParseType::subclass_type: {
             Subclass::Data result{};
-            parse_subclass(obj, get_filepath()).move_into(result, errors);
+            parse_subclass(obj, get_filepath(), foundry_parser).move_into(result, errors);
             parsed_data.subclass_data.insert({result.get_key(), result});
             break;
         }
         case ParseType::subclassFeature_type: {
-            errors += parse_subclass_feature(obj, get_filepath(), parsed_data.subclass_data);
+            errors += parse_subclass_feature(obj, get_filepath(), parsed_data.subclass_data, foundry_parser);
             break;
         }
         case ParseType::race_type: {
             Species::Data result{};
-            parse_species(obj, get_filepath()).move_into(result, errors);
+            parse_species(obj, get_filepath(), foundry_parser).move_into(result, errors);
             parsed_data.species_data.insert({result.get_key(), result});
             break;
         }
         case ParseType::subrace_type: {
-            if (!obj.contains("name")) { // empty subclasses
+            if (!obj.contains("name")) { // empty subspecies
                 break;
             }
             Subspecies::Data result{};
-            parse_subspecies(obj, get_filepath()).move_into(result, errors);
+            parse_subspecies(obj, get_filepath(), foundry_parser).move_into(result, errors);
             parsed_data.subspecies_data.insert({result.get_key(), result});
             break;
         }
         case ParseType::character_type: {
             Character::Data result{};
-            parse_character(obj, get_filepath()).move_into(result, errors);
+            parse_character(obj, get_filepath(), foundry_parser).move_into(result, errors);
             parsed_data.character_data.insert({result.get_key(), result});
             break;
         }
         case ParseType::feat_type: {
             Choosable::Data result{};
-            parse_feat(obj, get_filepath()).move_into(result, errors);
+            parse_feat(obj, get_filepath(), foundry_parser).move_into(result, errors);
             parsed_data.choosable_data.insert({result.get_key(), result});
             break;
         }
@@ -169,5 +170,25 @@ Errors ContentFileParser::parse_object(const nlohmann::ordered_json& obj, ParseT
     return errors;
 }
 
+FoundryFileParser::FoundryFileParser(const std::filesystem::path& filepath)
+    : FileParser(filepath, true) {}
+
+Errors FoundryFileParser::parse() { return Errors(); }
+
+void FoundryFileParser::save_result(Content& content) { DND_UNUSED(content); }
+
+static Opt<CRef<nlohmann::json>> get_entry(const nlohmann::json& obj, std::string type_key, const std::string& key) {
+    type_key[0] = std::tolower(type_key[0]);
+    DND_UNUSED(obj);
+    DND_UNUSED(key);
+    return std::nullopt;
+}
+
+#define IMPL_GET_OBJ_KEY(C, U, j, a, p, P)                                                                             \
+    Opt<CRef<nlohmann::json>> FoundryFileParser::get_##j##_entry(const std::string& key) {          \
+        return get_entry(json, #C, key);                                                                               \
+    }
+X_CONTENT_PIECES(IMPL_GET_OBJ_KEY)
+#undef IMPL_GET_OBJ_KEY
 
 } // namespace dnd

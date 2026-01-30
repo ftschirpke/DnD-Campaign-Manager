@@ -21,7 +21,7 @@
 namespace dnd {
 
 SpellFileParser::SpellFileParser(const std::filesystem::path& filepath, const SpellSources& spell_sources)
-    : FileParser(filepath, true), spell_sources(spell_sources) {}
+    : FileParser(filepath, true), foundry_parser(filepath), spell_sources(spell_sources) {}
 
 Errors SpellFileParser::parse() {
     Errors errors;
@@ -59,7 +59,7 @@ Errors SpellFileParser::parse() {
             parse_required_attribute_into(element, "name", name, get_filepath());
 
             Spell::Data spell_data;
-            parse_spell(element, get_filepath()).move_into(spell_data, errors);
+            parse_spell(element, get_filepath(), foundry_parser).move_into(spell_data, errors);
 
             if (spell_sources.contains(spell_data.source_name)
                 && spell_sources.at(spell_data.source_name).contains(spell_data.name)) {

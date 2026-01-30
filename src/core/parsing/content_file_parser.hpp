@@ -61,6 +61,7 @@ private:
     Errors parse_object(const nlohmann::ordered_json& obj, ParseType parse_type);
 
     Data parsed_data;
+    FoundryFileParser foundry_parser;
 };
 
 

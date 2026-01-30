@@ -287,7 +287,10 @@ static WithErrors<Spellcasting::Data> parse_spellcasting(
     return result;
 }
 
-WithErrors<Class::Data> parse_class(const nlohmann::ordered_json& obj, const std::filesystem::path& filepath) {
+WithErrors<Class::Data> parse_class(
+    const nlohmann::ordered_json& obj, const std::filesystem::path& filepath,
+    const FoundryFileParser& foundry_parser
+) {
     WithErrors<Class::Data> result;
     Class::Data& class_data = result.value;
     Errors& errors = result.errors;
@@ -307,12 +310,14 @@ WithErrors<Class::Data> parse_class(const nlohmann::ordered_json& obj, const std
 
     parse_spellcasting(obj, filepath, false).move_into(class_data.spellcasting_data, errors);
 
+    DND_UNUSED(foundry_parser); // TODO: implement
+
     return result;
 }
 
 Errors parse_class_feature(
     const nlohmann::ordered_json& obj, const std::filesystem::path& filepath,
-    std::map<std::string, Class::Data>& parsed_classes
+    std::map<std::string, Class::Data>& parsed_classes, const FoundryFileParser& foundry_parser
 ) {
     Errors errors;
 
@@ -339,10 +344,15 @@ Errors parse_class_feature(
     errors += parse_required_attribute_into(obj, "level", feature_data.level, filepath);
     errors += write_formatted_text_into(obj, feature_data.description, filepath);
 
+    DND_UNUSED(foundry_parser); // TODO: implement
+
     return errors;
 }
 
-WithErrors<Subclass::Data> parse_subclass(const nlohmann::ordered_json& obj, const std::filesystem::path& filepath) {
+WithErrors<Subclass::Data> parse_subclass(
+    const nlohmann::ordered_json& obj, const std::filesystem::path& filepath,
+    const FoundryFileParser& foundry_parser
+) {
     WithErrors<Subclass::Data> result;
     Subclass::Data& subclass_data = result.value;
     Errors& errors = result.errors;
@@ -359,12 +369,14 @@ WithErrors<Subclass::Data> parse_subclass(const nlohmann::ordered_json& obj, con
 
     parse_spellcasting(obj, filepath, true).move_into(subclass_data.spellcasting_data, errors);
 
+    DND_UNUSED(foundry_parser); // TODO: implement
+
     return result;
 }
 
 Errors parse_subclass_feature(
     const nlohmann::ordered_json& obj, const std::filesystem::path& filepath,
-    std::map<std::string, Subclass::Data>& parsed_subclasses
+    std::map<std::string, Subclass::Data>& parsed_subclasses, const FoundryFileParser& foundry_parser
 ) {
     Errors errors;
 
@@ -409,6 +421,8 @@ Errors parse_subclass_feature(
     } else {
         errors += write_formatted_text_into(obj, feature_data.description, filepath);
     }
+
+    DND_UNUSED(foundry_parser); // TODO: implement
 
     return errors;
 }

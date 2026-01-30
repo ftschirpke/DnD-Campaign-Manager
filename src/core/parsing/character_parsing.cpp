@@ -166,7 +166,10 @@ static WithErrors<std::vector<std::string>> parse_character_feats(
 }
 
 
-WithErrors<Character::Data> parse_character(const nlohmann::json& obj, const std::filesystem::path& filepath) {
+WithErrors<Character::Data> parse_character(
+    const nlohmann::json& obj, const std::filesystem::path& filepath,
+    const FoundryFileParser& foundry_parser
+) {
     WithErrors<Character::Data> result;
     Character::Data& character_data = result.value;
     Errors& errors = result.errors;
@@ -188,6 +191,8 @@ WithErrors<Character::Data> parse_character(const nlohmann::json& obj, const std
     parse_character_feature_providers(obj, filepath).move_into(character_data.feature_providers_data, errors);
     parse_character_base_scores(obj, filepath).move_into(character_data.base_ability_scores_data, errors);
     parse_character_feats(obj, filepath).move_into(character_data.choosable_keys, errors);
+
+    DND_UNUSED(foundry_parser); // TODO: implement
 
     return result;
 }
