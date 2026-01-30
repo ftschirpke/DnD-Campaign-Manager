@@ -14,7 +14,7 @@ struct GuiFonts;
 class DisplayVisitor : public ContentVisitor {
 public:
     DisplayVisitor(const Content& content, const GuiFonts& fonts);
-#define DECL_VISIT(C, U, j, a, p, P) virtual void visit(const C& a) override;
+#define DECL_VISIT(C, U, j, a, p, P) virtual void visit(const C& a) override final;
     X_CONTENT_PIECES(DECL_VISIT)
 #undef DECL_VISIT
 private:

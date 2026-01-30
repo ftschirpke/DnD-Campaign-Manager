@@ -21,10 +21,10 @@ class SpellFilter : public ContentPieceFilter {
 public:
     explicit SpellFilter(const Content& content) noexcept;
 
-    bool has_all_filters() const override;
+    bool has_all_filters() const override final;
     bool matches(const Spell& spell) const;
-    std::vector<Id> all_matches() const override;
-    void clear() override;
+    std::vector<Id> all_matches() const override final;
+    void clear() override final;
 
     BoolFilter verbal_component_filter;
     BoolFilter somatic_component_filter;

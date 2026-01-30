@@ -22,10 +22,10 @@ public:
 
     static CreateResult<Item> create(Data&& item_data);
 
-    const std::string& get_name() const override;
-    const Text& get_description() const override;
-    const SourceInfo& get_source_info() const override;
-    const std::string& get_key() const override;
+    const std::string& get_name() const override final;
+    const Text& get_description() const override final;
+    const SourceInfo& get_source_info() const override final;
+    const std::string& get_key() const override final;
     const Text& get_cosmetic_description() const;
     bool requires_attunement() const;
 private:

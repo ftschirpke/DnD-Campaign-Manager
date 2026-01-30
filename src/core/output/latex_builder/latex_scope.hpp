@@ -36,8 +36,8 @@ public:
     LatexCommand* add_command(const std::string& command);
     LatexCommand* add_command(const std::string& command, const std::string& brace_argument);
     LatexBeginEnd add_begin_end(const std::string& name);
-    std::string str() const override;
-    size_t text_size() const override;
+    std::string str() const override final;
+    size_t text_size() const override final;
 private:
     bool enclosing_brace;
     std::vector<std::unique_ptr<LatexObject>> objects;

@@ -19,8 +19,8 @@ public:
     virtual ~LatexCommand() = default;
     LatexCommand* add_braces_argument(const std::string& argument);
     LatexCommand* add_bracket_argument(const std::string& argument);
-    std::string str() const override;
-    size_t text_size() const override;
+    std::string str() const override final;
+    size_t text_size() const override final;
 private:
     const std::string name;
     std::vector<std::string> braces_arguments;

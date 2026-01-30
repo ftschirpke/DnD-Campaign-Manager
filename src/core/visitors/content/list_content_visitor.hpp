@@ -20,7 +20,7 @@ public:
     std::vector<std::string> get_list();
     void clear_list();
 
-#define DECL_VISIT(C, U, j, a, p, P) virtual void visit(const C& a) override;
+#define DECL_VISIT(C, U, j, a, p, P) virtual void visit(const C& a) override final;
     X_CONTENT_PIECES(DECL_VISIT)
 #undef DECL_VISIT
 private:

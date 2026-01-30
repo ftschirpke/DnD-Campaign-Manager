@@ -14,10 +14,10 @@ class ChoosableFilter : public ContentPieceFilter {
 public:
     explicit ChoosableFilter(const Content& content) noexcept;
 
-    bool has_all_filters() const override;
+    bool has_all_filters() const override final;
     bool matches(const Choosable& choosable) const;
-    std::vector<Id> all_matches() const override;
-    void clear() override;
+    std::vector<Id> all_matches() const override final;
+    void clear() override final;
 
     StringFilter type_filter;
     BoolFilter has_prerequisites_filter;

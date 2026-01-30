@@ -143,7 +143,7 @@ public:
     nlohmann::json get_open_tabs() { return std::move(open_tabs_json); }
 
 #define VISIT(C, U, j, a, p, P)                                                                                        \
-    virtual void visit(const C& a) override {                                                                          \
+    virtual void visit(const C& a) override final {                                                                    \
         if (!open_tabs_json.contains(#j)) {                                                                            \
             open_tabs_json[#j] = nlohmann::json::array();                                                              \
         }                                                                                                              \

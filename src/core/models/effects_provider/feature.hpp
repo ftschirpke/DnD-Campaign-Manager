@@ -31,11 +31,11 @@ public:
     Feature(Feature&&) noexcept = default;
     Feature& operator=(Feature&&) noexcept = default;
 
-    const std::string& get_name() const override;
-    const Text& get_description() const override;
-    const SourceInfo& get_source_info() const override;
-    const std::string& get_key() const override;
-    const Effects& get_main_effects() const override;
+    const std::string& get_name() const override final;
+    const Text& get_description() const override final;
+    const SourceInfo& get_source_info() const override final;
+    const std::string& get_key() const override final;
+    const Effects& get_main_effects() const override final;
 protected:
     Feature(
         std::string&& name, Text&& description, std::filesystem::path&& source_path, std::string&& source_name,

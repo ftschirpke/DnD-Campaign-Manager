@@ -29,8 +29,8 @@ public:
     LatexText* add_custom_modifier(const std::string& modifier);
     LatexText* add_custom_inline_modifier(const std::string& modifier);
     LatexText* set_size(const std::string& new_size);
-    std::string str() const override;
-    size_t text_size() const override;
+    std::string str() const override final;
+    size_t text_size() const override final;
     std::string get_text() const;
     void set_text(const std::string& new_text);
 private:

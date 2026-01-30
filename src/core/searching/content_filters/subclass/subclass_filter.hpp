@@ -15,10 +15,10 @@ class SubclassFilter : public ContentPieceFilter {
 public:
     explicit SubclassFilter(const Content& content) noexcept;
 
-    bool has_all_filters() const override;
+    bool has_all_filters() const override final;
     bool matches(const Subclass& subclass) const;
-    std::vector<Id> all_matches() const override;
-    void clear() override;
+    std::vector<Id> all_matches() const override final;
+    void clear() override final;
 
     BoolFilter has_spellcasting_filter;
 };

@@ -25,11 +25,11 @@ requires isContentPieceType<T>
 class ReferencingContentLibrary : public ContentLibrary<T> {
 public:
     std::optional<size_t> find(const std::string& key) const;
-    bool contains(const std::string& key) const override;
-    bool empty() const override;
-    size_t size() const override;
-    Opt<CRef<T>> get(size_t index) const override;
-    Opt<CRef<T>> get(const std::string& key) const override;
+    bool contains(const std::string& key) const override final;
+    bool empty() const override final;
+    size_t size() const override final;
+    Opt<CRef<T>> get(size_t index) const override final;
+    Opt<CRef<T>> get(const std::string& key) const override final;
     const std::vector<std::reference_wrapper<const T>>& get_all() const;
     /**
      * @brief Add a content piece to a content piece to the library

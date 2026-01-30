@@ -16,8 +16,8 @@ using SpellSources = std::unordered_map<std::string, std::unordered_map<std::str
 class SpellSourcesFileParser : public FileParser {
 public:
     explicit SpellSourcesFileParser(const std::filesystem::path& filepath);
-    virtual Errors parse() override;
-    virtual void save_result(Content& content) override;
+    virtual Errors parse() override final;
+    virtual void save_result(Content& content) override final;
 
     SpellSources spell_classes_by_source;
 };

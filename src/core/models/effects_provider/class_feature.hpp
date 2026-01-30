@@ -58,7 +58,7 @@ struct ClassFeature::Data : public Feature::Data {
     );
 
     std::strong_ordering operator<=>(const Data&) const = default;
-    std::string get_key() const override;
+    std::string get_key() const override final;
 
     int level;
     std::map<int, Effects::Data> higher_level_effects_data;

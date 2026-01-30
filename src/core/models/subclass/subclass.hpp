@@ -32,11 +32,11 @@ public:
     Subclass(Subclass&&) noexcept = default;
     Subclass& operator=(Subclass&&) noexcept = default;
 
-    const std::string& get_name() const override;
+    const std::string& get_name() const override final;
     const std::string& get_short_name() const;
-    const Text& get_description() const override;
-    const SourceInfo& get_source_info() const override;
-    const std::string& get_key() const override;
+    const Text& get_description() const override final;
+    const SourceInfo& get_source_info() const override final;
+    const std::string& get_key() const override final;
     const std::vector<SubclassFeature>& get_features() const;
     bool has_spellcasting() const;
     const Spellcasting* get_spellcasting() const;
@@ -62,7 +62,7 @@ struct Subclass::Data : public ValidationData {
     static std::string key(const std::string& name, const std::string& source_name, const std::string& class_name);
 
     std::strong_ordering operator<=>(const Data&) const = default;
-    std::string get_key() const override;
+    std::string get_key() const override final;
 
     std::string short_name;
     std::string class_name;

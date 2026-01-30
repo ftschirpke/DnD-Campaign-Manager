@@ -14,10 +14,10 @@ class SubspeciesFilter : public ContentPieceFilter {
 public:
     explicit SubspeciesFilter(const Content& content) noexcept;
 
-    bool has_all_filters() const override;
+    bool has_all_filters() const override final;
     bool matches(const Subspecies& subspecies) const;
-    std::vector<Id> all_matches() const override;
-    void clear() override;
+    std::vector<Id> all_matches() const override final;
+    void clear() override final;
 };
 
 } // namespace dnd
