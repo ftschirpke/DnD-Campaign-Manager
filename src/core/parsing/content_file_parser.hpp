@@ -1,5 +1,5 @@
-#ifndef V2_FILE_PARSER_HPP_
-#define V2_FILE_PARSER_HPP_
+#ifndef CONTENT_FILE_PARSER_HPP_
+#define CONTENT_FILE_PARSER_HPP_
 
 #include <dnd_config.hpp>
 
@@ -17,7 +17,7 @@
 
 namespace dnd {
 
-#define X_PARSE_TYPES                                                                                                  \
+#define X_PARSE_TYPES(X)                                                                                               \
     X(action), X(adventure), X(artObjects), X(background), X(backgroundFluff), X(baseitem), X(book), X(boon), X(card), \
         X(character), X(charoption), X(charoptionFluff), X(class), X(classFeature), X(classFluff), X(condition),       \
         X(conditionFluff), X(cr), X(cult), X(data), X(deck), X(deity), X(disease), X(dragon), X(dragonMundaneItems),   \
@@ -33,18 +33,18 @@ namespace dnd {
         X(variantrule), X(vehicle), X(vehicleFluff), X(vehicleUpgrade),
 
 enum class ParseType {
-#define X(enum) enum##_type
-    X_PARSE_TYPES
-#undef X
+#define APPEND_TYPE(enum) enum##_type
+    X_PARSE_TYPES(APPEND_TYPE)
+#undef APPEND_TYPE
 };
 
-#define X(str) #str
-constexpr std::array<const char*, 90> parse_types = {X_PARSE_TYPES};
-#undef X
+#define TOSTR(str) #str
+constexpr std::array<const char*, 90> parse_types = {X_PARSE_TYPES(TOSTR)};
+#undef TOSTR
 
 class Content;
 
-class V2FileParser : public FileParser {
+class ContentFileParser : public FileParser {
 public:
     struct Data {
         std::map<std::string, Class::Data> class_data;
@@ -54,7 +54,7 @@ public:
         std::map<std::string, Character::Data> character_data;
         std::map<std::string, Choosable::Data> choosable_data;
     };
-    explicit V2FileParser(const std::filesystem::path& filepath);
+    explicit ContentFileParser(const std::filesystem::path& filepath);
     virtual Errors parse();
     virtual void save_result(Content& content);
 private:
@@ -66,4 +66,4 @@ private:
 
 } // namespace dnd
 
-#endif // V2_FILE_PARSER_HPP_
+#endif // CONTENT_FILE_PARSER_HPP_

@@ -13,10 +13,10 @@
 #include <core/errors/errors.hpp>
 #include <core/errors/parsing_error.hpp>
 #include <core/errors/validation_error.hpp>
+#include <core/parsing/content_file_parser.hpp>
 #include <core/parsing/file_parser.hpp>
 #include <core/parsing/spell_file_parser.hpp>
 #include <core/parsing/spell_sources_file_parser.hpp>
-#include <core/parsing/v2_file_parser.hpp>
 #include <log.hpp>
 
 namespace dnd {
@@ -83,16 +83,16 @@ ParsingResult parse_content(const std::set<std::filesystem::path>& content_paths
 
         if (std::filesystem::exists(content_path / "feats.json")
             && std::filesystem::is_regular_file(content_path / "feats.json")) {
-            result.errors += parse_file(result.content, V2FileParser(content_path / "feats.json"));
+            result.errors += parse_file(result.content, ContentFileParser(content_path / "feats.json"));
         }
 
         if (std::filesystem::exists(content_path / "races.json")
             && std::filesystem::is_regular_file(content_path / "races.json")) {
-            result.errors += parse_file(result.content, V2FileParser(content_path / "races.json"));
+            result.errors += parse_file(result.content, ContentFileParser(content_path / "races.json"));
         }
         if (std::filesystem::exists(content_path / "species.json")
             && std::filesystem::is_regular_file(content_path / "species.json")) {
-            result.errors += parse_file(result.content, V2FileParser(content_path / "species.json"));
+            result.errors += parse_file(result.content, ContentFileParser(content_path / "species.json"));
         }
 
         if (std::filesystem::exists(content_path / "class") && std::filesystem::is_directory(content_path / "class")) {
@@ -100,7 +100,7 @@ ParsingResult parse_content(const std::set<std::filesystem::path>& content_paths
                 if (std::filesystem::is_directory(dir_entry) || skip_file(dir_entry.path())) {
                     continue;
                 }
-                result.errors += parse_file(result.content, V2FileParser(dir_entry.path()));
+                result.errors += parse_file(result.content, ContentFileParser(dir_entry.path()));
             }
         }
 
@@ -126,7 +126,7 @@ ParsingResult parse_content(const std::set<std::filesystem::path>& content_paths
                 if (std::filesystem::is_directory(dir_entry) || skip_file(dir_entry.path())) {
                     continue;
                 }
-                result.errors += parse_file(result.content, V2FileParser(dir_entry.path()));
+                result.errors += parse_file(result.content, ContentFileParser(dir_entry.path()));
             }
         }
     }

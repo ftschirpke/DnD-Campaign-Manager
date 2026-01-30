@@ -10,9 +10,9 @@
 namespace dnd {
 
 enum class Type {
-#define X(C, u, j, a, p, P) C,
-    X_CONTENT_PIECES
-#undef X
+#define DECL_TYPE_ENUM(C, u, j, a, p, P) C,
+    X_CONTENT_PIECES(DECL_TYPE_ENUM)
+#undef DECL_TYPE_ENUM
 };
 
 struct Id {

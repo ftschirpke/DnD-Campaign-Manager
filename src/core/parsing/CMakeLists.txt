@@ -4,6 +4,7 @@ target_sources(${DND_CORE}
     choice_parsing.cpp
     choosable_parsing.cpp
     class_parsing.cpp
+    content_file_parser.cpp
     content_parsing.cpp
     file_parser.cpp
     parser.cpp
@@ -11,5 +12,4 @@ target_sources(${DND_CORE}
     spell_parsing.cpp
     spell_sources_file_parser.cpp
     species_parsing.cpp
-    v2_file_parser.cpp
 )

@@ -76,9 +76,9 @@ static const float min_w = 240.0f;
 static void render_content_count_table(const Content& content) {
     float window_width = ImGui::GetWindowWidth();
     float w = std::max(min_w, window_width);
-#define X(C, U, j, a, p, P) display_size(#p, content.get_##j##_library().size(), w);
-    X_CONTENT_PIECES
-#undef X
+#define DISPLAY_SIZE(C, U, j, a, p, P) display_size(#p, content.get_##j##_library().size(), w);
+    X_CONTENT_PIECES(DISPLAY_SIZE)
+#undef DISPLAY_SIZE
 }
 
 void GuiApp::render_overview_window() {

@@ -27,9 +27,9 @@
 namespace dnd {
 
 bool Content::empty() const {
-#define X(C, U, j, a, p, P) j##_library.empty() &&
-    return X_CONTENT_PIECES true;
-#undef X
+#define CHECK_AND(C, U, j, a, p, P) j##_library.empty() &&
+    return X_CONTENT_PIECES(CHECK_AND) true;
+#undef CHECK_AND
 }
 
 const Groups& Content::get_groups() const { return groups; }
@@ -37,13 +37,13 @@ const Groups& Content::get_groups() const { return groups; }
 Opt<Id> Content::find(Type type, const std::string& key) const {
     std::optional<size_t> index;
     switch (type) {
-#define X(C, U, j, a, p, P)                                                                                            \
+#define FIND_CASE(C, U, j, a, p, P)                                                                                    \
     case Type::C: {                                                                                                    \
         index = j##_library.find(key);                                                                                 \
         break;                                                                                                         \
     }
-        X_CONTENT_PIECES
-#undef X
+        X_CONTENT_PIECES(FIND_CASE)
+#undef FIND_CASE
         default:
             std::unreachable();
     }
@@ -53,73 +53,73 @@ Opt<Id> Content::find(Type type, const std::string& key) const {
     return Id{.index = index.value(), .type = type};
 }
 
-#define X(C, U, j, a, p, P)                                                                                            \
+#define FIND_KEY(C, U, j, a, p, P)                                                                                     \
     Opt<Id> Content::find_##j(const std::string& key) const { return find(Type::C, key); }
-X_CONTENT_PIECES
-#undef X
+X_CONTENT_PIECES(FIND_KEY)
+#undef FIND_KEY
 
 ContentPieceVariant Content::get(Id id) const {
     switch (id.type) {
-#define X(C, U, j, a, p, P)                                                                                            \
+#define TYPE_CASE_GETID(C, U, j, a, p, P)                                                                              \
     case Type::C: {                                                                                                    \
         auto val = j##_library.get(id.index);                                                                          \
         assert(val.has_value()); /* we assume the IDs we handed out to be valid */                                     \
         return val.value();                                                                                            \
     }
-        X_CONTENT_PIECES
-#undef X
+        X_CONTENT_PIECES(TYPE_CASE_GETID)
+#undef TYPE_CASE_GETID
     }
     std::unreachable();
 }
 
 const ContentPiece* Content::get_ptr(Id id) const {
     switch (id.type) {
-#define X(C, U, j, a, p, P)                                                                                            \
+#define TYPE_CASE_GETID(C, U, j, a, p, P)                                                                              \
     case Type::C: {                                                                                                    \
         return &get_##j(id);                                                                                           \
     }
-        X_CONTENT_PIECES
-#undef X
+        X_CONTENT_PIECES(TYPE_CASE_GETID)
+#undef TYPE_CASE_GETID
     }
     std::unreachable();
 }
 
-#define X(C, U, j, a, p, P)                                                                                            \
+#define IMPL_GET_IDX(C, U, j, a, p, P)                                                                                 \
     const C& Content::get_##j(size_t index) const {                                                                    \
         auto val = j##_library.get(index);                                                                             \
         assert(val.has_value()); /* we assume the IDs we handed out to be valid */                                     \
         return val.value();                                                                                            \
     }
-X_CONTENT_PIECES
-#undef X
+X_CONTENT_PIECES(IMPL_GET_IDX)
+#undef IMPL_GET_IDX
 
-#define X(C, U, j, a, p, P)                                                                                            \
+#define IMPL_GETID(C, U, j, a, p, P)                                                                                   \
     const C& Content::get_##j(Id id) const {                                                                           \
         assert(id.type == Type::C);                                                                                    \
         return get_##j(id.index);                                                                                      \
     }
-X_CONTENT_PIECES
-#undef X
+X_CONTENT_PIECES(IMPL_GETID)
+#undef IMPL_GETID
 
-#define X(C, U, j, a, p, P)                                                                                            \
+#define IMPL_GET_ALL(C, U, j, a, p, P)                                                                                 \
     const std::vector<C>& Content::get_all_##p() const { return get_##j##_library().get_all(); }
-X_OWNED_CONTENT_PIECES
-#undef X
+X_OWNED_CONTENT_PIECES(IMPL_GET_ALL)
+#undef IMPL_GET_ALL
 
-#define X(C, U, j, a, p, P)                                                                                            \
+#define IMPL_GET_ALL_REF(C, U, j, a, p, P)                                                                             \
     const std::vector<CRef<C>>& Content::get_all_##p() const { return get_##j##_library().get_all(); }
-X_REFERENCE_CONTENT_PIECES
-#undef X
+X_REFERENCE_CONTENT_PIECES(IMPL_GET_ALL_REF)
+#undef IMPL_GET_ALL_REF
 
-#define X(C, U, j, a, p, P)                                                                                            \
+#define IMPL_GET_LIB(C, U, j, a, p, P)                                                                                 \
     const StorageContentLibrary<C>& Content::get_##j##_library() const { return j##_library; }
-X_OWNED_CONTENT_PIECES
-#undef X
+X_OWNED_CONTENT_PIECES(IMPL_GET_LIB)
+#undef IMPL_GET_LIB
 
-#define X(C, U, j, a, p, P)                                                                                            \
+#define IMPL_GET_REF_LIB(C, U, j, a, p, P)                                                                             \
     const ReferencingContentLibrary<C>& Content::get_##j##_library() const { return j##_library; }
-X_REFERENCE_CONTENT_PIECES
-#undef X
+X_REFERENCE_CONTENT_PIECES(IMPL_GET_REF_LIB)
+#undef IMPL_GET_REF_LIB
 
 std::optional<EffectsProviderVariant> Content::get_effects_provider(const std::string& key) const {
     Opt<CRef<Feature>> feature = feature_library.get(key);
@@ -254,7 +254,7 @@ Opt<CRef<Choosable>> Content::add_choosable(Choosable&& choosable) {
     return inserted_choosable;
 }
 
-#define X(C, U, j, a, p, P)                                                                                            \
+#define IMPL_ADD_RES(C, U, j, a, p, P)                                                                                 \
     Opt<CRef<C>> Content::add_##j##_result(CreateResult<C>&& a) {                                                      \
         if (a.is_valid()) {                                                                                            \
             return add_##j(std::move(a.value()));                                                                      \
@@ -263,7 +263,7 @@ Opt<CRef<Choosable>> Content::add_choosable(Choosable&& choosable) {
             return std::nullopt;                                                                                       \
         }                                                                                                              \
     }
-X_OWNED_CONTENT_PIECES
-#undef X
+X_OWNED_CONTENT_PIECES(IMPL_ADD_RES)
+#undef IMPL_ADD_RES
 
 } // namespace dnd

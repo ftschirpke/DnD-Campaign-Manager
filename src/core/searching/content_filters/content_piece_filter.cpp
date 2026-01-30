@@ -25,7 +25,7 @@ bool ContentPieceFilter::matches(const ContentPiece& content_piece) const {
 
 std::vector<Id> ContentPieceFilter::all_matches() const {
     std::vector<Id> matching_content_pieces;
-#define X(C, U, j, a, p, P)                                                                                            \
+#define MATCH(C, U, j, a, p, P)                                                                                        \
     const auto& vec_##p = content.get().get_all_##p();                                                                 \
     for (size_t i = 0; i < vec_##p.size(); ++i) {                                                                      \
         const C& a = vec_##p[i];                                                                                       \
@@ -33,8 +33,8 @@ std::vector<Id> ContentPieceFilter::all_matches() const {
             matching_content_pieces.emplace_back(Id{.index = i, .type = Type::C});                                     \
         }                                                                                                              \
     }
-    X_CONTENT_PIECES
-#undef X
+    X_CONTENT_PIECES(MATCH)
+#undef MATCH
     return matching_content_pieces;
 }
 

@@ -20,7 +20,7 @@ std::vector<SearchResult> fuzzy_search_content(
 
     int64_t min_match_score = 0;
 
-#define X(C, U, j, a, p, P)                                                                                            \
+#define SEARCH_OPTION(C, U, j, a, p, P)                                                                                \
     if (options.search_##p) {                                                                                          \
         const std::vector<C>& vec_##p = content.get_all_##p();                                                         \
         for (size_t i = 0; i < vec_##p.size(); ++i) {                                                                  \
@@ -32,11 +32,11 @@ std::vector<SearchResult> fuzzy_search_content(
         }                                                                                                              \
     }
 
-    X_OWNED_CONTENT_PIECES
-#undef X
+    X_OWNED_CONTENT_PIECES(SEARCH_OPTION)
+#undef SEARCH_OPTION
 
     if (options.search_features) {
-#define X(C, U, j, a, p, P)                                                                                            \
+#define SEARCH_FEATURE(C, U, j, a, p, P)                                                                               \
     const std::vector<CRef<C>>& vec_##p = content.get_all_##p();                                                       \
     for (size_t i = 0; i < vec_##p.size(); ++i) {                                                                      \
         const C& a = vec_##p[i];                                                                                       \
@@ -46,8 +46,8 @@ std::vector<SearchResult> fuzzy_search_content(
         }                                                                                                              \
     }
 
-        X_FEATURES
-#undef X
+        X_FEATURES(SEARCH_FEATURE)
+#undef SEARCH_FEATURE
     }
     return results;
 }

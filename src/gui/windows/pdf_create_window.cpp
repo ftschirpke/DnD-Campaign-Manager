@@ -26,10 +26,10 @@ public:
     )
         : content(content), item_card_builder(item_card_builder), spell_card_builder(spell_card_builder) {}
 
-#define X(C, U, j, a, p, P)                                                                                            \
+#define EMPTY_VISIT(C, U, j, a, p, P)                                                                                  \
     void visit(const C& a) override { DND_UNUSED(a); }
-    X_CONTENT_PIECES
-#undef X
+    X_CONTENT_PIECES(EMPTY_VISIT)
+#undef EMPTY_VISIT
 
     void parse(const std::deque<Id>& content_pieces) {
         item_card_builder.clear_items();

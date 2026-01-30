@@ -15,9 +15,7 @@ SpellSourcesFileParser::SpellSourcesFileParser(const std::filesystem::path& file
 Errors SpellSourcesFileParser::parse() {
     Errors errors;
     if (!json.is_object()) {
-        errors.add_parsing_error(
-            ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(), "The v2 json is not an object."
-        );
+        errors.add_parsing_error(ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(), "The json is not an object.");
         return errors;
     }
 

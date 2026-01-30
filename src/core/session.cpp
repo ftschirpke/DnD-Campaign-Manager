@@ -142,15 +142,15 @@ class CollectOpenTabsVisitor : public ContentVisitor {
 public:
     nlohmann::json get_open_tabs() { return std::move(open_tabs_json); }
 
-#define X(C, U, j, a, p, P)                                                                                            \
+#define VISIT(C, U, j, a, p, P)                                                                                        \
     virtual void visit(const C& a) override {                                                                          \
         if (!open_tabs_json.contains(#j)) {                                                                            \
             open_tabs_json[#j] = nlohmann::json::array();                                                              \
         }                                                                                                              \
         open_tabs_json[#j].push_back(a.get_key());                                                                     \
     }
-    X_CONTENT_PIECES
-#undef X
+    X_CONTENT_PIECES(VISIT)
+#undef VISIT
 private:
     nlohmann::json open_tabs_json;
 };
@@ -313,15 +313,15 @@ void Session::parse_content_and_initialize() {
 }
 
 void Session::open_last_session() {
-#define X(C, U, j, a, p, P)                                                                                            \
+#define FIND_AND_ADD(C, U, j, a, p, P)                                                                                 \
     for (const std::string& piece_to_open : last_session_open_tabs[#j]) {                                              \
         Opt<Id> id = content.find_##j(piece_to_open);                                                                  \
         if (id.has_value()) {                                                                                          \
             open_content_pieces.push_back(id.value());                                                                 \
         }                                                                                                              \
     }
-    X_CONTENT_PIECES
-#undef X
+    X_CONTENT_PIECES(FIND_AND_ADD)
+#undef FIND_AND_ADD
 }
 
 void Session::open_content_piece(Id content_piece) {

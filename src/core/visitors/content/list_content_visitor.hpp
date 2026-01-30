@@ -20,9 +20,9 @@ public:
     std::vector<std::string> get_list();
     void clear_list();
 
-#define X(C, U, j, a, p, P) virtual void visit(const C& a) override;
-    X_CONTENT_PIECES
-#undef X
+#define DECL_VISIT(C, U, j, a, p, P) virtual void visit(const C& a) override;
+    X_CONTENT_PIECES(DECL_VISIT)
+#undef DECL_VISIT
 private:
     const Content& content;
     std::vector<std::string> string_list;

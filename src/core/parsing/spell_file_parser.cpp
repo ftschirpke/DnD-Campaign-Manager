@@ -12,10 +12,10 @@
 #include <core/content.hpp>
 #include <core/errors/errors.hpp>
 #include <core/models/spell/spell.hpp>
+#include <core/parsing/content_file_parser.hpp>
 #include <core/parsing/file_parser.hpp>
 #include <core/parsing/spell_parsing.hpp>
 #include <core/parsing/spell_sources_file_parser.hpp>
-#include <core/parsing/v2_file_parser.hpp>
 #include <log.hpp>
 
 namespace dnd {
@@ -26,9 +26,7 @@ SpellFileParser::SpellFileParser(const std::filesystem::path& filepath, const Sp
 Errors SpellFileParser::parse() {
     Errors errors;
     if (!json.is_object()) {
-        errors.add_parsing_error(
-            ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(), "The v2 json is not an object."
-        );
+        errors.add_parsing_error(ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(), "The json is not an object.");
     }
 
     for (nlohmann::ordered_json::const_iterator it = json.cbegin(); it != json.cend(); ++it) {

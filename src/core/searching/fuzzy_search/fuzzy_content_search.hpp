@@ -15,17 +15,17 @@ class Content;
 constexpr uint32_t FUZZY_SEARCH_MINIMUM_QUERY_LENGTH = 1;
 
 struct FuzzySearchOptions {
-#define X(C, U, j, a, p, P) bool search_##p;
-    X_OWNED_CONTENT_PIECES
-#undef X
+#define DECL_SEARCH_BOOL(C, U, j, a, p, P) bool search_##p;
+    X_OWNED_CONTENT_PIECES(DECL_SEARCH_BOOL)
+#undef DECL_SEARCH_BOOL
     bool search_features;
 
     std::strong_ordering operator<=>(const FuzzySearchOptions&) const = default;
 
     void set_all(bool value) {
-#define X(C, U, j, a, p, P) search_##p = value;
-        X_OWNED_CONTENT_PIECES
-#undef X
+#define SET_SEARCH_BOOL(C, U, j, a, p, P) search_##p = value;
+        X_OWNED_CONTENT_PIECES(SET_SEARCH_BOOL)
+#undef SET_SEARCH_BOOL
         search_features = value;
     }
 };

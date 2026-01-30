@@ -1,6 +1,6 @@
 #include <dnd_config.hpp>
 
-#include "v2_file_parser.hpp"
+#include "content_file_parser.hpp"
 
 #include <filesystem>
 
@@ -26,14 +26,12 @@
 
 namespace dnd {
 
-V2FileParser::V2FileParser(const std::filesystem::path& filepath) : FileParser(filepath, true) {}
+ContentFileParser::ContentFileParser(const std::filesystem::path& filepath) : FileParser(filepath, true) {}
 
-Errors V2FileParser::parse() {
+Errors ContentFileParser::parse() {
     Errors errors;
     if (!json.is_object()) {
-        errors.add_parsing_error(
-            ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(), "The v2 json is not an object."
-        );
+        errors.add_parsing_error(ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(), "The json is not an object.");
     }
 
     for (nlohmann::ordered_json::const_iterator it = json.cbegin(); it != json.cend(); ++it) {
@@ -84,7 +82,7 @@ Errors V2FileParser::parse() {
     return errors;
 }
 
-void V2FileParser::save_result(Content& content) {
+void ContentFileParser::save_result(Content& content) {
     for (auto& [key, data] : parsed_data.class_data) {
         data.important_levels_data.feat_levels = {1};            // HACK: set random feat level to circumvent validation
         data.subclass_feature_name = data.features_data[0].name; // HACK: set subclass feature to circumvent validation
@@ -109,7 +107,7 @@ void V2FileParser::save_result(Content& content) {
     }
 }
 
-Errors V2FileParser::parse_object(const nlohmann::ordered_json& obj, ParseType parse_type) {
+Errors ContentFileParser::parse_object(const nlohmann::ordered_json& obj, ParseType parse_type) {
     Errors errors;
     switch (parse_type) {
         case ParseType::class_type: {
