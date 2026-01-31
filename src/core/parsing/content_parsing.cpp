@@ -59,6 +59,20 @@ static bool skip_file(const std::filesystem::path& filepath) {
     return false;
 }
 
+static Opt<const std::filesystem::path> isa_valid_dir(const std::filesystem::path& path) {
+    if (std::filesystem::exists(path) && std::filesystem::is_directory(path)) {
+        return path;
+    }
+    return std::nullopt;
+}
+
+static Opt<const std::filesystem::path> isa_valid_file(const std::filesystem::path& path) {
+    if (std::filesystem::exists(path) && std::filesystem::is_regular_file(path)) {
+        return path;
+    }
+    return std::nullopt;
+}
+
 ParsingResult parse_content(const std::set<std::filesystem::path>& content_paths) {
     DND_MEASURE_FUNCTION();
     ParsingResult result;
@@ -81,52 +95,62 @@ ParsingResult parse_content(const std::set<std::filesystem::path>& content_paths
             return result;
         }
 
-        if (std::filesystem::exists(content_path / "feats.json")
-            && std::filesystem::is_regular_file(content_path / "feats.json")) {
-            result.errors += parse_file(result.content, ContentFileParser(content_path / "feats.json"));
+        if (auto main = isa_valid_file(content_path / "feats.json")) {
+            auto foundry = isa_valid_file(content_path / "foundry-feats.json");
+            result.errors += parse_file(result.content, ContentFileParser(main.value(), foundry));
         }
 
-        if (std::filesystem::exists(content_path / "races.json")
-            && std::filesystem::is_regular_file(content_path / "races.json")) {
-            result.errors += parse_file(result.content, ContentFileParser(content_path / "races.json"));
+        if (auto main = isa_valid_file(content_path / "races.json")) {
+            auto foundry = isa_valid_file(content_path / "foundry-races.json");
+            result.errors += parse_file(result.content, ContentFileParser(main.value(), foundry));
         }
-        if (std::filesystem::exists(content_path / "species.json")
-            && std::filesystem::is_regular_file(content_path / "species.json")) {
-            result.errors += parse_file(result.content, ContentFileParser(content_path / "species.json"));
+        if (auto main = isa_valid_file(content_path / "species.json")) {
+            auto foundry = isa_valid_file(content_path / "foundry-species.json");
+            result.errors += parse_file(result.content, ContentFileParser(main.value(), foundry));
         }
 
-        if (std::filesystem::exists(content_path / "class") && std::filesystem::is_directory(content_path / "class")) {
-            for (const auto& dir_entry : std::filesystem::directory_iterator(content_path / "class")) {
-                if (std::filesystem::is_directory(dir_entry) || skip_file(dir_entry.path())) {
+        if (auto dir = isa_valid_dir(content_path / "class")) {
+            auto foundry = isa_valid_file(dir.value() / "foundry.json");
+            for (const auto& dir_entry : std::filesystem::directory_iterator(dir.value())) {
+                if (skip_file(dir_entry.path())) {
                     continue;
                 }
-                result.errors += parse_file(result.content, ContentFileParser(dir_entry.path()));
+                if (auto main = isa_valid_file(dir_entry.path())) {
+                    result.errors += parse_file(result.content, ContentFileParser(main.value(), foundry));
+                }
             }
         }
 
-        if (std::filesystem::exists(content_path / "spells")
-            && std::filesystem::is_directory(content_path / "spells")) {
-            std::filesystem::path sources_path = content_path / "spells" / "sources.json";
+        if (auto dir = isa_valid_dir(content_path / "spells")) {
+            std::filesystem::path sources_path = dir.value() / "sources.json";
             SpellSourcesFileParser source_parser(sources_path);
-            result.errors += parse_file(result.content, source_parser);
+            if (isa_valid_file(sources_path)) {
+                result.errors += parse_file(result.content, source_parser);
+            }
 
-            for (const auto& dir_entry : std::filesystem::directory_iterator(content_path / "spells")) {
-                if (std::filesystem::is_directory(dir_entry) || skip_file(dir_entry.path())) {
+            auto foundry = isa_valid_file(dir.value() / "foundry.json");
+            for (const auto& dir_entry : std::filesystem::directory_iterator(dir.value())) {
+                if (skip_file(dir_entry.path())) {
                     continue;
                 }
-                result.errors += parse_file(
-                    result.content, SpellFileParser(dir_entry.path(), source_parser.spell_classes_by_source)
-                );
+                if (auto main = isa_valid_file(dir_entry.path())) {
+                    result.errors += parse_file(
+                        result.content,
+                        SpellFileParser(dir_entry.path(), foundry, source_parser.spell_classes_by_source)
+                    );
+                }
             }
         }
 
-        if (std::filesystem::exists(content_path / "characters")
-            && std::filesystem::is_directory(content_path / "characters")) {
+        if (auto dir = isa_valid_dir(content_path / "characters")) {
+            auto foundry = isa_valid_file(content_path / "foundry.json");
             for (const auto& dir_entry : std::filesystem::directory_iterator(content_path / "characters")) {
-                if (std::filesystem::is_directory(dir_entry) || skip_file(dir_entry.path())) {
+                if (skip_file(dir_entry.path())) {
                     continue;
                 }
-                result.errors += parse_file(result.content, ContentFileParser(dir_entry.path()));
+                if (auto main = isa_valid_file(dir_entry.path())) {
+                    result.errors += parse_file(result.content, ContentFileParser(main.value(), foundry));
+                }
             }
         }
     }

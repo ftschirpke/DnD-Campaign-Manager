@@ -10,11 +10,16 @@
 #include <core/errors/errors.hpp>
 #include <core/models/effects_provider/choosable.hpp>
 #include <core/parsing/choice_parsing.hpp>
+#include <core/parsing/effects_parsing.hpp>
 #include <core/parsing/parser.hpp>
+
+#include <log.hpp>
 
 namespace dnd {
 
-static WithErrors<Choosable::Data> parse_choosable(const nlohmann::json& obj, const std::filesystem::path& filepath) {
+static WithErrors<Choosable::Data> parse_choosable(
+    const nlohmann::json& obj, const std::filesystem::path& filepath, const FoundryFileParser& foundry_parser
+) {
     WithErrors<Choosable::Data> result;
     Choosable::Data& choosable_data = result.value;
     Errors& errors = result.errors;
@@ -22,10 +27,6 @@ static WithErrors<Choosable::Data> parse_choosable(const nlohmann::json& obj, co
     choosable_data.source_path = filepath;
     errors += parse_required_attribute_into(obj, "name", choosable_data.name, filepath);
     errors += parse_required_attribute_into(obj, "source", choosable_data.source_name, filepath);
-
-    // TODO: implement functional choosables
-    // choosable_data.main_effects_data;
-    // choosable_data.prerequisites_data;
 
     choosable_data.description = Text{};
 
@@ -137,17 +138,30 @@ static WithErrors<Choosable::Data> parse_choosable(const nlohmann::json& obj, co
 
     errors += write_formatted_text_into(obj, choosable_data.description, filepath, skip_first_description_entry);
 
+
+    // TODO: implement functional choosables
+    auto entry = foundry_parser.get_choosable_entry(choosable_data.get_key());
+    if (entry.has_value()) {
+        LOGINFO("FRIEDRICH found '{}'", entry.value().get()["name"].get<std::string>());
+        if (entry.value().get().contains("effects")) {
+            parse_effects(entry.value().get()["effects"], filepath).move_into(choosable_data.main_effects_data, errors);
+        }
+    }
+    for (const auto& sc : choosable_data.main_effects_data.stat_changes_data) {
+        LOGINFO("FRIEDRICH {} has | {} |", choosable_data.name, sc.stat_change_str);
+    }
+
+    // choosable_data.main_effects_data;
+    // choosable_data.prerequisites_data;
+
     return result;
 }
 
 WithErrors<Choosable::Data> parse_feat(
-    const nlohmann::json& obj, const std::filesystem::path& filepath,
-    const FoundryFileParser& foundry_parser
+    const nlohmann::json& obj, const std::filesystem::path& filepath, const FoundryFileParser& foundry_parser
 ) {
-    WithErrors<Choosable::Data> feat_data = parse_choosable(obj, filepath);
+    WithErrors<Choosable::Data> feat_data = parse_choosable(obj, filepath, foundry_parser);
     feat_data.value.type = "feat";
-
-    DND_UNUSED(foundry_parser); // TODO: implement
 
     return feat_data;
 }

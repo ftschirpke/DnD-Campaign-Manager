@@ -28,14 +28,16 @@ protected:
     bool multiple_pieces_per_file;
 };
 
-class FoundryFileParser : FileParser {
+class FoundryFileParser {
 public:
-    explicit FoundryFileParser(const std::filesystem::path& filepath);
-    Errors parse() override final;
-    void save_result(Content& content) override final;
-#define DECL_GET_OBJ_ENTRY(C, U, j, a, p, P) Opt<CRef<nlohmann::json>> get_##j##_entry(const std::string& key);
+    explicit FoundryFileParser(Opt<CRef<std::filesystem::path>> filepath);
+    Errors open_json();
+#define DECL_GET_OBJ_ENTRY(C, U, j, a, p, P) Opt<CRef<nlohmann::json>> get_##j##_entry(const std::string& key) const;
     X_CONTENT_PIECES(DECL_GET_OBJ_ENTRY)
 #undef DECL_GET_OBJ_ENTRY
+private:
+    Opt<CRef<std::filesystem::path>> filepath;
+    nlohmann::json json;
 };
 
 

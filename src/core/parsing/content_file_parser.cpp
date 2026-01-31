@@ -26,14 +26,18 @@
 
 namespace dnd {
 
-ContentFileParser::ContentFileParser(const std::filesystem::path& filepath)
-    : FileParser(filepath, true), foundry_parser(filepath) {}
+ContentFileParser::ContentFileParser(
+    const std::filesystem::path& filepath, Opt<CRef<std::filesystem::path>> foundry_path
+)
+    : FileParser(filepath, true), foundry_parser(foundry_path) {}
 
 Errors ContentFileParser::parse() {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(), "The json is not an object.");
     }
+
+    errors += foundry_parser.open_json();
 
     for (nlohmann::ordered_json::const_iterator it = json.cbegin(); it != json.cend(); ++it) {
         const std::string& category = it.key();
@@ -57,6 +61,8 @@ Errors ContentFileParser::parse() {
             case ParseType::subclassFeature_type:
             case ParseType::race_type:
             case ParseType::subrace_type:
+            case ParseType::species_type:
+            case ParseType::subspecies_type:
             case ParseType::character_type:
             case ParseType::feat_type:
                 is_supported = true;
@@ -131,12 +137,14 @@ Errors ContentFileParser::parse_object(const nlohmann::ordered_json& obj, ParseT
             errors += parse_subclass_feature(obj, get_filepath(), parsed_data.subclass_data, foundry_parser);
             break;
         }
-        case ParseType::race_type: {
+        case ParseType::race_type:
+        case ParseType::species_type: {
             Species::Data result{};
             parse_species(obj, get_filepath(), foundry_parser).move_into(result, errors);
             parsed_data.species_data.insert({result.get_key(), result});
             break;
         }
+        case ParseType::subspecies_type:
         case ParseType::subrace_type: {
             if (!obj.contains("name")) { // empty subspecies
                 break;
@@ -169,26 +177,5 @@ Errors ContentFileParser::parse_object(const nlohmann::ordered_json& obj, ParseT
     }
     return errors;
 }
-
-FoundryFileParser::FoundryFileParser(const std::filesystem::path& filepath)
-    : FileParser(filepath, true) {}
-
-Errors FoundryFileParser::parse() { return Errors(); }
-
-void FoundryFileParser::save_result(Content& content) { DND_UNUSED(content); }
-
-static Opt<CRef<nlohmann::json>> get_entry(const nlohmann::json& obj, std::string type_key, const std::string& key) {
-    type_key[0] = std::tolower(type_key[0]);
-    DND_UNUSED(obj);
-    DND_UNUSED(key);
-    return std::nullopt;
-}
-
-#define IMPL_GET_OBJ_KEY(C, U, j, a, p, P)                                                                             \
-    Opt<CRef<nlohmann::json>> FoundryFileParser::get_##j##_entry(const std::string& key) {          \
-        return get_entry(json, #C, key);                                                                               \
-    }
-X_CONTENT_PIECES(IMPL_GET_OBJ_KEY)
-#undef IMPL_GET_OBJ_KEY
 
 } // namespace dnd

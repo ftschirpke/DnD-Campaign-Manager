@@ -17,7 +17,10 @@ class Content;
 
 class SpellFileParser : public FileParser {
 public:
-    explicit SpellFileParser(const std::filesystem::path& filepath, const SpellSources& spell_sources);
+    explicit SpellFileParser(
+        const std::filesystem::path& filepath, Opt<CRef<std::filesystem::path>> foundry_path,
+        const SpellSources& spell_sources
+    );
     virtual Errors parse();
     virtual void save_result(Content& content);
 private:

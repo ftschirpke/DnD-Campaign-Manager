@@ -6,6 +6,7 @@ target_sources(${DND_CORE}
     class_parsing.cpp
     content_file_parser.cpp
     content_parsing.cpp
+    effects_parsing.cpp
     file_parser.cpp
     parser.cpp
     spell_file_parser.cpp

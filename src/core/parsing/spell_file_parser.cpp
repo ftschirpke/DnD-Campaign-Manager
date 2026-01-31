@@ -20,14 +20,19 @@
 
 namespace dnd {
 
-SpellFileParser::SpellFileParser(const std::filesystem::path& filepath, const SpellSources& spell_sources)
-    : FileParser(filepath, true), foundry_parser(filepath), spell_sources(spell_sources) {}
+SpellFileParser::SpellFileParser(
+    const std::filesystem::path& filepath, Opt<CRef<std::filesystem::path>> foundry_path,
+    const SpellSources& spell_sources
+)
+    : FileParser(filepath, true), foundry_parser(foundry_path), spell_sources(spell_sources) {}
 
 Errors SpellFileParser::parse() {
     Errors errors;
     if (!json.is_object()) {
         errors.add_parsing_error(ParsingError::Code::INVALID_FILE_FORMAT, get_filepath(), "The json is not an object.");
     }
+
+    errors += foundry_parser.open_json();
 
     for (nlohmann::ordered_json::const_iterator it = json.cbegin(); it != json.cend(); ++it) {
         const std::string& category = it.key();

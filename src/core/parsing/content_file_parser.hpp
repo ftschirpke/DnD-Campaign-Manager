@@ -28,9 +28,9 @@ namespace dnd {
         X(makebrewCreatureAction), X(makebrewCreatureTrait), X(monster), X(monsterFluff), X(monsterTemplate),          \
         X(monsterfeatures), X(name), X(object), X(objectFluff), X(optionalfeature), X(optionalfeatureFluff),           \
         X(psionic), X(race), X(raceFeature), X(raceFluff), X(recipe), X(recipeFluff), X(reducedItemProperty),          \
-        X(reducedItemType), X(reward), X(rewardFluff), X(sense), X(skill), X(spell), X(spellFluff), X(status),         \
-        X(subclass), X(subclassFeature), X(subclassFluff), X(subrace), X(table), X(tableGroup), X(trap), X(trapFluff), \
-        X(variantrule), X(vehicle), X(vehicleFluff), X(vehicleUpgrade),
+        X(reducedItemType), X(reward), X(rewardFluff), X(sense), X(skill), X(species), X(spell), X(spellFluff),        \
+        X(status), X(subclass), X(subclassFeature), X(subclassFluff), X(subrace), X(subspecies), X(table),             \
+        X(tableGroup), X(trap), X(trapFluff), X(variantrule), X(vehicle), X(vehicleFluff), X(vehicleUpgrade),
 
 enum class ParseType {
 #define APPEND_TYPE(enum) enum##_type
@@ -39,7 +39,7 @@ enum class ParseType {
 };
 
 #define TOSTR(str) #str
-constexpr std::array<const char*, 90> parse_types = {X_PARSE_TYPES(TOSTR)};
+constexpr std::array<const char*, 92> parse_types = {X_PARSE_TYPES(TOSTR)};
 #undef TOSTR
 
 class Content;
@@ -54,7 +54,7 @@ public:
         std::map<std::string, Character::Data> character_data;
         std::map<std::string, Choosable::Data> choosable_data;
     };
-    explicit ContentFileParser(const std::filesystem::path& filepath);
+    explicit ContentFileParser(const std::filesystem::path& filepath, Opt<CRef<std::filesystem::path>> foundry_path);
     virtual Errors parse();
     virtual void save_result(Content& content);
 private:
