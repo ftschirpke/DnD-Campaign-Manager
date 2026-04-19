@@ -89,11 +89,28 @@ static LatexText* create_card_header(LatexScope* scope, const Spell& spell, int 
     create_minipage(scope, "Components", spell.get_components().short_str());
     create_minipage(scope, "Duration", spell.get_duration());
     scope->add_line_break("8pt");
-    if (spell.get_components().has_material() && !spell.get_components().get_material_components().empty()) {
+
+    bool concentration_line = spell.requires_concentration();
+    bool materials_line = spell.get_components().has_material()
+                          && !spell.get_components().get_material_components().empty();
+    bool middle_block = concentration_line || materials_line;
+    LatexScope* middle_block_scope = nullptr;
+    if (middle_block) {
         scope->add_command("vspace", "-8mm");
-        scope->add_begin_end("center")
-            .scope->add_text('(' + spell.get_components().get_material_components() + ')')
-            ->set_size("scriptsize");
+        middle_block_scope = scope->add_begin_end("center").scope;
+    }
+    if (concentration_line) {
+        middle_block_scope->add_text("Concentration")
+            ->set_size("scriptsize")
+            ->add_modifier(LatexTextModifier::ITALIC)
+            ->add_line_break();
+    }
+    if (materials_line) {
+        middle_block_scope->add_text('(' + spell.get_components().get_material_components() + ')')
+            ->set_size("scriptsize")
+            ->add_line_break();
+    }
+    if (middle_block) {
         scope->add_command("vspace", "-2mm");
     }
     scope->add_command("scriptsize");
