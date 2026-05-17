@@ -17,14 +17,11 @@ namespace dnd {
 
 class ParseOpenContentVisitor : public ContentVisitor {
 private:
-    const Content& content;
     ItemCardBuilder& item_card_builder;
     SpellCardBuilder& spell_card_builder;
 public:
-    ParseOpenContentVisitor(
-        const Content& content, ItemCardBuilder& item_card_builder, SpellCardBuilder& spell_card_builder
-    )
-        : content(content), item_card_builder(item_card_builder), spell_card_builder(spell_card_builder) {}
+    ParseOpenContentVisitor(ItemCardBuilder& item_card_builder, SpellCardBuilder& spell_card_builder)
+        : item_card_builder(item_card_builder), spell_card_builder(spell_card_builder) {}
 
 #define X(C, U, j, a, p, P)                                                                                            \
     void visit(const C& a) override { DND_UNUSED(a); }
@@ -35,8 +32,18 @@ public:
         item_card_builder.clear_items();
         spell_card_builder.clear_spells();
         for (Id id : content_pieces) {
-            auto variant = content.get(id);
-            visit_variant(variant);
+            switch (id.type) {
+                case Type::Item: {
+                    item_card_builder.add_item(id);
+                    break;
+                }
+                case Type::Spell: {
+                    spell_card_builder.add_spell(id);
+                    break;
+                }
+                default:
+                    break;
+            }
         }
     }
 };
@@ -60,7 +67,7 @@ void PdfCreateWindow::render() {
     if (!last_content_pieces.has_value() || last_content_pieces.value() != content_pieces) {
         const Content& content = session.get_content();
 
-        ParseOpenContentVisitor visitor(content, item_card_builder, spell_card_builder);
+        ParseOpenContentVisitor visitor(item_card_builder, spell_card_builder);
         visitor.parse(content_pieces);
 
         list_items_visitor.clear_list();
