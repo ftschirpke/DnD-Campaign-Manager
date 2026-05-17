@@ -57,6 +57,7 @@ Errors V2FileParser::parse() {
             case ParseType::subclass_type:
             case ParseType::subclassFeature_type:
             case ParseType::race_type:
+            case ParseType::species_type:
             case ParseType::subrace_type:
             case ParseType::character_type:
             case ParseType::feat_type:
@@ -132,6 +133,7 @@ Errors V2FileParser::parse_object(const nlohmann::ordered_json& obj, ParseType p
             errors += parse_subclass_feature(obj, get_filepath(), parsed_data.subclass_data);
             break;
         }
+        case ParseType::species_type:
         case ParseType::race_type: {
             Species::Data result{};
             parse_species(obj, get_filepath()).move_into(result, errors);
