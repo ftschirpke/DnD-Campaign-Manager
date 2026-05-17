@@ -28,9 +28,9 @@ namespace dnd {
         X(makebrewCreatureAction), X(makebrewCreatureTrait), X(monster), X(monsterFluff), X(monsterTemplate),          \
         X(monsterfeatures), X(name), X(object), X(objectFluff), X(optionalfeature), X(optionalfeatureFluff),           \
         X(psionic), X(race), X(raceFeature), X(raceFluff), X(recipe), X(recipeFluff), X(reducedItemProperty),          \
-        X(reducedItemType), X(reward), X(rewardFluff), X(sense), X(skill), X(spell), X(spellFluff), X(status),         \
-        X(subclass), X(subclassFeature), X(subclassFluff), X(subrace), X(table), X(tableGroup), X(trap), X(trapFluff), \
-        X(variantrule), X(vehicle), X(vehicleFluff), X(vehicleUpgrade),
+        X(reducedItemType), X(reward), X(rewardFluff), X(sense), X(skill), X(species), X(spell), X(spellFluff),        \
+        X(status), X(subclass), X(subclassFeature), X(subclassFluff), X(subrace), X(table), X(tableGroup), X(trap),    \
+        X(trapFluff), X(variantrule), X(vehicle), X(vehicleFluff), X(vehicleUpgrade),
 
 enum class ParseType {
 #define X(enum) enum##_type
@@ -39,7 +39,7 @@ enum class ParseType {
 };
 
 #define X(str) #str
-constexpr std::array<const char*, 90> parse_types = {X_PARSE_TYPES};
+constexpr std::array<const char*, 91> parse_types = {X_PARSE_TYPES};
 #undef X
 
 class Content;
