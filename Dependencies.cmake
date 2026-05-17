@@ -15,7 +15,7 @@ FetchContent_Declare(
 FetchContent_Declare(
     fmt
     GIT_REPOSITORY https://github.com/fmtlib/fmt
-    GIT_TAG 123913715afeb8a437e6388b4473fcc4753e1c9a # Release 11.1.4
+    GIT_TAG 407c905e45ad75fc29bf0f9bb7c5c2fd3475976f # Release 12.1.0
 )
 
 FetchContent_MakeAvailable(nlohmann_json fmt)
@@ -43,7 +43,7 @@ find_package(OpenGL REQUIRED)
 FetchContent_Populate(
     imgui
     GIT_REPOSITORY https://github.com/ocornut/imgui
-    GIT_TAG 4806a1924ff6181180bf5e4b8b79ab4394118875 # Release 1.91.9b-docking
+    GIT_TAG b61e56346a92cfcaf1f43a545ca37b0b32239654 # Release 1.92.8-docking
     SOURCE_DIR imgui/imgui
 )
 
@@ -74,7 +74,7 @@ target_link_libraries(imgui PUBLIC ${OPENGL_LIBRARIES} glfw)
 FetchContent_Populate(
     imgui-filebrowser
     GIT_REPOSITORY https://github.com/AirGuanZ/imgui-filebrowser
-    GIT_TAG 347dda538f37fb71be3767e66930e0d7bc5d5f52 # Commit Feb 17, 2025
+    GIT_TAG 47a1884524d6a3df5d99f70ecc82e1ed0ccd26cf # Commit Sep 24, 2025
     SOURCE_DIR imgui/imgui_filebrowser
 )
 
@@ -85,7 +85,7 @@ FetchContent_Populate(
 FetchContent_Declare(
     catch2
     GIT_REPOSITORY https://github.com/catchorg/Catch2
-    GIT_TAG 2b60af89e23d28eefc081bc930831ee9d45ea58b # Release 3.8.1
+    GIT_TAG 6ee0826dcae55ed1e06b2c5701981221e979e1e6 # Release 3.15.0
 )
 
 FetchContent_MakeAvailable(catch2)
