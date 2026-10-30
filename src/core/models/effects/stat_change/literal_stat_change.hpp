@@ -16,24 +16,12 @@ namespace dnd {
  */
 class LiteralStatChange : public StatChange {
 public:
-    LiteralStatChange(
-        const std::string& affected_attribute, StatChangeTime time, StatChangeOperation operation, bool value
-    );
-    LiteralStatChange(
-        std::string_view affected_attribute, StatChangeTime time, StatChangeOperation operation, bool value
-    );
-    LiteralStatChange(
-        const std::string& affected_attribute, StatChangeTime time, StatChangeOperation operation, int value
-    );
-    LiteralStatChange(
-        std::string_view affected_attribute, StatChangeTime time, StatChangeOperation operation, int value
-    );
-    LiteralStatChange(
-        const std::string& affected_attribute, StatChangeTime time, StatChangeOperation operation, float value
-    );
-    LiteralStatChange(
-        std::string_view affected_attribute, StatChangeTime time, StatChangeOperation operation, float value
-    );
+    LiteralStatChange(const std::string& affected_attribute, Time time, Operation operation, bool value);
+    LiteralStatChange(std::string_view affected_attribute, Time time, Operation operation, bool value);
+    LiteralStatChange(const std::string& affected_attribute, Time time, Operation operation, int value);
+    LiteralStatChange(std::string_view affected_attribute, Time time, Operation operation, int value);
+    LiteralStatChange(const std::string& affected_attribute, Time time, Operation operation, float value);
+    LiteralStatChange(std::string_view affected_attribute, Time time, Operation operation, float value);
 
     Errors apply(Stats& stats) const override final;
 private:

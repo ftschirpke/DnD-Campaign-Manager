@@ -21,36 +21,36 @@
 
 namespace dnd {
 
-static std::optional<StatChangeTime> stat_change_time_from_str(std::string_view stat_change_time_str) {
+static std::optional<StatChange::Time> stat_change_time_from_str(std::string_view stat_change_time_str) {
     if (stat_change_time_str == "earliest") {
-        return StatChangeTime::EARLIEST;
+        return StatChange::Time::EARLIEST;
     } else if (stat_change_time_str == "early") {
-        return StatChangeTime::EARLY;
+        return StatChange::Time::EARLY;
     } else if (stat_change_time_str == "normal") {
-        return StatChangeTime::NORMAL;
+        return StatChange::Time::NORMAL;
     } else if (stat_change_time_str == "late") {
-        return StatChangeTime::LATE;
+        return StatChange::Time::LATE;
     } else if (stat_change_time_str == "latest") {
-        return StatChangeTime::LATEST;
+        return StatChange::Time::LATEST;
     }
     std::unreachable();
 }
 
-static std::optional<StatChangeOperation> stat_change_operation_from_str(std::string_view stat_change_operation_str) {
+static std::optional<StatChange::Operation> stat_change_operation_from_str(std::string_view stat_change_operation_str) {
     if (stat_change_operation_str == "add") {
-        return StatChangeOperation::ADD;
+        return StatChange::Operation::ADD;
     } else if (stat_change_operation_str == "sub") {
-        return StatChangeOperation::SUB;
+        return StatChange::Operation::SUB;
     } else if (stat_change_operation_str == "mult") {
-        return StatChangeOperation::MULT;
+        return StatChange::Operation::MULT;
     } else if (stat_change_operation_str == "div") {
-        return StatChangeOperation::DIV;
+        return StatChange::Operation::DIV;
     } else if (stat_change_operation_str == "set") {
-        return StatChangeOperation::SET;
+        return StatChange::Operation::SET;
     } else if (stat_change_operation_str == "max") {
-        return StatChangeOperation::MAX;
+        return StatChange::Operation::MAX;
     } else if (stat_change_operation_str == "min") {
-        return StatChangeOperation::MIN;
+        return StatChange::Operation::MIN;
     }
     std::unreachable();
 }
@@ -66,7 +66,7 @@ FactoryResult<StatChange> create_stat_change(StatChange::Data&& data) {
     it = std::find(it, data.stat_change_str.cend(), ' ');
 
     const std::string_view stat_change_time_str = str_view(last_it, it);
-    std::optional<StatChangeTime> stat_change_time_optional = stat_change_time_from_str(stat_change_time_str);
+    std::optional<StatChange::Time> stat_change_time_optional = stat_change_time_from_str(stat_change_time_str);
     if (!stat_change_time_optional.has_value()) {
         Errors sub_errors = Errors(ValidationError(
             ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
@@ -74,13 +74,13 @@ FactoryResult<StatChange> create_stat_change(StatChange::Data&& data) {
         ));
         return InvalidFactory<StatChange>(std::move(data), std::move(sub_errors));
     }
-    StatChangeTime stat_change_time = stat_change_time_optional.value();
+    StatChange::Time stat_change_time = stat_change_time_optional.value();
 
     last_it = ++it;
     it = std::find(it, data.stat_change_str.cend(), ' ');
     const std::string_view operator_name = str_view(last_it, it);
 
-    std::optional<StatChangeOperation> operation_optional = stat_change_operation_from_str(operator_name);
+    std::optional<StatChange::Operation> operation_optional = stat_change_operation_from_str(operator_name);
     if (!operation_optional.has_value()) {
         Errors sub_errors = Errors(ValidationError(
             ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
@@ -88,7 +88,7 @@ FactoryResult<StatChange> create_stat_change(StatChange::Data&& data) {
         ));
         return InvalidFactory<StatChange>(std::move(data), std::move(sub_errors));
     }
-    StatChangeOperation operation = operation_optional.value();
+    StatChange::Operation operation = operation_optional.value();
 
     const std::string_view value = str_view(++it, data.stat_change_str.cend());
 
@@ -96,7 +96,7 @@ FactoryResult<StatChange> create_stat_change(StatChange::Data&& data) {
     if (value[0] >= 'A' && value[0] <= 'Z') {
         stat_change = std::make_unique<IdentifierStatChange>(affected_attribute, stat_change_time, operation, value);
     } else if (value == "true" || value == "false") {
-        if (operation != StatChangeOperation::SET) {
+        if (operation != StatChange::Operation::SET) {
             Errors sub_errors = Errors(ValidationError(
                 ValidationError::Code::INVALID_ATTRIBUTE_VALUE,
                 fmt::format("Boolean values only support the 'set' operation, '{}' is invalid.", operator_name)

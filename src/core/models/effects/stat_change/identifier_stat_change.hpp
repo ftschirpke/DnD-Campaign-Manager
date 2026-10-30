@@ -17,12 +17,10 @@ namespace dnd {
 class IdentifierStatChange : public StatChange {
 public:
     IdentifierStatChange(
-        const std::string& affected_attribute, StatChangeTime time, StatChangeOperation operation,
-        const std::string& value_identifier
+        const std::string& affected_attribute, Time time, Operation operation, const std::string& value_identifier
     );
     IdentifierStatChange(
-        std::string_view affected_attribute, StatChangeTime time, StatChangeOperation operation,
-        std::string_view value_identifier
+        std::string_view affected_attribute, Time time, Operation operation, std::string_view value_identifier
     );
     Errors apply(Stats& stats) const override final;
 private:

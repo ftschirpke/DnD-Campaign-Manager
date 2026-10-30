@@ -32,7 +32,7 @@ CreateResult<Decision> Decision::create_for(Data&& data, const Content& content)
     Effects::Data res_data;
     for (const std::string& stat_change_str : data.selections["stat_changes"]) {
         StatChange::Data stat_change_data;
-        stat_change_data.stat_change_str = stat_change_str;
+        DND_UNUSED(stat_change_str); // TODO: implement
         res_data.stat_changes_data.push_back(std::move(stat_change_data));
     }
     ins(res_data.extra_spells_holder_data.free_cantrips, std::move(data.selections["cantrips_free"]));

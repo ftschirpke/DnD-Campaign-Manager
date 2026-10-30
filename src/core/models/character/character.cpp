@@ -196,7 +196,7 @@ Errors Character::recalculate_stats(const Content& content) {
     implicit_stat_changes.reserve(proficient_saves.size() + proficient_skills.size());
     for (const std::string& save_ability : proficient_saves) {
         implicit_stat_changes.emplace_back(
-            attributes::ability_saving_throw(save_ability), StatChangeTime::NORMAL, StatChangeOperation::ADD,
+            attributes::ability_saving_throw(save_ability), StatChange::Time::NORMAL, StatChange::Operation::ADD,
             attributes::PROFICIENCY_BONUS
         );
     }
@@ -212,7 +212,7 @@ Errors Character::recalculate_stats(const Content& content) {
         }
         const SkillInfo& skill_info = skill_info_opt.value();
         implicit_stat_changes.emplace_back(
-            std::string_view(skill_info.stat_name), StatChangeTime::NORMAL, StatChangeOperation::ADD,
+            std::string_view(skill_info.stat_name), StatChange::Time::NORMAL, StatChange::Operation::ADD,
             attributes::PROFICIENCY_BONUS
         );
     }

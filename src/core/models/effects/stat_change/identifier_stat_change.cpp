@@ -16,14 +16,12 @@
 namespace dnd {
 
 IdentifierStatChange::IdentifierStatChange(
-    const std::string& affected_attribute, StatChangeTime time, StatChangeOperation operation,
-    const std::string& value_identifier
+    const std::string& affected_attribute, Time time, Operation operation, const std::string& value_identifier
 )
     : StatChange(affected_attribute, time, operation), value_identifier(value_identifier) {}
 
 IdentifierStatChange::IdentifierStatChange(
-    std::string_view affected_attribute, StatChangeTime time, StatChangeOperation operation,
-    std::string_view value_identifier
+    std::string_view affected_attribute, Time time, Operation operation, std::string_view value_identifier
 )
     : StatChange(affected_attribute, time, operation), value_identifier(value_identifier) {}
 

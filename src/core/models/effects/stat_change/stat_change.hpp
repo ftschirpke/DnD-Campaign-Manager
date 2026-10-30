@@ -10,56 +10,59 @@
 
 namespace dnd {
 
-enum class StatChangeTime {
-    // earliest - applied first, e.g. setting a new default value
-    EARLIEST = 0,
-    // early - applied early, e.g. multiplication that shouldn't affect added boni
-    EARLY = 1,
-    // normal - intended for normal additive boni e.g. -1, +1, +2 etc.
-    NORMAL = 2,
-    // late - applied late, e.g. multiplication that should affect added boni
-    LATE = 3,
-    // latest - applied latest, e.g. setting fixed value
-    LATEST = 4
-};
-
-enum class StatChangeOperation {
-    ADD,
-    SUB,
-    MULT,
-    DIV,
-    SET,
-    MAX,
-    MIN,
-};
-
 class Stats;
 
 class StatChange {
 public:
+    enum class Time {
+        // earliest - applied first, e.g. setting a new default value
+        EARLIEST = 0,
+        // early - applied early, e.g. multiplication that shouldn't affect added boni
+        EARLY = 1,
+        // normal - intended for normal additive boni e.g. -1, +1, +2 etc.
+        NORMAL = 2,
+        // late - applied late, e.g. multiplication that should affect added boni
+        LATE = 3,
+        // latest - applied latest, e.g. setting fixed value
+        LATEST = 4
+    };
+
+    enum class Operation {
+        ADD,
+        SUB,
+        MULT,
+        DIV,
+        SET,
+        MAX,
+        MIN,
+    };
+
     struct Data;
 
     virtual ~StatChange() = default;
 
-    StatChangeTime get_time() const;
+    Time get_time() const;
     const std::string& get_affected_attribute() const;
 
     virtual Errors apply(Stats& stats) const = 0;
 protected:
-    StatChange(const std::string& affected_attribute, StatChangeTime time, StatChangeOperation operation);
-    StatChange(std::string_view affected_attribute, StatChangeTime time, StatChangeOperation operation);
+    StatChange(const std::string& affected_attribute, Time time, Operation operation);
+    StatChange(std::string_view affected_attribute, Time time, Operation operation);
 
     Errors apply_with_value(Stats& stats, int value) const;
 private:
     std::string affected_attribute;
-    StatChangeOperation operation;
-    StatChangeTime time;
+    Time time;
+    Operation operation;
 };
 
 struct StatChange::Data {
     std::strong_ordering operator<=>(const Data&) const = default;
 
-    std::string stat_change_str;
+    std::string affected_attribute;
+    std::string time;
+    std::string operation;
+    std::string value;
 };
 
 } // namespace dnd
